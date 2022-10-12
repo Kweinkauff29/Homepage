@@ -23,6 +23,9 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Righteous&display=swap" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet"/>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto&display=swap" rel="stylesheet">
 
 
   </head>
@@ -35,14 +38,64 @@
   p {
     margin: 0;
   }
+
+  #head-background {
+    z-index: 997;
+    margin: -130px 0 -40px 0;
+    box-shadow: black 0px 0px 14px;
+    width: 100%;
+    position: fixed;
+    height: 130px;
+    background-color: white;
+  }
+
+  .important-links {
+    background-image: url("https://www.bonitaesterorealtors.com/wp-content/uploads/2022/10/Untitled-design-10.png");
+    background-size: cover;
+    margin: 100px 0;
+  }
   .contain-head {
     width: 100%;
+    margin: -87px 0;
     background-color: white;
     box-shadow: 0px -30px 67px grey;
   }
 
   #toprow {
     margin: 0px 5% 0px 5% !important;
+  }
+
+  #MLS {
+    background-color: #fbaa19;
+    margin: -100px 0;
+    height: 250px;
+    width: 300px;
+  }
+
+  #MLS:hover {
+    font-size: 50px;
+    cursor: pointer;
+  }
+
+  #MP {
+    background-color: #ffdfa7;
+    margin: -100px 0;
+    height: 250px;
+    width: 300px;
+  }
+
+  #Events {
+    background-color: #ffce75;
+    margin: -100px 0;
+    height: 250px;
+    width: 300px;
+  }
+
+  #Join {
+    background-color: #fff3dd;
+    margin: -100px 0;
+    height: 250px;
+    width: 300px;
   }
 
   .col-sm {
@@ -53,6 +106,10 @@
   }
   .col-sm h3 {
     font-size: 20px;
+  }
+
+  .col-sm-3 {
+    height: 300px;
   }
 
   .vc_column_container>.vc_column-inner {
@@ -87,6 +144,8 @@
     width: 100%;
     background-color: grey;
     object-fit: contain;
+    margin: 260px 0 0 0;
+    position: relative;
   }
   #display1 {
     max-height: 500px;
@@ -101,9 +160,32 @@
     width: 130px;
     margin: 10px auto 10px auto;
   }
+  #MLSlogo {
+    width: 90%;
+    display: flex;
+    margin: auto;
+  }
+  @keyframes growlogo {
+    0% {
+      width: 90%;
+    }
+    100% {
+      width: 100%;
+    }
+  }
+
+  #MLSlogo:hover {
+    animation: growlogo linear .5s;
+    width: 100%;
+    opacity: .9;
+  }
   #heading {
     max-width: 1100px;
-    margin: auto !important;
+    margin: -1px auto !important;
+    width: 100%;
+    z-index: 998;
+    background-color: white;
+    display: flex;
   }
   #forewarn-back {
     background-color: white;
@@ -148,6 +230,10 @@
   }
   #abovehead {
     background-image: linear-gradient( to right, #77d9d9, #02aae1);
+    z-index: 999;
+    position: fixed;
+    width: 100%;
+    margin: -173px 0;
   }
   .btn {
     border-radius: 40px;
@@ -162,6 +248,11 @@
   }
   .italics {
     font-style: italic;
+  }
+  #biglinks {
+    max-width: 1100px;
+    margin: auto !important;
+    height: 350px;
   }
   h1 {
     font-size: 50px;
@@ -187,10 +278,18 @@
     margin: 60px auto;
     text-align: center;
   }
-  .col-sm-3 h3 {
-    margin: 60px auto;
+
+  #MLStext {
+    border-top: white solid 2px;
+    border-bottom: white solid 2px;
     text-align: center;
+    color: white;
+    font-size: 40px;
+    font-family: 'Roboto', sans-serif;
+    padding: 10px 0 10px 0;
+    line-height: 4rem;
   }
+
   #text {
     padding: 0;
   }
@@ -204,6 +303,10 @@
     border-top: 1rem solid lightsteelblue;
     box-shadow: rgb(0 0 0 / 15%) 0px 1px 20px;
     z-index: 999;
+  }
+  #about-hover:hover {
+    cursor: pointer;
+    text-decoration: underline;
   }
   #about-hover p {
     font-size: 14px;
@@ -221,6 +324,11 @@
     box-shadow: rgb(0 0 0 / 15%) 0px 1px 20px;
     z-index: 999;
   }
+  #resources-hover:hover {
+    cursor: pointer;
+    text-decoration: underline;
+  }
+
   #resources-hover p {
     font-size: 14px;
     margin: 15px 0 5px 0;
@@ -237,6 +345,10 @@
     box-shadow: rgb(0 0 0 / 15%) 0px 1px 20px;
     z-index: 999;
   }
+  #membership-hover:hover {
+    cursor: pointer;
+    text-decoration: underline;
+  }
   #membership-hover p {
     font-size: 14px;
     margin: 15px 0 5px 0;
@@ -252,6 +364,10 @@
     border-top: 1rem solid lightsteelblue;
     box-shadow: rgb(0 0 0 / 15%) 0px 1px 20px;
   }
+  #news-hover:hover {
+    cursor: pointer;
+    text-decoration: underline;
+  }
   #membershiptools-hover {
     display: none;
     position: absolute;
@@ -262,6 +378,11 @@
     border-top: 1rem solid lightsteelblue;
     box-shadow: rgb(0 0 0 / 15%) 0px 1px 20px;
     z-index: 999;
+  }
+  #membershiptools-hover p {
+    font-size: 14px;
+    margin: 15px 0 5px 0;
+    font-weight: 500;
   }
   #news-hover p {
     font-size: 14px;
@@ -415,7 +536,7 @@
         }
 </style>
 
-<body>
+<body onscroll="scrollFunc()">
   <!--Heading Row-->
   <div class="contain-head">
     <div id="abovehead">
@@ -465,117 +586,122 @@
         </div>
       </div>
     </div>
-    <div class="row" id="heading">
-      <div class="col-sm">
-        <h3 onmouseover="aboutdrop()" onmouseout="removeabout()">About</h3>
-        <div id="about-hover" onmouseover="aboutdrop()" onmouseout="removeabout()">
-          <a href="https://www.bonitaesterorealtors.com/about/"><p>About BER</p></a>
-          <a href="https://www.bonitaesterorealtors.com/golden-b-e-a-r-awards-3/"><p>BER Sales Excellence Awards</p></a>
-          <a href="https://www.bonitaesterorealtors.com/2022-bod-and-past-pres/"><p>2022 Board of Directors</p></a>
-          <a href="https://www.bonitaesterorealtors.com/home-foundation/"><p>BER Home Foundation</p></a>
-          <a href="http://bonitaspringsesterorealtorsfl.growthzoneapp.com/realtordirectory/Find?term=&advFilter=eyJDdXN0b21GaWVsZFZhbHVlcyI6W10sIkNvdW50cmllcyI6W10sIlN0YXRlcyI6W10sIkNpdGllcyI6W10sIlBvc3RhbENvZGVzIjpbXSwiQ2F0ZWdvcnlWYWx1ZXMiOltdLCJSYWRpdXMiOiIwIn0%3D"><p>Realtor Directory</p></a>
-          <a href="http://bonitaspringsesterorealtorsfl.growthzoneapp.com/brokerdirectory/Find?term=&advFilter=eyJDdXN0b21GaWVsZFZhbHVlcyI6W10sIkNvdW50cmllcyI6W10sIlN0YXRlcyI6W10sIkNpdGllcyI6W10sIlBvc3RhbENvZGVzIjpbXSwiQ2F0ZWdvcnlWYWx1ZXMiOltdLCJSYWRpdXMiOiIwIn0%3D"><p>Broker Directory</p></a>
-          <a href="https://www.bonitaesterorealtors.com/simplyrets-listings/"><p>Property Search</p></a>
-          <a href="https://members.bonitaesterorealtors.com/affiliatedirectory"><p>Affiliate Directory</p></a>
-        </div>
-      </div>
-      <script type="text/javascript">
-        var about = document.getElementById("about-hover");
-        function aboutdrop() {
-          about.style.display="inline";
-        }
-        function removeabout() {
-          about.style.display="none";
-        }
-      </script>
-      <div class="col-sm">
-        <h3  onmouseover="memdrop()" onmouseout="removemem()">Membership</h3>
-        <div id="membership-hover" onmouseover="memdrop()" onmouseout="removemem()">
-          <a href="https://www.bonitaesterorealtors.com/join-bser/"><p>Join BER</p></a>
-          <a href="https://bonitaspringsesterorealtorsfl.growthzoneapp.com/ap/Form/Fill/rJD9lS4P"><p>Join A Commitee</p></a>
-        </div>
-      </div>
-      <script type="text/javascript">
-        var membership = document.getElementById("membership-hover");
-        function memdrop() {
-          membership.style.display="inline";
-        }
-        function removemem() {
-          membership.style.display="none";
-        }
-      </script>
-      <div class="col-sm">
-        <h3 onmouseover="newsdrop()" onmouseout="removenews()">News & Events</h3>
-        <div onmouseover="newsdrop()" onmouseout="removenews()" id="news-hover">
-          <a href="https://members.bonitaesterorealtors.com/bercalendar"><p>Event Calendar</p></a>
-          <a href="https://www.bonitaesterorealtors.com/ber-news/"><p>BER News</p></a>
-        </div>
-      </div>
-
-      <div class="col-sm" id="logo-contain">
-          <a href="https://www.bonitaesterorealtors.com/"><img id="logo" src="https://www.bonitaesterorealtors.com/wp-content/uploads/2022/10/BonitaSpringsEsteroRealtors_Logo_Vertical.png" alt=""></a>
-      </div>
-
-      <script type="text/javascript">
-        var news = document.getElementById("news-hover");
-        function newsdrop() {
-          news.style.display="inline";
-        }
-        function removenews() {
-          news.style.display="none";
-        }
-      </script>
-      <div class="col-sm">
-          <a href="https://www.bonitaesterorealtors.com/continuing-education-2/"><h3>Education</h3></a>
-      </div>
-      <div class="col-sm">
-          <h3 onmouseover="resourcesdrop()" onmouseout="removeresources()">Resources</h3>
-          <div onmouseover="resourcesdrop()" onmouseout="removeresources()" id="resources-hover">
-            <a href="https://www.bonitaesterorealtors.com/mls-test-page/"><p>MLS Tips & Recordings</p></a>
-            <a href="https://www.bonitaesterorealtors.com/reminehelppage/"><p>Remine Pro Help</p></a>
-            <a href="https://www.bonitaesterorealtors.com/rpac/"><p>RPAC</p></a>
-            <a href="https://www.bonitaesterorealtors.com/our-commitment-to-diversity/"><p>Diversity Page</p></a>
-            <a href="https://www.bonitaesterorealtors.com/florida-realtors-2/"><p>Florida Realtors</p></a>
-            <a href="https://www.bonitaesterorealtors.com/market-reports-2/"><p>Market Reports</p></a>
-            <a href="https://www.bonitaesterorealtors.com/wp-content/uploads/2021/04/2021-MLS-Rules-Regs.pdf"><p>MLS Rules & Regulations</p></a>
+    <div id="head-background">
+      <div class="row" id="heading">
+        <div class="col-sm">
+          <h3 onmouseover="aboutdrop()" onmouseout="removeabout()">About</h3>
+          <div id="about-hover" onmouseover="aboutdrop()" onmouseout="removeabout()">
+            <a href="https://www.bonitaesterorealtors.com/about/"><p>About BER</p></a>
+            <a href="https://www.bonitaesterorealtors.com/golden-b-e-a-r-awards-3/"><p>BER Sales Excellence Awards</p></a>
+            <a href="https://www.bonitaesterorealtors.com/2022-bod-and-past-pres/"><p>2022 Board of Directors</p></a>
+            <a href="https://www.bonitaesterorealtors.com/home-foundation/"><p>BER Home Foundation</p></a>
+            <a href="http://bonitaspringsesterorealtorsfl.growthzoneapp.com/realtordirectory/Find?term=&advFilter=eyJDdXN0b21GaWVsZFZhbHVlcyI6W10sIkNvdW50cmllcyI6W10sIlN0YXRlcyI6W10sIkNpdGllcyI6W10sIlBvc3RhbENvZGVzIjpbXSwiQ2F0ZWdvcnlWYWx1ZXMiOltdLCJSYWRpdXMiOiIwIn0%3D"><p>Realtor Directory</p></a>
+            <a href="http://bonitaspringsesterorealtorsfl.growthzoneapp.com/brokerdirectory/Find?term=&advFilter=eyJDdXN0b21GaWVsZFZhbHVlcyI6W10sIkNvdW50cmllcyI6W10sIlN0YXRlcyI6W10sIkNpdGllcyI6W10sIlBvc3RhbENvZGVzIjpbXSwiQ2F0ZWdvcnlWYWx1ZXMiOltdLCJSYWRpdXMiOiIwIn0%3D"><p>Broker Directory</p></a>
+            <a href="https://www.bonitaesterorealtors.com/simplyrets-listings/"><p>Property Search</p></a>
+            <a href="https://members.bonitaesterorealtors.com/affiliatedirectory"><p>Affiliate Directory</p></a>
           </div>
-      </div>
-
-      <div class="col-sm">
-          <h3 onmouseover="toolssdrop()" onmouseout="removetools()">Membership Tools</h3>
-          <div onmouseover="toolssdrop()" onmouseout="removetools()" id="membershiptools-hover">
-            <a href="https://www.bonitaesterorealtors.com/mls-test-page/"><p>MLS Tips & Recordings</p></a>
-            <a href="https://www.bonitaesterorealtors.com/reminehelppage/"><p>Remine Pro Help</p></a>
-            <a href="https://www.bonitaesterorealtors.com/rpac/"><p>RPAC</p></a>
-            <a href="https://www.bonitaesterorealtors.com/our-commitment-to-diversity/"><p>Diversity Page</p></a>
-            <a href="https://www.bonitaesterorealtors.com/florida-realtors-2/"><p>Florida Realtors</p></a>
-            <a href="https://www.bonitaesterorealtors.com/market-reports-2/"><p>Market Reports</p></a>
-            <a href="https://www.bonitaesterorealtors.com/wp-content/uploads/2021/04/2021-MLS-Rules-Regs.pdf"><p>MLS Rules & Regulations</p></a>
+        </div>
+        <script type="text/javascript">
+          var about = document.getElementById("about-hover");
+          function aboutdrop() {
+            about.style.display="inline";
+          }
+          function removeabout() {
+            about.style.display="none";
+          }
+        </script>
+        <div class="col-sm">
+          <h3  onmouseover="memdrop()" onmouseout="removemem()">Membership</h3>
+          <div id="membership-hover" onmouseover="memdrop()" onmouseout="removemem()">
+            <a href="https://www.bonitaesterorealtors.com/join-bser/"><p>Join BER</p></a>
+            <a href="https://bonitaspringsesterorealtorsfl.growthzoneapp.com/ap/Form/Fill/rJD9lS4P"><p>Join A Commitee</p></a>
           </div>
-      </div>
+        </div>
+        <script type="text/javascript">
+          var membership = document.getElementById("membership-hover");
+          function memdrop() {
+            membership.style.display="inline";
+          }
+          function removemem() {
+            membership.style.display="none";
+          }
+        </script>
+        <div class="col-sm">
+          <h3 onmouseover="newsdrop()" onmouseout="removenews()">News & Events</h3>
+          <div onmouseover="newsdrop()" onmouseout="removenews()" id="news-hover">
+            <a href="https://members.bonitaesterorealtors.com/bercalendar"><p>Event Calendar</p></a>
+            <a href="https://www.bonitaesterorealtors.com/ber-news/"><p>BER News</p></a>
+          </div>
+        </div>
 
-      <script type="text/javascript">
-        var resources = document.getElementById("resources-hover");
-        function resourcesdrop() {
-          resources.style.display="inline";
-        }
-        function removeresources() {
-          resources.style.display="none";
-        }
-        var tools = document.getElementById("membershiptools-hover");
-        function toolssdrop() {
-          tools.style.display="inline";
-        }
-        function removetools() {
-          tools.style.display="none";
-        }
-      </script>
+        <div class="col-sm" id="logo-contain">
+            <a href="https://www.bonitaesterorealtors.com/"><img id="logo" src="https://www.bonitaesterorealtors.com/wp-content/uploads/2022/10/BonitaSpringsEsteroRealtors_Logo_Vertical.png" alt=""></a>
+        </div>
 
+        <script type="text/javascript">
+          var news = document.getElementById("news-hover");
+          function newsdrop() {
+            news.style.display="inline";
+          }
+          function removenews() {
+            news.style.display="none";
+          }
+        </script>
+        <div class="col-sm">
+            <a href="https://www.bonitaesterorealtors.com/continuing-education-2/"><h3>Education</h3></a>
+        </div>
+        <div class="col-sm">
+            <h3 onmouseover="resourcesdrop()" onmouseout="removeresources()">Resources</h3>
+            <div onmouseover="resourcesdrop()" onmouseout="removeresources()" id="resources-hover">
+              <a href="https://www.bonitaesterorealtors.com/mls-test-page/"><p>MLS Tips & Recordings</p></a>
+              <a href="https://www.bonitaesterorealtors.com/reminehelppage/"><p>Remine Pro Help</p></a>
+              <a href="https://www.bonitaesterorealtors.com/rpac/"><p>RPAC</p></a>
+              <a href="https://www.bonitaesterorealtors.com/our-commitment-to-diversity/"><p>Diversity Page</p></a>
+              <a href="https://www.bonitaesterorealtors.com/florida-realtors-2/"><p>Florida Realtors</p></a>
+              <a href="https://www.bonitaesterorealtors.com/market-reports-2/"><p>Market Reports</p></a>
+              <a href="https://www.bonitaesterorealtors.com/wp-content/uploads/2021/04/2021-MLS-Rules-Regs.pdf"><p>MLS Rules & Regulations</p></a>
+            </div>
+        </div>
+
+        <div class="col-sm">
+            <h3 onmouseover="toolssdrop()" onmouseout="removetools()">Membership Tools</h3>
+            <div onmouseover="toolssdrop()" onmouseout="removetools()" id="membershiptools-hover">
+              <a href="https://www.bonitaesterorealtors.com/mls-test-page/"><p>MLS Tips & Recordings</p></a>
+              <a href="https://www.bonitaesterorealtors.com/reminehelppage/"><p>Remine Pro Help</p></a>
+              <a href="https://www.bonitaesterorealtors.com/rpac/"><p>RPAC</p></a>
+              <a href="https://www.bonitaesterorealtors.com/our-commitment-to-diversity/"><p>Diversity Page</p></a>
+              <a href="https://www.bonitaesterorealtors.com/florida-realtors-2/"><p>Florida Realtors</p></a>
+              <a href="https://www.bonitaesterorealtors.com/market-reports-2/"><p>Market Reports</p></a>
+              <a href="https://www.bonitaesterorealtors.com/wp-content/uploads/2021/04/2021-MLS-Rules-Regs.pdf"><p>MLS Rules & Regulations</p></a>
+            </div>
+        </div>
+
+        <script type="text/javascript">
+          var resources = document.getElementById("resources-hover");
+          function resourcesdrop() {
+            resources.style.display="inline";
+          }
+          function removeresources() {
+            resources.style.display="none";
+          }
+          var tools = document.getElementById("membershiptools-hover");
+          function toolssdrop() {
+            tools.style.display="inline";
+          }
+          function removetools() {
+            tools.style.display="none";
+          }
+        </script>
+
+        </div>
       </div>
 
       <style media="screen">
-        @keyframe loading {
+        @keyframes loading {
           0% {
+            width: 0%;
+          }
+          15% {
             width: 0%;
           }
           100% {
@@ -587,18 +713,53 @@
             height: 10px;
             z-index: 5;
             width: 100%;
-            opacity: 1;
+            margin: 0 !important;
+            opacity: .3;
             color: black;
-            border-top: lightgrey solid 5px;
+            border-top: black solid 5px;
             animation: loading 8s linear;
           }
       </style>
 
+      <script type="text/javascript">
+
+      function scrollFunc() {
+        if (window.scrollY < 100) {
+          document.getElementById("head-background").style.opacity = "1";
+        }
+        else if (window.scrollY > 100) {
+          document.getElementById("head-background").style.opacity = ".8";
+        }
+      }
+
+      </script>
+
       <div class="video-contain">
         <div id="display1">
-          <div id="loading-line1">
-          </div>
+          <hr id="loading-line1">
           <img id="img1" src="https://www.bonitaesterorealtors.com/wp-content/uploads/2022/08/Q4-2021-Website.gif" alt="">
+        </div>
+      </div>
+
+      <div class="important-links">
+        <div class="row" id="biglinks">
+          <!--MLS-->
+          <a href=""><div class="col-sm-3" id="MLS">
+            <img id="MLSlogo" src="https://www.bonitaesterorealtors.com/wp-content/uploads/2022/10/Untitled-design-12.png" alt="">
+            <h4 id="MLStext">MLS Login</h4>
+          </div></a>
+          <!--Member Portal-->
+          <div class="col-sm-3" id="MP">
+
+          </div>
+          <!--Events-->
+          <div class="col-sm-3" id="Events">
+
+          </div>
+          <!--Join BER-->
+          <div class="col-sm-3"id="Join">
+
+          </div>
         </div>
       </div>
 
