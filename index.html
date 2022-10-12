@@ -57,7 +57,7 @@
   .important-links {
     background-image: url("https://www.bonitaesterorealtors.com/wp-content/uploads/2022/10/Untitled-design-10.png");
     background-size: cover;
-    margin: 100px 0;
+    margin: 60px 0 100px 0;
   }
   .contain-head {
     width: 100%;
@@ -72,7 +72,7 @@
 
   #MLS {
     background-color: #fbaa19;
-    margin: -100px 0;
+    margin: -60px 0;
     height: 250px;
     width: 300px;
   }
@@ -84,23 +84,29 @@
 
   #MP {
     background-color: #ffdfa7;
-    margin: -100px 0;
+    margin: -60px 0;
     height: 250px;
     width: 300px;
   }
 
   #Events {
     background-color: #ffce75;
-    margin: -100px 0;
+    margin: -60px 0;
     height: 250px;
     width: 300px;
   }
 
   #Join {
     background-color: #fff3dd;
-    margin: -100px 0;
+    margin: -60px 0;
     height: 250px;
     width: 300px;
+  }
+
+  #vid1 {
+    width: 100%;
+    object-fit: cover;
+    margin: 0 0 -21px 0;
   }
 
   .welcome {
@@ -112,7 +118,7 @@
     text-align: center;
     color: white;
     padding: 50px 50px 50px 49px;
-    margin: -210px auto 0px;
+    margin: -225px auto 0px auto;
   }
 
   .col-sm {
@@ -754,7 +760,14 @@
       <div class="video-contain">
         <div id="display1">
           <hr id="loading-line1">
-          <img id="img1" src="https://www.bonitaesterorealtors.com/wp-content/uploads/2022/08/Q4-2021-Website.gif" alt="">
+          <video id="vid1" playsinline autoplay muted loop poster="cake.jpg">
+            <source src="https://www.bonitaesterorealtors.com/wp-content/uploads/2022/10/Welcome-to.mp4" type="video/webm">
+            Your browser does not support the video tag.
+          </video>
+        </div>
+        <div id="display2">
+          <hr id="loading-line2">
+          <img id="img1" style="display: none;" src="https://www.bonitaesterorealtors.com/wp-content/uploads/2022/08/Q4-2021-Website.gif" alt="">
         </div>
       </div>
 
@@ -783,6 +796,156 @@
       <div class="welcome">
         Welcome to Bonita Springs-Estero Realtors.  Our mission is to  to Serve and Enhance the Professionalism of our Members, Promote an Environment Where Our Members can Prosper, and Contribute to our Community.  We have over 1,300 active Realtors and 200 plus affiliates who call "BER" their Realtor Board.  Come find out what makes "BER" special.
       </div>
+
+      <style>
+   .marquee {
+     width: 150%;
+     margin: 0 0 0 -30px;
+     height: 120px;
+     /*background-image: linear-gradient(to right, #006ee2 0%, #05aae1 15%, #05aae1 85%, #006ee2 100%);*/
+   }
+
+   #marquee-content {
+     display: flex;
+     height: 100%;
+     animation: scrolling 130s linear infinite;
+   }
+
+   @keyframes scrolling {
+     0%{ transform: translateX(140vw); }
+     100%{ transform: translateX(-2200vw); }
+   }
+
+   #marquee-content li, img{
+       list-style: none;
+       justify-content: center;
+       align-items: center;
+       flex-shrink: 0;
+       display: flex;
+       margin: auto 20px auto 20px;
+       height: 110px;
+       max-width: 300px;
+       white-space: nowrap;
+       object-fit: contain;
+       background-color: #FFF;
+   }
+
+   #marquee-content li, img:hover {
+     cursor: pointer;
+   }
+
+ </style>
+ <h2 style="text-align: center;">Our Affiliates</h2>
+   <div class="marquee" onclick="window.open('https://members.bonitaesterorealtors.com/affiliatedirectory')">
+     <ul id="marquee-content">
+       <li><img src="https://www.bonitaesterorealtors.com/wp-content/uploads/2021/09/239.jpeg"</img></li>
+       <li><img src="https://www.bonitaesterorealtors.com/wp-content/uploads/2021/09/911.png"</img></li>
+       <li><img src="https://www.bonitaesterorealtors.com/wp-content/uploads/2021/09/Screen-Shot-2021-09-15-at-11.54.04-AM-1.png"</img></li>
+       <li><img src="https://www.bonitaesterorealtors.com/wp-content/uploads/2021/09/AccessTitleLogo1-300x89-1.jpeg"</img></li>
+       <li><img src="https://www.bonitaesterorealtors.com/wp-content/uploads/2021/09/allied.jpeg"</img></li>
+       <li><img src="https://www.bonitaesterorealtors.com/wp-content/uploads/2021/09/allure.jpeg"</img></li>
+       <li><img src="https://www.bonitaesterorealtors.com/wp-content/uploads/2021/09/ares.png"</img></li>
+       <li><img src="https://www.bonitaesterorealtors.com/wp-content/uploads/2021/09/assuredp.jpeg"</img></li>
+       <li><img src="https://www.bonitaesterorealtors.com/wp-content/uploads/2021/09/acm-logo-primary-blue.png"</img></li>
+       <li><img src="https://www.bonitaesterorealtors.com/wp-content/uploads/2022/01/Apex-Painting-e1642528424622.webp"</img></li>
+       <li><img src="https://www.bonitaesterorealtors.com/wp-content/uploads/2022/01/ArmstrongLogo-web375.png"</img></li>
+       <li><img src="https://www.bonitaesterorealtors.com/wp-content/uploads/2021/09/OIP-8.jpeg"</img></li>
+       <li><img src="https://www.bonitaesterorealtors.com/wp-content/uploads/2021/09/biosweep.jpeg"</img></li>
+       <li><img src="https://www.bonitaesterorealtors.com/wp-content/uploads/2022/05/Blue-line-enviormental-services.jpeg"</img></li>
+       <li><img src="https://www.bonitaesterorealtors.com/wp-content/uploads/2021/09/capital.jpeg"</img></li>
+       <li><img src="https://www.bonitaesterorealtors.com/wp-content/uploads/2021/09/center.jpeg"</img></li>
+       <li><img src="https://www.bonitaesterorealtors.com/wp-content/uploads/2021/09/CenterState-logo.png"</img></li>
+       <li><img src="https://www.bonitaesterorealtors.com/wp-content/uploads/2021/09/OIP-9.jpeg"</img></li>
+       <li><img src="https://www.bonitaesterorealtors.com/wp-content/uploads/2021/09/OIP-10.jpeg"</img></li>
+       <li><img src="https://www.bonitaesterorealtors.com/wp-content/uploads/2021/09/CCM_Logo.png"</img></li>
+       <li><img src="https://www.bonitaesterorealtors.com/wp-content/uploads/2022/01/CITE-solutions-logo.png"</img></li>
+       <li><img src="https://www.bonitaesterorealtors.com/wp-content/uploads/2021/09/cutco.png"</img></li>
+       <li><img src="https://www.bonitaesterorealtors.com/wp-content/uploads/2021/09/cropped-1612302583.jpeg"</img></li>
+       <li><img src="https://www.bonitaesterorealtors.com/wp-content/uploads/2021/09/dr-horton.png"</img></li>
+       <li><img style="background-color: #05a8c8" src="https://www.bonitaesterorealtors.com/wp-content/uploads/2022/01/DTD-Logo-white-small.png"</img></li>
+       <li><img src="https://www.bonitaesterorealtors.com/wp-content/uploads/2021/09/180760970_606028123656003_1192281656902750561_n.jpeg"</img></li>
+       <li><img src="https://www.bonitaesterorealtors.com/wp-content/uploads/2022/05/embrace-home-loans-2.jpeg"</img></li>
+       <li><img src="https://www.bonitaesterorealtors.com/wp-content/uploads/2022/01/eTITLE_logo@2x.png"</img></li>
+       <li><img src="https://www.bonitaesterorealtors.com/wp-content/uploads/2021/09/equitable.jpeg"</img></li>
+       <li><img src="https://www.bonitaesterorealtors.com/wp-content/uploads/2022/01/Express-Displosal.png"</img></li>
+       <li><img src="https://www.bonitaesterorealtors.com/wp-content/uploads/2021/09/R-1.png"</img></li>
+       <li><img src="https://www.bonitaesterorealtors.com/wp-content/uploads/2021/09/fairview-lending-logo.png"</img></li>
+       <li><img src="https://www.bonitaesterorealtors.com/wp-content/uploads/2021/09/Screen-Shot-2021-09-15-at-10.58.43-AM.png"</img></li>
+       <li><img src="https://www.bonitaesterorealtors.com/wp-content/uploads/2021/09/first.jpeg"</img></li>
+       <li><img src="https://www.bonitaesterorealtors.com/wp-content/uploads/2022/05/first-horizons-logo.jpeg"</img></li>
+       <li><img src="https://www.bonitaesterorealtors.com/wp-content/uploads/2022/01/Gulf-Western-Roofing.png"</img></li>
+       <li><img src="https://www.bonitaesterorealtors.com/wp-content/uploads/2021/09/haines.jpeg"</img></li>
+       <li><img src="https://www.bonitaesterorealtors.com/wp-content/uploads/2021/09/hale-logo-with-ned.png"</img></li>
+       <li><img src="https://www.bonitaesterorealtors.com/wp-content/uploads/2021/09/Height-title-logo.webp"</img></li>
+       <li><img src="https://www.bonitaesterorealtors.com/wp-content/uploads/2021/09/Screen-Shot-2021-09-15-at-10.57.12-AM.png"</img></li>
+       <li><img src="https://www.bonitaesterorealtors.com/wp-content/uploads/2022/05/homecierge-of-SWFL.jpeg"</img></li>
+       <li><img src="https://www.bonitaesterorealtors.com/wp-content/uploads/2022/05/homelight-scaled.jpeg"</img></li>'
+       <li><img src="https://www.bonitaesterorealtors.com/wp-content/uploads/2022/05/HOMESHIELD_v1-300x101-1.jpeg"</img></li>
+       <li><img src="https://www.bonitaesterorealtors.com/wp-content/uploads/2021/09/hometeam.png"</img></li>
+       <li><img src="https://www.bonitaesterorealtors.com/wp-content/uploads/2022/01/Housemaster.png"</img></li>
+       <li><img src="https://www.bonitaesterorealtors.com/wp-content/uploads/2021/09/HT-Head.png"</img></li>
+       <li><img src="https://www.bonitaesterorealtors.com/wp-content/uploads/2021/09/G1_Hughes-Logo.png"</img></li>
+       <li><img src="https://www.bonitaesterorealtors.com/wp-content/uploads/2021/09/38fcc07f265c39dee1765890f6cc6ab5.jpeg"</img></li>
+       <li><img src="https://www.bonitaesterorealtors.com/wp-content/uploads/2021/09/Green-John-Galt-Logo-allsize600px.png"</img></li>
+       <li><img src="https://www.bonitaesterorealtors.com/wp-content/uploads/2021/09/johnsons.png"</img></li>
+       <li><img src="https://www.bonitaesterorealtors.com/wp-content/uploads/2022/01/Joe-the-Home-Pro.png"</img></li>
+       <li><img src="https://www.bonitaesterorealtors.com/wp-content/uploads/2022/01/JR-Co.-Inc..png"</img></li>
+       <li><img src="https://www.bonitaesterorealtors.com/wp-content/uploads/2022/01/Koala-Insullation-.png"</img></li>
+       <li><img src="https://www.bonitaesterorealtors.com/wp-content/uploads/2021/09/sam-saad.jpeg"</img></li>
+       <li><img src="https://www.bonitaesterorealtors.com/wp-content/uploads/2022/01/sunpro-solar-logo.png"</img></li>
+       <li><img src="https://www.bonitaesterorealtors.com/wp-content/uploads/2021/09/LBHRenovation.png"</img></li>
+       <li><img src="https://www.bonitaesterorealtors.com/wp-content/uploads/2022/05/loandepot_com__llc_logo-2.jpeg"</img></li>
+       <li><img src="https://www.bonitaesterorealtors.com/wp-content/uploads/2021/09/guarenteed.jpeg"</img></li>
+       <li><img src="https://www.bonitaesterorealtors.com/wp-content/uploads/2022/05/mapps-insurance-2.jpeg"</img></li>
+       <li><img src="https://www.bonitaesterorealtors.com/wp-content/uploads/2022/05/marketplace-title-copy-2-Small.jpeg"</img></li>
+       <li><img style="background-color: #05a8c8" src="https://www.bonitaesterorealtors.com/wp-content/uploads/2022/01/Monark-Premium-Appliances.png"</img></li>
+       <li><img src="https://www.bonitaesterorealtors.com/wp-content/uploads/2022/05/movement-mortgage-2.jpeg"</img></li>
+       <li><img style="background-color: #05a8c8" src="https://www.bonitaesterorealtors.com/wp-content/uploads/2022/01/My-Undercover-Agent.png"</img></li>
+       <li><img src="https://www.bonitaesterorealtors.com/wp-content/uploads/2022/05/nrl-mortgage-2.jpeg"</img></li>
+       <li><img src="https://www.bonitaesterorealtors.com/wp-content/uploads/2021/09/northpointelogo.jpeg"</img></li>
+       <li><img style="background-color: #05a8c8" src="https://www.bonitaesterorealtors.com/wp-content/uploads/2022/01/Southwest-Florida-Dryer-Vent-Cleaning.png"</img></li>
+       <li><img src="https://www.bonitaesterorealtors.com/wp-content/uploads/2021/09/pelican-nest.jpeg"</img></li>
+       <li><img src="https://www.bonitaesterorealtors.com/wp-content/uploads/2021/09/pillar-to-post.jpeg"</img></li>
+       <li><img src="https://www.bonitaesterorealtors.com/wp-content/uploads/2022/05/pinnacle-re.jpeg"</img></li>
+       <li><img src="https://www.bonitaesterorealtors.com/wp-content/uploads/2021/09/premier-rep.jpeg"</img></li>
+       <li><img src="https://www.bonitaesterorealtors.com/wp-content/uploads/2021/09/Screen-Shot-2021-09-14-at-11.22.16-AM.png"</img></li>
+       <li><img src="https://www.bonitaesterorealtors.com/wp-content/uploads/2021/09/PrimeLending_Trademarked_Stacked_2C_Square_500px-2.jpeg"</img></li>
+       <li><img src="https://www.bonitaesterorealtors.com/wp-content/uploads/2022/05/private-client.jpeg"</img></li>
+       <li><img src="https://www.bonitaesterorealtors.com/wp-content/uploads/2022/05/Property-shots.jpeg"</img></li>
+       <li><img src="https://www.bonitaesterorealtors.com/wp-content/uploads/2021/09/Pulte_Logo.jpeg"</img></li>
+       <li><img src="https://www.bonitaesterorealtors.com/wp-content/uploads/2021/09/radon.jpeg"</img></li>
+       <li><img src="https://www.bonitaesterorealtors.com/wp-content/uploads/2022/05/responsive-insurance.jpeg"</img></li>
+       <li><img src="https://www.bonitaesterorealtors.com/wp-content/uploads/2021/09/RightChoiceHomeWatch_Logo_30bigger.png"</img></li>
+       <li><img src="https://www.bonitaesterorealtors.com/wp-content/uploads/2022/05/rob-bullerdick.jpeg"</img></li>
+       <li><img src="https://www.bonitaesterorealtors.com/wp-content/uploads/2021/09/rosier.webp"</img></li>
+       <li><img src="https://www.bonitaesterorealtors.com/wp-content/uploads/2021/09/38fcc07f265c39dee1765890f6cc6ab5.jpeg"</img></li>
+       <li><img style="background-color: #05a8c8" src="https://www.bonitaesterorealtors.com/wp-content/uploads/2021/09/seag-dev.png"</img></li>
+       <li><img style="background-color: #05a8c8" src="https://www.bonitaesterorealtors.com/wp-content/uploads/2021/09/sierra.png"</img></li>
+       <li><img src="https://www.bonitaesterorealtors.com/wp-content/uploads/2021/09/SPOTLIGHT_logo.jpeg"</img></li>
+       <li><img src="https://www.bonitaesterorealtors.com/wp-content/uploads/2021/09/new-logo-state-insurance-usa.jpeg"</img></li>
+       <li><img src="https://www.bonitaesterorealtors.com/wp-content/uploads/2022/05/starbanco.jpeg"</img></li>
+       <li><img style="background-color: #05a8c8" src="https://www.bonitaesterorealtors.com/wp-content/uploads/2022/05/sunbelt.jpeg"</img></li>
+       <li><img src="https://www.bonitaesterorealtors.com/wp-content/uploads/2022/05/suncoast-moving.jpeg"</img></li>
+       <li><img src="https://www.bonitaesterorealtors.com/wp-content/uploads/2022/05/sunrise-insurance.jpeg"</img></li>
+       <li><img src="https://www.bonitaesterorealtors.com/wp-content/uploads/2021/09/testimonial.png"</img></li>
+       <li><img src="https://www.bonitaesterorealtors.com/wp-content/uploads/2022/05/td-bank.jpeg"</img></li>
+       <li><img src="https://www.bonitaesterorealtors.com/wp-content/uploads/2022/05/the-colony.jpeg"</img></li>
+       <li><img src="https://www.bonitaesterorealtors.com/wp-content/uploads/2021/09/bug-terminators.jpeg"</img></li>
+       <li><img src="https://www.bonitaesterorealtors.com/wp-content/uploads/2022/05/the-mortgage-place-copy.jpeg"</img></li>
+       <li><img src="https://www.bonitaesterorealtors.com/wp-content/uploads/2022/05/Third-Federal-Mortgage.jpeg"</img></li>
+       <li><img src="https://www.bonitaesterorealtors.com/wp-content/uploads/2022/05/total-mortgage.jpeg"</img></li>
+       <li><img src="https://www.bonitaesterorealtors.com/wp-content/uploads/2022/05/treeline-building.jpeg"</img></li>
+       <li><img style="background-color: #05a8c8" src="https://www.bonitaesterorealtors.com/wp-content/uploads/2021/09/APPROVED-LARGE-Moore-Lending-Group_Team-Logo_Stacked-white.png"</img></li>
+       <li><img src="https://www.bonitaesterorealtors.com/wp-content/uploads/2021/09/tri-town.png"</img></li>
+       <li><img src="https://www.bonitaesterorealtors.com/wp-content/uploads/2022/01/Tomasso-Morthage.png"</img></li>
+       <li><img src="https://www.bonitaesterorealtors.com/wp-content/uploads/2022/01/Screen-Shot-2022-01-18-at-1.33.40-PM-1.png"</img></li>
+       <li><img src="https://www.bonitaesterorealtors.com/wp-content/uploads/2021/09/Screen-Shot-2021-09-15-at-11.29.55-AM.png"</img></li>
+       <li><img src="https://www.bonitaesterorealtors.com/wp-content/uploads/2021/09/valley-national-bank.webp"</img></li>
+       <li><img src="https://www.bonitaesterorealtors.com/wp-content/uploads/2022/05/wells-fargo-2.jpeg"</img></li>
+       <li><img style="background-color: #05a8c8" src="https://www.bonitaesterorealtors.com/wp-content/uploads/2022/01/WWMR.png"</img></li>
+       <li><img style="background-color: #05a8c8" src="https://www.bonitaesterorealtors.com/wp-content/uploads/2022/01/Woodward-Pires.png"</img></li>
+     </ul>
+   </div>
 
       <!--Upcoming & Stats-->
       <div class="statsplus row">
