@@ -70,11 +70,22 @@
     margin: 0px 5% 0px 5% !important;
   }
 
+  #welcome-text {
+    font-size: 16px;
+  }
+
+  #welcome-head {
+    font-family: Oswald, sans-serif;
+    font-size: 46px
+  }
+
   #MLS {
-    background-image: url("https://www.bonitaesterorealtors.com/wp-content/uploads/2022/10/Untitled-600-x-500-px.png");
+    background-image: url("https://www.bonitaesterorealtors.com/wp-content/uploads/2022/10/backorange.png");
     margin: -60px 0;
     height: 250px;
-    width: 300px;
+    width: auto;
+    background-size: cover;
+    border-radius: 15px 0px 0px 15px;
   }
 
   #MLS:hover {
@@ -86,25 +97,71 @@
     background-color: #ffdfa7;
     margin: -60px 0;
     height: 250px;
-    width: 300px;
+    width: auto;
+    background-image: url("https://www.bonitaesterorealtors.com/wp-content/uploads/2022/10/backoranges.png");
+    background-size: cover;
+  }
+  #MP:hover {
+    font-size: 50px;
+    cursor: pointer;
   }
 
   #Events {
     background-color: #ffce75;
     margin: -60px 0;
     height: 250px;
-    width: 300px;
+    width: auto;
+    background-image: url("https://www.bonitaesterorealtors.com/wp-content/uploads/2022/10/backoranges-1.png");
+    background-size: cover;
+  }
+  #Events:hover {
+    font-size: 50px;
+    cursor: pointer;
   }
 
   #Join {
     background-color: #fff3dd;
     margin: -60px 0;
+    color: #ffc235;
     height: 250px;
-    width: 300px;
+    width: auto;
+    border-radius: 0px 15px 15px 0px;
+    background-image: url("https://www.bonitaesterorealtors.com/wp-content/uploads/2022/10/backoranges-2.png");
+    background-size: cover;
+  }
+  #Join:hover {
+    font-size: 50px;
+    cursor: pointer;
+  }
+
+  #Jointext {
+    color: #ffc235;
+    border-top: #ffc235 solid 2px;
+    border-bottom: #ffc235 solid 2px;
+    text-align: center;
+    font-size: 40px;
+    font-family: 'Roboto', sans-serif;
+    padding: 10px 0 10px 0;
+    line-height: 4rem;
   }
 
   #vid1 {
     width: 100%;
+    max-height: 600px;
+    object-fit: cover;
+    margin: 0 0 -21px 0;
+  }
+
+  #vid2 {
+    width: 100%;
+    max-height: 600px;
+    object-fit: cover;
+    margin: 0 0 -21px 0;
+  }
+
+  #vid3 {
+    width: 100%;
+    max-height: 600px;
     object-fit: cover;
     margin: 0 0 -21px 0;
   }
@@ -119,6 +176,7 @@
     color: white;
     padding: 50px 50px 50px 49px;
     margin: -225px auto 0px auto;
+    display: block;
   }
 
   .col-sm {
@@ -163,6 +221,7 @@
     width: 430px;
     height: 260px;
   }
+
   .video-contain {
     width: 100%;
     background-color: grey;
@@ -171,7 +230,17 @@
     position: relative;
   }
   #display1 {
-    max-height: 500px;
+    max-height: 600px;
+    display: flex;
+    margin: auto;
+  }
+  #display2 {
+    max-height: 600px;
+    display: flex;
+    margin: auto;
+  }
+  #display3 {
+    max-height: 600px;
     display: flex;
     margin: auto;
   }
@@ -186,8 +255,7 @@
   #MLSlogo {
     width: 90%;
     display: flex;
-    margin: auto;
-    background-color: #fbaa19;
+    margin: 20px auto;
   }
   @keyframes growlogo {
     0% {
@@ -219,6 +287,12 @@
   .subtitle {
     font-size: 26px;
     margin: 0;
+  }
+  .resrow {
+    text-align: center;
+    font-size: 44px;
+    color: #008080;
+    font-family: 'Oswald', sans-serif;
   }
   #socials {
     margin: 5px auto;
@@ -314,6 +388,17 @@
     line-height: 4rem;
   }
 
+  #Eventtext {
+    border-top: white solid 2px;
+    border-bottom: white solid 2px;
+    text-align: center;
+    color: white;
+    font-size: 30px;
+    font-family: 'Roboto', sans-serif;
+    padding: 10px 0 10px 0;
+    line-height: 4rem;
+  }
+
   #text {
     padding: 0;
   }
@@ -327,10 +412,6 @@
     border-top: 1rem solid lightsteelblue;
     box-shadow: rgb(0 0 0 / 15%) 0px 1px 20px;
     z-index: 999;
-  }
-  #about-hover:hover {
-    cursor: pointer;
-    text-decoration: underline;
   }
   #about-hover p {
     font-size: 14px;
@@ -347,10 +428,6 @@
     border-top: 1rem solid lightsteelblue;
     box-shadow: rgb(0 0 0 / 15%) 0px 1px 20px;
     z-index: 999;
-  }
-  #resources-hover:hover {
-    cursor: pointer;
-    text-decoration: underline;
   }
 
   #resources-hover p {
@@ -369,10 +446,6 @@
     box-shadow: rgb(0 0 0 / 15%) 0px 1px 20px;
     z-index: 999;
   }
-  #membership-hover:hover {
-    cursor: pointer;
-    text-decoration: underline;
-  }
   #membership-hover p {
     font-size: 14px;
     margin: 15px 0 5px 0;
@@ -387,10 +460,6 @@
     margin: -10px 0 0 0px;
     border-top: 1rem solid lightsteelblue;
     box-shadow: rgb(0 0 0 / 15%) 0px 1px 20px;
-  }
-  #news-hover:hover {
-    cursor: pointer;
-    text-decoration: underline;
   }
   #membershiptools-hover {
     display: none;
@@ -741,7 +810,29 @@
             opacity: .3;
             color: black;
             border-top: black solid 5px;
-            animation: loading 8s linear;
+            animation: loading 12s linear;
+          }
+          #loading-line2 {
+            position: absolute;
+            height: 10px;
+            z-index: 5;
+            width: 100%;
+            margin: 0 !important;
+            opacity: .3;
+            color: black;
+            border-top: black solid 5px;
+            animation: loading 32s linear;
+          }
+          #loading-line3 {
+            position: absolute;
+            height: 10px;
+            z-index: 5;
+            width: 100%;
+            margin: 0 !important;
+            opacity: .3;
+            color: black;
+            border-top: black solid 5px;
+            animation: loading 64s linear;
           }
       </style>
 
@@ -756,20 +847,78 @@
         }
       }
 
+      let vidnum = 1;
+
+
+
+      function changeVidNum() {
+        let vid1 = document.getElementById("vid1");
+        let vid2 = document.getElementById("vid2");
+        let vid3 = document.getElementById("vid3");
+        if (vidnum === 0) {
+          console.log("This");
+          document.getElementById("display1").style.display = "contents";
+          document.getElementById("display3").style.display = "none";
+          document.getElementById("display2").style.display = "none";
+          document.getElementById("display2").currentTime = 0;
+          vid2.pause();
+          vid2.currentTime = 0;
+          vid1.play();
+          vidnum++;
+        }
+        else if (vidnum === 1) {
+          console.log("That");
+          document.getElementById("display2").style.display = "contents";
+          document.getElementById("display1").style.display = "none";
+          document.getElementById("display1").currentTime = 0;
+          vid1.pause();
+          vid1.currentTime = 0;
+          vid2.play();
+          vidnum++;
+        }
+        else if (vidnum === 2) {
+          console.log("That");
+          document.getElementById("display3").style.display = "contents";
+          document.getElementById("display2").style.display = "none";
+          document.getElementById("display1").style.display = "none";
+          document.getElementById("display1").currentTime = 0;
+          vid2.pause();
+          vid2.currentTime = 0;
+          vid3.play();
+          vidnum = 0;
+        }
+        else {
+          vidnum = 0;
+          document.getElementById("display1").style.display = "contents";
+          document.getElementById("display2").style.display = "none";
+        }
+        console.log(vidnum);
+      }
+
+
+
       </script>
 
       <div class="video-contain">
         <div id="display1">
           <hr id="loading-line1">
-          <video id="vid1" playsinline autoplay muted loop poster="cake.jpg">
+          <video id="vid1" playsinline autoplay muted poster="cake.jpg" onended="changeVidNum()">
             <source src="https://www.bonitaesterorealtors.com/wp-content/uploads/2022/10/Welcome-to-1.mp4" type="video/webm">
             Your browser does not support the video tag.
           </video>
         </div>
-        <div id="display2">
+        <div id="display2" style="display: none;">
           <hr id="loading-line2">
-          <img id="img1" style="display: none;" src="https://www.bonitaesterorealtors.com/wp-content/uploads/2022/08/Q4-2021-Website.gif" alt="">
-        </div>
+          <video id="vid2" playsinline autoplay muted poster="cake.jpg" onended="changeVidNum()">
+            <source src="https://www.bonitaesterorealtors.com/wp-content/uploads/2022/10/Copy-of-Welcome-to.mp4" type="video/webm">
+            Your browser does not support the video tag.
+          </video>        </div>
+          <div id="display3" style="display: none;">
+            <hr id="loading-line3">
+            <video id="vid3" playsinline autoplay muted poster="cake.jpg" onended="changeVidNum()">
+              <source src="https://www.bonitaesterorealtors.com/wp-content/uploads/2022/10/For-Website-1.mp4" type="video/webm">
+              Your browser does not support the video tag.
+            </video>        </div>
       </div>
 
       <div class="important-links">
@@ -781,21 +930,26 @@
           </div></a>
           <!--Member Portal-->
           <div class="col-sm-3" id="MP">
-
+            <img id="MLSlogo" src="https://www.bonitaesterorealtors.com/wp-content/uploads/2022/10/Untitled-design-21.png" alt="">
+            <h4 id="MLStext">MemberPortal</h4>
           </div>
           <!--Events-->
           <div class="col-sm-3" id="Events">
-
+            <img id="MLSlogo" src="https://www.bonitaesterorealtors.com/wp-content/uploads/2022/10/Untitled-design-18.png" alt="">
+            <h4 id="Eventtext">Events & Classes</h4>
           </div>
           <!--Join BER-->
           <div class="col-sm-3"id="Join">
-
+            <img id="MLSlogo" src="https://www.bonitaesterorealtors.com/wp-content/uploads/2022/10/Untitled-design-20.png" alt="">
+            <h4 id="Jointext">Join BER</h4>
           </div>
         </div>
       </div>
 
       <div class="welcome">
-        Welcome to Bonita Springs-Estero Realtors.  Our mission is to  to Serve and Enhance the Professionalism of our Members, Promote an Environment Where Our Members can Prosper, and Contribute to our Community.  We have over 1,300 active Realtors and 200 plus affiliates who call "BER" their Realtor Board.  Come find out what makes "BER" special.
+        <h2 id="welcome-head">Welcome to Bonita Springs-Estero Realtors</h2>
+        <hr>
+        <p id="welcome-text">Our mission is to  to Serve and Enhance the Professionalism of our Members, Promote an Environment Where Our Members can Prosper, and Contribute to our Community.  We have over 1,300 active Realtors and 200 plus affiliates who call "BER" their Realtor Board.  Come find out what makes "BER" special.  Established in 1966.</p>
       </div>
 
       <style>
@@ -828,7 +982,6 @@
              max-width: 300px;
              white-space: nowrap;
              object-fit: contain;
-             background-color: #FFF;
          }
 
          #marquee-content li, img:hover {
@@ -836,7 +989,7 @@
          }
 
       </style>
-        <h2 style="text-align: center;">Our Affiliates</h2>
+        <h2 style="text-align: center;" class="resrow">Our Affiliates</h2>
    <div class="marquee" onclick="window.open('https://members.bonitaesterorealtors.com/affiliatedirectory')">
      <ul id="marquee-content">
        <li><img src="https://www.bonitaesterorealtors.com/wp-content/uploads/2021/09/239.jpeg"</img></li>
@@ -951,7 +1104,7 @@
       <!--Upcoming & Stats-->
       <div class="statsplus row">
         <div class="col-sm-4">
-          <h3>Resources</h3>
+          <h3 class="resrow">Resources</h3>
           <div class="box">
 
           </div>
@@ -966,7 +1119,7 @@
           </div>
         </div>
         <div class="col-sm-8">
-          <h3>Upcoming at BER - October 7th</h3>
+          <h3 class="resrow">Upcoming at BER - October 7th</h3>
           <style>
           .frame-class {
             width:100%;
