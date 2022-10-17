@@ -93,6 +93,10 @@
     cursor: pointer;
   }
 
+  #about:hover {
+    cursor: pointer;
+  }
+
   #MP {
     background-color: #ffdfa7;
     margin: -60px 0;
@@ -134,6 +138,17 @@
     cursor: pointer;
   }
 
+  .res-img {
+    width: 80%;
+    height: auto;
+    border-radius: 15px 15px 15px 15px;
+    margin: auto;
+  }
+
+  .res-img:hover {
+    animation: growlogo 1s linear;
+  }
+
   #Jointext {
     color: #ffc235;
     border-top: #ffc235 solid 2px;
@@ -170,12 +185,11 @@
     max-width: 1300px;
     border-radius: 20px;
     background-color: teal;
-    margin: auto;
     display: flex;
     text-align: center;
     color: white;
     padding: 50px 50px 50px 49px;
-    margin: -225px auto 0px auto;
+    margin: -225px auto auto auto;
     display: block;
   }
 
@@ -220,6 +234,10 @@
     object-fit: cover;
     width: 430px;
     height: 260px;
+  }
+
+  #outside-contain {
+    margin: 0 3% auto 3%;
   }
 
   .video-contain {
@@ -421,13 +439,38 @@
   #resources-hover {
     display: none;
     position: absolute;
-    width: 150px;
+    width: 200px;
     background-color: white;
     padding: 15px 10px 10px 10px;
     margin: -10px 0 0 0px;
     border-top: 1rem solid lightsteelblue;
     box-shadow: rgb(0 0 0 / 15%) 0px 1px 20px;
     z-index: 999;
+  }
+
+  #resources:hover {
+    cursor: pointer;
+  }
+
+  #newsandevents:hover {
+    cursor: pointer;
+  }
+
+  #membership:hover {
+    cursor: pointer;
+  }
+
+  #education:hover {
+    cursor: pointer;
+  }
+
+  .res-head {
+    text-align: center;
+    font-size: 16px;
+  }
+
+  #membership-tools:hover {
+    cursor: pointer;
   }
 
   #resources-hover p {
@@ -464,7 +507,7 @@
   #membershiptools-hover {
     display: none;
     position: absolute;
-    width: 120px;
+    width: 230px;
     background-color: white;
     padding: 20px 10px 10px 10px;
     margin: -10px 11px 0 0px;
@@ -645,33 +688,25 @@
                 <a
                   class="btn text-white btn-floating m-1"
                   style="background-color: #ffffff;"
-                  href="#!"
-                  role="button"
+                  href="https://www.facebook.com/groups/482719335711288"
+                  role="button" target="_blank"
                   ><i class="fa fa-facebook"></i></a>
 
-                <!-- Twitter -->
-                <a
-                  class="btn text-white btn-floating m-1"
-                  style="background-color: #ffffff;"
-                  href="#!"
-                  role="button"
-                  ><i class="fa fa-twitter"></i
-                ></a>
 
                 <!-- Youtube -->
                 <a
                   class="btn text-white btn-floating m-1"
                   style="background-color: #ffffff;"
-                  href="#!"
-                  role="button"
+                  href="https://www.youtube.com/c/Bonitaesterorealtors"
+                  role="button" target="_blank"
                   ><i class="fa fa-youtube"></i
                 ></a>
 
                 <!-- Instagram -->
                 <a
                   class="btn text-white btn-floating m-1"
-                  style="background-color: #ffffff;"
-                  href="#!"
+                  style="background-color: #ffffff;" target="_blank"
+                  href="https://www.instagram.com/bonita_estero_realtors/"
                   role="button"
                   ><i class="fa fa-instagram"></i
                 ></a>
@@ -682,7 +717,7 @@
     <div id="head-background">
       <div class="row" id="heading">
         <div class="col-sm">
-          <h3 onmouseover="aboutdrop()" onmouseout="removeabout()">About</h3>
+          <h3 onmouseover="aboutdrop()" onmouseout="removeabout()" id="about">About <i class="fa fa-caret-down" aria-hidden="true"></i></h3>
           <div id="about-hover" onmouseover="aboutdrop()" onmouseout="removeabout()">
             <a href="https://www.bonitaesterorealtors.com/about/"><p>About BER</p></a>
             <a href="https://www.bonitaesterorealtors.com/golden-b-e-a-r-awards-3/"><p>BER Sales Excellence Awards</p></a>
@@ -704,7 +739,7 @@
           }
         </script>
         <div class="col-sm">
-          <h3  onmouseover="memdrop()" onmouseout="removemem()">Membership</h3>
+          <h3  onmouseover="memdrop()" onmouseout="removemem()" id="membership">Membership <i class="fa fa-caret-down" aria-hidden="true"></i></h3>
           <div id="membership-hover" onmouseover="memdrop()" onmouseout="removemem()">
             <a href="https://www.bonitaesterorealtors.com/join-bser/"><p>Join BER</p></a>
             <a href="https://bonitaspringsesterorealtorsfl.growthzoneapp.com/ap/Form/Fill/rJD9lS4P"><p>Join A Commitee</p></a>
@@ -720,7 +755,7 @@
           }
         </script>
         <div class="col-sm">
-          <h3 onmouseover="newsdrop()" onmouseout="removenews()">News & Events</h3>
+          <h3 onmouseover="newsdrop()" onmouseout="removenews()" id="newsandevents">News & Events <i class="fa fa-caret-down" aria-hidden="true"></i></h3>
           <div onmouseover="newsdrop()" onmouseout="removenews()" id="news-hover">
             <a href="https://members.bonitaesterorealtors.com/bercalendar"><p>Event Calendar</p></a>
             <a href="https://www.bonitaesterorealtors.com/ber-news/"><p>BER News</p></a>
@@ -741,31 +776,33 @@
           }
         </script>
         <div class="col-sm">
-            <a href="https://www.bonitaesterorealtors.com/continuing-education-2/"><h3>Education</h3></a>
+            <a href="https://www.bonitaesterorealtors.com/continuing-education-2/"><h3 id="education">Education</h3></a>
         </div>
         <div class="col-sm">
-            <h3 onmouseover="resourcesdrop()" onmouseout="removeresources()">Resources</h3>
+            <h3 onmouseover="resourcesdrop()" onmouseout="removeresources()" id="resources">Resources <i class="fa fa-caret-down" aria-hidden="true"></i></h3>
             <div onmouseover="resourcesdrop()" onmouseout="removeresources()" id="resources-hover">
               <a href="https://www.bonitaesterorealtors.com/mls-test-page/"><p>MLS Tips & Recordings</p></a>
               <a href="https://www.bonitaesterorealtors.com/reminehelppage/"><p>Remine Pro Help</p></a>
               <a href="https://www.bonitaesterorealtors.com/rpac/"><p>RPAC</p></a>
-              <a href="https://www.bonitaesterorealtors.com/our-commitment-to-diversity/"><p>Diversity Page</p></a>
+              <a href="https://www.bonitaesterorealtors.com/b-e-a-r-global-network/"><p>Bonita Springs-Estero REALTORS® Global Network</p></a>
               <a href="https://www.bonitaesterorealtors.com/florida-realtors-2/"><p>Florida Realtors</p></a>
               <a href="https://www.bonitaesterorealtors.com/market-reports-2/"><p>Market Reports</p></a>
-              <a href="https://www.bonitaesterorealtors.com/wp-content/uploads/2021/04/2021-MLS-Rules-Regs.pdf"><p>MLS Rules & Regulations</p></a>
+              <a href="https://www.bonitaesterorealtors.com/important-links-and-contacts/"><p>Important Links & Resources</p></a>
+              <a href="https://www.bonitaesterorealtors.com/homebuyerssellers/"><p>Home Buyers & Sellers</p></a>
+
             </div>
         </div>
 
         <div class="col-sm">
-            <h3 onmouseover="toolssdrop()" onmouseout="removetools()">Membership Tools</h3>
+            <h3 onmouseover="toolssdrop()" onmouseout="removetools()" id="membership-tools">Membership Tools <i class="fa fa-caret-down" aria-hidden="true"></i></h3>
             <div onmouseover="toolssdrop()" onmouseout="removetools()" id="membershiptools-hover">
-              <a href="https://www.bonitaesterorealtors.com/mls-test-page/"><p>MLS Tips & Recordings</p></a>
-              <a href="https://www.bonitaesterorealtors.com/reminehelppage/"><p>Remine Pro Help</p></a>
-              <a href="https://www.bonitaesterorealtors.com/rpac/"><p>RPAC</p></a>
-              <a href="https://www.bonitaesterorealtors.com/our-commitment-to-diversity/"><p>Diversity Page</p></a>
-              <a href="https://www.bonitaesterorealtors.com/florida-realtors-2/"><p>Florida Realtors</p></a>
-              <a href="https://www.bonitaesterorealtors.com/market-reports-2/"><p>Market Reports</p></a>
-              <a href="https://www.bonitaesterorealtors.com/wp-content/uploads/2021/04/2021-MLS-Rules-Regs.pdf"><p>MLS Rules & Regulations</p></a>
+              <a href="https://www.bonitaesterorealtors.com/mls-membership-information/"><p>MLS</p></a>
+              <a href="https://www.bonitaesterorealtors.com/professional-standards/"><p>Professional Standards</p></a>
+              <a href="https://www.bonitaesterorealtors.com/wp-content/uploads/2022/10/2022-MLS-Model-Rules-and-Regs-1.pdf"><p>MLS Rules & Regulations</p></a>
+              <a href="https://www.bonitaesterorealtors.com/supra-information/"><p>Supra</p></a>
+              <a href="https://www.bonitaesterorealtors.com/document-library/"><p>Floor Plans</p></a>
+              <a href="https://www.bonitaesterorealtors.com/social-media-policy/"><p>Social Media Policy</p></a>
+              <a href="https://bonitasprings.wpengine.com/rpac/"><p>What is RPAC?</p></a>
             </div>
         </div>
 
@@ -773,7 +810,7 @@
           var resources = document.getElementById("resources-hover");
           function resourcesdrop() {
             resources.style.display="inline";
-          }
+                    }
           function removeresources() {
             resources.style.display="none";
           }
@@ -922,6 +959,7 @@
       </div>
 
       <div class="important-links">
+        <div id="outside-contain">
         <div class="row" id="biglinks">
           <!--MLS-->
           <a href=""><div class="col-sm-3" id="MLS">
@@ -930,7 +968,7 @@
           </div></a>
           <!--Member Portal-->
           <div class="col-sm-3" id="MP">
-            <img id="MLSlogo" src="https://www.bonitaesterorealtors.com/wp-content/uploads/2022/10/Untitled-design-21.png" alt="">
+            <img id="MLSlogo" src="https://www.bonitaesterorealtors.com/wp-content/uploads/2022/10/Untitled-design-21-e1666029842341.png" alt="">
             <h4 id="MLStext">MemberPortal</h4>
           </div>
           <!--Events-->
@@ -945,11 +983,14 @@
           </div>
         </div>
       </div>
+      </div>
 
-      <div class="welcome">
-        <h2 id="welcome-head">Welcome to Bonita Springs-Estero Realtors</h2>
-        <hr>
-        <p id="welcome-text">Our mission is to  to Serve and Enhance the Professionalism of our Members, Promote an Environment Where Our Members can Prosper, and Contribute to our Community.  We have over 1,300 active Realtors and 200 plus affiliates who call "BER" their Realtor Board.  Come find out what makes "BER" special.  Established in 1966.</p>
+      <div id="outside-contain">
+          <div class="welcome">
+          <h2 id="welcome-head">Welcome to Bonita Springs-Estero Realtors</h2>
+          <hr>
+          <p id="welcome-text">Our mission is to  to Serve and Enhance the Professionalism of our Members, Promote an Environment Where Our Members can Prosper, and Contribute to our Community.  We have over 1,300 active Realtors and 200 plus affiliates who call "BER" their Realtor Board.  Come find out what makes "BER" special.  Established in 1966.</p>
+        </div>
       </div>
 
       <style>
@@ -989,6 +1030,11 @@
          }
 
       </style>
+
+      <div class="">
+
+      </div>
+
         <h2 style="text-align: center;" class="resrow">Our Affiliates</h2>
    <div class="marquee" onclick="window.open('https://members.bonitaesterorealtors.com/affiliatedirectory')">
      <ul id="marquee-content">
@@ -1106,16 +1152,20 @@
         <div class="col-sm-4">
           <h3 class="resrow">Resources</h3>
           <div class="box">
-
+            <h4 class="res-head">Member Apps</h4>
+            <a><img class="res-img" src="https://www.bonitaesterorealtors.com/wp-content/uploads/2022/10/Need-Photo.gif" alt=""></a>
           </div>
           <div class="box">
-
+            <h4 class="res-head">Global Diversity</h4>
+            <a><img class="res-img" src="https://www.bonitaesterorealtors.com/wp-content/uploads/2022/10/Copy-of-Copy-of-Copy-of-Classes-Events-11.png" alt=""></a>
           </div>
           <div class="box">
-
+            <h4 class="res-head">RPAC</h4>
+            <a><img class="res-img" src="https://www.bonitaesterorealtors.com/wp-content/uploads/2022/10/Need-Photo-2.png" alt=""></a>
           </div>
           <div class="box">
-
+            <h4 class="res-head">Hurricane Page</h4>
+            <a><img class="res-img" src="https://www.bonitaesterorealtors.com/wp-content/uploads/2022/10/Copy-of-Copy-of-Copy-of-Classes-Events-1.gif" alt=""></a>
           </div>
         </div>
         <div class="col-sm-8">
@@ -1123,7 +1173,7 @@
           <style>
           .frame-class {
             width:100%;
-            height:800px;
+            height: 1325px;
             background-color:#DDDDDD;
             color: #DDDDDD;
             border: 0;
