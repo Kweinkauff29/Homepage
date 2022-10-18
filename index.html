@@ -279,6 +279,15 @@
     display: flex;
     margin: 20px auto;
   }
+  @keyframes growlogo2 {
+    0% {
+      width: 200px;
+    }
+    100% {
+      width: 210px;
+    }
+  }
+
   @keyframes growlogo {
     0% {
       width: 90%;
@@ -530,13 +539,33 @@
     font-weight: 500;
   }
   @media only screen and (max-width: 1200px) {
-    #forewarn-back {
-      margin-right: 0 !important;
+    .statsplus {
+      display: grid;
+    }
+    .col-sm-4 {
+      display: inline-flex;
+      margin: auto;
+      width: 90%;
+    }
+    .res-img {
+      width: 200px;
+      margin: auto 0 auto 10px;
+      animation-name: growlogo2 1s linear;
+    }
+    .res-img:hover {
+      animation-play-state: paused;
+      animation-name: growlogo2 1s linear;
+    }
+    .col-sm-8 {
+      width: 100%;
     }
     }
-  @media only screen and (max-width: 1165px) {
-    #forewarn-back {
-      width: auto !important;
+  @media only screen and (max-width: 1130px) {
+    #Eventtext {
+      font-size: 24px;
+    }
+    #MLStext {
+      font-size: 30px;
     }
     }
   @media only screen and (max-width: 1145px) {
@@ -549,9 +578,9 @@
     }
   }
 
-  @media only screen and (max-width: 980px) {
-    .col-sm-7 {
-      padding-left: 25px;
+  @media only screen and (max-width: 960px) {
+    .col-sm h3 {
+      font-size: 16px;
     }
   }
   @media only screen and (max-width: 940px) {
