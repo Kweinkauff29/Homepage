@@ -545,10 +545,10 @@
     .col-sm-4 {
       display: inline-flex;
       margin: auto;
-      width: 90%;
+      width: 100%;
     }
     .res-img {
-      width: 200px;
+      width: 100%;
       margin: auto 0 auto 10px;
       animation-name: growlogo2 1s linear;
     }
@@ -603,10 +603,38 @@
       padding-left: 85px;
     }
   }
-  @media only screen and (max-width: 780px) {
+  @media only screen and (max-width: 768px) {
     .col-sm-7 {
       padding-left: 100px;
     }
+    .col-sm- h3 {
+      font-size: 12px;
+    }
+    #heading {
+      display: grid !important;
+      margin: -95px 20px 24px 20px !important;
+    }
+    #logo-contain {
+      display: none;
+    }
+    #head-background {
+      height: 200px;
+      margin: 93px 0 -40px -20px;
+      width: 103%;
+      position: absolute;
+      opacity: 1 !important;
+    }
+    #resrow {
+      display: none;
+    }
+    .video-contain {
+      margin: 293px 0 0 0;
+    }
+    #abovehead {
+      margin: 87px 0 0 0;
+      position: relative;
+    }
+
   }
   @media only screen and (max-width: 930px) {
     .col-sm h3 {
@@ -615,7 +643,7 @@
   }
     @media only screen and (max-width: 850px) {
         #heading {
-          margin: auto 20px auto 20px !important;
+          margin: auto 20px auto 20px;
         }
         .col-sm-2 h3 {
           font-size: 14px;
@@ -1194,7 +1222,7 @@
       <!--Upcoming & Stats-->
       <div class="statsplus row">
         <div class="col-sm-4">
-          <h3 class="resrow">Resources</h3>
+          <h3 class="resrow" id="resrow">Resources</h3>
           <div class="box">
             <h4 class="res-head">Member Apps</h4>
             <a><img class="res-img" src="https://www.bonitaesterorealtors.com/wp-content/uploads/2022/10/Need-Photo.gif" alt=""></a>
