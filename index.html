@@ -491,6 +491,9 @@
     margin: 15px 0 5px 0;
     font-weight: 500;
   }
+  .br-mobile {
+    display: none;
+  }
   #membership-hover {
     display: none;
     position: absolute;
@@ -627,8 +630,22 @@
     #resrow {
       display: none;
     }
+    #biglinks {
+      display: block;
+      height: 920px;
+    }
+    #about-hover {
+      display: contents;
+    }
     .video-contain {
       margin: 293px 0 0 0;
+    }
+    #MLS {
+      border-radius: 15px 15px 0px 0px;
+    }
+    #Join {
+      border-radius: 0px 0px 15px 15px;
+
     }
     #abovehead {
       margin: 87px 0 0 0;
@@ -669,6 +686,17 @@
         display: flex !important;
         color: #f2f2f2 !important;
       }
+      #socials {
+        display: flex;
+        justify-content: center;
+      }
+      .m-1 {
+        width: 43px !important;
+        margin: 0 2px 0 0;
+      }
+      .br-mobile {
+        display: block;
+      }
       .col-sm-5 {
         background-color: dimgrey;
       }
@@ -679,7 +707,7 @@
         text-align: center;
       }
       .btn {
-        width: 100% !important;
+        width: 100%;
       }
       #split {
         display: inline;
@@ -695,6 +723,16 @@
       .col-xs-8 {
         margin: auto auto 15px;
         width: auto;
+      }
+      .col-sm h3 {
+        text-align: center;
+        font-size: 22px;
+      }
+      .col-sm p {
+        text-align: center;
+      }
+      #MLSlogo {
+        display: none;
       }
       #heading {
         display: flex;
@@ -801,7 +839,13 @@
         <script type="text/javascript">
           var about = document.getElementById("about-hover");
           function aboutdrop() {
-            about.style.display="inline";
+            if (screen.width >= 769) {
+              about.style.display="inline";
+
+            }
+            else if (screen.width < 769) {
+            about.style.display="contents";
+          }
           }
           function removeabout() {
             about.style.display="none";
@@ -817,7 +861,13 @@
         <script type="text/javascript">
           var membership = document.getElementById("membership-hover");
           function memdrop() {
-            membership.style.display="inline";
+            if (screen.width >= 769) {
+              membership.style.display="inline";
+
+            }
+            else if (screen.width < 769) {
+            membership.style.display="contents";
+            }
           }
           function removemem() {
             membership.style.display="none";
@@ -838,7 +888,13 @@
         <script type="text/javascript">
           var news = document.getElementById("news-hover");
           function newsdrop() {
-            news.style.display="inline";
+            if (screen.width >= 769) {
+              news.style.display="inline";
+
+            }
+            else if (screen.width < 769) {
+            news.style.display="contents";
+            }
           }
           function removenews() {
             news.style.display="none";
@@ -878,7 +934,13 @@
         <script type="text/javascript">
           var resources = document.getElementById("resources-hover");
           function resourcesdrop() {
-            resources.style.display="inline";
+            if (screen.width >= 769) {
+              resources.style.display="inline";
+
+            }
+            else if (screen.width < 769) {
+            resources.style.display="contents";
+            }
                     }
           function removeresources() {
             resources.style.display="none";
@@ -1033,23 +1095,27 @@
           <!--MLS-->
           <a href=""><div class="col-sm-3" id="MLS">
             <img id="MLSlogo" src="https://www.bonitaesterorealtors.com/wp-content/uploads/2022/10/Untitled-design-12.png" alt="">
+            <br class="br-mobile">
             <h4 id="MLStext">MLS Login</h4>
           </div></a>
           <!--Member Portal-->
-          <div class="col-sm-3" id="MP">
+          <a href=""><div class="col-sm-3" id="MP">
             <img id="MLSlogo" src="https://www.bonitaesterorealtors.com/wp-content/uploads/2022/10/Untitled-design-21-e1666029842341.png" alt="">
+            <br class="br-mobile">
             <h4 id="MLStext">MemberPortal</h4>
-          </div>
+          </div></a>
           <!--Events-->
-          <div class="col-sm-3" id="Events">
+          <a href=""><div class="col-sm-3" id="Events">
             <img id="MLSlogo" src="https://www.bonitaesterorealtors.com/wp-content/uploads/2022/10/Untitled-design-18.png" alt="">
+            <br class="br-mobile">
             <h4 id="Eventtext">Events & Classes</h4>
-          </div>
+          </div></a>
           <!--Join BER-->
-          <div class="col-sm-3"id="Join">
+          <a href=""><div class="col-sm-3"id="Join">
             <img id="MLSlogo" src="https://www.bonitaesterorealtors.com/wp-content/uploads/2022/10/Untitled-design-20.png" alt="">
+            <br class="br-mobile">
             <h4 id="Jointext">Join BER</h4>
-          </div>
+          </div></a>
         </div>
       </div>
       </div>
@@ -1100,11 +1166,6 @@
 
       </style>
 
-      <div id="spacer">
-        <br>
-        <br>
-        <br>
-      </div>
 
     <div id="bottom-contain">
           <h2 style="text-align: center;" class="resrow">Our Affiliates</h2>
