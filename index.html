@@ -223,9 +223,6 @@
     max-height: 500px;
     margin: auto;
   }
-  a:hover {
-    text-decoration: underline;
-  }
   h4 {
     font-size: 28px;
     font-weight: 700;
@@ -652,6 +649,21 @@
       position: relative;
     }
 
+  }
+
+  @media only screen and (max-width: 768px) {
+    .col-sm-8 {
+      display: none;
+    }
+    .col-sm-4 {
+      display: block;
+    }
+    .res-img {
+      margin: auto;
+    }
+    #resrow {
+      display: block;
+    }
   }
   @media only screen and (max-width: 930px) {
     .col-sm h3 {
@@ -1354,7 +1366,7 @@
 
 
 
-        <h3>Upcoming Classes & Events</h3>
+        <h3 class="resrow">Upcoming Classes & Events</h3>
         <div id="mni-widgets-17dc7e76" showLocation="true" showDescription="true" feedType="2" marquee="0" showLinks="true" emptyMessage="true"></div>
         <script type="text/javascript">
         /*<![CDATA[*/
