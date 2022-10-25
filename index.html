@@ -955,12 +955,19 @@
             resources.style.display="contents";
             }
                     }
+
           function removeresources() {
             resources.style.display="none";
           }
+
           var tools = document.getElementById("membershiptools-hover");
           function toolssdrop() {
-            tools.style.display="inline";
+            if (screen.width >= 769) {
+              tools.style.display="inline";
+            }
+            else if (screen.width < 769) {
+            tools.style.display="contents";
+            }
           }
           function removetools() {
             tools.style.display="none";
