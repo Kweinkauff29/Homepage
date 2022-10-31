@@ -26,7 +26,9 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Roboto&display=swap" rel="stylesheet">
-
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap" rel="stylesheet">
 
   </head>
   <body>
@@ -46,7 +48,7 @@
 
   #head-background {
     z-index: 997;
-    margin: -130px 0 -40px 0;
+    margin: 42px 0 -40px 0;
     box-shadow: black 0px 0px 14px;
     width: 100%;
     position: fixed;
@@ -61,7 +63,7 @@
   }
   .contain-head {
     width: 100%;
-    margin: -87px 0;
+    margin: 0;
     background-color: white;
     box-shadow: 0px -30px 67px grey;
   }
@@ -361,7 +363,7 @@
     z-index: 999;
     position: fixed;
     width: 100%;
-    margin: -174px 0;
+    margin: 0;
   }
   .btn {
     border-radius: 40px;
@@ -459,6 +461,10 @@
     z-index: 999;
   }
 
+  .right-img {
+    right: -38px;
+  }
+
   #resources:hover {
     cursor: pointer;
   }
@@ -543,10 +549,8 @@
     .statsplus {
       display: grid;
     }
-    .col-sm-4 {
-      display: inline-flex;
-      margin: auto;
-      width: 100%;
+    .right-img {
+      right: 0;
     }
     .res-img {
       width: 100%;
@@ -658,6 +662,9 @@
     }
     .col-sm-4 {
       display: block;
+    }
+    .right-img {
+      right: -38px;
     }
     .res-img {
       margin: auto;
@@ -1023,17 +1030,178 @@
             border-top: black solid 5px;
             animation: loading 64s linear;
           }
+
+            #headback {
+              margin: 200px auto;
+              max-width: 100%;
+              object-fit: contain;
+              animation: fadein 1s;
+              }
+
+            .besthead {
+              margin: auto;
+              max-width: 1000px;
+              z-index: 5;
+            }
+
+            #backcolor {
+              background-color: #1eb0bb;
+              animation: backgrow 2s;
+              height: 170px;
+              width: 100%;
+              z-index: 1;
+              position: inherit;
+              margin: -410px auto;
+            }
+
+            .btext {
+              margin: 450px 3% auto 3%;
+              position: relative;
+              text-align: center;
+            }
+
+            .btext h3 {
+            }
+
+            #top-b {
+              font-size: 30px;
+              font-family: roboto;
+            }
+
+            #bot-b {
+              font-size: 100px;
+              color: #1eb0bb;
+              font-family: 'Bebas Neue', cursive;
+            }
+
+          @keyframes backgrow {
+            0% {
+              width: 0%;
+            }
+            100% {
+              width: 100%;
+            }
+          }
+
+          @keyframes fadein {
+            0% {
+              opacity: 0;
+            }
+            100% {
+              opacity: 1;
+            }
+          }
+
+          #aol {
+            background-color: #FBAA19;
+            border-radius: 15px;
+            margin-right: 5px;
+
+          }
+
+          #aor {
+            background-color: #FBAA19;
+            border-radius: 15px;
+            margin-left: 5px;
+          }
+
+          .class-img {
+            object-fit: contain;
+            border-radius: 15px;
+            max-height: 200px;
+            padding-top: 5px;
+            padding-bottom: 5px;
+          }
+
+          .teach-text-left {
+            position: absolute;
+              text-align: center;
+              justify-content: center;
+              color: white;
+              top: 168px;
+              left: 23px;
+          }
+
+          .class-head {
+            font-size: 30px;
+            font-family: bebas neue;
+            color: white;
+          }
+
+          .class-desc {
+            color: white;
+            font-size: 12px;
+            line-height: 1.2;
+          }
+
+          .class-row {
+            max-width: 1300px;
+            justify-content: center;
+            margin: auto;
+          }
+
       </style>
 
+      <div class="best">
+        <div class="besthead">
+          <img src="https://www.bonitaesterorealtors.com/wp-content/uploads/2022/10/Hmielewski-2.png" id="headback" alt="">
+        </div>
+        <div id="backcolor">
+
+        </div>
+        <div class="btext">
+          <h3 id="top-b">6 Classes. 2 Community Opportunities. An Intro to SWFL Real Estate.</h3>
+          <h3 id="bot-b">All for $30</h3>
+
+          <h1 style="color: black;">Course Curriculum:</h1>
+        </div>
 
 
 
+        <div class="row class-row">
+          <div class="col-sm" id="aol">
+            <div class="row">
+              <div class="col-sm-4">
+                <img src="https://www.bonitaesterorealtors.com/wp-content/uploads/2022/10/danielledamianov.jpg" class="class-img" alt="">
+                <p class="teach-text-left">Danielle Damianov</p>
+              </div>
+              <div class="col-sm-8">
+                <h5 class="class-head">Answering Objections (2CE)</h5>
+                <div class="class-desc">
+                  <ol>
+                  <li>Provide tools necessary to achieve sales goals</li>
+                  <li>Draw on the knowledge gained in this course to help sellers and buyers </li>
+                  <li>Recognize why objections are important to the sales process</li>
+                  <li>And Much More!</li>
+                </ol>
+              </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-sm" id="aor">
+            <div class="row">
+              <div class="col-sm-8">
+                <h5 class="class-head">Prospecting and Qualifying Buyers (2CE)</h5>
+                <div class="class-desc">
+                  <ol>
+                  <li>Identify sources of prospects</li>
+                  <li>Qualify prospects</li>
+                  <li>Adhere to the CAN-SPAM ACT of 2003</li>
+                  <li>Develop a plan to maintain contact with prospects</li>
+                  <li>Identify Buyer motivations</li>
+                </ol>
+              </div>
+              </div>
+              <div class="col-sm-4 right-img">
+                <img src="https://www.bonitaesterorealtors.com/wp-content/uploads/2022/10/danielledamianov.jpg" class="class-img" alt="">
+                <p class="teach-text-left">Danielle Damianov</p>
+              </div>
+            </div>
+          </div>
 
+        </div>
 
-
-
-  </div>
-
+      </div>
 
 
 
