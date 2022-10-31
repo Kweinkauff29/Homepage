@@ -462,7 +462,7 @@
   }
 
   .right-img {
-    right: -38px;
+    right: -45px;
   }
 
   #resources:hover {
@@ -535,6 +535,9 @@
     box-shadow: rgb(0 0 0 / 15%) 0px 1px 20px;
     z-index: 999;
   }
+  .inner-class {
+    width: 600px;
+  }
   #membershiptools-hover p {
     font-size: 14px;
     margin: 15px 0 5px 0;
@@ -548,6 +551,10 @@
   @media only screen and (max-width: 1200px) {
     .statsplus {
       display: grid;
+    }
+
+    .inner-class {
+      width: 500px;
     }
     .right-img {
       right: 0;
@@ -582,6 +589,15 @@
       margin: auto;
     }
   }
+
+  @media only screen and (max-width: 1050px) {
+    .class-row {
+      display: grid;
+    }
+    .inner-class {
+        width: 600px;
+      }
+    }
 
   @media only screen and (max-width: 960px) {
     .col-sm h3 {
@@ -1096,6 +1112,7 @@
             background-color: #FBAA19;
             border-radius: 15px;
             margin-right: 5px;
+            margin-top: 10px;
 
           }
 
@@ -1103,14 +1120,34 @@
             background-color: #FBAA19;
             border-radius: 15px;
             margin-left: 5px;
+            margin-top: 10px;
           }
 
+          #aol2 {
+            background-color: #A6A6A6;
+            border-radius: 15px;
+            margin-right: 5px;
+            margin-top: 10px;
+          }
+
+          #aor2 {
+            background-color: #A6A6A6;
+            border-radius: 15px;
+            margin-left: 5px;
+            margin-top: 10px;
+
+          }
+
+
+
           .class-img {
-            object-fit: contain;
+            object-fit: cover;
             border-radius: 15px;
             max-height: 200px;
+            height: 100%;
             padding-top: 5px;
             padding-bottom: 5px;
+            max-width: 132px;
           }
 
           .teach-text-left {
@@ -1120,6 +1157,27 @@
               color: white;
               top: 168px;
               left: 23px;
+              font-size: 12px;
+          }
+
+          .teach-text-left2 {
+            position: absolute;
+              text-align: center;
+              justify-content: center;
+              color: white;
+              top: 168px;
+              left: 41px;
+              font-size: 12px;
+          }
+
+          .teach-text-left3 {
+            position: absolute;
+              text-align: center;
+              justify-content: center;
+              color: white;
+              top: 168px;
+              left: 35px;
+              font-size: 12px;
           }
 
           .class-head {
@@ -1137,7 +1195,7 @@
           .class-row {
             max-width: 1300px;
             justify-content: center;
-            margin: auto;
+            margin: auto auto auto auto;
           }
 
       </style>
@@ -1159,10 +1217,10 @@
 
 
         <div class="row class-row">
-          <div class="col-sm" id="aol">
-            <div class="row">
+          <div class="col-sm inner-class" id="aol">
+            <div class="row inner-class">
               <div class="col-sm-4">
-                <img src="https://www.bonitaesterorealtors.com/wp-content/uploads/2022/10/danielledamianov.jpg" class="class-img" alt="">
+                <img src="https://www.bonitaesterorealtors.com/wp-content/uploads/2022/10/danielledamianov-e1667241661920.jpg" class="class-img" alt="">
                 <p class="teach-text-left">Danielle Damianov</p>
               </div>
               <div class="col-sm-8">
@@ -1178,7 +1236,89 @@
               </div>
             </div>
           </div>
-          <div class="col-sm" id="aor">
+          <div class="col-sm inner-class" id="aor">
+            <div class="row inner-class">
+              <div class="col-sm-8">
+                <h5 class="class-head">Prospecting and Qualifying Buyers (2CE)</h5>
+                <div class="class-desc">
+                  <ol>
+                  <li>Identify sources of prospects</li>
+                  <li>Qualify prospects</li>
+                  <li>Adhere to the CAN-SPAM ACT of 2003</li>
+                  <li>Develop a plan to maintain contact with prospects</li>
+                  <li>Identify Buyer motivations</li>
+                </ol>
+              </div>
+              </div>
+              <div class="col-sm-4 right-img">
+                <img src="https://www.bonitaesterorealtors.com/wp-content/uploads/2022/10/danielledamianov-e1667241661920.jpg" class="class-img" alt="">
+                <p class="teach-text-left">Danielle Damianov</p>
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+        <div class="row class-row">
+          <div class="col-sm inner-class" id="aol2">
+            <div class="row inner-class">
+              <div class="col-sm-4">
+                <img src="https://www.bonitaesterorealtors.com/wp-content/uploads/2021/10/adam-ruud-1-800x600-1-e1667240577587.jpeg" class="class-img" alt="">
+                <p class="teach-text-left2">Adam Ruud</p>
+              </div>
+              <div class="col-sm-8">
+                <h5 class="class-head">Preparation and Presentation for Sellers (2CE)</h5>
+                <div class="class-desc">
+                  <p>Develop knowledge, skills and tools necessary to plan and deliver listing presentations,
+                    so that the numbers of marketable listing increases; sharpen your preparation and presentation skills and
+                    develop the techniques involved in preparing for and delivering the listing presentation.</p>
+              </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-sm inner-class" id="aor2">
+            <div class="row inner-class">
+              <div class="col-sm-8">
+                <h5 class="class-head">Elements of Successful Selling (2CE)</h5>
+                <div class="class-desc">
+                  <ol>
+                  <li>Understand the steps of the sales cycle</li>
+                  <li> Discover the importance of the sales cycle in your success</li>
+                  <li>Explain how communication affects all steps of the sales cycle</li>
+                  <li>Define people skills and explain why they are important</li>
+                </ol>
+              </div>
+              </div>
+              <div class="col-sm-4 right-img">
+                <img src="https://www.bonitaesterorealtors.com/wp-content/uploads/2022/10/Mark-L-e1667241575469.jpg" class="class-img" alt="">
+                <p class="teach-text-left3">Mark Ledbetter</p>
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+        <div class="row class-row">
+          <div class="col-sm inner-class" id="aol">
+            <div class="row inner-class">
+              <div class="col-sm-4">
+                <img src="https://www.bonitaesterorealtors.com/wp-content/uploads/2022/10/danielledamianov-e1667241661920.jpg" class="class-img" alt="">
+                <p class="teach-text-left">Danielle Damianov</p>
+              </div>
+              <div class="col-sm-8">
+                <h5 class="class-head">Answering Objections (2CE)</h5>
+                <div class="class-desc">
+                  <ol>
+                  <li>Provide tools necessary to achieve sales goals</li>
+                  <li>Draw on the knowledge gained in this course to help sellers and buyers </li>
+                  <li>Recognize why objections are important to the sales process</li>
+                  <li>And Much More!</li>
+                </ol>
+              </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-sm inner-class" id="aor">
             <div class="row">
               <div class="col-sm-8">
                 <h5 class="class-head">Prospecting and Qualifying Buyers (2CE)</h5>
@@ -1193,13 +1333,16 @@
               </div>
               </div>
               <div class="col-sm-4 right-img">
-                <img src="https://www.bonitaesterorealtors.com/wp-content/uploads/2022/10/danielledamianov.jpg" class="class-img" alt="">
+                <img src="https://www.bonitaesterorealtors.com/wp-content/uploads/2022/10/danielledamianov-e1667241661920.jpg" class="class-img" alt="">
                 <p class="teach-text-left">Danielle Damianov</p>
               </div>
             </div>
           </div>
 
         </div>
+
+        About Instructors
+
 
       </div>
 
