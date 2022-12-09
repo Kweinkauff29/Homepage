@@ -1340,10 +1340,273 @@
           </div>
 
         </div>
-        <div class="">
-          About Instructors
 
+        <style media="screen">
+          .title {
+            font-size: 2rem;
+            margin: 0 5px 0 5px;
+            text-align: center;
+          }
+          .title:hover {
+            cursor: pointer;
+            color: grey;
+          }
+          .instrow {
+            justify-content: center;
+          }
+          #hr1, #hr2, #hr3, #hr4, #hr5 {
+            height: 5px; background-color: orange;
+            animation: grow 0.5s ease-in-out;
+            margin: 0 0 0 0;
+
+          }
+          @keyframes grow {
+            0% {
+              transform: scale(0);
+            }
+            100% {
+              transform: scale(1);
+            }
+          }
+
+          .instdetails {
+              display: flex;
+            }
+
+            .column {
+              flex: 1;
+            }
+
+            .column.left {
+              text-align: center;
+            }
+            .instcontainer {
+              max-width: 1000px;
+              justify-content: center;
+              margin: 10px auto;
+            }
+            .teachrow {
+              display: block;
+            }
+
+            @keyframes moveLeft {
+              0% {
+                transform: translateX(100%)
+              }
+              100% {
+                transform: translateX(0%)
+              }
+            }
+
+            @keyframes moveRight {
+              0% {
+                transform: translateX(-100%)
+              }
+              100% {
+                transform: translate(0%)
+              }
+            }
+        </style>
+
+        <h1 style="color: black;">Instructor Bios:</h1>
+
+
+        <div class="row instcontainer">
+          <div class="row instrow" style="">
+            <div class="row teachrow" id="danielle">
+              <span onclick="inst11()" class="title">Danielle Damianov</span>
+              <hr id="hr1" style="height: 5px; background-color: orange;">
+            </div>
+            <div class="row teachrow">
+              <span class="title" onclick="inst22()" id="adam">Adam Ruud</span>
+              <hr id="hr2" style="height: 5px; background-color: orange; display: none;">
+            </div>
+            <div class="row teachrow">
+              <span class="title" onclick="inst33()" id="mark">Mark Ledbetter</span>
+              <hr id="hr3" style="height: 5px; background-color: orange; display: none;">
+            </div>
+            <div class="row teachrow">
+              <span class="title" onclick="inst44()" id="cid">Cid Fernandez</span>
+              <hr id="hr4" style="height: 5px; background-color: orange; display: none;">
+            </div>
+            <div class="row teachrow">
+              <span class="title" onclick="inst55()" id="jennifer">Jennifer Springer</span>
+              <hr id="hr5" style="height: 5px; background-color: orange; display: none;">
+            </div>
+          </div>
         </div>
+
+          <div id="inst1" class="instdetails">
+            <div class="column left">
+              <img src="photo.jpg" alt="Photo" style="display: block; margin: 0 auto;">
+            </div>
+            <div class="column right">
+              <h1>Danielle Damianov</h1>
+              <hr>
+              <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce tincidunt, nunc a faucibus ornare, quam ipsum elementum tellus, vel pharetra lectus dui et arcu.</p>
+            </div>
+          </div>
+
+          <div id="inst2" class="instdetails" style="display: none;">
+            <div class="column left">
+              <img src="photo.jpg" alt="Photo" style="display: block; margin: 0 auto;">
+            </div>
+            <div class="column right">
+              <h1>Adam Ruud</h1>
+              <hr>
+              <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce tincidunt, nunc a faucibus ornare, quam ipsum elementum tellus, vel pharetra lectus dui et arcu.</p>
+            </div>
+          </div>
+
+          <div id="inst3" class="instdetails" style="display: none;">
+            <div class="column left">
+              <img src="photo.jpg" alt="Photo" style="display: block; margin: 0 auto;">
+            </div>
+            <div class="column right">
+              <h1>Mark Ledbetter</h1>
+              <hr>
+              <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce tincidunt, nunc a faucibus ornare, quam ipsum elementum tellus, vel pharetra lectus dui et arcu.</p>
+            </div>
+          </div>
+
+          <div id="inst4" class="instdetails" style="display: none;">
+            <div class="column left">
+              <img src="photo.jpg" alt="Photo" style="display: block; margin: 0 auto;">
+            </div>
+            <div class="column right">
+              <h1>Cid Fernandez</h1>
+              <hr>
+              <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce tincidunt, nunc a faucibus ornare, quam ipsum elementum tellus, vel pharetra lectus dui et arcu.</p>
+            </div>
+          </div>
+
+          <div id="inst5" class="instdetails" style="display: none;">
+            <div class="column left">
+              <img src="photo.jpg" alt="Photo" style="display: block; margin: 0 auto;">
+            </div>
+            <div class="column right">
+              <h1>Jennifer Springer</h1>
+              <hr>
+              <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce tincidunt, nunc a faucibus ornare, quam ipsum elementum tellus, vel pharetra lectus dui et arcu.</p>
+            </div>
+          </div>
+
+          <script type="text/javascript">
+          let selector = 1;
+            let  = document.getElementById("hr1");
+            let hr2 = document.getElementById("hr2");
+            let hr3 = document.getElementById("hr3");
+            let hr4 = document.getElementById("hr4");
+            let hr5 = document.getElementById("hr5");
+            let inst1 = document.getElementById("inst1");
+            let inst2 = document.getElementById("inst2");
+            let inst3 = document.getElementById("inst3");
+            let inst4 = document.getElementById("inst4");
+            let inst5 = document.getElementById("inst5");
+
+            function inst11() {
+              let value = 1;
+              inst1.style.display = "flex";
+              inst2.style.display = "none";
+              inst3.style.display = "none";
+              inst4.style.display = "none";
+              inst5.style.display = "none";
+              hr1.style.display = "block";
+              hr2.style.display = "none";
+              hr3.style.display = "none";
+              hr4.style.display = "none";
+              hr5.style.display = "none";
+              if(value < selector){
+                  document.getElementById('inst1').style.animation = 'moveRight 0.5s ease-in-out';
+                } else {
+                  document.getElementById('inst1').style.animation = 'moveLeft 0.5s ease-in-out';
+                }
+              selector = 1;
+              }
+
+            function inst22() {
+              let value = 2;
+              inst1.style.display = "none";
+              inst2.style.display = "flex";
+              inst3.style.display = "none";
+              inst4.style.display = "none";
+              inst5.style.display = "none";
+              hr1.style.display = "none";
+              hr2.style.display = "block";
+              hr3.style.display = "none";
+              hr4.style.display = "none";
+              hr5.style.display = "none";
+              if(value < selector){
+                  document.getElementById('inst2').style.animation = 'moveRight 0.5s ease-in-out';
+                } else {
+                  document.getElementById('inst2').style.animation = 'moveLeft 0.5s ease-in-out';
+                }
+              selector = 2;
+              }
+
+            function inst33() {
+              let value = 3;
+              inst1.style.display = "none";
+              inst2.style.display = "none";
+              inst3.style.display = "flex";
+              inst4.style.display = "none";
+              inst5.style.display = "none";
+              hr1.style.display = "none";
+              hr2.style.display = "none";
+              hr3.style.display = "block";
+              hr4.style.display = "none";
+              hr5.style.display = "none";
+              if(value < selector){
+                  document.getElementById('inst3').style.animation = 'moveRight 0.5s ease-in-out';
+                } else {
+                  document.getElementById('inst3').style.animation = 'moveLeft 0.5s ease-in-out';
+                }
+              selector = 3;
+              }
+            function inst44() {
+              let value = 4;
+              inst1.style.display = "none";
+              inst2.style.display = "none";
+              inst3.style.display = "none";
+              inst4.style.display = "flex";
+              inst5.style.display = "none";
+              hr1.style.display = "none";
+              hr2.style.display = "none";
+              hr3.style.display = "none";
+              hr4.style.display = "block";
+              hr5.style.display = "none";
+              if(value < selector){
+                  document.getElementById('inst4').style.animation = 'moveRight 0.5s ease-in-out';
+                } else {
+                  document.getElementById('inst4').style.animation = 'moveLeft 0.5s ease-in-out';
+                }
+              selector = 4;
+
+              }
+
+            function inst55() {
+              let value = 5;
+              inst1.style.display = "none";
+              inst2.style.display = "none";
+              inst3.style.display = "none";
+              inst4.style.display = "none";
+              inst5.style.display = "flex";
+              hr1.style.display = "none";
+              hr2.style.display = "none";
+              hr3.style.display = "none";
+              hr4.style.display = "none";
+              hr5.style.display = "block";
+              if(value < selector){
+                  document.getElementById('inst5').style.animation = 'moveRight 0.5s ease-in-out';
+                } else {
+                  document.getElementById('inst5').style.animation = 'moveLeft 0.5s ease-in-out';
+                }
+              selector = 5;
+
+              }
+
+          </script>
+
 
         <div class="">
           Additional Classes
