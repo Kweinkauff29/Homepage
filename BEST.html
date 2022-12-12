@@ -48,11 +48,11 @@
 
   #head-background {
     z-index: 997;
-    margin: 42px 0 -40px 0;
+    margin: -5px 0 -40px 0;
     box-shadow: black 0px 0px 14px;
     width: 100%;
     position: fixed;
-    height: 130px;
+    height: 125px;
     background-color: white;
   }
 
@@ -429,6 +429,9 @@
     padding: 10px 0 10px 0;
     line-height: 4rem;
   }
+  #best2 {
+    margin-top: -60px !important;
+  }
 
   #text {
     padding: 0;
@@ -613,9 +616,9 @@
       font-size: 16px;
     }
   }
-  @media only screen and (max-width: 940px) {
-    .col-sm-7 {
-      padding-left: 35px;
+  @media (max-width: 940px) {
+    #backcolor {
+      margin: -402px auto !important;
     }
   }
   @media only screen and (max-width: 910px) {
@@ -627,6 +630,10 @@
     .col-sm-7 {
       padding-left: 70px;
     }
+    #backcolor {
+      margin: -390px auto !important;
+    }
+  }
   }
   @media only screen and (max-width: 830px) {
     .col-sm-7 {
@@ -637,6 +644,9 @@
     .col-sm-7 {
       padding-left: 100px;
     }
+    .best {
+      margin: 160px auto;
+    }
     .col-sm- h3 {
       font-size: 12px;
     }
@@ -644,12 +654,27 @@
       display: grid !important;
       margin: -95px 20px 24px 20px !important;
     }
-    #logo-contain {
+    #backcolor {
+      margin: -293px auto !important;
+      height: 85px !important;
+    }
+    .btext {
+      margin-top: 320px !important;
+    }
+    .inner-class {
+      width: 95%;
+    }
+    .col-sm-4 {
       display: none;
     }
+    .right p {
+      font-size: 1rem;
+    }
+    }
+    #logo-contain {
+      display: contents;
+    }
     #head-background {
-      height: 200px;
-      margin: 93px 0 -40px -20px;
       width: 103%;
       position: absolute;
       opacity: 1 !important;
@@ -675,7 +700,7 @@
 
     }
     #abovehead {
-      margin: 87px 0 0 0;
+      margin: -1px 0 0 0;
       position: relative;
     }
 
@@ -683,13 +708,13 @@
 
   @media only screen and (max-width: 768px) {
     .col-sm-8 {
-      display: none;
+      display: block;
     }
     .col-sm-4 {
       display: block;
     }
     .right-img {
-      right: -38px;
+      right: 0px;
     }
     .res-img {
       margin: auto;
@@ -725,11 +750,21 @@
         display: flex !important;
         color: black;
       }
+      .backcolor {
+        height: 540px !important;
+      }
       #MUA {
         width: -webkit-fill-available !important;
         margin: auto !important;
         display: flex !important;
         color: #f2f2f2 !important;
+      }
+      .title {
+        margin-right: 0px !important;
+        font-size: 1rem !important;
+      }
+      .left {
+        display: none;
       }
       #socials {
         display: flex;
@@ -765,6 +800,9 @@
         margin: 100px auto;
         display: relative;
       }
+      .contain-head {
+        margin: -86px auto;
+      }
       .col-xs-8 {
         margin: auto auto 15px;
         width: auto;
@@ -798,14 +836,14 @@
         position: fixed;
         background-color: white;
         padding: 15px 10px 10px 10px;
-        margin: -70px 0 0 -15px;
+        margin: -10px 0 0 6px;
       }
       #news-hover {
         display: none;
         position: fixed;
         background-color: white;
         padding: 15px 10px 10px 10px;
-        margin: -75px 0 0 0px;
+        margin: -12px 0 0 -15px;
         border-top: 1px lightsteelblue;
       }
     }
@@ -889,10 +927,12 @@
 
             }
             else if (screen.width < 769) {
+            document.getElementById('best2').style.marginTop = "400px";
             about.style.display="contents";
           }
           }
           function removeabout() {
+            document.getElementById('best2').style.marginTop = "160px";
             about.style.display="none";
           }
         </script>
@@ -911,10 +951,12 @@
 
             }
             else if (screen.width < 769) {
+            document.getElementById('best2').style.marginTop = "200px";
             membership.style.display="contents";
             }
           }
           function removemem() {
+            document.getElementById('best2').style.marginTop = "160px";
             membership.style.display="none";
           }
         </script>
@@ -939,6 +981,7 @@
 
             }
             else if (screen.width < 769) {
+            document.getElementById('best2').style.marginTop = "225px";
             news.style.display="contents";
             }
           }
@@ -985,11 +1028,13 @@
 
             }
             else if (screen.width < 769) {
+            document.getElementById('best2').style.marginTop = "400px";
             resources.style.display="contents";
             }
                     }
 
           function removeresources() {
+            document.getElementById('best2').style.marginTop = "160px";
             resources.style.display="none";
           }
 
@@ -999,10 +1044,12 @@
               tools.style.display="inline";
             }
             else if (screen.width < 769) {
+            document.getElementById('best2').style.marginTop = "400px";
             tools.style.display="contents";
             }
           }
           function removetools() {
+            document.getElementById('best2').style.marginTop = "160px";
             tools.style.display="none";
           }
         </script>
@@ -1257,7 +1304,7 @@
 
       </style>
 
-      <div class="best">
+      <div class="best" id="best2">
         <div class="besthead">
           <img src="https://www.bonitaesterorealtors.com/wp-content/uploads/2022/11/Hmielewski.png" id="headback" alt="">
         </div>
