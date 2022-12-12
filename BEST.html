@@ -466,7 +466,9 @@
   }
 
   .right {
-    padding: 20px 30px 20px 20px;
+    padding: 40px 30px 50px 3000px;
+    margin-left: -3000px;
+    background-color: #20afbb;
   }
 
   #resources:hover {
@@ -596,6 +598,9 @@
 
   @media only screen and (max-width: 1050px) {
     .class-row {
+      display: grid;
+    }
+    .class-row2 {
       display: grid;
     }
     .inner-class {
@@ -1051,6 +1056,25 @@
             animation: loading 64s linear;
           }
 
+          .backcolor {
+            background-color: #f3f3f3;
+            padding: 30px;
+            height: 560px;
+          }
+          .btn-primary  {
+            width: 100%;
+            border-radius: 10px;
+            font-size: 26px;
+            margin: 15px auto;
+          }
+          .registration p {
+            text-align: center;
+          }
+          .registration h1 {
+            text-align: center;
+            color: white;
+          }
+
             #headback {
               margin: 200px auto;
               max-width: 100%;
@@ -1141,6 +1165,15 @@
             margin-top: 10px;
 
           }
+          .right p{
+            color: white;
+          }
+          .right hr {
+            margin: 5px auto 0px auto;
+          }
+          .right h1 {
+            color: white;
+          }
 
 
 
@@ -1190,16 +1223,36 @@
             color: white;
           }
 
+          .class-head2 {
+            font-size: 30px;
+            font-family: bebas neue;
+            color: white;
+            margin: 20px 20px;
+          }
+
           .class-desc {
             color: white;
             font-size: 12px;
             line-height: 1.2;
+            display: grid;
+            align-items: center;
           }
 
           .class-row {
             max-width: 1300px;
             justify-content: center;
             margin: auto auto auto auto;
+          }
+          .class-row2 {
+            max-width: 1300px;
+            justify-content: center;
+            margin: auto auto auto auto;
+          }
+          .registration {
+            background-color: lightgrey;
+            border-radius: 30px;
+            padding: 30px;
+            margin: 20px 5% auto 5%;
           }
 
       </style>
@@ -1212,7 +1265,7 @@
 
         </div>
         <div class="btext">
-          <h3 id="top-b">6 Classes. 2 Community Opportunities. An Intro to SWFL Real Estate.</h3>
+          <h3 id="top-b">6 classes, 2 community opportunities, and a comprehensive introduction to real estate in SWFL.</h3>
           <h3 id="bot-b">All for $30</h3>
 
           <h1 style="color: black;">Course Curriculum:</h1>
@@ -1378,17 +1431,24 @@
             max-width: 1000px;
             margin: auto;
             max-height: 500px;
-            align-items: center;
+            align-items: end;
+            background-color: #f3f3f3;
             }
 
             .column {
               flex: 1;
               border-radius: 0 30px 30px 0;
-              background-color: teal;
+            }
+            .column h1 {
+              margin-left: 0px;
             }
 
             .column.left {
               text-align: center;
+            }
+            .left {
+              z-index: 5;
+              position: relative;
             }
             .instcontainer {
               max-width: 1000px;
@@ -1446,9 +1506,10 @@
           </div>
         </div>
 
+        <div class="backcolor">
           <div id="inst1" class="instdetails">
             <div class="column left">
-              <img src="https://www.bonitaesterorealtors.com/wp-content/uploads/2022/12/Hk33xYrbO-1-Edited.png" alt="Photo" style="display: block; margin: 0 50px 0 50px; max-width: 70%; max-height: 500px; background-color: none;">
+              <img src="https://www.bonitaesterorealtors.com/wp-content/uploads/2022/12/Hk33xYrbO-1-Edited.png" alt="Photo" style="display: block; margin: 0 50px 0 50px; max-width: 80%; max-height: 500px; background-color: none;">
             </div>
             <div class="column right">
               <h1>Danielle Damianov</h1>
@@ -1481,7 +1542,7 @@
 
           <div id="inst4" class="instdetails" style="display: none;">
             <div class="column left">
-              <img src="https://www.bonitaesterorealtors.com/wp-content/uploads/2022/12/cid-fernandez.jpeg" alt="Photo" style="display: block; margin: 0 auto; max-width: 100%; max-height: 500px; margin-right: 30px;">
+              <img src="https://www.bonitaesterorealtors.com/wp-content/uploads/2022/12/cid-fernandez-Edited.png" alt="Photo" style="display: block; margin: 0 auto; max-width: 100%; max-height: 500px; margin-right: 30px;">
             </div>
             <div class="column right">
               <h1>Cid Fernandez</h1>
@@ -1500,6 +1561,9 @@
               <p>Jennifer Springer the broker and owner of Orchid Realty Group, and the instructor for "Marketing the Property and Servicing the Seller (2CE)". She specializes in residential real estate and has extensive knowledge and experience in marketing properties. Jennifer's class is designed to help real estate professionals improve their marketing skills and take their careers to the next level. Whether you are looking to improve your marketing skills, or you are simply interested in learning more about the real estate market, Jennifer is ready to help you achieve your goals.</p>
             </div>
           </div>
+
+        </div>
+
 
           <script type="text/javascript">
           let selector = 1;
@@ -1617,9 +1681,61 @@
 
           </script>
 
+          <h1 style="color: black;">Community Classes:</h1>
 
-        <div class="">
-          Additional Classes
+
+          <div class="row class-row2">
+            <div class="col-sm inner-class" id="aol2">
+              <div class="row inner-class">
+                  <h5 class="class-head2">Appraisals and Homestead</h5>
+                  <div class="class-desc">
+                    Join instructor Lynelle Sturgeon for a class on how to use the Lee County Property Appraiser's website and understand the homestead process. LEEPA is a valuable resource for real estate professionals, providing information on properties you may be listing or showing to clients. Don't miss out on this opportunity to learn how to use this tool to your advantage and provide better service to your clients.
+                </div>
+              </div>
+            </div>
+            <div class="col-sm inner-class" id="aor2">
+              <div class="row inner-class">
+                  <h5 class="class-head2">Appraisals and Homestead</h5>
+                  <div class="class-desc">
+                    Join instructor Lynelle Sturgeon for a class on how to use the Lee County Property Appraiser's website and understand the homestead process. LEEPA is a valuable resource for real estate professionals, providing information on properties you may be listing or showing to clients. Don't miss out on this opportunity to learn how to use this tool to your advantage and provide better service to your clients.
+                </div>
+              </div>
+            </div>
+
+        </div>
+
+          <h1 style="color: black;">Additional Classes:</h1>
+
+
+          <div class="row class-row">
+            <div class="col-sm inner-class" id="aol">
+              <div class="row inner-class">
+                <div class="col-sm-4">
+                  <img src="https://www.bonitaesterorealtors.com/wp-content/uploads/2022/12/david-hengel-Edited.png" class="class-img" alt="">
+                  <p class="teach-text-left">David Hengel</p>
+                </div>
+                <div class="col-sm-8">
+                  <h5 class="class-head">Code of Ethics (3CE)</h5>
+                  <div class="class-desc">
+                    Do you want to enhance your understanding of ethical practices in the real estate industry? Join us for a course on the ins and outs of ethical conduct in the field. You'll learn about the Real Estate Code of Ethics, how to handle ethical dilemmas, and the consequences of unethical behavior. This course is a must for anyone looking to build a strong, successful career in real estate. Don't miss out on this opportunity to become a confident and respected professional in your field. (Occurs on the First Thursday of Each Month)
+                </div>
+                </div>
+              </div>
+            </div>
+            <div class="col-sm inner-class" id="aor">
+              <div class="row inner-class">
+                <div class="col-sm-8">
+                  <h5 class="class-head">Core Law (3CE)</h5>
+                  <div class="class-desc">
+                    Join us for a course on Core Law and how to minimize legal risk in real estate. You'll learn about the laws governing the industry and how to identify and understand legal issues. This course is not intended to make you a legal expert, but to help you work with customers and safeguard them from complications. Don't miss out on this opportunity to become a more knowledgeable and confident sales associate. (Occurs every other month)
+                </div>
+                </div>
+                <div class="col-sm-4 right-img">
+                  <img src="https://www.bonitaesterorealtors.com/wp-content/uploads/2022/12/steven-fishman-Edited.png" class="class-img" alt="">
+                  <p class="teach-text-left">Steven Fishman</p>
+                </div>
+              </div>
+            </div>
 
         </div>
 
@@ -1628,9 +1744,10 @@
 
         </div>
 
-        <div class="">
-          Registration
-
+        <div class="registration">
+          <h1 style="color: black;">Registration:</h1>
+          <p>When you register for the B.E.S.T. Designation program, you'll gain access to six informative classes and two community opportunities. You'll have one year from the date of registration to complete four out of the six classes and earn your designation. Click the link below to register and start your journey today!</p>
+          <a href=""><button type="button" class="btn btn-primary"name="button">Register Here</button></a>
         </div>
 
 
