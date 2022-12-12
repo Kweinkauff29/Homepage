@@ -430,7 +430,7 @@
     line-height: 4rem;
   }
   #best2 {
-    margin-top: -60px !important;
+    margin-top: -60px;
   }
 
   #text {
@@ -546,6 +546,7 @@
   }
   .inner-class {
     width: 600px;
+    align-items: center;
   }
   #membershiptools-hover p {
     font-size: 14px;
@@ -643,6 +644,12 @@
   @media only screen and (max-width: 768px) {
     .col-sm-7 {
       padding-left: 100px;
+    }
+    #head-background {
+      height: 230px;
+    }
+    #best2 {
+      margin-top: 130px;
     }
     .best {
       margin: 160px auto;
@@ -744,6 +751,18 @@
         background-color: #f2f2f2 !important;
         margin: auto 5% 30px 5%;
       }
+      #aol {
+        margin: 10px auto !important;
+      }
+      #aol2 {
+        margin: 10px auto !important;
+      }
+      h1 {
+        font-size: 3rem;
+      }
+      #top-b {
+        font-size: 2rem;
+      }
       .article-img {
         width: -webkit-fill-available !important;
         margin: auto !important;
@@ -751,7 +770,7 @@
         color: black;
       }
       .backcolor {
-        height: 540px !important;
+        height: auto !important;
       }
       #MUA {
         width: -webkit-fill-available !important;
@@ -801,7 +820,7 @@
         display: relative;
       }
       .contain-head {
-        margin: -86px auto;
+        margin: 0px auto;
       }
       .col-xs-8 {
         margin: auto auto 15px;
@@ -813,12 +832,15 @@
       }
       .col-sm p {
         text-align: center;
+        font-size: 1.2rem;
+        padding: 0px 20px 20px 20px;
       }
       #MLSlogo {
         display: none;
       }
       #heading {
         display: flex;
+        margin: 0px 0px 24px 0px !important;
       }
       #logo {
         width: 45%;
@@ -908,7 +930,7 @@
       <div class="row" id="heading">
         <div class="col-sm">
           <h3 onmouseover="aboutdrop()" onmouseout="removeabout()" id="about">About <i class="fa fa-caret-down" aria-hidden="true"></i></h3>
-          <div id="about-hover" onmouseover="aboutdrop()" onmouseout="removeabout()">
+          <div id="about-hover" onmouseover="aboutdrop()" onmouseout="removeabout()" style="display: none;">
             <a href="https://www.bonitaesterorealtors.com/about/"><p>About BER</p></a>
             <a href="https://www.bonitaesterorealtors.com/golden-b-e-a-r-awards-3/"><p>BER Sales Excellence Awards</p></a>
             <a href="https://www.bonitaesterorealtors.com/2022-bod-and-past-pres/"><p>2022 Board of Directors</p></a>
@@ -981,7 +1003,7 @@
 
             }
             else if (screen.width < 769) {
-            document.getElementById('best2').style.marginTop = "225px";
+            document.getElementById('best2').style.marginTop = "250px";
             news.style.display="contents";
             }
           }
@@ -1028,7 +1050,7 @@
 
             }
             else if (screen.width < 769) {
-            document.getElementById('best2').style.marginTop = "400px";
+            document.getElementById('best2').style.marginTop = "370px";
             resources.style.display="contents";
             }
                     }
@@ -1282,6 +1304,7 @@
             font-size: 12px;
             line-height: 1.2;
             display: grid;
+            padding: 10px;
             align-items: center;
           }
 
@@ -1796,6 +1819,9 @@
           <p>When you register for the B.E.S.T. Designation program, you'll gain access to six informative classes and two community opportunities. You'll have one year from the date of registration to complete four out of the six classes and earn your designation. Click the link below to register and start your journey today!</p>
           <a href=""><button type="button" class="btn btn-primary"name="button">Register Here</button></a>
         </div>
+
+        <br>
+        <br>
 
 
       </div>
