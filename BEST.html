@@ -603,13 +603,14 @@
 
   @media only screen and (max-width: 1050px) {
     .class-row {
-      display: grid;
+      display: grid !important;
     }
     .class-row2 {
-      display: grid;
+      display: grid !important;
     }
     .inner-class {
         width: 600px;
+        display: grid;
       }
     }
 
@@ -951,7 +952,7 @@
 
             }
             else if (screen.width < 769) {
-            document.getElementById('best2').style.marginTop = "400px";
+            document.getElementById('best2').style.marginTop = "560px";
             about.style.display="contents";
           }
           }
@@ -980,7 +981,7 @@
 
             }
             else if (screen.width < 769) {
-            document.getElementById('best2').style.marginTop = "200px";
+            document.getElementById('best2').style.marginTop = "360px";
             membership.style.display="contents";
             }
           }
@@ -1015,7 +1016,7 @@
 
             }
             else if (screen.width < 769) {
-            document.getElementById('best2').style.marginTop = "250px";
+            document.getElementById('best2').style.marginTop = "410px";
             news.style.display="contents";
             }
           }
@@ -1068,7 +1069,7 @@
 
             }
             else if (screen.width < 769) {
-            document.getElementById('best2').style.marginTop = "370px";
+            document.getElementById('best2').style.marginTop = "530px";
             resources.style.display="contents";
             }
                     }
@@ -1089,7 +1090,7 @@
               tools.style.display="inline";
             }
             else if (screen.width < 769) {
-            document.getElementById('best2').style.marginTop = "400px";
+            document.getElementById('best2').style.marginTop = "560px";
             tools.style.display="contents";
             }
           }
@@ -1554,7 +1555,7 @@
               margin: 10px auto;
             }
             .teachrow {
-              display: block;
+              display: block !important;
             }
 
             @keyframes moveLeft {
@@ -1837,10 +1838,205 @@
 
         </div>
 
-        <div class="">
-          Upcoming Classes
+        <h1 style="color: black;">Upcoming Classes:</h1>
 
-        </div>
+
+        <style>
+          .row {
+            display: flex;
+            align-items: center;
+          }
+
+          .arrow {
+            cursor: pointer;
+          }
+
+          .left-arrow {
+            margin-right: auto;
+            position: fixed;
+            display: contents;
+            font-size: 40px;
+            width: 50px;
+          }
+
+          .right-arrow {
+            margin-left: auto;
+            position: fixed;
+            display: contents;
+            width: 50px;
+            font-size: 50px;
+          }
+
+          .column-class {
+            margin: 0 10px auto 10px;
+            width: 300px;
+            height: 300px;
+            background-color: orange;
+          }
+          .contain-classes {
+            max-width: 1000px;
+            margin: 20px auto;
+          }
+          .classes {
+            position: fixed;
+            display: contents;
+          }
+          .class-hair {
+            font-size: 24px;
+            text-align: center;
+            margin: auto;
+
+          }
+          .column-class p {
+            text-align: center;
+            margin: 10px 5% auto 5%;
+            font-size: 13px;
+          }
+
+          .class-head1 {
+            margin: 20px auto 10px auto !important;
+            text-align: center;
+            font-size: 24px;
+            color: white;
+          }
+          .btnclasses {
+            width: 90%;
+            margin: 20px auto;
+          }
+
+          .classlink {
+            justify-content: center;
+            display: flex;
+            margin: auto;
+            }
+          .btnclasses {
+            background-color: white;
+          }
+            @media (max-width: 900px) {
+              .column-class p {
+                font-size: 12px;
+              }
+              .class-head1 {
+                font-size: 24px;
+              }
+            }
+            @media (max-width: 600px) {
+              .class-head1 {
+                font-size: 24px;
+              }
+              .column-class p {
+                font-size: 12px;
+              }
+              .column-class {
+                margin: 0 10px 10px 10px;
+              }
+              .contain-classes {
+                display: grid;
+                justify-content: center;
+                text-align: center;
+              }
+              .classes {
+              }
+            }
+          }
+
+          </style>
+
+
+          <div class="row contain-classes">
+            <div class="arrow left-arrow">&lt;</div>
+              <div class="row classes">
+                <div class="column-class" id="1">
+                  <h1 class="class-head1">Code of Ethics - (3CE)</h1>
+                  <hr style="background-color: white; height: 1px; border: none; margin: 0 5% 0 5%;">
+                  <p>January 5th, 2023 @ 1PM</p>
+                  <p>GOT ETHICS? Of course you do! Ever questioned the ethics of others? Of course you have! Real estate is a complicated, complex industry and career. Only the strong survive. Get the strength that only confident professionals have...</p>
+                  <a href="https://bonitaspringsesterorealtorsfl.growthzoneapp.com/ap/Events/Register/vP36Xgmp?sourceTypeId=Website&mode=Attendee" class="classlink" target="_blank"><button type="button" class="btn btnclasses" name="button">More Info</button></a>
+                </div>
+                <div class="column-class" id="2">
+                  <h1 class="class-head1">Core Law (3CE)</h1>
+                  <hr style="background-color: white; height: 1px; border: none; margin: 0 5% 0 5%;">
+                  <p> January 25th, 2023 @ 9AM</p>
+                  <p>This course provides an advanced look into real estate law beyond the basic sales associates’ course. This course is not designed to make participants legal experts, but rather to help them identify and understand legal issues that arise...</p>
+                  <a href="https://bonitaspringsesterorealtorsfl.growthzoneapp.com/ap/Events/Register/WpM8eMqr?sourceTypeId=Website&mode=Attendee" class="classlink" target="_blank"><button type="button" class="btn btnclasses" name="button">More Info</button></a>
+                </div>
+                <div class="column-class" id="3">
+                  <h1 class="class-head1">Core Law (3CE)</h1>
+                  <hr style="background-color: white; height: 1px; border: none; margin: 0 5% 0 5%;">
+                  <p> March 22nd, 2023 @ 9AM</p>
+                  <p>This course provides an advanced look into real estate law beyond the basic sales associates’ course. This course is not designed to make participants legal experts, but rather to help them identify and understand legal issues that arise...</p>
+                  <a href="https://bonitaspringsesterorealtorsfl.growthzoneapp.com/ap/Events/Register/WpM8eMqr?sourceTypeId=Website&mode=Attendee" class="classlink" target="_blank"><button type="button" class="btn btnclasses" name="button">More Info</button></a>
+                </div>
+                <div class="column-class" id="4" style="display: none;">
+                  <h1 class="class-head1">Lee County Property Appraiser -City Series</h1>
+                  <hr style="background-color: white; height: 1px; border: none; margin: 0 5% 0 5%;">
+                  <p>April 27th, 2023 @ 11AM</p>
+                  <p>City Series - Lee County Property Appraiser Instructor: Lynelle Sturgeon...</p>
+                  <a href="https://bonitaspringsesterorealtorsfl.growthzoneapp.com/ap/Events/Register/ZrndoevP?sourceTypeId=Website&mode=Attendee" class="classlink" target="_blank"><button type="button" class="btn btnclasses" name="button">More Info</button></a>
+                </div>
+                <div class="column-class" id="5" style="display: none;">
+                  <h1 class="class-head1">Lee County Property Appraiser -City Series</h1>
+                  <hr style="background-color: white; height: 1px; border: none; margin: 0 5% 0 5%;">
+                  <p>November 9th, 2023 @ 11AM</p>
+                  <p>City Series - Lee County Property Appraiser Instructor: Lynelle Sturgeon...</p>
+                  <a href="https://bonitaspringsesterorealtorsfl.growthzoneapp.com/ap/Events/Register/2rO8xv1p?sourceTypeId=Website&mode=Attendee" class="classlink" target="_blank"><button type="button" class="btn btnclasses" name="button">More Info</button></a>
+                </div>
+              </div>
+            <div class="arrow right-arrow">&gt;</div>
+          </div>
+
+
+          <script>
+            const leftArrow = document.querySelector('.left-arrow');
+            const rightArrow = document.querySelector('.right-arrow');
+            let loadArray = [1,2,3];
+
+            rightArrow.addEventListener('click', () => {
+              let next = loadArray[2] + 1;
+              let before = loadArray[0];
+
+              if (loadArray[2] < 5) {
+                loadArray.splice(0,1);
+                loadArray.splice(2, 0, next);
+                let before = loadArray[0] - 1;
+                let one = loadArray[0];
+                let two = loadArray[1];
+                let three = loadArray[2];
+                document.getElementById(before).style.display = "none";
+                document.getElementById(one).style.display = "block";
+                document.getElementById(two).style.display = "block";
+                document.getElementById(three).style.display = "block";
+              }
+              else {console.error();}
+
+              console.log(loadArray);
+
+
+
+            });
+
+            leftArrow.addEventListener('click', () => {
+              let before = loadArray[0] - 1;
+
+              if (loadArray[0] > 1) {
+              loadArray.splice(2,1);
+              loadArray.splice(0, 0, before);
+              let one = loadArray[0];
+              let two = loadArray[1];
+              let three = loadArray[2];
+              let next = loadArray[2] + 1;
+              document.getElementById(next).style.display = "none";
+              document.getElementById(one).style.display = "block";
+              document.getElementById(two).style.display = "block";
+              document.getElementById(three).style.display = "block";
+            }
+
+            else {console.error();}
+
+            console.log(loadArray);
+
+              });
+            </script>
 
         <div class="registration">
           <h1 style="color: black;">Registration:</h1>
