@@ -180,6 +180,20 @@
     margin: 0 0 -21px 0;
   }
 
+  #vid4 {
+    width: 100%;
+    max-height: 650px;
+    object-fit: cover;
+    margin: 0 0 -21px 0;
+  }
+
+  #vid5 {
+    width: 100%;
+    max-height: 650px;
+    object-fit: cover;
+    margin: 0 0 -21px 0;
+  }
+
   .welcome {
     max-width: 1300px;
     border-radius: 20px;
@@ -261,6 +275,16 @@
     margin: auto;
   }
   #display3 {
+    max-height: 600px;
+    display: flex;
+    margin: auto;
+  }
+  #display4 {
+    max-height: 600px;
+    display: flex;
+    margin: auto;
+  }
+  #display5 {
     max-height: 600px;
     display: flex;
     margin: auto;
@@ -1045,6 +1069,28 @@
             border-top: black solid 5px;
             animation: loading 64s linear;
           }
+         #loading-line4 {
+            position: absolute;
+            height: 10px;
+            z-index: 5;
+            width: 100%;
+            margin: 0 !important;
+            opacity: .3;
+            color: black;
+            border-top: black solid 5px;
+            animation: loading 64s linear;
+          }
+          #loading-line5 {
+            position: absolute;
+            height: 10px;
+            z-index: 5;
+            width: 100%;
+            margin: 0 !important;
+            opacity: .3;
+            color: black;
+            border-top: black solid 5px;
+            animation: loading 64s linear;
+          }
       </style>
 
       <script type="text/javascript">
@@ -1066,20 +1112,27 @@
         let vid1 = document.getElementById("vid1");
         let vid2 = document.getElementById("vid2");
         let vid3 = document.getElementById("vid3");
+        let vid4 = document.getElementById("vid4");
+        let vid5 = document.getElementById("vid5");
         if (vidnum === 0) {
           console.log("This");
           document.getElementById("display1").style.display = "contents";
+          document.getElementById("display5").style.display = "none";
+          document.getElementById("display4").style.display = "none";
           document.getElementById("display3").style.display = "none";
           document.getElementById("display2").style.display = "none";
           document.getElementById("display2").currentTime = 0;
-          vid2.pause();
-          vid2.currentTime = 0;
+          vid5.pause();
+          vid5.currentTime = 0;
           vid1.play();
           vidnum++;
         }
         else if (vidnum === 1) {
           console.log("That");
           document.getElementById("display2").style.display = "contents";
+          document.getElementById("display3").style.display = "none";
+          document.getElementById("display4").style.display = "none";
+          document.getElementById("display5").style.display = "none";
           document.getElementById("display1").style.display = "none";
           document.getElementById("display1").currentTime = 0;
           vid1.pause();
@@ -1090,18 +1143,49 @@
         else if (vidnum === 2) {
           console.log("That");
           document.getElementById("display3").style.display = "contents";
+          document.getElementById("display4").style.display = "none";
+          document.getElementById("display5").style.display = "none";
           document.getElementById("display2").style.display = "none";
           document.getElementById("display1").style.display = "none";
-          document.getElementById("display1").currentTime = 0;
+          document.getElementById("display2").currentTime = 0;
           vid2.pause();
           vid2.currentTime = 0;
           vid3.play();
+          vidnum++;
+        }
+        else if (vidnum === 3) {
+          console.log("That");
+          document.getElementById("display4").style.display = "contents";
+          document.getElementById("display3").style.display = "none";
+          document.getElementById("display5").style.display = "none";
+          document.getElementById("display2").style.display = "none";
+          document.getElementById("display1").style.display = "none";
+          document.getElementById("display3").currentTime = 0;
+          vid3.pause();
+          vid3.currentTime = 0;
+          vid4.play();
+          vidnum++;
+        }
+        else if (vidnum === 4) {
+          console.log("That");
+          document.getElementById("display5").style.display = "contents";
+          document.getElementById("display4").style.display = "none";
+          document.getElementById("display3").style.display = "none";
+          document.getElementById("display2").style.display = "none";
+          document.getElementById("display1").style.display = "none";
+          document.getElementById("display4").currentTime = 0;
+          vid4.pause();
+          vid4.currentTime = 0;
+          vid5.play();
           vidnum = 0;
         }
         else {
           vidnum = 0;
           document.getElementById("display1").style.display = "contents";
           document.getElementById("display2").style.display = "none";
+          document.getElementById("display3").style.display = "none";
+          document.getElementById("display4").style.display = "none";
+          document.getElementById("display5").style.display = "none";
         }
         console.log(vidnum);
       }
@@ -1130,6 +1214,18 @@
               <source src="https://www.bonitaesterorealtors.com/wp-content/uploads/2023/01/Website-copy-December-2022-1.mp4" type="video/webm">
               Your browser does not support the video tag.
             </video>        </div>
+            <div id="display4" style="display: none;">
+              <hr id="loading-line4">
+              <video id="vid4" playsinline autoplay muted poster="cake.jpg" onended="changeVidNum()">
+                <source src="https://www.bonitaesterorealtors.com/wp-content/uploads/2023/01/part-1.mp4" type="video/webm">
+                Your browser does not support the video tag.
+              </video>        </div>
+              <div id="display5" style="display: none;">
+                <hr id="loading-line5">
+                <video id="vid5" playsinline autoplay muted poster="cake.jpg" onended="changeVidNum()">
+                  <source src="https://www.bonitaesterorealtors.com/wp-content/uploads/2023/01/part-2.mp4" type="video/webm">
+                  Your browser does not support the video tag.
+                </video>        </div>
       </div>
 
       <div class="important-links">
@@ -1610,7 +1706,7 @@
           </div>
         </div>
         <div class="col-sm-8">
-          <h3 class="resrow">Upcoming at BER - January 13th</h3>
+          <h3 class="resrow">Upcoming at BER - January 20th</h3>
           <style>
           .frame-class {
             width:100%;
@@ -1630,7 +1726,7 @@
             }
           </style>
 
-          <iframe class="frame-class" src="https://bonitaspringsesterorealtorsfl.growthzoneapp.com/ap/EmailViewer/LvGGJVAr">
+          <iframe class="frame-class" src="https://bonitaspringsesterorealtorsfl.growthzoneapp.com/ap/EmailViewer/Lz6n8laL">
           </iframe>
         </div>
       </div>
