@@ -4,11 +4,12 @@
   <title>Video Player</title>
   <style>
     body {
-      display: flex;
+      display: contents;
       justify-content: center;
       align-items: center;
       height: auto;
       width: 100%;
+      font-family: Arial, sans-serif;
     }
 
     #container {
@@ -19,11 +20,17 @@
       width: 100%;
     }
 
+    h1 {
+      color: #333;
+    }
+
     #video-player {
         width: 90%;
-        height: 0;
-        padding-bottom: 56.25%;
-        position: relative;
+      height: 0;
+      padding-bottom: 56.25%;
+      position: relative;
+      background-color: #1b2447;
+      overflow: hidden;
     }
 
     #video-player iframe {
@@ -32,17 +39,18 @@
         height: 100%;
         top: 0;
         left: 0;
-        }
+    }
 
     #thumbnail-container {
-      display: flex;
+    display: flex;
       justify-content: center;
-      flex-wrap: wrap;
-      width: 100%;
+      flex-wrap: nowrap;
+      width: 102%;
       height: auto;
-      overflow-x: auto;
+      overflow-x: visible;
       white-space: nowrap;
       margin-top: 20px;
+      background-color: #1b2447;
     }
 
     .thumbnail {
@@ -76,35 +84,200 @@
       transform: scale(1.2);
     }
 
+    .desc-holder {
+        background-color: #1b2447;
+      width: 102%;
+    }
+
+    .desc-holder2 {
+        background-color: #1b2447;
+      width: 102%;
+      margin: -20px auto;
+    }
+
     .class-description {
+        margin-top: 20px;
+      font-size: 14px;
+      color: white;
+      background-color: #1b2447;
+      padding: 10px;
+      width: 102%;
+      margin: -20px auto;
+    }
+
+    #container2 {
+      display: grid;
+      justify-items: center;
+      grid-gap: 20px;
+      text-align: center;
+      width: 100%;
+    }
+
+    h1 {
+      color: #333;
+    }
+
+    #video-player2 {
+      width: 90%;
+      height: 0;
+      padding-bottom: 56.25%;
+      position: relative;
+    }
+
+    #video-player2 iframe {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      top: 0;
+      left: 0;
+    }
+
+    #thumbnail-container2 {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      width: 100%;
+      height: auto;
+      overflow-x: auto;
+      white-space: nowrap;
       margin-top: 20px;
+      background-color: #1b2447;
+    }
+
+    .thumbnail2 {
+      display: inline-block;
+      width: 200px;
+      height: auto;
+      margin: 10px;
+      cursor: pointer;
+      position: relative;
+    }
+
+    .thumbnail2 img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .thumbnail2:hover::after {
+      content: attr(data-title);
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      text-align: center;
+      background-color: rgba(0, 0, 0, 0.7);
+      color: #fff;
+      padding: 5px;
+      font-size: 12px;
+      font-weight: bold;
+      transition: all 0.3s;
+      transform: scale(1.2);
+    }
+
+    .class-description2 {
+      margin-top: 40px;
+      font-size: 14px;
+      color: white;
+      background-color: #1b2447;
+    }
+
+    .arrow {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      background-color: rgba(0, 0, 0, 0.7);
+      color: #fff;
+      padding: 10px;
+      font-size: 20px;
+      cursor: pointer;
+    }
+
+    .arrow-left {
+      left: 0;
+    }
+
+    .arrow-right {
+      right: 0;
     }
   </style>
 </head>
 <body>
   <div id="container">
-    <h1>Full Classes</h1>
     <div id="video-player">
       <iframe width="100%" height="100%" src="https://www.youtube.com/embed/hK2HRoMC3rY" frameborder="0" allowfullscreen></iframe>
     </div>
 
     <div id="thumbnail-container">
-      <div class="thumbnail" onclick="changeVideo('hK2HRoMC3rY', 'Class 1: Lorem ipsum dolor sit amet, consectetur adipiscing elit.')" data-title="External Links">
+        <div class="arrow arrow-left" onclick="scrollThumbnails(-1)">&lt;</div>
+      <div class="thumbnail" onclick="changeVideo('VkBwwtmwmYg', 'Class 1: Lorem ipsum dolor sit amet, consectetur adipiscing elit.')" data-title="Companion Apps">
+        <img src="https://www.bonitaesterorealtors.com/wp-content/uploads/2023/06/Blue-And-Yellow-Simple-What-Do-You-Need-To-Prepare-In-20s-Youtube-Thumbnails.png" alt="Companion Apps">
+      </div>
+      <div class="thumbnail" onclick="changeVideo('C-xT9dx3n4k', 'Class 2: Sed ut perspiciatis unde omnis iste natus error sit voluptatem.')" data-title="Managing Your Profile">
+        <img src="https://www.bonitaesterorealtors.com/wp-content/uploads/2023/06/Blue-And-Yellow-Simple-What-Do-You-Need-To-Prepare-In-20s-Youtube-Thumbnails-1.png" alt="Managing Your Profile">
+      </div>
+      <div class="thumbnail" onclick="changeVideo('C-xT9dx3n4k', 'Class 2: Sed ut perspiciatis unde omnis iste natus error sit voluptatem.')" data-title="Managing Your Profile">
+        <img src="https://www.bonitaesterorealtors.com/wp-content/uploads/2023/06/Blue-And-Yellow-Simple-What-Do-You-Need-To-Prepare-In-20s-Youtube-Thumbnails-1.png" alt="Managing Your Profile">
+      </div>
+
+      <div class="thumbnail" onclick="changeVideo('EWW9AIjrNkk', 'Class 2: Sed ut perspiciatis unde omnis iste natus error sit voluptatem.')" data-title="Auto Emails">
+        <img src="https://www.bonitaesterorealtors.com/wp-content/uploads/2023/06/Blue-And-Yellow-Simple-What-Do-You-Need-To-Prepare-In-20s-Youtube-Thumbnails-1.png" alt="Auto Emails">
+      </div>
+
+      <div class="thumbnail" onclick="changeVideo('3St0e2lwhGU', 'Class 2: Sed ut perspiciatis unde omnis iste natus error sit voluptatem.')" data-title="Listing Inputs">
+        <img src="https://www.bonitaesterorealtors.com/wp-content/uploads/2023/06/Blue-And-Yellow-Simple-What-Do-You-Need-To-Prepare-In-20s-Youtube-Thumbnails-1.png" alt="Listing Inputs">
+      </div>
+
+      <div class="thumbnail" onclick="changeVideo('x2_AiOrAREU', 'Class 2: Sed ut perspiciatis unde omnis iste natus error sit voluptatem.')" data-title="Mailing Labels/Realist">
+        <img src="https://www.bonitaesterorealtors.com/wp-content/uploads/2023/06/Blue-And-Yellow-Simple-What-Do-You-Need-To-Prepare-In-20s-Youtube-Thumbnails-1.png" alt="Mailing Labels/Realist">
+      </div>
+
+      <!-- Add more thumbnail divs as needed -->
+      <div class="arrow arrow-right" onclick="scrollThumbnails(1)">&gt;</div>
+
+    </div>
+
+    <div class="desc-holder">
+        <div id="class-description" class="class-description"></div>
+       </div>
+    </div>
+
+  <script>
+        function scrollThumbnails(direction) {
+            const thumbnailContainer = document.getElementById('thumbnail-container');
+    const scrollAmount = 200; // Adjust the scroll amount as needed
+
+    const currentScrollLeft = thumbnailContainer.scrollLeft;
+    const newScrollLeft = currentScrollLeft + direction * scrollAmount;
+    thumbnailContainer.scrollLeft = newScrollLeft;
+    }
+  </script>
+
+<div id="container2">
+    <h1>Full Classes</h1>
+    <div id="video-player2">
+      <iframe width="100%" height="100%" src="https://www.youtube.com/embed/hK2HRoMC3rY" frameborder="0" allowfullscreen></iframe>
+    </div>
+
+    <div id="thumbnail-container2">
+      <div class="thumbnail2" onclick="changeVideo2('hK2HRoMC3rY', 'Class 1: Lorem ipsum dolor sit amet, consectetur adipiscing elit.')" data-title="External Links">
         <img src="https://www.bonitaesterorealtors.com/wp-content/uploads/2023/06/Blue-And-Yellow-Simple-What-Do-You-Need-To-Prepare-In-20s-Youtube-Thumbnails.png" alt="External Links">
       </div>
-      <div class="thumbnail" onclick="changeVideo('QlmRULArKIc', 'Class 2: Sed ut perspiciatis unde omnis iste natus error sit voluptatem.')" data-title="Make MLS Work For You">
+      <div class="thumbnail2" onclick="changeVideo2('QlmRULArKIc', 'Class 2: Sed ut perspiciatis unde omnis iste natus error sit voluptatem.')" data-title="Make MLS Work For You">
         <img src="https://www.bonitaesterorealtors.com/wp-content/uploads/2023/06/Blue-And-Yellow-Simple-What-Do-You-Need-To-Prepare-In-20s-Youtube-Thumbnails-1.png" alt="Make MLS Work For You">
       </div>
       <!-- Add more thumbnail divs as needed -->
     </div>
 
-    <div id="class-description" class="class-description"></div>
+    <div class="desc-holder2">
+      <div id="class-description2" class="class-description2"></div>
+    </div>
   </div>
 
   <script>
-    function changeVideo(videoId, description) {
-      var videoPlayer = document.getElementById('video-player');
-      var classDescription = document.getElementById('class-description');
+    function changeVideo2(videoId, description) {
+      var videoPlayer = document.getElementById('video-player2');
+      var classDescription = document.getElementById('class-description2');
       videoPlayer.innerHTML = '<iframe width="100%" height="100%" src="https://www.youtube.com/embed/' + videoId + '" frameborder="0" allowfullscreen></iframe>';
       classDescription.textContent = description;
     }
