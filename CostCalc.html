@@ -8,8 +8,8 @@
     }
     
     #calculator, #calculator2, #calculator3 {
-      max-width: 400px;
-      margin: 0 auto;
+      width: 400px;
+      margin: 0 10px;
       padding: 20px;
       background-color: #f5f5f5;
       border: 1px solid #ccc;
@@ -19,6 +19,11 @@
     
     h1 {
       text-align: center;
+    }
+
+    #infoArea {
+      margin: 20px;
+      width: 500px;
     }
 
     .description {
@@ -32,6 +37,17 @@
         display: flex;
         margin: auto;
         text-align: center;
+    }
+
+    #spread {
+      display: flex;
+    margin: auto 5%;
+    justify-content: center;
+    }
+
+    #calcContain {
+      display: contents;
+      width: 425px;
     }
     
     label {
@@ -95,8 +111,6 @@
 </head>
 <body>
 
-    <iframe src="https://bonitaspringsesterorealtorsfl.growthzoneapp.com/ap/Membership/Application/YpgyoZLj" id="embeddedFrame" frameborder="0"></iframe>
-
     <script>
       window.addEventListener('DOMContentLoaded', function() {
         var iframe = document.getElementById('embeddedFrame');
@@ -126,6 +140,8 @@
       </div>
 
 
+<div id="spread">
+<div id="calcContain">
   <div id="calculator" class="calculators">
     <h1>Realtor Dues Calculator</h1>
     <label>
@@ -147,50 +163,50 @@
     </label>
     <label>
         Membership Type:
-        <select id="membershipType" onchange="calculateDues(); toggleDescription(this);">
+        <select id="membershipType" onchange="calculateDues(); showDescript();">
           <option value="primary" data-description="Description for Primary Realtor.">Primary Realtor</option>
           <option value="secondary" data-description="Description for Secondary Realtor.">Secondary Realtor</option>
           <option value="secondaryOut" data-description="Description for Secondary Realtor out of State.">Secondary Realtor out of State</option>
-          <option value="transferring" data-description="Description for Transferring Agent.">Transferring Agent</option>
+          <option value="transferring" data-description="Description for Transferring Agent.">Transferring Primary Realtor</option>
         </select>
       </label>
-    <button onclick="calculateDues()">Calculate</button>
     <div id="result"></div>
     <div id="totalDues"></div>
   </div>
 
   <div id="calculator2" class="calculators">
-    <h1>Broker Dues Calculator</h1>
-    <label>
-      Month:
-      <select id="month2" onchange="calculateDues2()">
-        <option value="1">January</option>
-        <option value="2">February</option>
-        <option value="3">March</option>
-        <option value="4">April</option>
-        <option value="5">May</option>
-        <option value="6">June</option>
-        <option value="7">July</option>
-        <option value="8">August</option>
-        <option value="9">September</option>
-        <option value="10">October</option>
-        <option value="11">November</option>
-        <option value="12">December</option>
-      </select>
-    </label>
-    <label>
-        Membership Type:
-        <select id="membershipType2" onchange="calculateDues2(); toggleDescription(this);">
-          <option value="primary" data-description="Description for Primary Realtor.">Primary Realtor</option>
-          <option value="secondary" data-description="Description for Secondary Realtor.">Secondary Realtor</option>
-          <option value="secondaryOut" data-description="Description for Secondary Realtor out of State.">Secondary Realtor out of State</option>
-          <option value="transferring" data-description="Description for Transferring Agent.">Transferring Agent</option>
-        </select>
-      </label>
-    <button onclick="calculateDues()">Calculate</button>
-    <div id="result2"></div>
-    <div id="totalDues2"></div>
-  </div>
+  <h1>Broker Dues Calculator</h1>
+  <label>
+    Month:
+    <select id="month2" onchange="calculateDues2()">
+      <option value="1">January</option>
+      <option value="2">February</option>
+      <option value="3">March</option>
+      <option value="4">April</option>
+      <option value="5">May</option>
+      <option value="6">June</option>
+      <option value="7">July</option>
+      <option value="8">August</option>
+      <option value="9">September</option>
+      <option value="10">October</option>
+      <option value="11">November</option>
+      <option value="12">December</option>
+    </select>
+  </label>
+  <label>
+    Membership Type:
+    <select id="membershipType2" onchange="calculateDues2(); showDescript2();">
+      <option value="primary2" data-description="Description for Primary Realtor.">Primary Broker</option>
+      <option value="secondary2" data-description="Description for Secondary Realtor.">Secondary Broker With MLS</option>
+      <option value="secondaryOut2" data-description="Description for Secondary Realtor out of State.">Secondary Broker Without MLS</option>
+      <option value="transferring2" data-description="Description for Transferring Agent.">Secondary Broker Out of State With MLS</option>
+      <option value="SecondaryOutofStateWoMLS" data-description="Description for Transferring Agent.">Secondary Broker Out of State Without MLS</option>
+
+    </select>
+  </label>
+  <div id="result2"></div>
+  <div id="totalDues2"></div>
+</div>
 
   <div id="calculator3" class="calculators">
     <h1>Affiliate Dues Calculator</h1>
@@ -213,22 +229,30 @@
     </label>
     <label>
         Membership Type:
-        <select id="membershipType3" onchange="calculateDues3(); toggleDescription(this);">
-          <option value="primary" data-description="Description for Primary Realtor.">Primary Realtor</option>
-          <option value="secondary" data-description="Description for Secondary Realtor.">Secondary Realtor</option>
-          <option value="secondaryOut" data-description="Description for Secondary Realtor out of State.">Secondary Realtor out of State</option>
-          <option value="transferring" data-description="Description for Transferring Agent.">Transferring Agent</option>
+        <select id="membershipType3" onchange="calculateDues3(); showDescript3();">
+          <option value="primary" data-description="Description for Primary Realtor.">Primary Affiliate</option>
+          <option value="secondary" data-description="Description for Secondary Realtor.">Associate Affiliate</option>
         </select>
       </label>
-    <button onclick="calculateDues()">Calculate</button>
     <div id="result3"></div>
     <div id="totalDues3"></div>
   </div>
+  </div>
+  <div id="infoArea">
+    <div style="margin: 0px auto;">What's included: <div id="includes"></div></div>
+    <div style="margin: 0px auto;">Requirements: <div id="requirements"></div></div>
+  </div>
+
+  </div>
+
+
 
   <script>
     function calculateDues() {
       const selectedMonth = parseInt(document.getElementById('month').value);
       const membershipType = document.getElementById('membershipType').value;
+
+      document.getElementById('calculator').style.display = "block";
 
       const frAnnualDuesStart = 116;
       let frAdvocacy = 30;
@@ -297,6 +321,10 @@
       const selectedMonth2 = parseInt(document.getElementById('month2').value);
       const membershipType2 = document.getElementById('membershipType2').value;
 
+      document.getElementById("calculator").style.display = "none";
+      document.getElementById("calculator3").style.display = "none";
+
+
       const brokerDues = 270;
       const frAnnualDuesStart = 116;
       let frAdvocacy = 30;
@@ -317,24 +345,33 @@
       let narAnnualDues = narAnnualDuesStart - narAnnualDuesDecrease * (selectedMonth2 - 1);
 
       // Remove dues and fees based on membership type
-      if (membershipType === 'secondary') {
+      if (membershipType2 === 'secondary2') {
         frAnnualDues = 0;
         frAdvocacy = 0;
         narAnnualDues = 0;
         narAdvocacyAssess = 0;
         frProcessingFee = 0;
-      } else if (membershipType === 'secondaryOut') {
-        narAnnualDues = 0;
-        narAdvocacyAssess = 0;
-      } else if (membershipType === 'transferring') {
+      } else if (membershipType2 === 'secondaryOut2') {
         frAnnualDues = 0;
         frAdvocacy = 0;
         narAnnualDues = 0;
         narAdvocacyAssess = 0;
         frProcessingFee = 0;
-        localAppFee = 0;
+        mlsIndividual = 0;
+        mlsOffice = 0;
+      } else if (membershipType2 === 'transferring2') {
+        narAnnualDues = 0;
+        narAdvocacyAssess = 0;
         // Transferring agents still need to pay local association annual dues
       }
+      else if (membershipType2 === 'SecondaryOutofStateWoMLS') {
+        narAnnualDues = 0;
+        narAdvocacyAssess = 0;
+        mlsIndividual = 0;
+        mlsOffice = 0;
+      }
+
+
 
       // Calculate total dues
       const totalDues = brokerDues + frAnnualDues + frAdvocacy + narAnnualDues + narAdvocacyAssess + localAssocDues + rpacAssessment + bearHomeFoundation + frProcessingFee + mlsIndividual + mlsOffice;
@@ -366,60 +403,38 @@
       const selectedMonth3 = parseInt(document.getElementById('month3').value);
       const membershipType3 = document.getElementById('membershipType3').value;
 
-      const frAnnualDuesStart = 116;
-      let frAdvocacy = 30;
-      const narAnnualDuesStart = 150;
-      let narAdvocacyAssess = 45;
-      let localAssocDues = calculateLocalAssocDues(selectedMonth3);
-      const rpacAssessment = 20;
-      const bearHomeFoundation = 10;
+      let Affiliate = 135;
       let localAppFee = 50;
-      let frProcessingFee = 30;
-      let mlsIndividual = calculateMlsIndividualDues(selectedMonth3);
+      let Rpac = 20;
+      let Associate = 60;
 
       // Calculate the monthly decreases
-      const frAnnualDuesDecrease = 9.665;
-      const narAnnualDuesDecrease = 12.5;
+      const AffiliateDecrease = 11.25;
+      const AssociateDecrease = 5;
 
-      let frAnnualDues = frAnnualDuesStart - frAnnualDuesDecrease * (selectedMonth3 - 1);
-      let narAnnualDues = narAnnualDuesStart - narAnnualDuesDecrease * (selectedMonth3 - 1);
+      let totalDues;
+
+      let AffDues = Affiliate - AffiliateDecrease * (selectedMonth3 - 1);
+      let AffAssDues = Associate - AssociateDecrease * (selectedMonth3 - 1);
 
       // Remove dues and fees based on membership type
-      if (membershipType === 'secondary') {
-        frAnnualDues = 0;
-        frAdvocacy = 0;
-        narAnnualDues = 0;
-        narAdvocacyAssess = 0;
-        frProcessingFee = 0;
-      } else if (membershipType === 'secondaryOut') {
-        narAnnualDues = 0;
-        narAdvocacyAssess = 0;
-      } else if (membershipType === 'transferring') {
-        frAnnualDues = 0;
-        frAdvocacy = 0;
-        narAnnualDues = 0;
-        narAdvocacyAssess = 0;
-        frProcessingFee = 0;
+      if (membershipType3 === 'primary') {
+        AffAssDues = 0;
+        totalDues = AffDues + Rpac + localAppFee;
+      } else if (membershipType3 === 'secondary') {
+        AffDues = 0;
         localAppFee = 0;
-        // Transferring agents still need to pay local association annual dues
+        totalDues = Rpac + AffAssDues;
       }
 
-      // Calculate total dues
-      const totalDues = frAnnualDues + frAdvocacy + narAnnualDues + narAdvocacyAssess + localAssocDues + rpacAssessment + bearHomeFoundation + localAppFee + frProcessingFee + mlsIndividual;
 
       // Generate the result
       const resultElement3 = document.getElementById('result3');
       resultElement3.innerHTML = `
-        <p>FR Annual Dues: $${frAnnualDues.toFixed(2)}</p>
-        <p>FR Advocacy: $${frAdvocacy.toFixed(2)}</p>
-        <p>NAR Annual Dues: $${narAnnualDues.toFixed(2)}</p>
-        <p>NAR Advocacy Assess: $${narAdvocacyAssess.toFixed(2)}</p>
-        <p>Local Association Annual Dues: $${localAssocDues.toFixed(2)}</p>
-        <p>RPAC Assessment: $${rpacAssessment.toFixed(2)}</p>
-        <p>BEAR Home Foundation: $${bearHomeFoundation.toFixed(2)}</p>
-        <p>Local Application Fee: $${localAppFee.toFixed(2)}</p>
-        <p>FR Processing Fee: $${frProcessingFee.toFixed(2)}</p>
-        <p>MLS Individual: $${mlsIndividual.toFixed(2)}</p>
+        <p>Affiliate Dues: $${AffDues.toFixed(2)}</p>
+        <p>Affiliate Applicaton (One-Time): $${localAppFee.toFixed(2)}</p>
+        <p>RPAC Investment: $${Rpac.toFixed(2)}</p>
+        <p>Associate Affiliate Dues: $${AffAssDues.toFixed(2)}</p>
         <hr>
       `;
 
@@ -493,7 +508,88 @@
       }
     }
 
-    function showCalculator(calculatorId) {
+    let includes = document.getElementById('includes');
+   let requirements = document.getElementById('requirements');
+
+  function showDescript() {
+
+    document.getElementById("calculator").style.display = "block";
+    const membershipType = document.getElementById('membershipType').value;
+    const membershipType2 = document.getElementById('membershipType2').value;
+    const membershipType3 = document.getElementById('membershipType3').value;
+    includes.innerHTML = '';
+      requirements.innerHTML = '';
+      console.log("gets here1");
+      if (membershipType === 'primary') {
+        console.log("gets here");
+        includes.innerHTML = '<ul><li>Full Access to the Southwest Florida MLS</li><li>Access to Florida Realtor and NAR Services Including:<ul><li>Form Simplicity</li><li>MLS Advantage</li><li>NAR Realtor Benefits Program</li></ul><li>Full Access to Member Apps Including: <ul><li>Forewarn</li><li>Remine</li><li>Homesnap</li><li>MemberPlus</li><li>ShowingTime</li></ul><li>Full Time support staff</li><li>Access to Florida Realtors Tech Support and Legal Hotline</li><li>Additional Services: <ul><li>Testimonial Tree</li><li>My Undercover Agent</li><li>Offer Mangager</li></ul><ul>'
+        requirements.innerHTML = '<ul><li>Must have obtained a Florida Sales Associate License from the Department of Business and Professional Reqgulations</li><li>Must have not be a current member of an assoctiation (If so, Choose <strong>Transfering Primary Realtor</strong>)</li><li>Must complete all 3 New Member Class requirements within 90 days of joining the association</li></ul>';
+        }
+      else if (membershipType === 'secondary') {
+        includes.innerHTML = '<ul><li>Full Access to the Southwest Florida MLS</li><li>Access to Florida Realtor and NAR Services Including:<ul><li>Form Simplicity</li><li>MLS Advantage</li><li>NAR Realtor Benefits Program</li></ul><li>Full Access to Member Apps Including: <ul><li>Forewarn</li><li>Remine</li><li>Homesnap</li><li>MemberPlus</li><li>ShowingTime</li></ul><li>Full Time support staff</li><li>Access to Florida Realtors Tech Support and Legal Hotline</li><li>Additional Services: <ul><li>Testimonial Tree</li><li>My Undercover Agent</li><li>Offer Mangager</li></ul><ul>'
+          requirements.innerHTML = '<ul><li>Must have obtained a Florida Sales Associate License from the Department of Business and Professional Reqgulations</li><li>Must have a Membership to another association in Florida.  If the association is outside of Florida, please select <strong>Secondary Realtor out of State</strong>.</li></li></ul>';
+
+        } else if (membershipType === 'secondaryOut') {
+          includes.innerHTML = '<ul><li>Full Access to the Southwest Florida MLS</li><li>Access to Florida Realtor and NAR Services Including:<ul><li>Form Simplicity</li><li>MLS Advantage</li><li>NAR Realtor Benefits Program</li></ul><li>Full Access to Member Apps Including: <ul><li>Forewarn</li><li>Remine</li><li>Homesnap</li><li>MemberPlus</li><li>ShowingTime</li></ul><li>Full Time support staff</li><li>Access to Florida Realtors Tech Support and Legal Hotline</li><li>Additional Services: <ul><li>Testimonial Tree</li><li>My Undercover Agent</li><li>Offer Mangager</li></ul><ul>'
+          requirements.innerHTML = '<ul><li>Must have obtained a Florida Sales Associate License from the Department of Business and Professional Reqgulations</li><li>Must not already be a member with another Association in Florida.  If you are already a member of another organization in Florda, please select <strong>Secondary Realtor</strong>.</li></li></ul>';
+
+      } else if (membershipType === 'transferring') {
+        includes.innerHTML = '<ul><li>Full Access to the Southwest Florida MLS</li><li>Access to Florida Realtor and NAR Services Including:<ul><li>Form Simplicity</li><li>MLS Advantage</li><li>NAR Realtor Benefits Program</li></ul><li>Full Access to Member Apps Including: <ul><li>Forewarn</li><li>Remine</li><li>Homesnap</li><li>MemberPlus</li><li>ShowingTime</li></ul><li>Full Time support staff</li><li>Access to Florida Realtors Tech Support and Legal Hotline</li><li>Additional Services: <ul><li>Testimonial Tree</li><li>My Undercover Agent</li><li>Offer Mangager</li></ul><ul>'
+          requirements.innerHTML = '<ul><li>Must have obtained a Florida Sales Associate License from the Department of Business and Professional Reqgulations</li><li>Must provide a letter of good standing from the current association you are transfering from.</li></li></ul>';
+
+    }
+  }
+
+  function showDescript2() {
+      document.getElementById("calculator").style.display = "none";
+
+      includes.innerHTML = '';
+      requirements.innerHTML = '';
+
+      const membershipType = document.getElementById('membershipType').value;
+      const membershipType2 = document.getElementById('membershipType2').value;
+      const membershipType3 = document.getElementById('membershipType3').value;
+
+
+        if (membershipType2 === 'primary2') {
+          includes.innerHTML = '<ul><li>Full Access to the Southwest Florida MLS as an Office and Individual MLS Subscription</li><li>Access to Florida Realtor and NAR Services Including:<ul><li>Form Simplicity</li><li>MLS Advantage</li><li>NAR Realtor Benefits Program</li></ul><li>Full Access to Member Apps Including: <ul><li>Forewarn</li><li>Remine</li><li>Homesnap</li><li>MemberPlus</li><li>ShowingTime</li></ul><li>Full Time support staff</li><li>Access to Florida Realtors Tech Support and Legal Hotline</li><li>Additional Services: <ul><li>Testimonial Tree</li><li>My Undercover Agent</li><li>Offer Mangager</li></ul><ul>'
+          requirements.innerHTML = '<ul><li>Must have obtained a Florida Broker Associate License from the Department of Business and Professional Reqgulations</li><li>Must have not be a current member of an assoctiation (If so, Choose <strong>Transfering Primary Realtor</strong>)</li><li>Must have an active Real Estate Office on the DBPR</li></ul>';
+        }
+        else if (membershipType2 === 'secondary2') {
+          includes.innerHTML = '<ul><li>Full Access to the Southwest Florida MLS as an Office and Individual MLS Subscription</li><li>Access to Florida Realtor and NAR Services Including:<ul><li>Form Simplicity</li><li>MLS Advantage</li><li>NAR Realtor Benefits Program</li></ul><li>Full Access to Member Apps Including: <ul><li>Forewarn</li><li>Remine</li><li>Homesnap</li><li>MemberPlus</li><li>ShowingTime</li></ul><li>Full Time support staff</li><li>Access to Florida Realtors Tech Support and Legal Hotline</li><li>Additional Services: <ul><li>Testimonial Tree</li><li>My Undercover Agent</li><li>Offer Mangager</li></ul><ul>'
+          requirements.innerHTML = '<ul><li>Must have obtained a Florida Broker Associate License from the Department of Business and Professional Reqgulations</li><li>Must be a current member of another assoctiation with the ability to provide a letter of good standing from your current assocaition (If no current assocation, Choose <strong>Primary Broker</strong>)</li><li>Must have an active Real Estate Office on the DBPR</li></ul>';
+        } else if (membershipType2 === 'secondaryOut2') {
+          includes.innerHTML = '<ul><li>No Access to the Southwest Florida MLS</li></ul>'
+          requirements.innerHTML = '<ul><li>Must have obtained a Florida Broker Associate License from the Department of Business and Professional Reqgulations</li><li>Must be a current member of another assoctiation with the ability to provide a letter of good standing from your current assocaition (If no current assocation, Choose <strong>Primary Broker</strong>)</li><li>Must have an active Real Estate Office on the DBPR</li></ul>';
+        } else if (membershipType2 === 'transferring2') {
+          includes.innerHTML = '<ul><li>Full Access to the Southwest Florida MLS as an Office and Individual MLS Subscription</li><li>Access to Florida Realtor and NAR Services Including:<ul><li>Form Simplicity</li><li>MLS Advantage</li><li>NAR Realtor Benefits Program</li></ul><li>Full Access to Member Apps Including: <ul><li>Forewarn</li><li>Remine</li><li>Homesnap</li><li>MemberPlus</li><li>ShowingTime</li></ul><li>Full Time support staff</li><li>Access to Florida Realtors Tech Support and Legal Hotline</li><li>Additional Services: <ul><li>Testimonial Tree</li><li>My Undercover Agent</li><li>Offer Mangager</li></ul><ul>'
+          requirements.innerHTML = '<ul><li>Must have obtained a Florida Broker Associate License from the Department of Business and Professional Reqgulations</li><li>Must be a current member of another assoctiation with the ability to provide a letter of good standing from your current assocaition (If no current assocation, Choose <strong>Primary Broker</strong>)</li><li>Must have an active Real Estate Office on the DBPR</li></ul>';
+        }
+        else if (membershipType2 === 'SecondaryOutofStateWoMLS') {
+
+        }
+  }
+
+  function showDescript3() {
+
+    const membershipType = document.getElementById('membershipType').value;
+    const membershipType2 = document.getElementById('membershipType2').value;
+    const membershipType3 = document.getElementById('membershipType3').value;
+
+    let includes = document.getElementById('includes');
+    let requirements = document.getElementById('requirements');
+    document.getElementById("calculator").style.display = "none";
+
+    includes.innerHTML = '';
+    requirements.innerHTML = '';
+    if (membershipType3 === 'primary') {
+
+    } else if (membershipType3 === 'secondary') {
+
+}
+  }
+
+  function showCalculator(calculatorId) {
     const calculators = document.getElementsByClassName('calculators');
     for (let i = 0; i < calculators.length; i++) {
       calculators[i].style.display = 'none'; // Hide all calculators
@@ -504,23 +600,17 @@
     }
   }
 
-    function toggleDescription(selectElement) {
-      const selectedIndex = selectElement.selectedIndex;
-      const selectedOption = selectElement.options[selectedIndex];
-      const description = selectedOption.getAttribute('data-description');
-      const selectedDescriptions = document.querySelectorAll('.description');
 
-      selectedDescriptions.forEach((selectedDescription) => {
-        selectedDescription.style.display = 'none';
-        selectedDescription.parentNode.classList.remove('selected');
-      });
 
-      const descriptionElement = selectElement.parentNode.parentNode.nextElementSibling.querySelector('.description');
+  function toggleDescription(selectElement) {
+    const descriptionElement = selectElement.parentNode.parentNode.nextElementSibling.querySelector('.description');
+    if (descriptionElement) {
+      const description = selectElement.options[selectElement.selectedIndex].getAttribute('data-description');
       descriptionElement.textContent = description;
       descriptionElement.style.display = 'block';
       selectElement.parentNode.classList.add('selected');
     }
-
+  }
     // Set the default selected month to the current month
     document.getElementById('month').value = new Date().getMonth() + 1;
     document.getElementById('month2').value = new Date().getMonth() + 1;
@@ -531,9 +621,9 @@
     calculateDues();
     calculateDues2();
     calculateDues3();
+    showDescript();
 
   </script>
 
-  <div>What's included: </div>
 </body>
 </html>
