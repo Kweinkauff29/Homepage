@@ -4,7 +4,6 @@
   <title>Video Player</title>
   <style>
     body {
-      display: contents;
       justify-content: center;
       align-items: center;
       height: auto;
@@ -30,7 +29,6 @@
       padding-bottom: 56.25%;
       position: relative;
       background-color: #1b2447;
-      overflow: hidden;
     }
 
     #video-player iframe {
@@ -47,7 +45,7 @@
       flex-wrap: nowrap;
       width: 102%;
       height: auto;
-      overflow-x: visible;
+      overflow-x: scroll;
       white-space: nowrap;
       margin-top: 20px;
       background-color: #1b2447;
@@ -209,7 +207,6 @@
     </div>
 
     <div id="thumbnail-container">
-        <div class="arrow arrow-left" onclick="scrollThumbnails(-1)">&lt;</div>
       <div class="thumbnail" onclick="changeVideo('VkBwwtmwmYg', 'Class 1: Lorem ipsum dolor sit amet, consectetur adipiscing elit.')" data-title="Companion Apps">
         <img src="https://www.bonitaesterorealtors.com/wp-content/uploads/2023/06/Blue-And-Yellow-Simple-What-Do-You-Need-To-Prepare-In-20s-Youtube-Thumbnails.png" alt="Companion Apps">
       </div>
@@ -232,8 +229,11 @@
         <img src="https://www.bonitaesterorealtors.com/wp-content/uploads/2023/06/Blue-And-Yellow-Simple-What-Do-You-Need-To-Prepare-In-20s-Youtube-Thumbnails-1.png" alt="Mailing Labels/Realist">
       </div>
 
+      <div class="thumbnail" onclick="changeVideo('ltJbDpa14Y8', 'Class 2: Sed ut perspiciatis unde omnis iste natus error sit voluptatem.')" data-title="Using MarketWatch">
+        <img src="https://www.bonitaesterorealtors.com/wp-content/uploads/2023/06/Blue-And-Yellow-Simple-What-Do-You-Need-To-Prepare-In-20s-Youtube-Thumbnails-1.png" alt="Using MarketWatch">
+      </div>
+
       <!-- Add more thumbnail divs as needed -->
-      <div class="arrow arrow-right" onclick="scrollThumbnails(1)">&gt;</div>
 
     </div>
 
@@ -275,6 +275,13 @@
   </div>
 
   <script>
+        function changeVideo(videoId, description) {
+      var videoPlayer = document.getElementById('video-player');
+      var classDescription = document.getElementById('class-description');
+      videoPlayer.innerHTML = '<iframe width="100%" height="100%" src="https://www.youtube.com/embed/' + videoId + '" frameborder="0" allowfullscreen></iframe>';
+      classDescription.textContent = description;
+    }
+
     function changeVideo2(videoId, description) {
       var videoPlayer = document.getElementById('video-player2');
       var classDescription = document.getElementById('class-description2');
