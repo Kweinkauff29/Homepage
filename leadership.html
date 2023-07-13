@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html>
+<head>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins&family=Ubuntu:wght@500&display=swap" rel="stylesheet">
+
+  <style>
+    /* Define the initial state of the div elements */
+    .pulsing-caret {
+      position: fixed;
+      bottom: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      font-size: 40px;
+      animation: pulse 1.5s ease-in-out infinite;
+    }
+
+    @keyframes pulse {
+      0% {
+        transform: translateX(-50%) scale(1);
+      }
+      50% {
+        transform: translateX(-50%) scale(1.2);
+      }
+      100% {
+        transform: translateX(-50%) scale(1);
+      }
+    }
+    .scroll-in {
+      opacity: 0;
+      transform: translateX(-100px);
+      transition: opacity 0.5s, transform 0.5s;
+    }
+    .scroll-in img {
+      max-width: 100%;
+      height: auto;
+    }
+    body {
+        width: 100%;
+        margin: auto;
+    }
+    #headText {
+        font-family: 'Poppins', sans-serif;
+        margin: -20px 5% 30px 5%;
+        text-align: center;
+    }
+    #head1 {
+        font-family: 'Poppins', sans-serif;
+        margin: auto 5% -15px 5%;
+        text-align: left; 
+        color: teal;
+    }
+    #bodyText {
+        font-family: 'Poppins', sans-serif;
+        margin: auto 5% 30px 5%;
+        text-align: center;
+    }
+    .image-row {
+      display: flex;
+      justify-content: center;
+      margin-bottom: 20px;
+    }
+    .image-row img {
+      width: 300px; /* Adjust the width as needed */
+      height: auto;
+      margin: 0 10px; /* Adjust the margin as needed */
+      opacity: 0;
+      transition: opacity 0.5s;
+      object-fit: cover;
+
+    }
+  </style>
+  <script>
+    // Function to handle scroll event
+    function handleScroll() {
+      var scrollPosition = window.scrollY;
+
+      var div1 = document.getElementById('div1');
+      var div2 = document.getElementById('div2');
+      var div3 = document.getElementById('div3');
+
+      if (scrollPosition >= 0) {
+        div1.style.opacity = 1;
+        div1.style.transform = 'translateX(0)';
+      }
+
+      if (scrollPosition >= 300) {
+        div2.style.opacity = 1;
+        div2.style.transform = 'translateX(0)';
+      }
+
+      if (scrollPosition >= 600) {
+        div3.style.opacity = 1;
+        div3.style.transform = 'translateX(0)';
+      }
+    }
+
+    // Function to handle image roll animation
+    function handleImageSwap() {
+      var imageRow = document.getElementById('image-row');
+      var images = imageRow.getElementsByTagName('img');
+      var imageLinks = [
+        "https://www.bonitaesterorealtors.com/wp-content/uploads/2023/07/313970335_10166833849520582_524968419129836610_n.jpg",
+        "https://www.bonitaesterorealtors.com/wp-content/uploads/2023/07/269621906_10165906106815582_543070390877219035_n.jpg",
+        "https://www.bonitaesterorealtors.com/wp-content/uploads/2023/07/269759136_10165906320620582_6984053925364003265_n.jpg",
+        "https://www.bonitaesterorealtors.com/wp-content/uploads/2023/07/271731637_10224917436910505_3041546481207044055_n.jpg",
+        "https://www.bonitaesterorealtors.com/wp-content/uploads/2023/07/275607402_1295176884335608_6050236263405955768_n.jpg",
+        "https://www.bonitaesterorealtors.com/wp-content/uploads/2023/07/306966472_10166664420105582_7534537244427181455_n.jpg"
+        // Add more image links as needed
+      ];
+
+      function shuffleArray(array) {
+        var currentIndex = array.length;
+        var temporaryValue, randomIndex;
+
+        while (currentIndex !== 0) {
+          randomIndex = Math.floor(Math.random() * currentIndex);
+          currentIndex -= 1;
+          temporaryValue = array[currentIndex];
+          array[currentIndex] = array[randomIndex];
+          array[randomIndex] = temporaryValue;
+        }
+
+        return array;
+      }
+
+      function swapImages() {
+        var shuffledLinks = shuffleArray(imageLinks);
+
+        for (var i = 0; i < images.length; i++) {
+          images[i].style.opacity = 0;
+          images[i].src = shuffledLinks[i % shuffledLinks.length];
+        }
+
+        setTimeout(showImages, 500); // Delay showing images by 500 milliseconds for better visual effect
+      }
+
+      function showImages() {
+        for (var i = 0; i < images.length; i++) {
+          images[i].style.opacity = 1;
+        }
+      }
+
+      // Initial image swap
+      swapImages();
+
+      // Repeat image swap every 6 seconds
+      setInterval(swapImages, 7000);
+    }
+
+    // Attach the scroll event listener
+    window.addEventListener('scroll', handleScroll);
+  </script>
+</head>
+<body>
+  <div class="scroll-in" id="div1">
+    <img src="https://www.bonitaesterorealtors.com/wp-content/uploads/2023/07/LA_upscayl_4x_realesrgan-x4plus.jpg.png" alt="">
+    <div id="headText"><p>Introducing our exclusive Leadership Development Program, designed to identify, nurture, and empower the next generation of visionary leaders within our association and the broader community. Our program aims to cultivate individuals with the necessary skills, knowledge, and self-assurance to excel in their roles and effectively inspire and influence others they encounter, both within our association and throughout the community.</p>
+    </div>
+    <div class="image-row" id="image-row">
+        <img src="" alt="">
+        <img src="" alt="">
+        <img src="" alt="">
+      </div>
+
+      </p></div>
+  </div>
+
+  <div class="scroll-in" id="div2">
+    <h1 id="head1">Leadership Academy Application</h1>
+    <div id="bodyText"><p>Are you ready to unlock your full leadership potential and make a significant impact on our organization and the wider community? Look no further. Our program is designed to identify, cultivate, and empower the next generation of visionary leaders within BER. Through a comprehensive and tailored training curriculum, participants will embark on a transformative journey, acquiring the essential skills, knowledge, and self-assurance necessary to excel in their leadership roles. Join us on this transformative leadership journey and become a driving force within our organization and community. Together, we can shape a brighter future and make a difference that will resonate for years to come. Apply now for the BER Leadership Advancement Program and step into your role as a visionary leader!</p>
+    <div id="bodyText">Use the link here to apply:</div>
+    </div>
+  </div>
+
+  <div class="scroll-in" id="div3">
+    <h1>Div 3</h1>
+    <p>This is the content of Div 3.</p>
+    <img src="https://www.bonitaesterorealtors.com/wp-content/uploads/2023/07/Spring-2023-Magazine.png" alt="">
+  </div>
+
+  <div style="height: 1000px !important;"></div>
+
+  <div class="pulsing-caret" id="pulsing-caret">˅</div>
+
+  <!-- Add more div elements as needed -->
+
+  <script>
+    // Trigger the initial animation for elements in the viewport on page load
+    handleScroll();
+    handleImageSwap();
+  </script>
+</body>
+</html>
