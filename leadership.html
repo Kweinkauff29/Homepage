@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Poppins&family=Ubuntu:wght@500&display=swap" rel="stylesheet">
@@ -28,6 +29,51 @@
       }
     }
 
+    .split-columns {
+      display: flex;
+    }
+
+    .left-column {
+      flex: 1;
+      padding-right: 20px;
+      text-align: center;
+    }
+
+    .left-column li {
+      list-style: none;
+    }
+
+    .right-column {
+      flex: 1;
+    }
+
+    .person {
+      text-align: center;
+      margin-top: 20px;
+    }
+
+    .person img {
+      width: 200px;
+      height: auto;
+      border-radius: 50%;
+    }
+
+
+    .grid-item {
+      margin: 10px;
+      width: 100%;
+      height: 100%;
+      margin: 0 5px;
+
+    }
+
+    .grid-item img {
+      width: 100%;
+      height: 245px !important;
+      object-fit: cover;
+      max-height: 245px !important;
+    }
+
     h1 {
       font-family: 'Poppins', sans-serif;
       text-align: center;
@@ -35,11 +81,19 @@
       }
     .grid {
       display: grid;
-      grid-template-columns: repeat(5, 1fr);
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      grid-gap: 10px;
+      justify-items: center;
     }
     .grid-item {
       text-align: center;
     }
+
+    .grid-item:nth-last-child(-n+3) {
+      margin-left: auto;
+      margin-right: auto;
+    }
+
     .scroll-in {
       opacity: 0;
       transform: translateX(-100px);
@@ -60,7 +114,7 @@
     }
     #head1 {
         font-family: 'Poppins', sans-serif;
-        margin: auto 5% -15px 5%;
+        margin: auto 5% auto 5%;
         text-align: left; 
         color: teal;
     }
@@ -83,15 +137,78 @@
       object-fit: cover;
 
     }
+
+    /* Existing CSS code */
+
+    @media only screen and (max-width: 600px) {
+      .left-column {
+        padding-right: 0;
+      }
+
+      .right-column {
+        margin-top: 20px;
+      }
+
+      .grid {
+        grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+      }
+
+      .grid-item img {
+        height: 150px !important;
+        max-height: 150px;
+      }
+
+      .person img {
+        width: 150px;
+      }
+
+      .pulsing-caret {
+        font-size: 30px;
+      }
+
+      #headText,
+      #head1,
+      #bodyText {
+        margin: 10px 5%;
+      }
+
+      .image-row {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+      }
+
+      .image-row img {
+        width: 100%;
+        max-width: 200px;
+        height: auto;
+        margin: 10px;
+      }
+
+      #head1 {
+      font-family: 'Poppins', sans-serif;
+      text-align: center;
+      color: teal;
+    }
+
+
+    .split-columns {
+      display: contents;
+    }
+    }
+
   </style>
   <script>
     // Function to handle scroll event
     function handleScroll() {
       var scrollPosition = window.scrollY;
+      var screenWidth = window.innerWidth;
 
       var div1 = document.getElementById('div1');
       var div2 = document.getElementById('div2');
       var div3 = document.getElementById('div3');
+      var div4 = document.getElementById('div4');
+
 
       if (scrollPosition >= 0) {
         div1.style.opacity = 1;
@@ -107,6 +224,26 @@
         div3.style.opacity = 1;
         div3.style.transform = 'translateX(0)';
       }
+
+      if (scrollPosition >= 900) {
+        div4.style.opacity = 1;
+        div4.style.transform = 'translateX(0)';
+      }
+
+      var pulsingCaret = document.getElementById('pulsing-caret');
+      if (screenWidth < 800) {
+      if (scrollPosition > 2500) {
+        pulsingCaret.style.display = 'none';
+      } else {
+        pulsingCaret.style.display = 'block';
+      }
+    } else if (screenWidth > 700) {
+      if (scrollPosition > 1000) {
+        pulsingCaret.style.display = 'none';
+      } else {
+        pulsingCaret.style.display = 'block';
+      }
+    }
     }
 
     // Function to handle image roll animation
@@ -183,7 +320,7 @@
   <div class="scroll-in" id="div2">
     <h1 id="head1">Leadership Academy Application</h1>
     <div id="bodyText"><p>Are you ready to unlock your full leadership potential and make a significant impact on our organization and the wider community? Look no further. Our program is designed to identify, cultivate, and empower the next generation of visionary leaders within BER. Through a comprehensive and tailored training curriculum, participants will embark on a transformative journey, acquiring the essential skills, knowledge, and self-assurance necessary to excel in their leadership roles. Join us on this transformative leadership journey and become a driving force within our organization and community. Together, we can shape a brighter future and make a difference that will resonate for years to come. Apply now for the BER Leadership Advancement Program and step into your role as a visionary leader!</p>
-    <div id="bodyText">Use the link here to apply:</div>
+    <div id="bodyText">Use the link here to apply: (Registration for 2024 Available soon!)</div>
     </div>
   </div>
 
@@ -192,70 +329,95 @@
       <h1>Leadership Academy Class of 2023</h1>
       <div class="grid">
         <div class="grid-item">
-          <img src="photo1.jpg" alt="Photo 1">
-          <p>Text 1</p>
+          <img src="https://www.bonitaesterorealtors.com/wp-content/uploads/2023/07/Alice-Schwer-e1689601734533.jpeg" alt="Photo 1">
+          <p>Alice Schwer</p>
         </div>
         <div class="grid-item">
-          <img src="photo2.jpg" alt="Photo 2">
-          <p>Text 2</p>
+          <img src="https://www.bonitaesterorealtors.com/wp-content/uploads/2023/07/Allan-Hase.jpeg" alt="Photo 2">
+          <p>Allan Hase</p>
         </div>
         <div class="grid-item">
-          <img src="photo3.jpg" alt="Photo 3">
-          <p>Text 3</p>
+          <img src="https://www.bonitaesterorealtors.com/wp-content/uploads/2023/07/bruce-mitchell.jpeg" alt="Photo 3">
+          <p>Bruce Mitchell</p>
         </div>
         <div class="grid-item">
-          <img src="photo4.jpg" alt="Photo 4">
-          <p>Text 4</p>
+          <img src="https://www.bonitaesterorealtors.com/wp-content/uploads/2023/07/Catherine-Vigliano.jpeg" alt="Photo 4">
+          <p>Catherine Vigliano</p>
         </div>
         <div class="grid-item">
-          <img src="photo5.jpg" alt="Photo 5">
-          <p>Text 5</p>
+          <img src="https://www.bonitaesterorealtors.com/wp-content/uploads/2023/07/Crystal-Lynch.jpeg" alt="Photo 5">
+          <p>Crystal Lynch</p>
         </div>
         <div class="grid-item">
-          <img src="photo6.jpg" alt="Photo 6">
-          <p>Text 6</p>
+          <img src="https://www.bonitaesterorealtors.com/wp-content/uploads/2023/07/Kristen-Welborn-.jpeg" alt="Photo 6">
+          <p>Kristen Welborn</p>
         </div>
         <div class="grid-item">
-          <img src="photo7.jpg" alt="Photo 7">
-          <p>Text 7</p>
+          <img src="https://www.bonitaesterorealtors.com/wp-content/uploads/2023/07/Mason-Burge.jpeg" alt="Photo 7">
+          <p>Mason Burge</p>
         </div>
         <div class="grid-item">
-          <img src="photo8.jpg" alt="Photo 8">
-          <p>Text 8</p>
+          <img src="https://www.bonitaesterorealtors.com/wp-content/uploads/2023/07/Michael-Jackson.jpeg" alt="Photo 8">
+          <p>Michael Jackson</p>
         </div>
         <div class="grid-item">
-          <img src="photo9.jpg" alt="Photo 9">
-          <p>Text 9</p>
+          <img src="https://www.bonitaesterorealtors.com/wp-content/uploads/2023/07/Nikki-Harmon.jpeg" alt="Photo 9">
+          <p>Nikki Harmon</p>
         </div>
         <div class="grid-item">
-          <img src="photo10.jpg" alt="Photo 10">
-          <p>Text 10</p>
+          <img src="https://www.bonitaesterorealtors.com/wp-content/uploads/2023/07/Samantha-Schwartz-e1689601935598.jpeg" alt="Photo 10">
+          <p>Samantha Schwartz</p>
         </div>
         <div class="grid-item">
-          <img src="photo11.jpg" alt="Photo 11">
-          <p>Text 11</p>
+          <img src="https://www.bonitaesterorealtors.com/wp-content/uploads/2023/07/Sarah-anstett.webp" alt="Photo 11">
+          <p>Sarah Anstett</p>
         </div>
         <div class="grid-item">
-          <img src="photo12.jpg" alt="Photo 12">
-          <p>Text 12</p>
+          <img src="https://www.bonitaesterorealtors.com/wp-content/uploads/2023/07/Sheryl-Golnick.webp" alt="Photo 12">
+          <p>Sheryl Golnick</p>
         </div>
         <div class="grid-item">
-          <img src="photo12.jpg" alt="Photo 12">
-          <p>Text 13</p>
-        </div>
-        <div class="grid-item">
-          <img src="photo12.jpg" alt="Photo 12">
-          <p>Text 14</p>
-        </div>
-        <div class="grid-item">
-          <img src="photo12.jpg" alt="Photo 12">
-          <p>Text 15</p>
+          <img src="https://www.bonitaesterorealtors.com/wp-content/uploads/2023/07/virimartinez.jpg" alt="Photo 12">
+          <p>Viridiana Martinez</p>
         </div>
       </div>
     </div>
   </div>
 
-  <div style="height: 1000px !important;"></div>
+  <div class="scroll-in" id="div4">
+    <div class="split-columns">
+      <div class="left-column">
+        <h1>Leadership Academy Modules:</h1>
+        <ul>
+          <li>Module 1 - History</li>
+          <li>G.A.R.D.</li>
+          <li>Module 2 - Public Safety</li>
+          <li>Module 3 - Non-profit Day</li>
+          <li>Module 4 - Media</li>
+          <li>Module 5 - Economic Development</li>
+          <li>Module 6 - Emergency Management</li>
+          <li>Module 7 - Sustainability</li>
+          <li>Module 8 - Lee County Gov't</li>
+          <li>Module 9 - Roberts Rules</li>
+          <li>Florida Realtors Expo & Convention</li>
+          <li>Module 10 - Education</li>
+          <li>Module 11 - Waterways</li>
+          <li>Module 12 - Manufacturing</li>
+        </ul>
+      </div>
+      <div class="right-column">
+        <div class="person">
+          <img src="https://www.bonitaesterorealtors.com/wp-content/uploads/2022/11/image-16-e1668450198280.png" alt="Person Photo">
+          <h3>Ellen Boyce</h3>
+          <p>Leadership Academy Chair</p>
+        </div>
+      </div>
+    </div>    
+
+  </div>
+  
+
+  <div style="height: 100px !important;"></div>
 
   <div class="pulsing-caret" id="pulsing-caret">˅</div>
 
