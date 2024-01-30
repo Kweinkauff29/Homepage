@@ -25,7 +25,9 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Roboto&display=swap" rel="stylesheet">
-
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400..700&family=Poppins&family=Ubuntu:wght@500&display=swap" rel="stylesheet">
 
   </head>
   <body>
@@ -42,6 +44,55 @@
     max-width: 1300px;
     margin: auto !important;
   }
+
+  .carousel {
+  position: relative;
+  width: 100%;
+  max-width: 80%;
+  margin: auto;
+  overflow: hidden;
+}
+
+.show {
+  display: flex;
+}
+
+.carousel .sponsor-group {
+  display: none;
+  text-align: center;
+}
+
+.carousel .sponsor-group.show {
+  display: flex !important; /* Display the active category as a flex container */
+    flex-direction: row; /* Align children in a row */
+    justify-content: space-around; /* Adjusts the spacing between items */
+    align-items: center; /* Aligns items vertically */
+    margin: auto;
+}
+
+.carousel img {
+  margin: 10px;
+  width: 100px; /* Set a fixed width */
+  height: auto; /* Set a fixed height */
+  max-height: 140px;
+  object-fit: contain;
+  opacity: 0;
+  transition: opacity 1s ease-in-out;
+  z-index: -99999;
+}
+
+.carousel p {
+  font-family: "Poppins", sans-serif;
+  font-weight: 400;
+  font-style: normal;
+  font-size: 3rem;
+}
+
+.carousel img.show {
+  opacity: 1;
+  width: 95%;
+  object-fit: contain;
+}
 
   #head-background {
     z-index: 997;
@@ -147,6 +198,26 @@
   .res-img:hover {
   }
 
+  #diamond {
+    width: 95%;
+  }
+
+  #platinum {
+    width: 90%;
+  }
+
+  #gold {
+    width: 50%;
+  }
+
+  #silver {
+    width: 50%;
+  }
+
+  #bronze {
+    width: 90%;
+  }
+
   #Jointext {
     color: #ffc235;
     border-top: #ffc235 solid 2px;
@@ -208,6 +279,12 @@
   .col-sm {
     margin: auto;
   }
+
+  .sponsor-label {
+    max-width: 300px !important;
+    object-fit: contain;
+  }
+
   .box {
 
   }
@@ -1208,13 +1285,13 @@
         <div id="display2" style="display: none;">
           <hr id="loading-line2">
           <video id="vid2" playsinline autoplay muted poster="cake.jpg" onended="changeVidNum()">
-            <source src="https://www.bonitaesterorealtors.com/wp-content/uploads/2022/11/Copy-of-Welcome-to.mp4" type="video/webm">
+            <source src="https://www.bonitaesterorealtors.com/wp-content/uploads/2024/01/Website-Video-1.mp4" type="video/webm">
             Your browser does not support the video tag.
           </video>        </div>
           <div id="display3" style="display: none;">
             <hr id="loading-line3">
             <video id="vid3" playsinline autoplay muted poster="cake.jpg" onended="changeVidNum()">
-              <source src="https://www.bonitaesterorealtors.com/wp-content/uploads/2023/01/Website-copy-December-2022-1.mp4" type="video/webm">
+              <source src="https://www.bonitaesterorealtors.com/wp-content/uploads/2024/01/website-2023-1.mp4" type="video/webm">
               Your browser does not support the video tag.
             </video>        </div>
             <div id="display4" style="display: none;">
@@ -1313,6 +1390,58 @@
 
     <div id="bottom-contain">
           <h2 style="text-align: center;" class="resrow">Our Affiliates</h2>
+
+          <div class="carousel">
+            <h3 style="text-align: center; font-size: 2rem !important; color: #008080 !important;">2024 Year Sponsors</h2>
+            <div class="sponsor-group" id="diamond" class="row">
+                            <!-- Hider -->
+              <!-- Add Diamond sponsors' images with links -->
+              <a><img src="https://www.bonitaesterorealtors.com/wp-content/uploads/2024/01/3-e1706192519400.png" class="show"></a>
+              <a href="https://cottrelltitle.com/" target="_blank"><img src="https://www.bonitaesterorealtors.com/wp-content/uploads/2024/01/image-9-e1706193654177.png" class="show"></a>
+              <a href="https://stateinsuranceusa.com/" target="_blank"><img src="https://www.bonitaesterorealtors.com/wp-content/uploads/2024/01/image-8.png" class="show"></a>
+              <!-- More diamond sponsors -->
+            </div>
+            <div class="sponsor-group row" id="platinum">
+              <a><img src="https://www.bonitaesterorealtors.com/wp-content/uploads/2024/01/4-e1706192541504.png" class="show"></a>
+                <!-- Add Diamond sponsors' images with links -->          
+              <a href="https://berlinpatten.com/" target="_blank"><img src="https://www.bonitaesterorealtors.com/wp-content/uploads/2024/01/image-10-e1706193479215.png" class="show"></a>
+              <a href="https://sunriseinsurancegroup.com/" target="_blank"><img src="https://www.bonitaesterorealtors.com/wp-content/uploads/2024/01/image-11.png" class="show"></a>
+              <a href="https://heightstitle.com/" target="_blank"><img src="https://www.bonitaesterorealtors.com/wp-content/uploads/2024/01/image-12-e1706192091614.png" class="show"></a>
+
+              <!-- Add Platinum sponsors' images with links -->
+              <!-- More platinum sponsors -->
+            </div>
+            <!-- Repeat for Gold, Silver, Bronze -->
+            <div class="sponsor-group row" id="gold">
+              <a><img src="https://www.bonitaesterorealtors.com/wp-content/uploads/2024/01/5-e1706192560811.png" class="show"></a>
+              <!-- Add Diamond sponsors' images with links -->         
+              <a href="https://www.drhorton.com/" target="_blank"><img src="https://www.bonitaesterorealtors.com/wp-content/uploads/2024/01/R808a8f035af39d7d76dc292dd9d7b575-1.png" class="show"></a>
+              <!-- Add Platinum sponsors' images with links -->
+              <!-- More platinum sponsors -->
+            </div>
+            <div class="sponsor-group row" id="silver">
+              <a><img src="https://www.bonitaesterorealtors.com/wp-content/uploads/2024/01/6-e1706192576315.png" class="show"></a>
+
+            
+              <a><img src="https://www.bonitaesterorealtors.com/wp-content/uploads/2024/01/image-14.png" class="show"></a>
+              <a><img src="https://www.bonitaesterorealtors.com/wp-content/uploads/2024/01/image-13.png" class="show"></a>
+              <!-- Add Platinum sponsors' images with links -->
+              <!-- More platinum sponsors -->
+            </div>
+            <div class="sponsor-group row" id="bronze">
+              <a><img src="https://www.bonitaesterorealtors.com/wp-content/uploads/2024/01/7-e1706192598686.png" class="show"></a>
+
+
+              <a><img src="https://www.bonitaesterorealtors.com/wp-content/uploads/2024/01/image-15.png" class="show"></a>
+              <a><img src="https://www.bonitaesterorealtors.com/wp-content/uploads/2024/01/image-16.png" class="show"></a>
+              <a><img src="https://www.bonitaesterorealtors.com/wp-content/uploads/2024/01/image-17.png" class="show"></a>
+              <a><img src="https://www.bonitaesterorealtors.com/wp-content/uploads/2024/01/image-18.png" class="show"></a>
+              <a><img src="https://www.bonitaesterorealtors.com/wp-content/uploads/2024/01/image-19.png" class="show"></a>
+              <!-- Add Platinum sponsors' images with links -->
+              <!-- More platinum sponsors -->
+            </div>
+          </div>
+
           <script type="text/javascript">
            let img1 = document.getElementById("img1");
            let img2 = document.getElementById("img2");
@@ -1528,7 +1657,6 @@
              while (i < imgLinks.length) {
                let imgIdMaker = 'img' + i;
                imgidArray.push(imgIdMaker);
-               console.log(imgidArray);
                let imgid2 = imgidArray[i - 1];
                let imgid = document.getElementById(imgidArray[i - 1]);
                imgid.src = imgLinks[i];
@@ -1536,6 +1664,49 @@
              }
 
            }
+           var currentCategoryIndex = 0;
+var categories = document.querySelectorAll('.carousel .sponsor-group');
+var intervalTime = 5000; // 5 seconds
+var intervalId; // To store the interval ID
+
+function cycleSponsors() {
+    // Show the active category
+    var activeCategory = categories[currentCategoryIndex];
+    activeCategory.classList.add('show');
+}
+
+function startCyclingCategories() {
+    intervalId = setInterval(function() {
+        var previousCategory = categories[currentCategoryIndex];
+        previousCategory.classList.remove('show'); // Remove show from the current category
+
+        currentCategoryIndex = (currentCategoryIndex + 1) % categories.length;
+        var newActiveCategory = categories[currentCategoryIndex];
+        newActiveCategory.classList.add('show'); // Add show to the new category
+
+        cycleSponsors(); // Update the active category
+    }, intervalTime);
+}
+
+function stopCyclingCategories() {
+    clearInterval(intervalId); // Clear the interval to stop cycling
+}
+
+// Add mouseover and mouseout event listeners to each image
+categories.forEach(function(category) {
+    category.addEventListener('mouseover', stopCyclingCategories);
+    category.addEventListener('mouseout', startCyclingCategories);
+});
+
+// Initialize the cycling
+cycleSponsors();
+startCyclingCategories(); // Start cycling categories
+
+
+            // Initialize the cycling
+            cycleSponsors(); // Initially show the first category
+            cycleCategories(); // Start cycling categories
+
 
            // define the function to run on animation end
              function onAnimationEnd() {
@@ -1711,7 +1882,7 @@
           </div>
         </div>
         <div class="col-sm-8">
-          <h3 class="resrow">Upcoming at BER - December 29th, 2023</h3>
+          <h3 class="resrow">Upcoming at BER - January 26th, 2024</h3>
           <style>
           .frame-class {
             width:100%;
@@ -1731,7 +1902,7 @@
             }
           </style>
 
-          <iframe class="frame-class" src="https://bonitaspringsesterorealtorsfl.growthzoneapp.com/ap/EmailViewer/PdmZgynL">
+          <iframe class="frame-class" src="https://bonitaspringsesterorealtorsfl.growthzoneapp.com/ap/EmailViewer/PNnBMwGP">
           </iframe>
         </div>
       </div>
