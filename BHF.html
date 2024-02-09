@@ -6,6 +6,7 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Lobster&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap" rel="stylesheet">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
@@ -1193,24 +1194,49 @@
 
 
       <style>
-        #colorTop {
+      #colorTop {
           margin: auto;
           height: 400px;
-          background-color: #2faae1;
+          background-image: linear-gradient(to right, #1f8cb5, #2faae1, #1f8cb5);
           display: flex;
           align-items: center;
-        }
+      }
         #cText{
           align-items: center;
           width: 700px;
           color: white;
+        }
+        #cText h2 {
+          position: relative; /* Needed to position the pseudo-element correctly */
+          display: inline-block; /* Ensures the line aligns with the text width */
+        }
+
+        #cText h2::after {
+          content: '';
+          position: absolute;
+          bottom: -10px; /* Adjust this value to position the line below the text */
+          left: 0;
+          width: 100%; /* Line width matches the text width */
+          height: 2px; /* Line thickness */
+          background-color: white; /* Line color */
+          animation: bounce 2s infinite ease-in-out; /* Animation name, duration, loop, timing function */
+        }
+
+        @keyframes bounce {
+          0%, 100% {
+            transform: translateX(0); /* Start and end at the original position */
+          }
+          50% {
+            transform: translateX(20px); /* Adjust this value for the bounce distance */
+          }
         }
       </style>
 
 
     <div id="mainSection">      
 
-      <div id="colorTop">     
+      <div id="colorTop" class="row">     
+        <div><img src="https://www.bonitaesterorealtors.com/wp-content/uploads/2024/02/4b58c437-7692-4036-9201-fc16fd60b379.png" style="margin: auto auto auto 80px; max-height: 240px;" alt=""></div>
         <div id="cText">       
           <h1>BER Home Foundation</h1>
           <h2>Members Helping Members</h2>
@@ -1220,40 +1246,60 @@
 
 
       <style>
-      
-      .container {
-        display: flex;
-        flex-wrap: wrap;
-        margin: auto;
-      }
-      
-      .about-section, .assistance-section {
+        .container {
+          display: flex;
+          flex-wrap: wrap;
+          margin: auto;
+          justify-content: center; /* Center the items horizontally */
+          align-items: flex-start; /* Align items to start from the top */
+        }
+        
+        .about-section, .assistance-section {
           padding: 20px;
-      }
+          background-image: linear-gradient(to right, #1f8cb5, #2faae1, #1f8cb5);
+          border-radius: 10px; /* Rounded borders */
+          color: white;
+          transition: transform 0.3s ease, box-shadow 0.3s ease; /* Smooth transition for transform and shadow */
+          margin: 10px; /* Ensure some space around sections */
+          box-sizing: border-box; /* Include padding and border in the element's total width and height */
+        }
+        
+        .about-section:hover, .assistance-section:hover {
+          transform: scale(1.03); /* Grow effect on hover */
+          box-shadow: 0 0 10px rgba(0,0,0,0.2); /* Shadow for depth effect */
+        }
       
-      h2 {
-        margin: 10px 5% auto 5%;
-      }
-      .about-section {
-          flex: 1 1 33%; /* Takes up 1/3 of the space */
-      }
-      
-      .assistance-section {
-          flex: 1 1 66%; /* Takes up 2/3 of the space */
-      }
-      
-      @media (max-width: 768px) {
+        h2 {
+          margin: 10px 5% auto 5%;
+        }
+        
+        /* Adjusted to keep both sections on the same row */
+        .about-section {
+          flex: 1; /* Allows the section to grow */
+          max-width: 33%; /* Maximum width */
+          padding-bottom: 40px;
+        }
+        
+        .assistance-section {
+          flex: 2; /* Allows the section to take twice the space of the about-section */
+          max-width: 66%; /* Maximum width */
+        }
+        
+        @media (max-width: 768px) {
           .about-section, .assistance-section {
-              flex: 1 1 100%; /* Stacks them into 1 column on smaller screens */
+            flex: 1 0 100%; /* Takes full width on smaller screens */
+            max-width: 100%;
           }
-      }
+        }
       </style>
+      
       <br>
       <br>
       <br>
       <div class="container">
         <div class="about-section">
-            <h2 style="margin: auto;">About</h2>
+            <h2 style="margin: auto; font-family: 'Lobster', cursive; font-size: 5rem;">About</h2>
+            <hr style="border-color: white; margin: 10px auto;">
             <p>The B.E.R. Home Foundation is an organization within the Bonita Springs-Estero REALTORS®, Inc. The mission of the B.E.R. Home Foundation is:</p>
             <ul>
               <li>To accumulate assets from fundraising and donations that can be managed to serve our Members.</li>
@@ -1263,7 +1309,8 @@
 
         </div>
         <div class="assistance-section">
-            <h2 style="margin: auto;">How to Request Assistance</h2>
+            <h2 style="margin: auto; font-family: 'Lobster', cursive; font-size: 5rem;">How to Request Assistance</h2>
+            <hr style="border-color: white; margin: 10px auto;">
             <p>Foundation funds may be requested by a phone call to any member of the B.E.R. Home Foundation. Each request is handled with complete confidentiality within the Foundation. Such a request is examined for approval and funds are distributed in accordance with our Bylaws. Funds may be requested for:</p>
             <ul>
               <li>Emergency Medical Needs</li>
@@ -1272,14 +1319,86 @@
               <li>Catastrophic Events</li>
               <li>There is no payback obligation. Future donations will be accepted.</li>
             </ul>
+            <div class="join-section" style="text-align: left; margin: 20px;">
+              <a href="https://bonitaspringsesterorealtorsfl.growthzoneapp.com/ap/Form/Fill/rklx0FVp" class="btn btn-primary" target="_blank" style="font-size: 20px; padding: 10px 20px; background-color: #007bff; color: white; border-radius: 5px; text-decoration: none;">Apply for Assistance</a>
+            </div>
 
         </div>
     </div>
 
-      <h2 style="margin: 30px auto 30px auto; text-align: center;">Directors</h2>
+    <br>
+    <br>
+
+    <div class="row" style="display: flex; margin: auto; justify-content: center; align-items: center;">
+      <div><h3 style="font-family: 'Righteous';">Looking to become apart of the BER Home Foundation?</h3></div>
+    <div class="join-section" style="text-align: center; margin: 20px;">
+      <a href="https://bonitaspringsesterorealtorsfl.growthzoneapp.com/ap/Form/Fill/Lq1X7fML" class="btn btn-primary" target="_blank" style="font-size: 20px; padding: 10px 20px; background-color: #007bff; color: white; border-radius: 5px; text-decoration: none;">Join Here</a>
+    </div>
+        <!-- View Bylaws Button -->
+        <div style="text-align: center; margin: 20px;">
+          <button onclick="togglePDF()" style="font-size: 20px; padding: 10px 20px; background-color: #007bff; color: white; border-radius: 5px; text-decoration: none;">View Bylaws</button>
+        </div>
+     </div>
+
+    <br>
+    <br>
+
+      <style>
+        /* Additional styling for smooth transitions */
+        .pdfViewerVisible {
+          max-height: 600px; /* Adjust this value based on the actual height needed */
+          opacity: 1;
+        }
+        .pdfViewerVisible iframe {
+          opacity: 1; /* Ensure the iframe also becomes fully visible */
+        }
+      </style>
+    
+
+    <script>
+      function togglePDF() {
+        var pdfSection = document.getElementById("pdfViewer");
+        var iframe = pdfSection.querySelector("iframe");
+    
+        // Check if the PDF is currently visible
+        if (pdfSection.classList.contains("pdfViewerVisible")) {
+          // If visible, start the hide animation
+          pdfSection.style.maxHeight = '0';
+          iframe.style.opacity = '0';
+          
+          // Wait for the opacity transition, then set display to none
+          setTimeout(() => {
+            pdfSection.classList.remove("pdfViewerVisible");
+            pdfSection.style.opacity = '0';
+          }, 500); // Match the duration of the opacity transition
+        } else {
+          // If hidden, make the div block to enable transition, then start the show animation
+          pdfSection.classList.add("pdfViewerVisible");
+          pdfSection.style.opacity = '1';
+          pdfSection.style.maxHeight = '1000px'; // Ensure this matches the max height of the content
+          setTimeout(() => iframe.style.opacity = '1', 10); // Slightly delay the iframe opacity to ensure it transitions
+        }
+      }
+    </script>
+    
+
+    <!-- PDF Section Initially Invisible -->
+    <div id="pdfViewer" style="max-height: 0; overflow: hidden; opacity: 0; transition: opacity 0.5s ease, max-height 0.5s ease; text-align: center;">
+      <iframe src="https://www.bonitaesterorealtors.com/wp-content/uploads/2024/02/BHF-New-Bylaws.pdf" style="width: 100%; height: 1000px; opacity: 0; transition: opacity 0.5s ease;"></iframe>
+    </div>
+
+
+
+
+<br>
+<br>
+
+      <h2 style="margin: 30px auto 30px auto; text-align: center; font-family: 'Lobster', cursive; font-size: 6rem;">Directors</h2>
       <hr style="margin: auto 5% auto 5%;">
       <br>
       <br>
+
+      
 
       <!--Directors -->
 
