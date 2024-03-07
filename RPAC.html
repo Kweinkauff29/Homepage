@@ -1226,16 +1226,24 @@
       <style>
       #colorTop {
           margin: auto;
-          height: 400px;
+          height: 600px;
           background-image: linear-gradient(to right, #1f8cb5, #2faae1, #1f8cb5);
           display: flex;
           align-items: center;
+          object-fit: contain;
+          color: red;
+          background-size: cover;
       }
-        #cText{
+        #cText {
           align-items: center;
           width: 700px;
-          color: white;
+          color: red !important;
         }
+        #cText h1 {
+            color: red !important;
+
+        }
+
         #cText h2 {
           position: relative; /* Needed to position the pseudo-element correctly */
           display: inline-block; /* Ensures the line aligns with the text width */
@@ -1248,7 +1256,7 @@
           left: 0;
           width: 100%; /* Line width matches the text width */
           height: 2px; /* Line thickness */
-          background-color: white; /* Line color */
+          background-color: red; /* Line color */
           animation: bounce 2s infinite ease-in-out; /* Animation name, duration, loop, timing function */
         }
 
@@ -1265,13 +1273,13 @@
 
     <div id="mainSection">      
 
-      <div id="colorTop" class="row">     
-        <div><img id="BHFphoto" src="https://www.bonitaesterorealtors.com/wp-content/uploads/2024/02/4b58c437-7692-4036-9201-fc16fd60b379.png" style="margin: auto auto auto 80px; max-height: 240px;" alt=""></div>
-        <div id="cText">       
-          <h1>BER Home Foundation</h1>
-          <h2>Members Helping Members</h2>
+        <div id="colorTop" class="row" style="background-image: url('https://www.bonitaesterorealtors.com/wp-content/uploads/2024/02/Invest-in-Your-Proffesion-1.png');">
+            <div><img id="BHFphoto" src="https://www.bonitaesterorealtors.com/wp-content/uploads/2024/02/fbbec2b4-0f88-4f18-a5cd-f6b7f1e4bdf0.png" style="margin: auto auto auto 80px; max-height: 240px;" alt=""></div>
+            <div id="cText">
+                <h1>Realtor Political Action Committee</h1>
+                <h2>Invest in your Profession</h2>
+            </div>
         </div>
-      </div>
 
 
 
@@ -1286,7 +1294,7 @@
         
         .about-section, .assistance-section {
           padding: 20px;
-          background-image: linear-gradient(to right, #1f8cb5, #2faae1, #1f8cb5);
+          background-image: linear-gradient(to right, red, coral, red);
           border-radius: 10px; /* Rounded borders */
           color: white;
           transition: transform 0.3s ease, box-shadow 0.3s ease; /* Smooth transition for transform and shadow */

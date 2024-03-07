@@ -3,35 +3,198 @@
 <head>
 <meta charset="UTF-8">
 <title>API Data Fetch</title>
+<style>
+    #contactInfo {
+        display: flex;
+        flex-wrap: wrap;
+    }
+    .contact {
+        flex: 0 0 calc(33.333% - 20px);
+        margin: 10px;
+        border: 1px solid #ccc;
+        padding: 10px;
+    }
+    .contact img {
+        max-width: 100px;
+    }
+    img {
+        max-width: 100%;
+    }
+</style>
 </head>
 <body>
     <h1>API Data Fetch Example</h1>
+
     <div id="contactInfo"></div> <!-- This is where the contact info will be displayed -->
 
     <script>
-        // Replace 'your_subdomain' with the actual subdomain of your database.
-        var apiEndpoint = 'https://bonitaspringsesterorealtorsfl.growthzoneapp.com/api/contacts';
 
-        // Use this for testing purposes only. Your API key should not be exposed like this.
-        var apiKey = 'cR1djHVMkndNjLbwXyhDyOV7dWPJ6TnufYtcdOHc';
+// Replace 'your_subdomain' with the actual subdomain of your database.
+let apiEndpoint = 'https://bonitaspringsesterorealtorsfl.growthzoneapp.com/api/contacts?skip=0&take=1&$top=900000&orderBy=ContactId';
 
-        fetch(apiEndpoint, {
-    method: 'GET',
-    headers: {
-        'Content-Type': 'application/json',
-        'Authorization': 'ApiKey ' + apiKey
-    }
-})
-.then(function(response) {
-    return response.json();
-})
-.then(function(data) {
-    console.log(data.Results[1]);
-})
-.catch(function(error) {
-    console.error('Error fetching data: ', error);
+let apiEndpoint2 = 'https://bonitaspringsesterorealtorsfl.growthzoneapp.com//api/memberships/all?skip=0&take=1&$top=900000&OrderBy=MembershipId';
+
+
+// Use this for testing purposes only. Your API key should not be exposed like this.
+var apiKey = 'cR1djHVMkndNjLbwXyhDyOV7dWPJ6TnufYtcdOHc';
+
+var contactInfoContainer = document.getElementById('contactInfo');
+
+let contacts;
+let contacts2;
+let contacts4;
+
+document.addEventListener('DOMContentLoaded', async function() {
+    await fetchContacts();
+    await fetchContacts2();
+
 });
+
+           async function fetchContacts(page) {
+                fetch(apiEndpoint, { // Adjust the limit parameter here
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': 'ApiKey ' + apiKey
+                    }
+                })
+                .then(async function(response) {
+                     return await response.json();
+                })
+                .then(async function(data) {
+                    console.log(data);
+                    contacts = data.Results;
+                    await displayContacts(contacts);
+                    return contacts;
+
+                     //await console.log(contacts);
+                    
+                    // Check if there are more pages to fetch
+                    if (data.Pagination && data.Pagination.TotalPages > page) {
+                        // Fetch next page
+                        fetchContacts();
+                    }
+                })
+                .catch(function(error) {
+                    console.error('Error fetching data: ', error);
+                });
+            }
+
+            async function fetchContacts2(page) {
+                fetch(apiEndpoint2, { // Adjust the limit parameter here
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': 'ApiKey ' + apiKey
+                    }
+                })
+                .then(async function(response) {
+                     return await response.json();
+                })
+                .then(async function(data) {
+                    console.log(data);
+                    contacts2 = data.Results;
+                    contacts3 = data.Results.Type === "Individual MLS";
+                    console.log(contacts3);
+
+                    var filteredContacts3 = contacts2.filter(async function(contact2) {
+                        contacts4 = contacts2.Type === "Individual MLS";
+                        return contacts4;
+                    });
+
+                    console.log(contacts4);
+
+                    return contacts2.Type === "Individual MLS";
+
+                     //await console.log(contacts2);
+                    
+                    // Check if there are more pages to fetch
+                    if (data.Pagination && data.Pagination.TotalPages > page) {
+                        // Fetch next page
+                        fetchContacts2();
+                    }
+                })
+                .catch(function(error) {
+                    console.error('Error fetching data: ', error);
+                });
+            }
+
+
+
+
+
+
+        function displayContacts(contacts) {
+            // Filter the contacts array to include only contacts with SystemContactTypeId equal to 1
+            var filteredContacts = contacts.filter(function(contact) {
+                return contact.SystemContactTypeId === 1;
+            });
+
+            function displayContacts2(contacts2) {
+            // Filter the contacts array to include only contacts with SystemContactTypeId equal to 1
+            var filteredContacts = contacts2.filter(function(contact2) {
+                return contacts2.Type === "Primary REALTOR®";
+            });
+
+            console.log(contacts2);
+        }
+
+
+
+            // Compare and find common elements based on 'id'
+                const commonContacts = contacts.filter(contacts =>
+                    contacts2.some(contacts2 => contacts.ContactId === contacts2.ContactId)
+                );
+
+                console.log('Common contacts:', commonContacts);
+
+
+
+            // Iterate over the filtered contacts array
+           filteredContacts.forEach(function(commonContacts) {
+
+                if (commonContacts.Status === "Active" && commonContacts.MembershipStatusTypeId === 2) {
+                    //console.log(contact);
+
+                    var contactDiv = document.createElement('div');
+                    contactDiv.classList.add('contact');
+
+                    var image = document.createElement('img');
+                    if (commonContacts.ImageUrl) {
+                        image.src = commonContacts.ImageUrl;
+                    } else {
+                        // Set a default image source if ImageURL is undefined
+                        image.src = 'https://www.bonitaesterorealtors.com/wp-content/uploads/2024/02/Platinum-1.png'; // Replace 'default-image-url.jpg' with your default image URL
+                    }
+                    contactDiv.appendChild(image);
+
+                    var name = document.createElement('p');
+                    var phone = document.createElement('p');
+                    var cid = document.createElement('p');
+                    var link = document.createElement('a');
+                    link.href = `https://www.realtor.com/realestateagents/agent?nrdsid=${commonContacts.AccountNumber}&ref=nar`; // Set the href attribute
+                    link.textContent = commonContacts.Name;
+                    link.target = "_blank"; // Open link in a new tab
+                    name.appendChild(link); // Append the link to the <p> element
+                    phone.textContent = commonContacts.Phone;
+                    cid.textContent = commonContacts.SystemContactTypeId;
+                    contactDiv.appendChild(document.createElement('br')); // Append the line break element
+                    contactDiv.appendChild(name); // Append the name paragraph
+                    contactDiv.appendChild(phone); // Append the phone paragraph
+                    contactDiv.appendChild(cid); // Append the phone paragraph
+
+
+
+                    var nrds = document.createElement('p');
+                    nrds.textContent = commonContacts.AccountNumber;
+                    contactDiv.appendChild(nrds);
+
+                    contactInfoContainer.appendChild(contactDiv);
+                }
+            });
+        }
+
+    
     </script>
 </body>
 </html>
-
