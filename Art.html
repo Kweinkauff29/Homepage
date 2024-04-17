@@ -1,0 +1,466 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Art Portfolio</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&family=Open+Sans&family=Lato&family=Slabo+27px&family=Oswald&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css">
+
+
+
+</head>
+
+<body>
+
+    <style>
+        .carousel-caption {
+        }
+        .carousel-caption h5 {
+            font-family: "lato";
+        }
+        body {
+            background-color: #121212;
+            color: #e0e0e0;
+            margin-top: 45px; /* Space for fixed navbar */
+        }
+        nav {
+            position: fixed; /* Fixed navbar */
+            top: 0;
+            left: 0;
+            width: 100%;
+            background-color: #333; /* Dark background for the navbar */
+            color: white;
+            display: flex;
+            justify-content: space-between;
+            padding: 10px 20px; /* Padding around content */
+            box-shadow: 0 2px 4px rgba(0,0,0,0.5); /* Subtle shadow for depth */
+            z-index: 1000; /* Ensures navbar is above other content */
+        }
+        .video-container {
+            position: relative;
+            width: 100%;
+            height: 100%; /* Full viewport height */
+        }
+        video {
+            width: 100%;
+            height: 100%;
+            object-fit: cover; /* Cover the whole area */
+        }
+        .video-overlay {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 520px;  /* Height of the fade effect */
+            background: linear-gradient(to top, #121212, transparent);  /* Adjust colors to match your site's design */
+        }
+        .my-work {
+            font-size: 36px; /* Adjust size as needed */
+            font-weight: bold;
+            margin: auto 0;
+            position: relative;
+            margin: auto auto auto 140px;
+        }
+        .container-fluid {
+            margin: -1475px auto;
+            max-height: 550px;
+        }
+        .my-work::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px; /* Thickness of the underline */
+            bottom: 0;
+            left: 0;
+            background-color: #FFFFFF; /* Color of the underline */
+            transition: width 0.3s ease-in-out;
+        }
+        .my-work:hover::after {
+            width: 100%;
+        }
+        .row {
+            height: 100vh; /* Full viewport height */
+            align-items: center; /* Center content vertically */
+        }
+        .quote {
+            position: absolute;
+            top: 15%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: white;
+            font-size: 2em;
+            text-align: center;
+            opacity: 1;
+            transition: opacity 3s;
+        }
+        nav a {
+            color: white;
+            text-decoration: none; /* No underline */
+            margin: 22px 40px auto auto; /* Space between links */
+        }
+        #artCarousel {
+            max-width: 100%;
+            margin: auto;
+        }
+        .carousel-item {
+        }
+        .carousel-item img {
+            transition: transform 0.5s ease; /* Smooth transition for scaling */
+            max-height: 550px;
+            margin: auto; /* Center the image horizontally */
+            display: block; /* Ensures the image is block level to accept margin auto */
+            object-fit: contain;
+        }
+        .carousel-item img:hover {
+            transform: scale(1.05); /* Scale up image on hover */
+            cursor: pointer;
+        }
+
+        .modal-backdrop.show {
+            opacity: 0.8; /* Darkens the background */
+        }
+        .modal-img {
+            width: 100%;
+        }
+        #logo:hover {
+            cursor: pointer;
+        }
+        #scrollTopBtn {
+        display: none; /* Hidden by default */
+        position: fixed;
+        bottom: 20px;
+        right: 20px;
+        cursor: pointer;
+        z-index: 1000;
+        background-color: #333;
+        color: white;
+        border: none;
+        padding: 10px;
+        border-radius: 5px;
+    }
+    </style>
+
+    <div>
+        <nav>
+            <div><img src="https://www.bonitaesterorealtors.com/wp-content/uploads/2024/04/Untitled_Artwork-4-1.png" id="logo" style="margin:auto auto auto 30px; max-height: 70px;" alt="" onclick="scrollToTop()"></div>
+            <div style="display: flex;">
+                <a href="#!" id="scrollLink">Gallery</a>
+                <a href="page2.html">About</a>
+                <a href="page3.html">Contact</a>
+            </div>
+        </nav>    
+    </div>
+
+    <div id="caret" class="fa fa-caret-down"></div>
+
+    <script>
+        window.addEventListener('scroll', function() {
+            var caret = document.getElementById('caret');
+            caret.style.animation = 'none'; // Stop the animation when user scrolls
+            caret.style.opacity = '0';
+        });
+        </script>
+
+    <style>
+        #caret {
+            position: fixed;
+            left: 50%;
+            bottom: 20px;
+            font-size: 40px; /* Adjust size as needed */
+            color: #FFF; /* Caret color */
+            transform: translateX(-50%); /* Center horizontally */
+            animation: moveUpDown 2s ease-in-out infinite, fadeInOut 2s ease-in-out infinite;
+            z-index: 1001;
+        }
+        
+        /* Keyframes for moving the caret up and down */
+        @keyframes moveUpDown {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-20px); } /* Move up 20px */
+        }
+        
+        /* Keyframes for fading the caret in and out */
+        @keyframes fadeInOut {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; } /* Fade to 50% and back */
+        }
+        </style>
+
+
+    <button id="scrollTopBtn" style="display: none; position: fixed; bottom: 20px; right: 20px; cursor: pointer; z-index: 1000; background-color: #333; color: white; border: none; padding: 10px; border-radius: 5px;">^</button>
+
+    <script>
+        // Get the button:
+        var scrollTopBtn = document.getElementById("scrollTopBtn");
+    
+        // When the user scrolls down 20px from the top of the document, show the button
+        window.onscroll = function() {
+            if (document.body.scrollTop > 20 || document.documentElement.scrollTop > 20) {
+                scrollTopBtn.style.display = "block";
+            } else {
+                scrollTopBtn.style.display = "none";
+            }
+        };
+    
+        // When the user clicks on the button, scroll to the top of the document
+        scrollTopBtn.onclick = function() {
+            document.body.scrollTop = 0; // For Safari
+            document.documentElement.scrollTop = 0; // For Chrome, Firefox, IE, and Opera
+        };
+    </script>
+    
+        <script>
+            function scrollToTop() {
+                window.scrollTo(0, 0);
+            }
+            </script>
+
+        <div class="video-container">
+            <video autoplay loop muted>
+                <source src="https://www.bonitaesterorealtors.com/wp-content/uploads/2024/04/Untitled-design-2.mp4" type="video/mp4">
+                Your browser does not support the video tag.
+            </video>
+            <div class="video-overlay"></div>
+            <div class="quote">"A life dedicated to art is never a life wasted."</div>
+        </div>
+
+        <script>
+            $(document).ready(function() {
+                var fonts = ['Roboto', 'Open Sans', 'Lato', 'Slabo 27px', 'Oswald']; // List of fonts
+                var currentFont = 0;
+        
+                setInterval(function() {
+                    $('.quote').css('font-family', fonts[currentFont]); // Change the font of the quote
+                    currentFont = (currentFont + 1) % fonts.length; // Increment or reset the index
+                }, 7000); // Change every 5 seconds
+            });
+        </script>
+
+
+    <div class="container-fluid h-100">
+         <div class="row">
+            <div class="col-md-3 text-center">
+                <div class="my-work" style="font-family: lato;">Recent Work</div>
+            </div>
+            <div class="col-md-9">
+                <div id="artCarousel" class="carousel slide" data-bs-ride="carousel">
+                    <div class="carousel-inner">
+                        <!-- Slide 1 -->
+                        <div class="carousel-item active">
+                            <div class="carousel-caption d-none d-md-block">
+                                <h5>Date: 2022-01-01</h5>
+                            </div>
+                            <img src="https://www.bonitaesterorealtors.com/wp-content/uploads/2024/04/Untitled_Artwork-7.png" class="d-block w-100" alt="Artwork 1">
+                        </div>
+                        <!-- Slide 2 -->
+                        <div class="carousel-item">
+                            <div class="carousel-caption d-none d-md-block">
+                                <h5>Date: 2022-03-15</h5>
+                            </div>
+                            <img src="https://www.bonitaesterorealtors.com/wp-content/uploads/2024/04/Untitled_Artwork-4.png" class="d-block w-100" alt="Artwork 2">
+                        </div>
+                        <!-- More slides as needed -->
+                        <div class="carousel-item">
+                            <div class="carousel-caption d-none d-md-block">
+                                <h5>Date: 2022-03-15</h5>
+                            </div>
+                            <img src="https://www.bonitaesterorealtors.com/wp-content/uploads/2024/04/Untitled_Artwork-3.png" class="d-block w-100" alt="Artwork 2">
+                        </div>
+                        <div class="carousel-item">
+                            <div class="carousel-caption d-none d-md-block">
+                                <h5>Date: 2022-03-15</h5>
+                            </div>
+                            <img src="https://www.bonitaesterorealtors.com/wp-content/uploads/2024/04/Untitled_Artwork-5.png" class="d-block w-100" alt="Artwork 2">
+                        </div>
+                        <div class="carousel-item">
+                            <div class="carousel-caption d-none d-md-block">
+                                <h5>Date: 2022-03-15</h5>
+                            </div>
+                            <img src="https://www.bonitaesterorealtors.com/wp-content/uploads/2024/04/Untitled_Artwork-9.png" class="d-block w-100" alt="Artwork 2">
+                        </div>
+                        <div class="carousel-item">
+                            <div class="carousel-caption d-none d-md-block">
+                                <h5>Date: 2022-03-15</h5>
+                            </div>
+                            <img src="https://www.bonitaesterorealtors.com/wp-content/uploads/2024/04/Untitled_Artwork-8.png" class="d-block w-100" alt="Artwork 2">
+                        </div>
+                        <div class="carousel-item">
+                            <div class="carousel-caption d-none d-md-block">
+                                <h5>Date: 2022-03-15</h5>
+                            </div>
+                            <img src="https://www.bonitaesterorealtors.com/wp-content/uploads/2024/04/Untitled_Artwork-6-e1713361672430.png" class="d-block w-100" alt="Artwork 2">
+                        </div>
+                    </div>
+                    <button class="carousel-control-prev" type="button" data-bs-target="#artCarousel" data-bs-slide="prev">
+                        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                        <span class="visually-hidden">Previous</span>
+                    </button>
+                    <button class="carousel-control-next" type="button" data-bs-target="#artCarousel" data-bs-slide="next">
+                        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                        <span class="visually-hidden">Next</span>
+                    </button>
+                </div>
+            </div>
+         </div>
+    </div>
+
+            <!-- Modal for enlarged image -->
+        <div class="modal fade" id="imageModal" tabindex="-1" aria-labelledby="imageModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-xl">
+                <div class="modal-content">
+                    <div class="modal-body">
+                        <img src="" class="modal-img" alt="Enlarged Artwork">
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <script>
+        $(document).ready(function(){
+            $('.carousel .carousel-item img').click(function(){
+                var src = $(this).attr('src');
+                $('.modal-img').attr('src', src);
+                $('#imageModal').modal('show');
+            });
+        });
+        </script>
+
+    <style>
+        .photo-video-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr); /* Three equal columns */
+            gap: 10px; /* Space between columns */
+            margin: 2500px auto;
+            width: 95%;
+        }
+        
+        .photo-video {
+            position: relative;
+            width: 100%;
+            cursor: pointer;
+            overflow: hidden; /* Keep everything neat */
+        }
+        
+        .photo-video img, .photo-video video {
+            width: 100%;
+            display: block; /* Remove extra space beneath the image */
+            transition: opacity 0.5s ease; /* Smooth transition for fade effect */
+        }
+        
+        .photo-video video {
+            position: absolute;
+            top: 0;
+            left: 0;
+            opacity: 0; /* Hide video initially */
+            height: 100%; /* Cover the entire container */
+            transition: opacity 0.5s ease;
+        }
+        
+        .photo-video:hover video {
+            opacity: 1; /* Show video on hover */
+        }
+        .photo-video:hover img {
+            opacity: 0; /* Hide image on hover */
+        }
+        #hoverText {
+            margin: 2200px auto -2473px auto;
+            text-align: center;
+        }
+        </style>
+
+        <div style="display: block; z-index: 998; position: absolute;">
+        <h2 id="hoverText">Hover for Timelapse</h2>
+
+        <div class="photo-video-grid">
+            <div class="photo-video">
+                <img src="https://www.bonitaesterorealtors.com/wp-content/uploads/2024/04/Untitled_Artwork-3.png" alt="Description">
+                <video class="video-hover" preload="auto" muted loop>
+                    <source src="https://www.bonitaesterorealtors.com/wp-content/uploads/2024/04/Untitled_Artwork-4.mp4" type="video/mp4">
+                    Your browser does not support the video tag.
+                </video>
+            </div>
+            <div class="photo-video">
+                <img src="https://www.bonitaesterorealtors.com/wp-content/uploads/2024/04/Untitled_Artwork-scaled.jpg" alt="Description2">
+                <video class="video-hover" preload="auto" muted loop>
+                    <source src="https://www.bonitaesterorealtors.com/wp-content/uploads/2024/04/Untitled_Artwork-5.mp4" type="video/mp4">
+                    Your browser does not support the video tag.
+                </video>
+            </div>
+            <div class="photo-video">
+                <img src="https://www.bonitaesterorealtors.com/wp-content/uploads/2024/04/Untitled_Artwork-10.png" alt="Description3">
+                <video class="video-hover" preload="auto" muted loop>
+                    <source src="https://www.bonitaesterorealtors.com/wp-content/uploads/2024/04/Untitled_Artwork-6.mp4" type="video/mp4">
+                    Your browser does not support the video tag.
+                </video>
+            </div>
+            <div class="photo-video">
+                <img src="https://www.bonitaesterorealtors.com/wp-content/uploads/2024/04/Untitled_Artwork-5.png" alt="Description">
+                <video class="video-hover" style="object-fit: contain; object-position: top;" preload="auto" muted loop>
+                    <source src="https://www.bonitaesterorealtors.com/wp-content/uploads/2024/04/Untitled_Artwork-4.mp4" style="object-fit: contain;" type="video/mp4">
+                    Your browser does not support the video tag.
+                </video>
+            </div>
+            <div class="photo-video">
+                <img src="https://www.bonitaesterorealtors.com/wp-content/uploads/2024/04/Untitled_Artwork-4.png" alt="Description2">
+                <video class="video-hover" preload="auto" muted loop>
+                    <source src="https://www.bonitaesterorealtors.com/wp-content/uploads/2024/04/Untitled_Artwork-9.mp4" type="video/mp4">
+                    Your browser does not support the video tag.
+                </video>
+            </div>
+            <div class="photo-video">
+                <img src="https://www.bonitaesterorealtors.com/wp-content/uploads/2024/04/Untitled_Artwork-7.png" alt="Description3">
+                <video class="video-hover" preload="auto" style="object-fit: contain; object-position: top;" muted loop>
+                    <source src="https://www.bonitaesterorealtors.com/wp-content/uploads/2024/04/Untitled_Artwork-6.mp4" style="object-fit: contain;" type="video/mp4">
+                    Your browser does not support the video tag.
+                </video>
+            </div>
+        </div>
+    </div>
+
+        <script>
+            document.addEventListener("DOMContentLoaded", function() {
+                var videoElements = document.querySelectorAll('.video-hover');
+            
+                videoElements.forEach(function(video) {
+                    video.parentElement.addEventListener('mouseenter', function() {
+                        console.log("Mouseenter");
+                        video.play();
+                    });
+                    video.parentElement.addEventListener('mouseleave', function() {
+                        console.log("Mouseleave");
+                        video.pause();
+                        video.currentTime = 0; // Optionally reset the video to start
+                    });
+                });
+            });
+
+            document.addEventListener('DOMContentLoaded', function() {
+            var scrollLink = document.getElementById('scrollLink');
+
+            if (scrollLink) {
+                scrollLink.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    window.scrollTo({
+                        top: 1300, // Scroll to exactly 1300px from the top
+                        left: 0,
+                        behavior: 'smooth'
+                    });
+                });
+            }
+        });
+
+        window.addEventListener('scroll', function() {
+            var scrollPosition = window.scrollY;  // Or use window.pageYOffset for older browser support
+            console.log('Current Scroll from the Top: ' + scrollPosition + 'px');
+        });
+            </script>
+
+
+</body>
+
+</html>
