@@ -8,6 +8,8 @@
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&family=Open+Sans&family=Lato&family=Slabo+27px&family=Oswald&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&family=Open+Sans&family=Lato&family=Slabo+27px&family=Oswald&family=Montserrat:wght@700&family=Merriweather:wght@700&family=Bebas+Neue&family=Anton&family=Pacifico&family=Dancing+Script&family=Playfair+Display&family=Baskervville&family=Amatic+SC&family=Lobster&family=Righteous&family=Cinzel&family=Indie+Flower&family=Shadows+Into+Light&display=swap" rel="stylesheet">
+
 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css">
 
@@ -93,7 +95,7 @@
             left: 50%;
             transform: translate(-50%, -50%);
             color: white;
-            font-size: 2em;
+            font-size: 3em;
             text-align: center;
             opacity: 1;
             transition: opacity 3s;
@@ -106,6 +108,7 @@
         #artCarousel {
             max-width: 100%;
             margin: auto;
+            z-index: 999;
         }
         .carousel-item {
         }
@@ -231,14 +234,23 @@
 
         <script>
             $(document).ready(function() {
-                var fonts = ['Roboto', 'Open Sans', 'Lato', 'Slabo 27px', 'Oswald']; // List of fonts
-                var currentFont = 0;
-        
+                var fonts = [
+                    'Roboto', 'Open Sans', 'Lato', 'Slabo 27px', 'Oswald', // Basic and versatile sans-serif fonts
+                    'Montserrat', 'Merriweather', // Bold and readable for large text
+                    'Bebas Neue', 'Anton', // Very bold and impactful, good for headings
+                    'Pacifico', 'Dancing Script', // Cursive and artistic
+                    'Playfair Display', 'Baskervville', // Serif fonts with style and elegance
+                    'Amatic SC', 'Lobster', // Artistic and quirky
+                    'Righteous', 'Cinzel', // Decorative and stylized
+                    'Indie Flower', 'Shadows Into Light' // Handwriting-like, casual
+                ];
+
                 setInterval(function() {
-                    $('.quote').css('font-family', fonts[currentFont]); // Change the font of the quote
-                    currentFont = (currentFont + 1) % fonts.length; // Increment or reset the index
-                }, 7000); // Change every 5 seconds
+                    var randomIndex = Math.floor(Math.random() * fonts.length); // Generate a random index
+                    $('.quote').css('font-family', fonts[randomIndex]); // Apply a random font
+                }, 4000); // Change every 7 seconds
             });
+
         </script>
 
 
@@ -337,6 +349,8 @@
             gap: 10px; /* Space between columns */
             margin: 2500px auto;
             width: 95%;
+            grid-auto-rows: 500px; /* This sets a fixed row height */
+            object-fit: contain;
         }
         
         .photo-video {
@@ -344,12 +358,15 @@
             width: 100%;
             cursor: pointer;
             overflow: hidden; /* Keep everything neat */
+            object-fit: contain;
         }
         
         .photo-video img, .photo-video video {
             width: 100%;
             display: block; /* Remove extra space beneath the image */
             transition: opacity 0.5s ease; /* Smooth transition for fade effect */
+            object-fit: cover;
+            height: 500px;
         }
         
         .photo-video video {
@@ -357,8 +374,10 @@
             top: 0;
             left: 0;
             opacity: 0; /* Hide video initially */
-            height: 100%; /* Cover the entire container */
+            height: 500px; /* Cover the entire container */
             transition: opacity 0.5s ease;
+            object-fit: contain;
+
         }
         
         .photo-video:hover video {
@@ -400,8 +419,8 @@
             </div>
             <div class="photo-video">
                 <img src="https://www.bonitaesterorealtors.com/wp-content/uploads/2024/04/Untitled_Artwork-5.png" alt="Description">
-                <video class="video-hover" style="object-fit: contain; object-position: top;" preload="auto" muted loop>
-                    <source src="https://www.bonitaesterorealtors.com/wp-content/uploads/2024/04/Untitled_Artwork-4.mp4" style="object-fit: contain;" type="video/mp4">
+                <video class="video-hover" preload="auto" muted loop>
+                    <source src="https://www.bonitaesterorealtors.com/wp-content/uploads/2024/04/Untitled_Artwork-11.mp4" style="object-fit: contain;" type="video/mp4">
                     Your browser does not support the video tag.
                 </video>
             </div>
@@ -414,12 +433,34 @@
             </div>
             <div class="photo-video">
                 <img src="https://www.bonitaesterorealtors.com/wp-content/uploads/2024/04/Untitled_Artwork-7.png" alt="Description3">
-                <video class="video-hover" preload="auto" style="object-fit: contain; object-position: top;" muted loop>
-                    <source src="https://www.bonitaesterorealtors.com/wp-content/uploads/2024/04/Untitled_Artwork-6.mp4" style="object-fit: contain;" type="video/mp4">
+                <video class="video-hover" preload="auto"  muted loop>
+                    <source src="https://www.bonitaesterorealtors.com/wp-content/uploads/2024/04/gothi-2.mp4" style="object-fit: contain;" type="video/mp4">
+                    Your browser does not support the video tag.
+                </video>
+            </div>
+            <div class="photo-video">
+                <img src="https://www.bonitaesterorealtors.com/wp-content/uploads/2024/04/Untitled_Artwork-6-e1713361672430.png" alt="Description">
+                <video class="video-hover" preload="auto" muted loop>
+                    <source src="https://www.bonitaesterorealtors.com/wp-content/uploads/2024/04/Untitled_Artwork-4.mp4" style="object-fit: contain;" type="video/mp4">
+                    Your browser does not support the video tag.
+                </video>
+            </div>
+            <div class="photo-video">
+                <img src="https://www.bonitaesterorealtors.com/wp-content/uploads/2024/04/Untitled_Artwork-9.png" alt="Description2">
+                <video class="video-hover" preload="auto" muted loop>
+                    <source src="https://www.bonitaesterorealtors.com/wp-content/uploads/2024/04/Untitled_Artwork-9.mp4" type="video/mp4">
+                    Your browser does not support the video tag.
+                </video>
+            </div>
+            <div class="photo-video">
+                <img src="https://www.bonitaesterorealtors.com/wp-content/uploads/2024/04/Untitled_Artwork-8.png" alt="Description3">
+                <video class="video-hover" preload="auto" muted loop>
+                    <source src="https://www.bonitaesterorealtors.com/wp-content/uploads/2024/04/gothi.mp4" style="object-fit: contain;" type="video/mp4">
                     Your browser does not support the video tag.
                 </video>
             </div>
         </div>
+        <h2>Refrences! Refrences! Refrences!</h2>
     </div>
 
         <script>
