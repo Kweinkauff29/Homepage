@@ -621,7 +621,7 @@
   }
 
   #mainSection {
-    margin: 270px auto 0 auto;
+    margin: 270px auto 90px auto;
     padding-bottom: 30px;
   }
 
@@ -1293,7 +1293,7 @@
         }
         
         .about-section, .assistance-section {
-          padding: 20px;
+          padding: 20px 30px 20px 30px;
           background-image: linear-gradient(to right, red, coral, red);
           border-radius: 10px; /* Rounded borders */
           color: white;
@@ -1336,13 +1336,13 @@
       <br>
       <div class="container" style="padding: 0 5% 0 5%;">
         <div class="about-section">
-            <h2 style="margin: auto; font-family: 'Lobster', cursive; font-size: 5rem;">About the REALTOR® Party</h2>
+            <h2 style="margin: auto; font-family: 'Lobster', cursive; font-size: 4rem; text-align: center;">About the REALTOR® Party</h2>
             <hr style="border-color: white; margin: 10px auto;">
             <p>The REALTOR® Party (RPAC) is a political action committee dedicated to supporting pro-housing and pro-realtor issues at the local, state, and national levels. Through donations and efforts from members like you, we keep our business thriving and protect the rights of home ownership. </p>
 
         </div>
         <div class="assistance-section">
-            <h2 style="margin: auto; font-family: 'Lobster', cursive; font-size: 5rem;">Invest in Advocacy: REALTOR® Party Recognition Levels</h2>
+            <h2 style="margin: auto; font-family: 'Lobster', cursive; font-size: 4rem; text-align: center;">Invest in Advocacy: <br>REALTOR® Party Recognition Levels</h2>
             <hr style="border-color: white; margin: 10px auto;">
             <p>BER recognizes its members and Affiliates for their contributions to the REALTOR® Party at local, state, and national levels. Multiple investment opportunities cater to a range of budgets. Recognition levels start with the $35 "Fare Share" option. For $99, members join the "$99 Club" and receive a party pin and reception invite. Stepping up to the $250 "Capital Club" adds a plaque to the previous rewards. A $500 investment earns "Statesman" status, granting a Statesman plaque alongside the pin and reception access. Finally, major investors contributing $1,000 reach "Sterling R" level, receiving a national party pin, Florida REALTORS® gift, Sterling R plaque, convention reception invitation, and recognition in the REALTOR® report.</p>
         
@@ -1356,7 +1356,7 @@
     <div class="row" id="textArea">
       <div><h3 style="font-family: 'Righteous';">Looking to Invest in Your Profession?</h3></div>
     <div class="join-section" style="text-align: center; margin: 0px 20px 15px 20px;">
-      <a href="https://bonitaspringsesterorealtorsfl.growthzoneapp.com/ap/Form/Fill/Lq1X7fML" class="btn btn-primary" target="_blank" style="font-size: 20px; padding: 10px 20px; background-color: red; color: white; border-radius: 5px; text-decoration: none;">Click Here</a>
+      <a href="https://realtorparty.realtor/invest.html" class="btn btn-primary" target="_blank" style="font-size: 20px; padding: 10px 20px; background-color: red; color: white; border-radius: 5px; text-decoration: none;">Click Here</a>
     </div>
      </div>
 
@@ -1375,41 +1375,6 @@
       </style>
     
 
-    <script>
-      function togglePDF() {
-        var pdfSection = document.getElementById("pdfViewer");
-        var iframe = pdfSection.querySelector("iframe");
-    
-        // Check if the PDF is currently visible
-        if (pdfSection.classList.contains("pdfViewerVisible")) {
-          // If visible, start the hide animation
-          pdfSection.style.maxHeight = '0';
-          iframe.style.opacity = '0';
-          
-          // Wait for the opacity transition, then set display to none
-          setTimeout(() => {
-            pdfSection.classList.remove("pdfViewerVisible");
-            pdfSection.style.opacity = '0';
-          }, 500); // Match the duration of the opacity transition
-        } else {
-          // If hidden, make the div block to enable transition, then start the show animation
-          pdfSection.classList.add("pdfViewerVisible");
-          pdfSection.style.opacity = '1';
-          pdfSection.style.maxHeight = '1000px'; // Ensure this matches the max height of the content
-          setTimeout(() => iframe.style.opacity = '1', 10); // Slightly delay the iframe opacity to ensure it transitions
-        }
-      }
-    </script>
-    
-
-    <!-- PDF Section Initially Invisible -->
-    <div id="pdfViewer" style="max-height: 0; overflow: hidden; opacity: 0; transition: opacity 0.5s ease, max-height 0.5s ease; text-align: center;">
-      <iframe src="https://www.bonitaesterorealtors.com/wp-content/uploads/2024/02/BHF-New-Bylaws.pdf" style="width: 100%; height: 1000px; opacity: 0; transition: opacity 0.5s ease;"></iframe>
-    </div>
-
-    <div id="MI" style="width: auto; margin: auto auto 20px auto; display: flex; justify-content: center;">
-      <img src="https://www.bonitaesterorealtors.com/wp-content/uploads/2024/03/thumbnail_image003.png" style="width: 60%; object-fit: contain; display: flex;" alt="">
-    </div>
 
     <style>
       .pac-info {
@@ -1468,8 +1433,10 @@
         
         <h3>What is a Political Action Committee (PAC)?</h3>
           <p>PACs have been around since 1944, when the Congress of Industrial Organizations (CIO) formed the first one to raise money for the re-election of President Franklin D. Roosevelt. A Political Action Committee (PAC) is a popular term for a political committee organized by like-minded people for the purpose of raising and spending money to elect and defeat candidates. The PAC’s money must come from voluntary contributions from members rather than the member’s dues treasury. PACs represent business, labor or ideological interests. PACs can give $5,000 to a candidate committee per election (primary, general, run-off or special). They can also give up to $15,000 annually to any national party committee, and $5,000 annually to any other PAC. PACs may receive up to $5,000 from any one individual.
-          
-          Why should I contribute to RPAC?
+          <br>
+          <br>
+          <h4>Why should I contribute to RPAC?</h4>
+          <br>
           <br>
           <ul>RPAC is the muscle behind NAR. RPAC represents over 400,000 politically active REALTORS that members of Congress want as their friends. Recent legislative and regulatory successes include:
           
@@ -1483,15 +1450,32 @@
           100% of your contribution is used to elect pro-REALTOR candidates: 70% remains in the state to be used in state and local elections. 30% of your contribution will be forwarded to National RPAC to fund key U.S. House and Senate races. Until your state PAC reaches its RPAC goal 30% is sent to National RPAC to support federal candidates and is charged against your limits under 2 U.S.C. 441a; after the state PAC reaches its RPAC goal it may elect to retain your entire contribution for use in supporting state and local candidates. RPAC is neither a Republican nor a Democratic organization. Your contribution to RPAC is a vote for a pro-REALTOR Congress, regardless of political party.
           <br>
           <br>
-          Source: Realtor.org – https://www.nar.realtor/</p>
+          Source: Realtor.org – <a href="https://www.nar.realtor/" target="_blank" style="color: blue;">https://www.nar.realtor/</a></p>
       </div>
       <div id="pac-content-2" class="pac-content">
         <p>RPAC Fundraising
           Since 1969, the REALTORS® Political Action Committee (RPAC) has promoted the election of pro-REALTOR® candidates across the United States. The purpose of RPAC is clear: REALTORS® raise and spend money to elect candidates who understand and support their interests. The money to accomplish this comes from voluntary contributions made by REALTORS®. These are not members’ dues; this is money given freely by REALTORS® in recognition of how important campaign fundraising is to the political process. RPAC doesn’t buy votes. RPAC enables REALTORS® to support candidates that support the issues that are important to their profession and livelihood.
           </p>
-      </div>
+          <br>
+          <h2>Use the link below to Invest in Your Profession:</h2>
+          <a href="https://realtorparty.realtor/invest.html" class="btn btn-primary" target="_blank" style="font-size: 20px; padding: 10px 20px; background-color: red; color: white; border-radius: 5px; text-decoration: none; margin: 20px auto; width: 100%;">Click Here</a>
+        </div>
       <div id="pac-content-3" class="pac-content">
         <p>Take action and make a difference! Here are some ways you can get involved...</p>
+
+        <br><br>
+
+        <p style="text-align: center;">Thank you BER Members!
+
+          <br>
+          <br>
+          Thanks to your help, we have received the RPAC Triple Crown for the 5th consecutive year in a row! 
+        </p>
+
+        <br>
+        <br>
+
+        <a href="https://realtorparty.realtor/invest.html" target="_blank"><img style="margin: auto; display: flex;" src="https://www.bonitaesterorealtors.com/wp-content/uploads/2024/05/RPAC-logo.jpeg" alt=""></a>
       </div>
     </div>
   
@@ -1517,7 +1501,13 @@
       });
     </script>
 
+    <br>
+    <br>
 
+
+   <div id="MI" style="width: auto; margin: auto auto 20px auto; display: flex; justify-content: center;">
+      <img src="https://www.bonitaesterorealtors.com/wp-content/uploads/2024/03/thumbnail_image003.png" style="width: 60%; object-fit: contain; display: flex;" alt="">
+    </div>
 
 
 <br>
