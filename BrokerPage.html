@@ -98,7 +98,7 @@
     z-index: 997;
     margin: -130px 0 -40px 0;
     box-shadow: black 0px 0px 14px;
-    width: 100%;
+    width: 102%;
     position: fixed;
     height: 130px;
     background-color: white;
@@ -425,7 +425,7 @@
     background-image: linear-gradient( to right, #77d9d9, #02aae1);
     z-index: 999;
     position: fixed;
-    width: 100%;
+    width: 102%;
     margin: -174px 0;
   }
   .btn {
@@ -1271,7 +1271,586 @@
         </div>
     </div>
 
+    <h2 class="videoTitle">
+      Agent Onboarding:
+    </h2>
 
+
+    <div class="row showButtons">
+      <div class="column">
+        <h3>Agent Onboarding Kit:</h3>
+        <button class="btn">Click Here</button> <!-- Presumably to download/view the PDF -->
+      </div>
+    
+      <div class="column">
+        <h3>Membership Costs:</h3>
+        <button class="btn">Click Here</button> <!-- Presumably to show the calculator -->
+      </div>
+    </div>
+
+    <br>
+    <br>
+    <br>
+
+
+
+    <style>
+
+      .showButtons {
+        display: flex;
+        justify-content: space-around; /* This will space out the columns evenly */
+        align-items: center; /* This aligns the items vertically in the center */
+        background-image: linear-gradient(to right, #77d9d9, #02aae1); /* Gradient background */
+        padding: 50px; /* Adds padding to ensure there's space inside the row */
+      }
+
+          #calculator {
+          width: 400px;
+          margin: 0 10px;
+          padding: 20px;
+          background-color: #f5f5f5;
+          border: 1px solid #ccc;
+          border-radius: 5px;
+          display: contents;
+        }
+
+        #calculator2, #calculator3 {
+          width: 400px;
+          margin: 0 10px;
+          padding: 20px;
+          background-color: #f5f5f5;
+          border: 1px solid #ccc;
+          border-radius: 5px;
+          display: none;
+        }
+        
+        h1 {
+          text-align: center;
+        }
+
+        #infoArea {
+          margin: 20px;
+          width: 500px;
+        }
+
+        .description {
+          display: none;
+          margin-top: 10px;
+          font-style: italic;
+          font-size: 12px;
+        }
+
+        #calcHead h2 {
+            display: flex;
+            margin: auto auto auto 5%;
+            text-align: center;
+        }
+
+        #spread {
+          display: block;
+          margin: auto 5%;
+          justify-content: center;
+          text-align: center;
+          }
+
+        #calcContain {
+          display: contents;
+          width: 425px;
+        }
+        
+        label {
+          display: block;
+          margin-bottom: 10px;
+        }
+        
+        #result. #result2, #result3 {
+          margin-top: 20px;
+          text-align: center;
+          font-weight: bold;
+        }
+        .button-container {
+        display: flex;
+        justify-content: center;
+        margin: 0 20px; /* Adjust the spacing as needed */
+      }
+
+      .button-container {
+        display: flex;
+        justify-content: center;
+        margin: 0 20px; /* Adjust the spacing as needed */
+        flex-wrap: wrap; /* Allow buttons to wrap to the next line */
+      }
+
+      .button {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+        background-color: #018dff; /* Set the button color */
+        color: #fff; /* Set the text color */
+        transition: background-color 0.3s ease; /* Add transition effect */
+        cursor: pointer; /* Set cursor to pointer */
+        overflow: hidden; /* Hide overflowing content */
+        margin: 10px; /* Add spacing between buttons */
+        max-width: 300px; /* Limit the maximum width of buttons */
+      }
+
+      .button img {
+        max-width: 100%; /* Ensure the image doesn't exceed the container */
+        height: auto; /* Maintain aspect ratio */
+        transition: transform 0.3s ease; /* Add transition effect */
+      }
+
+      .button:hover {
+        background-color: #0064b7; /* Set the darker shade for hover */
+      }
+
+      .button:hover img {
+        transform: scale(1.1); /* Scale the image on hover */
+      }
+
+      #embeddedFrame {
+          width: 100%;
+          height: 1000px;
+        }
+    </style>
+
+
+    <div>
+      <!--cost breakdown-->
+      <div id="calculator" style="display: contents;">
+        <div id="calcHead"><h2>I am a...</h2></div>
+        <br>
+            <div class="button-container">
+                <button class="button" onclick="showCalculator('calculator1')">
+                  <img src="https://www.bonitaesterorealtors.com/wp-content/uploads/2023/06/3.png" alt="Image 1">
+                  <h2>Realtor</h2>
+                </button>
+                <button class="button" onclick="showCalculator('calculator2')">
+                  <img src="https://www.bonitaesterorealtors.com/wp-content/uploads/2023/06/4.png" alt="Image 2">
+                  <h2>Broker</h2>
+                </button>
+                <button class="button" onclick="showCalculator('calculator3')">
+                  <img src="https://www.bonitaesterorealtors.com/wp-content/uploads/2023/06/5.png" alt="Image 3">
+                  <h2>Affiliate</h2>
+                </button>
+              </div>
+        
+        
+        <div id="spread">
+        <div id="calcContain">
+          <div id="calculator1" class="calculators">
+            <h1>Realtor Dues Calculator</h1>
+            <label>
+              Month:
+              <select id="month" onchange="calculateDues()">
+                <option value="1">January</option>
+                <option value="2">February</option>
+                <option value="3">March</option>
+                <option value="4">April</option>
+                <option value="5">May</option>
+                <option value="6">June</option>
+                <option value="7">July</option>
+                <option value="8">August</option>
+                <option value="9">September</option>
+                <option value="10">October</option>
+                <option value="11">November</option>
+                <option value="12">December</option>
+              </select>
+            </label>
+            <label>
+                Membership Type:
+                <select id="membershipType" onchange="calculateDues();">
+                  <option value="primary" data-description="Description for Primary Realtor.">Primary Realtor</option>
+                  <option value="secondary" data-description="Description for Secondary Realtor.">Secondary Realtor</option>
+                  <option value="secondaryOut" data-description="Description for Secondary Realtor out of State.">Secondary Realtor out of State</option>
+                  <option value="transferring" data-description="Description for Transferring Agent.">Transferring Primary Realtor</option>
+                </select>
+              </label>
+            <div id="result"></div>
+            <div id="totalDues"></div>
+          </div>
+        
+          <div id="calculator2" class="calculators">
+          <h1>Broker Dues Calculator</h1>
+          <label>
+            Month:
+            <select id="month2" onchange="calculateDues2()">
+              <option value="1">January</option>
+              <option value="2">February</option>
+              <option value="3">March</option>
+              <option value="4">April</option>
+              <option value="5">May</option>
+              <option value="6">June</option>
+              <option value="7">July</option>
+              <option value="8">August</option>
+              <option value="9">September</option>
+              <option value="10">October</option>
+              <option value="11">November</option>
+              <option value="12">December</option>
+            </select>
+          </label>
+          <label>
+            Membership Type:
+            <select id="membershipType2" onchange="calculateDues2();">
+              <option value="primary2" data-description="Description for Primary Realtor.">Primary Broker</option>
+              <option value="secondary2" data-description="Description for Secondary Realtor.">Secondary Broker With MLS</option>
+              <option value="secondaryOut2" data-description="Description for Secondary Realtor out of State.">Secondary Broker Without MLS</option>
+              <option value="transferring2" data-description="Description for Transferring Agent.">Secondary Broker Out of State With MLS</option>
+              <option value="SecondaryOutofStateWoMLS" data-description="Description for Transferring Agent.">Secondary Broker Out of State Without MLS</option>
+            </select>
+          </label>
+          <div id="result2"></div>
+          <div id="totalDues2"></div>
+        </div>
+        
+          <div id="calculator3" class="calculators">
+            <h1>Affiliate Dues Calculator</h1>
+            <label>
+              Month:
+              <select id="month3" onchange="calculateDues3()">
+                <option value="1">January</option>
+                <option value="2">February</option>
+                <option value="3">March</option>
+                <option value="4">April</option>
+                <option value="5">May</option>
+                <option value="6">June</option>
+                <option value="7">July</option>
+                <option value="8">August</option>
+                <option value="9">September</option>
+                <option value="10">October</option>
+                <option value="11">November</option>
+                <option value="12">December</option>
+              </select>
+            </label>
+            <label>
+                Membership Type:
+                <select id="membershipType3" onchange="calculateDues3();">
+                  <option value="primary" data-description="Description for Primary Realtor.">Primary Affiliate</option>
+                  <option value="secondary" data-description="Description for Secondary Realtor.">Associate Affiliate</option>
+                </select>
+              </label>
+            <div id="result3"></div>
+            <div id="totalDues3"></div>
+          </div>
+        </div>
+        
+          </div>        
+      </div>
+
+      <script>
+        function calculateDues() {
+
+          console.log("get's here");
+          const selectedMonth = parseInt(document.getElementById('month').value);
+          const membershipType = document.getElementById('membershipType').value;
+    
+          document.getElementById('calculator').style.display = "contents";
+    
+          const frAnnualDuesStart = 116;
+          let frAdvocacy = 30;
+          const narAnnualDuesStart = 150;
+          let narAdvocacyAssess = 45;
+          let localAssocDues = calculateLocalAssocDues(selectedMonth);
+          const rpacAssessment = 20;
+          const bearHomeFoundation = 10;
+          let localAppFee = 50;
+          let frProcessingFee = 30;
+          let mlsIndividual = calculateMlsIndividualDues(selectedMonth);
+    
+          // Calculate the monthly decreases
+          const frAnnualDuesDecrease = 9.665;
+          const narAnnualDuesDecrease = 12.5;
+    
+          let frAnnualDues = frAnnualDuesStart - frAnnualDuesDecrease * (selectedMonth - 1);
+          let narAnnualDues = narAnnualDuesStart - narAnnualDuesDecrease * (selectedMonth - 1);
+    
+          // Remove dues and fees based on membership type
+          if (membershipType === 'secondary') {
+            frAnnualDues = 0;
+            frAdvocacy = 0;
+            narAnnualDues = 0;
+            narAdvocacyAssess = 0;
+            frProcessingFee = 0;
+          } else if (membershipType === 'secondaryOut') {
+            narAnnualDues = 0;
+            narAdvocacyAssess = 0;
+          } else if (membershipType === 'transferring') {
+            frAnnualDues = 0;
+            frAdvocacy = 0;
+            narAnnualDues = 0;
+            narAdvocacyAssess = 0;
+            frProcessingFee = 0;
+            localAppFee = 0;
+            // Transferring agents still need to pay local association annual dues
+          }
+    
+          // Calculate total dues
+          const totalDues = frAnnualDues + frAdvocacy + narAnnualDues + narAdvocacyAssess + localAssocDues + rpacAssessment + bearHomeFoundation + localAppFee + frProcessingFee + mlsIndividual;
+    
+          // Generate the result
+          const resultElement = document.getElementById('result');
+          resultElement.innerHTML = `
+            <p>FR Annual Dues: $${frAnnualDues.toFixed(2)}</p>
+            <p>FR Advocacy: $${frAdvocacy.toFixed(2)}</p>
+            <p>NAR Annual Dues: $${narAnnualDues.toFixed(2)}</p>
+            <p>NAR Advocacy Assess: $${narAdvocacyAssess.toFixed(2)}</p>
+            <p>Local Association Annual Dues: $${localAssocDues.toFixed(2)}</p>
+            <p>RPAC Assessment: $${rpacAssessment.toFixed(2)}</p>
+            <p>BEAR Home Foundation: $${bearHomeFoundation.toFixed(2)}</p>
+            <p>Local Application Fee: $${localAppFee.toFixed(2)}</p>
+            <p>FR Processing Fee: $${frProcessingFee.toFixed(2)}</p>
+            <p>MLS Individual: $${mlsIndividual.toFixed(2)}</p>
+            <hr>
+          `;
+    
+          // Display total dues
+          const totalDuesElement = document.getElementById('totalDues');
+          totalDuesElement.innerHTML = `<p><strong>Total Dues: $${totalDues.toFixed(2)}</strong></p>`;
+        }
+    
+        //For Broker Dues
+        function calculateDues2() {
+          const selectedMonth2 = parseInt(document.getElementById('month2').value);
+          const membershipType2 = document.getElementById('membershipType2').value;
+
+    
+          const brokerDues = 270;
+          const frAnnualDuesStart = 116;
+          let frAdvocacy = 30;
+          const narAnnualDuesStart = 150;
+          let narAdvocacyAssess = 45;
+          let localAssocDues = calculateLocalAssocDues2(selectedMonth2);
+          const rpacAssessment = 20;
+          const bearHomeFoundation = 20;
+          let frProcessingFee = 30;
+          let mlsIndividual = calculateMlsIndividualDues(selectedMonth2);
+          let mlsOffice = calculateMlsOfficeDues(selectedMonth2);
+    
+          // Calculate the monthly decreases
+          const frAnnualDuesDecrease = 9.665;
+          const narAnnualDuesDecrease = 12.5;
+    
+          let frAnnualDues = frAnnualDuesStart - frAnnualDuesDecrease * (selectedMonth2 - 1);
+          let narAnnualDues = narAnnualDuesStart - narAnnualDuesDecrease * (selectedMonth2 - 1);
+    
+          // Remove dues and fees based on membership type
+          if (membershipType2 === 'secondary2') {
+            frAnnualDues = 0;
+            frAdvocacy = 0;
+            narAnnualDues = 0;
+            narAdvocacyAssess = 0;
+            frProcessingFee = 0;
+          } else if (membershipType2 === 'secondaryOut2') {
+            frAnnualDues = 0;
+            frAdvocacy = 0;
+            narAnnualDues = 0;
+            narAdvocacyAssess = 0;
+            frProcessingFee = 0;
+            mlsIndividual = 0;
+            mlsOffice = 0;
+          } else if (membershipType2 === 'transferring2') {
+            narAnnualDues = 0;
+            narAdvocacyAssess = 0;
+            // Transferring agents still need to pay local association annual dues
+          }
+          else if (membershipType2 === 'SecondaryOutofStateWoMLS') {
+            narAnnualDues = 0;
+            narAdvocacyAssess = 0;
+            mlsIndividual = 0;
+            mlsOffice = 0;
+          }
+
+          console.log("get here?");
+
+    
+          // Calculate total dues
+          const totalDues = brokerDues + frAnnualDues + frAdvocacy + narAnnualDues + narAdvocacyAssess + localAssocDues + rpacAssessment + bearHomeFoundation + frProcessingFee + mlsIndividual + mlsOffice;
+    
+          // Generate the result
+          const resultElement2 = document.getElementById('result2');
+          resultElement2.innerHTML = `
+            <p>Local Dues: $${brokerDues.toFixed(2)}</p>
+            <p>FR Annual Dues: $${frAnnualDues.toFixed(2)}</p>
+            <p>FR Advocacy: $${frAdvocacy.toFixed(2)}</p>
+            <p>NAR Annual Dues: $${narAnnualDues.toFixed(2)}</p>
+            <p>NAR Advocacy Assess: $${narAdvocacyAssess.toFixed(2)}</p>
+            <p>Local Association Annual Dues: $${localAssocDues.toFixed(2)}</p>
+            <p>RPAC Assessment: $${rpacAssessment.toFixed(2)}</p>
+            <p>BEAR Home Foundation: $${bearHomeFoundation.toFixed(2)}</p>
+            <p>FR Processing Fee: $${frProcessingFee.toFixed(2)}</p>
+            <p>MLS Individual: $${mlsIndividual.toFixed(2)}</p>
+            <p>MLS Office: $${mlsOffice.toFixed(2)}</p>
+            <hr>
+          `;
+    
+          // Display total dues
+          const totalDuesElement2 = document.getElementById('totalDues2');
+          totalDuesElement2.innerHTML = `<p><strong>Total Dues: $${totalDues.toFixed(2)}</strong></p>`;
+        }
+    
+        //For Affiliate Dues
+        function calculateDues3() {
+          const selectedMonth3 = parseInt(document.getElementById('month3').value);
+          const membershipType3 = document.getElementById('membershipType3').value;
+    
+          let Affiliate = 135;
+          let localAppFee = 50;
+          let Rpac = 20;
+          let Associate = 60;
+    
+          // Calculate the monthly decreases
+          const AffiliateDecrease = 11.25;
+          const AssociateDecrease = 5;
+    
+          let totalDues;
+    
+          let AffDues = Affiliate - AffiliateDecrease * (selectedMonth3 - 1);
+          let AffAssDues = Associate - AssociateDecrease * (selectedMonth3 - 1);
+    
+          // Remove dues and fees based on membership type
+          if (membershipType3 === 'primary') {
+            AffAssDues = 0;
+            totalDues = AffDues + Rpac + localAppFee;
+          } else if (membershipType3 === 'secondary') {
+            AffDues = 0;
+            localAppFee = 0;
+            totalDues = Rpac + AffAssDues;
+          }
+    
+    
+          // Generate the result
+          const resultElement3 = document.getElementById('result3');
+          resultElement3.innerHTML = `
+            <p>Affiliate Dues: $${AffDues.toFixed(2)}</p>
+            <p>Affiliate Applicaton (One-Time): $${localAppFee.toFixed(2)}</p>
+            <p>RPAC Investment: $${Rpac.toFixed(2)}</p>
+            <p>Associate Affiliate Dues: $${AffAssDues.toFixed(2)}</p>
+            <hr>
+          `;
+    
+          // Display total dues
+          const totalDuesElement3 = document.getElementById('totalDues3');
+          totalDuesElement3.innerHTML = `<p><strong>Total Dues: $${totalDues.toFixed(2)}</strong></p>`;
+        }
+    
+        function calculateLocalAssocDues(selectedMonth) {
+          if (selectedMonth >= 1 && selectedMonth <= 3) {
+            return 165;
+          } else if (selectedMonth >= 4 && selectedMonth <= 6) {
+            return 123.75;
+          } else if (selectedMonth >= 7 && selectedMonth <= 9) {
+            return 82.5;
+          } else if (selectedMonth >= 10 && selectedMonth <= 12) {
+            return 41.25;
+          }
+        }
+    
+        function calculateLocalAssocDues2(selectedMonth2) {
+          if (selectedMonth2 >= 1 && selectedMonth2 <= 3) {
+            return 165;
+          } else if (selectedMonth2 >= 4 && selectedMonth2 <= 6) {
+            return 125;
+          } else if (selectedMonth2 >= 7 && selectedMonth2 <= 9) {
+            return 85;
+          } else if (selectedMonth2 >= 10 && selectedMonth2 <= 12) {
+            return 45;
+          }
+        }
+    
+        function calculateTransferringLocalAssocDues(selectedMonth) {
+          // Transferring agents pay local association dues regardless of the selected month
+          return 165;
+        }
+    
+        function calculateMlsIndividualDues(selectedMonth) {
+          if (selectedMonth >= 7) {
+            return 260 - (selectedMonth - 7) * 20;
+          } else if (selectedMonth === 6) {
+            return 40;
+          } else if (selectedMonth === 5) {
+            return 60;
+          } else if (selectedMonth === 4) {
+            return 80;
+          } else if (selectedMonth === 3) {
+            return 100;
+          } else if (selectedMonth === 2) {
+            return 120;
+          } else if (selectedMonth === 1) {
+            return 140;
+          }
+        }
+
+        function calculateMlsIndividualDues(selectedMonth2) {
+          if (selectedMonth2 >= 7) {
+            return 260 - (selectedMonth2 - 7) * 20;
+          } else if (selectedMonth2 === 6) {
+            return 40;
+          } else if (selectedMonth2 === 5) {
+            return 60;
+          } else if (selectedMonth2 === 4) {
+            return 80;
+          } else if (selectedMonth2 === 3) {
+            return 100;
+          } else if (selectedMonth2 === 2) {
+            return 120;
+          } else if (selectedMonth2 === 1) {
+            return 140;
+          }
+        }
+    
+        function calculateMlsOfficeDues(selectedMonth2) {
+          if (selectedMonth2 >= 7) {
+            return 1184 - (selectedMonth2 - 7) * 139;
+          } else if (selectedMonth2 === 6) {
+            return 489;
+          } else if (selectedMonth2 === 5) {
+            return 628;
+          } else if (selectedMonth2 === 4) {
+            return 767;
+          } else if (selectedMonth2 === 3) {
+            return 906;
+          } else if (selectedMonth2 === 2) {
+            return 1045;
+          } else if (selectedMonth2 === 1) {
+            return 1184;
+          }
+        }
+    
+        let includes = document.getElementById('includes');
+       let requirements = document.getElementById('requirements');
+  
+    
+       function showCalculator(calculatorId) {
+        const calculators = document.getElementsByClassName('calculators');
+        for (let i = 0; i < calculators.length; i++) {
+          calculators[i].style.display = 'none'; // Hide all calculators
+        }
+        const calculator = document.getElementById(calculatorId);
+        if (calculator) {
+          calculator.style.display = 'contents'; // Show the selected calculator
+        }
+      }
+    
+  
+        // Set the default selected month to the current month
+        document.getElementById('month').value = new Date().getMonth() + 1;
+        document.getElementById('month2').value = new Date().getMonth() + 1;
+        document.getElementById('month3').value = new Date().getMonth() + 1;
+    
+    
+        // Calculate dues on page load
+        calculateDues2();
+        calculateDues3();
+        calculateDues();
+
+      </script>
+
+      <!--Agent Onboarding PDF-->
+      <div></div>
+
+    </div>
 
     <style>
       .slider {
@@ -1351,6 +1930,20 @@
     .videoTitle {
       margin: 20px auto 10px 5%;
       color: #0056b3;
+    }
+
+    /* Styles for devices with a width of up to 600px */
+    @media only screen and (max-width: 600px) {
+      .subtitle {
+        margin: auto 5%;
+      }
+      .video-wrapper {
+        width: 1000%;
+      }
+      .video-wrapper2 {
+        width: 1000%;
+      }
+
     }
     </style>
 
@@ -1445,11 +2038,10 @@
       let currentSlide = 0;
       let currentSlide2 = 0;
 
-
       function moveSlide(direction) {
         const slides = document.querySelector('.video-wrapper');
         const totalVideos = slides.children.length;
-        const videosToShow = 3;
+        const videosToShow = 3;  // The number of videos to display at once
         currentSlide += direction;
 
         if (currentSlide < 0) {
@@ -1458,22 +2050,24 @@
           currentSlide = totalVideos - videosToShow;
         }
 
-        slides.style.transform = `translateX(-${currentSlide * (100 / videosToShow)}%)`;
+        const translateValue = window.innerWidth < 600 ? (25 / videosToShow) : (100 / videosToShow);
+        slides.style.transform = `translateX(-${currentSlide * translateValue}%)`;
       }
 
       function moveSlide2(direction) {
         const slides = document.querySelector('.video-wrapper2');
         const totalVideos = slides.children.length;
-        const videosToShow = 3;
+        const videosToShow = 3;  // The number of videos to display at once
         currentSlide2 += direction;
 
         if (currentSlide2 < 0) {
           currentSlide2 = 0;
-        } else if (currentSlide > totalVideos - videosToShow) {
+        } else if (currentSlide2 > totalVideos - videosToShow) {
           currentSlide2 = totalVideos - videosToShow;
         }
 
-        slides.style.transform = `translateX(-${currentSlide2 * (100 / videosToShow)}%)`;
+        const translateValue = window.innerWidth < 600 ? (25 / videosToShow) : (100 / videosToShow);
+        slides.style.transform = `translateX(-${currentSlide2 * translateValue}%)`;
       }
     </script>
 
