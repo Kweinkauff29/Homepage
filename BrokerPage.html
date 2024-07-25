@@ -1268,29 +1268,49 @@
             <ul>
               <li><a href="https://www.myfloridalicense.com/wl11.asp" target="_blank" rel="noopener noreferrer">DBPR</a></li>
             </ul>
+            <ul>
+              <li><a href="https://www.bonitaesterorealtors.com/wp-content/uploads/2024/07/Energy-Efficiency-Rating-Brochure-Rev-F1-04-09-13.pdf" target="_blank" rel="noopener noreferrer">Energy Efficiency Rating</a></li>
+            </ul>
         </div>
     </div>
 
     <h2 class="videoTitle">
       Agent Onboarding:
+
     </h2>
 
 
     <div class="row showButtons">
       <div class="column">
         <h3>Agent Onboarding Kit:</h3>
-        <button class="btn">Click Here</button> <!-- Presumably to download/view the PDF -->
+        <button class="btn" onclick="toggleContent('onboardingKit', 'calculator')">Click Here</button>
       </div>
     
       <div class="column">
         <h3>Membership Costs:</h3>
-        <button class="btn">Click Here</button> <!-- Presumably to show the calculator -->
+        <button class="btn" onclick="toggleContent('calculator', 'onboardingKit')">Click Here</button>
       </div>
     </div>
 
     <br>
     <br>
     <br>
+
+    <script>
+      function toggleContent(showId, hideId) {
+      var showDiv = document.getElementById(showId);
+      var hideDiv = document.getElementById(hideId);
+
+      // Toggle visibility of the sections
+      if (showDiv.style.display === 'none') {
+        showDiv.style.display = 'contents';
+        hideDiv.style.display = 'none';
+      } else {
+        showDiv.style.display = 'none';
+      }
+    }
+
+    </script>
 
 
 
@@ -1419,7 +1439,7 @@
 
     <div>
       <!--cost breakdown-->
-      <div id="calculator" style="display: contents;">
+      <div id="calculator" style="display: none;">
         <div id="calcHead"><h2>I am a...</h2></div>
         <br>
             <div class="button-container">
@@ -1848,7 +1868,9 @@
       </script>
 
       <!--Agent Onboarding PDF-->
-      <div></div>
+      <div id="onboardingKit" style="display:none;">
+        <iframe src="https://www.bonitaesterorealtors.com/wp-content/uploads/2024/07/Becoming-a-BER-Member-2.pdf" style="width:100%; height:1200px;" frameborder="0" allowfullscreen></iframe>
+      </div>
 
     </div>
 
