@@ -2,36 +2,17 @@
   <head>
     <meta charset="utf-8">
     <title>Bonita Springs-Estero Realtors</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Oswald&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Righteous&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet"/>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Cabin:ital@1&display=swap" rel="stylesheet">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Fascinate&display=swap" rel="stylesheet">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Oswald&display=swap" rel="stylesheet">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Righteous&display=swap" rel="stylesheet">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet"/>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Roboto&display=swap" rel="stylesheet">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <!-- Leaflet CSS -->
-    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
-    <!-- Leaflet JS -->
     <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400..700&family=Poppins&family=Ubuntu:wght@500&display=swap" rel="stylesheet">
 
   </head>
 
@@ -101,7 +82,7 @@
   
     #head-background {
       z-index: 997;
-      margin: 40px 0 -40px 0;
+      margin: 49px 0 -40px 0;
       height: 130px;
     }
   
@@ -338,6 +319,7 @@
     #toptext {
       color: white;
       text-align: center;
+      padding: 6px 0;
     }
   
     .italics {
@@ -388,8 +370,12 @@
       width: 230px;
       margin: -10px auto;
     }
+
+    #resources-hover {
+      width: 250px;
+    }
   
-    #about-hover, #resources-hover, #membership-hover {
+    #about-hover, #membership-hover {
       width: 150px;
       margin: -10px 0 0 0px;
     }
@@ -445,7 +431,8 @@
     @media only screen and (max-width: 768px) {
       #heading {
         display: grid !important;
-        margin: -95px 20px 24px 20px !important;
+        margin: -25px 0px 24px 20px !important;
+        width: 100%;
       }
   
       #head-background {
@@ -472,7 +459,7 @@
       }
   
       #about-hover, #resources-hover, #membership-hover, #news-hover {
-        display: contents;
+        display: none;
       }
   
       .col-sm-8 {
@@ -480,7 +467,7 @@
       }
   
       .col-sm-4 {
-        display: block;
+        display: none !important;
       }
   
       .res-img {
@@ -693,75 +680,6 @@
         </div>
       </div>
 
-      <style media="screen">
-        @keyframes loading {
-          0% {
-            width: 0%;
-          }
-          15% {
-            width: 0%;
-          }
-          100% {
-            width: 100%;
-          }
-        }
-          #loading-line1 {
-            position: absolute;
-            height: 10px;
-            z-index: 5;
-            width: 100%;
-            margin: 0 !important;
-            opacity: .3;
-            color: black;
-            border-top: black solid 5px;
-            animation: loading 12s linear;
-          }
-          #loading-line2 {
-            position: absolute;
-            height: 10px;
-            z-index: 5;
-            width: 100%;
-            margin: 0 !important;
-            opacity: .3;
-            color: black;
-            border-top: black solid 5px;
-            animation: loading 32s linear;
-          }
-          #loading-line3 {
-            position: absolute;
-            height: 10px;
-            z-index: 5;
-            width: 100%;
-            margin: 0 !important;
-            opacity: .3;
-            color: black;
-            border-top: black solid 5px;
-            animation: loading 64s linear;
-          }
-         #loading-line4 {
-            position: absolute;
-            height: 10px;
-            z-index: 5;
-            width: 100%;
-            margin: 0 !important;
-            opacity: .3;
-            color: black;
-            border-top: black solid 5px;
-            animation: loading 64s linear;
-          }
-          #loading-line5 {
-            position: absolute;
-            height: 10px;
-            z-index: 5;
-            width: 100%;
-            margin: 0 !important;
-            opacity: .3;
-            color: black;
-            border-top: black solid 5px;
-            animation: loading 64s linear;
-          }
-      </style>
-
       <script type="text/javascript">
 
       function scrollFunc() {
@@ -772,96 +690,10 @@
           document.getElementById("head-background").style.opacity = ".8";
         }
       }
-
-      let vidnum = 1;
-
-
-
-      function changeVidNum() {
-        let vid1 = document.getElementById("vid1");
-        let vid2 = document.getElementById("vid2");
-        let vid3 = document.getElementById("vid3");
-        let vid4 = document.getElementById("vid4");
-        let vid5 = document.getElementById("vid5");
-        if (vidnum === 0) {
-          console.log("This");
-          document.getElementById("display1").style.display = "contents";
-          document.getElementById("display5").style.display = "none";
-          document.getElementById("display4").style.display = "none";
-          document.getElementById("display3").style.display = "none";
-          document.getElementById("display2").style.display = "none";
-          document.getElementById("display2").currentTime = 0;
-          vid5.pause();
-          vid5.currentTime = 0;
-          vid1.play();
-          vidnum++;
-        }
-        else if (vidnum === 1) {
-          console.log("That");
-          document.getElementById("display2").style.display = "contents";
-          document.getElementById("display3").style.display = "none";
-          document.getElementById("display4").style.display = "none";
-          document.getElementById("display5").style.display = "none";
-          document.getElementById("display1").style.display = "none";
-          document.getElementById("display1").currentTime = 0;
-          vid1.pause();
-          vid1.currentTime = 0;
-          vid2.play();
-          vidnum++;
-        }
-        else if (vidnum === 2) {
-          console.log("That");
-          document.getElementById("display3").style.display = "contents";
-          document.getElementById("display4").style.display = "none";
-          document.getElementById("display5").style.display = "none";
-          document.getElementById("display2").style.display = "none";
-          document.getElementById("display1").style.display = "none";
-          document.getElementById("display2").currentTime = 0;
-          vid2.pause();
-          vid2.currentTime = 0;
-          vid3.play();
-          vidnum++;
-        }
-        else if (vidnum === 3) {
-          console.log("That");
-          document.getElementById("display4").style.display = "contents";
-          document.getElementById("display3").style.display = "none";
-          document.getElementById("display5").style.display = "none";
-          document.getElementById("display2").style.display = "none";
-          document.getElementById("display1").style.display = "none";
-          document.getElementById("display3").currentTime = 0;
-          vid3.pause();
-          vid3.currentTime = 0;
-          vid4.play();
-          vidnum++;
-        }
-        else if (vidnum === 4) {
-          console.log("That");
-          document.getElementById("display5").style.display = "contents";
-          document.getElementById("display4").style.display = "none";
-          document.getElementById("display3").style.display = "none";
-          document.getElementById("display2").style.display = "none";
-          document.getElementById("display1").style.display = "none";
-          document.getElementById("display4").currentTime = 0;
-          vid4.pause();
-          vid4.currentTime = 0;
-          vid5.play();
-          vidnum = 0;
-        }
-        else {
-          vidnum = 0;
-          document.getElementById("display1").style.display = "contents";
-          document.getElementById("display2").style.display = "none";
-          document.getElementById("display3").style.display = "none";
-          document.getElementById("display4").style.display = "none";
-          document.getElementById("display5").style.display = "none";
-        }
-        console.log(vidnum);
-      }
-
-
-
       </script>
+
+  </div>
+ </div>
 
   </body>
 </html>
