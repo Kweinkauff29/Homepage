@@ -26,12 +26,14 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Roboto&display=swap" rel="stylesheet">
     <link rel="preconnect" href="https://fonts.googleapis.com">
+    <!-- Leaflet CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+    <!-- Leaflet JS -->
+    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400..700&family=Poppins&family=Ubuntu:wght@500&display=swap" rel="stylesheet">
 
   </head>
-  <body>
-
     <style media="screen">
   a {
     color: black;
@@ -1751,7 +1753,7 @@ startCyclingCategories(); // Start cycling categories
 
             // Initialize the cycling
             cycleSponsors(); // Initially show the first category
-            cycleCategories(); // Start cycling categories
+            //cycleCategories(); // Start cycling categories
 
 
            // define the function to run on animation end
@@ -1765,7 +1767,7 @@ startCyclingCategories(); // Start cycling categories
              var element = document.getElementById("marquee-content");
 
              // add an event listener for the animationend event
-             element.addEventListener("animationend", onAnimationEnd)
+             ///element.addEventListener("animationend", onAnimationEnd)
 
            const marquee = document.getElementById("marquee-content");
 
@@ -1782,7 +1784,6 @@ startCyclingCategories(); // Start cycling categories
 
          </script>
 
-         <body>
            <div class="marquee" onclick="window.open('https://members.bonitaesterorealtors.com/affiliatedirectory')" onmouseover="stopScroll()" onmouseout="startScroll()">
              <ul id="marquee-content">
                <li><img id="img1" src=""></img></li>
@@ -1926,7 +1927,7 @@ startCyclingCategories(); // Start cycling categories
           </div>
         </div>
         <div class="col-sm-8">
-          <h3 class="resrow">Upcoming at BER - July 19th, 2024</h3>
+          <h3 class="resrow">Upcoming at BER - August 16th, 2024</h3>
           
           <style>
           .frame-class {
@@ -1947,7 +1948,7 @@ startCyclingCategories(); // Start cycling categories
             }
           </style>
 
-          <iframe class="frame-class" src="https://bonitaspringsesterorealtorsfl.growthzoneapp.com/ap/EmailViewer/pBVea13p">
+          <iframe class="frame-class" src="https://bonitaspringsesterorealtorsfl.growthzoneapp.com/ap/EmailViewer/P3nYxwbp">
           </iframe>
         </div>
       </div>
@@ -1987,10 +1988,36 @@ startCyclingCategories(); // Start cycling categories
         /*]]>*/
         </script>
 
+        <!-- New section for address and Google Map -->
+        <div id="address-section" style="margin-top: 30px;">
+          <h3 class="resrow">Our Address</h3>
+          <h4 class="res-head"><a href="https://www.google.com/maps/search/?api=1&query=25300+Bernwood+Dr,+suite+1,+Bonita+Springs,+FL+34135" target="_blank">25300 Bernwood Dr, Suite 1, Bonita Springs, FL 34135</a></h4>
+        
+        </div>
+
+        <!-- Leaflet Map Container -->
+        <div id="leaflet-map" style="width: 100%; height: 450px;"></div>
+
+        <!-- Initialize Leaflet Map -->
+        <script>
+          // Create a map centered at the specified location
+          var map = L.map('leaflet-map').setView([26.367234, -81.798167], 16);
+
+          // Add OpenStreetMap tiles to the map
+          L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+          }).addTo(map);
+
+          // Add a marker to the map
+          L.marker([26.367234, -81.798167]).addTo(map)
+            .bindPopup('25300 Bernwood Dr, Suite 1, Bonita Springs, FL 34135')
+            .openPopup();
+        </script>
+
+
+        </div>
 
   </div>
-
-</div>
 
 
 
