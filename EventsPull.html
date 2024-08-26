@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Events Pull</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/ical.js/1.3.0/ical.min.js"></script>
+</head>
+
+<body>
+    <div>
+        <h1>Events Pull</h1>
+        <div id="events"></div> <!-- This will display the events -->
+    </div>
+
+    <script>
+        // Define the CORS proxy and the target URL
+        const proxyUrl = 'https://cors-anywhere.herokuapp.com/';
+        const targetUrl = 'https://bonitaspringsesterorealtorsfl.growthzoneapp.com/ap/CalendarFeed/9421';
+        const url = proxyUrl + targetUrl;
+
+        // Use fetch to retrieve the iCal data through the CORS proxy
+        fetch(url)
+            .then(response => response.text())  // Get the data as a text string
+            .then(icsData => {
+                // Use ical.js to parse the iCal data
+                let jcalData = ICAL.parse(icsData);
+                let comp = new ICAL.Component(jcalData);
+                let events = comp.getAllSubcomponents('vevent');
+
+                let eventsDiv = document.getElementById('events');
+                
+                events.forEach(event => {
+                    let summary = event.getFirstPropertyValue('summary');
+                    let dtstart = event.getFirstPropertyValue('dtstart');
+                    let dtend = event.getFirstPropertyValue('dtend');
+                    let location = event.getFirstPropertyValue('location');
+                    let description = event.getFirstPropertyValue('description');
+                    let uid = event.getFirstPropertyValue('uid');
+
+                    // Display the events on the page
+                    let eventElement = document.createElement('div');
+                    eventElement.innerHTML = `<strong>${summary}</strong><br>
+                                              Starts: ${dtstart.toString()}<br>
+                                              Ends: ${dtend.toString()}<br>
+                                              Location: ${location || 'N/A'}<br>
+                                              Description: ${description || 'No description available.'}<br>
+                                              UID: ${uid}<br><br>`;
+                    eventsDiv.appendChild(eventElement);
+
+                    // Log all the event details to the console
+                    console.log('Event:', summary);
+                    console.log('Starts:', dtstart.toString());
+                    console.log('Ends:', dtend.toString());
+                    console.log('Location:', location || 'N/A');
+                    console.log('Description:', description || 'No description available.');
+                    console.log('UID:', uid);
+                    console.log('-----------------------');
+                });
+            })
+            .catch(error => console.error('Error fetching calendar feed:', error));
+    </script>
+</body>
+</html>

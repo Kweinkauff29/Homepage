@@ -1,0 +1,38 @@
+<html>
+
+<header></header>
+
+<body>
+    <div>
+        <h1>Events Pull</h1>
+    </div>
+</body>
+
+<script>
+const apiKey = 'cR1djHVMkndNjLbwXyhDyOV7dWPJ6TnufYtcdOHc';
+const url = 'https://bonitaspringsesterorealtorsfl.growthzoneapp.com/api/public/events';
+
+fetch(url, {
+    method: 'GET',
+    headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${apiKey}`
+    }
+})
+.then(response => {
+    if (!response.ok) {
+        throw new Error('Network response was not ok ' + response.statusText);
+    }
+    return response.json();
+})
+.then(data => {
+    console.log('API Response:', data);
+})
+.catch(error => {
+    console.error('There was a problem with the fetch operation:', error);
+});
+
+</script>
+
+
+</html>

@@ -53,7 +53,7 @@
   max-width: 80%;
   margin: auto;
   overflow: hidden;
-}
+  }
 
 .show {
   display: flex;
@@ -1386,6 +1386,74 @@
       </div>
       </div>
 
+      <!-- Popup Overlay
+      <style>
+        /* Popup container - can be anything you want */
+        .popup-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7); /* Grey gradient background */
+            z-index: 9999; /* Ensures popup is on top of all content */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        /* The actual popup */
+        .popup-content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            max-width: 500px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5);
+        }
+
+        /* Acknowledge button */
+        .popup-button {
+            margin-top: 20px;
+            padding: 10px 20px;
+            background-color: #007BFF;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        .popup-button:hover {
+            background-color: #0056b3;
+        }
+      </style>
+
+      <div id="popup" class="popup-overlay">
+        <div class="popup-content">
+            <h2> Florida Realtor's <br> Service Outage Notification</h2>
+            <hr>
+            <p>Some Florida Realtors services are currently unavailable, including:</p>
+            <br>
+            <ul style="text-align: left; font-weight: bold;">
+                <li>MLSAdvantage</li>
+                <li>Form Simplicity</li>
+                <li>FloridaRealtors.org</li>
+            </ul>
+            <br>
+            <p>We are working to restore full service as quickly as possible. Thank you for your patience.</p>
+            <br>
+            <button class="popup-button" onclick="closePopup()">Acknowledge</button>
+        </div>
+      </div>
+
+      <script>
+        // Function to close the popup
+        function closePopup() {
+            document.getElementById('popup').style.display = 'none';
+        }
+      </script>
+    -->
       <div id="outside-contain">
           <div class="welcome">
           <h2 id="welcome-head">Welcome to Bonita Springs-Estero Realtors</h2>
@@ -1988,6 +2056,38 @@ startCyclingCategories(); // Start cycling categories
         </div>
 
   </div>
+
+  <script>
+    window.onload = function() {
+          // Delay to ensure everything is fully loaded before executing the scroll operations
+          setTimeout(function() {
+              // Scroll to the top of the page
+              window.scrollTo(0, 0);
+
+              // Scroll down by 5 pixels after a short delay
+              setTimeout(function() {
+                  window.scrollTo(0, 5);
+              }, 100); // Delay of 100 milliseconds
+
+              // Scroll back up to the top after another short delay
+              setTimeout(function() {
+                  window.scrollTo(0, 0);
+              }, 200); // Delay of 200 milliseconds
+          }, 500); // Initial delay to ensure page is fully loaded
+              document.getElementById('popup').style.display = 'fixed';
+              console.log("Got Here");
+          };
+
+    window.onscroll = function() {
+    var scrollPosition = window.scrollY || document.documentElement.scrollTop;
+    var windowHeight = window.innerHeight || document.documentElement.clientHeight;
+    var documentHeight = document.documentElement.scrollHeight;
+    var scrollPercentage = (scrollPosition / (documentHeight - windowHeight)) * 100;
+
+    console.log("You have scrolled " + scrollPosition + " pixels.");
+    console.log("You are " + scrollPercentage.toFixed(2) + "% down the page.");
+    };
+    </script>
 
 
 
