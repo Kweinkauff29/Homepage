@@ -1,0 +1,2433 @@
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <title>Bonita Springs-Estero Realtors</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Oswald&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Righteous&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet"/>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+
+  </head>
+
+  <!--Head CSS-->
+  <style media="screen">
+    a {
+      color: black;
+    }
+    p {
+      margin: 0;
+    }
+
+    #site-header {
+        display: none !important;
+    }
+
+    .year-tabs {
+    }
+
+    .video-player-container {
+        margin: 250px 0 30px 0;
+    }
+  
+    .statsplus {
+      max-width: 1300px;
+      margin: auto !important;
+    }
+  
+    .carousel {
+      position: relative;
+      width: 100%;
+      max-width: 80%;
+      margin: auto;
+      overflow: hidden;
+    }
+  
+    .carousel .sponsor-group {
+      display: none;
+      text-align: center;
+    }
+  
+    .carousel .sponsor-group.show {
+      display: flex !important;
+      flex-direction: row;
+      justify-content: space-around;
+      align-items: center;
+      margin: auto;
+    }
+  
+    .carousel img {
+      margin: 10px;
+      width: 100px;
+      max-height: 140px;
+      object-fit: contain;
+      opacity: 0;
+      transition: opacity 1s ease-in-out;
+      z-index: -99999;
+    }
+  
+    .carousel img.show {
+      opacity: 1;
+      width: 95%;
+    }
+  
+    .carousel p {
+      font-family: "Poppins", sans-serif;
+      font-weight: 400;
+      font-size: 3rem;
+    }
+  
+    #head-background, .contain-head {
+      position: fixed;
+      top: 0;
+      width: 100%;
+      background-color: white;
+      box-shadow: 0px -30px 67px grey;
+    }
+  
+    #head-background {
+      z-index: 997;
+      margin: 49px 0 -40px 0;
+      height: 130px;
+    }
+  
+    .important-links {
+      background-image: url("https://www.bonitaesterorealtors.com/wp-content/uploads/2022/10/Untitled-design-10.png");
+      background-size: cover;
+      margin: 60px 0 100px 0;
+    }
+  
+    #toprow {
+      margin: 0 5% !important;
+    }
+  
+    #welcome-text, .subtitle, .col-sm-7 p {
+      font-size: 16px;
+    }
+  
+    #welcome-head {
+      font-family: Oswald, sans-serif;
+      font-size: 46px;
+    }
+  
+    #MLS, #MP, #Events, #Join {
+      height: 250px;
+      background-size: cover;
+      margin: -60px 0;
+      width: auto;
+    }
+  
+    #MLS, #Join {
+      border-radius: 15px 0 0 15px;
+    }
+  
+    #Join {
+      border-radius: 0 15px 15px 0;
+      color: #ffc235;
+    }
+  
+    #MLS:hover, #MP:hover, #Events:hover, #Join:hover {
+      font-size: 50px;
+      cursor: pointer;
+    }
+  
+    .res-img {
+      width: 80%;
+      height: auto;
+      border-radius: 15px;
+      margin: auto;
+    }
+  
+    #diamond, #platinum, #bronze {
+      width: 90%;
+    }
+  
+    #gold, #silver {
+      width: 50%;
+    }
+  
+    /* Styles for devices with a width of up to 600px */
+    @media only screen and (max-width: 600px) {
+      #diamond, #platinum, #gold, #silver, #bronze {
+        display: contents;
+      }
+    }
+  
+    #Jointext, #MLStext, #Eventtext {
+      text-align: center;
+      font-family: 'Roboto', sans-serif;
+      padding: 10px 0;
+      line-height: 4rem;
+    }
+  
+    #Jointext {
+      color: #ffc235;
+      border: 2px solid #ffc235;
+      font-size: 40px;
+    }
+  
+    #MLStext {
+      color: white;
+      font-size: 40px;
+      border-top: 2px solid white;
+      border-bottom: 2px solid white;
+    }
+  
+    #Eventtext {
+      color: white;
+      font-size: 30px;
+      border-top: 2px solid white;
+      border-bottom: 2px solid white;
+    }
+  
+    #vid1, #vid2, #vid3, #vid4, #vid5 {
+      width: 100%;
+      max-height: 650px;
+      object-fit: cover;
+      margin: 0 0 -21px 0;
+    }
+  
+    .welcome {
+      max-width: 1300px;
+      background-color: teal;
+      color: white;
+      padding: 50px;
+      margin: -225px auto auto;
+      border-radius: 20px;
+      text-align: center;
+    }
+  
+    .col-sm, .col-sm-6 {
+      margin: auto;
+    }
+  
+    .col-sm h3, h4 {
+      font-size: 20px;
+    }
+  
+    .col-sm-3 {
+      height: 300px;
+    }
+  
+    .vc_column_container>.vc_column-inner {
+      padding: 0;
+    }
+  
+    #forewarn, #MUA, #img1 {
+      object-fit: contain;
+      margin: auto;
+    }
+  
+    #img1 {
+      max-height: 500px;
+    }
+  
+    .article-img {
+      width: 430px;
+      height: 260px;
+      object-fit: cover;
+    }
+  
+    #outside-contain, .media-container {
+      margin: 0 3%;
+      max-width: 1185px;
+    }
+  
+    .video-contain {
+      width: 100%;
+      background-color: grey;
+      object-fit: contain;
+      margin: 260px 0 0 0;
+      position: relative;
+    }
+  
+    #display1, #display2, #display3, #display4, #display5 {
+      max-height: 600px;
+      display: flex;
+      margin: auto;
+    }
+  
+    #logo {
+      width: 130px;
+      margin: 10px auto;
+    }
+  
+    #MLSlogo {
+      width: 90%;
+      display: flex;
+      margin: 20px auto;
+    }
+  
+    #MPlogo {
+      width: 47%;
+      display: flex;
+      margin: 15px auto;
+    }
+  
+    @keyframes growlogo {
+      0% {
+        width: 90%;
+      }
+      100% {
+        width: 100%;
+      }
+    }
+  
+    @keyframes growlogo3 {
+      0% {
+        width: 47%;
+      }
+      100% {
+        width: 55%;
+      }
+    }
+  
+    #MLSlogo:hover {
+      animation: growlogo 0.5s linear;
+      width: 100%;
+      opacity: 0.9;
+    }
+  
+    #MPlogo:hover {
+      animation: growlogo3 0.5s linear;
+      width: 55%;
+      opacity: 0.9;
+    }
+  
+    #heading {
+      max-width: 1100px;
+      margin: 5px auto;
+      display: flex;
+      z-index: 998;
+      background-color: white;
+    }
+  
+    .news-row {
+      background-color: #f2f2f2;
+      margin: 10px 5%;
+      box-shadow: 0px 20px 29px -27px grey;
+    }
+  
+    #abovehead {
+      background-image: linear-gradient(to right, #77d9d9, #02aae1);
+      z-index: 999;
+      position: fixed;
+      width: 100%;
+      margin: -0px 0;
+      padding: 8px;
+    }
+  
+    .btn {
+      border-radius: 40px;
+    }
+  
+    #toptext {
+      color: white;
+      text-align: center;
+      padding: 6px 0;
+    }
+  
+    .italics {
+      font-style: italic;
+    }
+  
+    #biglinks {
+      max-width: 1100px;
+      margin: auto;
+      height: 350px;
+    }
+  
+    h1 {
+      font-size: 50px;
+      margin: 10px 5%;
+      font-family: 'Righteous', cursive;
+      color: darkblue;
+    }
+  
+    .toplinks {
+      color: white;
+    }
+  
+    .toplinks:hover {
+      text-decoration: underline;
+      color: #0ca7a4;
+    }
+  
+    .br-mobile {
+      display: none;
+    }
+  
+    #about-hover, #resources-hover, #membership-hover, #news-hover, #membershiptools-hover {
+      display: none;
+      position: absolute;
+      background-color: white;
+      box-shadow: rgb(0 0 0 / 15%) 0px 1px 20px;
+      z-index: 999;
+      border-top: 1rem solid lightsteelblue;
+    }
+  
+    #about-hover, #resources-hover, #membership-hover, #news-hover {
+      padding: 10px;
+    }
+  
+    #membershiptools-hover {
+      padding: 20px 10px;
+      width: 230px;
+      margin: -10px auto;
+    }
+
+    #resources-hover {
+      width: 250px;
+    }
+  
+    #about-hover, #membership-hover {
+      width: 150px;
+      margin: -10px 0 0 0px;
+    }
+  
+    #membership-hover, #news-hover {
+      margin: -10px 11px 0 0px;
+    }
+
+    #about-hover p, #resources-hover p, #membership-hover p, #news-hover p, #membershiptools-hover p{
+      margin: 10px auto;
+      }
+  
+    @media only screen and (max-width: 1200px) {
+      .statsplus {
+        display: grid;
+      }
+  
+      .col-sm-4 {
+        display: inline-flex;
+        margin: auto;
+        width: 100%;
+      }
+  
+      .res-img {
+        width: auto;
+        height: 160px;
+        margin: auto 0 auto 10px;
+      }
+    }
+  
+    @media only screen and (max-width: 1130px) {
+      #Eventtext {
+        font-size: 24px;
+      }
+  
+      #MLStext {
+        font-size: 30px;
+      }
+    }
+  
+    @media only screen and (max-width: 1145px) {
+      .article-img {
+        width: 370px;
+      }
+    }
+  
+    @media only screen and (max-width: 960px) {
+      .col-sm h3 {
+        font-size: 16px;
+      }
+    }
+  
+    @media only screen and (max-width: 768px) {
+      #heading {
+        display: grid !important;
+        margin: -25px 0px 24px 20px !important;
+        width: 100%;
+      }
+  
+      #head-background {
+        height: 200px;
+        margin: 93px 0 -40px -20px;
+        width: 103%;
+        position: absolute;
+      }
+  
+      .video-contain {
+        margin: 110px 0 0 0;
+      }
+  
+      #biglinks {
+        height: 920px;
+      }
+  
+      #resrow {
+        display: block;
+      }
+  
+      .col-sm-7 {
+        padding-left: 100px;
+      }
+  
+      #about-hover, #resources-hover, #membership-hover, #news-hover {
+        display: none;
+      }
+  
+      .col-sm-8 {
+        display: none;
+      }
+  
+      .col-sm-4 {
+        display: none !important;
+      }
+  
+      .res-img {
+        margin: auto;
+        display: flex;
+        height: 230px;
+      }
+    }
+  
+    @media only screen and (max-width: 620px) {
+      #logo {
+        display: none;
+      }
+  
+      .col-sm-2 h3 {
+        font-size: 12px;
+      }
+    }
+  </style>
+
+<body onscroll="scrollFunc()">
+  <!--Heading Row-->
+  <div class="contain-head">
+    <div id="abovehead">
+      <div class="row" id="toprow">
+        <div class="col-sm-6">
+          <p id="toptext"><i class="fa fa-phone"></i> Phone: <a href="tel:+12399926771" class="toplinks">(239) 992-6771</a> | <i class="fa fa-envelope"></i> Email: <a href="mailto:Support@BERealtors.org" class="toplinks">Support@BERealtors.org</a></p>
+        </div>
+        <div class="col-sm-2">
+
+        </div>
+        <div class="col-sm-4" id="socials">
+          <!-- Facebook -->
+                <a
+                  class="btn text-white btn-floating m-1"
+                  style="background-color: #ffffff;"
+                  href="https://www.facebook.com/groups/482719335711288"
+                  role="button" target="_blank"
+                  ><i class="fa fa-facebook"></i></a>
+
+
+                <!-- Youtube -->
+                <a
+                  class="btn text-white btn-floating m-1"
+                  style="background-color: #ffffff;"
+                  href="https://www.youtube.com/c/Bonitaesterorealtors"
+                  role="button" target="_blank"
+                  ><i class="fa fa-youtube"></i
+                ></a>
+
+                <!-- Instagram -->
+                <a
+                  class="btn text-white btn-floating m-1"
+                  style="background-color: #ffffff;" target="_blank"
+                  href="https://www.instagram.com/bonita_estero_realtors/"
+                  role="button"
+                  ><i class="fa fa-instagram"></i
+                ></a>
+
+        </div>
+      </div>
+    </div>
+    <div id="head-background">
+      <div class="row" id="heading">
+        <div class="col-sm">
+          <h3 onmouseover="aboutdrop()" onmouseout="removeabout()" id="about">About <i class="fa fa-caret-down" aria-hidden="true"></i></h3>
+          <div id="about-hover" onmouseover="aboutdrop()" onmouseout="removeabout()">
+            <a href="https://www.bonitaesterorealtors.com/about/"><p>About BER</p></a>
+            <a href="https://www.bonitaesterorealtors.com/2023-sales-excellence-award-winners/"><p>BER Sales Excellence Awards</p></a>
+            <a href="https://www.bonitaesterorealtors.com/2022-bod-and-past-pres/"><p>2024 Board of Directors</p></a>
+            <a href="https://www.bonitaesterorealtors.com/home-foundation/"><p>BER Home Foundation</p></a>
+            <a href="https://www.bonitaesterorealtors.com/leadership-academy-2023/"><p>Leadership Academy</p></a>
+            <a href="http://bonitaspringsesterorealtorsfl.growthzoneapp.com/realtordirectory/Find?term=&advFilter=eyJDdXN0b21GaWVsZFZhbHVlcyI6W10sIkNvdW50cmllcyI6W10sIlN0YXRlcyI6W10sIkNpdGllcyI6W10sIlBvc3RhbENvZGVzIjpbXSwiQ2F0ZWdvcnlWYWx1ZXMiOltdLCJSYWRpdXMiOiIwIn0%3D"><p>Realtor Directory</p></a>
+            <a href="http://bonitaspringsesterorealtorsfl.growthzoneapp.com/brokerdirectory/Find?term=&advFilter=eyJDdXN0b21GaWVsZFZhbHVlcyI6W10sIkNvdW50cmllcyI6W10sIlN0YXRlcyI6W10sIkNpdGllcyI6W10sIlBvc3RhbENvZGVzIjpbXSwiQ2F0ZWdvcnlWYWx1ZXMiOltdLCJSYWRpdXMiOiIwIn0%3D"><p>Broker Directory</p></a>
+            <a href="https://www.bonitaesterorealtors.com/simplyrets-listings/"><p>Property Search</p></a>
+            <a href="https://members.bonitaesterorealtors.com/affiliatedirectory"><p>Affiliate Directory</p></a>
+          </div>
+        </div>
+        <script type="text/javascript">
+          var about = document.getElementById("about-hover");
+          function aboutdrop() {
+            if (screen.width >= 769) {
+              about.style.display="inline";
+
+            }
+            else if (screen.width < 769) {
+            about.style.display="contents";
+          }
+          }
+          function removeabout() {
+            about.style.display="none";
+          }
+        </script>
+        <div class="col-sm">
+          <h3  onmouseover="memdrop()" onmouseout="removemem()" id="membership">Membership <i class="fa fa-caret-down" aria-hidden="true"></i></h3>
+          <div id="membership-hover" onmouseover="memdrop()" onmouseout="removemem()">
+            <a href="https://www.bonitaesterorealtors.com/join-bser/"><p>Join BER</p></a>
+            <a href="https://bonitaspringsesterorealtorsfl.growthzoneapp.com/ap/Form/Fill/rJD9lS4P"><p>Join A Commitee</p></a>
+            <a href="https://bonitaspringsesterorealtorsfl.growthzoneapp.com/realtorstore/"><p>Store</p></a>
+          </div>
+        </div>
+        <script type="text/javascript">
+          var membership = document.getElementById("membership-hover");
+          function memdrop() {
+            if (screen.width >= 769) {
+              membership.style.display="inline";
+
+            }
+            else if (screen.width < 769) {
+            membership.style.display="contents";
+            }
+          }
+          function removemem() {
+            membership.style.display="none";
+          }
+        </script>
+        <div class="col-sm">
+          <h3 onmouseover="newsdrop()" onmouseout="removenews()" id="newsandevents">News & Events <i class="fa fa-caret-down" aria-hidden="true"></i></h3>
+          <div onmouseover="newsdrop()" onmouseout="removenews()" id="news-hover">
+            <a href="https://members.bonitaesterorealtors.com/bercalendar"><p>Event Calendar</p></a>
+            <a href="https://www.bonitaesterorealtors.com/2022-realtor-review-page-q1/"><p>The Realtor Review Magazine</p></a>
+            <a href="https://www.bonitaesterorealtors.com/ber-news-home/"><p>BER News</p></a>
+          </div>
+        </div>
+
+        <div class="col-sm" id="logo-contain">
+            <a href="https://www.bonitaesterorealtors.com/"><img id="logo" src="https://www.bonitaesterorealtors.com/wp-content/uploads/2022/10/BonitaSpringsEsteroRealtors_Logo_Vertical.png" alt=""></a>
+        </div>
+
+        <script type="text/javascript">
+          var news = document.getElementById("news-hover");
+          function newsdrop() {
+            if (screen.width >= 769) {
+              news.style.display="inline";
+
+            }
+            else if (screen.width < 769) {
+            news.style.display="contents";
+            }
+          }
+          function removenews() {
+            news.style.display="none";
+          }
+        </script>
+        <div class="col-sm">
+            <a href="https://www.bonitaesterorealtors.com/continuing-education-2/"><h3 id="education">Education</h3></a>
+        </div>
+        <div class="col-sm">
+            <h3 onmouseover="resourcesdrop()" onmouseout="removeresources()" id="resources">Resources <i class="fa fa-caret-down" aria-hidden="true"></i></h3>
+            <div onmouseover="resourcesdrop()" onmouseout="removeresources()" id="resources-hover">
+              <a href="https://www.bonitaesterorealtors.com/mls-test-page/"><p>MLS Tips & Recordings</p></a>
+              <a href="https://www.bonitaesterorealtors.com/rpac/"><p>RPAC</p></a>
+              <a href="https://www.bonitaesterorealtors.com/wp-content/uploads/2024/03/2024-Reciprocal-Listing-Form.pdf"><p>Reciprocal Listings</p></a>
+              <a href="https://www.bonitaesterorealtors.com/our-commitment-to-diversity/"><p>Bonita Springs-Estero REALTORS® Global Network</p></a>
+              <a href="https://www.bonitaesterorealtors.com/broker-manager/"><p>Broker/Manager Resources</p></a>
+              <a href="https://www.bonitaesterorealtors.com/florida-realtors-2/"><p>Florida Realtors</p></a>
+              <a href="https://www.bonitaesterorealtors.com/market-reports-2/"><p>Market Reports</p></a>
+              <a href="https://www.bonitaesterorealtors.com/important-links-and-contacts/"><p>Important Links & Resources</p></a>
+              <a href="https://www.bonitaesterorealtors.com/homebuyerssellers/"><p>Home Buyers & Sellers</p></a>
+              <a href="https://bonitaspringsesterorealtorsfl.growthzoneapp.com/ap/Form/Fill/r42XZSQP"><p>BER BOX Truck Rental</p></a>
+              <a href="https://bonitaspringsesterorealtorsfl.growthzoneapp.com/ap/Form/Fill/rOxknh2p"><p>Media Room Rental</p></a>
+              <a href="https://www.leegov.com/dhs/Documents/Housing/CDBG%20Application%2003.01.2023.pdf"><p>Lee County Homeownership Assistance</p></a>
+              <a href="https://www.flipsnack.com/759C5EAA9F7/nar-2024-member-guide/full-view.html"><p>2024 NAR Membership Guide</p></a>
+            </div>
+        </div>
+
+        <div class="col-sm">
+            <h3 onmouseover="toolssdrop()" onmouseout="removetools()" id="membership-tools">Membership Tools <i class="fa fa-caret-down" aria-hidden="true"></i></h3>
+            <div onmouseover="toolssdrop()" onmouseout="removetools()" id="membershiptools-hover">
+              <a href="https://www.bonitaesterorealtors.com/mls-membership-information/"><p>MLS</p></a>
+              <a href="https://www.bonitaesterorealtors.com/professional-standards/"><p>Professional Standards</p></a>
+              <a href="https://www.bonitaesterorealtors.com/wp-content/uploads/2022/10/2022-MLS-Model-Rules-and-Regs-1.pdf"><p>MLS Rules & Regulations</p></a>
+              <a href="https://www.bonitaesterorealtors.com/supra-information/"><p>Supra</p></a>
+              <a href="https://www.bonitaesterorealtors.com/document-library/"><p>Floor Plans</p></a>
+              <a href="https://www.bonitaesterorealtors.com/social-media-policy/"><p>Social Media Policy</p></a>
+              <a href="https://bonitasprings.wpengine.com/rpac/"><p>What is RPAC?</p></a>
+            </div>
+        </div>
+
+        <script type="text/javascript">
+          var resources = document.getElementById("resources-hover");
+          function resourcesdrop() {
+            if (screen.width >= 769) {
+              resources.style.display="inline";
+
+            }
+            else if (screen.width < 769) {
+            resources.style.display="contents";
+            }
+                    }
+
+          function removeresources() {
+            resources.style.display="none";
+          }
+
+          var tools = document.getElementById("membershiptools-hover");
+          function toolssdrop() {
+            if (screen.width >= 769) {
+              tools.style.display="inline";
+            }
+            else if (screen.width < 769) {
+            tools.style.display="contents";
+            }
+          }
+          function removetools() {
+            tools.style.display="none";
+          }
+        </script>
+
+        </div>
+      </div>
+
+      <script type="text/javascript">
+
+      function scrollFunc() {
+        if (window.scrollY < 100) {
+          document.getElementById("head-background").style.opacity = "1";
+        }
+        else if (window.scrollY > 100) {
+          document.getElementById("head-background").style.opacity = ".8";
+        }
+      }
+      </script>
+
+  </div>
+
+
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+
+<style>
+    .preview:hover {
+        cursor: pointer;
+    }
+
+    .market-reports-container {
+    opacity: 0;
+    transition: opacity 0.3s ease-in-out;
+    }
+
+    .fade-in {
+    opacity: 1;
+    }
+
+    .fade-out {
+    opacity: 0;
+    }
+
+    .year-tabs {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 0px;
+    }
+
+    .btn-custom {
+        background-color: #007bff;
+        color: white;
+        padding: 10px 20px;
+        border-radius: 10px 10px 0px 0px;
+        border: none;
+        transition: background-color 0.3s, transform 0.3s;
+        margin: 0px;
+    }
+
+    .btn-custom:hover {
+        background-color: #0056b3;
+    }
+
+    .btn-custom.active {
+        background-color: #0056b3; /* Darker blue for active state */
+    }
+
+    .tab-button {
+        font-size: 16px;
+        font-weight: bold;
+        outline: none;
+    }
+
+    #market-reports-2021, #market-reports-2020, #market-reports-2019,  #market-reports-2018,
+    #market-reports-2017, #market-reports-2016, #market-reports-2015, 
+    #market-reports-PR {
+        text-align: center;
+    }
+
+    #market-reports-2021 h3, #market-reports-2020 h3, #market-reports-2019 h3, #market-reports-2018 h3,
+    #market-reports-2017 h3, #market-reports-2016 h3, #market-reports-2015 h3, 
+    #market-reports-PR h3 {
+        text-align: center;
+        margin-bottom: 20px;
+    }
+
+    #market-reports-2021 p, #market-reports-2020 p, #market-reports-2019 p, #market-reports-2018 p,
+    #market-reports-2017 p, #market-reports-2016 p, #market-reports-2015 p, 
+    #market-reports-PR p {
+        text-align: center;
+    }
+
+    .video-player-container {
+        background-color: #333;
+        color: white;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding: 20px;
+        position: relative;
+    }
+
+    .video-player {
+        width: 70%;
+        height: 720px;
+        overflow: auto;
+        object-fit: contain;
+    }
+
+    .video-player iframe {
+        width: 100%;
+        height: 100%;
+    }
+
+    .arrow {
+        background-color: #555;
+        border: none;
+        color: white;
+        padding: 10px;
+        cursor: pointer;
+        font-size: 18px;
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+        z-index: 2;
+    }
+
+    .left-arrow {
+        left: 10px;
+    }
+
+    .right-arrow {
+        right: 10px;
+    }
+
+    .arrow:hover {
+        background-color: #777;
+    }
+
+    .market-report-row {
+        display: flex; justify-content: space-around; align-items: flex-start;
+    }
+
+    .market-report {
+            width: 30%;
+            text-align: center;
+        }
+
+    @media only screen and (max-width: 768px) {
+        .market-report-row {
+            display: block;
+            align-items: center;
+        }
+        .market-report {
+            margin: auto;
+        }
+        .video-player {
+            height: 210px;
+            width: 90%;
+        }
+    }
+
+</style>
+
+    <div class="video-player-container">
+        <button class="arrow left-arrow" onclick="previousVideo()">&#8249;</button>
+        <div class="video-player">
+            <iframe id="youtube-iframe" src="" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+        </div>
+        <button class="arrow right-arrow" onclick="nextVideo()">&#8250;</button>
+        </div>
+
+    <!-- Year Tabs -->
+    <div class="year-tabs nav nav-tabs" style="justify-content: center; margin-bottom: 20px; display: flex;">
+        <button class="tab-button nav-link active btn-custom" id="tab-2024" onclick="showYear('2024')">2024</button>
+        <button class="tab-button nav-link btn-custom" id="tab-2023" onclick="showYear('2023')">2023</button>
+        <button class="tab-button nav-link btn-custom" id="tab-2022" onclick="showYear('2022')">2022</button>
+        <button class="tab-button nav-link btn-custom" id="tab-2021" onclick="showYear('2021')">2021</button>
+        <button class="tab-button nav-link btn-custom" id="tab-2020" onclick="showYear('2020')">2020</button>
+        <button class="tab-button nav-link btn-custom" id="tab-2019" onclick="showYear('2019')">2019</button>
+        <button class="tab-button nav-link btn-custom" id="tab-2017" onclick="showYear('2018')">2018</button>
+        <button class="tab-button nav-link btn-custom" id="tab-2017" onclick="showYear('2017')">2017</button>
+        <button class="tab-button nav-link btn-custom" id="tab-2016" onclick="showYear('2016')">2016</button>
+        <button class="tab-button nav-link btn-custom" id="tab-2015" onclick="showYear('2015')">2015</button>
+        <button class="tab-button nav-link btn-custom" id="tab-PR" onclick="showYear('PR')">Press Releases</button>
+    </div>
+
+  
+    <!-- Market Reports Section for 2024 -->
+    <div id="market-reports-2024" class="market-reports-container fade-in" style="display: flex; flex-direction: column; gap: 20px;">
+        
+        <!-- Row containing all three months -->
+        <div class="market-report-row" style="">
+            
+            <!-- January -->
+            <div class="market-report" style="">
+                <h3>January</h3>
+                <div class="previews" style="display: flex; justify-content: space-around;">
+                <a href="https://www.bonitaesterorealtors.com/wp-content/uploads/2024/02/Jan-2024-Fast-Stats.pdf" target="_blank" style="text-decoration: none;">
+                    <div class="preview" style="width: auto; height: 250px;">
+                    <img src="https://www.bonitaesterorealtors.com/wp-content/uploads/2024/09/Screenshot_3-9-2024_11401_www.bonitaesterorealtors.com_.jpeg" alt="BER Fast Stats" style="width: 100%; height: 100%; object-fit: cover;">
+                    </div>
+                    <p style="text-align: center; margin-top: 10px;">BER Fast Stats</p>
+                </a>
+                <a href="https://www.bonitaesterorealtors.com/wp-content/uploads/2024/02/Jan-2024-FR-Stats.pdf" target="_blank" style="text-decoration: none;">
+                    <div class="preview" style="width: auto; height: 250px;">
+                    <img src="https://www.bonitaesterorealtors.com/wp-content/uploads/2024/09/Screenshot_3-9-2024_114456_www.bonitaesterorealtors.com_.jpeg" alt="Florida Realtors Stats" style="width: 100%; height: 100%; object-fit: cover;">
+                    </div>
+                    <p style="text-align: center; margin-top: 10px;">Florida Realtors Stats</p>
+                </a>
+                </div>
+            </div>
+
+            <!-- February -->
+            <div class="market-report" style="">
+                <h3>February</h3>
+                <div class="previews" style="display: flex; justify-content: space-around;">
+                <a href="https://www.bonitaesterorealtors.com/wp-content/uploads/2024/03/BonitaSprings-Estero-1.pdf" target="_blank" style="text-decoration: none;">
+                    <div class="preview" style="width: auto; height: 250px;">
+                    <img src="https://www.bonitaesterorealtors.com/wp-content/uploads/2024/09/Screenshot_3-9-2024_11401_www.bonitaesterorealtors.com_.jpeg" alt="BER Fast Stats" style="width: 100%; height: 100%; object-fit: cover;">
+                    </div>
+                    <p style="text-align: center; margin-top: 10px;">BER Fast Stats</p>
+                </a>
+                <a href="https://www.bonitaesterorealtors.com/wp-content/uploads/2024/02/Jan-2024-FR-Stats.pdf" target="_blank" style="text-decoration: none;">
+                    <div class="preview" style="width: auto; height: 250px;">
+                    <img src="https://www.bonitaesterorealtors.com/wp-content/uploads/2024/09/Screenshot_3-9-2024_114456_www.bonitaesterorealtors.com_.jpeg" alt="Florida Realtors Stats" style="width: 100%; height: 100%; object-fit: cover;">
+                    </div>
+                    <p style="text-align: center; margin-top: 10px;">Florida Realtors Stats</p>
+                </a>
+                </div>
+            </div>
+
+            <!-- March -->
+            <div class="market-report" style="">
+                <h3>March</h3>
+                <div class="previews" style="display: flex; justify-content: space-around;">
+                <a href="https://www.bonitaesterorealtors.com/wp-content/uploads/2024/04/BonitaSprings-Estero-2.pdf" target="_blank" style="text-decoration: none;">
+                    <div class="preview" style="width: auto; height: 250px;">
+                    <img src="https://www.bonitaesterorealtors.com/wp-content/uploads/2024/09/Screenshot_3-9-2024_11401_www.bonitaesterorealtors.com_.jpeg" alt="BER Fast Stats" style="width: 100%; height: 100%; object-fit: cover;">
+                    </div>
+                    <p style="text-align: center; margin-top: 10px;">BER Fast Stats</p>
+                </a>
+                <a href="https://www.bonitaesterorealtors.com/wp-content/uploads/2024/04/April-2024.pdf" target="_blank" style="text-decoration: none;">
+                    <div class="preview" style="width: auto; height: 250px;">
+                    <img src="https://www.bonitaesterorealtors.com/wp-content/uploads/2024/09/Screenshot_3-9-2024_114456_www.bonitaesterorealtors.com_.jpeg" alt="Florida Realtors Stats" style="width: 100%; height: 100%; object-fit: cover;">
+                    </div>
+                    <p style="text-align: center; margin-top: 10px;">Florida Realtors Stats</p>
+                </a>
+                </div>
+            </div>
+
+        </div>
+
+         <!-- Row containing all three months -->
+         <div class="market-report-row" style="">
+            
+            <!-- January -->
+            <div class="market-report" style="">
+                <h3>April</h3>
+                <div class="previews" style="display: flex; justify-content: space-around;">
+                <a href="https://www.bonitaesterorealtors.com/wp-content/uploads/2024/06/April-Fast-Stats.pdf" target="_blank" style="text-decoration: none;">
+                    <div class="preview" style="width: auto; height: 250px;">
+                    <img src="https://www.bonitaesterorealtors.com/wp-content/uploads/2024/09/Screenshot_3-9-2024_11401_www.bonitaesterorealtors.com_.jpeg" alt="BER Fast Stats" style="width: 100%; height: 100%; object-fit: cover;">
+                    </div>
+                    <p style="text-align: center; margin-top: 10px;">BER Fast Stats</p>
+                </a>
+                <a href="https://www.bonitaesterorealtors.com/wp-content/uploads/2024/06/April-FR-Stats.pdf" target="_blank" style="text-decoration: none;">
+                    <div class="preview" style="width: auto; height: 250px;">
+                    <img src="https://www.bonitaesterorealtors.com/wp-content/uploads/2024/09/Screenshot_3-9-2024_114456_www.bonitaesterorealtors.com_.jpeg" alt="Florida Realtors Stats" style="width: 100%; height: 100%; object-fit: cover;">
+                    </div>
+                    <p style="text-align: center; margin-top: 10px;">Florida Realtors Stats</p>
+                </a>
+                </div>
+            </div>
+
+            <!-- February -->
+            <div class="market-report" style="">
+                <h3>May</h3>
+                <div class="previews" style="display: flex; justify-content: space-around;">
+                <a href="https://www.bonitaesterorealtors.com/wp-content/uploads/2024/06/May-Fast-Stats-1.pdf" target="_blank" style="text-decoration: none;">
+                    <div class="preview" style="width: auto; height: 250px;">
+                    <img src="https://www.bonitaesterorealtors.com/wp-content/uploads/2024/09/Screenshot_3-9-2024_11401_www.bonitaesterorealtors.com_.jpeg" alt="BER Fast Stats" style="width: 100%; height: 100%; object-fit: cover;">
+                    </div>
+                    <p style="text-align: center; margin-top: 10px;">BER Fast Stats</p>
+                </a>
+                <a href="https://www.bonitaesterorealtors.com/wp-content/uploads/2024/06/May-FR-Stats.pdf" target="_blank" style="text-decoration: none;">
+                    <div class="preview" style="width: auto; height: 250px;">
+                    <img src="https://www.bonitaesterorealtors.com/wp-content/uploads/2024/09/Screenshot_3-9-2024_114456_www.bonitaesterorealtors.com_.jpeg" alt="Florida Realtors Stats" style="width: 100%; height: 100%; object-fit: cover;">
+                    </div>
+                    <p style="text-align: center; margin-top: 10px;">Florida Realtors Stats</p>
+                </a>
+                </div>
+            </div>
+
+            <!-- March -->
+            <div class="market-report" style="">
+                <h3>June</h3>
+                <div class="previews" style="display: flex; justify-content: space-around;">
+                <a href="https://www.bonitaesterorealtors.com/wp-content/uploads/2024/07/June-2024-Fast-Stats.pdf" target="_blank" style="text-decoration: none;">
+                    <div class="preview" style="width: auto; height: 250px;">
+                    <img src="https://www.bonitaesterorealtors.com/wp-content/uploads/2024/09/Screenshot_3-9-2024_11401_www.bonitaesterorealtors.com_.jpeg" alt="BER Fast Stats" style="width: 100%; height: 100%; object-fit: cover;">
+                    </div>
+                    <p style="text-align: center; margin-top: 10px;">BER Fast Stats</p>
+                </a>
+                <a href="https://www.bonitaesterorealtors.com/wp-content/uploads/2024/07/June-2024-FR.pdf" target="_blank" style="text-decoration: none;">
+                    <div class="preview" style="width: auto; height: 250px;">
+                    <img src="https://www.bonitaesterorealtors.com/wp-content/uploads/2024/09/Screenshot_3-9-2024_114456_www.bonitaesterorealtors.com_.jpeg" alt="Florida Realtors Stats" style="width: 100%; height: 100%; object-fit: cover;">
+                    </div>
+                    <p style="text-align: center; margin-top: 10px;">Florida Realtors Stats</p>
+                </a>
+                </div>
+            </div>
+
+        </div>
+
+         <!-- Row containing all three months -->
+         <div class="market-report-row" style="">
+            
+            <!-- January -->
+            <div class="market-report" style="">
+                <h3>July</h3>
+                <div class="previews" style="display: flex; justify-content: space-around;">
+                <a href="https://www.bonitaesterorealtors.com/wp-content/uploads/2024/08/July-Fasts-Stats.pdf" target="_blank" style="text-decoration: none;">
+                    <div class="preview" style="width: auto; height: 250px;">
+                    <img src="https://www.bonitaesterorealtors.com/wp-content/uploads/2024/09/Screenshot_3-9-2024_11401_www.bonitaesterorealtors.com_.jpeg" alt="BER Fast Stats" style="width: 100%; height: 100%; object-fit: cover;">
+                    </div>
+                    <p style="text-align: center; margin-top: 10px;">BER Fast Stats</p>
+                </a>
+                <a href="https://www.bonitaesterorealtors.com/wp-content/uploads/2024/08/July-2024-FR-Stats.pdf" target="_blank" style="text-decoration: none;">
+                    <div class="preview" style="width: auto; height: 250px;">
+                    <img src="https://www.bonitaesterorealtors.com/wp-content/uploads/2024/09/Screenshot_3-9-2024_114456_www.bonitaesterorealtors.com_.jpeg" alt="Florida Realtors Stats" style="width: 100%; height: 100%; object-fit: cover;">
+                    </div>
+                    <p style="text-align: center; margin-top: 10px;">Florida Realtors Stats</p>
+                </a>
+                </div>
+            </div>
+
+            <!-- February -->
+            <div class="market-report" style="">
+                <h3>August</h3>
+                <div class="previews" style="display: flex; justify-content: space-around;">
+                <a href="https://www.bonitaesterorealtors.com/wp-content/uploads/2024/08/July-Fasts-Stats.pdf" target="_blank" style="text-decoration: none;">
+                    <div class="preview" style="width: auto; height: 250px;">
+                    <img src="https://www.bonitaesterorealtors.com/wp-content/uploads/2024/09/Screenshot_3-9-2024_11401_www.bonitaesterorealtors.com_.jpeg" alt="BER Fast Stats" style="width: 100%; height: 100%; object-fit: cover;">
+                    </div>
+                    <p style="text-align: center; margin-top: 10px;">BER Fast Stats</p>
+                </a>
+                <a href="https://www.bonitaesterorealtors.com/wp-content/uploads/2024/02/Feb-2024-FR-Stats.pdf" target="_blank" style="text-decoration: none;">
+                    <div class="preview" style="width: auto; height: 250px;">
+                    <img src="https://www.bonitaesterorealtors.com/wp-content/uploads/2024/09/Screenshot_3-9-2024_114456_www.bonitaesterorealtors.com_.jpeg" alt="Florida Realtors Stats" style="width: 100%; height: 100%; object-fit: cover;">
+                    </div>
+                    <p style="text-align: center; margin-top: 10px;">Florida Realtors Stats</p>
+                </a>
+                </div>
+            </div>
+
+            <!-- March 
+            <div class="market-report" style="">
+                <h3>September</h3>
+                <div class="previews" style="display: flex; justify-content: space-around;">
+                <a href="https://www.bonitaesterorealtors.com/wp-content/uploads/2024/02/Mar-2024-Fast-Stats.pdf" target="_blank" style="text-decoration: none;">
+                    <div class="preview" style="width: auto; height: 250px;">
+                    <img src="https://www.bonitaesterorealtors.com/wp-content/uploads/2024/09/Screenshot_3-9-2024_11401_www.bonitaesterorealtors.com_.jpeg" alt="BER Fast Stats" style="width: 100%; height: 100%; object-fit: cover;">
+                    </div>
+                    <p style="text-align: center; margin-top: 10px;">BER Fast Stats</p>
+                </a>
+                <a href="https://www.bonitaesterorealtors.com/wp-content/uploads/2024/02/Mar-2024-FR-Stats.pdf" target="_blank" style="text-decoration: none;">
+                    <div class="preview" style="width: auto; height: 250px;">
+                    <img src="https://www.bonitaesterorealtors.com/wp-content/uploads/2024/09/Screenshot_3-9-2024_114456_www.bonitaesterorealtors.com_.jpeg" alt="Florida Realtors Stats" style="width: 100%; height: 100%; object-fit: cover;">
+                    </div>
+                    <p style="text-align: center; margin-top: 10px;">Florida Realtors Stats</p>
+                </a>
+                </div>
+            </div>-->
+
+        </div>
+        
+    </div>
+
+
+  
+<!-- Market Reports Section for 2023 -->
+<div id="market-reports-2023" class="market-reports-container" style="display: none; flex-direction: column; gap: 20px;">
+
+    <div class="market-report-row" style="">
+            
+        <!-- January -->
+        <div class="market-report" style="">
+            <h3>2023 Annual Stats</h3>
+            <div class="previews" style="display: flex; justify-content: space-around;">
+            <a href="https://www.bonitaesterorealtors.com/wp-content/uploads/2024/01/Annual-Report-FR.pdf" target="_blank" style="text-decoration: none;">
+                <div class="preview" style="width: auto; height: 250px;">
+                <img src="https://www.bonitaesterorealtors.com/wp-content/uploads/2024/09/Screenshot_3-9-2024_11401_www.bonitaesterorealtors.com_.jpeg" alt="BER Fast Stats" style="width: 100%; height: 100%; object-fit: cover;">
+                </div>
+                <p style="text-align: center; margin-top: 10px;">BER Fast Stats</p>
+            </a>
+            <a href="https://www.bonitaesterorealtors.com/wp-content/uploads/2024/01/Annual-Fast-Stats.pdf" target="_blank" style="text-decoration: none;">
+                <div class="preview" style="width: auto; height: 250px;">
+                <img src="https://www.bonitaesterorealtors.com/wp-content/uploads/2024/09/Screenshot_3-9-2024_114456_www.bonitaesterorealtors.com_.jpeg" alt="Florida Realtors Stats" style="width: 100%; height: 100%; object-fit: cover;">
+                </div>
+                <p style="text-align: center; margin-top: 10px;">Florida Realtors Stats</p>
+            </a>
+            </div>
+        </div>
+
+    </div>
+    <!-- Row containing all three months -->
+    <div class="market-report-row" style="">
+            
+        <!-- January -->
+        <div class="market-report" style="">
+            <h3>January</h3>
+            <div class="previews" style="display: flex; justify-content: space-around;">
+            <a href="https://www.bonitaesterorealtors.com/wp-content/uploads/2023/02/January-Fast-Stats.pdf" target="_blank" style="text-decoration: none;">
+                <div class="preview" style="width: auto; height: 250px;">
+                <img src="https://www.bonitaesterorealtors.com/wp-content/uploads/2024/09/Screenshot_3-9-2024_11401_www.bonitaesterorealtors.com_.jpeg" alt="BER Fast Stats" style="width: 100%; height: 100%; object-fit: cover;">
+                </div>
+                <p style="text-align: center; margin-top: 10px;">BER Fast Stats</p>
+            </a>
+            <a href="https://www.bonitaesterorealtors.com/wp-content/uploads/2023/02/January-2023-FR-report.pdf" target="_blank" style="text-decoration: none;">
+                <div class="preview" style="width: auto; height: 250px;">
+                <img src="https://www.bonitaesterorealtors.com/wp-content/uploads/2024/09/Screenshot_3-9-2024_114456_www.bonitaesterorealtors.com_.jpeg" alt="Florida Realtors Stats" style="width: 100%; height: 100%; object-fit: cover;">
+                </div>
+                <p style="text-align: center; margin-top: 10px;">Florida Realtors Stats</p>
+            </a>
+            </div>
+        </div>
+
+        <!-- February -->
+        <div class="market-report" style="">
+            <h3>February</h3>
+            <div class="previews" style="display: flex; justify-content: space-around;">
+            <a href="https://www.bonitaesterorealtors.com/wp-content/uploads/2023/03/FEB-2023.pdf" target="_blank" style="text-decoration: none;">
+                <div class="preview" style="width: auto; height: 250px;">
+                <img src="https://www.bonitaesterorealtors.com/wp-content/uploads/2024/09/Screenshot_3-9-2024_11401_www.bonitaesterorealtors.com_.jpeg" alt="BER Fast Stats" style="width: 100%; height: 100%; object-fit: cover;">
+                </div>
+                <p style="text-align: center; margin-top: 10px;">BER Fast Stats</p>
+            </a>
+            <a href="https://www.bonitaesterorealtors.com/wp-content/uploads/2023/03/February-2023-FR-Report.pdf" target="_blank" style="text-decoration: none;">
+                <div class="preview" style="width: auto; height: 250px;">
+                <img src="https://www.bonitaesterorealtors.com/wp-content/uploads/2024/09/Screenshot_3-9-2024_114456_www.bonitaesterorealtors.com_.jpeg" alt="Florida Realtors Stats" style="width: 100%; height: 100%; object-fit: cover;">
+                </div>
+                <p style="text-align: center; margin-top: 10px;">Florida Realtors Stats</p>
+            </a>
+            </div>
+        </div>
+
+        <!-- March -->
+        <div class="market-report" style="">
+            <h3>March</h3>
+            <div class="previews" style="display: flex; justify-content: space-around;">
+            <a href="https://www.bonitaesterorealtors.com/wp-content/uploads/2023/04/March-2023-Fast-Stats.pdf" target="_blank" style="text-decoration: none;">
+                <div class="preview" style="width: auto; height: 250px;">
+                <img src="https://www.bonitaesterorealtors.com/wp-content/uploads/2024/09/Screenshot_3-9-2024_11401_www.bonitaesterorealtors.com_.jpeg" alt="BER Fast Stats" style="width: 100%; height: 100%; object-fit: cover;">
+                </div>
+                <p style="text-align: center; margin-top: 10px;">BER Fast Stats</p>
+            </a>
+            <a href="https://www.bonitaesterorealtors.com/wp-content/uploads/2023/04/March-2023-FR.pdf" target="_blank" style="text-decoration: none;">
+                <div class="preview" style="width: auto; height: 250px;">
+                <img src="https://www.bonitaesterorealtors.com/wp-content/uploads/2024/09/Screenshot_3-9-2024_114456_www.bonitaesterorealtors.com_.jpeg" alt="Florida Realtors Stats" style="width: 100%; height: 100%; object-fit: cover;">
+                </div>
+                <p style="text-align: center; margin-top: 10px;">Florida Realtors Stats</p>
+            </a>
+            </div>
+        </div>
+
+    </div>
+
+     <!-- Row containing all three months -->
+     <div class="market-report-row" style="">
+        
+        <!-- January -->
+        <div class="market-report" style="">
+            <h3>April</h3>
+            <div class="previews" style="display: flex; justify-content: space-around;">
+            <a href="https://www.bonitaesterorealtors.com/wp-content/uploads/2023/05/April-2023-Fast-Stats.pdf" target="_blank" style="text-decoration: none;">
+                <div class="preview" style="width: auto; height: 250px;">
+                <img src="https://www.bonitaesterorealtors.com/wp-content/uploads/2024/09/Screenshot_3-9-2024_11401_www.bonitaesterorealtors.com_.jpeg" alt="BER Fast Stats" style="width: 100%; height: 100%; object-fit: cover;">
+                </div>
+                <p style="text-align: center; margin-top: 10px;">BER Fast Stats</p>
+            </a>
+            <a href="https://www.bonitaesterorealtors.com/wp-content/uploads/2023/05/April-2023-FR-Market-Stats.pdf" target="_blank" style="text-decoration: none;">
+                <div class="preview" style="width: auto; height: 250px;">
+                <img src="https://www.bonitaesterorealtors.com/wp-content/uploads/2024/09/Screenshot_3-9-2024_114456_www.bonitaesterorealtors.com_.jpeg" alt="Florida Realtors Stats" style="width: 100%; height: 100%; object-fit: cover;">
+                </div>
+                <p style="text-align: center; margin-top: 10px;">Florida Realtors Stats</p>
+            </a>
+            </div>
+        </div>
+
+        <!-- February -->
+        <div class="market-report" style="">
+            <h3>May</h3>
+            <div class="previews" style="display: flex; justify-content: space-around;">
+            <a href="https://www.bonitaesterorealtors.com/wp-content/uploads/2023/06/May-2023-Fast-Stats.pdf" target="_blank" style="text-decoration: none;">
+                <div class="preview" style="width: auto; height: 250px;">
+                <img src="https://www.bonitaesterorealtors.com/wp-content/uploads/2024/09/Screenshot_3-9-2024_11401_www.bonitaesterorealtors.com_.jpeg" alt="BER Fast Stats" style="width: 100%; height: 100%; object-fit: cover;">
+                </div>
+                <p style="text-align: center; margin-top: 10px;">BER Fast Stats</p>
+            </a>
+            <a href="https://www.bonitaesterorealtors.com/wp-content/uploads/2023/06/May-2023-FR-Report.pdf" target="_blank" style="text-decoration: none;">
+                <div class="preview" style="width: auto; height: 250px;">
+                <img src="https://www.bonitaesterorealtors.com/wp-content/uploads/2024/09/Screenshot_3-9-2024_114456_www.bonitaesterorealtors.com_.jpeg" alt="Florida Realtors Stats" style="width: 100%; height: 100%; object-fit: cover;">
+                </div>
+                <p style="text-align: center; margin-top: 10px;">Florida Realtors Stats</p>
+            </a>
+            </div>
+        </div>
+
+        <!-- March -->
+        <div class="market-report" style="">
+            <h3>June</h3>
+            <div class="previews" style="display: flex; justify-content: space-around;">
+            <a href="https://www.bonitaesterorealtors.com/wp-content/uploads/2023/07/June-2023-Fast-Stats.pdf" target="_blank" style="text-decoration: none;">
+                <div class="preview" style="width: auto; height: 250px;">
+                <img src="https://www.bonitaesterorealtors.com/wp-content/uploads/2024/09/Screenshot_3-9-2024_11401_www.bonitaesterorealtors.com_.jpeg" alt="BER Fast Stats" style="width: 100%; height: 100%; object-fit: cover;">
+                </div>
+                <p style="text-align: center; margin-top: 10px;">BER Fast Stats</p>
+            </a>
+            <a href="https://www.bonitaesterorealtors.com/wp-content/uploads/2023/07/June-2023-FR-Stats.pdf" target="_blank" style="text-decoration: none;">
+                <div class="preview" style="width: auto; height: 250px;">
+                <img src="https://www.bonitaesterorealtors.com/wp-content/uploads/2024/09/Screenshot_3-9-2024_114456_www.bonitaesterorealtors.com_.jpeg" alt="Florida Realtors Stats" style="width: 100%; height: 100%; object-fit: cover;">
+                </div>
+                <p style="text-align: center; margin-top: 10px;">Florida Realtors Stats</p>
+            </a>
+            </div>
+        </div>
+
+    </div>
+
+     <!-- Row containing all three months -->
+     <div class="market-report-row" style="">
+        
+        <!-- January -->
+        <div class="market-report" style="">
+            <h3>July</h3>
+            <div class="previews" style="display: flex; justify-content: space-around;">
+            <a href="https://www.bonitaesterorealtors.com/wp-content/uploads/2023/08/July-2023-Fast-Stats.pdf" target="_blank" style="text-decoration: none;">
+                <div class="preview" style="width: auto; height: 250px;">
+                <img src="https://www.bonitaesterorealtors.com/wp-content/uploads/2024/09/Screenshot_3-9-2024_11401_www.bonitaesterorealtors.com_.jpeg" alt="BER Fast Stats" style="width: 100%; height: 100%; object-fit: cover;">
+                </div>
+                <p style="text-align: center; margin-top: 10px;">BER Fast Stats</p>
+            </a>
+            <a href="https://www.bonitaesterorealtors.com/wp-content/uploads/2023/08/July-2023-FR-Report.pdf" target="_blank" style="text-decoration: none;">
+                <div class="preview" style="width: auto; height: 250px;">
+                <img src="https://www.bonitaesterorealtors.com/wp-content/uploads/2024/09/Screenshot_3-9-2024_114456_www.bonitaesterorealtors.com_.jpeg" alt="Florida Realtors Stats" style="width: 100%; height: 100%; object-fit: cover;">
+                </div>
+                <p style="text-align: center; margin-top: 10px;">Florida Realtors Stats</p>
+            </a>
+            </div>
+        </div>
+
+        <!-- February -->
+        <div class="market-report" style="">
+            <h3>August</h3>
+            <div class="previews" style="display: flex; justify-content: space-around;">
+            <a href="https://www.bonitaesterorealtors.com/wp-content/uploads/2023/09/August-BER-FAST-STATS.pdf" target="_blank" style="text-decoration: none;">
+                <div class="preview" style="width: auto; height: 250px;">
+                <img src="https://www.bonitaesterorealtors.com/wp-content/uploads/2024/09/Screenshot_3-9-2024_11401_www.bonitaesterorealtors.com_.jpeg" alt="BER Fast Stats" style="width: 100%; height: 100%; object-fit: cover;">
+                </div>
+                <p style="text-align: center; margin-top: 10px;">BER Fast Stats</p>
+            </a>
+            <a href="https://www.bonitaesterorealtors.com/wp-content/uploads/2023/09/August-FR-Report.pdf" target="_blank" style="text-decoration: none;">
+                <div class="preview" style="width: auto; height: 250px;">
+                <img src="https://www.bonitaesterorealtors.com/wp-content/uploads/2024/09/Screenshot_3-9-2024_114456_www.bonitaesterorealtors.com_.jpeg" alt="Florida Realtors Stats" style="width: 100%; height: 100%; object-fit: cover;">
+                </div>
+                <p style="text-align: center; margin-top: 10px;">Florida Realtors Stats</p>
+            </a>
+            </div>
+        </div>
+
+        <!-- March -->
+        <div class="market-report" style="">
+            <h3>September</h3>
+            <div class="previews" style="display: flex; justify-content: space-around;">
+            <a href="https://www.bonitaesterorealtors.com/wp-content/uploads/2023/10/September-2023-Fast-Stats.pdf" target="_blank" style="text-decoration: none;">
+                <div class="preview" style="width: auto; height: 250px;">
+                <img src="https://www.bonitaesterorealtors.com/wp-content/uploads/2024/09/Screenshot_3-9-2024_11401_www.bonitaesterorealtors.com_.jpeg" alt="BER Fast Stats" style="width: 100%; height: 100%; object-fit: cover;">
+                </div>
+                <p style="text-align: center; margin-top: 10px;">BER Fast Stats</p>
+            </a>
+            <a href="https://www.bonitaesterorealtors.com/wp-content/uploads/2023/10/September-FR-Report.pdf" target="_blank" style="text-decoration: none;">
+                <div class="preview" style="width: auto; height: 250px;">
+                <img src="https://www.bonitaesterorealtors.com/wp-content/uploads/2024/09/Screenshot_3-9-2024_114456_www.bonitaesterorealtors.com_.jpeg" alt="Florida Realtors Stats" style="width: 100%; height: 100%; object-fit: cover;">
+                </div>
+                <p style="text-align: center; margin-top: 10px;">Florida Realtors Stats</p>
+            </a>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Row containing all three months -->
+    <div class="market-report-row" style="">
+            
+        <!-- January -->
+        <div class="market-report" style="">
+            <h3>October</h3>
+            <div class="previews" style="display: flex; justify-content: space-around;">
+            <a href="https://www.bonitaesterorealtors.com/wp-content/uploads/2023/11/October-2023-Fast-Stats.pdf" target="_blank" style="text-decoration: none;">
+                <div class="preview" style="width: auto; height: 250px;">
+                <img src="https://www.bonitaesterorealtors.com/wp-content/uploads/2024/09/Screenshot_3-9-2024_11401_www.bonitaesterorealtors.com_.jpeg" alt="BER Fast Stats" style="width: 100%; height: 100%; object-fit: cover;">
+                </div>
+                <p style="text-align: center; margin-top: 10px;">BER Fast Stats</p>
+            </a>
+            <a href="https://www.bonitaesterorealtors.com/wp-content/uploads/2023/11/October-2023-FR-Report.pdf" target="_blank" style="text-decoration: none;">
+                <div class="preview" style="width: auto; height: 250px;">
+                <img src="https://www.bonitaesterorealtors.com/wp-content/uploads/2024/09/Screenshot_3-9-2024_114456_www.bonitaesterorealtors.com_.jpeg" alt="Florida Realtors Stats" style="width: 100%; height: 100%; object-fit: cover;">
+                </div>
+                <p style="text-align: center; margin-top: 10px;">Florida Realtors Stats</p>
+            </a>
+            </div>
+        </div>
+
+        <!-- February -->
+        <div class="market-report" style="">
+            <h3>November</h3>
+            <div class="previews" style="display: flex; justify-content: space-around;">
+            <a href="https://www.bonitaesterorealtors.com/wp-content/uploads/2023/12/November-2023-Fast-Stats.pdf" target="_blank" style="text-decoration: none;">
+                <div class="preview" style="width: auto; height: 250px;">
+                <img src="https://www.bonitaesterorealtors.com/wp-content/uploads/2024/09/Screenshot_3-9-2024_11401_www.bonitaesterorealtors.com_.jpeg" alt="BER Fast Stats" style="width: 100%; height: 100%; object-fit: cover;">
+                </div>
+                <p style="text-align: center; margin-top: 10px;">BER Fast Stats</p>
+            </a>
+            <a href="https://www.bonitaesterorealtors.com/wp-content/uploads/2023/12/November-2023-FR-Stats.pdf" target="_blank" style="text-decoration: none;">
+                <div class="preview" style="width: auto; height: 250px;">
+                <img src="https://www.bonitaesterorealtors.com/wp-content/uploads/2024/09/Screenshot_3-9-2024_114456_www.bonitaesterorealtors.com_.jpeg" alt="Florida Realtors Stats" style="width: 100%; height: 100%; object-fit: cover;">
+                </div>
+                <p style="text-align: center; margin-top: 10px;">Florida Realtors Stats</p>
+            </a>
+            </div>
+        </div>
+
+        <!-- March -->
+        <div class="market-report" style="">
+            <h3>December</h3>
+            <div class="previews" style="display: flex; justify-content: space-around;">
+            <a href="https://www.bonitaesterorealtors.com/wp-content/uploads/2024/01/December-Fast-Stats.pdf" target="_blank" style="text-decoration: none;">
+                <div class="preview" style="width: auto; height: 250px;">
+                <img src="https://www.bonitaesterorealtors.com/wp-content/uploads/2024/09/Screenshot_3-9-2024_11401_www.bonitaesterorealtors.com_.jpeg" alt="BER Fast Stats" style="width: 100%; height: 100%; object-fit: cover;">
+                </div>
+                <p style="text-align: center; margin-top: 10px;">BER Fast Stats</p>
+            </a>
+            <a href="https://www.bonitaesterorealtors.com/wp-content/uploads/2024/01/Dec-2023-FR-Stats.pdf" target="_blank" style="text-decoration: none;">
+                <div class="preview" style="width: auto; height: 250px;">
+                <img src="https://www.bonitaesterorealtors.com/wp-content/uploads/2024/09/Screenshot_3-9-2024_114456_www.bonitaesterorealtors.com_.jpeg" alt="Florida Realtors Stats" style="width: 100%; height: 100%; object-fit: cover;">
+                </div>
+                <p style="text-align: center; margin-top: 10px;">Florida Realtors Stats</p>
+            </a>
+            </div>
+        </div>
+
+    </div>
+    
+</div>
+
+  
+  <!-- Market Reports Section for 2022 -->
+  <div id="market-reports-2022" class="market-reports-container" style="display: none; flex-direction: column; gap: 20px;">
+    <!-- Include the market reports for 2022 here -->
+
+    <div class="market-report-row" style="">
+            
+        <!-- January -->
+        <div class="market-report" style="">
+            <h3>2022 Annual Stats</h3>
+            <div class="previews" style="display: flex; justify-content: space-around;">
+            <a href="https://www.bonitaesterorealtors.com/wp-content/uploads/2023/01/2022-FR-Report.pdf" target="_blank" style="text-decoration: none;">
+                <div class="preview" style="width: auto; height: 250px;">
+                <img src="https://www.bonitaesterorealtors.com/wp-content/uploads/2024/09/Screenshot_3-9-2024_114456_www.bonitaesterorealtors.com_.jpeg" alt="Florida Realtors Stats" style="width: 100%; height: 100%; object-fit: cover;">
+                </div>
+                <p style="text-align: center; margin-top: 10px;">Florida Realtors Stats</p>
+            </a>
+            </div>
+        </div>
+
+    </div>
+    
+    <!-- Row containing all three months -->
+    <div class="market-report-row" style="display: flex; justify-content: space-around; align-items: flex-start;">
+            
+        <!-- January -->
+        <div class="market-report" style="">
+            <h3>January</h3>
+            <div class="previews" style="display: flex; justify-content: space-around;">
+            <a href="https://www.bonitaesterorealtors.com/wp-content/uploads/2022/02/BonitaSprings-Estero-2.pdf" target="_blank" style="text-decoration: none;">
+                <div class="preview" style="width: auto; height: 250px;">
+                <img src="https://www.bonitaesterorealtors.com/wp-content/uploads/2024/09/Screenshot_3-9-2024_11401_www.bonitaesterorealtors.com_.jpeg" alt="BER Fast Stats" style="width: 100%; height: 100%; object-fit: cover;">
+                </div>
+                <p style="text-align: center; margin-top: 10px;">BER Fast Stats</p>
+            </a>
+            <a href="https://www.bonitaesterorealtors.com/wp-content/uploads/2022/02/January-2022-Stats.pdf" target="_blank" style="text-decoration: none;">
+                <div class="preview" style="width: auto; height: 250px;">
+                <img src="https://www.bonitaesterorealtors.com/wp-content/uploads/2024/09/Screenshot_3-9-2024_114456_www.bonitaesterorealtors.com_.jpeg" alt="Florida Realtors Stats" style="width: 100%; height: 100%; object-fit: cover;">
+                </div>
+                <p style="text-align: center; margin-top: 10px;">Florida Realtors Stats</p>
+            </a>
+            </div>
+        </div>
+
+        <!-- February -->
+        <div class="market-report" style="">
+            <h3>February</h3>
+            <div class="previews" style="display: flex; justify-content: space-around;">
+            <a href="https://www.bonitaesterorealtors.com/wp-content/uploads/2022/03/BonitaSprings-Estero.pdf" target="_blank" style="text-decoration: none;">
+                <div class="preview" style="width: auto; height: 250px;">
+                <img src="https://www.bonitaesterorealtors.com/wp-content/uploads/2024/09/Screenshot_3-9-2024_11401_www.bonitaesterorealtors.com_.jpeg" alt="BER Fast Stats" style="width: 100%; height: 100%; object-fit: cover;">
+                </div>
+                <p style="text-align: center; margin-top: 10px;">BER Fast Stats</p>
+            </a>
+            <a href="https://www.bonitaesterorealtors.com/wp-content/uploads/2022/03/February-2022-FR-Stats.pdf" target="_blank" style="text-decoration: none;">
+                <div class="preview" style="width: auto; height: 250px;">
+                <img src="https://www.bonitaesterorealtors.com/wp-content/uploads/2024/09/Screenshot_3-9-2024_114456_www.bonitaesterorealtors.com_.jpeg" alt="Florida Realtors Stats" style="width: 100%; height: 100%; object-fit: cover;">
+                </div>
+                <p style="text-align: center; margin-top: 10px;">Florida Realtors Stats</p>
+            </a>
+            </div>
+        </div>
+
+        <!-- March -->
+        <div class="market-report" style="">
+            <h3>March</h3>
+            <div class="previews" style="display: flex; justify-content: space-around;">
+            <a href="https://www.bonitaesterorealtors.com/wp-content/uploads/2022/04/March-2022-Fast-Stats.pdf" target="_blank" style="text-decoration: none;">
+                <div class="preview" style="width: auto; height: 250px;">
+                <img src="https://www.bonitaesterorealtors.com/wp-content/uploads/2024/09/Screenshot_3-9-2024_11401_www.bonitaesterorealtors.com_.jpeg" alt="BER Fast Stats" style="width: 100%; height: 100%; object-fit: cover;">
+                </div>
+                <p style="text-align: center; margin-top: 10px;">BER Fast Stats</p>
+            </a>
+            <a href="https://www.bonitaesterorealtors.com/wp-content/uploads/2022/05/March-2022-FR-Stats.pdf" target="_blank" style="text-decoration: none;">
+                <div class="preview" style="width: auto; height: 250px;">
+                <img src="https://www.bonitaesterorealtors.com/wp-content/uploads/2024/09/Screenshot_3-9-2024_114456_www.bonitaesterorealtors.com_.jpeg" alt="Florida Realtors Stats" style="width: 100%; height: 100%; object-fit: cover;">
+                </div>
+                <p style="text-align: center; margin-top: 10px;">Florida Realtors Stats</p>
+            </a>
+            </div>
+        </div>
+
+    </div>
+
+     <!-- Row containing all three months -->
+     <div class="market-report-row" style="">
+        
+        <!-- January -->
+        <div class="market-report" style="">
+            <h3>April</h3>
+            <div class="previews" style="display: flex; justify-content: space-around;">
+            <a href="https://www.bonitaesterorealtors.com/wp-content/uploads/2022/05/April-2022-Fast-Stats.pdf" target="_blank" style="text-decoration: none;">
+                <div class="preview" style="width: auto; height: 250px;">
+                <img src="https://www.bonitaesterorealtors.com/wp-content/uploads/2024/09/Screenshot_3-9-2024_11401_www.bonitaesterorealtors.com_.jpeg" alt="BER Fast Stats" style="width: 100%; height: 100%; object-fit: cover;">
+                </div>
+                <p style="text-align: center; margin-top: 10px;">BER Fast Stats</p>
+            </a>
+            <a href="https://www.bonitaesterorealtors.com/wp-content/uploads/2022/05/April-2022-FR-Report.pdf" target="_blank" style="text-decoration: none;">
+                <div class="preview" style="width: auto; height: 250px;">
+                <img src="https://www.bonitaesterorealtors.com/wp-content/uploads/2024/09/Screenshot_3-9-2024_114456_www.bonitaesterorealtors.com_.jpeg" alt="Florida Realtors Stats" style="width: 100%; height: 100%; object-fit: cover;">
+                </div>
+                <p style="text-align: center; margin-top: 10px;">Florida Realtors Stats</p>
+            </a>
+            </div>
+        </div>
+
+        <!-- February -->
+        <div class="market-report" style="">
+            <h3>May</h3>
+            <div class="previews" style="display: flex; justify-content: space-around;">
+            <a href="https://www.bonitaesterorealtors.com/wp-content/uploads/2022/06/May-Fast-Stats.pdf" target="_blank" style="text-decoration: none;">
+                <div class="preview" style="width: auto; height: 250px;">
+                <img src="https://www.bonitaesterorealtors.com/wp-content/uploads/2024/09/Screenshot_3-9-2024_11401_www.bonitaesterorealtors.com_.jpeg" alt="BER Fast Stats" style="width: 100%; height: 100%; object-fit: cover;">
+                </div>
+                <p style="text-align: center; margin-top: 10px;">BER Fast Stats</p>
+            </a>
+            </div>
+        </div>
+
+        <!-- March -->
+        <div class="market-report" style="">
+            <h3>June</h3>
+            <div class="previews" style="display: flex; justify-content: space-around;">
+            <a href="https://www.bonitaesterorealtors.com/wp-content/uploads/2022/07/June-2022-Fast-Stats.pdf" target="_blank" style="text-decoration: none;">
+                <div class="preview" style="width: auto; height: 250px;">
+                <img src="https://www.bonitaesterorealtors.com/wp-content/uploads/2024/09/Screenshot_3-9-2024_11401_www.bonitaesterorealtors.com_.jpeg" alt="BER Fast Stats" style="width: 100%; height: 100%; object-fit: cover;">
+                </div>
+                <p style="text-align: center; margin-top: 10px;">BER Fast Stats</p>
+            </a>
+            <a href="https://www.bonitaesterorealtors.com/wp-content/uploads/2022/07/June-2022-FR-Stats.pdf" target="_blank" style="text-decoration: none;">
+                <div class="preview" style="width: auto; height: 250px;">
+                <img src="https://www.bonitaesterorealtors.com/wp-content/uploads/2024/09/Screenshot_3-9-2024_114456_www.bonitaesterorealtors.com_.jpeg" alt="Florida Realtors Stats" style="width: 100%; height: 100%; object-fit: cover;">
+                </div>
+                <p style="text-align: center; margin-top: 10px;">Florida Realtors Stats</p>
+            </a>
+            </div>
+        </div>
+
+    </div>
+
+     <!-- Row containing all three months -->
+     <div class="market-report-row" style="">
+        
+        <!-- January -->
+        <div class="market-report" style="">
+            <h3>July</h3>
+            <div class="previews" style="display: flex; justify-content: space-around;">
+            <a href="https://www.bonitaesterorealtors.com/wp-content/uploads/2022/08/July-2022-Fast-Stats.pdf" target="_blank" style="text-decoration: none;">
+                <div class="preview" style="width: auto; height: 250px;">
+                <img src="https://www.bonitaesterorealtors.com/wp-content/uploads/2024/09/Screenshot_3-9-2024_11401_www.bonitaesterorealtors.com_.jpeg" alt="BER Fast Stats" style="width: 100%; height: 100%; object-fit: cover;">
+                </div>
+                <p style="text-align: center; margin-top: 10px;">BER Fast Stats</p>
+            </a>
+            <a href="https://www.bonitaesterorealtors.com/wp-content/uploads/2022/08/July-2022-FR-Stats.pdf" target="_blank" style="text-decoration: none;">
+                <div class="preview" style="width: auto; height: 250px;">
+                <img src="https://www.bonitaesterorealtors.com/wp-content/uploads/2024/09/Screenshot_3-9-2024_114456_www.bonitaesterorealtors.com_.jpeg" alt="Florida Realtors Stats" style="width: 100%; height: 100%; object-fit: cover;">
+                </div>
+                <p style="text-align: center; margin-top: 10px;">Florida Realtors Stats</p>
+            </a>
+            </div>
+        </div>
+
+        <!-- February -->
+        <div class="market-report" style="">
+            <h3>August</h3>
+            <div class="previews" style="display: flex; justify-content: space-around;">
+            <a href="https://www.bonitaesterorealtors.com/wp-content/uploads/2022/09/August-MR-BonitaSprings-Estero.pdf" target="_blank" style="text-decoration: none;">
+                <div class="preview" style="width: auto; height: 250px;">
+                <img src="https://www.bonitaesterorealtors.com/wp-content/uploads/2024/09/Screenshot_3-9-2024_11401_www.bonitaesterorealtors.com_.jpeg" alt="BER Fast Stats" style="width: 100%; height: 100%; object-fit: cover;">
+                </div>
+                <p style="text-align: center; margin-top: 10px;">BER Fast Stats</p>
+            </a>
+            <a href="https://www.bonitaesterorealtors.com/wp-content/uploads/2022/10/August-2022-FR-Report.pdf" target="_blank" style="text-decoration: none;">
+                <div class="preview" style="width: auto; height: 250px;">
+                <img src="https://www.bonitaesterorealtors.com/wp-content/uploads/2024/09/Screenshot_3-9-2024_114456_www.bonitaesterorealtors.com_.jpeg" alt="Florida Realtors Stats" style="width: 100%; height: 100%; object-fit: cover;">
+                </div>
+                <p style="text-align: center; margin-top: 10px;">Florida Realtors Stats</p>
+            </a>
+            </div>
+        </div>
+
+        <!-- March -->
+        <div class="market-report" style="">
+            <h3>September</h3>
+            <div class="previews" style="display: flex; justify-content: space-around;">
+            <a href="https://www.bonitaesterorealtors.com/wp-content/uploads/2022/10/September-Fast-Stats.pdf" target="_blank" style="text-decoration: none;">
+                <div class="preview" style="width: auto; height: 250px;">
+                <img src="https://www.bonitaesterorealtors.com/wp-content/uploads/2024/09/Screenshot_3-9-2024_11401_www.bonitaesterorealtors.com_.jpeg" alt="BER Fast Stats" style="width: 100%; height: 100%; object-fit: cover;">
+                </div>
+                <p style="text-align: center; margin-top: 10px;">BER Fast Stats</p>
+            </a>
+            <a href="https://www.bonitaesterorealtors.com/wp-content/uploads/2022/11/September-FR-Report.pdf" target="_blank" style="text-decoration: none;">
+                <div class="preview" style="width: auto; height: 250px;">
+                <img src="https://www.bonitaesterorealtors.com/wp-content/uploads/2024/09/Screenshot_3-9-2024_114456_www.bonitaesterorealtors.com_.jpeg" alt="Florida Realtors Stats" style="width: 100%; height: 100%; object-fit: cover;">
+                </div>
+                <p style="text-align: center; margin-top: 10px;">Florida Realtors Stats</p>
+            </a>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Row containing all three months -->
+    <div class="market-report-row" style="">
+            
+        <!-- January -->
+        <div class="market-report" style="">
+            <h3>October</h3>
+            <div class="previews" style="display: flex; justify-content: space-around;">
+            <a href="https://www.bonitaesterorealtors.com/wp-content/uploads/2022/11/BonitaSprings-Estero.pdf" target="_blank" style="text-decoration: none;">
+                <div class="preview" style="width: auto; height: 250px;">
+                <img src="https://www.bonitaesterorealtors.com/wp-content/uploads/2024/09/Screenshot_3-9-2024_11401_www.bonitaesterorealtors.com_.jpeg" alt="BER Fast Stats" style="width: 100%; height: 100%; object-fit: cover;">
+                </div>
+                <p style="text-align: center; margin-top: 10px;">BER Fast Stats</p>
+            </a>
+            <a href="https://www.bonitaesterorealtors.com/wp-content/uploads/2022/11/October-Market-Stats-FR.pdf" target="_blank" style="text-decoration: none;">
+                <div class="preview" style="width: auto; height: 250px;">
+                <img src="https://www.bonitaesterorealtors.com/wp-content/uploads/2024/09/Screenshot_3-9-2024_114456_www.bonitaesterorealtors.com_.jpeg" alt="Florida Realtors Stats" style="width: 100%; height: 100%; object-fit: cover;">
+                </div>
+                <p style="text-align: center; margin-top: 10px;">Florida Realtors Stats</p>
+            </a>
+            </div>
+        </div>
+
+        <!-- February -->
+        <div class="market-report" style="">
+            <h3>November</h3>
+            <div class="previews" style="display: flex; justify-content: space-around;">
+            <a href="https://www.bonitaesterorealtors.com/wp-content/uploads/2022/12/November-Fast-Stats.pdf" target="_blank" style="text-decoration: none;">
+                <div class="preview" style="width: auto; height: 250px;">
+                <img src="https://www.bonitaesterorealtors.com/wp-content/uploads/2024/09/Screenshot_3-9-2024_11401_www.bonitaesterorealtors.com_.jpeg" alt="BER Fast Stats" style="width: 100%; height: 100%; object-fit: cover;">
+                </div>
+                <p style="text-align: center; margin-top: 10px;">BER Fast Stats</p>
+            </a>
+            <a href="https://www.bonitaesterorealtors.com/wp-content/uploads/2023/01/November-2022-FR-Report.pdf" target="_blank" style="text-decoration: none;">
+                <div class="preview" style="width: auto; height: 250px;">
+                <img src="https://www.bonitaesterorealtors.com/wp-content/uploads/2024/09/Screenshot_3-9-2024_114456_www.bonitaesterorealtors.com_.jpeg" alt="Florida Realtors Stats" style="width: 100%; height: 100%; object-fit: cover;">
+                </div>
+                <p style="text-align: center; margin-top: 10px;">Florida Realtors Stats</p>
+            </a>
+            </div>
+        </div>
+
+        <!-- March -->
+        <div class="market-report" style="">
+            <h3>December</h3>
+            <div class="previews" style="display: flex; justify-content: space-around;">
+            <a href="https://www.bonitaesterorealtors.com/wp-content/uploads/2023/01/December-2022-Fast-Stats.pdf" target="_blank" style="text-decoration: none;">
+                <div class="preview" style="width: auto; height: 250px;">
+                <img src="https://www.bonitaesterorealtors.com/wp-content/uploads/2024/09/Screenshot_3-9-2024_11401_www.bonitaesterorealtors.com_.jpeg" alt="BER Fast Stats" style="width: 100%; height: 100%; object-fit: cover;">
+                </div>
+                <p style="text-align: center; margin-top: 10px;">BER Fast Stats</p>
+            </a>
+            <a href="https://www.bonitaesterorealtors.com/wp-content/uploads/2023/01/December-2022-FR-Stats.pdf" target="_blank" style="text-decoration: none;">
+                <div class="preview" style="width: auto; height: 250px;">
+                <img src="https://www.bonitaesterorealtors.com/wp-content/uploads/2024/09/Screenshot_3-9-2024_114456_www.bonitaesterorealtors.com_.jpeg" alt="Florida Realtors Stats" style="width: 100%; height: 100%; object-fit: cover;">
+                </div>
+                <p style="text-align: center; margin-top: 10px;">Florida Realtors Stats</p>
+            </a>
+            </div>
+        </div>
+
+        </div>
+
+    </div>
+  
+
+     <!-- Market Reports Section for 2021 -->
+    <div id="market-reports-2021" class="market-reports-container" style="display: none; flex-direction: column; gap: 20px;">
+        <strong>Year Report</strong>
+
+            <a href="https://www.bonitaesterorealtors.com/wp-content/uploads/2022/02/2021-Market-Detail-Report.pdf">2021 Market Detail Report </a>
+
+            <strong>January</strong>
+
+            <a href="https://www.bonitaesterorealtors.com/wp-content/uploads/2021/02/BonitaSprings-Estero-Jan-2021.pdf">January 2021 Fast Stats </a>
+
+            <a href="https://www.bonitaesterorealtors.com/wp-content/uploads/2021/04/January-2021-Florida-.pdf">January 2021 Florida Realtors Report</a>
+
+            <strong>February </strong>
+
+            <a href="https://bonitaestero.stats.showingtime.com/docs/lmu/x/BonitaSprings-Estero?src=map">February 2021 Fast Stats </a>
+
+            <a href="https://www.bonitaesterorealtors.com/wp-content/uploads/2021/04/February-2021-Florida-Realtors-Report.pdf">February 2021 Florida Realtors Report</a>
+
+            <strong>March</strong>
+
+            <a href="https://www.bonitaesterorealtors.com/wp-content/uploads/2021/04/March-2021-Fast-Stats.pdf">March 2021 Fast Stats</a>
+
+            <a href="https://www.bonitaesterorealtors.com/wp-content/uploads/2021/05/Market-Report-March-2021.pdf">March 2021 Florida Realtors Report</a>
+
+            <strong>April</strong>
+
+            <a href="https://www.bonitaesterorealtors.com/wp-content/uploads/2021/05/April-2021-FastStats.pdf">April 2021 Fast Stats</a>
+
+            <a href="https://www.bonitaesterorealtors.com/wp-content/uploads/2021/06/April-2021-Florida-Realtors-Stats.pdf">April 2021 Florida Realtors Report</a>
+
+            <strong>May </strong>
+
+            <a href="https://www.bonitaesterorealtors.com/wp-content/uploads/2021/06/May-21-Fast-Stats.pdf" target="_blank" rel="noopener">May 2021 Fast Stats </a>
+
+            <a href="https://www.bonitaesterorealtors.com/wp-content/uploads/2021/08/May-2021-FR.pdf">May 2021 Florida Realtors Report</a>
+
+            <strong>June</strong>
+
+            <a href="https://www.bonitaesterorealtors.com/wp-content/uploads/2021/08/June-2021-Fast-Stats.pdf">June 2021 Fast Stats</a>
+
+            <a href="https://www.bonitaesterorealtors.com/wp-content/uploads/2021/08/June-2021-Florida-Realtors-Report.pdf">June 2021 Florida Realtors Report</a>
+
+            <strong>July</strong>
+
+            <a href="https://www.bonitaesterorealtors.com/wp-content/uploads/2021/09/July-Fast-Stats.pdf">July 2021 Fast Stats</a>
+
+            <a href="https://www.bonitaesterorealtors.com/wp-content/uploads/2021/09/July-2021-FR-Stats.pdf">July 2021 Florida Realtors Report</a>
+
+            <strong>August</strong>
+
+            <a href="https://www.bonitaesterorealtors.com/wp-content/uploads/2021/09/Fast-Stats-August-2021.pdf">August 2021 Fast Stats </a>
+
+            <a href="https://www.bonitaesterorealtors.com/wp-content/uploads/2021/09/August-FR.pdf">August 2021 Florida Realtors Report</a>
+
+            <strong>September</strong>
+
+            <a href="https://www.bonitaesterorealtors.com/wp-content/uploads/2021/10/FastStats-September.pdf">September 2021 Fast Stats </a>
+
+            <a href="https://www.bonitaesterorealtors.com/wp-content/uploads/2021/10/September-Florida-Realtors-Report.pdf">September 2021 Florida Realtors Report</a>
+
+            <strong>October</strong>
+
+            <a href="https://www.bonitaesterorealtors.com/wp-content/uploads/2021/12/October-2021.pdf">October 2021 Fast Stats</a>
+
+            <a href="https://www.bonitaesterorealtors.com/wp-content/uploads/2021/11/October-21-stats.pdf" target="_blank" rel="noopener">October 2021 Florida Realtors Report</a>
+
+            <strong>November</strong>
+
+            <a href="https://www.bonitaesterorealtors.com/wp-content/uploads/2021/12/Nov-2021.pdf">November 2021 Florida Realtors Report</a>
+
+            <a href="https://www.bonitaesterorealtors.com/wp-content/uploads/2021/12/BonitaSprings-Estero-1.pdf">November 2021 Fast Stats</a>
+
+            <strong>December</strong>
+
+            <a href="https://www.bonitaesterorealtors.com/wp-content/uploads/2022/01/December-2021-Fast-Stats-1.pdf">December 2021 Fast Stats</a>
+
+            <a href="https://www.bonitaesterorealtors.com/wp-content/uploads/2022/01/December-2021-FR-Report.pdf">December 2021 Florida Realtors Report</a>
+    </div>
+
+    <!-- Market Reports Section for 2020 -->
+    <div id="market-reports-2020" class="market-reports-container" style="display: none; flex-direction: column; gap: 20px;">
+        <strong>January</strong>
+
+            <a href="https://www.bonitaesterorealtors.com/wp-content/uploads/2020/02/January-2020-Florida-Realtors-Market-Report.pdf">January 2020 Florida Realtors Report</a>
+
+            <a href="https://www.bonitaesterorealtors.com/wp-content/uploads/2020/02/Market-Data-Report_BEAR_2020-02-04-06-42-12.pdf">January 2020 Bonita Springs-Estero Market RPR Report</a>
+
+            <strong>February</strong>
+
+            <a href="https://www.bonitaesterorealtors.com/wp-content/uploads/2020/05/February-FR-Stats-.pdf">February 2020 Florida Realtors Report</a>
+
+            <a href="https://www.bonitaesterorealtors.com/wp-content/uploads/2020/03/Market-Data-Report_BEAR_2020-03-04-06-42-13-1.pdf">February 2020 Bonita Springs-Estero Market RPR Report</a>
+
+            <strong>March</strong>
+
+            <a href="https://www.bonitaesterorealtors.com/wp-content/uploads/2020/05/March-FR-Report.pdf">March 2020 Florida Realtors Report</a>
+
+            <a href="https://www.bonitaesterorealtors.com/wp-content/uploads/2020/04/Market-Data-Report_BEAR_2020-04-06-11-27-14.pdf">March 2020 Bonita Springs-Estero Market RPR Report</a>
+
+            <strong>April</strong>
+
+            <a href="https://www.bonitaesterorealtors.com/wp-content/uploads/2020/06/April-2020-Market-Report-FR.pdf">April 2020 Florida Realtors Report</a>
+
+            <a href="https://www.bonitaesterorealtors.com/wp-content/uploads/2020/05/Market-Data-Report_BEAR_2020-05-06-16-00-23.pdf">April 2020 Bonita Springs-Estero Market RPR Report</a>
+
+            <strong>May</strong>
+
+            <a href="https://www.bonitaesterorealtors.com/wp-content/uploads/2020/07/FR-MAY-2020-Report.pdf">May 2020 Florida Realtors Report</a>
+
+            <a href="https://www.bonitaesterorealtors.com/wp-content/uploads/2020/06/May-RPR-Report-.pdf">May 2020 Bonita Springs-Estero Market RPR Report </a>
+
+            <strong>June</strong>
+
+            <a href="https://www.bonitaesterorealtors.com/wp-content/uploads/2020/07/Market-Report-June-2020-1.pdf">June 2020 Bonita Springs-Estero Market RPR Report</a>
+
+            <a href="https://www.bonitaesterorealtors.com/wp-content/uploads/2020/07/June-Showingtime-Stats.pdf">June 2020 Bonita Springs-Estero Market Showingtime Report </a>
+
+            <strong>July </strong>
+
+            <a href="https://www.bonitaesterorealtors.com/wp-content/uploads/2020/08/FR-July-2020-Market-Report.pdf">July 2020 Florida Realtors Report</a>
+
+            <strong>August</strong>
+
+            <a href="https://www.bonitaesterorealtors.com/wp-content/uploads/2020/09/August-2020-FastStats.pdf">August 2020 Bonita Springs-Estero Realtors Market Report</a>
+
+            <a href="https://www.bonitaesterorealtors.com/wp-content/uploads/2020/09/FR-August-2020.pdf">August 2020 Florida Realtors Report</a>
+
+            <strong>September</strong>
+
+            <a href="https://www.bonitaesterorealtors.com/wp-content/uploads/2020/10/Florida-Realtors-September-Report-.pdf">September 2020 Florida Realtor Reports</a>
+
+            <a href="https://www.bonitaesterorealtors.com/wp-content/uploads/2020/10/September-2020-Bonita-Springs-Estero-Market-Report.pdf">September 2020 Bonita Springs-Estero Market Report</a>
+
+            <strong>October </strong>
+
+            <a href="https://www.bonitaesterorealtors.com/wp-content/uploads/2020/12/BonitaSprings-Estero.pdf">October 2020 Bonita Springs-Estero Market Report</a>
+
+            <strong>November</strong>
+
+            <a href="https://www.bonitaesterorealtors.com/wp-content/uploads/2020/12/Nov-2020.pdf">November 2020 Florida Realtors Report</a>
+
+            <a href="https://www.bonitaesterorealtors.com/wp-content/uploads/2020/12/November-2020.pdf">November 2020 Bonita Springs-Estero Realtors Market Report</a>
+
+            <strong>December</strong>
+
+            <a href="https://www.bonitaesterorealtors.com/wp-content/uploads/2021/01/December-2020.pdf">December 2020 Florida Realtors Report</a>
+
+            <a href="https://www.bonitaesterorealtors.com/wp-content/uploads/2021/01/BonitaSprings-Estero.pdf">December 2020 Bonita Springs-Estero Realtors Market Report </a>
+    </div>
+
+    <!-- Market Reports Section for 2019 -->
+    <div id="market-reports-2019" class="market-reports-container" style="display: none; flex-direction: column; gap: 20px;">
+        <strong>December
+        </strong><a href="https://www.bonitaesterorealtors.com/wp-content/uploads/2020/01/Binder1.pdf">December 2019 Florida Realtors Report</a><strong>
+        </strong><a href="https://www.bonitaesterorealtors.com/wp-content/uploads/2020/01/Market-Data-Report_BEAR_2020-01-04-06-42-16.pdf">December 2019 Bonita Springs-Estero Market RPR Report</a>
+        
+        <strong>November
+        </strong><a href="https://www.bonitaesterorealtors.com/wp-content/uploads/2019/12/NOV-FR.pdf">November 2019 Florida Realtors Report</a><strong>
+        </strong><a href="https://www.bonitaesterorealtors.com/wp-content/uploads/2019/12/Market-Data-Report_BEAR_2019-12-04-06-42-20.pdf">November 2019 Bonita Springs-Estero Market RPR Report</a>
+        
+        <strong>October
+        </strong><a href="https://www.bonitaesterorealtors.com/wp-content/uploads/2019/11/FR-OCT.pdf">October 2019 Florida Realtors Report</a>
+        <a href="https://www.bonitaesterorealtors.com/wp-content/uploads/2019/11/Market-Data-Report_BEAR_2019-11-06-15-13-16.pdf">October 2019 Bonita Springs-Estero Market RPR Report</a>
+        
+        <strong>September
+        </strong><a href="https://www.bonitaesterorealtors.com/wp-content/uploads/2019/10/sept-fr.pdf">September 2019 Florida Realtors Report</a><strong>
+        </strong><a href="https://www.bonitaesterorealtors.com/wp-content/uploads/2019/10/marketstats.pdf">September 2019 MarketStats Overview</a>
+        <a href="https://www.bonitaesterorealtors.com/wp-content/uploads/2019/10/Market-Data-Report_BEAR_2019-10-04-14-49-14.pdf">September 2019 Bonita Springs-Estero Market RPR Report</a>
+        
+        <strong>August
+        </strong><a href="https://www.bonitaesterorealtors.com/wp-content/uploads/2019/09/august-fr.pdf">August 2019 Florida Realtors Report</a><strong>
+        </strong><a href="https://www.bonitaesterorealtors.com/wp-content/uploads/2019/09/August-rpr-report.pdf">August 2019 Bonita Springs-Estero Market RPR Report</a>
+        
+        <strong>July
+        </strong><a href="https://www.bonitaesterorealtors.com/wp-content/uploads/2019/08/Binder1.pdf">July 2019 Florida Realtors Report</a>
+        <a href="https://www.bonitaesterorealtors.com/wp-content/uploads/2019/08/Market-Data-Report_BEAR_2019-08-06-09-53-41.pdf">July 2019 Bonita Springs-Estero Market RPR Report</a>
+        
+        <strong>June
+        </strong><a href="https://www.bonitaesterorealtors.com/wp-content/uploads/2019/07/Binder1temp.pdf">June 2019 Florida Realtors Report</a>
+        <a href="https://bonitasprings.wpengine.com/wp-content/uploads/2019/07/Market-Data-Report_BEAR_2019-07-06-07-35-23.pdf">June 2019 Bonita Springs-Estero Market RPR Report</a>
+        
+        <strong>May
+        </strong><a href="https://bonitasprings.wpengine.com/wp-content/uploads/2019/06/fr-june.pdf">May 2019 Florida Realtors Report</a>
+        <a href="https://bonitasprings.wpengine.com/wp-content/uploads/2019/06/MAY-RPR.pdf">May 2019 Bonita Springs-Estero Market RPR Report</a>
+        
+        <strong>April</strong>
+        <a href="https://bonitasprings.wpengine.com/wp-content/uploads/2019/05/April-FR-Stats.pdf">April 2019 Florida Realtors Report</a>
+        <a href="https://bonitasprings.wpengine.com/wp-content/uploads/2019/05/Market-Data-Report_BEAR_2019-05-07-12-39-16.pdf">April 2019 Bonita Springs-Estero Market RPR Report</a>
+        
+        <strong>March
+        </strong><a href="https://bonitasprings.wpengine.com/wp-content/uploads/2019/04/fr-march.pdf">March 2019 Florida Realtors Report</a>
+        <a href="https://bonitasprings.wpengine.com/wp-content/uploads/2019/04/Market-Data-Report_BEAR_2019-04-08-15-19-03.pdf">March 2019 Bonita Springs-Estero Market RPR Report</a>
+        
+        <strong>February 2019</strong>
+        <a href="https://bonitasprings.wpengine.com/wp-content/uploads/2019/03/feb-19.pdf">February 2019 Florida Realtors Report</a>
+        <a href="https://bonitasprings.wpengine.com/wp-content/uploads/2019/03/Market-Data-Report_BEAR_2019-03-04-15-33-23.pdf">February 2019 Bonita Springs-Estero Market RPR Report</a>
+        
+        <strong>January 2019
+        </strong><a href="https://bonitasprings.wpengine.com/wp-content/uploads/2019/02/jan-2019.pdf">January 2019 Florida Realtors Report</a>
+        <a href="https://bonitasprings.wpengine.com/wp-content/uploads/2019/02/Market-Data-Report_BEAR_2019-02-04-15-33-14.pdf">January 2019 Bonita Springs-Estero Market RPR Report</a>
+    </div>
+
+    <!-- Market Reports Section for 2018 -->
+    <div id="market-reports-2018" class="market-reports-container" style="display: none; flex-direction: column; gap: 20px;">
+        <strong>December
+        </strong><a href="https://bonitasprings.wpengine.com/wp-content/uploads/2019/01/DEC-FR.pdf">December Florida Realtors Report</a>
+        <a href="https://bonitasprings.wpengine.com/wp-content/uploads/2019/01/Market-Data-Report_BEAR_2019-01-08-14-13-13.pdf">December 2018 Bonita Springs-Estero Market RPR Report</a>
+        
+        <strong>November
+        </strong><a href="https://bonitasprings.wpengine.com/wp-content/uploads/2018/12/fr-november.pdf">November Florida Realtors Report</a>
+        <a href="https://bonitasprings.wpengine.com/wp-content/uploads/2018/12/Market-Data-Report_BEAR_2018-12-05-17-07-17.pdf">November 2018 Bonita Springs-Estero Market RPR Report</a>
+        
+        <strong>October
+        </strong><a href="https://bonitasprings.wpengine.com/wp-content/uploads/2018/11/Binder1.pdf">October Florida Realtors Report</a>
+        <a href="https://bonitasprings.wpengine.com/wp-content/uploads/2018/11/Market-Data-Report_BEAR_2018-11-09-02-10-30.pdf">October 2018 Bonita Springs-Estero Market RPR Report</a>
+        
+        <strong>September
+        </strong><a href="https://bonitasprings.wpengine.com/wp-content/uploads/2018/10/Sept-FR.pdf">September Florida Realtors Report</a><strong>
+        </strong><a href="https://bonitasprings.wpengine.com/wp-content/uploads/2018/10/BEARMarketOverview-August.pdf">September 2018 Bonita Springs-Estero Market RPR Report</a>
+        
+        <strong>August 2018
+        </strong><a href="https://bonitasprings.wpengine.com/wp-content/uploads/2018/09/FR-August.pdf">August Florida Realtors Report</a>
+        <a href="https://bonitasprings.wpengine.com/wp-content/uploads/2018/09/Market-Data-Report_BEAR_2018-09-07-15-29-15.pdf">August 2018 Bonita Springs-Estero Market RPR Report</a>
+        
+        <strong>July 2018
+        </strong><a href="https://bonitasprings.wpengine.com/wp-content/uploads/2018/08/florida-realtors-july.pdf">July Florida Realtors Report</a>
+        <a href="https://bonitasprings.wpengine.com/wp-content/uploads/2018/08/rpr-date-august.pdf">July 2018 Bonita Springs-Estero Market RPR Report</a>
+        
+        <strong>June 2018
+        </strong><a href="https://bonitasprings.wpengine.com/wp-content/uploads/2018/07/June-BEAROverview.pdf">Bonita Springs-Estero REALTORS Market Overview</a>
+        <a href="https://bonitasprings.wpengine.com/wp-content/uploads/2018/07/FR-JUNE-STATS.pdf">June Florida Realtors Report</a>
+        <a href="https://bonitasprings.wpengine.com/wp-content/uploads/2018/07/Market-Data-Report_BEAR_2018-07-09-04-47-13.pdf">June 2018 Bonita Springs-Estero Market RPR Report</a>
+        
+        <strong>May 2018
+        </strong><a href="https://bonitasprings.wpengine.com/wp-content/uploads/2018/06/June-BEARMarketOverview.pdf">Bonita Springs-Estero REALTORS Market Overview</a><strong>
+        </strong><a href="https://bonitasprings.wpengine.com/wp-content/uploads/2018/06/May-Market-numbers.pdf">May Florida Realtors Report</a>
+        <a href="https://bonitasprings.wpengine.com/wp-content/uploads/2018/06/June-Market-Data.pdf">May 2018 Bonita Springs-Estero Market RPR Report</a>
+        
+        <strong>April 2018
+        </strong><a href="https://bonitasprings.wpengine.com/wp-content/uploads/2018/05/BEAR-Overview-April.pdf">Bonita Springs-Estero REALTORS Market Overview</a><a href="https://bonitasprings.wpengine.com/wp-content/uploads/2018/05/May-FR-Market.pdf">
+        April Florida Realtors Report</a>
+        <a href="https://bonitasprings.wpengine.com/wp-content/uploads/2018/05/Market-Data-Report_BEAR_2018-05-09-07-56-14.pdf">April 2018 Bonita Springs-Estero Market RPR Report</a>
+        
+        <strong>March 2018
+        </strong><a href="https://bonitasprings.wpengine.com/wp-content/uploads/2018/04/march-fr-numbers.pdf">March Florida Realtors Report</a>
+        <a href="https://bonitasprings.wpengine.com/wp-content/uploads/2018/04/Market-Data-Report_BEAR_2018-04-06-04-12-17.pdf">March 2018 Bonita Springs-Estero Market RPR Report</a>
+        
+        <strong>February 2018
+        </strong><a href="/wp-content/uploads/2018/03/Florida-Realtors-February-Report.pdf">February Florida Realtors Report
+        </a><a href="https://bonitasprings.wpengine.com/wp-content/uploads/2018/04/Market-Data-Report_BEAR_2018-03-07-06-01-18.pdf">February 2018 Bonita Springs-Estero Market RPR Report</a>
+        
+        <strong>January 2018
+        </strong><a href="http://wbnbonitarealt.wpengine.com/wp-content/uploads/2018/02/january-2018.pdf">January Florida Realtors Report</a>
+        <a href="http://wbnbonitarealt.wpengine.com/wp-content/uploads/2018/02/Market-Data-Report_BEAR_2018-02-07-16-43-43-1.pdf">January 2018 Bonita Springs-Estero Market RPR Report</a>
+        
+        <a href="http://wbnbonitarealt.wpengine.com/wp-content/uploads/2017/06/2017-Report.pdf">
+        2017 Florida Realtors Report</a>
+    </div>
+
+        <!-- Market Reports Section for 2017 -->
+        <div id="market-reports-2017" class="market-reports-container" style="display: none; flex-direction: column; gap: 20px;">
+            <h3>2017 Market Reports</h3>
+            <strong>December 2017
+            </strong>
+            <ul>
+                 <li><a href="http://wbnbonitarealt.wpengine.com/wp-content/uploads/2017/06/December-Market-Reportr.pdf">December Florida Realtors Report</a></li>
+                 <li><a href="http://wbnbonitarealt.wpengine.com/wp-content/uploads/2018/01/RPR-December.pdf">December Bonita Springs-Estero REALTORS® Market RPR Report</a></li>
+            </ul>
+            <strong>November 2017</strong>
+            <ul>
+                 <li><a href="http://wbnbonitarealt.wpengine.com/wp-content/uploads/2017/12/nov-fr.pdf">November Florida Realtor Report</a></li>
+                 <li><a href="http://wbnbonitarealt.wpengine.com/wp-content/uploads/2017/12/Market-Data-Report_BEAR_2017-12-07-00-50-21-1.pdf">November Bonita Springs-Estero REALTORS® Market RPR Report</a></li>
+            </ul>
+            <strong>October 2017</strong>
+            <ul>
+                 <li><a href="http://wbnbonitarealt.wpengine.com/wp-content/uploads/2017/11/FR-October-2017.pdf">October Florida Realtor Report</a></li>
+                 <li><a href="https://bonitasprings.wpengine.com/wp-content/uploads/2017/06/October-RPR-Report.pdf">October Bonita Springs-Estero REALTORS® Market RPR Report</a></li>
+                 <li><a href="https://bonitasprings.wpengine.com/wp-content/uploads/2017/11/3rd-quarter-stats.pdf">Third Quarter Florida Realtor Report</a></li>
+            </ul>
+            <strong>September</strong>
+            <ul>
+                 <li><a href="http://wbnbonitarealt.wpengine.com/market-reports-2/fr-report-sept-2/" rel="attachment wp-att-8445">September Florida Realtors</a><a href="http://wbnbonitarealt.wpengine.com/market-reports-2/fr-report-sept-2/" rel="attachment wp-att-8445"> Report</a></li>
+            </ul>
+            <strong>August</strong>
+            <ul>
+                 <li><a href="http://wbnbonitarealt.wpengine.com/wp-content/uploads/2017/12/august-17-3.pdf">August Florida Realtors Report </a></li>
+            </ul>
+            <strong>July</strong>
+            <ul>
+                 <li><a href="http://wbnbonitarealt.wpengine.com/wp-content/uploads/2017/12/july-fr-1.pdf">July Florida Realtors Market Report</a></li>
+            </ul>
+            <strong>June</strong>
+            <ul>
+                 <li><a href="https://bonitasprings.wpengine.com/wp-content/uploads/2017/06/june-2017-rpr.pdf">June Bonita Springs-Estero REALTORS® Market RPR Report</a></li>
+            </ul>
+            <strong>May</strong>
+            <ul>
+                 <li><a href="http://wbnbonitarealt.wpengine.com/market-reports-2/may-fr-report/" target="_blank" rel="attachment wp-att-8444 noopener noreferrer">May Florida Realtor Market Report</a></li>
+            </ul>
+            <strong>April 2017</strong>
+            <ul>
+                 <li><a href="https://bonitasprings.wpengine.com/wp-content/uploads/2017/06/april-report.pdf">April Florida Realtor Market Report</a></li>
+                 <li><a href="https://bonitasprings.wpengine.com/wp-content/uploads/2017/06/Market-Data-April.pdf">April Bonita Springs-Estero REALTORS® Market RPR Report</a></li>
+            </ul>
+            <strong>March 2017</strong>
+            <ul>
+                 <li><a href="http://wbnbonitarealt.wpengine.com/wp-content/uploads/2017/06/March-FR-Report.pdf">March Florida Realtor Market Report</a></li>
+                 <li><a href="http://wbnbonitarealt.wpengine.com/wp-content/uploads/2017/06/FR-March.pdf">March Bonita Springs-Estero REALTORS® Market RPR Report</a></li>
+            </ul>
+            <strong>February 2017</strong>
+            <ul>
+                 <li><a href="http://wbnbonitarealt.wpengine.com/wp-content/uploads/2017/06/BEARMarketOverview.pdf">February Market Overview Report</a></li>
+                 <li><a href="http://wbnbonitarealt.wpengine.com/wp-content/uploads/2017/06/Feb-Association-Market-Data-Report_BEAR-2015-03-03-1.pdf">February Market Data Report</a></li>
+                 <li><a href="http://wbnbonitarealt.wpengine.com/wp-content/uploads/2017/06/FR-Feb-Report.pdf">February Bonita Springs-Estero REALTORS®Market RPR Report</a></li>
+            </ul>
+            <strong>January 2017</strong>
+            <ul>
+                 <li><a href="http://wbnbonitarealt.wpengine.com/wp-content/uploads/2017/06/BEARMarketOverviefebw.pdf">January Market Overview Report</a></li>
+                 <li><a href="http://wbnbonitarealt.wpengine.com/wp-content/uploads/2017/06/FR-January-Report.pdf">January Florida Realtor Market Report</a></li>
+                 <li><a href="http://wbnbonitarealt.wpengine.com/wp-content/uploads/2017/06/FR-2017-Report.pdf"> Bonita Springs-Estero REALTORS® Market RPR Report for year 2016</a></li>
+                 <li><a href="https://bonitasprings.wpengine.com/wp-content/uploads/2017/06/Quarter-42.pdf"> Bonita Springs-Estero REALTORS® Market RPR Report Quarter 4 2016</a></li>
+            </ul>
+        </div>
+
+    <!-- Market Reports Section for 2016 -->
+    <div id="market-reports-2016" class="market-reports-container" style="display: none; flex-direction: column; gap: 20px;">
+        <h3>2016 Market Reports</h3>
+            <strong>December 2016</strong>
+            <ul>
+                <li style="list-style-type: none;">
+            <ul>
+                <li style="list-style-type: none;">
+            <ul>
+                <li><a href="http://wbnbonitarealt.wpengine.com/wp-content/uploads/2017/06/December-FR-Report2.pdf">December Florida Realtor Market Report</a></li>
+                <li><a href="http://wbnbonitarealt.wpengine.com/wp-content/uploads/2017/06/RPR-Report-December.pdf">December Bonita Springs-Estero REALTORS® Market RPR Report</a></li>
+            </ul>
+            </li>
+            </ul>
+            </li>
+            </ul>
+            <strong>November 2016</strong>
+            <ul>
+                <li style="list-style-type: none;">
+            <ul>
+                <li style="list-style-type: none;">
+            <ul>
+                <li><a href="http://wbnbonitarealt.wpengine.com/wp-content/uploads/2017/06/FR-November.pdf">November Florida Realtor Market Report</a></li>
+                <li><a href="http://wbnbonitarealt.wpengine.com/wp-content/uploads/2017/06/Market-Data-Report_BEAR_2016-12-06-00-31-05.pdf">November Bonita Springs-Estero REALTORS® Market RPR Report</a></li>
+            </ul>
+            </li>
+            </ul>
+            </li>
+            </ul>
+            <strong>October 2016</strong>
+            <ul>
+                <li style="list-style-type: none;">
+            <ul>
+                <li style="list-style-type: none;">
+            <ul>
+                <li><a href="http://wbnbonitarealt.wpengine.com/wp-content/uploads/2017/06/October-FR-Report.pdf">October Florida Realtor Market Report</a></li>
+                <li><a href="http://wbnbonitarealt.wpengine.com/wp-content/uploads/2017/06/October-RPR-Report.pdf">October Bonita Springs-Estero REALTORS® Market RPR Report</a></li>
+            </ul>
+            </li>
+            </ul>
+            </li>
+            </ul>
+            <strong>September 2016</strong>
+            <ul>
+                <li style="list-style-type: none;">
+            <ul>
+                <li style="list-style-type: none;">
+            <ul>
+                <li><a href="http://wbnbonitarealt.wpengine.com/wp-content/uploads/2017/06/Market-Data-Report_BEAR_2016-10-06-05-07-58.pdf">September Florida Realtor Market Report</a></li>
+                <li><a href="http://wbnbonitarealt.wpengine.com/wp-content/uploads/2017/06/September-Monthly-Report.pdf">September Bonita Springs-Estero REALTORS® Market RPR Report</a></li>
+            </ul>
+            </li>
+            </ul>
+            </li>
+            </ul>
+            <strong>August 2016</strong>
+            <ul>
+                <li style="list-style-type: none;">
+            <ul>
+                <li style="list-style-type: none;">
+            <ul>
+                <li><a href="http://wbnbonitarealt.wpengine.com/wp-content/uploads/2017/06/August-stats.pdf">August Florida Realtor Market Report</a></li>
+                <li><a href="http://wbnbonitarealt.wpengine.com/wp-content/uploads/2017/06/Market-Data-Report_BEAR_2016-09-09-01-09-23.pdf">August Bonita Springs-Estero REALTORS® Market RPR Report</a></li>
+            </ul>
+            </li>
+            </ul>
+            </li>
+            </ul>
+            <strong>July 2016</strong>
+            <ul>
+                <li style="list-style-type: none;">
+            <ul>
+                <li style="list-style-type: none;">
+            <ul>
+                <li><a href="http://wbnbonitarealt.wpengine.com/wp-content/uploads/2017/06/July-FR-Reports.pdf">July Florida Realtor Market Report</a></li>
+                <li><a href="http://wbnbonitarealt.wpengine.com/wp-content/uploads/2017/06/Market-Data-Report_BEAR_2016-08-08-01-04-26.pdf">July Bonita Springs-Estero REALTORS® Market RPR Report</a></li>
+            </ul>
+            </li>
+            </ul>
+            </li>
+            </ul>
+            <strong>June 2016</strong>
+            <ul>
+                <li style="list-style-type: none;">
+            <ul>
+                <li style="list-style-type: none;">
+            <ul>
+                <li><a href="http://wbnbonitarealt.wpengine.com/wp-content/uploads/2017/06/June-Market-report.pdf">June Florida Realtor Market Report</a></li>
+                <li><a href="http://wbnbonitarealt.wpengine.com/wp-content/uploads/2017/06/Market-Data-Report_BEAR_2016-07-07-01-00-21.pdf">June Bonita Springs-Estero REALTORS® Market RPR Report</a></li>
+            </ul>
+            </li>
+            </ul>
+            </li>
+            </ul>
+            <strong>May 2016</strong>
+            <ul>
+                <li style="list-style-type: none;">
+            <ul>
+                <li style="list-style-type: none;">
+            <ul>
+                <li><a href="http://wbnbonitarealt.wpengine.com/wp-content/uploads/2017/06/May-2016-FR.pdf">May Florida Realtor Market Report</a></li>
+                <li><a href="http://wbnbonitarealt.wpengine.com/wp-content/uploads/2017/06/Market-Data-Report_BEAR_2016-06-09-06-02-17.pdf">May Bonita Springs-Estero REALTORS® Market RPR Report</a></li>
+            </ul>
+            </li>
+            </ul>
+            </li>
+            </ul>
+            <strong>April 2016</strong>
+            <ul>
+                <li style="list-style-type: none;">
+            <ul>
+                <li style="list-style-type: none;">
+            <ul>
+                <li><a href="http://wbnbonitarealt.wpengine.com/wp-content/uploads/2017/06/April-2016-FR.pdf">April Florida Realtor Market Report</a></li>
+                <li><a href="http://wbnbonitarealt.wpengine.com/wp-content/uploads/2017/06/rpr-april.pdf">April Bonita Springs-Estero REALTORS® Market RPR Report</a></li>
+            </ul>
+            </li>
+            </ul>
+            </li>
+            </ul>
+            <strong>March 2016</strong>
+            <ul>
+                <li style="list-style-type: none;">
+            <ul>
+                <li style="list-style-type: none;">
+            <ul>
+                <li><a href="http://wbnbonitarealt.wpengine.com/wp-content/uploads/2017/06/FR-March.pdf">March Florida Realtor Market Report</a></li>
+            </ul>
+            </li>
+            </ul>
+            </li>
+            </ul>
+            <strong>February 2016</strong>
+            <ul>
+                <li style="list-style-type: none;">
+            <ul>
+                <li style="list-style-type: none;">
+            <ul>
+                <li><a href="http://wbnbonitarealt.wpengine.com/wp-content/uploads/2017/06/February-FR-Report.pdf">February Florida Realtor Market Report</a></li>
+                <li><a href="http://wbnbonitarealt.wpengine.com/wp-content/uploads/2017/06/Association-Market-Data-Report_BEAR-2016-03-07.pdf">February Bonita Springs-Estero REALTORS® Market RPR Report</a></li>
+            </ul>
+            </li>
+            </ul>
+            </li>
+            </ul>
+            <strong>January 2016</strong>
+            <ul>
+                <li style="list-style-type: none;">
+            <ul>
+                <li style="list-style-type: none;">
+            <ul>
+                <li><a href="http://wbnbonitarealt.wpengine.com/wp-content/uploads/2017/12/January-2016-FAR-2.pdf">January Florida Realtor Market Report</a></li>
+                <li><a href="http://wbnbonitarealt.wpengine.com/wp-content/uploads/2017/06/Association-Market-Data-Report_BEAR-2016-02-07.pdf">January Bonita Springs-Estero REALTORS® Market RPR Report</a></li>
+            </ul>
+            </li>
+            </ul>
+            </li>
+            </ul>
+    </div>
+    
+    <!-- Market Reports Section for 2015 -->
+    <div id="market-reports-2015" class="market-reports-container" style="display: none; flex-direction: column; gap: 20px;">
+        <h3>2015 Market Reports</h3>
+            <ul>
+                <li style="list-style-type: none;">
+            <ul>
+                <li style="list-style-type: none;">
+            <ul>
+                <li><a href="http://wbnbonitarealt.wpengine.com/wp-content/uploads/2017/06/January-2015-Reports-1.pdf">2015 Florida Realtor Market Report</a></li>
+                <li><a href="http://wbnbonitarealt.wpengine.com/wp-content/uploads/2017/06/4th-quarter.pdf">2015 Quarterly Florida Realtor Market Report</a></li>
+            </ul>
+            </li>
+            </ul>
+            </li>
+            </ul>
+            <strong>December 2015</strong>
+            <ul>
+                <li style="list-style-type: none;">
+            <ul>
+                <li style="list-style-type: none;">
+            <ul>
+                <li><a href="http://wbnbonitarealt.wpengine.com/wp-content/uploads/2017/06/December-Florida-Realtor-Market-Report.pdf">December Florida Realtor Market Report</a></li>
+                <li><a href="http://wbnbonitarealt.wpengine.com/wp-content/uploads/2017/06/Association-Market-Data-Report_BEAR-2016-01-04-1.pdf">December Bonita Springs-Estero REALTORS® Market RPR Report</a></li>
+            </ul>
+            </li>
+            </ul>
+            </li>
+            </ul>
+            <strong>November 2015</strong>
+            <ul>
+                <li style="list-style-type: none;">
+            <ul>
+                <li style="list-style-type: none;">
+            <ul>
+                <li><a href="http://wbnbonitarealt.wpengine.com/wp-content/uploads/2017/06/Nov-2015-BEAR-Market-Details-1.pdf">November Florida Realtor Market Report</a></li>
+                <li><a href="http://wbnbonitarealt.wpengine.com/wp-content/uploads/2017/06/Association-Market-Data-Report_BEAR-2015-12-04-1.pdf">November Bonita Springs-Estero REALTORS® Market RPR Report</a></li>
+            </ul>
+            </li>
+            </ul>
+            </li>
+            </ul>
+            <strong>October 2015</strong>
+            <ul>
+                <li style="list-style-type: none;">
+            <ul>
+                <li style="list-style-type: none;">
+            <ul>
+                <li><a href="http://wbnbonitarealt.wpengine.com/wp-content/uploads/2017/06/BEAR-Market-Report-October.pdf">October Florida Realtor Market Report</a></li>
+                <li><a href="http://wbnbonitarealt.wpengine.com/wp-content/uploads/2017/06/Association-Market-Data-Report_BEAR-2015-11-06.pdf">October Bonita Springs-Estero REALTORS® Market RPR Report</a></li>
+            </ul>
+            </li>
+            </ul>
+            </li>
+            </ul>
+            <strong>September 2015</strong>
+            <ul>
+                <li style="list-style-type: none;">
+            <ul>
+                <li style="list-style-type: none;">
+            <ul>
+                <li><a href="http://wbnbonitarealt.wpengine.com/wp-content/uploads/2017/06/Sept-Residential-Market-Stats-1.pdf">September Florida Realtor Market Report</a></li>
+                <li><a href="http://wbnbonitarealt.wpengine.com/wp-content/uploads/2017/06/Association-Market-Data-Report_BEAR-2015-10-05.pdf">September Bonita Springs-Estero REALTORS® Market RPR Report</a></li>
+            </ul>
+            </li>
+            </ul>
+            </li>
+            </ul>
+            <strong>August 2015</strong>
+            <ul>
+                <li style="list-style-type: none;">
+            <ul>
+                <li style="list-style-type: none;">
+            <ul>
+                <li><a href="http://wbnbonitarealt.wpengine.com/wp-content/uploads/2017/06/Florida-Market-Report-August-2015-1.pdf">August Florida Realtor Market Report</a></li>
+                <li><a href="http://wbnbonitarealt.wpengine.com/wp-content/uploads/2017/06/Association-Market-Data-Report_BEAR-2015-09-06-1.pdf">August Bonita Springs-Estero REALTORS® Market RPR Report</a></li>
+            </ul>
+            </li>
+            </ul>
+            </li>
+            </ul>
+            <strong>July 2015</strong>
+            <ul>
+                <li style="list-style-type: none;">
+            <ul>
+                <li style="list-style-type: none;">
+            <ul>
+                <li><a href="http://wbnbonitarealt.wpengine.com/wp-content/uploads/2017/06/July-2015-Monthly-Market-Report.pdf">July Florida Realtor Market Report</a></li>
+                <li><a href="http://wbnbonitarealt.wpengine.com/wp-content/uploads/2017/06/Association-Market-Data-Report_BEAR-2015-08-10.pdf">July Bonita Springs-Estero REALTORS® Market RPR Report</a></li>
+            </ul>
+            </li>
+            </ul>
+            </li>
+            </ul>
+            <strong>June 2015</strong>
+            <ul>
+                <li style="list-style-type: none;">
+            <ul>
+                <li style="list-style-type: none;">
+            <ul>
+                <li><a href="http://wbnbonitarealt.wpengine.com/wp-content/uploads/2017/06/BEAR-June-Florida-Realtor-Report.pdf">June Florida Realtor Market Report</a></li>
+                <li><a href="http://wbnbonitarealt.wpengine.com/wp-content/uploads/2017/06/Association-Market-Data-Report_BEAR-2015-07-05-1.pdf">June Bonita Springs-Estero REALTORS® Market RPR Report</a></li>
+            </ul>
+            </li>
+            </ul>
+            </li>
+            </ul>
+            <strong>May 2015</strong>
+            <ul>
+                <li style="list-style-type: none;">
+            <ul>
+                <li style="list-style-type: none;">
+            <ul>
+                <li><a href="http://wbnbonitarealt.wpengine.com/wp-content/uploads/2017/06/Lee-County-Market-Report.pdf">May Florida Realtor Market Report</a></li>
+                <li><a href="http://wbnbonitarealt.wpengine.com/wp-content/uploads/2017/06/Association-Market-Data-Report_BEAR-2015-06-08.pdf">May Bonita Springs-Estero REALTORS® Market RPR Report</a></li>
+            </ul>
+            </li>
+            </ul>
+            </li>
+            </ul>
+            <strong>April 2015</strong>
+            <ul>
+                <li style="list-style-type: none;">
+            <ul>
+                <li style="list-style-type: none;">
+            <ul>
+                <li><a href="http://wbnbonitarealt.wpengine.com/wp-content/uploads/2017/06/BEAR-FR-Market-Report-April-2015-1.pdf">April Florida Realtor Market Report</a></li>
+                <li><a href="http://wbnbonitarealt.wpengine.com/wp-content/uploads/2017/06/Association-Market-Data-Report_BEAR-2015-05-04-1.pdf">April Bonita Springs-Estero REALTORS® Market RPR Report</a></li>
+            </ul>
+            </li>
+            </ul>
+            </li>
+            </ul>
+            <strong>March 2015</strong>
+            <ul>
+                <li style="list-style-type: none;">
+            <ul>
+                <li style="list-style-type: none;">
+            <ul>
+                <li><a href="http://wbnbonitarealt.wpengine.com/wp-content/uploads/2017/06/March-2015-FR-Report.pdf">March Florida Realtor Market Report</a></li>
+                <li><a href="http://wbnbonitarealt.wpengine.com/wp-content/uploads/2017/06/ListHub-Syndication-Report-March-2015-1.pdf">March  ListHub Syndication Report</a></li>
+                <li><a href="http://wbnbonitarealt.wpengine.com/wp-content/uploads/2017/06/Association-Market-Data-Report_BEAR-2015-04-07-2.pdf">March Bonita Springs-Estero REALTORS® Market RPR Report</a></li>
+            </ul>
+            </li>
+            </ul>
+            </li>
+            </ul>
+            <strong>February 2015</strong>
+            <ul>
+                <li style="list-style-type: none;">
+            <ul>
+                <li style="list-style-type: none;">
+            <ul>
+                <li><a href="http://wbnbonitarealt.wpengine.com/wp-content/uploads/2017/06/Feb-2015-Market-Report-1.pdf">February Florida Realtor Market Report</a></li>
+                <li><a href="http://wbnbonitarealt.wpengine.com/wp-content/uploads/2017/06/Feb-Association-Market-Data-Report_BEAR-2015-03-03.pdf">February Bonita Springs-Estero REALTORS® Market RPR Report</a></li>
+            </ul>
+            </li>
+            </ul>
+            </li>
+            </ul>
+            <strong>January 2015</strong>
+            <ul>
+                <li style="list-style-type: none;">
+            <ul>
+                <li style="list-style-type: none;">
+            <ul>
+                <li><a href="http://wbnbonitarealt.wpengine.com/wp-content/uploads/2017/06/January-2015-Reports.pdf">January Florida Realtor Market Report</a></li>
+                <li><a href="http://wbnbonitarealt.wpengine.com/wp-content/uploads/2017/06/Jan-2015.pdf">January Bonita Springs-Estero REALTORS® Market RPR Report</a></li>
+            </ul>
+            </li>
+            </ul>
+            </li>
+            </ul>
+    </div>
+
+    <!-- Market Reports Section for PR -->
+    <div id="market-reports-PR" class="market-reports-container" style="display: none; flex-direction: column; gap: 20px;">
+        <h3>Press Releases</h3>
+            <strong>2024</strong>
+            <ul>
+                <li><a href="https://www.bonitaesterorealtors.com/wp-content/uploads/2024/06/BER-June6.24.24.pdf">June 2024: Bonita Springs and Estero Broker Brace for Strong Summer Spike in Inventory Topples Trends</a></li>
+                <li><a href="https://www.bonitaesterorealtors.com/wp-content/uploads/2024/04/March-PR-.pdf">April 2024: Local Real Estate Buyer-Seller Dynamic Change Working with Real Estate Agents More Powerful than Before</a></li>
+                <li><a href="https://www.bonitaesterorealtors.com/wp-content/uploads/2024/01/BER-2023.pdf">January: Bonita Springs- Estero Real Estate Market was both strong and challenging in 2023 reflecting the market returning to “normal”</a></li>
+            </ul>
+            <strong>2023</strong>
+            <ul>
+                <li><a href="https://www.bonitaesterorealtors.com/wp-content/uploads/2023/12/BER-Nov.-Stats-Release-w-SK-12-26-edits.pdf">December: <span class="TextRun MacChromeBold SCXW228332256 BCX8" lang="EN" xml:lang="EN" data-contrast="auto"><span class="NormalTextRun SCXW228332256 BCX8">Bonita Springs- Estero Real Estate Market shows a strong end to 2023</span></span><span class="EOP SCXW228332256 BCX8" data-ccp-props="{&quot;201341983&quot;:0,&quot;335551550&quot;:2,&quot;335551620&quot;:2,&quot;335559740&quot;:480}"> </span></a></li>
+                <li><a href="https://www.bonitaesterorealtors.com/wp-content/uploads/2023/10/October-Press-Release.pdf">October: First signs of season in our Real Estate Market</a></li>
+                <li><a href="https://www.bonitaesterorealtors.com/wp-content/uploads/2023/09/FOR-IMMEDIATE-RELEASE.pdf">August: If the price isn’t fit it will sit - <em style="color: var(--wpex-text-2); font-family: var(--wpex-body-font-family, var(--wpex-font-sans)); font-size: var(--wpex-body-font-size, 13px);">Improperly priced properties are dragging down the market with longer selling cycles and more price adjustments</em></a></li>
+                <li><a href="https://www.bonitaesterorealtors.com/wp-content/uploads/2023/09/Final-BER-July-Stats-Final.pdf">July: Southwest Florida Market Is Experiencing Some Unusual Trends This Summer</a></li>
+                <li><a href="https://www.bonitaesterorealtors.com/wp-content/uploads/2023/04/BER-April-PR.pdf">April 2023: The Bonita Springs and Estero Real Estate Market 6 months post Ian -<em style="color: var(--wpex-text-2); font-family: var(--wpex-body-font-family, var(--wpex-font-sans)); font-size: var(--wpex-body-font-size, 13px);">Where we are and where we are headed</em></a></li>
+                <li><a href="https://www.bonitaesterorealtors.com/wp-content/uploads/2023/04/March-PR.pdf">March 2023: How to ensure your future home is not a compromise Local Brokers encourage buyers to not wait in buying a home</a></li>
+                <li><a href="https://www.bonitaesterorealtors.com/wp-content/uploads/2023/02/BER-Jan-Press-Release.pdf">January 2023: The SWFL Real Estate Market; Are we Back to Normal yet - <em style="color: var(--wpex-text-2); font-family: var(--wpex-body-font-family, var(--wpex-font-sans)); font-size: var(--wpex-body-font-size, 13px);">The Real Estate Market is Better than you think</em></a></li>
+            </ul>
+            <strong>2022</strong>
+            <ul>
+                <li><a href="https://www.bonitaesterorealtors.com/wp-content/uploads/2022/01/BER-PR-Jan-22.pdf" target="_blank" rel="noopener">January 2022: 2021 Year End Shows 49 Percent Increase in Closed Sales in Bonita Springs and Estero</a></li>
+                <li><a href="https://www.bonitaesterorealtors.com/wp-content/uploads/2022/03/BER-PR-Feb-2249.pdf">February 2022: Current Demand, Cash Sales and Appraisals Are Driving New Market Home Values in Bonita Springs and Estero</a></li>
+                <li><a href="https://www.bonitaesterorealtors.com/wp-content/uploads/2022/03/BER-PR-Mar-22.pdf">March 2022: Area Brokers Advise Buyers &amp; Sellers of a Demanding Market; Buyer Interest Continues to Dominate Bonita Springs and Estero</a></li>
+                <li><a href="https://www.bonitaesterorealtors.com/wp-content/uploads/2022/05/April-2022-PR.pdf">April 2022: Bonita Springs Estero trends are no longer a one and done market for most</a></li>
+                <li><a href="https://www.bonitaesterorealtors.com/wp-content/uploads/2022/05/May-PR.pdf">May 2022: Bonita Springs, Estero real estate markets show signs of stabilizing</a></li>
+                <li><a href="https://www.bonitaesterorealtors.com/wp-content/uploads/2022/07/June-Release-BER40.pdf">June 2022: Local brokers point realtors and buyers to signs of the market normalizing</a></li>
+                <li><a href="https://www.bonitaesterorealtors.com/wp-content/uploads/2022/09/August-2022-MR.pdf">August 2022: <span style="color: black;">Positive Factors Affecting the Bonita Springs- Estero Real Estate Market</span></a></li>
+                <li><a href="https://www.bonitaesterorealtors.com/wp-content/uploads/2022/10/Real-Estate-Recession-Not-the-Case-in-SWFL-.pdf">September 2022: Real Estate Recession? - Not in SWFL!</a></li>
+                <li><a href="https://www.bonitaesterorealtors.com/wp-content/uploads/2022/11/October-2022-Press-Release.pdf">October 2022: Hurricane Ian's Impact on the Bonita-Springs Estero Real Estate Market</a></li>
+                <li><a href="https://www.bonitaesterorealtors.com/wp-content/uploads/2022/12/Nov.-BER-release.pdf">November 2022: In this Strong Market, Ian Damaged Homes make Buying/Selling Risky without a Realtor</a></li>
+                <li><a href="https://www.bonitaesterorealtors.com/wp-content/uploads/2023/01/BER-December-Release.pdf">December 2022: The Continued Effects of Hurricane Ian on our Real Estate Market or the Lack thereof</a></li>
+            </ul>
+            <strong>2021</strong>
+            <ul>
+                <li><a href="https://www.bonitaesterorealtors.com/wp-content/uploads/2021/12/December-2021-PR.pdf" target="_blank" rel="noopener">December 2021: Area Brokers Urge Sellers to List Now in Bonita Springs and Estero</a></li>
+                <li><a href="https://www.bonitaesterorealtors.com/wp-content/uploads/2021/12/BER-PR-Nov-2192.pdf" target="_blank" rel="noopener">November 2021: New Listings Come to Market While Buyer Interest Remains High in Bonita Springs and Estero</a></li>
+                <li><a href="https://www.bonitaesterorealtors.com/wp-content/uploads/2021/10/BER-PR-Oct-2187.pdf" target="_blank" rel="noopener">October 2021: Buyers Still in the Market, But Some Sellers Leaving Money on the Table</a></li>
+                <li><a href="https://www.bonitaesterorealtors.com/wp-content/uploads/2021/10/BER-PR-Sept-2153.pdf" target="_blank" rel="noopener">September 2021: Steady Buyer Demand Still Present in Bonita Springs &amp; Estero; Area Brokers Address ‘Bubble’ Concerns</a></li>
+                <li><a href="https://www.bonitaesterorealtors.com/wp-content/uploads/2021/10/BER-PR-Aug-2165.pdf" target="_blank" rel="noopener">August 2021: Now is the Time to Sell in Bonita Springs and Estero</a></li>
+                <li><a href="https://www.bonitaesterorealtors.com/wp-content/uploads/2021/12/BER-PR-July-2123.pdf" target="_blank" rel="noopener">July 2021: Bonita Springs and Estero Continues to Rank High Across the NE and Midwest U.S. for Homebuyer Desirability</a></li>
+                <li><a href="https://www.bonitaesterorealtors.com/wp-content/uploads/2021/06/BER-PR-June-219.pdf">June 2021: Buyer ‘Frenzy’ Levels Off, but High Demand Still Outpacing Available Inventory in Bonita Springs and Estero</a></li>
+                <li><a href="https://www.bonitaesterorealtors.com/wp-content/uploads/2021/05/BER-PR-May-2134.pdf">May 2021: Buyer Demand Still ‘Very Demanding’ in Bonita Springs and Estero Residential Real Estate Market</a></li>
+                <li><a href="https://www.bonitaesterorealtors.com/wp-content/uploads/2021/04/BER-PR-Apr-21.pdf">April 2021: Closings Increase as Inventory Decreases: Area Brokers Advise Buyers and Sellers to Remain Persistent</a></li>
+                <li><a href="https://www.bonitaesterorealtors.com/wp-content/uploads/2021/03/BER-PR-Mar-2184.pdf">March 2021: No Slowdown in Buyer Demand for the Bonita Springs and Estero Housing Market</a></li>
+                <li><a href="https://www.bonitaesterorealtors.com/wp-content/uploads/2021/02/February-2021.docx">February 2021: Record-breaking Online Buyer Search Result Views for Bonita Springs and Estero Housing Market</a></li>
+                <li><a href="https://www.bonitaesterorealtors.com/wp-content/uploads/2021/01/BER-PR-Jan-21.pdf">January 2021: Bonita Springs and Estero Housing Markets Finish on a High Note in 2020</a></li>
+            </ul>
+            <strong>2020</strong>
+            <ul>
+                <li><a href="https://www.bonitaesterorealtors.com/wp-content/uploads/2020/12/BER-PR-Dec-20.pdf">December 2020: Area Brokers Advise Resale Home Buyers to Move Fast in Bonita Springs and Estero</a></li>
+                <li><a href="https://www.bonitaesterorealtors.com/wp-content/uploads/2020/12/BER-PR-Nov-2020.docx">November 2020: Buyer Demand for Homes in Bonita Springs/Estero Remains High</a></li>
+                <li><a href="https://www.bonitaesterorealtors.com/wp-content/uploads/2020/10/BER-PR-Oct-20.docx">October 2020:Buyer Desirability and Demand Continue in Bonita Springs and Estero; Sellers Urged to List Due to Low Inventory</a></li>
+                <li><a href="https://www.bonitaesterorealtors.com/wp-content/uploads/2020/08/BER-PR-Aug-20.docx">August 2020: Buyer Desirability Increases, Fueling Home Sales for Bonita Springs and Estero </a></li>
+                <li><a href="https://www.bonitaesterorealtors.com/wp-content/uploads/2020/08/BER-PR-July-20.docx">July 2020: Increased Buyer Demand in Bonita Springs and Estero is Outpacing Available Inventory</a></li>
+                <li><a href="https://www.bonitaesterorealtors.com/wp-content/uploads/2020/08/BER-PR-June-20.docx">June 2020: Bonita Springs and Estero Residential Real Estate Market Seeing a Swift Rebound from Short-Term Virus Effects</a></li>
+                <li><a href="https://www.bonitaesterorealtors.com/wp-content/uploads/2020/08/BER-PR-May-20.docx">May 2020: Bonita Springs and Estero Show Market Resiliency as REALTORS® Continue Serving Buyers &amp; Sellers</a></li>
+                <li><a href="https://www.bonitaesterorealtors.com/wp-content/uploads/2020/08/BER-PR-Apr-20.docx">April 2020: Residential Real Estate Market in Bonita Springs and Estero Closes an Active Q1 and Remains Open for Business</a></li>
+                <li><a href="https://www.bonitaesterorealtors.com/wp-content/uploads/2020/03/BER-PR-Mar-20.pdf">March 2020: Real Estate Market Holding Strong in Bonita Springs and Estero Despite COVID-19</a></li>
+                <li><a href="https://www.bonitaesterorealtors.com/wp-content/uploads/2020/02/Continued-Market-Sustainability-Encourage-Healthy-Buyer-Demand-in-Bonita-Springs-and-Estero.pdf">January 2020: Continued Market Sustainability Encourage Healthy Buyer Demand in Bonita Springs and Estero</a></li>
+            </ul>
+            <strong>2019</strong>
+            <ul>
+                <li><a href="https://www.bonitaesterorealtors.com/wp-content/uploads/2020/01/BER-PR-Jan-20.pdf">December 2019: Bonita Springs and Estero Closes 2019 as a Healthy Market; January 2020 Poised for Success</a></li>
+                <li><a href="https://www.bonitaesterorealtors.com/wp-content/uploads/2019/12/BER-December.pdf">November 2019: Year-End Market Pending Sales &amp; Stability Gaining Attention of Buyers in Bonita Springs and Estero</a></li>
+                <li><a href="https://www.bonitaesterorealtors.com/wp-content/uploads/2019/11/November.pdf">October 2019: Desirability to Buy Continues to Trend Strong in Bonita Springs and Estero</a></li>
+                <li><a href="https://www.bonitaesterorealtors.com/wp-content/uploads/2019/11/September-2019.pdf">September 2019: Buyer Demand for Inventory Continues in Bonita Springs and Estero</a></li>
+                <li><a href="https://www.bonitaesterorealtors.com/wp-content/uploads/2019/09/August-2019.pdf">August 2019: Pending Sales Up 16 Percent; Buyers Need Inventory in the Bonita Springs and Estero Housing Markets</a></li>
+                <li><a href="https://www.bonitaesterorealtors.com/wp-content/uploads/2019/09/July-2019.pdf">July 2019: High Buyer Interest and Low Inventory Levels in the Bonita Springs and Estero Housing Markets</a></li>
+                <li><a href="https://www.bonitaesterorealtors.com/wp-content/uploads/2019/07/June.pdf" target="_blank" rel="noopener noreferrer">June 2019: Listing Inventory at Lowest in Three Years in Bonita Springs and Estero Housing Market</a></li>
+                <li><a href="https://bonitasprings.wpengine.com/wp-content/uploads/2019/06/BER-Media-Committee-PR-May-2019.pdf">May 2019: Pending and Closed Listings Increase as Federal Interest Rates Remain Steady</a></li>
+                <li><a href="https://bonitasprings.wpengine.com/wp-content/uploads/2019/06/BER-Media-Committee-PR-April-2019.pdf" target="_blank" rel="noopener noreferrer">April 2019: Bonita Springs-Estero Market Heats Up as International Summer Shuffle Approaches</a></li>
+                <li><a href="https://bonitasprings.wpengine.com/wp-content/uploads/2019/05/BER-Media-Committee-PR-March-2019.pdf" target="_blank" rel="noopener noreferrer">March 2019: Resale Values Continue to Rise Despite Increased Competition from New Construction</a></li>
+                <li><a href="https://bonitasprings.wpengine.com/wp-content/uploads/2019/03/BER-PR-Mar-19.pdf">February 2019: Desirability and Opportunities Remain High in the Bonita Springs and Estero Markets</a></li>
+                <li><a href="https://bonitasprings.wpengine.com/wp-content/uploads/2019/03/BER-PR-Feb-19-002.pdf">January 2019 Slow Start in Bonita Springs and Estero Markets</a></li>
+                <li><a href="https://bonitasprings.wpengine.com/wp-content/uploads/2019/02/BER-PR-Jan19-YearEnd.pdf">January 2019: New Year, New Season, New Price</a></li>
+            </ul>
+            <strong>2018</strong>
+            <ul>
+                <li><a href="https://bonitasprings.wpengine.com/wp-content/uploads/2019/01/BER-PR-Jan19-YearEnd-002.pdf">December 2018: New Year, New Season, New Price</a></li>
+                <li><a href="https://bonitasprings.wpengine.com/wp-content/uploads/2019/01/November-2018-Report.pdf">November 2018 Report: Inventory Increases Give More Choices to Buyers &amp; Investors in Bonita Springs and Estero Markets</a></li>
+                <li><a href="https://bonitasprings.wpengine.com/wp-content/uploads/2018/11/October.pdf">October 2018 Report: Three-Year Positive Trend Shows Fair Market Stabilization in Bonita Springs and Estero</a></li>
+                <li><a href="https://bonitasprings.wpengine.com/wp-content/uploads/2018/11/September-2018-Report.pdf">September 2018 Report: Bonita Springs- Estero Housing Market Heats Up as Temperatures Cool Down</a></li>
+                <li><a href="https://bonitasprings.wpengine.com/wp-content/uploads/2018/10/August-2018-Report.pdf">August 2018 Report: Bonita Springs-Estero Market Remains Steady with Uptick in Pending Sales</a></li>
+                <li><a href="https://bonitasprings.wpengine.com/wp-content/uploads/2018/07/July-Report.pdf">July 2018 Report: Summer Heat Has Not Cooled Interest in the Bonita Springs and Estero Markets</a></li>
+                <li><a href="https://bonitasprings.wpengine.com/wp-content/uploads/2018/06/June-2018-Report.pdf">June 2018 Report: Bonita Springs and Estero Markets Seeing Steady Summer Activity and Increases in Pending and Closed Sales</a></li>
+                <li><a href="https://bonitasprings.wpengine.com/wp-content/uploads/2018/05/May-2018.pdf">May 2018 Report: Increased Online Views and Pending Sales for April 2018 in Bonita Springs and Estero</a></li>
+                <li><a href="https://bonitasprings.wpengine.com/wp-content/uploads/2018/05/BER-PR-Apr-18-Release-Mar-18-Numbers.pdf">April 2018 Report: Increased Buyer Activity Continues into Summer Months for Bonita Springs and Estero</a></li>
+                <li><a href="https://bonitasprings.wpengine.com/wp-content/uploads/2018/03/March-2018-Report.pdf">March 2018 Report: Updated Properties Seeing Increased Activity and Sales in Bonita Springs and Estero</a></li>
+                <li><a href="http://wbnbonitarealt.wpengine.com/wp-content/uploads/2018/02/February-2018-Press-Release.pdf">February 2018 Report: Online Views Spike in the Bonita Springs and Estero Real Estate Markets</a></li>
+                <li><a href="http://wbnbonitarealt.wpengine.com/wp-content/uploads/2018/02/BER-PR-Jan-18-Release-Dec-17-Numbers.pdf">January 2018 Report: Stability Rules the Bonita Springs and Estero Markets</a><strong><a href="http://wbnbonitarealt.wpengine.com/wp-content/uploads/2018/02/February-2018-Press-Release.pdf">
+            </a></strong></li>
+            </ul>
+            <strong>2017</strong>
+            <ul>
+                <li><a href="http://wbnbonitarealt.wpengine.com/wp-content/uploads/2017/12/December-2017-Report.pdf">December 2017 Report:  Month-over-Month Inventory Increases as Buyers Make their Way to Bonita Springs and Estero</a></li>
+                <li><a href="http://wbnbonitarealt.wpengine.com/wp-content/uploads/2017/06/November-2017.pdf">November 2017: Seasonal Inventory Swell Anticipated in Bonita Springs and Estero; </a><a href="http://wbnbonitarealt.wpengine.com/wp-content/uploads/2017/06/November-2017.pdf">Homeowners Urged to List Now</a></li>
+                <li><a href="http://wbnbonitarealt.wpengine.com/wp-content/uploads/2017/06/September-Release.pdf">September 2017: Bonita Springs and Estero Markets Remain Active Post-Storm</a></li>
+                <li><a href="http://wbnbonitarealt.wpengine.com/wp-content/uploads/2017/12/August-2017-Buyers-Sellers-Urged-to-Review-Online-Pricing-Information-with-Local-REALTORS.pdf">August 2017- Buyers &amp; Sellers Urged to Review Online Pricing Information with Local REALTORS</a></li>
+                <li><a href="http://wbnbonitarealt.wpengine.com/wp-content/uploads/2017/12/BEAR-PR-July-Release-June-Numbers-2017.pdf">July 2017:  Fierce Competition for Sellers in Bonita Springs and Estero</a></li>
+                <li><a href="http://wbnbonitarealt.wpengine.com/wp-content/uploads/2017/11/BEAR-PR-June-Numbers-2017.pdf">June 2017: Fierce Competition for Sellers in Bonita Springs and Estero</a></li>
+                <li><a href="http://wbnbonitarealt.wpengine.com/wp-content/uploads/2017/12/BEAR-May-2017.pdf">May 2017: Sales Start to Sizzle in Bonita Springs &amp; Estero</a></li>
+            </ul>
+    </div>
+
+  </div>
+  
+  <script>
+    function showYear(year) {
+    // Remove active class from all tabs
+    document.querySelectorAll('.tab-button').forEach(button => button.classList.remove('active'));
+
+    // Hide all market report sections with a fade-out effect
+    document.querySelectorAll('.market-reports-container').forEach(section => {
+        section.classList.remove('fade-in');
+        section.classList.add('fade-out');
+        
+        setTimeout(() => {
+        section.style.display = 'none';
+        }, 300); // Duration matches the animation duration
+    });
+
+    // Show the selected year's market report section with a fade-in effect
+    setTimeout(() => {
+        const selectedSection = document.getElementById('market-reports-' + year);
+        selectedSection.style.display = 'flex';
+        selectedSection.classList.remove('fade-out');
+        selectedSection.classList.add('fade-in');
+            }, 300); // Delay to match the fade-out timing
+
+            // Add active class to the clicked tab
+            document.getElementById('tab-' + year).classList.add('active');
+            }
+
+            // Initially set the active tab to 2024
+            document.getElementById('tab-2024').classList.add('active');
+            document.getElementById('market-reports-2024').classList.add('active');
+
+            const videoLinks = [
+            "https://www.youtube.com/embed/DAobnWcVbok?si=mER5L5SYScsAWwri",
+            "https://www.youtube.com/embed/aeSpU2aYf1w?si=qPKFDAvcMzFhnPwS",
+            "https://www.youtube.com/embed/wzFN5IxP0EQ?si=oKV1JFJnkBrr9FzI",
+            // Add more video links here
+        ];
+
+        let currentVideoIndex = 0;
+
+        document.getElementById('youtube-iframe').src = videoLinks[currentVideoIndex];
+
+        function previousVideo() {
+            currentVideoIndex = (currentVideoIndex > 0) ? currentVideoIndex - 1 : videoLinks.length - 1;
+            document.getElementById('youtube-iframe').src = videoLinks[currentVideoIndex];
+        }
+
+        function nextVideo() {
+            currentVideoIndex = (currentVideoIndex < videoLinks.length - 1) ? currentVideoIndex + 1 : 0;
+            document.getElementById('youtube-iframe').src = videoLinks[currentVideoIndex];
+        }
+    </script>
+  
+
+    </body>
+
+
+
+  </html>
