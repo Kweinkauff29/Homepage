@@ -113,7 +113,7 @@
   }
   .contain-head {
     width: 100%;
-    margin: -87px 0;
+    margin: 150px 0;
     background-color: white;
     box-shadow: 0px -30px 67px grey;
   }
@@ -248,6 +248,18 @@
       display: contents;
     }
 
+    .contain-head {
+      margin: -110px 0;
+    }
+
+    #alertDiv {
+      margin: 430px 0px -111px 0px;
+    }
+
+    .important-links {
+      margin: 200px 0 100px 0;
+    }
+
     }
 
   #Jointext {
@@ -369,7 +381,7 @@
     width: 100%;
     background-color: grey;
     object-fit: contain;
-    margin: 260px 0 0 0;
+    margin: 0px 0 0 0;
     position: relative;
   }
   #display1 {
@@ -1348,6 +1360,55 @@
 
       </script>
 
+            <!--Yellow Warning-->
+
+            <style>
+              /* Style for the alert div */
+              #alertDiv {
+                background-color: yellow;
+                color: black;
+                padding: 20px;
+                position: relative;
+                width: 100%;
+                box-sizing: border-box;
+                text-align: center;
+                font-size: 16px;
+              }
+          
+              /* Close button styles */
+              .closeBtn {
+                position: absolute;
+                top: 10px;
+                right: 20px;
+                font-size: 20px;
+                cursor: pointer;
+                font-weight: bold;
+              }
+          
+              /* Link styles */
+              #alertDiv a {
+                color: blue;
+                text-decoration: underline;
+              }
+            </style>
+
+             <!-- Alert Div -->
+            <div id="alertDiv">
+              <span class="closeBtn" onclick="closeAlert()">&times;</span>
+              As many of you may already be aware, there is a tropical disturbance in the Gulf that appears to be approaching Florida, potentially by Thursday of this week. We encourage everyone to stay updated, especially if you are scheduled for any classes, as cancellations are likely to occur.<br><br>
+              For real-time updates on the storm’s progress, please refer to this resource: 
+              <a href="https://www.nhc.noaa.gov/refresh/graphics_at4+shtml/150208.shtml?cone#contents" target="_blank">
+                https://www.nhc.noaa.gov/refresh/graphics_at4+shtml/150208.shtml?cone#contents
+              </a>.
+            </div>
+
+            <script>
+              // Function to close the alert div
+              function closeAlert() {
+                document.getElementById('alertDiv').style.display = 'none';
+              }
+            </script>
+
       <div class="video-contain">
         <div id="display1">
           <hr id="loading-line1">
@@ -1481,6 +1542,9 @@
         }
       </script>
     -->
+
+
+
       <div id="outside-contain">
           <div class="welcome">
           <h2 id="welcome-head">Welcome to Bonita Springs-Estero Realtors</h2>
