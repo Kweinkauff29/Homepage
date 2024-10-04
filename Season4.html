@@ -1,0 +1,855 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Season 4 Dating Sim</title>
+    <!-- You can move the CSS to an external file if you prefer -->
+    <style>
+        /* CSS Styles */
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            margin: 0;
+            padding: 0;
+        }
+
+        #game-container {
+            width: 90%;
+            max-width: 800px;
+            margin: 20px auto;
+            background-color: rgba(255, 255, 255, 0.8); /* Semi-transparent background */
+            padding: 20px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+
+        #character-portrait {
+            height: 300px;
+            background-size: cover;
+            background-position: center;
+        }
+
+        #dialogue-box {
+            margin-top: 20px;
+            font-size: 1.2em;
+            transition: opacity 0.5s;
+        }
+
+        #options-container {
+            margin-top: 20px;
+        }
+
+        .option-button {
+            display: block;
+            margin: 10px 0;
+            padding: 10px;
+            background-color: #007BFF;
+            color: #fff;
+            text-align: left;
+            border: none;
+            cursor: pointer;
+            font-size: 1em;
+        }
+
+        .option-button:hover {
+            background-color: #0056b3;
+        }
+
+        #start-screen {
+            text-align: center;
+            width: 90%;
+            max-width: 800px;
+            margin-top: 20px;
+        }
+
+        #character-list {
+            list-style-type: none;
+            padding: 0;
+            margin-top: 20px;
+        }
+
+        #character-list li {
+            margin: 10px 0;
+        }
+
+        .character-link {
+            font-size: 1.5em;
+            color: #007BFF;
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+        .character-link:hover {
+            text-decoration: underline;
+        }
+        #character-portrait {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 100%;
+            max-width: 300px;
+            height: 450px; /* Set a fixed height if needed */
+            margin: 0 auto;
+        }
+
+        #character-image {
+            max-width: 100%;
+            max-height: 100%;
+        }
+
+        @media (max-width: 600px) {
+            #dialogue-box {
+                font-size: 1em;
+            }
+
+            .option-button {
+                font-size: 0.9em;
+                padding: 12px;
+            }
+
+            .character-link {
+                font-size: 1.2em;
+            }
+
+            #start-screen h1 {
+                font-size: 1.8em;
+            }
+
+            #start-screen h2 {
+                font-size: 1em;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Start Screen -->
+    <div id="start-screen">
+        <h1>Select a character to talk to:</h1>
+        <h2>WARNING! - This game is extremly unhinged and will almost definitley involve weird nudity of some kind.  You've been warned.</h2>
+        <ul id="character-list"></ul>
+    </div>
+
+    <!-- Game Container -->
+    <div id="game-container" style="display: none;">
+        <div id="character-portrait">
+            <img id="character-image" src="" alt="Character Portrait">
+        </div>
+        <div id="dialogue-box"></div>
+        <div id="options-container"></div>
+    </div>
+
+    <!-- JavaScript -->
+    <script>
+        // References to DOM elements
+        const startScreen = document.getElementById('start-screen');
+        const characterList = document.getElementById('character-list');
+        const gameContainer = document.getElementById('game-container');
+        const characterPortrait = document.getElementById('character-portrait');
+        const dialogueBox = document.getElementById('dialogue-box');
+        const optionsContainer = document.getElementById('options-container');
+        const characterImage = document.getElementById('character-image');
+
+        let currentNode = null;
+
+        // Dialogue structure
+        const dialogues = {
+            start: {
+                characters: ["Hunter", "Kalvin", "Cougar", "Patrick", "Xac", "Kevin", "Andrew"],
+            },
+
+            // Hunter's dialogues
+            hunter_intro: {
+                character: "Hunter",
+                portrait: "https://i.imgur.com/NbnKFD4.png",
+                text: "Hey! It's Hunter, what's up?",
+                background: "https://www.bonitaesterorealtors.com/wp-content/uploads/2024/08/Untitled-design-18.png",
+                options: [
+                    { 
+                        text: "How are you?", 
+                        next: "hunter_conversation_1",
+                        reaction: "Hunter smiles at your concern.",
+                        reactionPortrait: "https://i.imgur.com/NbnKFD4.png"
+                    },
+                    { 
+                        text: "Nice to meet you!", 
+                        next: "hunter_conversation_2",
+                        reaction: "Hunter nods and seems pleased.",
+                        reactionPortrait: "https://i.imgur.com/x2bMr1v.png"
+                    },
+                ],
+            },
+            hunter_conversation_1: {
+                character: "Hunter",
+                portrait: "",
+                text: "I'm doing great, thanks for asking!",
+                options: [
+                    { 
+                        text: "That's good to hear.", 
+                        next: "end",
+                        reaction: "Hunter seems happy that you care."
+                    },
+                    { 
+                        text: "What have you been up to?", 
+                        next: "hunter_conversation_3",
+                        reaction: "Hunter is excited to tell you more."
+                    },
+                ],
+            },
+            hunter_conversation_2: {
+                character: "Hunter",
+                portrait: "",
+                text: "Nice to meet you too!",
+                options: [
+                    { 
+                        text: "Wanna hang out sometime?", 
+                        next: "end",
+                        reaction: "Hunter agrees enthusiastically."
+                    },
+                    { 
+                        text: "Tell me about yourself.", 
+                        next: "hunter_conversation_4",
+                        reaction: "Hunter is eager to share."
+                    },
+                ],
+            },
+            hunter_conversation_3: {
+                character: "Hunter",
+                portrait: "",
+                text: "I've been working on some new projects and exploring the outdoors!",
+                options: [
+                    { 
+                        text: "Sounds fun!", 
+                        next: "end",
+                        reaction: "Hunter grins broadly."
+                    },
+                    { 
+                        text: "Maybe we can join you next time.", 
+                        next: "end",
+                        reaction: "Hunter likes the idea."
+                    },
+                ],
+            },
+            hunter_conversation_4: {
+                character: "Hunter",
+                portrait: "",
+                text: "Well, I love hiking and coding in my free time.",
+                options: [
+                    { 
+                        text: "That's awesome!", 
+                        next: "end",
+                        reaction: "Hunter appreciates your enthusiasm."
+                    },
+                    { 
+                        text: "We should hike together sometime.", 
+                        next: "end",
+                        reaction: "Hunter seems excited about the suggestion."
+                    },
+                ],
+            },
+
+            // Kalvin's dialogues
+            kalvin_intro: {
+                character: "Kalvin",
+                portrait: "",
+                text: "Yo, I'm Kalvin. What do you want to talk about?",
+                options: [
+                    { 
+                        text: "Tell me something interesting.", 
+                        next: "kalvin_conversation_1",
+                        reaction: "Kalvin smirks, ready to share a story."
+                    },
+                    { 
+                        text: "Just saying hi.", 
+                        next: "kalvin_conversation_2",
+                        reaction: "Kalvin waves casually."
+                    },
+                ],
+            },
+            kalvin_conversation_1: {
+                character: "Kalvin",
+                portrait: "",
+                text: "Did you know the universe is constantly expanding?",
+                options: [
+                    { 
+                        text: "That's fascinating!", 
+                        next: "end",
+                        reaction: "Kalvin is pleased by your interest."
+                    },
+                    { 
+                        text: "Tell me more.", 
+                        next: "kalvin_conversation_3",
+                        reaction: "Kalvin is happy to continue."
+                    },
+                ],
+            },
+            kalvin_conversation_2: {
+                character: "Kalvin",
+                portrait: "",
+                text: "Hey there! Nice to see you.",
+                options: [
+                    { 
+                        text: "Same here!", 
+                        next: "end",
+                        reaction: "Kalvin smiles warmly."
+                    },
+                    { 
+                        text: "Catch up later?", 
+                        next: "end",
+                        reaction: "Kalvin nods in agreement."
+                    },
+                ],
+            },
+            kalvin_conversation_3: {
+                character: "Kalvin",
+                portrait: "",
+                text: "Well, scientists believe dark energy is driving the expansion.",
+                options: [
+                    { 
+                        text: "Mind-blowing!", 
+                        next: "end",
+                        reaction: "Kalvin enjoys your amazement."
+                    },
+                    { 
+                        text: "Thanks for sharing.", 
+                        next: "end",
+                        reaction: "Kalvin appreciates your attention."
+                    },
+                ],
+            },
+
+            // Cougar's dialogues
+            cougar_intro: {
+                character: "Cougar",
+                portrait: "",
+                text: "Hey! I'm Cougar. What's up?",
+                options: [
+                    { 
+                        text: "Not much, you?", 
+                        next: "cougar_conversation_1",
+                        reaction: "Cougar grins and leans forward."
+                    },
+                    { 
+                        text: "Just wanted to say hi.", 
+                        next: "cougar_conversation_2",
+                        reaction: "Cougar gives you a friendly nod."
+                    },
+                ],
+            },
+            cougar_conversation_1: {
+                character: "Cougar",
+                portrait: "",
+                text: "Just enjoying the day. Any plans?",
+                options: [
+                    { 
+                        text: "Thinking of grabbing coffee.", 
+                        next: "end",
+                        reaction: "Cougar seems interested."
+                    },
+                    { 
+                        text: "Not really, any suggestions?", 
+                        next: "cougar_conversation_3",
+                        reaction: "Cougar is happy to share ideas."
+                    },
+                ],
+            },
+            cougar_conversation_2: {
+                character: "Cougar",
+                portrait: "",
+                text: "Hi there! How's everything going?",
+                options: [
+                    { 
+                        text: "All good!", 
+                        next: "end",
+                        reaction: "Cougar smiles brightly."
+                    },
+                    { 
+                        text: "Could be better.", 
+                        next: "end",
+                        reaction: "Cougar offers a sympathetic look."
+                    },
+                ],
+            },
+            cougar_conversation_3: {
+                character: "Cougar",
+                portrait: "",
+                text: "We could check out the new arcade in town!",
+                options: [
+                    { 
+                        text: "Sounds awesome!", 
+                        next: "end",
+                        reaction: "Cougar is excited."
+                    },
+                    { 
+                        text: "Maybe another time.", 
+                        next: "end",
+                        reaction: "Cougar understands."
+                    },
+                ],
+            },
+
+            // Patrick's dialogues
+            patrick_intro: {
+                character: "Patrick",
+                portrait: "",
+                text: "Hello, Patrick here. Need something?",
+                options: [
+                    { 
+                        text: "Just chatting.", 
+                        next: "patrick_conversation_1",
+                        reaction: "Patrick seems intrigued."
+                    },
+                    { 
+                        text: "Do you have a moment?", 
+                        next: "patrick_conversation_2",
+                        reaction: "Patrick checks his watch and nods."
+                    },
+                ],
+            },
+            patrick_conversation_1: {
+                character: "Patrick",
+                portrait: "",
+                text: "Sure, what's on your mind?",
+                options: [
+                    { 
+                        text: "Wanted to get to know you.", 
+                        next: "patrick_conversation_3",
+                        reaction: "Patrick smiles slightly."
+                    },
+                    { 
+                        text: "Nothing specific.", 
+                        next: "end",
+                        reaction: "Patrick nods thoughtfully."
+                    },
+                ],
+            },
+            patrick_conversation_2: {
+                character: "Patrick",
+                portrait: "",
+                text: "I can spare a few minutes.",
+                options: [
+                    { 
+                        text: "Great! How's your day?", 
+                        next: "end",
+                        reaction: "Patrick appreciates your interest."
+                    },
+                    { 
+                        text: "I'll be quick.", 
+                        next: "patrick_conversation_4",
+                        reaction: "Patrick gestures for you to continue."
+                    },
+                ],
+            },
+            patrick_conversation_3: {
+                character: "Patrick",
+                portrait: "",
+                text: "Well, I'm into music and photography.",
+                options: [
+                    { 
+                        text: "That's cool!", 
+                        next: "end",
+                        reaction: "Patrick seems pleased."
+                    },
+                    { 
+                        text: "We should hang out sometime.", 
+                        next: "end",
+                        reaction: "Patrick considers the idea."
+                    },
+                ],
+            },
+            patrick_conversation_4: {
+                character: "Patrick",
+                portrait: "",
+                text: "No worries, what's up?",
+                options: [
+                    { 
+                        text: "Just wanted to say hi.", 
+                        next: "end",
+                        reaction: "Patrick smiles."
+                    },
+                    { 
+                        text: "Needed some advice.", 
+                        next: "end",
+                        reaction: "Patrick is ready to listen."
+                    },
+                ],
+            },
+
+            // Xac's dialogues
+            xac_intro: {
+                character: "Xac",
+                portrait: "",
+                text: "Hey, the name's Xac. What's going on?",
+                options: [
+                    { 
+                        text: "Just exploring.", 
+                        next: "xac_conversation_1",
+                        reaction: "Xac smiles knowingly."
+                    },
+                    { 
+                        text: "Wanted to meet you.", 
+                        next: "xac_conversation_2",
+                        reaction: "Xac raises an eyebrow, interested."
+                    },
+                ],
+            },
+            xac_conversation_1: {
+                character: "Xac",
+                portrait: "",
+                text: "Exploring, huh? Find anything interesting?",
+                options: [
+                    { 
+                        text: "Not yet.", 
+                        next: "end",
+                        reaction: "Xac chuckles."
+                    },
+                    { 
+                        text: "Maybe you can show me around.", 
+                        next: "end",
+                        reaction: "Xac nods thoughtfully."
+                    },
+                ],
+            },
+            xac_conversation_2: {
+                character: "Xac",
+                portrait: "",
+                text: "Well, here I am. What would you like to know?",
+                options: [
+                    { 
+                        text: "What do you do for fun?", 
+                        next: "xac_conversation_3",
+                        reaction: "Xac seems pleased you're interested."
+                    },
+                    { 
+                        text: "Just wanted to say hi.", 
+                        next: "end",
+                        reaction: "Xac smiles."
+                    },
+                ],
+            },
+            xac_conversation_3: {
+                character: "Xac",
+                portrait: "",
+                text: "I enjoy painting and hiking.",
+                options: [
+                    { 
+                        text: "That's cool!", 
+                        next: "end",
+                        reaction: "Xac appreciates your enthusiasm."
+                    },
+                    { 
+                        text: "Maybe we can paint together.", 
+                        next: "end",
+                        reaction: "Xac seems interested."
+                    },
+                ],
+            },
+
+            // Kevin's dialogues
+            kevin_intro: {
+                character: "Kevin",
+                portrait: "",
+                text: "Hi there! I'm Kevin.",
+                options: [
+                    { 
+                        text: "Nice to meet you!", 
+                        next: "kevin_conversation_1",
+                        reaction: "Kevin shakes your hand enthusiastically."
+                    },
+                    { 
+                        text: "How's it going?", 
+                        next: "kevin_conversation_2",
+                        reaction: "Kevin gives you a thumbs-up."
+                    },
+                ],
+            },
+            kevin_conversation_1: {
+                character: "Kevin",
+                portrait: "",
+                text: "Nice to meet you too! How are you enjoying your day?",
+                options: [
+                    { 
+                        text: "It's been great!", 
+                        next: "end",
+                        reaction: "Kevin is happy for you."
+                    },
+                    { 
+                        text: "Could be better.", 
+                        next: "kevin_conversation_3",
+                        reaction: "Kevin offers a sympathetic look."
+                    },
+                ],
+            },
+            kevin_conversation_2: {
+                character: "Kevin",
+                portrait: "",
+                text: "Going well! Thanks for asking.",
+                options: [
+                    { 
+                        text: "Glad to hear that.", 
+                        next: "end",
+                        reaction: "Kevin smiles warmly."
+                    },
+                    { 
+                        text: "What have you been up to?", 
+                        next: "kevin_conversation_4",
+                        reaction: "Kevin seems excited to share."
+                    },
+                ],
+            },
+            kevin_conversation_3: {
+                character: "Kevin",
+                portrait: "",
+                text: "Sorry to hear that. Anything I can help with?",
+                options: [
+                    { 
+                        text: "Just need someone to talk to.", 
+                        next: "end",
+                        reaction: "Kevin nods understandingly."
+                    },
+                    { 
+                        text: "Thanks, but I'll be okay.", 
+                        next: "end",
+                        reaction: "Kevin offers a reassuring smile."
+                    },
+                ],
+            },
+            kevin_conversation_4: {
+                character: "Kevin",
+                portrait: "",
+                text: "I've been learning guitar recently!",
+                options: [
+                    { 
+                        text: "That's awesome!", 
+                        next: "end",
+                        reaction: "Kevin beams with pride."
+                    },
+                    { 
+                        text: "Maybe you can play something for me.", 
+                        next: "end",
+                        reaction: "Kevin seems eager."
+                    },
+                ],
+            },
+
+            // Andrew's dialogues
+            andrew_intro: {
+                character: "Andrew",
+                portrait: "",
+                text: "Hey! Andrew here. What's up?",
+                options: [
+                    { 
+                        text: "Just wanted to say hi.", 
+                        next: "andrew_conversation_1",
+                        reaction: "Andrew smiles brightly."
+                    },
+                    { 
+                        text: "Got a minute to chat?", 
+                        next: "andrew_conversation_2",
+                        reaction: "Andrew nods eagerly."
+                    },
+                ],
+            },
+            andrew_conversation_1: {
+                character: "Andrew",
+                portrait: "",
+                text: "Hi! How's your day going?",
+                options: [
+                    { 
+                        text: "Pretty good.", 
+                        next: "end",
+                        reaction: "Andrew is glad to hear that."
+                    },
+                    { 
+                        text: "Not too bad.", 
+                        next: "end",
+                        reaction: "Andrew nods in understanding."
+                    },
+                ],
+            },
+            andrew_conversation_2: {
+                character: "Andrew",
+                portrait: "",
+                text: "Absolutely! What's on your mind?",
+                options: [
+                    { 
+                        text: "Wanted to get to know you better.", 
+                        next: "andrew_conversation_3",
+                        reaction: "Andrew seems excited."
+                    },
+                    { 
+                        text: "Just passing time.", 
+                        next: "end",
+                        reaction: "Andrew is happy to chat."
+                    },
+                ],
+            },
+            andrew_conversation_3: {
+                character: "Andrew",
+                portrait: "",
+                text: "Sure! I love cooking and playing sports.",
+                options: [
+                    { 
+                        text: "What's your favorite dish to cook?", 
+                        next: "andrew_conversation_4",
+                        reaction: "Andrew is thrilled to share."
+                    },
+                    { 
+                        text: "We should play sometime.", 
+                        next: "end",
+                        reaction: "Andrew agrees enthusiastically."
+                    },
+                ],
+            },
+            andrew_conversation_4: {
+                character: "Andrew",
+                portrait: "",
+                text: "I make a mean lasagna!",
+                options: [
+                    { 
+                        text: "I'd love to try it.", 
+                        next: "end",
+                        reaction: "Andrew smiles widely."
+                    },
+                    { 
+                        text: "Sounds delicious.", 
+                        next: "end",
+                        reaction: "Andrew is pleased you think so."
+                    },
+                ],
+            },
+};
+
+        // Function to display character names on the start screen
+        function displayStartScreen() {
+            characterList.innerHTML = '';
+            dialogues.start.characters.forEach(character => {
+                const listItem = document.createElement('li');
+                const nameLink = document.createElement('a');
+                nameLink.classList.add('character-link');
+                nameLink.innerText = character;
+                nameLink.href = '#';
+                nameLink.addEventListener('click', (e) => {
+                    e.preventDefault(); // Prevent default link behavior
+                    startConversation(character);
+                });
+                listItem.appendChild(nameLink);
+                characterList.appendChild(listItem);
+            });
+        }
+
+     // Start a conversation with the selected character
+    function startConversation(characterName) {
+        // Hide start screen and show the game container
+        startScreen.style.display = 'none';
+        gameContainer.style.display = 'block';
+
+        // Build the key for the intro dialogue
+        const introKey = characterName.toLowerCase() + '_intro';
+
+        // Set the current node to the character's intro dialogue
+        currentNode = dialogues[introKey];
+
+        // Display the dialogue node
+        displayNode(currentNode);
+    }
+        // Function to display a dialogue node
+        function displayNode(node) {
+            // Update background image if available
+            if (node.background) {
+                document.body.style.backgroundImage = `url('${node.background}')`;
+                document.body.style.backgroundSize = 'cover';
+                document.body.style.backgroundPosition = 'center';
+            }
+
+            // Update character image if available
+            if (node.portrait) {
+                characterImage.src = node.portrait;
+            } else {
+                characterImage.src = '';
+            }
+
+            // Update dialogue text
+            dialogueBox.innerText = `${node.character}: ${node.text}`;
+
+            // Clear previous options
+            optionsContainer.innerHTML = '';
+
+            // Display options
+            if (node.options && node.options.length > 0) {
+                node.options.forEach(option => {
+                    const button = document.createElement('button');
+                    button.classList.add('option-button');
+                    button.innerText = option.text;
+                    button.addEventListener('click', () => {
+                        // Display the reaction first
+                        displayReaction(option);
+                    });
+                    optionsContainer.appendChild(button);
+                });
+            } else {
+                // If no options, end the conversation
+                displayEndScreen();
+            }
+        }
+       // Function to display the character's reaction
+        function displayReaction(option) {
+            // Update character image if reactionPortrait is available
+            if (option.reactionPortrait) {
+                characterImage.src = option.reactionPortrait;
+            }
+
+            // Update dialogue box with the reaction
+            dialogueBox.innerText = option.reaction;
+
+            // Clear previous options
+            optionsContainer.innerHTML = '';
+
+            // Add a 'Continue' button
+            const continueButton = document.createElement('button');
+            continueButton.classList.add('option-button');
+            continueButton.innerText = "Continue";
+            continueButton.addEventListener('click', () => {
+                // Proceed to the next dialogue node
+                if (option.next === 'end') {
+                    displayEndScreen();
+                } else {
+                    currentNode = dialogues[option.next];
+                    if (currentNode) {
+                        displayNode(currentNode);
+                    } else {
+                        console.error(`Dialogue node "${option.next}" not found.`);
+                        dialogueBox.innerText = "An error occurred in the conversation.";
+                        optionsContainer.innerHTML = '';
+                    }
+                }
+            });
+            optionsContainer.appendChild(continueButton);
+        }
+
+        // Function to display the end screen
+        function displayEndScreen() {
+            dialogueBox.innerText = "The conversation has ended. Return to the main menu?";
+            optionsContainer.innerHTML = '';
+
+            const returnButton = document.createElement('button');
+            returnButton.classList.add('option-button');
+            returnButton.innerText = "Back to Main Menu";
+            returnButton.addEventListener('click', () => {
+                gameContainer.style.display = 'none';
+                startScreen.style.display = 'block';
+                dialogueBox.innerText = '';
+                optionsContainer.innerHTML = '';
+                characterPortrait.style.backgroundImage = '';
+            });
+            optionsContainer.appendChild(returnButton);
+        }
+
+        // Start the game by displaying the start screen
+        displayStartScreen();
+    </script>
+</body>
+</html>
