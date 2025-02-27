@@ -1,0 +1,602 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Sales Excellence Awards Email Generator</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 20px;
+    }
+    label, select, button {
+      font-size: 1rem;
+      margin: 5px 0;
+    }
+    .email-preview {
+      border: 1px solid #ccc;
+      padding: 15px;
+      margin-top: 20px;
+      background: #f9f9f9;
+      /* For display purposes in the browser */
+      white-space: pre-wrap;
+    }
+  </style>
+</head>
+<body>
+  <h1>Sales Excellence Awards Email Generator</h1>
+  <p>
+    <label for="nameSelect">Select a Name:</label>
+    <select id="nameSelect">
+      <!-- Options will be added here -->
+    </select>
+    <button id="generateBtn">Generate Email</button>
+  </p>
+  <div class="email-preview">
+    <p><strong>To:</strong> <span id="email"></span></p>
+    <p><strong>Subject:</strong> <span id="subject"></span></p>
+    <p><strong>Content:</strong></p>
+    <div id="content"></div>
+  </div>
+
+  <script>
+    // Hardcoded data array
+    const winners = [
+      {
+        firstName: "Scott",
+        lastName: "Fogel",
+        email: "scottfogel@bhhsfloridarealty.net",
+        office: "Berkshire Hathaway Florida Realty",
+        saleAmount: "20,000,000.00",
+        applied: "Yes - Diamond",
+        registered: "No",
+        award: "Trophy",
+        amtVerified: "15,309,900"
+      },
+      {
+        firstName: "Lisa",
+        lastName: "Schroeder",
+        email: "Lisa@SellingFlorida.net",
+        office: "Coldwell Banker Realty",
+        saleAmount: "20,540,000.00",
+        applied: "No",
+        registered: "",
+        award: "",
+        amtVerified: "8,612,000"
+      },
+      {
+        firstName: "Matthew",
+        lastName: "Larmore",
+        email: "matt@swflbuysell.com",
+        office: "Domain Realty",
+        saleAmount: "122.00",
+        applied: "yes, but what' s with the $ amount",
+        registered: "",
+        award: "",
+        amtVerified: "3,708,825"
+      },
+      {
+        firstName: "Dorota",
+        lastName: "Harris",
+        email: "dharris@johnrwood.com",
+        office: "John R Wood Properties",
+        saleAmount: "20,990,000.00",
+        applied: "Yes",
+        registered: "",
+        award: "",
+        amtVerified: "19,192,500"
+      },
+      {
+        firstName: "Teresa",
+        lastName: "Rucker",
+        email: "trucker@johnrwood.com",
+        office: "John R Wood Properties",
+        saleAmount: "30,296,996.00",
+        applied: "Y",
+        registered: "",
+        award: "",
+        amtVerified: "9,382,000"
+      },
+      {
+        firstName: "Ryan",
+        lastName: "Johnson",
+        email: "Ryan@ryanangelasellsfl.com",
+        office: "John R Wood Properties",
+        saleAmount: "39,125,000.00",
+        applied: "Y",
+        registered: "",
+        award: "",
+        amtVerified: "19,562,500"
+      },
+      {
+        firstName: "Evan",
+        lastName: "Correale",
+        email: "EJCorreale@gmail.com",
+        office: "Keller Williams Elevate Luxury",
+        saleAmount: "23,363,409.00",
+        applied: "Y",
+        registered: "",
+        award: "",
+        amtVerified: "13,692,140"
+      },
+      {
+        firstName: "Katrena",
+        lastName: "Meyers",
+        email: "katrena@FLRise.com",
+        office: "KW Elevate",
+        saleAmount: "28,967,589.00",
+        applied: "y",
+        registered: "",
+        award: "",
+        amtVerified: "4,223,500"
+      },
+      {
+        firstName: "Shelly",
+        lastName: "Olsen",
+        email: "shelly@shellyolsenrealtor.com",
+        office: "Local Real Estate",
+        saleAmount: "21,958,096.00",
+        applied: "y",
+        registered: "",
+        award: "",
+        amtVerified: "19,831,597"
+      },
+      {
+        firstName: "Michael",
+        lastName: "Knoerlein",
+        email: "mjteamswfl@gmail.com",
+        office: "MJ Team Premeire Plus Realty",
+        saleAmount: "20,000,000.00",
+        applied: "y",
+        registered: "",
+        award: "",
+        amtVerified: "8,042,400"
+      },
+      {
+        firstName: "Kathryn",
+        lastName: "Zangrilli",
+        email: "KZ@BROKERBROTHERSRE.COM",
+        office: "RealReno LLC",
+        saleAmount: "27,813.00",
+        applied: "yes, but what' s with the $ amount",
+        registered: "",
+        award: "",
+        amtVerified: "19,057,249"
+      },
+      {
+        firstName: "Alex",
+        lastName: "Greenwood",
+        email: "alex@gulfregroup.com",
+        office: "Realty One Group MVP, LLC",
+        saleAmount: "29,385,800.34",
+        applied: "y",
+        registered: "",
+        award: "",
+        amtVerified: "2,125,000"
+      },
+      {
+        firstName: "Renee",
+        lastName: "Poppie",
+        email: "reneepops@comcast.net",
+        office: "Realty World J. Pavich RE",
+        saleAmount: "32,062,000.00",
+        applied: "y",
+        registered: "",
+        award: "",
+        amtVerified: "16,074,000"
+      },
+      {
+        firstName: "Carol",
+        lastName: "Carpenter",
+        email: "soldbycarol@ol.com",
+        office: "Berkshire Hathaway Florida Real Estate",
+        saleAmount: "11,076,875.00",
+        registered: "y",
+        award: "",
+        amtVerified: "6,067,500"
+      },
+      {
+        firstName: "Marc",
+        lastName: "Lobdell",
+        email: "marc.lobdell@cbrealty.com",
+        office: "Coldwell Banker Realty",
+        saleAmount: "11,004,374.00",
+        registered: "y",
+        award: "",
+        amtVerified: "9,765,490"
+      },
+      {
+        firstName: "Stacey",
+        lastName: "Reed",
+        email: "staceysellsestero@gmail.com",
+        office: "DomainRealty.com LLC",
+        saleAmount: "12,000,000.00",
+        registered: "y",
+        award: "",
+        amtVerified: "7,991,500"
+      },
+      {
+        firstName: "Jennifer",
+        lastName: "Smyth",
+        email: "jsmyth@johnrwood.com",
+        office: "John R Wood Properties",
+        saleAmount: "10,000,000.00",
+        registered: "",
+        award: "",
+        amtVerified: "7,203,750"
+      },
+      {
+        firstName: "Mary",
+        lastName: "Abshire",
+        email: "mabshire@johnrwood.com",
+        office: "John R Wood Properties",
+        saleAmount: "10,361,115.99",
+        registered: "",
+        award: "",
+        amtVerified: "7,423,500"
+      },
+      {
+        firstName: "Tyler",
+        lastName: "Mattingly",
+        email: "Tylermattingly@kw.com",
+        office: "Keller Williams Elite Realty",
+        saleAmount: "9,730,400.00",
+        registered: "",
+        award: "",
+        amtVerified: "7,451,000"
+      },
+      {
+        firstName: "Ellen",
+        lastName: "Boyce",
+        email: "ellenboyce@kw.com",
+        office: "Keller Williams Elite Realty",
+        saleAmount: "10,515,800.00",
+        registered: "",
+        award: "",
+        amtVerified: "8,582,300"
+      },
+      {
+        firstName: "Danielle",
+        lastName: "Allen",
+        email: "danielleallenswfl@gmail.com",
+        office: "KW Elevate Luxury",
+        saleAmount: "13,584,249.00",
+        registered: "",
+        award: "",
+        amtVerified: "9,830,998"
+      },
+      {
+        firstName: "Tyler",
+        lastName: "Butcher",
+        email: "tylerbutcherhomes@gmail.com",
+        office: "KW Elevate Luxury",
+        saleAmount: "182,214,860.00",
+        registered: "",
+        award: "",
+        amtVerified: "8,710,500"
+      },
+      {
+        firstName: "Samantha",
+        lastName: "Pasquino",
+        email: "samantha@pasquinorealty.com",
+        office: "Local Real Estate",
+        saleAmount: "10,025,400.00",
+        registered: "",
+        award: "",
+        amtVerified: "8,646,150"
+      },
+      {
+        firstName: "Amber",
+        lastName: "Reyes",
+        email: "amberreyesrealtor@gmail.com",
+        office: "Local Real Estate",
+        saleAmount: "10,014,399.00",
+        registered: "",
+        award: "",
+        amtVerified: "8,903,399"
+      },
+      {
+        firstName: "Justin",
+        lastName: "Jordan",
+        email: "justin@jordanteamswfl.com",
+        office: "Local Real Estate",
+        saleAmount: "10,885,317.50",
+        registered: "",
+        award: "",
+        amtVerified: "6,682,400"
+      },
+      {
+        firstName: "Candace",
+        lastName: "Farmer",
+        email: "candace@candacefarmer.com",
+        office: "Local Real Estate",
+        saleAmount: "10,082,200.00",
+        registered: "",
+        award: "",
+        amtVerified: "9,159,500"
+      },
+      {
+        firstName: "Kristin",
+        lastName: "Van Heukelom",
+        email: "office@team239.com",
+        office: "Local Real Estate",
+        saleAmount: "17,444,942.50",
+        registered: "",
+        award: "",
+        amtVerified: "6,599,292"
+      },
+      {
+        firstName: "Todd",
+        lastName: "Jaskiewicz",
+        email: "Toddjaskiewicz@mcdhomes.com",
+        office: "McDowell Real Estate",
+        saleAmount: "13,456,850.00",
+        registered: "",
+        award: "",
+        amtVerified: "3,812,600"
+      },
+      {
+        firstName: "Brad L",
+        lastName: "Graves PA",
+        email: "brad@floridaheritageteam.com",
+        office: "Premiere Plus Realty, Co.",
+        saleAmount: "10,672,669.00",
+        registered: "",
+        award: "",
+        amtVerified: "5,473,999"
+      },
+      {
+        firstName: "James",
+        lastName: "Hunter",
+        email: "james.hunter39@gmail.com",
+        office: "Realty One Group MVP, LLC",
+        saleAmount: "16,200,000.00",
+        registered: "",
+        award: "",
+        amtVerified: "6,822,500"
+      },
+      {
+        firstName: "Jacqueline",
+        lastName: "Maglio",
+        email: "jackieknowsnaples@gmail.com",
+        office: "Robert Slack LLC",
+        saleAmount: "11,640,323.00",
+        registered: "",
+        award: "",
+        amtVerified: "8,962,000"
+      },
+      {
+        firstName: "Juan",
+        lastName: "Hernandez",
+        email: "juan@juanhernandezre.com",
+        office: "Avanti Way Realty",
+        saleAmount: "5,187,450.00",
+        registered: "",
+        award: "",
+        amtVerified: "971,300"
+      },
+      {
+        firstName: "Megan",
+        lastName: "Reusch",
+        email: "megan@reuschrealty.com",
+        office: "DomainRealty.com LLC",
+        saleAmount: "5,304,016.00",
+        registered: "",
+        award: "",
+        amtVerified: "4,572,266"
+      },
+      {
+        firstName: "Ashley",
+        lastName: "Prescott",
+        email: "ashley@domainrealtygroup.com",
+        office: "DomainRealty.com LLC",
+        saleAmount: "7,741,195.00",
+        registered: "",
+        award: "",
+        amtVerified: "???"
+      },
+      {
+        firstName: "Dotty",
+        lastName: "Rydell",
+        email: "DottyRydell@gmail.com",
+        office: "Local Real Estate, LLC",
+        saleAmount: "5,275,000.00",
+        registered: "",
+        award: "",
+        amtVerified: "2,637,500"
+      },
+      {
+        firstName: "Jennifer",
+        lastName: "Springer Rinden",
+        email: "jennifer@orchidrealtygroup.com",
+        office: "Orchid Realty International",
+        saleAmount: "112,507,299.00",
+        registered: "",
+        award: "",
+        amtVerified: "76,842,649"
+      },
+      {
+        firstName: "Harriet",
+        lastName: "Harnar",
+        email: "harriet.harnar@premiersir.com",
+        office: "Premier Sotheby's International Realty",
+        saleAmount: "6,647,500.00",
+        registered: "",
+        award: "",
+        amtVerified: "3,973,750"
+      },
+      {
+        firstName: "Pamela",
+        lastName: "Umscheid",
+        email: "pamela.umscheid@premiersir.com",
+        office: "Premier Sotheby's International Realty",
+        saleAmount: "5,716,250.00",
+        registered: "",
+        award: "",
+        amtVerified: "3,765,125"
+      },
+      {
+        firstName: "Dimo",
+        lastName: "Demirev",
+        email: "dimo.demirev@premiersir.com",
+        office: "Premier Sotheby's International Realty",
+        saleAmount: "7,861,956.00",
+        registered: "",
+        award: "",
+        amtVerified: "3,008,478"
+      },
+      {
+        firstName: "Rita",
+        lastName: "Murray",
+        email: "murrayrita770@gmail.com",
+        office: "Premiere Plus Realty",
+        saleAmount: "5,225,000.00",
+        registered: "",
+        award: "",
+        amtVerified: "4,387,500"
+      },
+      {
+        firstName: "SHELLEY",
+        lastName: "MILLARD",
+        email: "shelleymillard@yahoo.com",
+        office: "Realty World J PAVICH REAL ESTATE",
+        saleAmount: "5,211,839.00",
+        registered: "",
+        award: "",
+        amtVerified: "3,494,500"
+      },
+      {
+        firstName: "Rebecca",
+        lastName: "Dycio",
+        email: "rsdycio@gmail.com",
+        office: "Robert Slack, LLC",
+        saleAmount: "5,693,000.00",
+        registered: "",
+        award: "",
+        amtVerified: "4,268,000"
+      },
+      {
+        firstName: "Marjorie",
+        lastName: "Johnson",
+        email: "marketingmjkay@gmail.com",
+        office: "Royal Shell Real Estate Inc.",
+        saleAmount: "5,034,000.00",
+        registered: "",
+        award: "",
+        amtVerified: "4,952,500"
+      },
+      {
+        firstName: "Steven",
+        lastName: "Leek",
+        email: "steve@sterlingrealtyfl.com",
+        office: "Sterling Realty of SWFL",
+        saleAmount: "5,778,732.00",
+        registered: "",
+        award: "",
+        amtVerified: "4,552,232"
+      }
+    ];
+
+    // Populate the dropdown with names
+    function populateDropdown() {
+      const select = document.getElementById("nameSelect");
+      winners.forEach((winner, index) => {
+        const option = document.createElement("option");
+        option.value = index;
+        option.text = `${winner.firstName} ${winner.lastName}`;
+        select.appendChild(option);
+      });
+    }
+
+    // Generate the email preview based on the selected record
+    function generateEmail() {
+      const select = document.getElementById("nameSelect");
+      const index = select.value;
+      if (index === "") {
+        alert("Please select a name.");
+        return;
+      }
+      const winner = winners[index];
+
+      // Parse and format the verified amount
+      const amtVerified = parseFloat(winner.amtVerified.replace(/,/g, "")) || 0;
+      const formattedVerifiedAmt = amtVerified.toLocaleString("en-US", { style: "currency", currency: "USD" });
+      
+      // Determine current eligibility (using amtVerified)
+      let currentEligibleLevel = "";
+      if (amtVerified >= 20000000) {
+        currentEligibleLevel = "Diamond";
+      } else if (amtVerified >= 10000000) {
+        currentEligibleLevel = "Platinum";
+      } else if (amtVerified >= 5000000) {
+        currentEligibleLevel = "Gold";
+      } else {
+        currentEligibleLevel = "Not Eligible";
+      }
+      
+      let content = "";
+      
+      // If not eligible based on verified amount, use the simpler message.
+      if (currentEligibleLevel === "Not Eligible") {
+        content = `Dear ${winner.firstName},
+
+We are reaching out regarding your Sales Excellence Awards application. Our records indicate that your verified sales amount is ${formattedVerifiedAmt}. Based on this figure, you are not currently eligible for an award.
+
+If you are certain you are eligible for the applied level, please take the following actions:
+
+1. <strong>Team Sales:</strong> If you are part of a team, please reply to this email indicating the team member(s) with whom you are sharing your sales and ensure they are CC'd for verification.  We will take the totals and divide them.
+2. <strong>Off-Market Sales:</strong> If you have off-market sales (e.g., New Construction or FSBO), please follow the instructions via the link here <a href="https://scribehow.com/shared/How_to_Submit_a_Residential_Comp_Sold_Listing__qb9PpgJFQbmtGaBgBzUIeA" target="_blank">Scribe Link</a>. Alternatively, if you believe some sales have not been credited correctly, please send us the relevant Settlement Statements and MLS numbers so we can update our records.
+
+Please note that failure to respond by <strong>February 19th</strong> may result in you not receiving an award.
+
+Thank you for your prompt attention to this matter.
+
+Sincerely,
+Bonita Springs-Estero Realtors`;
+      } else {
+        // Parse and format the applied amount (from the saleAmount field)
+        const appliedAmount = parseFloat(winner.saleAmount.replace(/,/g, "")) || 0;
+        const formattedAppliedAmt = appliedAmount.toLocaleString("en-US", { style: "currency", currency: "USD" });
+        
+        // Determine the level applied for (using saleAmount)
+        let appliedLevel = "";
+        if (appliedAmount >= 20000000) {
+          appliedLevel = "Diamond";
+        } else if (appliedAmount >= 10000000) {
+          appliedLevel = "Platinum";
+        } else if (appliedAmount >= 5000000) {
+          appliedLevel = "Gold";
+        } else {
+          appliedLevel = "Not Eligible";
+        }
+        
+        // Build the email content for eligible records
+        content = `Dear ${winner.firstName},
+
+We are reaching out regarding your Sales Excellence Awards application. Our records indicate that you applied for the <strong>${appliedLevel}</strong> level with a submitted sales amount of <strong>${formattedAppliedAmt}</strong>, while your verified MLS sales amount is <strong>${formattedVerifiedAmt}</strong>. Based on your verified sales, you are currently eligible for the <strong>${currentEligibleLevel}</strong> level of recognition.
+
+If you are certain you are eligible for the applied level, please take the following actions:
+
+1. <strong>Team Sales:</strong> If you are part of a team, please reply to this email indicating the team member(s) with whom you are sharing your sales and ensure they are CC'd for verification.  We will take the totals and divide them.
+2. <strong>Off-Market Sales:</strong> If you have off-market sales (e.g., New Construction or FSBO), please follow the instructions provided via the link here <a href="https://scribehow.com/shared/How_to_Submit_a_Residential_Comp_Sold_Listing__qb9PpgJFQbmtGaBgBzUIeA" target="_blank">Scribe Link</a>. 
+3. <strong>Sales Credit:</strong> If you believe some sales have not been credited correctly, please send us the relevant Settlement Statements and MLS number so we can update our records.
+
+Please note that failure to respond by <strong>February 19th</strong> may result in your recognition level being lowered to the level we have verified.
+
+Thank you for your prompt attention to this matter.
+
+Sincerely,
+Bonita Springs-Estero Realtors`;
+      }
+
+      // Replace newline characters with <br> tags to preserve formatting when copying
+      document.getElementById("email").textContent = winner.email;
+      document.getElementById("subject").textContent = "Action Required: Sales Excellence Awards Application - Sales Figure Discrepancy";
+      document.getElementById("content").innerHTML = content.replace(/\n/g, "<br>");
+    }
+
+    // Attach event listener and populate dropdown on load
+    document.getElementById("generateBtn").addEventListener("click", generateEmail);
+    populateDropdown();
+  </script>
+</body>
+</html>
