@@ -1,0 +1,36 @@
+<html>
+
+
+<body>
+    <div id="header-placeholder"></div>
+  
+    <h1>This is a test page</h1>
+  
+    <script>
+      fetch('https://bonitaesterorealtors.com/header-test/')
+        .then(response => response.text())
+        .then(data => {
+          // Insert the HTML into the placeholder
+          const placeholder = document.getElementById('header-placeholder');
+          placeholder.innerHTML = data;
+          
+          // Find and process all script tags in the fetched content
+          const scripts = placeholder.querySelectorAll("script");
+          scripts.forEach(oldScript => {
+            const newScript = document.createElement("script");
+            // If the script has a src attribute, copy it
+            if(oldScript.src) {
+              newScript.src = oldScript.src;
+              newScript.async = false; // Maintain execution order if needed
+            } else {
+              newScript.text = oldScript.innerHTML;
+            }
+            document.body.appendChild(newScript);
+          });
+        })
+        .catch(error => console.error('Error loading header:', error));
+    </script>
+</body>
+
+
+</html>

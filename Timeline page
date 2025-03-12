@@ -1,0 +1,312 @@
+<div id="timelineCalculator" style="border:1px solid #ccc; padding:20px; max-width:900px; font-family:Arial, sans-serif;">
+    <h2>FR/BAR Contract Timeline Calculator</h2>
+    <p>
+      Based on guidelines from 
+      The calculator uses default day offsets from the Effective Date (or relative to Closing Date) as commonly used in the FR/BAR contract.
+    </p>
+    
+    <h3>Input Dates &amp; Default Periods</h3>
+    <label for="effectiveDate"><strong>Effective Date (Contract Start):</strong></label>
+    <input type="date" id="effectiveDate"><br><br>
+    
+    <label for="closingDate"><strong>Closing Date:</strong></label>
+    <input type="date" id="closingDate"><br><br>
+    
+    <label for="offerAcceptanceDays">Offer Acceptance Period (days):</label>
+    <input type="number" id="offerAcceptanceDays" value="2">
+    <small>(No extension if deadline falls on a weekend/holiday)</small><br><br>
+    
+    <label for="initialDepositDays">Initial Deposit Deadline (days after Effective Date):</label>
+    <input type="number" id="initialDepositDays" value="3"><br><br>
+    
+    <label for="additionalDepositDays">Additional Deposit Deadline (days after Effective Date):</label>
+    <input type="number" id="additionalDepositDays" value="10"><br><br>
+    
+    <label for="loanApplicationDays">Loan Application Deadline (days after Effective Date):</label>
+    <input type="number" id="loanApplicationDays" value="5"><br><br>
+    
+    <label for="loanApprovalDays">Loan Approval Period (days after Effective Date):</label>
+    <input type="number" id="loanApprovalDays" value="30"><br><br>
+    
+    <label for="inspectionDays">Inspection Period (days after Effective Date):</label>
+    <input type="number" id="inspectionDays" value="15"><br><br>
+    
+    <label for="titleEvidenceOffset">Title Evidence Deadline Offset (days <em>before</em> Closing):</label>
+    <input type="number" id="titleEvidenceOffset" value="15"><br><br>
+    
+    <label for="titleDefectNotification">Title Defect Notification Date (if applicable):</label>
+    <input type="date" id="titleDefectNotification">
+    <small>(Leave blank if not applicable)</small><br><br>
+    
+    <label for="titleDefectCureDays">Title Defect Cure Period (days after Notification):</label>
+    <input type="number" id="titleDefectCureDays" value="30"><br><br>
+    
+    <label for="buyerDecisionDays">Buyer Decision Period for Title Defects (days after Cure):</label>
+    <input type="number" id="buyerDecisionDays" value="5"><br><br>
+    
+    <label for="assocSellerDays">Association Seller Info Deadline (days after Effective Date):</label>
+    <input type="number" id="assocSellerDays" value="5"><br><br>
+    
+    <label for="assocBuyerDays">Association Buyer Approval Deadline (days <em>before</em> Closing):</label>
+    <input type="number" id="assocBuyerDays" value="5"><br><br>
+    
+    <label for="leaseDisclosureDays">Lease Disclosure Deadline (days after Effective Date):</label>
+    <input type="number" id="leaseDisclosureDays" value="5"><br><br>
+    
+    <label for="leaseReviewDays">Lease Review Deadline (days after Disclosure):</label>
+    <input type="number" id="leaseReviewDays" value="5"><br><br>
+    
+    <button onclick="updateTimeline()">Calculate Timelines</button>
+    <button id="downloadExcel">Download Timeline as Excel</button>
+    
+    <h3>Calculated Timeline</h3>
+    <div id="timelineOutput"></div>
+  </div>
+  
+  <script>
+    // Utility functions
+    function addDays(date, days) {
+      let result = new Date(date);
+      result.setDate(result.getDate() + days);
+      return result;
+    }
+    
+    function subtractDays(date, days) {
+      let result = new Date(date);
+      result.setDate(result.getDate() - days);
+      return result;
+    }
+    
+    // Adjust deadline if it falls on Saturday (6) or Sunday (0)
+    function adjustForWeekend(date) {
+      let adjusted = new Date(date);
+      let day = adjusted.getDay();
+      // For most deadlines, if falling on weekend, extend to Monday
+      if(day === 6) { // Saturday
+        adjusted.setDate(adjusted.getDate() + 2);
+      } else if(day === 0) { // Sunday
+        adjusted.setDate(adjusted.getDate() + 1);
+      }
+      return adjusted;
+    }
+    
+    // Format a date as YYYY-MM-DD
+    function formatDate(date) {
+      if(isNaN(date)) return "";
+      let yyyy = date.getFullYear();
+      let mm = String(date.getMonth() + 1).padStart(2, '0');
+      let dd = String(date.getDate()).padStart(2, '0');
+      return `${yyyy}-${mm}-${dd}`;
+    }
+    
+    // Main function to update all timelines
+    function updateTimeline() {
+      // Get input values
+      const effectiveDateVal = document.getElementById("effectiveDate").value;
+      const closingDateVal = document.getElementById("closingDate").value;
+      if(!effectiveDateVal) {
+        alert("Please enter the Effective Date.");
+        return;
+      }
+      
+      const effectiveDate = new Date(effectiveDateVal);
+      const closingDate = closingDateVal ? new Date(closingDateVal) : null;
+      
+      // Read day offsets
+      const offerAcceptanceDays = parseInt(document.getElementById("offerAcceptanceDays").value);
+      const initialDepositDays = parseInt(document.getElementById("initialDepositDays").value);
+      const additionalDepositDays = parseInt(document.getElementById("additionalDepositDays").value);
+      const loanApplicationDays = parseInt(document.getElementById("loanApplicationDays").value);
+      const loanApprovalDays = parseInt(document.getElementById("loanApprovalDays").value);
+      const inspectionDays = parseInt(document.getElementById("inspectionDays").value);
+      const titleEvidenceOffset = parseInt(document.getElementById("titleEvidenceOffset").value);
+      const titleDefectNotificationVal = document.getElementById("titleDefectNotification").value;
+      const titleDefectCureDays = parseInt(document.getElementById("titleDefectCureDays").value);
+      const buyerDecisionDays = parseInt(document.getElementById("buyerDecisionDays").value);
+      const assocSellerDays = parseInt(document.getElementById("assocSellerDays").value);
+      const assocBuyerDays = parseInt(document.getElementById("assocBuyerDays").value);
+      const leaseDisclosureDays = parseInt(document.getElementById("leaseDisclosureDays").value);
+      const leaseReviewDays = parseInt(document.getElementById("leaseReviewDays").value);
+      
+      // Calculate each timeline event
+      // 1. Offer Acceptance Deadline – no weekend adjustment
+      const offerAcceptanceDeadline = addDays(effectiveDate, offerAcceptanceDays);
+      
+      // 2. Effective Date (displayed as is)
+      const effectiveDateDisplay = effectiveDate;
+      
+      // 3. Initial Deposit Deadline (adjust for weekend)
+      const initialDepositDeadline = adjustForWeekend(addDays(effectiveDate, initialDepositDays));
+      
+      // 4. Additional Deposit Deadline (adjust)
+      const additionalDepositDeadline = adjustForWeekend(addDays(effectiveDate, additionalDepositDays));
+      
+      // 5. Loan Application Deadline (adjust)
+      const loanApplicationDeadline = adjustForWeekend(addDays(effectiveDate, loanApplicationDays));
+      
+      // 6. Loan Approval Period Deadline (adjust)
+      const loanApprovalDeadline = adjustForWeekend(addDays(effectiveDate, loanApprovalDays));
+      
+      // 7. Inspection Period End (adjust)
+      const inspectionDeadline = adjustForWeekend(addDays(effectiveDate, inspectionDays));
+      
+      // 8. Title Evidence Deadline – computed from Closing Date (if provided)
+      let titleEvidenceDeadline = null;
+      if(closingDate) {
+        titleEvidenceDeadline = adjustForWeekend(subtractDays(closingDate, titleEvidenceOffset));
+      }
+      
+      // 9. Title Defect Cure Deadline and Buyer Decision Deadline (if notification provided)
+      let titleDefectCureDeadline = null;
+      let buyerDecisionDeadline = null;
+      if(titleDefectNotificationVal) {
+        const titleDefectNotification = new Date(titleDefectNotificationVal);
+        titleDefectCureDeadline = adjustForWeekend(addDays(titleDefectNotification, titleDefectCureDays));
+        buyerDecisionDeadline = adjustForWeekend(addDays(titleDefectCureDeadline, buyerDecisionDays));
+      }
+      
+      // 10. Association Seller Info Deadline (adjust)
+      const assocSellerDeadline = adjustForWeekend(addDays(effectiveDate, assocSellerDays));
+      
+      // 11. Association Buyer Approval Deadline (from Closing Date)
+      let assocBuyerDeadline = null;
+      if(closingDate) {
+        assocBuyerDeadline = adjustForWeekend(subtractDays(closingDate, assocBuyerDays));
+      }
+      
+      // 12. Lease Disclosure Deadline (adjust)
+      const leaseDisclosureDeadline = adjustForWeekend(addDays(effectiveDate, leaseDisclosureDays));
+      
+      // 13. Lease Review Deadline (adjust) – based on disclosure deadline + leaseReviewDays
+      const leaseReviewDeadline = adjustForWeekend(addDays(leaseDisclosureDeadline, leaseReviewDays));
+      
+      // Build an array of timeline events with descriptions
+      const timelineEvents = [
+        {
+          name: "Offer Acceptance Deadline",
+          date: offerAcceptanceDeadline,
+          description: "Deadline by which the offer must be accepted. (No weekend extension applies.)"
+        },
+        {
+          name: "Effective Date",
+          date: effectiveDateDisplay,
+          description: "The date the contract becomes binding; used as day 0 for subsequent deadlines."
+        },
+        {
+          name: "Initial Deposit Deadline",
+          date: initialDepositDeadline,
+          description: "Deadline for the buyer to deliver the initial deposit (default 3 days after Effective Date, extended if falling on weekend)."
+        },
+        {
+          name: "Additional Deposit Deadline",
+          date: additionalDepositDeadline,
+          description: "Deadline for any additional deposit (default 10 days after Effective Date, extended if needed)."
+        },
+        {
+          name: "Loan Application Deadline",
+          date: loanApplicationDeadline,
+          description: "Deadline for submitting the loan application (default 5 days after Effective Date, with weekend extension)."
+        },
+        {
+          name: "Loan Approval Deadline",
+          date: loanApprovalDeadline,
+          description: "Deadline for obtaining loan approval (financing contingency, default 30 days after Effective Date)."
+        },
+        {
+          name: "Inspection Period End",
+          date: inspectionDeadline,
+          description: "Deadline for completing property inspections (default 15 days after Effective Date, extended if on weekend)."
+        },
+        {
+          name: "Title Evidence Deadline",
+          date: titleEvidenceDeadline,
+          description: "Deadline for seller to provide the title insurance commitment (default offset: 15 days before Closing)."
+        },
+        {
+          name: "Title Defect Cure Deadline",
+          date: titleDefectCureDeadline,
+          description: "Deadline for the seller to cure any title defects after buyer notification (default 30 days after notification)."
+        },
+        {
+          name: "Buyer Decision Deadline for Title Defects",
+          date: buyerDecisionDeadline,
+          description: "Deadline for the buyer to decide on acceptance or cancellation if title defects remain (default 5 days after cure period)."
+        },
+        {
+          name: "Association Seller Info Deadline",
+          date: assocSellerDeadline,
+          description: "Deadline for the seller to provide HOA/condo association information (default 5 days after Effective Date)."
+        },
+        {
+          name: "Association Buyer Approval Deadline",
+          date: assocBuyerDeadline,
+          description: "Deadline for the buyer to obtain association approval (default: 5 days before Closing)."
+        },
+        {
+          name: "Lease Disclosure Deadline",
+          date: leaseDisclosureDeadline,
+          description: "Deadline for the seller to provide lease/occupancy details (default 5 days after Effective Date)."
+        },
+        {
+          name: "Lease Review Deadline",
+          date: leaseReviewDeadline,
+          description: "Deadline for the buyer to review lease details (default: 5 days after disclosure)."
+        },
+        {
+          name: "Closing Date",
+          date: closingDate,
+          description: "The agreed date for finalizing the transaction."
+        }
+      ];
+      
+      // Build HTML table output
+      let outputHTML = `<table border="1" cellpadding="5" cellspacing="0" style="border-collapse:collapse; width:100%;">
+        <tr style="background:#f0f0f0;">
+          <th>Timeline Event</th>
+          <th>Calculated Date</th>
+          <th>Description</th>
+        </tr>`;
+        
+      timelineEvents.forEach(event => {
+        // Only display events that have a computed date (some are null if Closing Date or Notification Date not provided)
+        if(event.date) {
+          outputHTML += `<tr>
+            <td>${event.name}</td>
+            <td>${formatDate(event.date)}</td>
+            <td>${event.description}</td>
+          </tr>`;
+        }
+      });
+      outputHTML += `</table>`;
+      
+      document.getElementById("timelineOutput").innerHTML = outputHTML;
+      
+      // Prepare data for CSV download
+      window.timelineData = timelineEvents.filter(e => e.date).map(e => ({
+        "Timeline Event": e.name,
+        "Calculated Date": formatDate(e.date),
+        "Description": e.description
+      }));
+    }
+    
+    // Download the timeline as a CSV file (Excel can open CSV)
+    document.getElementById("downloadExcel").addEventListener("click", function(){
+      if(!window.timelineData || window.timelineData.length === 0) {
+        alert("Please calculate the timeline first.");
+        return;
+      }
+      let csvContent = "data:text/csv;charset=utf-8,";
+      csvContent += "Timeline Event,Calculated Date,Description\r\n";
+      window.timelineData.forEach(function(row) {
+        csvContent += `"${row["Timeline Event"]}","${row["Calculated Date"]}","${row["Description"]}"\r\n`;
+      });
+      const encodedUri = encodeURI(csvContent);
+      const link = document.createElement("a");
+      link.setAttribute("href", encodedUri);
+      link.setAttribute("download", "FRBAR_Timeline.csv");
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    });
+  </script>
+  
