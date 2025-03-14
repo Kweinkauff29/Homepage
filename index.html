@@ -296,17 +296,19 @@
   }
 
   #vid3 {
-    width: 100%;
+    width: auto;
     max-height: 650px;
     object-fit: cover;
-    margin: 0 0 -21px 0;
+    margin: 0 auto 0px auto;
+    display: flex;
   }
 
   #vid4 {
-    width: 100%;
+    width: auto;
     max-height: 650px;
     object-fit: cover;
-    margin: 0 0 -21px 0;
+    margin: 0 auto 0px auto;
+    display: flex;
   }
 
   #vid5 {
@@ -387,7 +389,7 @@
 
   .video-contain {
     width: 100%;
-    background-color: grey;
+    background-color: #252525;
     object-fit: contain;
     margin: 0px 0 0 0;
     position: relative;
@@ -1235,7 +1237,7 @@
             opacity: .3;
             color: black;
             border-top: black solid 5px;
-            animation: loading 12s linear;
+            animation: loading 10s linear;
           }
           #loading-line2 {
             position: absolute;
@@ -1257,7 +1259,7 @@
             opacity: .3;
             color: black;
             border-top: black solid 5px;
-            animation: loading 64s linear;
+            animation: loading 66s linear;
           }
          #loading-line4 {
             position: absolute;
@@ -1268,7 +1270,7 @@
             opacity: .3;
             color: black;
             border-top: black solid 5px;
-            animation: loading 64s linear;
+            animation: loading 52s linear;
           }
           #loading-line5 {
             position: absolute;
@@ -1294,92 +1296,48 @@
         }
       }
 
-      let vidnum = 1;
 
 
+      let vidnum = 1; // Global variable to track current video
 
-      function changeVidNum() {
-        let vid1 = document.getElementById("vid1");
-        let vid2 = document.getElementById("vid2");
-        let vid3 = document.getElementById("vid3");
-        let vid4 = document.getElementById("vid4");
-        let vid5 = document.getElementById("vid5");
-        if (vidnum === 0) {
-          console.log("This");
-          document.getElementById("display1").style.display = "contents";
-          document.getElementById("display5").style.display = "none";
-          document.getElementById("display4").style.display = "none";
-          document.getElementById("display3").style.display = "none";
-          document.getElementById("display2").style.display = "none";
-          document.getElementById("display2").currentTime = 0;
-          vid5.pause();
-          vid5.currentTime = 0;
-          vid1.play();
-          vidnum++;
-        }
-        else if (vidnum === 1) {
-          console.log("That");
-          document.getElementById("display2").style.display = "contents";
-          document.getElementById("display3").style.display = "none";
-          document.getElementById("display4").style.display = "none";
-          document.getElementById("display5").style.display = "none";
-          document.getElementById("display1").style.display = "none";
-          document.getElementById("display1").currentTime = 0;
-          vid1.pause();
-          vid1.currentTime = 0;
-          vid2.play();
-          vidnum++;
-        }
-        else if (vidnum === 2) {
-          console.log("That");
-          document.getElementById("display3").style.display = "contents";
-          document.getElementById("display4").style.display = "none";
-          document.getElementById("display5").style.display = "none";
-          document.getElementById("display2").style.display = "none";
-          document.getElementById("display1").style.display = "none";
-          document.getElementById("display2").currentTime = 0;
-          vid2.pause();
-          vid2.currentTime = 0;
-          vid3.play();
-          vidnum++;
-        }
-        else if (vidnum === 3) {
-          console.log("That");
-          document.getElementById("display4").style.display = "contents";
-          document.getElementById("display3").style.display = "none";
-          document.getElementById("display5").style.display = "none";
-          document.getElementById("display2").style.display = "none";
-          document.getElementById("display1").style.display = "none";
-          document.getElementById("display3").currentTime = 0;
-          vid3.pause();
-          vid3.currentTime = 0;
-          vid4.play();
-          vidnum++;
-        }
-        else if (vidnum === 4) {
-          console.log("That");
-          document.getElementById("display5").style.display = "contents";
-          document.getElementById("display4").style.display = "none";
-          document.getElementById("display3").style.display = "none";
-          document.getElementById("display2").style.display = "none";
-          document.getElementById("display1").style.display = "none";
-          document.getElementById("display4").currentTime = 0;
-          vid4.pause();
-          vid4.currentTime = 0;
-          vid5.play();
-          vidnum = 0;
-        }
-        else {
-          vidnum = 0;
-          document.getElementById("display1").style.display = "contents";
-          document.getElementById("display2").style.display = "none";
-          document.getElementById("display3").style.display = "none";
-          document.getElementById("display4").style.display = "none";
-          document.getElementById("display5").style.display = "none";
-        }
-        console.log(vidnum);
-      }
+    function changeVidNum() {
+        let vids = [
+            document.getElementById("vid1"),
+            document.getElementById("vid2"),
+            document.getElementById("vid3"),
+            document.getElementById("vid4")
+        ];
 
+        let displays = [
+            document.getElementById("display1"),
+            document.getElementById("display2"),
+            document.getElementById("display3"),
+            document.getElementById("display4")
+        ];
+
+        // Pause and hide all videos initially
+        vids.forEach((vid, index) => {
+            vid.pause();
+            vid.currentTime = 0;
+            displays[index].style.display = "none";
+        });
+
+        // Play the next video and show its display container
+        console.log(`Playing Video ${vidnum + 1}`);
+        vids[vidnum].play();
+        displays[vidnum].style.display = "contents";
+
+        // Wait for the video to finish before switching
+        vids[vidnum].onended = function () {
+            vidnum = (vidnum + 1) % vids.length; // Loop back to 0 after last video
+            changeVidNum(); // Recursively call function to play next video
+        };
+    }
+
+    // Start playing the first video automatically
+    window.onload = function () {
+        changeVidNum();
+    };
 
 
       </script>
@@ -1450,21 +1408,23 @@
           <div id="display3" style="display: none;">
             <hr id="loading-line3">
             <video id="vid3" playsinline autoplay muted poster="cake.jpg" onended="changeVidNum()">
-              <source src="https://www.bonitaesterorealtors.com/wp-content/uploads/2024/01/website-2023-1.mp4" type="video/webm">
+              <source src="https://bonitaesterorealtors.com/wp-content/uploads/2025/03/2024-vs-2023.mp4" type="video/webm">
               Your browser does not support the video tag.
             </video>        </div>
             <div id="display4" style="display: none;">
               <hr id="loading-line4">
               <video id="vid4" playsinline autoplay muted poster="cake.jpg" onended="changeVidNum()">
-                <source src="https://www.bonitaesterorealtors.com/wp-content/uploads/2023/01/part-1.mp4" type="video/webm">
+                <source src="https://bonitaesterorealtors.com/wp-content/uploads/2025/03/2024-Stats3.mp4" type="video/webm">
                 Your browser does not support the video tag.
               </video>        </div>
-              <div id="display5" style="display: none;">
+              
+              <!--<div id="display5" style="display: none;">
                 <hr id="loading-line5">
                 <video id="vid5" playsinline autoplay muted poster="cake.jpg" onended="changeVidNum()">
                   <source src="https://www.bonitaesterorealtors.com/wp-content/uploads/2023/01/part-2.mp4" type="video/webm">
                   Your browser does not support the video tag.
-                </video>        </div>
+                </video>        </div>-->
+
       </div>
 
 
