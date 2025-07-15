@@ -1,0 +1,446 @@
+
+  <style>
+    /* ===== Shared Page Styles ===== */
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0; padding: 0;
+      background: #f7fafc;
+      color: #333;
+    }
+    .page-container {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 2%;
+      max-width: 1200px;
+      margin: 2rem auto;
+      padding: 0 1rem;
+    }
+    .column {
+      background: #fff;
+      border-radius: 12px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+      padding: 1.5rem;
+      box-sizing: border-box;
+    }
+    .left-col { flex: 0 0 60%; }
+    .right-col{ flex: 0 0 38%; }
+    @media (max-width: 768px) {
+      .left-col, .right-col { flex: 0 0 100%; }
+    }
+
+    /* ===== Calculator Styles ===== */
+    .button-container {
+      display: flex; justify-content: center;
+      flex-wrap: wrap; gap: 1rem; margin: 0 20px;
+    }
+    .button {
+      flex: 1 1 100px; max-width: 150px;
+      background-color: #018dff; color: #fff;
+      border: none; border-radius: 8px;
+      cursor: pointer; padding: .5rem;
+      text-align: center; transition: background-color .3s ease;
+    }
+    .button img {
+      max-width: 100%; height: auto;
+      margin-bottom: .25rem;
+      transition: transform .3s ease;
+    }
+    .button:hover { background-color: #0064b7; }
+    .button:hover img { transform: scale(1.1); }
+    #calcHead h2 {
+      color: #2faae0; margin-bottom: 1rem;
+    }
+    .calculators { margin-top: 1rem; }
+    .calculators h1 {
+      font-size: 1.25rem; margin-bottom: .5rem;
+    }
+    label {
+      display: block; margin-bottom: .75rem;
+      font-weight: bold;
+    }
+    select {
+      width: 100%; padding: .5rem;
+      margin-top: .25rem;
+    }
+    #result, #result2, #result3,
+    #totalDues, #totalDues2, #totalDues3 {
+      margin-top: 1rem; padding: .75rem;
+      background:#f0f8ff; border-radius:6px;
+      font-weight: bold; text-align:center;
+    }
+
+    /* ===== Renewal Fees & Extras ===== */
+    .fees-layout {
+      display: flex; flex-direction: column;
+      gap: 1.5rem;
+    }
+    .fees-layout p {
+      margin-bottom: 1rem; text-align: center;
+    }
+    .fees-cards {
+      display: flex; flex-wrap: wrap; gap: 1rem;
+    }
+    .fees-card {
+      flex: 1 1 45%;
+      border: 1px solid #ddd;
+      border-radius: 6px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+      padding: 1rem; background: #fff;
+    }
+    .fees-card h3 {
+      margin-top: 0; color: #0b5fb2;
+    }
+    .fees-card .row {
+      margin: .75rem 0;
+    }
+    .fees-card label {
+      display: block; font-weight: bold;
+      margin-bottom: .25rem;
+    }
+    .fees-card .field {
+      border: 1px solid #eee;
+      background: #fafafa;
+      border-radius: 4px;
+      padding: .5rem;
+    }
+    .cta {
+      text-align: center; margin-top: 1.5rem;
+    }
+    .cta a {
+      display: inline-block;
+      background: #018dff; color: #fff;
+      padding: .75rem 1.5rem;
+      border-radius: 8px;
+      text-decoration: none;
+      font-weight: bold;
+      transition: background .3s;
+    }
+    .cta a:hover { background: #0064b7; }
+
+    @media (max-width: 768px) {
+      .fees-card { flex: 1 1 100%; }
+    }
+  </style>
+</head>
+<body>
+
+    <div class="page-container">
+        <!-- Left Column: Dues Calculator -->
+        <div class="column left-col">
+          <div id="calculator">
+            <div id="calcHead"><h2>I am a...</h2></div>
+            <div class="button-container">
+              <button class="button" onclick="showCalculator('calculator1')">
+                <img src="https://www.bonitaesterorealtors.com/wp-content/uploads/2023/06/3.png" alt="Realtor">
+                Realtor
+              </button>
+              <button class="button" onclick="showCalculator('calculator2')">
+                <img src="https://www.bonitaesterorealtors.com/wp-content/uploads/2023/06/4.png" alt="Broker">
+                Broker
+              </button>
+              <button class="button" onclick="showCalculator('calculator3')">
+                <img src="https://www.bonitaesterorealtors.com/wp-content/uploads/2023/06/5.png" alt="Affiliate">
+                Affiliate
+              </button>
+            </div>
+      
+            <!-- Realtor Calculator (unchanged) -->
+            <div id="calculator1" class="calculators">
+              <h1>Realtor Dues Calculator</h1>
+              <label>Month:
+                <select id="month" onchange="calculateDues()"></select>
+              </label>
+              <label>Membership Type:
+                <select id="membershipType" onchange="calculateDues();">
+                  <option value="primary">Primary Realtor</option>
+                  <option value="secondary">Secondary Realtor</option>
+                  <option value="secondaryOut">Secondary Realtor (Out-of-State)</option>
+                  <option value="transferring">Transferring Realtor</option>
+                </select>
+              </label>
+              <div id="result"></div>
+            </div>
+      
+            <!-- Broker Calculator (updated) -->
+            <div id="calculator2" class="calculators" style="display:none;">
+              <h1>Broker Dues Calculator</h1>
+              <label>Month:
+                <select id="month2" onchange="calculateDues2()"></select>
+              </label>
+              <label>Broker Type:
+                <select id="membershipType2" onchange="calculateDues2();">
+                  <option value="primaryWMLS">Primary w/ MLS</option>
+                  <option value="secondaryWoMLS">Secondary w/o MLS</option>
+                  <option value="secondaryWMLS">Secondary w/ MLS</option>
+                  <option value="outStateWoMLS">Out of State w/o MLS</option>
+                  <option value="outStateWMLS">Out of State w/ MLS</option>
+                </select>
+              </label>
+              <div id="result2"></div>
+            </div>
+      
+            <!-- Affiliate Calculator (unchanged) -->
+            <div id="calculator3" class="calculators" style="display:none;">
+              <h1>Affiliate Dues Calculator</h1>
+              <label>Month:
+                <select id="month3" onchange="calculateDues3()"></select>
+              </label>
+              <label>Affiliate Type:
+                <select id="membershipType3" onchange="calculateDues3();">
+                  <option value="primary">Primary Affiliate</option>
+                  <option value="secondary">Associate Affiliate</option>
+                </select>
+              </label>
+              <div id="result3"></div>
+            </div>
+          </div>
+        </div>
+
+    <!-- Right Column: Renewal Fees & Extras -->
+    <div class="column right-col">
+      <div class="fees-layout">
+        <h3>Reoccurring Membership Fees:</h3>
+        <p>
+          Membership dues are collected twice a year:
+          <strong>Dec 15</strong> (NAR, FR & Local dues) and
+          <strong>Jul 1</strong> (MLS access). MLS Office dues follow the same schedule.
+        </p>
+        <div class="fees-cards">
+          <div class="fees-card">
+            <h3>Primary</h3>
+            <div class="row">
+              <label>In-State:</label>
+              <div class="field">Association: $542 (Dec 15) | MLS: $240 (Jul 1)</div>
+            </div>
+            <div class="row">
+              <label>Out-of-State:</label>
+              <div class="field">Not applicable</div>
+            </div>
+          </div>
+          <div class="fees-card">
+            <h3>Secondary</h3>
+            <div class="row">
+              <label>In-State:</label>
+              <div class="field">$175 (Dec 15)</div>
+            </div>
+            <div class="row">
+              <label>Out-of-State:</label>
+              <div class="field">$321 (Dec 15)</div>
+            </div>
+          </div>
+          <div class="fees-card">
+            <h3>MLS Office</h3>
+            <div class="row">
+              <label>Cost:</label>
+              <div class="field">$834 twice/year</div>
+            </div>
+          </div>
+          <div class="fees-card">
+            <h3>Switch &amp; Save</h3>
+            <div class="row">
+              <label>Transfer Credit from RPCRA/NABOR:</label>
+              <div class="field">$50 off Application Fee</div>
+            </div>
+          </div>
+          <div class="fees-card">
+            <h3>Need Help?</h3>
+            <div class="row">
+              <label>Email:</label>
+              <div class="field">membership@berealtors.org</div>
+            </div>
+            <div class="row">
+              <label>Phone:</label>
+              <div class="field">(239) 992-6771</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // 1) All 12-month arrays for each line-item (REALTOR + Broker + Affiliate)
+    const FEES = {
+      "Local App":                        [50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50],
+      "FR Processing Fee":                [30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30],
+      "FR Annual":                        [146,133.83,121.67,109.50,97.33,85.17,73,60.83,48.67,36.50,24.33,12.17],
+      "FR Advocacy":                      [30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30],
+      "NAR Annual":                       [156,143,130,117,104,91,78,65,52,39,26,13],
+      "NAR Advocacy":                     [45, 45, 45, 45, 45, 45, 45, 45, 45, 45, 45, 45],
+      "Local Assoc. Annual":              [165,165,165,123.75,123.75,123.75,82.50,82.50,82.50,41.25,41.25,41.25],
+      "RPAC Investment":                  [20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20],
+      "BER Home Foundation Donation":     [10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10],
+      "MLS App Fee":                      [20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20],
+      "MLS Individual":                   [120,100,80,60,280,260,240,220,200,180,160,140],
+      "MLS Office App Fee":               [350,350,350,350,350,350,350,350,350,350,350,350],
+      "MLS Office":                       [834,695,556,417,1112,973,834,695,556,417,1112,973]
+    };
+  
+    // 2) Map membershipType → array of FEES keys (REALTOR & Affiliate unchanged)
+    const TYPE_MAP = {
+      primary: [
+        "Local App","FR Processing Fee","FR Annual","FR Advocacy",
+        "NAR Annual","NAR Advocacy","Local Assoc. Annual",
+        "RPAC Investment","BER Home Foundation Donation",
+        "MLS App Fee","MLS Individual"
+      ],
+      secondary: [
+        "Local Assoc. Annual","FR Processing Fee",
+        "RPAC Investment","BER Home Foundation Donation",
+        "MLS App Fee","MLS Individual"
+      ],
+      secondaryOut: [
+       "Local App","FR Processing Fee",
+       "FR Annual","FR Advocacy",
+       "Local Assoc. Annual",
+       "RPAC Investment","BER Home Foundation Donation",
+       "MLS App Fee","MLS Individual"
+     ],
+      transferring: []  // built below
+    };
+    // Transferring = primary minus Local App + FR Processing + NAR Annual + NAR Advocacy
+    TYPE_MAP.transferring = TYPE_MAP.primary.filter(k =>
+      k !== "Local App" &&
+      k !== "FR Processing Fee" &&
+      k !== "NAR Annual" &&
+      k !== "NAR Advocacy"
+    );
+  
+    // 3) Populate month dropdowns
+    const monthNames = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+    monthNames.forEach((m,i)=>{
+      ['month','month2','month3'].forEach(id=>{
+        document.getElementById(id).options.add(new Option(m, i+1));
+      });
+    });
+  
+    // 4) Show/hide calculators
+    function showCalculator(id) {
+      document.querySelectorAll('.calculators').forEach(c=>c.style.display='none');
+      document.getElementById(id).style.display='contents';
+    }
+    showCalculator('calculator1');  // default
+  
+    // 5) Helper to format each line
+    function formatLine(name,val) {
+      return `<p><strong>${name}:</strong> $${val.toFixed(2)}</p>`;
+    }
+  
+    // 6) Generic breakdown renderer
+    function renderBreakdown(type, monthIdx, resultId) {
+      const keys = TYPE_MAP[type]||[];
+      let html = '', total = 0;
+      keys.forEach(k=>{
+        const amt = FEES[k][monthIdx];
+        html += formatLine(k, amt);
+        total += amt;
+      });
+      html += '<hr>';
+      html += `<p><strong>Total Dues:</strong> $${total.toFixed(2)}</p>`;
+      document.getElementById(resultId).innerHTML = html;
+    }
+  
+    // 7) Realtor calculator (UNCHANGED)
+    function calculateDues() {
+      const m = +document.getElementById('month').value - 1;
+      const t = document.getElementById('membershipType').value;
+      renderBreakdown(t, m, 'result');
+    }
+  
+    // 8) Broker calculator (FULLY UPDATED to your five types)
+    function calculateDues2(){
+    const m = parseInt(document.getElementById('month2').value, 10) - 1;
+    const t = document.getElementById('membershipType2').value;
+
+    // exactly your broker line‐items per column, with RPAC removed for the two out-of-state types
+    const BROKER_LINES = {
+        primaryWMLS: [
+        "Local App","FR Processing Fee","FR Annual","FR Advocacy",
+        "NAR Annual","NAR Advocacy","Local Assoc. Annual",
+        "RPAC Investment","BER Home Foundation Donation",
+        "MLS App Fee","MLS Individual","MLS Office App Fee","MLS Office"
+        ],
+        secondaryWoMLS: [
+        "Local Assoc. Annual",
+        "RPAC Investment",
+        "BER Home Foundation Donation"
+        ],
+        secondaryWMLS: [
+        "Local Assoc. Annual","FR Processing Fee",
+        "RPAC Investment","BER Home Foundation Donation",
+        "MLS App Fee","MLS Individual"
+        ],
+        outStateWoMLS: [
+        "Local App","FR Processing Fee","FR Annual","FR Advocacy",
+        "NAR Annual","NAR Advocacy","Local Assoc. Annual",
+        "BER Home Foundation Donation"
+        ],
+        outStateWMLS: [
+        "Local App","FR Processing Fee","FR Annual","FR Advocacy",
+        "NAR Annual","NAR Advocacy", "MLS Individual", "Local Assoc. Annual",
+        "BER Home Foundation Donation",
+        "MLS Office App Fee","MLS Office"
+        ]
+    };
+
+    const lines = BROKER_LINES[t] || BROKER_LINES.primaryWMLS;
+    let html = '', total = 0;
+
+    lines.forEach(key => {
+        // brokers pay a flat $270 for “Local App”
+        const amt = (key === "Local App") ? 270 : FEES[key][m];
+        html += formatLine(key, amt);
+        total += amt;
+    });
+
+    html += '<hr>';
+    html += `<p><strong>Total Dues:</strong> $${total.toFixed(2)}</p>`;
+    document.getElementById('result2').innerHTML = html;
+    }
+  
+    // 9) Affiliate calculator (UNCHANGED)
+    function calculateDues3() {
+    const m = parseInt(document.getElementById('month3').value, 10) - 1;
+    const t = document.getElementById('membershipType3').value;
+    let html = '', total = 0;
+
+    if (t === 'primary') {
+      // Primary Affiliate:
+      //  • Local dues: start 135, drop \$11.25 each month → 135 - 11.25*m
+      const localDues = 135 - 11.25 * m;
+      html  += formatLine('Local Assoc. Annual', localDues);
+      total += localDues;
+
+      //  • One-time Application Fee: $50
+      html  += formatLine('Application Fee', 50);
+      total += 50;
+
+      //  • One-time RPAC Investment: $20
+      html  += formatLine('RPAC Investment', 20);
+      total += 20;
+    } else {
+      // Associate Affiliate:
+      //  • Local dues: start 60, drop \$5 each month → 60 - 5*m
+      const localDues = 60 - 5 * m;
+      html  += formatLine('Local Assoc. Annual', localDues);
+      total += localDues;
+
+      //  • One-time RPAC Investment: $20
+      html  += formatLine('RPAC Investment', 20);
+      total += 20;
+    }
+
+    html += '<hr>';
+    html += `<p><strong>Total Dues:</strong> $${total.toFixed(2)}</p>`;
+    document.getElementById('result3').innerHTML = html;
+  }
+
+  // 10) Initialize & compute
+  ['month','month2','month3'].forEach(id=>{
+    document.getElementById(id).value = new Date().getMonth()+1;
+  });
+  calculateDues();
+  calculateDues2();
+  calculateDues3();
+  </script>
+  
