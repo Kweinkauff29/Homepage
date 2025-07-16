@@ -3,6 +3,7 @@
       <meta charset="utf-8">
       <title>Bonita Springs-Estero Realtors</title>
       <link rel="preconnect" href="https://fonts.googleapis.com">
+      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" integrity="sha512-dyZ88n1Kis7J1gY9+jnuv6QylsHY2Rz+5PjqF3tU5hAnk3q1uI5wVzW+Z3G6CVJz4N97Z8vaUeQb+J6aQ1mX0g==" crossorigin="anonymous" referrerpolicy="no-referrer"/>
       <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
       <link rel="preconnect" href="https://fonts.googleapis.com">
       <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -32,7 +33,27 @@
       <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
       <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>s
       <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400..700&family=Poppins&family=Ubuntu:wght@500&display=swap" rel="stylesheet">
-  
+      <link 
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" 
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"
+      integrity="sha512-dyZ88n1Kis7J1gY9+jnuv6QylsHY2Rz+5PjqF3tU5hAnk3q1uI5wVzW+Z3G6CVJz4N97Z8vaUeQb+J6aQ1mX0g=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    />
+    
+    <!-- FontAwesome -->
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"
+      integrity="sha512-dyZ88n1Kis7J1gY9+jnuv6QylsHY2Rz+5PjqF3tU5hAnk3q1uI5wVzW+Z3G6CVJz4N97Z8vaUeQb+J6aQ1mX0g=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    />
+
     </head>
       <style media="screen">
     a {
@@ -1614,85 +1635,255 @@
       </style>
     </head>
   
-    <div class="stats-container">
-      <h2 class="stats-title">May 2025 – Bonita-Estero Market Statistics</h2>
-      <div class="stats-row">
-        <!-- CLOSED SALES -->
-        <div class="stat-box">
-          <div class="stat-icon">
-            <i class="fa fa-home" aria-hidden="true"></i>
-          </div>
-          <div class="stat-label">Closed Sales</div>
-          <div class="stat-value">309</div>
-          <div class="stat-change">
-            <span class="arrow-down">▼</span>-5.8% vs May 2024
-          </div>
-        </div>
+    <style>
+      :root {
+        --ber-teal:       #008080;
+        --ber-gold:       #F2BE22;
+        --ber-dark:       #004D4D;
+        --ber-light:      #F7FAFC;
+        --ber-mid-gray:   #CCCCCC;
+        --bs-bg:          var(--ber-light);
+        --bs-stats-bg:    #e6f7f7;       /* light teal for stats */
+        --bs-card-bg:     #ffffff;
+        --bs-border:      rgba(0,0,0,0.05);
+        --bs-title:       var(--ber-gold);
+        --bs-icon:        var(--ber-dark);
+        --bs-text:        #333333;
+        --bs-change-up:   #28A745;
+        --bs-change-down: #DC3545;
+      }
     
-        <!-- AVERAGE PRICE -->
-        <div class="stat-box">
-          <div class="stat-icon">
-            <i class="fa fa-tag" aria-hidden="true"></i>
-          </div>
-          <div class="stat-label">Median Price</div>
-          <div class="stat-value">$525,000</div>
-          <div class="stat-change">
-            <span class="arrow-down">▼</span>-12.5% vs May 2024
-          </div>
-        </div>
+      /* Base font */
+      body {
+        font-family: 'Inter', sans-serif;
+      }
     
-        <!-- TIME TO SALE -->
-        <div class="stat-box">
-          <div class="stat-icon">
-            <i class="fa fa-clock-o" aria-hidden="true"></i>
-          </div>
-          <div class="stat-label">Days on Market (Median)</div>
-          <div class="stat-value">51 Days</div>
-          <div class="stat-change">
-            <span class="arrow-up">▲</span>+8.5% vs May 2024
-          </div>
-        </div>
+      /* Two-column container */
+      .bemSection {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 2rem;
+        max-width: 1200px;
+        margin: 2rem auto;
+        padding: 0 1rem;
+      }
+      .bemSection__col {
+        flex: 1 1 48%;
+        box-sizing: border-box;
+      }
+      @media (max-width: 768px) {
+        .bemSection__col { flex: 1 1 100%; }
+      }
     
-        <!-- PENDING SALES -->
-        <div class="stat-box">
-          <div class="stat-icon">
-            <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
-          </div>
-          <div class="stat-label">Pending Sales</div>
-          <div class="stat-value">334</div>
-          <div class="stat-change">
-            <span class="arrow-down">▼</span>-9.0% vs May 2024
-          </div>
-        </div>
+      /* ---- Market Stats ---- */
+      .bemStats {
+        background: var(--bs-stats-bg);
+        border-radius: 16px;
+        box-shadow: 0 6px 16px var(--bs-border);
+        padding: 1.5rem;
+      }
+      .bemStats__title {
+        text-align: center;
+        color: var(--ber-dark);
+        font-size: 2.25rem;
+        margin-bottom: 1rem;
+        position: relative;
+        font-weight: 700;
+      }
+      .bemStats__title::after {
+        content: "";
+        width: 100px; height: 4px;
+        background: var(--ber-dark);
+        display: block;
+        margin: .5rem auto 0;
+        border-radius: 2px;
+      }
+      .bemStats__grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(180px,1fr));
+        gap: 1.5rem;
+        padding: 1rem 0;
+      }
+      .bemStats__card {
+        background: var(--bs-card-bg);
+        border-radius: 12px;
+        box-shadow: 0 4px 12px var(--bs-border);
+        padding: 1.25rem;
+        text-align: center;
+        transition: transform .2s, box-shadow .2s;
+      }
+      .bemStats__card:hover {
+        transform: translateY(-6px);
+        box-shadow: 0 8px 20px var(--bs-border);
+      }
+      .bemStats__icon {
+        font-size: 2rem;
+        color: var(--ber-teal);
+        margin-bottom: .5rem;
+      }
+      .bemStats__label {
+        font-size: 2rem;
+        color: var(--bs-text);
+        text-transform: uppercase;
+        margin-bottom: .5rem;
+        font-weight: 600;
+      }
+      .bemStats__value {
+        font-size: 1.75rem;
+        font-weight: 700;
+        color: var(--ber-dark);
+        margin-bottom: .5rem;
+      }
+      .bemStats__change {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-size: 1.5rem;
+        font-weight: 500;
+      }
+      .bemStats__change--up   { color: var(--bs-change-up); }
+      .bemStats__change--down { color: var(--bs-change-down); }
+      .bemStats__change-icon  { margin-right: .25em; }
+      .bemStats__disclaimer {
+        font-size: 1rem;
+        text-align: center;
+        color: var(--bs-text);
+        opacity: .7;
+        border-top: 1px solid var(--ber-mid-gray);
+        padding-top: 1rem;
+        margin-top: 1rem;
+      }
     
-        <!-- DOLLAR VOLUME -->
-        <div class="stat-box">
-          <div class="stat-icon">
-            <i class="fa fa-usd" aria-hidden="true"></i>
-          </div>
-          <div class="stat-label">Dollar Volume</div>
-          <div class="stat-value">$233 Million</div>
-          <div class="stat-change">
-            <span class="arrow-down">▼</span>-18.2% vs May 2024
-          </div>
-        </div>
+      /* ---- Carousel (Affiliates) ---- */
+      .carousel {
+        position: relative;
+        width: 100%;
+        max-width: 100%;
+        margin: auto;
+        overflow: hidden;
+        padding: 1rem;
+        background: #fff;
+        border-radius: 16px;
+        box-shadow: 0 4px 12px var(--bs-border);
+      }
+      .carousel h3 {
+        font-family: 'Inter', sans-serif;
+        font-size: 2rem;
+        font-weight: 700;
+        margin-bottom: 1rem;
+        text-align: center;
+      }
+      .show { display: flex; }
+      .carousel .sponsor-group {
+        display: none;
+        text-align: center;
+      }
+      .carousel .sponsor-group.show {
+        display: flex !important;
+        flex-direction: column;      /* vertical stack */
+        justify-content: center;
+        align-items: center;
+        gap: 1rem;
+      }
+      .carousel img {
+        margin: 0;
+        width: 190px !important;
+        height: auto;
+        object-fit: contain;
+        opacity: 0;
+        transition: opacity .8s ease-in-out, transform .3s;
+      }
+      .carousel img.show {
+        opacity: 1;
+        transform: scale(1);
+      }
+      .carousel img:hover {
+        transform: scale(1.1);
+      }
+    </style>
     
-        <!-- ACTIVE INVENTORY -->
-        <div class="stat-box">
-          <div class="stat-icon">
-            <i class="fa fa-archive" aria-hidden="true"></i>
-          </div>
-          <div class="stat-label">Active Inventory</div>
-          <div class="stat-value">2,286</div>
-          <div class="stat-change">
-            <span class="arrow-up">▲</span>+36.6% vs May 2024
+    <div class="bemSection">
+      <!-- LEFT: Market Stats -->
+      <div class="bemSection__col">
+        <div class="bemStats">
+          <h2 class="bemStats__title">June 2025 – Bonita-Estero Market Statistics</h2>
+          <div class="bemStats__grid" id="bemStatsGrid"></div>
+          <div class="bemStats__disclaimer">
+            The data presented is based on the most accurate information available at the time  
+            of publication. Stats directly pulled from Bonita-Estero Area Domus Analytics.
           </div>
         </div>
       </div>
-      <div class="stats-disclaimer">
-        The data presented is based on the most accurate information available at the time of publication. Stats directly pulled from Bonita-Estero Area InfoSparks.
+    
+      <!-- RIGHT: Affiliates Carousel -->
+      <div class="bemSection__col">
+        <div class="carousel" style="box-shadow: none !important;">
+          <h3 style="color:var(--ber-teal);">2025 Year Sponsors</h3>
+          <div class="sponsor-group show" id="diamond">
+            <a><img src="https://www.bonitaesterorealtors.com/wp-content/uploads/2024/01/3-e1706192519400.png" class="show" alt=""></a>
+            <a href="https://cottrelltitle.com/" target="_blank"><img src="https://www.bonitaesterorealtors.com/wp-content/uploads/2023/03/cottrell-feature-logo-1-2.png" class="show" alt=""></a>
+            <a href="https://stateinsuranceusa.com/" target="_blank"><img src="https://www.bonitaesterorealtors.com/wp-content/uploads/2022/11/state-insurance-usa.jpeg" class="show" alt=""></a>
+            <a href="https://housemaster.com" target="_blank"><img src="https://bonitaesterorealtors.com/wp-content/uploads/2025/03/hm2.png" class="show" alt=""></a>
+            <a href="https://www.saadlegal.com/" target="_blank"><img src="https://bonitaesterorealtors.com/wp-content/uploads/2021/09/sam-saad.jpeg" class="show" alt=""></a>
+            <a href="https://www.lawfirmnaples.com/" target="_blank"><img src="https://bonitaesterorealtors.com/wp-content/uploads/2022/03/WWMRLaw-Firm.png" class="show" alt=""></a>
+          </div>
+          <div class="sponsor-group" id="gold">
+            <a><img src="https://www.bonitaesterorealtors.com/wp-content/uploads/2024/01/5-e1706192560811.png" class="show" alt=""></a>
+            <a href="https://hiltonmovers.com/" target="_blank"><img src="https://bonitaesterorealtors.com/wp-content/uploads/2024/08/Hilton-Moving-Storage-LLC.jpg" class="show" alt=""></a>
+            <a href="https://www.privateclienttitle.com/" target="_blank"><img src="https://bonitaesterorealtors.com/wp-content/uploads/2025/03/Screenshot-2025-03-04-at-13-30-20-Media-Library-‹-Bonita-Springs-Estero-Realtors-—-WordPress.png" class="show" alt=""></a>
+            <a href="https://www.daviesduke.com/" target="_blank"><img src="https://bonitaesterorealtors.com/wp-content/uploads/2025/02/DukeDavies-329w.webp" class="show" alt=""></a>
+          </div>
+          <div class="sponsor-group" id="silver">
+            <a><img src="https://bonitaesterorealtors.com/wp-content/uploads/2024/01/6-e1706192576315.png" class="show" alt=""></a>
+            <a><img src="https://bonitaesterorealtors.com/wp-content/uploads/2021/09/239.jpeg" class="show" alt=""></a>
+          </div>
+          <div class="sponsor-group" id="bronze">
+            <a><img src="https://www.bonitaesterorealtors.com/wp-content/uploads/2024/01/7-e1706192598686.png" class="show" alt=""></a>
+            <a><img src="https://bonitaesterorealtors.com/wp-content/uploads/2022/12/premium-mortgage.jpeg" class="show" alt=""></a>
+            <a><img src="https://bonitaesterorealtors.com/wp-content/uploads/2024/02/DwellingCheckupdatedlogo2.png" class="show" alt=""></a>
+            <a><img src="https://bonitaesterorealtors.com/wp-content/uploads/2023/03/Venture-1.jpg" class="show" alt=""></a>
+          </div>
+        </div>
       </div>
     </div>
+    
+    <script>
+      /* Inject stats cards */
+      (function(){
+        const stats = [
+          { icon:'fa-home',        label:'Closed Sales',            value:'241',          change:'-0.8% vs June 2024', up:false },
+          { icon:'fa-tag',         label:'Median Price',            value:'$555,000',     change:'-4.3% vs June 2024', up:false },
+          { icon:'fa-clock',       label:'Days on Market (Median)', value:'72 Days',       change:'+46.9% vs June 2024', up:true  },
+          { icon:'fa-pencil-alt',  label:'Pending Sales',           value:'232',          change:'+39.8% vs June 2024', up:true  },
+          { icon:'fa-dollar-sign', label:'Dollar Volume',           value:'$176 Million', change:'+4.1% vs June 2024',  up:true  },
+          { icon:'fa-archive',     label:'Active Inventory',        value:'2,039',        change:'+24.6% vs June 2024', up:true  }
+        ];
+        const grid = document.getElementById('bemStatsGrid');
+        stats.forEach(s => {
+          const div = document.createElement('div');
+          div.className = 'bemStats__card';
+          div.innerHTML = `
+            <div class="bemStats__icon"><i class="fas ${s.icon}"></i></div>
+            <div class="bemStats__label">${s.label}</div>
+            <div class="bemStats__value">${s.value}</div>
+            <div class="bemStats__change ${s.up?'bemStats__change--up':'bemStats__change--down'}">
+              <span class="bemStats__change-icon">${s.up?'▲':'▼'}</span>${s.change}
+            </div>
+          `;
+          grid.appendChild(div);
+        });
+      })();
+    
+      /* Rotate sponsor levels every 5s */
+      (function() {
+        const groups = Array.from(document.querySelectorAll('.carousel .sponsor-group'));
+        let idx = 0;
+        const show = i => groups.forEach((g,j)=>g.classList.toggle('show', j===i));
+        show(idx);
+        setInterval(()=> show(idx = (idx+1)%groups.length), 5000);
+      })();
+    </script>
+    
   
         <style>
         .marquee {
@@ -1734,54 +1925,6 @@
   
         </style>
   
-  
-      <div id="bottom-contain">
-            <h2 style="text-align: center;" class="resrow">Our Affiliates</h2>
-  
-            <div class="carousel">
-              <h3 style="text-align: center; font-size: 2rem !important; color: #008080 !important;">2025 Year Sponsors</h2>
-  
-              <div class="sponsor-group" id="diamond" class="row">
-                              <!-- Hider -->
-                <!-- Add Diamond sponsors' images with links -->
-                <a><img src="https://www.bonitaesterorealtors.com/wp-content/uploads/2024/01/3-e1706192519400.png" class="show"></a>
-                <a href="https://cottrelltitle.com/" target="_blank"><img src="https://www.bonitaesterorealtors.com/wp-content/uploads/2023/03/cottrell-feature-logo-1-2.png" class="show"></a>
-                <a href="https://stateinsuranceusa.com/" target="_blank"><img src="https://www.bonitaesterorealtors.com/wp-content/uploads/2022/11/state-insurance-usa.jpeg" class="show"></a>
-                <a href="https://housemaster.com"  target="_blank"><img src="https://bonitaesterorealtors.com/wp-content/uploads/2025/03/hm2.png" class="show"></a>
-                <a href="https://www.saadlegal.com/"  target="_blank"><img  src="https://bonitaesterorealtors.com/wp-content/uploads/2021/09/sam-saad.jpeg" class="show"></a>
-                <a href="https://www.lawfirmnaples.com/"  target="_blank"><img src="https://bonitaesterorealtors.com/wp-content/uploads/2022/03/WWMRLaw-Firm.png" class="show"></a>
-                <!-- More diamond sponsors -->
-              </div>
-  
-              <!--<div class="sponsor-group row" id="platinum">
-                <a><img src="https://www.bonitaesterorealtors.com/wp-content/uploads/2024/01/4-e1706192541504.png" class="show"></a>
-              </div>-->
-  
-              <!-- Repeat for Gold, Silver, Bronze -->
-              <div class="sponsor-group row" id="gold">
-                <a><img src="https://www.bonitaesterorealtors.com/wp-content/uploads/2024/01/5-e1706192560811.png" class="show"></a>
-                <a href="https://hiltonmovers.com/" target="_blank"><img src="https://bonitaesterorealtors.com/wp-content/uploads/2024/08/Hilton-Moving-Storage-LLC.jpg" class="show"></a>
-                <a href="https://www.privateclienttitle.com/" target="_blank"><img src="https://bonitaesterorealtors.com/wp-content/uploads/2025/03/Screenshot-2025-03-04-at-13-30-20-Media-Library-‹-Bonita-Springs-Estero-Realtors-—-WordPress.png" class="show"></a>
-                <a href="https://www.daviesduke.com/" target="_blank"><img src="https://bonitaesterorealtors.com/wp-content/uploads/2025/02/DukeDavies-329w.webp" class="show"></a>
-  
-              </div>
-  
-              <div class="sponsor-group row" id="silver">
-                <a><img src="https://bonitaesterorealtors.com/wp-content/uploads/2024/01/6-e1706192576315.png" class="show"></a>
-                <a><img src="https://bonitaesterorealtors.com/wp-content/uploads/2021/09/239.jpeg" class="show"></a>
-  
-              </div>
-  
-              <<div class="sponsor-group row" id="bronze">
-                <a><img src="https://www.bonitaesterorealtors.com/wp-content/uploads/2024/01/7-e1706192598686.png" class="show"></a>
-  
-                <a><img src="https://bonitaesterorealtors.com/wp-content/uploads/2022/12/premium-mortgage.jpeg" class="show"></a>
-                <a><img src="https://bonitaesterorealtors.com/wp-content/uploads/2024/02/DwellingCheckupdatedlogo2.png" class="show"></a>
-                <a><img src="https://bonitaesterorealtors.com/wp-content/uploads/2023/03/Venture-1.jpg" class="show"></a>
-  
-  
-              </div>
-            </div>
   
             <!--Last Updated - August 22nd, 2024-->
             <script type="text/javascript">
