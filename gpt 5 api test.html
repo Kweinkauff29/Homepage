@@ -1,0 +1,405 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>IDX Listings – Bridge API (BSAOR)</title>
+  <style>
+    /* ===== BER Light Theme (matches bonitaesterorealtors.com) ===== */
+    :root{
+      --bg:#f6f8fc;          /* page bg */
+      --card:#ffffff;        /* card bg */
+      --ink:#101827;         /* body text */
+      --muted:#5e6b85;       /* secondary text */
+      --line:#e6eaf2;        /* borders */
+      --accent:#1a4b84;      /* BER blue */
+      --accent2:#d4af37;     /* BER gold */
+      --cta:#1a4b84;         /* primary button */
+      --cta-hover:#163c6a;   /* darker blue */
+    }
+    *{box-sizing:border-box}
+    body{margin:0;font-family:system-ui,-apple-system,Segoe UI,Roboto,Inter,Helvetica,Arial,sans-serif;background:var(--bg);color:var(--ink)}
+    header{padding:20px;display:flex;flex-wrap:wrap;gap:10px;align-items:center;justify-content:space-between;background:#fff;position:sticky;top:0;z-index:5;border-bottom:1px solid var(--line)}
+    header h1{font-size:20px;margin:0;color:var(--accent)}
+    .filters{display:flex;flex-wrap:wrap;gap:10px}
+    .filters input,.filters select,.filters button{padding:10px 12px;border-radius:8px;border:1px solid var(--line);background:#fff;color:var(--ink)}
+    .filters button{background:var(--cta);border-color:transparent;color:#fff;font-weight:600;cursor:pointer}
+    .filters button:hover{background:var(--cta-hover)}
+    .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:16px;padding:20px;max-width:1400px;margin:0 auto}
+    .card{background:var(--card);border:1px solid var(--line);border-radius:14px;overflow:hidden;display:flex;flex-direction:column;box-shadow:0 4px 14px rgba(15,23,42,.06)}
+
+    /* Thumbnail + inline carousel */
+    .thumb{position:relative;aspect-ratio:16/10;background:#eef2f7}
+    .thumb img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;transition:opacity .2s ease}
+    .badges{position:absolute;left:10px;bottom:10px;display:flex;gap:8px}
+    .badge{background:#0009;border:1px solid #fff3;color:#fff;padding:4px 8px;border-radius:999px;font-size:12px}
+    .counter{position:absolute;right:10px;bottom:10px;background:#0009;color:#fff;border:1px solid #fff3;padding:3px 8px;border-radius:999px;font-size:12px}
+    .slide{position:absolute;top:50%;transform:translateY(-50%);background:#0008;border:1px solid #fff3;color:#fff;padding:8px 10px;border-radius:10px;display:none;user-select:none}
+    .slide.prev{left:8px}
+    .slide.next{right:8px}
+    .thumb:hover .slide{display:block}
+
+    .card main{padding:14px 14px 6px}
+    .price{font-size:20px;font-weight:700;color:#0f172a}
+    .address{color:var(--muted);margin-top:2px}
+    .meta{display:flex;gap:10px;margin-top:8px;color:#66728f;font-size:13px}
+    .actions{display:flex;gap:8px;padding:10px 14px 14px}
+    .btn{flex:1;background:#fff;border:1px solid var(--line);color:var(--accent);border-radius:10px;padding:10px 12px;cursor:pointer;font-weight:600}
+    .btn.primary{background:var(--accent);border-color:transparent;color:#fff}
+    .btn.primary:hover{background:var(--cta-hover)}
+    details{border-top:1px solid var(--line)}
+    details[open]{background:#f9fbff}
+    details summary{list-style:none;padding:12px 14px;cursor:pointer;color:var(--accent);font-weight:600}
+    details summary::-webkit-details-marker{display:none}
+    .detail-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;padding:0 14px 14px}
+    .kv{background:#f6f9ff;border:1px solid var(--line);border-radius:8px;padding:8px}
+    .kv .k{color:#365f99;font-size:12px}
+    .kv .v{font-weight:600;color:#0f172a}
+    .empty{padding:60px;text-align:center;color:var(--muted)}
+    .load-more{display:block;margin:10px auto 40px;background:var(--accent2);border:none;color:#231c0a;font-weight:800;padding:14px 18px;border-radius:12px;cursor:pointer}
+
+    /* Lightbox */
+    .lightbox{position:fixed;inset:0;background:#000b;backdrop-filter:saturate(120%) blur(3px);display:none;align-items:center;justify-content:center;z-index:50}
+    .lightbox.open{display:flex}
+    .lb-frame{width:min(96vw,1100px);background:#01050f;border:1px solid #203057;border-radius:14px;overflow:hidden}
+    .lb-bar{display:flex;align-items:center;justify-content:space-between;padding:10px 12px;border-bottom:1px solid #1e2a4a}
+    .lb-title{font-weight:700;color:#fff}
+    .lb-close{background:#111a2e;border:1px solid #2a3b6b;color:#e7eeff;border-radius:8px;padding:8px 10px;cursor:pointer}
+    .lb-img{position:relative;height:min(72vh,820px);background:#0b1220}
+    .lb-img img{position:absolute;inset:0;margin:auto;max-width:100%;max-height:100%;object-fit:contain}
+    .lb-nav{position:absolute;inset:0;display:flex;align-items:center;justify-content:space-between}
+    .lb-nav button{background:#0006;border:1px solid #fff3;color:#fff;padding:12px;border-radius:10px;margin:0 8px;cursor:pointer}
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Southwest Florida Listings</h1>
+    <div class="filters">
+      <input id="qCity" placeholder="City (e.g., Bonita Springs)" />
+      <input id="qMin" type="number" placeholder="Min $" />
+      <input id="qMax" type="number" placeholder="Max $" />
+      <select id="qBeds">
+        <option value="">Beds</option>
+        <option>1</option><option>2</option><option>3</option><option>4</option><option>5</option>
+      </select>
+      <button id="searchBtn">Search</button>
+    </div>
+  </header>
+
+  <section id="grid" class="grid" aria-live="polite"></section>
+  <button id="loadMore" class="load-more" style="display:none">Load more</button>
+
+  <!-- Lightbox for photo gallery -->
+  <div class="lightbox" id="lightbox" role="dialog" aria-modal="true" aria-label="Photo gallery">
+    <div class="lb-frame">
+      <div class="lb-bar">
+        <div class="lb-title" id="lbTitle">Gallery</div>
+        <button class="lb-close" id="lbClose">Close</button>
+      </div>
+      <div class="lb-img">
+        <img id="lbImg" alt="Property photo" />
+        <div class="lb-nav">
+          <button id="prev">◀</button>
+          <button id="next">▶</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+  // ==== CONFIG ============================================================
+  const ACCESS_TOKEN = 'f375ab2b20d02a67acc5b668207e1a26';
+  const MLS_SLUG = 'bsaor';
+  const BASE = `https://api.bridgedataoutput.com/api/v2/${MLS_SLUG}/listings`;
+
+  // ==== STATE =============================================================
+  let nextUrl = null; // pagination url from Bridge API
+  const grid = document.getElementById('grid');
+  const loadMoreBtn = document.getElementById('loadMore');
+
+  // Lightbox state
+  const lb = document.getElementById('lightbox');
+  const lbImg = document.getElementById('lbImg');
+  const lbTitle = document.getElementById('lbTitle');
+  let lbPhotos = []; let lbIndex = 0;
+
+  // ==== HELPERS ===========================================================
+  const fmt = new Intl.NumberFormat('en-US',{style:'currency',currency:'USD',maximumFractionDigits:0});
+
+  // Fetch media for a listing (BSAOR exposes photos via /media)
+  async function fetchPhotosFor(listingKey){
+    const baseMedia = `https://api.bridgedataoutput.com/api/v2/${MLS_SLUG}/media`;
+    const fields = 'fields=MediaURL,MediaUrl,MediaURLLarge,MediaURLMedium,MediaURLSmall,MediaCategory,MediaType,Order,MediaOrder';
+
+    // Attempt with ResourceRecordKey
+    let urlA = `${baseMedia}?limit=50&${fields}&access_token=${ACCESS_TOKEN}&filter=MediaResource.eq.Property,ResourceRecordKey.eq.${encodeURIComponent(listingKey)}`;
+    try{
+      let res = await fetch(urlA);
+      if(res.ok){
+        const data = await res.json();
+        let pics = (data.bundle||[])
+          .filter(m=>/photo|image/i.test(m.MediaCategory||m.MediaType||'photo'))
+          .map(m=>({
+            url: m.MediaURL||m.MediaUrl||m.MediaURLLarge||m.MediaURLMedium||m.MediaURLSmall,
+            ord: m.MediaOrder || m.Order || 0
+          }))
+          .filter(p=>!!p.url);
+        if(pics.length){
+          pics.sort((a,b)=>a.ord-b.ord); // client-side order
+          return pics.map(p=>p.url);
+        }
+      }
+    }catch(e){/* ignore and try fallback */}
+
+    // Fallback with ResourceRecordID
+    let urlB = `${baseMedia}?limit=50&${fields}&access_token=${ACCESS_TOKEN}&filter=MediaResource.eq.Property,ResourceRecordID.eq.${encodeURIComponent(listingKey)}`;
+    try{
+      let res = await fetch(urlB);
+      if(res.ok){
+        const data = await res.json();
+        let pics = (data.bundle||[])
+          .filter(m=>/photo|image/i.test(m.MediaCategory||m.MediaType||'photo'))
+          .map(m=>({ url: m.MediaURL||m.MediaUrl||m.MediaURLLarge||m.MediaURLMedium||m.MediaURLSmall, ord: m.MediaOrder || m.Order || 0 }))
+          .filter(p=>!!p.url);
+        if(pics.length){
+          pics.sort((a,b)=>a.ord-b.ord);
+          return pics.map(p=>p.url);
+        }
+      }
+    }catch(e){/* ignore */}
+    return [];
+  }
+
+  function text(v){ return (v ?? '').toString().trim(); }
+  function kv(k,v){ return `<div class=kv><div class=k>${k}</div><div class=v>${(v??'').toString()||'—'}</div></div>` }
+
+  function createCard(item){
+    let photos = []; // per-card photo list
+    let idx = 0;     // per-card index
+
+    const imgFallback = 'https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?q=80&w=1200&auto=format&fit=crop';
+    const price = item.ListPrice || item.listPrice || item.Price || 0;
+    const addr1 = item.UnparsedAddress || '';
+    const city = item.City || '';
+    const state = item.StateOrProvince || 'FL';
+    const postal = item.PostalCode || '';
+    const beds = item.BedroomsTotal || item.BedsTotal || item.Bedrooms || '—';
+    const baths = item.BathroomsTotalInteger || item.BathsTotal || item.BathroomsFull || '—';
+    const sqft = item.LivingArea || item.SqFtTotal || item.BuildingAreaTotal || item.LotSizeSquareFeet || '';
+
+    async function fetchPhotosForIds(ids){
+  const baseMedia = `https://api.bridgedataoutput.com/api/v2/${MLS_SLUG}/media`;
+  const fields = 'fields=MediaURL,MediaUrl,MediaURLLarge,MediaURLMedium,MediaURLSmall,MediaCategory,MediaType,Order,MediaOrder';
+
+  // Try in this order: OriginatingSystemKey, ListingId (ResourceRecordID), ListingKey (ResourceRecordKey)
+  const idFilters = [];
+  if (ids.originatingSystemKey) idFilters.push(`OriginatingSystemKey.eq.${encodeURIComponent(ids.originatingSystemKey)}`);
+  if (ids.listingId)            idFilters.push(`ResourceRecordID.eq.${encodeURIComponent(ids.listingId)}`);
+  if (ids.listingKey)           idFilters.push(`ResourceRecordKey.eq.${encodeURIComponent(ids.listingKey)}`);
+
+  // Some feeds want a resource hint; try with and without
+  const hints = ['', 'MediaResource.eq.Property', 'ResourceName.eq.Property', 'MediaResource.eq.Listing', 'ResourceName.eq.Listing'];
+
+  for (const idFilter of idFilters){
+    for (const h of hints){
+      const parts = h ? [h, idFilter] : [idFilter];
+      const url = `${baseMedia}?limit=50&${fields}&access_token=${ACCESS_TOKEN}&filter=${parts.join(',')}`;
+      try{
+        const res = await fetch(url);
+        if(!res.ok) continue;
+        const bundle = (await res.json()).bundle || [];
+        if(!bundle.length) continue;
+
+        const pics = bundle
+          .filter(m => /photo|image/i.test(m.MediaCategory || m.MediaType || 'photo'))
+          .map(m => ({
+            url: m.MediaURL || m.MediaUrl || m.MediaURLLarge || m.MediaURLMedium || m.MediaURLSmall,
+            ord: m.MediaOrder || m.Order || 0
+          }))
+          .filter(p => !!p.url)
+          .sort((a,b) => a.ord - b.ord)
+          .map(p => p.url);
+
+        if (pics.length) return pics;
+      }catch(e){ /* try next combo */ }
+    }
+  }
+  return [];
+}
+
+
+    const card = document.createElement('article');
+    card.className = 'card';
+    card.innerHTML = `
+      <div class="thumb">
+        <button class="slide prev" aria-label="Previous photo">◀</button>
+        <button class="slide next" aria-label="Next photo">▶</button>
+        <img alt="${(addr1||'Home').replace(/"/g,'')}" src="${imgFallback}">
+        <div class="badges">
+          <span class="badge">${beds} bd</span>
+          <span class="badge">${baths} ba</span>
+          <span class="badge">${sqft? new Intl.NumberFormat().format(Math.round(sqft))+' sf': '—'}</span>
+        </div>
+        <div class="counter" style="display:none">1/1</div>
+      </div>
+      <main>
+        <div class="price">${fmt.format(price)}</div>
+        <div class="address">${[addr1, city, state, postal].filter(Boolean).join(', ')}</div>
+        <div class="meta">
+          <span>${text(item.PropertySubType || item.PropertyType || 'Residential')}</span>
+          <span>MLS#: ${item.ListingKey || item.ListingId || '—'}</span>
+        </div>
+      </main>
+      <div class="actions">
+        <button class="btn" data-gallery style="display:none">View Gallery</button>
+        <button class="btn primary" data-toggle>Details</button>
+      </div>
+      <details>
+        <summary>Property details</summary>
+        <div class="detail-grid">
+          ${kv('Year Built', item.YearBuilt)}
+          ${kv('HOA', item.AssociationFee ? fmt.format(item.AssociationFee) : '—')}
+          ${kv('Lot Size', item.LotSizeAcres ? item.LotSizeAcres+' ac' : (item.LotSizeSquareFeet? new Intl.NumberFormat().format(item.LotSizeSquareFeet)+' sf':'—'))}
+          ${kv('DOM', item.DaysOnMarket || '—')}
+          ${kv('Status', item.MlsStatus || item.StandardStatus || '—')}
+          ${kv('County', item.CountyOrParish || '—')}
+        </div>
+      </details>
+    `;
+
+    const imgEl = card.querySelector('.thumb img');
+    const galleryBtn = card.querySelector('[data-gallery]');
+    const prevBtn = card.querySelector('.slide.prev');
+    const nextBtn = card.querySelector('.slide.next');
+    const counter = card.querySelector('.counter');
+
+    function updateCounter(){
+      if(!photos.length){ counter.style.display='none'; return; }
+      counter.textContent = `${idx+1}/${photos.length}`;
+      counter.style.display = photos.length>1 ? 'block' : 'none';
+    }
+
+    function show(i){
+      if(!photos.length) return;
+      idx = (i + photos.length) % photos.length;
+      imgEl.style.opacity = '0.6';
+      imgEl.src = photos[idx];
+      imgEl.onload = ()=>{ imgEl.style.opacity = '1'; };
+      updateCounter();
+    }
+
+    // Bind gallery (sync with current idx)
+    galleryBtn.addEventListener('click',()=>{
+      if(!photos.length) return;
+      lbPhotos = photos;
+      lbIndex = idx;
+      lbImg.src = lbPhotos[lbIndex];
+      lbTitle.textContent = `${addr1 || 'Gallery'} (${lbPhotos.length})`;
+      lb.classList.add('open');
+    });
+
+    // Arrow handlers
+    prevBtn.addEventListener('click',(e)=>{ e.stopPropagation(); if(photos.length>1) show(idx-1); });
+    nextBtn.addEventListener('click',(e)=>{ e.stopPropagation(); if(photos.length>1) show(idx+1); });
+
+    // Async load photos via /media
+    (async()=>{
+  try{
+    // If MLS says 0 photos, don’t call /media
+    const ids = {
+   listingKey: item.ListingKey || null,
+    listingId: item.ListingId || null,
+    originatingSystemKey: item.OriginatingSystemKey || null
+  };
+  const pics = await fetchPhotosForIds(ids);
+
+
+
+    if(pics && pics.length){
+      photos = pics;
+      idx = 0;
+      imgEl.src = photos[0];
+      galleryBtn.style.display = 'inline-block';
+      if(photos.length > 1){ prevBtn.style.display = 'block'; nextBtn.style.display = 'block'; }
+      updateCounter();
+    }
+  }catch(e){ /* keep fallback */ }
+})();
+
+
+    // Toggle details
+    card.querySelector('[data-toggle]').addEventListener('click',()=>{
+      const d = card.querySelector('details'); d.open = !d.open;
+    });
+
+    return card;
+  }
+
+  async function search({city,min,max,beds,reset=true}={}){
+    if(reset){ grid.innerHTML=''; nextUrl=null; }
+
+    const params = new URLSearchParams({
+      access_token: ACCESS_TOKEN,
+      limit: '24',
+      // no server-side sort (BSAOR rejects it)
+      fields: 'ListingKey,ListingId,OriginatingSystemKey,UnparsedAddress,City,StateOrProvince,PostalCode,ListPrice,PropertyType,PropertySubType,BedroomsTotal,BathroomsTotalInteger,LivingArea,LotSizeSquareFeet,LotSizeAcres,YearBuilt,AssociationFee,DaysOnMarket,StandardStatus,MlsStatus,CountyOrParish'
+    });
+
+    const q = [];
+    if(city) q.push(`City.eq.${encodeURIComponent(city)}`);
+    if(min) q.push(`ListPrice.gte.${min}`);
+    if(max) q.push(`ListPrice.lte.${max}`);
+    if(beds) q.push(`BedroomsTotal.gte.${beds}`);
+    if(q.length) params.set('filter', q.join(','));
+
+    const url = `${BASE}?${params.toString()}`;
+    const res = await fetch(url);
+    if(!res.ok){
+      const txt = await res.text();
+      grid.innerHTML = `<div class=empty>API error: ${res.status} – ${txt}</div>`; return;
+    }
+    const data = await res.json();
+    const items = data?.bundle || data?.listings || [];
+    // Client-side sort by price desc
+    items.sort((a,b)=>(b.ListPrice||0)-(a.ListPrice||0));
+
+    for(const item of items){ 
+      
+      grid.appendChild(createCard(item)); }
+
+    nextUrl = data.next || null;
+    loadMoreBtn.style.display = nextUrl ? 'block' : 'none';
+  }
+
+  loadMoreBtn.addEventListener('click', async ()=>{
+    if(!nextUrl) return;
+    const res = await fetch(`${nextUrl}&access_token=${ACCESS_TOKEN}`);
+    const data = await res.json();
+    const items = data?.bundle || [];
+    for(const item of items){ grid.appendChild(createCard(item)); }
+    nextUrl = data.next || null;
+    loadMoreBtn.style.display = nextUrl ? 'block' : 'none';
+  });
+
+  // Lightbox handlers
+  document.getElementById('lbClose').onclick = ()=> lb.classList.remove('open');
+  document.getElementById('prev').onclick = ()=> { if(!lbPhotos.length) return; lbIndex=(lbIndex-1+lbPhotos.length)%lbPhotos.length; lbImg.src=lbPhotos[lbIndex]; };
+  document.getElementById('next').onclick = ()=> { if(!lbPhotos.length) return; lbIndex=(lbIndex+1)%lbPhotos.length; lbImg.src=lbPhotos[lbIndex]; };
+  lb.addEventListener('click', (e)=>{ if(e.target===lb) lb.classList.remove('open'); });
+
+  // Search form
+  document.getElementById('searchBtn').addEventListener('click', ()=>{
+    search({
+      city: document.getElementById('qCity').value,
+      min: document.getElementById('qMin').value,
+      max: document.getElementById('qMax').value,
+      beds: document.getElementById('qBeds').value,
+      reset: true
+    });
+  });
+
+  // Initial fetch on load
+  search({reset:true});
+  </script>
+</body>
+</html>
