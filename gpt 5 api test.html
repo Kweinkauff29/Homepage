@@ -152,6 +152,13 @@
   const commFilterEl = document.getElementById('commFilter');
   const sortFilterEl = document.getElementById('sortFilter');
   const clearBtn = document.getElementById('clearBtn');
+  const loadMoreBtn = document.getElementById('loadMore');
+
+  // paging state
+  let visibleCount = 0;
+  let currentView = [];
+  let lastMediaHints = new Map();
+  const PAGE_SIZE = MIN_RESULTS; // show 8 at a time
 
   let RATE_COOLDOWN_UNTIL = 0;
   const mediaCache = new Map();
@@ -462,14 +469,27 @@
     return out;
   }
 
-  function renderCards(merged, mediaMap=new Map()){
-    grid.innerHTML='';
-    const list = applyClientFilters(merged);
-    list.forEach((row,i)=>{
-      const hint = mediaMap.get(row.property.ListingKey) || mediaMap.get(row.property.ListingId) || [];
-      const card=createCard(row.property, row.oh, hint, {priority: i<MIN_RESULTS});
+  function renderCards(merged, mediaMap=new Map(), {reset=true}={}){
+    if(reset){
+      grid.innerHTML='';
+      visibleCount = 0;
+      currentView = applyClientFilters(merged);
+      // keep last known hints if none provided
+      lastMediaHints = mediaMap && mediaMap.size ? mediaMap : lastMediaHints;
+    }
+
+    const start = visibleCount;
+    const end = Math.min(visibleCount + PAGE_SIZE, currentView.length);
+
+    for(let i=start; i<end; i++){
+      const row = currentView[i];
+      const hint = lastMediaHints.get(row.property.ListingKey) || lastMediaHints.get(row.property.ListingId) || [];
+      const card = createCard(row.property, row.oh, hint, {priority: i < PAGE_SIZE});
       grid.appendChild(card);
-    });
+    }
+
+    visibleCount = end;
+    loadMoreBtn.style.display = visibleCount < currentView.length ? 'block' : 'none';
   }
 
   // ===== INIT LOAD =====
@@ -493,7 +513,7 @@
     const mediaMap = await fetchMediaForProperties(currentMerged.slice(0, prefetchCount).map(x=>x.property));
 
     populateFiltersFrom(currentMerged);
-    renderCards(currentMerged, mediaMap);
+    renderCards(currentMerged, mediaMap, {reset:true});
     hideLoadingOverlay();
   }
 
@@ -505,10 +525,11 @@
   lbEl.addEventListener('click', (e)=>{ if(e.target===lbEl) lbEl.classList.remove('open'); });
 
   // Filter interactions
-  cityFilterEl.addEventListener('change', ()=> renderCards(currentMerged));
-  commFilterEl.addEventListener('change', ()=> renderCards(currentMerged));
-  sortFilterEl.addEventListener('change', ()=> renderCards(currentMerged));
-  clearBtn.addEventListener('click', ()=>{ cityFilterEl.value=''; commFilterEl.value=''; sortFilterEl.value='dateAsc'; renderCards(currentMerged); });
+  cityFilterEl.addEventListener('change', ()=> renderCards(currentMerged, lastMediaHints, {reset:true}));
+  commFilterEl.addEventListener('change', ()=> renderCards(currentMerged, lastMediaHints, {reset:true}));
+  sortFilterEl.addEventListener('change', ()=> renderCards(currentMerged, lastMediaHints, {reset:true}));
+  clearBtn.addEventListener('click', ()=>{ cityFilterEl.value=''; commFilterEl.value=''; sortFilterEl.value='dateAsc'; renderCards(currentMerged, lastMediaHints, {reset:true}); });
+  loadMoreBtn.addEventListener('click', ()=> renderCards(currentMerged, lastMediaHints, {reset:false}));
 
   // Start
   loadInitial();
