@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en" data-capo>
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>{{TITLE}}</title>
+
+  <!-- SEO -->
+  <meta name="title" content="{{TITLE}}" />
+  <meta name="description" content="{{META_DESCRIPTION}}" />
+
+  <!-- Open Graph / Twitter -->
+  <meta property="og:title" content="{{TITLE}}" />
+  <meta property="og:description" content="{{META_DESCRIPTION}}" />
+  <meta property="og:type" content="article" />
+  <meta property="og:url" content="{{CANONICAL_URL}}" />
+  <meta property="og:image" content="{{HERO_URL}}" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="{{TITLE}}" />
+  <meta name="twitter:description" content="{{META_DESCRIPTION}}" />
+  <meta name="twitter:image" content="{{HERO_URL}}" />
+
+  <!-- JSON-LD Article (Google-recommended) -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Article",
+    "headline": "{{TITLE}}",
+    "author": {"@type": "Organization","name": "Bonita Springs-Estero REALTORS®"},
+    "publisher": {"@type": "Organization","name": "Bonita Springs-Estero REALTORS®"},
+    "datePublished": "{{PUBLISHED_ISO}}",
+    "image": ["{{HERO_URL}}"],
+    "wordCount": {{WORD_COUNT}},
+    "inLanguage": "en-US"
+  }
+  </script>
+
+  <!-- Fonts -->
+  <link rel="stylesheet"
+    href="https://fonts.googleapis.com/css?family=Lato:100,200,300,400,500,600,700,800,900%7COpen+Sans:100,200,300,400,500,600,700,800,900%7CMontserrat:100,200,300,400,500,600,700,800,900%7CRoboto:100,200,300,400,500,600,700,800,900&display=swap"
+    media="all" onload="this.media='all'"/>
+
+  <!-- Styles (same look as your example) -->
+  <style>
+    :root{
+      --primary:#37ca37; --secondary:#188bf6; --white:#fff; --gray:#cbd5e0; --black:#000;
+      --headlinefont:'Montserrat'; --contentfont:'Lato'; --text-color:#000; --link-color:#188bf6;
+    }
+    body{margin:0;-webkit-font-smoothing:antialiased;color:var(--text-color)}
+    .img-round-corners img{border-radius:4px}
+    .shadow2{box-shadow:0 1px 5px rgba(0,0,0,.2)}
+    .preview-container{padding:20px}
+    .section .inner{max-width:1170px;margin:0 auto;padding:20px}
+    .row{display:flex;flex-wrap:wrap;margin:0 -15px}
+    .col{flex:1;padding:0 15px}
+    .heading{font-family:var(--headlinefont);font-weight:700;font-size:32px;margin:0 0 20px}
+    .sub-heading{font-family:var(--headlinefont);font-weight:400;font-size:22px;margin:30px 0 10px}
+    .paragraph{font-family:var(--contentfont);font-size:16px;line-height:1.6;margin:0 0 20px}
+    .paragraph ul{padding-left:20px;list-style:disc}
+    .paragraph ul li{margin-bottom:10px}
+    .image-container{text-align:center;margin-bottom:30px;width:100%}
+    figure{margin:24px 0}
+    figcaption{font:14px var(--contentfont);color:#555;margin-top:8px;text-align:center}
+    a{color:var(--link-color)}
+    .mw-100{width:100%}
+  </style>
+</head>
+<body>
+  <div id="preview-container" class="preview-container hl_page-preview--content">
+    <div class="section-wrapper">
+      <!-- Hero -->
+      <div class="image-container img-round-corners shadow2">
+        <img src="{{HERO_URL}}"
+             alt="{{HERO_ALT}}"
+             class="hl-optimized mw-100"
+             loading="lazy"
+             srcset="{{HERO_SRCSET}}"
+             sizes="(max-width: 768px) 92vw, 1170px" />
+      </div>
+
+      <!-- Title & Byline -->
+      <div class="heading"><h1>{{TITLE}}</h1></div>
+      <div class="sub-heading">
+        <strong><em>By Bonita Springs-Estero REALTORS®</em></strong><br/>
+        <strong><em>{{YEAR}}</em></strong>
+      </div>
+
+      <!-- Intro -->
+      <div class="paragraph">{{INTRO_HTML}}</div>
+
+      <!-- Body sections (I’ll repeat this block for each H2) -->
+      {{#SECTIONS}}
+        <div class="sub-heading">{{H2}}</div>
+        <div class="paragraph">{{HTML}}</div>
+      {{/SECTIONS}}
+
+      <!-- Inline media (optional) -->
+      {{#IMAGES}}
+        <figure class="img-round-corners shadow2">
+          <img src="{{url}}" alt="{{alt}}" class="mw-100" loading="lazy"
+               srcset="{{srcset}}" sizes="(max-width: 768px) 92vw, 1170px"/>
+          <figcaption>{{caption}}</figcaption>
+        </figure>
+      {{/IMAGES}}
+
+      <!-- Charts (optional) -->
+      {{#CHARTS}}
+        <figure class="shadow2">
+          <img src="{{quickchart_url}}" alt="{{alt}}" class="mw-100" loading="lazy"/>
+          <figcaption>{{caption}}</figcaption>
+        </figure>
+      {{/CHARTS}}
+
+      <!-- More News -->
+      <div class="paragraph">
+        <h2><strong>More Real Estate News</strong></h2>
+        <p><a href="https://bonitaesterorealtors.com/ber-news-home/" target="_blank" rel="noopener noreferrer">Click here</a></p>
+      </div>
+    </div>
+  </div>
+</body>
+</html>
