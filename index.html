@@ -75,6 +75,26 @@
     margin: auto;
     overflow: hidden;
     }
+
+  /* 1) Put the main content back to 100% */
+  .wpb-content--blank .wpb-content-wrapper {
+    max-width: 100% !important;
+    width: 100% !important;
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+  }
+
+  /* 2) Never allow horizontal overflow */
+  html, body { overflow-x: clip; } /* modern alternative to hidden */
+  *, *::before, *::after { box-sizing: border-box; }
+
+  /* 3) Header should never be wider than the viewport */
+  #head-background { left: 0; right: 0; width: 103% !important; }
+  @media (max-width: 768px) {
+    /* remove the 103% mobile width that was forcing overflow */
+    #head-background { width: 100% !important; margin: 93px 0 -40px 0 !important; }
+  }
+
   
   .show {
     display: flex;
@@ -553,7 +573,67 @@
     .head-image {
       width: 100%;
     }
-  
+        .ber-footer{
+        background:#111;
+            color:#fff;
+    margin-top:48px;
+    width:100%;
+    font-family:'Inter', system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+  }
+  .ber-footer a{ color:#fff; text-decoration:none; }
+  .ber-footer a:hover, .ber-footer a:focus{ text-decoration:underline; outline:0; }
+  .ber-footer__wrap{
+    max-width:1200px;
+    margin:0 auto;
+    padding:32px 16px;
+  }
+  .ber-footer__grid{
+    display:grid;
+    grid-template-columns: 2fr 1fr 1fr 1fr;
+    gap:28px;
+  }
+  .ber-footer__brand img{
+    width:140px; height:auto; display:block; margin-bottom:12px;
+  }
+  .ber-footer__tagline{ opacity:.85; line-height:1.5; }
+  .ber-footer__social{ margin-top:14px; display:flex; gap:10px; }
+  .ber-footer__social a{
+    display:inline-flex; align-items:center; justify-content:center;
+    width:38px; height:38px; border:1px solid rgba(255,255,255,.25);
+    border-radius:50%;
+  }
+  .ber-footer__title{
+    font-size:14px; letter-spacing:.04em; text-transform:uppercase;
+    margin:6px 0 10px; opacity:.8;
+  }
+  .ber-footer__links{ list-style:none; margin:0; padding:0; }
+  .ber-footer__links li{ margin:8px 0; font-size:14px; line-height:1.35; }
+  .ber-footer__contact p{ margin:6px 0; font-size:14px; }
+  .ber-footer__note{ font-size:12px; opacity:.75; margin-top:8px; line-height:1.5; }
+  .ber-footer__bottom{
+    border-top:1px solid rgba(255,255,255,.12);
+    margin-top:28px;
+    padding:14px 0 16px;
+    display:flex; align-items:center; justify-content:space-between;
+    gap:14px; flex-wrap:wrap;
+  }
+  .ber-footer__bottom a{ opacity:.9; }
+  .ber-footer__toplink{
+    margin-left:auto; font-size:14px;
+    display:inline-flex; align-items:center; gap:6px;
+  }
+  .ber-footer__toplink i{ font-size:12px; }
+  @media (max-width: 960px){
+    .ber-footer__grid{ grid-template-columns: 1fr 1fr; }
+  }
+  @media (max-width: 560px){
+    .ber-footer__grid{ grid-template-columns: 1fr; }
+    .ber-footer__bottom{ justify-content:center; text-align:center; }
+    .ber-footer__toplink{ margin-left:0; }
+  }
+
+
+
     .mn-scroll-location-description p {
       padding-top: 0 !important;
       margin-top: 0 !important;
@@ -1041,6 +1121,24 @@
         }
         @media only screen and (max-width: 510px) {
           }
+
+
+          /* ===== BER Footer (Bottom Header) ===== */
+        #bottom-contain .ber-footer,
+        footer.ber-footer {
+          background: #111 !important;
+          color: #fff !important;
+        }
+
+        #bottom-contain .ber-footer a,
+        footer.ber-footer a {
+          color: #fff !important;
+          text-decoration: none;
+        }
+
+        .ber-footer__bottom {
+          border-top: 1px solid rgba(255,255,255,.12) !important;
+        }
   </style>
   
   <body onscroll="scrollFunc()">
@@ -1887,7 +1985,8 @@
   
         <style>
         .marquee {
-          width: 150%;
+          width: 100% !important;
+
           margin: 0 0 0 -30px;
           height: 120px;
           /*background-image: linear-gradient(to right, #006ee2 0%, #05aae1 15%, #05aae1 85%, #006ee2 100%);*/
@@ -3169,6 +3268,93 @@
   
   
           </div>
+
+          <footer class="ber-footer" role="contentinfo">
+            <div class="ber-footer__wrap">
+              <div class="ber-footer__grid">
+                <!-- Brand / Mission / Social -->
+                <div class="ber-footer__brand">
+                  <a href="https://www.bonitaesterorealtors.com/">
+                    <img src="https://www.bonitaesterorealtors.com/wp-content/uploads/2022/10/BonitaSpringsEsteroRealtors_Logo_Vertical.png" alt="Bonita Springs-Estero REALTORS® logo">
+                  </a>
+                  <p class="ber-footer__tagline">
+                    Creating value-driven success for our members and the communities we serve. <br>
+                    <em>Core Values:</em> Integrity • Inclusive • Innovative • Authentic • Opportunity
+                  </p>
+                  <div class="ber-footer__social" aria-label="Social media">
+                    <a href="https://www.facebook.com/groups/482719335711288" target="_blank" aria-label="Facebook"><i class="fa fa-facebook"></i></a>
+                    <a href="https://www.youtube.com/c/Bonitaesterorealtors" target="_blank" aria-label="YouTube"><i class="fa fa-youtube"></i></a>
+                    <a href="https://www.instagram.com/bonita_estero_realtors/" target="_blank" aria-label="Instagram"><i class="fa fa-instagram"></i></a>
+                  </div>
+                </div>
+          
+                <!-- Quick Links (Public) -->
+                <nav aria-label="Quick links">
+                  <div class="ber-footer__title">Quick Links</div>
+                  <ul class="ber-footer__links">
+                    <li><a href="https://www.bonitaesterorealtors.com/about/">About BER</a></li>
+                    <li><a href="https://www.bonitaesterorealtors.com/2022-bod-and-past-pres/">Board of Directors</a></li>
+                    <li><a href="https://www.bonitaesterorealtors.com/home-foundation/">BER Home Foundation</a></li>
+                    <li><a href="https://www.bonitaesterorealtors.com/leadership-academy">Leadership Academy</a></li>
+                    <li><a href="https://www.bonitaesterorealtors.com/simplyrets-listings/">Property Search</a></li>
+                    <li><a href="https://members.bonitaesterorealtors.com/affiliatedirectory">Affiliate Directory</a></li>
+                    <li><a href="https://www.bonitaesterorealtors.com/market-reports-2/">Market Reports</a></li>
+                    <li><a href="https://www.bonitaesterorealtors.com/ber-news-home/">BER News</a></li>
+                  </ul>
+                </nav>
+          
+                <!-- Member Services -->
+                <nav aria-label="Member services">
+                  <div class="ber-footer__title">Member Services</div>
+                  <ul class="ber-footer__links">
+                    <li><a href="https://matrix.swflamls.com/matrix/login.aspx" target="_blank">MLS Login</a></li>
+                    <li><a href="https://members.bonitaesterorealtors.com/MIC/Login" target="_blank">Member Portal / Pay Dues</a></li>
+                    <li><a href="https://members.bonitaesterorealtors.com/bercalendar" target="_blank">Events &amp; Classes</a></li>
+                    <li><a href="https://www.bonitaesterorealtors.com/continuing-education-2/">Education</a></li>
+                    <li><a href="https://www.bonitaesterorealtors.com/rpac/">RPAC</a></li>
+                    <li><a href="https://www.bonitaesterorealtors.com/important-links-and-contacts/">Important Links &amp; Resources</a></li>
+                    <li><a href="https://join.bonitaesterorealtors.com/ber-truck">BER BOX Truck Rental</a></li>
+                    <li><a href="https://bonitaspringsesterorealtorsfl.growthzoneapp.com/ap/Form/Fill/rOxknh2p">Media Room Rental</a></li>
+                    <li><a href="https://www.bonitaesterorealtors.com/wp-content/uploads/2025/01/2025-MLS-Rules.pdf" target="_blank">MLS Rules &amp; Regulations (PDF)</a></li>
+                  </ul>
+                </nav>
+          
+                <!-- Contact -->
+                <div>
+                  <div class="ber-footer__title">Contact</div>
+                  <div class="ber-footer__contact">
+                    <p><i class="fa fa-phone"></i> <a href="tel:+12399926771">(239) 992-6771</a></p>
+                    <p><i class="fa fa-envelope"></i> <a href="mailto:Support@BERealtors.org">Support@BERealtors.org</a></p>
+                    <p><i class="fa fa-map-marker"></i> <a href="https://maps.google.com/?q=Bonita%20Springs-Estero%20REALTORS" target="_blank">Get Directions</a></p>
+                  </div>
+                  <p class="ber-footer__note">
+                    We are committed to fair housing and equal opportunity. REALTOR&reg; is a federally registered
+                    collective membership mark which identifies a real estate professional who is a member of the
+                    National Association of REALTORS&reg; and subscribes to its strict Code of Ethics.
+                  </p>
+                </div>
+              </div>
+          
+              <div class="ber-footer__bottom">
+                <div>© <span id="berYear"></span> Bonita Springs-Estero REALTORS&reg;. All rights reserved.</div>
+                <div>
+                  <a href="https://bonitaesterorealtors.com/privacy-policy-2/" target="_blank">Privacy Policy</a>
+                  &nbsp;•&nbsp;
+                  <a href="https://www.bonitaesterorealtors.com/professional-standards/">Professional Standards</a>
+                </div>
+                <a class="ber-footer__toplink" href="#toprow" aria-label="Back to top">
+                  <i class="fa fa-arrow-up" aria-hidden="true"></i> Back to top
+                </a>
+              </div>
+            </div>
+          </footer>
+          
+          <script>
+            // Dynamic year for copyright
+            document.getElementById('berYear').textContent = new Date().getFullYear();
+          </script>
+          <!-- ===== /BER Footer ===== -->
+          
   
   
     <script>
