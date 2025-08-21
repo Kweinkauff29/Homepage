@@ -1,0 +1,574 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Agent IDX – Search & Map (BER)</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+  <!-- Map -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" crossorigin=""/>
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" crossorigin=""></script>
+  <style>
+    :root{
+      /* Keep your current brand palette from the Open Houses page */
+      --bg:#f6f8fc;--card:#fff;--ink:#101827;--muted:#5e6b85;--line:#e6eaf2;
+      --accent:#1a4b84;--accent2:#d4af37;--cta:#1a4b84;--cta-hover:#163c6a;--chip:#0b6b3a;--warn:#7c3aed;
+      --max: 1200px;
+    }
+    *{box-sizing:border-box}
+    html,body{margin:0;background:var(--bg);color:var(--ink);font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif}
+    a{color:var(--accent);text-decoration:none}
+
+        /* Find and replace these two CSS rules */
+        .gallery {
+        background: #000;
+        overflow: auto;
+        /* This fixed height is required for the container to be scrollable */
+        height: 86vh;
+        }
+        .gallery img {
+        width: 100%;
+        height: auto; /* This allows each photo to have its natural height */
+        display: block;
+        }
+
+    /* Header / Agent bar */
+    header{padding:12px 16px;background:#fff;border-bottom:1px solid var(--line);position:sticky;top:0;z-index:20}
+    .head{max-width:var(--max);margin:0 auto;display:grid;grid-template-columns:1fr auto 1fr;gap:8px 16px;align-items:center;grid-template-areas:'title logo agent' 'filters filters filters'}
+    h1{grid-area:title;font-size:20px;margin:0;color:var(--accent)}
+    .brand{grid-area:logo;justify-self:center;display:flex;align-items:center}
+    .brand img{height:36px;width:auto}
+    .agent{grid-area:agent;justify-self:end;text-align:right}
+    .agent strong{display:block}
+    .agent small{color:var(--muted)}
+
+    /* Add this at the end of your <style> block */
+        .map-popup { max-width: 260px !important; }
+        .map-popup .leaflet-popup-content-wrapper { padding: 0; border-radius: 12px; overflow: hidden; }
+        .map-popup .leaflet-popup-content { margin: 0; }
+        .map-popup img { width: 100%; height: 120px; object-fit: cover; }
+        .map-popup-info { padding: 10px; }
+        .map-popup-info strong { display: block; font-size: 15px; }
+        .map-popup-info small { color: var(--muted); }
+
+    /* Filters */
+    .filters{grid-area:filters;display:flex;flex-wrap:wrap;gap:10px}
+    .filters input,.filters select,.filters button{padding:10px 12px;border-radius:10px;border:1px solid var(--line);background:#fff;color:var(--ink)}
+    .filters button{background:var(--cta);border-color:transparent;color:#fff;font-weight:700;cursor:pointer}
+    .filters button:hover{background:var(--cta-hover)}
+    .toggle{margin-left:auto;display:flex;gap:8px}
+    .toggle button{background:#fff;color:var(--accent);border:1px solid var(--accent);font-weight:600;padding:10px 12px;border-radius:10px}
+    .toggle button.active{background:var(--accent);color:#fff}
+
+    /* Split layout */
+    .wrap{max-width:var(--max);margin:14px auto;padding:0 16px}
+    .split{display:grid;gap:16px;grid-template-columns: 1.15fr .85fr}
+    #map{height:72vh;background:#e5e7eb;border:1px solid var(--line);border-radius:14px;overflow:hidden; z-index: 0;}
+    @media (max-width: 980px){ .split{grid-template-columns:1fr} #map{order:2;height:56vh} }
+
+    /* Results */
+    .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:16px}
+    .card{background:var(--card);border:1px solid var(--line);border-radius:14px;overflow:hidden;display:flex;flex-direction:column;box-shadow:0 4px 14px rgba(15,23,42,.06)}
+    .thumb{position:relative;aspect-ratio:16/10;background:#eef2f7}
+    .thumb img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+    .badge{position:absolute;left:10px;bottom:10px;background:#0009;border:1px solid #fff3;color:#fff;padding:4px 8px;border-radius:999px;font-size:12px}
+    .card main{padding:14px 14px 6px}
+    .price{font-size:20px;font-weight:800;color:#0f172a}
+    .address{color:var(--muted);margin-top:2px}
+    .meta{display:flex;gap:10px;margin-top:8px;color:#66728f;font-size:13px}
+    .agentline{color:var(--muted);font-size:12.5px;margin-top:4px}
+    .actions{display:flex;gap:8px;padding:10px 14px 14px}
+    .btn{flex:1;background:#fff;border:1px solid var(--line);color:var(--accent);border-radius:10px;padding:10px 12px;cursor:pointer;font-weight:700}
+    .btn.primary{background:var(--accent);border-color:transparent;color:#fff}
+
+    .controls{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px}
+    .controls .muted{color:var(--muted)}
+
+    .banner{display:none;position:sticky;top:0;z-index:25;margin:0;padding:10px 14px;background:var(--warn);color:#fff;border-bottom:1px solid #0002}
+
+    /* Detail modal + landing link */
+    dialog{ border:none;border-radius:16px;width:min(1100px,96vw);max-height:86vh;padding:0;overflow:hidden;box-shadow:0 24px 80px rgba(0,0,0,.35) }
+    .detail{ display:grid; grid-template-columns: 1.2fr 1fr; max-height:86vh }
+    .gallery{ background:#000; overflow:auto }
+    .gallery img{ width:100%; display:block }
+    .side{ overflow:auto; padding:16px; background:#fff }
+    .close-x{ position:absolute; right:10px; top:10px; z-index:2; background:#0009; color:#fff; border:none; border-radius:10px; padding:8px 10px; cursor:pointer }
+    .kv{background:#f6f9ff;border:1px solid var(--line);border-radius:8px;padding:8px}
+    .kv .k{color:#365f99;font-size:12px}
+    .kv .v{font-weight:700;color:#0f172a}
+
+    footer{padding:24px;text-align:center;color:var(--muted);border-top:1px solid var(--line)}
+  </style>
+</head>
+<body>
+  <header>
+    <div class="head">
+      <h1>Home Search – Bonita Springs‑Estero REALTORS®</h1>
+      <a class="brand" href="https://bonitaesterorealtors.com" target="_blank" rel="noopener" aria-label="Bonita Springs-Estero Realtors website">
+        <img src="https://bonitaesterorealtors.com/wp-content/uploads/2021/07/BonitaSpringsEsteroRealtors_Logo_Horizontal-2.png" alt="BER" />
+      </a>
+      <div class="agent">
+        <strong id="agentName">Agent Name</strong>
+        <small id="agentContact">(239) 555‑0123 • <a href="mailto:agent@ber.com" id="agentEmail">agent@ber.com</a></small>
+      </div>
+
+      <form id="filters" class="filters" autocomplete="off">
+        <input id="q" name="q" placeholder="City, ZIP, address, MLS#" />
+        <select id="minp" name="minp"><option value="">Min $</option><option>250000</option><option>500000</option><option>750000</option><option>1000000</option></select>
+        <select id="maxp" name="maxp"><option value="">Max $</option><option>750000</option><option>1000000</option><option>1500000</option><option>2500000</option></select>
+        <select id="beds" name="beds"><option value="">Beds+</option><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option></select>
+        <select id="baths" name="baths"><option value="">Baths+</option><option>1</option><option>2</option><option>3</option><option>4</option></select>
+        <select id="ptype" name="ptype"><option value="">Any Type</option><option value="SingleFamilyResidence">House</option><option value="Condominium">Condo</option><option value="Townhouse">Townhouse</option></select>
+        <button class="btn" id="doSearch" type="submit">Search</button>
+        <div class="toggle">
+          <button type="button" id="viewList" class="active">List</button>
+          <button type="button" id="viewMap">Map</button>
+        </div>
+      </form>
+    </div>
+  </header>
+
+  <p id="banner" class="banner" role="status" aria-live="polite"></p>
+
+  <div class="wrap">
+    <div class="split">
+      <section>
+        <div class="controls">
+          <div class="muted">Showing <span id="count">0</span> results</div>
+          <div>
+            <label class="muted" for="sort">Sort:</label>
+            <select id="sort">
+              <option value="price_desc">Price ↓</option>
+              <option value="price_asc">Price ↑</option>
+              <option value="newest">Newest</option>
+              <option value="oldest">Oldest</option>
+            </select>
+          </div>
+        </div>
+        <div id="grid" class="grid" aria-live="polite"></div>
+        <div id="pager" style="display:flex;gap:6px;justify-content:center;margin:16px 0 0"></div>
+      </section>
+      <div id="map"></div>
+    </div>
+  </div>
+
+  <footer>
+    Information deemed reliable but not guaranteed. © <span id="year"></span> Bonita Springs‑Estero REALTORS®. Equal Housing Opportunity. IDX compliance varies by MLS.
+  </footer>
+
+  <!-- Listing detail modal (also works as landing page link) -->
+  <dialog id="detail">
+    <button class="close-x" onclick="document.getElementById('detail').close()">✕</button>
+    <div class="detail">
+      <div class="gallery" id="detailGallery"></div>
+      <aside class="side">
+        <h2 id="detailAddr" style="margin:0 0 4px"></h2>
+        <div class="muted" id="detailSub"></div>
+        <div class="meta" id="detailMeta" style="margin:8px 0"></div>
+        <div style="display:grid; gap:10px; grid-template-columns:1fr 1fr" id="detailFacts"></div>
+        <p id="detailDesc" style="margin:10px 0 14px"></p>
+        <div style="display:flex; gap:8px; align-items:center; margin-top:6px">
+          <a id="detailPermalink" class="btn" target="_blank" rel="noopener">Open listing landing page</a>
+          <button class="btn primary" id="leadBtn">Request Info</button>
+        </div>
+      </aside>
+    </div>
+  </dialog>
+
+  <!-- Lead capture (simple) -->
+  <dialog id="leadDlg">
+    <form method="dialog" style="padding:18px;max-width:520px">
+      <h3 style="margin-top:0">Request More Information</h3>
+      <p class="muted">We'll connect you with <span id="leadAgent">the agent</span> about <strong id="leadAddr">this property</strong>.</p>
+      <div style="display:grid;gap:8px;grid-template-columns:1fr 1fr">
+        <input placeholder="First name" required>
+        <input placeholder="Last name" required>
+        <input placeholder="Email" type="email" required style="grid-column:1/-1">
+        <input placeholder="Phone (optional)" style="grid-column:1/-1">
+        <textarea placeholder="Your questions" rows="4" style="grid-column:1/-1"></textarea>
+      </div>
+      <div style="display:flex;gap:8px;justify-content:flex-end;margin-top:12px">
+        <button class="btn" value="cancel">Cancel</button>
+        <button class="btn primary" value="ok">Send</button>
+      </div>
+    </form>
+  </dialog>
+
+  <script>
+  /* =====================
+     CONFIG (Bridge Data Output)
+     ===================== */
+
+  const ACCESS_TOKEN = 'f375ab2b20d02a67acc5b668207e1a26';
+  const MLS_SLUG = 'bsaor';
+  const ODATA_PROPERTY = `https://api.bridgedataoutput.com/api/v2/OData/${MLS_SLUG}/Property`;
+  const ODATA_MEDIA    = `https://api.bridgedataoutput.com/api/v2/OData/${MLS_SLUG}/Media`;
+  const MEDIA_BASE     = `https://api.bridgedataoutput.com/api/v2/${MLS_SLUG}/media`;
+
+  // Fields we need (includes geo for map)
+// Add 'Latitude' and 'Longitude' to this list
+// Change 'Latitude' and 'Longitude' to the new fields
+const PROPERTY_SELECT = [
+  'ListingKey','ListingId','OriginatingSystemName','StandardStatus','MlsStatus','PropertyType','PropertySubType',
+  'UnparsedAddress','City','StateOrProvince','PostalCode','SubdivisionName','CountyOrParish',
+  'ListPrice','BedroomsTotal','BathroomsTotalInteger','LivingArea','LotSizeSquareFeet','LotSizeAcres','YearBuilt',
+  'PublicRemarks','ListAgentFullName','ListOfficeName','AssociationFee','DaysOnMarket',
+  'Media',
+  'BSAOR_Latitude',   // <-- UPDATE THIS
+  'BSAOR_Longitude'   // <-- AND THIS
+].join(',');
+
+  const fmt = new Intl.NumberFormat('en-US',{style:'currency',currency:'USD',maximumFractionDigits:0});
+  const nfmt = new Intl.NumberFormat('en-US');
+
+  // Paging state
+  let pageSize = 8;
+  let currentPage = 1;
+  let totalCount = 0;
+  let totalPages = 1;
+
+  /* =====================
+     MAP
+     ===================== */
+  let map, markersLayer;
+  function initMap(){
+    map = L.map('map');
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { attribution: '&copy; OpenStreetMap' }).addTo(map);
+    markersLayer = L.layerGroup().addTo(map);
+    map.setView([26.3398,-81.7787], 10); // SWFL
+  }
+
+  function getLatLng(p){
+  const lat = Number(p.BSAOR_Latitude);
+  const lon = Number(p.BSAOR_Longitude);
+  return (Number.isFinite(lat) && Number.isFinite(lon) && lat !== 0 && lon !== 0) ? [lat, lon] : null;
+}
+
+async function plotMarkers(rows) {
+  markersLayer.clearLayers();
+  const pts = [];
+
+  for (const p of rows) {
+    const ll = getLatLng(p);
+    if (!ll) continue;
+    
+    pts.push(ll);
+    
+    // Create the marker and add it to the map
+    const m = L.marker(ll).addTo(markersLayer);
+
+    // Create the content for our popup
+    const thumbUrl = await getThumb(p) || PLACEHOLDER;
+    const price = fmt.format(p.ListPrice || 0);
+    const addr = p.UnparsedAddress || 'Address unavailable';
+
+    const popupContent = `
+      <div class="map-popup-info">
+        <img src="${thumbUrl}" alt="Photo of ${addr}" style="width:100%; height:120px; object-fit:cover; border-radius:4px; margin-bottom:8px;">
+        <strong>${price}</strong>
+        <small>${addr}</small>
+      </div>`;
+
+    // Attach the popup to the marker
+    m.bindPopup(popupContent, {
+      className: 'map-popup',
+      closeButton: false
+    });
+
+    // --- Add hover and click events ---
+    m.on('mouseover', function (e) {
+      this.openPopup();
+    });
+    m.on('mouseout', function (e) {
+      this.closePopup();
+    });
+    m.on('click', () => openDetail(p));
+  }
+
+  // Adjust map view to show all markers
+  if (pts.length) {
+    const b = L.latLngBounds(pts);
+    map.fitBounds(b.pad(0.15));
+  }
+}
+
+  /* =====================
+     FETCH HELPERS (rate-limit aware)
+     ===================== */
+  let RATE_COOLDOWN_UNTIL = 0; const sleep=(ms)=> new Promise(r=>setTimeout(r,ms));
+  function createLimiter(max){
+    let active=0; const q=[];
+    const run=async()=>{ if(active>=max||!q.length) return; active++; const {fn,resolve,reject}=q.shift(); try{ resolve(await fn()); }catch(e){ reject(e); } finally{ active--; run(); } };
+    return (fn)=> new Promise((resolve,reject)=>{ q.push({fn,resolve,reject}); run(); });
+  }
+  const mediaLimiter = createLimiter(1);
+  function parseRetryAfter(headers, bodyText){
+    const h=headers.get('Retry-After');
+    if(h){ const sec=Number(h); if(Number.isFinite(sec)) return Math.max(0, sec*1000); const t=Date.parse(h); if(!Number.isNaN(t)) return Math.max(0,t-Date.now()); }
+    if(bodyText){ const m=bodyText.match(/reset on ([^\"]+)/i); if(m){ const t=Date.parse(m[1]); if(!Number.isNaN(t)) return Math.max(0,t-Date.now()); } }
+    return 15000;
+  }
+  async function fetchJSON(url, opts={}, label='fetch', {maxAttempts=4}={}){
+    for(let attempt=1; attempt<=maxAttempts; attempt++){
+      const res = await fetch(url, opts);
+
+      // This block handles rate-limiting (429) by waiting and retrying.
+      if(res.status===429){
+        const body = await res.text().catch(()=> '');
+        const waitMs = parseRetryAfter(res.headers, body) + Math.floor(Math.random()*800);
+        RATE_COOLDOWN_UNTIL = Date.now()+waitMs;
+        showBanner(`Rate limit hit (${label}). Retrying soon…`);
+        while(Date.now()<RATE_COOLDOWN_UNTIL){ await sleep(800); }
+        if(attempt===maxAttempts) throw new Error(`Rate limit for ${label} after ${maxAttempts} attempts.`);
+        continue;
+      }
+
+      // This block handles all other errors (like 404s) by throwing an error, which stops execution.
+      if(!res.ok){ 
+        const txt = await res.text().catch(()=> ''); 
+        throw new Error(`${label} ${res.status}: ${txt}`); 
+      }
+
+      // This line only runs on a successful (2xx) response.
+      document.getElementById('banner').style.display='none';
+      return await res.json();
+    }
+  }
+
+/* =====================
+   MEDIA (photos) - Simplified
+   ===================== */
+   const PLACEHOLDER = 'https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?q=80&w=1200&auto=format&fit=crop';
+
+// This helper function stays the same.
+function pickMediaURL(m){
+  return m?.MediaURL || m?.MediaUrl || m?.SecureMediaURL || m?.MediaURLLarge || m?.MediaURLMedium || m?.MediaURLSmall || m?.MediaURLText || null;
+}
+
+// NEW getThumb: No API call, just gets the first photo from the property's Media array.
+async function getThumb(p){
+  if (!p.Media || p.Media.length === 0) {
+    return null; // No photo available
+  }
+  // Find the photo with Order 1, or just take the first one.
+  const firstPhoto = p.Media.find(m => m.Order === 1) || p.Media[0];
+  return pickMediaURL(firstPhoto);
+}
+
+// NEW getPhotosFor: No API call, just gets all photos from the property's Media array.
+async function getPhotosFor(p){
+  if (!p.Media || p.Media.length === 0) {
+    return []; // No photos available
+  }
+  const seen = new Set();
+  return p.Media
+    .sort((a, b) => (a.Order || 99) - (b.Order || 99)) // Sort by Order
+    .map(pickMediaURL)
+    .filter(u => u && !seen.has(u) && seen.add(u)); // Filter out duplicates
+}
+
+
+  /* =====================
+     SEARCH + RENDER */
+     
+  const grid = document.getElementById('grid');
+  const countEl = document.getElementById('count');
+  const sortEl = document.getElementById('sort');
+
+  async function card(p){
+    const price = fmt.format(p.ListPrice||0);
+    const addr1 = p.UnparsedAddress || '';
+    const city = p.City||''; const st=p.StateOrProvince||'FL'; const zip=p.PostalCode||'';
+    const beds=p.BedroomsTotal??'—'; const baths=p.BathroomsTotalInteger??'—';
+
+    const el=document.createElement('article'); el.className='card';
+    el.innerHTML = `
+      <div class="thumb"><img loading="lazy" alt="${addr1.replace(/\"/g,'')}"><span class="badge">${beds} bd • ${baths} ba</span></div>
+      <main>
+        <div class="price">${price}</div>
+        <div class="address">${[addr1,city,st,zip].filter(Boolean).join(', ')}</div>
+        <div class="meta"><span>${p.PropertySubType||p.PropertyType||'Residential'}</span><span>MLS#: ${p.ListingId||'—'}</span></div>
+        <div class="agentline">Listed by ${p.ListAgentFullName||'—'} • ${p.ListOfficeName||'—'}</div>
+      </main>
+      <div class="actions">
+        <a class="btn" data-link target="_blank" rel="noopener">Listing Page</a>
+        <button class="btn primary" data-detail>Details</button>
+      </div>`;
+
+    const img = el.querySelector('img');
+    img.src = PLACEHOLDER;
+    getThumb(p).then(url=>{ if(url) img.src = url; });
+    // clicking photo opens detail and loads gallery lazily
+    el.querySelector('.thumb').addEventListener('click', ()=> openDetail(p));
+
+    const link = el.querySelector('[data-link]');
+    link.href = makePermalink(p);
+
+    el.querySelector('[data-detail]').addEventListener('click',()=> openDetail(p));
+    return el;
+  }
+
+  function makePermalink(p){
+    const slug = encodeURIComponent((p.UnparsedAddress||p.ListingId||'home').toLowerCase().replace(/\s+/g,'-'));
+    const url = new URL(window.location.href);
+    url.searchParams.set('listing', p.ListingId||p.ListingKey);
+    url.searchParams.set('addr', slug);
+    return url.toString();
+  }
+
+  async function openDetail(p){
+    const dlg=document.getElementById('detail');
+    const gallery=document.getElementById('detailGallery');
+    const facts=document.getElementById('detailFacts');
+    document.getElementById('detailAddr').textContent = p.UnparsedAddress||'Listing';
+    document.getElementById('detailSub').textContent = [p.City,p.StateOrProvince,p.PostalCode].filter(Boolean).join(', ');
+    document.getElementById('detailMeta').innerHTML = `${p.PropertySubType||p.PropertyType||'Residential'} • MLS# ${p.ListingId||'—'} • ${fmt.format(p.ListPrice||0)}`;
+    document.getElementById('detailPermalink').href = makePermalink(p);
+
+    facts.innerHTML = '';
+    const kv=(k,v)=>`<div class=kv><div class=k>${k}</div><div class=v>${v??'—'}</div></div>`;
+    facts.insertAdjacentHTML('beforeend',[
+      kv('Beds', p.BedroomsTotal??'—'),
+      kv('Baths', p.BathroomsTotalInteger??'—'),
+      kv('SqFt', p.LivingArea? new Intl.NumberFormat().format(p.LivingArea):'—'),
+      kv('Lot', p.LotSizeAcres? p.LotSizeAcres+' ac': (p.LotSizeSquareFeet? new Intl.NumberFormat().format(p.LotSizeSquareFeet)+' sf':'—')),
+      kv('Year Built', p.YearBuilt||'—'),
+      kv('HOA', p.AssociationFee? fmt.format(p.AssociationFee):'—'),
+      kv('DOM', p.DaysOnMarket||'—'),
+      kv('Status', p.MlsStatus||p.StandardStatus||'—'),
+      kv('County', p.CountyOrParish||'—')
+    ].join(''));
+
+    const pics = await mediaLimiter(()=> getPhotosFor(p));
+    gallery.innerHTML = pics.length ? pics.map(u=>`<img src="${u}" alt="">`).join('') : `<img src="${PLACEHOLDER}" alt="">`;
+    dlg.showModal();
+
+    // simple lead modal hookup
+    document.getElementById('leadBtn').onclick = ()=>{
+      document.getElementById('leadAgent').textContent = p.ListAgentFullName||'the agent';
+      document.getElementById('leadAddr').textContent = p.UnparsedAddress||'';
+      document.getElementById('leadDlg').showModal();
+    };
+  }
+
+  function showBanner(msg){ const b=document.getElementById('banner'); b.textContent=msg; b.style.display='block'; }
+
+  function encodeFilterParts(){
+    const q=document.getElementById('q').value.trim();
+    const minp=document.getElementById('minp').value; const maxp=document.getElementById('maxp').value;
+    const beds=document.getElementById('beds').value; const baths=document.getElementById('baths').value; const ptype=document.getElementById('ptype').value;
+
+    const f=[]; f.push("OriginatingSystemName eq 'Bonita Springs'");
+    if(q){ f.push(`contains(UnparsedAddress,'${q.replace(/'/g,"''")}') or contains(City,'${q.replace(/'/g,"''")}') or ListingId eq '${q.replace(/'/g,"''")}'`); }
+    if(minp) f.push(`ListPrice ge ${Number(minp)}`);
+    if(maxp) f.push(`ListPrice le ${Number(maxp)}`);
+    if(beds) f.push(`BedroomsTotal ge ${Number(beds)}`);
+    if(baths) f.push(`BathroomsTotalInteger ge ${Number(baths)}`);
+    if(ptype) f.push(`PropertySubType eq '${ptype}' or PropertyType eq '${ptype}'`);
+
+    // Map bbox filter (optional) — removed because this MLS feed does not expose Latitude/Longitude via OData for your token
+    // If/when geo fields are available, re-enable a bbox clause here using the correct field names
+
+    return f.join(' and ');
+  }
+
+  async function search(page=1){
+  currentPage = page;
+
+  const params = new URLSearchParams({
+    access_token: ACCESS_TOKEN,
+    $top: String(pageSize),
+    $select: PROPERTY_SELECT,
+    $count: 'true'
+  });
+
+  const filter = encodeFilterParts();
+  if (filter) params.set('$filter', filter);
+
+  const s = sortEl.value; 
+  let order = 'ListPrice desc';
+  if (s === 'price_asc') order = 'ListPrice asc';
+  else if (s === 'price_desc') order = 'ListPrice desc';
+  else if (s === 'newest') order = 'DaysOnMarket asc';
+  else if (s === 'oldest') order = 'DaysOnMarket desc';
+  params.set('$orderby', order);
+  params.set('$skip', String((page - 1) * pageSize));
+
+  const url = `${ODATA_PROPERTY}?${params.toString()}`;
+  const data = await fetchJSON(url, {}, 'Property');
+
+  const rows = (data.value || [])
+    .filter(p => String(p.OriginatingSystemName || '') === 'Bonita Springs');
+
+  totalCount = Number(data['@odata.count'] || rows.length);
+  totalPages = Math.max(1, Math.ceil(totalCount / pageSize));
+
+
+  // Now paint
+  render(rows);
+  plotMarkers(rows);
+  renderPager();
+}
+
+
+async function render(props){
+  grid.innerHTML='';
+  countEl.textContent = totalCount || props.length;
+  const cards = await Promise.all(props.map(p => card(p)));
+  cards.forEach(c => grid.appendChild(c));
+}
+
+  function renderPager(){
+    const pager = document.getElementById('pager');
+    pager.innerHTML='';
+    if(totalPages<=1){ pager.style.display='none'; return; }
+    pager.style.display='flex';
+
+    const mk = (label, page, disabled=false, active=false)=>{
+      const a = document.createElement('button');
+      a.textContent = label;
+      a.className = 'btn';
+      a.style.minWidth='40px'; a.style.padding='8px 10px';
+      a.disabled = disabled;
+      if(active){ a.style.background='var(--accent)'; a.style.color='#fff'; a.style.borderColor='transparent'; }
+      a.addEventListener('click', ()=>{ if(!a.disabled) search(page); });
+      return a;
+    };
+
+    // Prev
+    pager.appendChild(mk('‹', Math.max(1, currentPage-1), currentPage===1));
+
+    // Windowed page numbers (max 7)
+    const span = 3;
+    let start = Math.max(1, currentPage - span);
+    let end = Math.min(totalPages, currentPage + span);
+    if(end - start < span*2){
+      if(start===1) end = Math.min(totalPages, start + span*2);
+      else if(end===totalPages) start = Math.max(1, end - span*2);
+    }
+    for(let i=start;i<=end;i++) pager.appendChild(mk(String(i), i, false, i===currentPage));
+
+    // Next
+    pager.appendChild(mk('›', Math.min(totalPages, currentPage+1), currentPage===totalPages));
+  }
+
+  // View toggles
+  let currentView='list';
+  document.getElementById('viewList').onclick = ()=>{ currentView='list'; document.getElementById('viewList').classList.add('active'); document.getElementById('viewMap').classList.remove('active'); };
+  document.getElementById('viewMap').onclick  = ()=>{ currentView='map';  document.getElementById('viewMap').classList.add('active');  document.getElementById('viewList').classList.remove('active'); };
+
+  // Wire search
+  document.getElementById('filters').addEventListener('submit', (e)=>{ e.preventDefault(); search(1); });
+  sortEl.addEventListener('change', ()=> search(1));
+
+  // Init
+  document.getElementById('year').textContent = new Date().getFullYear();
+  initMap();
+  search(1);
+  </script>
+</body>
+</html>
+
+
