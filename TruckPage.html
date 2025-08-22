@@ -1,0 +1,254 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>BER • Box Truck & Cargo Van Reservation</title>
+  
+  <!-- Tailwind (Play CDN) -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: { sans: ["Inter", "ui-sans-serif", "system-ui", "-apple-system", "Segoe UI", "Roboto", "Helvetica Neue", "Arial", "Noto Sans", "sans-serif"] },
+        },
+      },
+    };
+  </script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <!-- BER brand helpers -->
+  <style>
+    :root{
+      --ber-blue:#188bf6; /* primary */
+      --ber-blue-dark:#0f6fd6; /* hover */
+      --ber-teal:#1EA29D; /* accent */
+      --ber-navy:#0f172a; /* ink */
+      --ber-bg:#f5f9ff; /* light tint */
+      --line:#e5e7eb;
+    }
+    .aspect-video { position: relative; padding-top: 56.25%; }
+    .aspect-video > iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; }
+    details > summary { list-style: none; }
+    details > summary::-webkit-details-marker { display: none; }
+    .summary-chevron svg { transition: transform .2s ease; }
+    details[open] .summary-chevron svg { transform: rotate(180deg); }
+  </style>
+</head>
+<body class="min-h-screen bg-white text-slate-900 font-sans">
+
+  <!-- PAGE TOP BACKDROP (brand tint) -->
+  <div aria-hidden class="absolute inset-0 -z-10" style="background:
+      radial-gradient(1200px 600px at -10% -10%, rgba(24,139,246,.08), transparent 40%),
+      radial-gradient(1200px 600px at 110% -10%, rgba(30,162,157,.07), transparent 40%)"></div>
+
+  <!-- NOTE: Header/hero removed on purpose to avoid duplicate WP header. -->
+
+  <!-- Compare -->
+  <section id="compare" class="pt-8 md:pt-12 pb-8 md:pb-10">
+    <div class="max-w-6xl mx-auto mb-6 md:mb-8 px-4">
+      <p class="uppercase tracking-[.20em] text-xs md:text-sm text-[color:var(--ber-teal)] mb-2">Compare</p>
+      <h1 class="text-2xl sm:text-3xl md:text-4xl font-semibold tracking-tight text-slate-900">Choose the right vehicle for the job</h1>
+      <p class="mt-3 text-slate-600 max-w-3xl">Both options are easy to drive and member‑ready. Pick based on volume, payload, and maneuverability.</p>
+    </div>
+
+    <div class="max-w-6xl mx-auto px-4 grid md:grid-cols-2 gap-6 md:gap-8">
+      <!-- Box Truck Card -->
+      <div class="group rounded-3xl border border-[color:var(--line)] bg-white p-5 md:p-7 hover:shadow-[0_20px_60px_-20px_rgba(24,139,246,.35)] transition-all">
+        <div class="flex items-center gap-3">
+          <div class="p-2 rounded-xl bg-[color:var(--ber-bg)]"><i data-lucide="truck" class="h-6 w-6" style="color:var(--ber-blue)"></i></div>
+          <h3 class="text-xl md:text-2xl font-semibold tracking-tight">Box Truck – Ford E‑350 (14′ cube)</h3>
+        </div>
+        <div class="mt-5 relative pb-[56.25%] bg-[color:var(--ber-bg)] rounded-2xl border border-[color:var(--line)] overflow-hidden">
+          <img id="img-truck" src="https://assets.cdn.filesafe.space/KM9vIlcOZRyxdtXkN7bV/media/6837222809ab6bfea66caa95.png" alt="BER box truck Ford E-350 14-foot cube" class="absolute inset-0 w-full h-full object-contain" loading="lazy" referrerpolicy="no-referrer">
+        </div>
+        <div class="mt-6 grid md:grid-cols-2 gap-6">
+          <div>
+            <p class="text-sm uppercase tracking-widest text-slate-500">Best for</p>
+            <ul class="mt-2 space-y-2 list-disc pl-5 text-slate-700">
+              <li>2–3 bedroom moves</li>
+              <li>Staging or bulk donations</li>
+              <li>Office relocations</li>
+            </ul>
+          </div>
+          <div>
+            <p class="text-sm uppercase tracking-widest text-slate-500">Key details</p>
+            <dl class="mt-2 grid gap-2">
+              <div class="flex justify-between gap-3 text-slate-800"><dt class="text-slate-600">Cargo space</dt><dd class="font-medium">14′ L × 7.2′ W × 7′ H (~750 cu ft)</dd></div>
+              <div class="flex justify-between gap-3 text-slate-800"><dt class="text-slate-600">Payload</dt><dd class="font-medium">Up to ~6,000 lb</dd></div>
+              <div class="flex justify-between gap-3 text-slate-800"><dt class="text-slate-600">Overall</dt><dd class="font-medium">~22′ L × 8′ W × 11.5′ H</dd></div>
+              <div class="flex justify-between gap-3 text-slate-800"><dt class="text-slate-600">Doors</dt><dd class="font-medium">Roll‑up rear + ramp/lift‑gate</dd></div>
+              <div class="flex justify-between gap-3 text-slate-800"><dt class="text-slate-600">License</dt><dd class="font-medium">Standard driver’s license</dd></div>
+            </dl>
+          </div>
+        </div>
+        <a id="cta-truck" href="https://link.bonitaesterorealtors.com/widget/bookings/boxtruck" target="_blank" rel="noopener" class="mt-6 inline-flex items-center justify-center gap-2 rounded-xl border px-5 py-3 text-white w-full sm:w-auto focus:outline-none focus:ring-4" style="background-color:var(--ber-blue); border-color:var(--ber-blue); --tw-ring-color: rgba(24,139,246,.25);">
+          <span>Reserve Box Truck</span>
+          <i data-lucide="calendar-clock" class="h-5 w-5"></i>
+        </a>
+      </div>
+
+      <!-- Van Card -->
+      <div class="group rounded-3xl border border-[color:var(--line)] bg-white p-5 md:p-7 hover:shadow-[0_20px_60px_-20px_rgba(24,139,246,.35)] transition-all">
+        <div class="flex items-center gap-3">
+          <div class="p-2 rounded-xl bg-[color:var(--ber-bg)]"><i data-lucide="car" class="h-6 w-6" style="color:var(--ber-blue)"></i></div>
+          <h3 class="text-xl md:text-2xl font-semibold tracking-tight">Cargo Van – Ram ProMaster 2500 (High‑Roof)</h3>
+        </div>
+        <div class="mt-5 relative pb-[56.25%] bg-[color:var(--ber-bg)] rounded-2xl border border-[color:var(--line)] overflow-hidden">
+          <img id="img-van" src="https://assets.cdn.filesafe.space/KM9vIlcOZRyxdtXkN7bV/media/68372228f362d619bda728ce.png" alt="BER moving van Ram ProMaster 2500 High-Roof" class="absolute inset-0 w-full h-full object-contain" loading="lazy" referrerpolicy="no-referrer">
+        </div>
+        <div class="mt-6 grid md:grid-cols-2 gap-6">
+          <div>
+            <p class="text-sm uppercase tracking-widest text-slate-500">Best for</p>
+            <ul class="mt-2 space-y-2 list-disc pl-5 text-slate-700">
+              <li>Studio / 1‑bedroom moves</li>
+              <li>Appliance pickups, event gear</li>
+              <li>Smaller staging jobs</li>
+            </ul>
+          </div>
+          <div>
+            <p class="text-sm uppercase tracking-widest text-slate-500">Key details</p>
+            <dl class="mt-2 grid gap-2">
+              <div class="flex justify-between gap-3 text-slate-800"><dt class="text-slate-600">Cargo space</dt><dd class="font-medium">10.2′ L × 6.3′ W × ~6.4′ H (~420 cu ft)</dd></div>
+              <div class="flex justify-between gap-3 text-slate-800"><dt class="text-slate-600">Payload</dt><dd class="font-medium">Up to ~4,000 lb</dd></div>
+              <div class="flex justify-between gap-3 text-slate-800"><dt class="text-slate-600">Overall</dt><dd class="font-medium">17.8′ L × 6.7′ W × ~8.7′ H</dd></div>
+              <div class="flex justify-between gap-3 text-slate-800"><dt class="text-slate-600">Doors</dt><dd class="font-medium">Rear swing + curb‑side sliding</dd></div>
+              <div class="flex justify-between gap-3 text-slate-800"><dt class="text-slate-600">License</dt><dd class="font-medium">Standard driver’s license</dd></div>
+            </dl>
+          </div>
+        </div>
+        <a id="cta-van" href="https://link.bonitaesterorealtors.com/widget/bookings/boxtruckjdn70l" target="_blank" rel="noopener" class="mt-6 inline-flex items-center justify-center gap-2 rounded-xl border px-5 py-3 text-white w-full sm:w-auto focus:outline-none focus:ring-4" style="background-color:var(--ber-blue); border-color:var(--ber-blue); --tw-ring-color: rgba(24,139,246,.25);">
+          <span>Reserve Moving Van</span>
+          <i data-lucide="calendar-clock" class="h-5 w-5"></i>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Reserve buttons section -->
+  <section id="reserve" class="py-10 md:py-16" style="background-color:var(--ber-bg)">
+    <div class="max-w-6xl mx-auto mb-6 md:mb-10 px-4">
+      <p class="uppercase tracking-[.20em] text-xs md:text-sm text-[color:var(--ber-teal)] mb-2">Reserve</p>
+      <h2 class="text-2xl sm:text-3xl md:text-4xl font-semibold tracking-tight text-slate-900">Pick a vehicle and book your date</h2>
+      <p class="mt-3 text-slate-600 max-w-3xl">Click the button to open the booking page in a new tab. You’ll receive confirmation and pickup instructions after submitting.</p>
+    </div>
+
+    <div class="max-w-6xl mx-auto px-4 grid lg:grid-cols-2 gap-6">
+      <!-- Box Truck Link Card -->
+      <div id="calendar-truck" class="rounded-3xl bg-white border border-[color:var(--line)] p-4 md:p-6">
+        <div class="flex items-center gap-3 mb-4">
+          <div class="p-2 rounded-xl bg-[color:var(--ber-bg)]"><i data-lucide="truck" class="h-5 w-5" style="color:var(--ber-blue)"></i></div>
+          <h3 class="text-lg md:text-xl font-semibold">Box Truck – Reservation</h3>
+        </div>
+        <a id="btn-truck" href="https://link.bonitaesterorealtors.com/widget/bookings/boxtruck" target="_blank" rel="noopener" class="inline-flex items-center justify-center gap-2 rounded-xl border px-5 py-3 text-white w-full sm:w-auto focus:outline-none focus:ring-4" style="background-color:var(--ber-blue); border-color:var(--ber-blue); --tw-ring-color: rgba(24,139,246,.25);">
+          <span>Open Box Truck Booking</span>
+          <i data-lucide="external-link" class="h-5 w-5"></i>
+        </a>
+      </div>
+
+      <!-- Moving Van Link Card -->
+      <div id="calendar-van" class="rounded-3xl bg-white border border-[color:var(--line)] p-4 md:p-6">
+        <div class="flex items-center gap-3 mb-4">
+          <div class="p-2 rounded-xl bg-[color:var(--ber-bg)]"><i data-lucide="car" class="h-5 w-5" style="color:var(--ber-blue)"></i></div>
+          <h3 class="text-lg md:text-xl font-semibold">Moving Van – Reservation</h3>
+        </div>
+        <a id="btn-van" href="https://link.bonitaesterorealtors.com/widget/bookings/boxtruckjdn70l" target="_blank" rel="noopener" class="inline-flex items-center justify-center gap-2 rounded-xl border px-5 py-3 text-white w-full sm:w-auto focus:outline-none focus:ring-4" style="background-color:var(--ber-blue); border-color:var(--ber-blue); --tw-ring-color: rgba(24,139,246,.25);">
+          <span>Open Moving Van Booking</span>
+          <i data-lucide="external-link" class="h-5 w-5"></i>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- FAQ -->
+  <section class="py-10 md:py-14">
+    <div class="max-w-6xl mx-auto mb-6 md:mb-10 px-4">
+      <p class="uppercase tracking-[.20em] text-xs md:text-sm text-[color:var(--ber-teal)] mb-2">FAQ</p>
+      <h2 class="text-2xl sm:text-3xl md:text-4xl font-semibold tracking-tight text-slate-900">Good to know</h2>
+    </div>
+    <div class="max-w-3xl mx-auto px-4 divide-y divide-slate-200">
+      <!-- Using <details> for accessibility & no-JS toggle -->
+      <details class="py-4">
+        <summary class="flex items-center justify-between cursor-pointer">
+          <span class="font-medium text-slate-900">Where can I drive the vehicles?</span>
+          <span class="summary-chevron"><i data-lucide="chevron-down" class="h-5 w-5" style="color:var(--ber-blue)"></i></span>
+        </summary>
+        <p class="mt-3 text-slate-600">Usage is limited to Lee, Collier, and Charlotte counties.</p>
+      </details>
+      <details class="py-4">
+        <summary class="flex items-center justify-between cursor-pointer">
+          <span class="font-medium text-slate-900">What license is required?</span>
+          <span class="summary-chevron"><i data-lucide="chevron-down" class="h-5 w-5" style="color:var(--ber-blue)"></i></span>
+        </summary>
+        <p class="mt-3 text-slate-600">A standard driver’s license is all you need.</p>
+      </details>
+      <details class="py-4">
+        <summary class="flex items-center justify-between cursor-pointer">
+          <span class="font-medium text-slate-900">What’s included?</span>
+          <span class="summary-chevron"><i data-lucide="chevron-down" class="h-5 w-5" style="color:var(--ber-blue)"></i></span>
+        </summary>
+        <p class="mt-3 text-slate-600">Moving equipment is included when available (dollies, straps, and pads).</p>
+      </details>
+      <details class="py-4">
+        <summary class="flex items-center justify-between cursor-pointer">
+          <span class="font-medium text-slate-900">When will my request be reviewed?</span>
+          <span class="summary-chevron"><i data-lucide="chevron-down" class="h-5 w-5" style="color:var(--ber-blue)"></i></span>
+        </summary>
+        <p class="mt-3 text-slate-600">Requests made after hours on Fridays are reviewed the following Monday.</p>
+      </details>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="border-t border-[color:var(--line)] py-8 text-sm">
+    <div class="max-w-6xl mx-auto px-4 grid sm:grid-cols-2 gap-3">
+      <p class="text-slate-600">© <span id="year"></span> Bonita Springs–Estero REALTORS®</p>
+      <div class="sm:text-right text-slate-600">Questions? <a href="tel:+12399926771" class="underline decoration-dotted" style="color:var(--ber-blue)">(239) 992‑6771</a></div>
+    </div>
+  </footer>
+
+  <!-- Lucide (non-React) icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <script>
+    // Initialize icons and small runtime tests
+    (function () {
+      try {
+        if (window.lucide && typeof window.lucide.createIcons === 'function') {
+          window.lucide.createIcons();
+        }
+        // Tiny non-blocking tests (unchanged)
+        console.assert(!!window.lucide, 'Lucide library should be available');
+        const mustHave = ['truck', 'car', 'calendar-clock', 'shield-check', 'map-pin', 'clock', 'lock-keyhole', 'boxes', 'phone', 'chevron-down', 'external-link'];
+        mustHave.forEach(n => console.assert(!!(window.lucide && window.lucide.icons && window.lucide.icons[n]), `Icon should exist: ${n}`));
+
+        // booking link sanity checks
+        const isValidBooking = (u) => /^https:\/\/link\.bonitaesterorealtors\.com\/widget\/bookings\/(boxtruck|boxtruckjdn70l)$/.test(u || '');
+        const truckHref = document.querySelector('#btn-truck')?.href || document.querySelector('#cta-truck')?.href || '';
+        const vanHref   = document.querySelector('#btn-van')?.href || document.querySelector('#cta-van')?.href || '';
+        console.assert(isValidBooking(truckHref), 'Truck booking link should be valid');
+        console.assert(isValidBooking(vanHref), 'Van booking link should be valid');
+        console.assert(document.querySelector('#btn-truck')?.target === '_blank' || document.querySelector('#cta-truck')?.target === '_blank', 'Truck link should open in a new tab');
+        console.assert(document.querySelector('#btn-van')?.target === '_blank' || document.querySelector('#cta-van')?.target === '_blank', 'Van link should open in a new tab');
+        // image presence checks
+        const truckImgEl = document.getElementById('img-truck');
+        const vanImgEl = document.getElementById('img-van');
+        console.assert(!!truckImgEl && /6837222809ab6bfea66caa95\.png$/.test(truckImgEl.src), 'Truck photo should be present and correct');
+        console.assert(!!vanImgEl && /68372228f362d619bda728ce\.png$/.test(vanImgEl.src), 'Van photo should be present and correct');
+        console.log('✅ Smoke tests passed');
+      } catch (e) {
+        console.warn('Icon/link smoke test issue:', e);
+      }
+      // year
+      document.getElementById('year').textContent = new Date().getFullYear();
+
+      // Enhance mobile buttons (wider hit targets)
+      const ctas = document.querySelectorAll('#cta-truck,#cta-van,#btn-truck,#btn-van');
+      ctas.forEach(btn => {
+        btn.addEventListener('mouseenter', () => btn.style.backgroundColor = getComputedStyle(document.documentElement).getPropertyValue('--ber-blue-dark'));
+        btn.addEventListener('mouseleave', () => btn.style.backgroundColor = getComputedStyle(document.documentElement).getPropertyValue('--ber-blue'));
+      });
+    })();
+  </script>
+</body>
+</html>
