@@ -1,0 +1,1923 @@
+<head>
+    <meta charset="utf-8">
+    <title>BER Global Diversity</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap" rel="stylesheet">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cabin:ital@1&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fascinate&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&display=swap" rel="stylesheet">
+
+    <style media="screen">
+      html {
+        width: 100%;
+      }
+
+      body {
+        width: 100%;
+      }
+
+      #placeinthesun {
+        display: flex;
+        margin: auto;
+        max-width: 1100px;
+      }
+
+      .foriegn-row {
+        background-color: grey;
+        margin: auto auto 50px auto;
+        max-width: 1100px;
+      }
+
+      .container {
+        padding: 0 !important;
+      }
+
+      #comm-button {
+        width: 100%;
+        margin: auto auto 10px auto;
+      }
+      #comm-button {
+        width: 100%;
+        margin: auto auto 10px auto;
+      }
+
+      #impl-button {
+        width: 100%;
+        margin: auto auto 10px auto;
+        background-color: grey;
+        color: black;
+      }
+
+      #train-button {
+        width: 100%;
+        margin: auto auto 10px auto;
+      }
+
+      #get-involved p{
+        margin: auto auto 5px auto;
+        text-align: center;
+        font-size: 12px;
+      }
+
+      .row {
+        margin: auto;
+        max-width: 1200px;
+      }
+
+      #bonita {
+        justify-content: center;
+      display: flex;
+      margin: auto;
+      max-width: 1050px;
+      padding: 5px 5% 5px 5%;
+      background-color: white;
+      border-radius: 10px;
+      }
+
+      .submit-row {
+        margin: auto;
+        display: flex;
+        justify-content: center;
+      }
+
+      #estero {
+        justify-content: center;
+        display: flex;
+        margin: -36px auto 10px auto;
+        max-width: 1050px;
+        padding: 5px 5% 5px 5%;
+        background-color: white;
+        border-radius: 10px;
+      }
+
+      .map-color {
+        background-color: #3fa7db;
+        padding-top: 100px;
+        margin-top: -150px;
+        padding-bottom: 10px;
+      }
+
+      #get-involved {
+        margin-bottom: 30px !important;
+      }
+
+      #get-involved .col-sm-3  {
+        background-color: white;
+        border-top: 2rem solid lightgrey !important;
+        margin: auto 10px auto 10px;
+        box-shadow: 0px 1px 1px darkgrey;
+      }
+
+      #get-involved .col-sm-4  {
+        background-color: white;
+        border-top: 2rem solid darkgrey !important;
+        margin: 0 1% auto 1%;
+        width: 31.3%;
+        box-shadow: 0px 1px 1px darkgrey;
+      }
+
+      .inv-h3 {
+        color: black !important;
+        font-size: 24px !important;
+        text-align: center;
+        margin: 10px auto 5px auto !important;
+      }
+
+      #get-involved {
+        margin: auto;
+
+      }
+
+      #photo-row {
+        justify-content: center;
+        display: flex;
+        margin: auto;
+        max-width: 1050px;
+        height: 300px;
+        padding: 0 5% 0 5%;
+      }
+
+      .col {
+        width: 100%;
+        margin: auto;
+        display: flex;
+      }
+
+      .arc path {
+            stroke: #fff;
+        }
+
+      #esttext {
+        display: inline;
+      }
+
+      .row img {
+        display: block;
+        width: 98%;
+        height: auto;
+        margin: auto 1px auto 1px;
+        box-shadow: 0px 3px 3px -1px black;
+        object-fit: cover;
+      }
+
+      #est-stats {
+        margin: auto;
+        display: inline;
+      }
+
+      #bon-stats {
+        margin: auto;
+        display: inline;
+      }
+
+      .members-from {
+        margin:57px auto 130px auto;
+        width: 100%;
+        height: 400px;
+        overflow: hidden;
+        color: #07abe1;
+      }
+
+      #sub {
+      width: 300px;
+      font-size: 20px;
+      font-family: arial;
+      font-weight: 700;
+      height: 59px;
+      background-color: white;
+      color: #3fa7db;
+      }
+
+      #sub:hover {
+        cursor: pointer;
+        background-color: #b4d8eb;
+        color: white;
+      }
+
+      @import url('https://fonts.googleapis.com/css2?family=Anton&display=swap');
+
+      .where {
+        text-align: center;
+        transform: translateY(55px);
+        z-index: 9999;
+        color: white;
+        font-family: 'Anton', sans-serif;
+        font-size: 48px;
+        font-weight: 700;
+      }
+
+      .map {
+        margin: auto;
+        width: auto;
+        height: 300px;
+        border: 0;
+      }
+
+      .map-div {
+        height: 575px;
+        margin-top: -67px;
+        overflow: hidden;
+      }
+
+      iframe {
+        z-index: -999;
+      }
+
+      .member-title {
+        z-index: 999;
+      }
+      #desc-text {
+        max-width: 950px;
+        margin: 65px auto 20px auto;
+        padding: 0 5% 0 5%;
+        font-size: 16px;
+        font-family: 'Cabin', sans-serif;
+        text-align: left;
+      }
+      #desc {
+        max-width: 1050px;
+      }
+      .map-inst {
+        margin: auto;
+        text-align: center;
+        max-width: 1050px;
+        padding: 0 5% 0 5%;
+        font-size: 15px;
+        font-family: arial;
+        color: white;
+      }
+      .inst-row {
+        margin: -115px 0 50px 0px;
+      }
+      .graph-title {
+        max-width: 1050px;
+        padding: 0 5% 0 5%;
+      }
+      .graph-heading {
+        font-size: 48px;
+        text-align: center;
+        color: white;
+        width: 100%;
+        margin: 25px auto 25px auto;
+        font-family: 'Oswald', sans-serif;
+        font-weight: 600;
+      }
+      .hr-grhd {
+        align-self: center;
+        width: 300px;
+        background-color: white;
+        height: 5px;
+        margin: -18px auto 20px auto;
+      }
+
+      .goback {
+        display: flex;
+        margin: 20px auto 10px -10%;
+      }
+
+      #arrowAnim {
+        display: flex;
+        justify-content: left;
+        margin: auto 57px 3px 15%;
+        align-items: center;
+      }
+
+      .arrow {
+        width: 15px;
+        height: 15px;
+        border: 15px solid;
+        border-color: black transparent transparent black;
+        transform: rotate(-45deg) translateY(-20px);
+      }
+
+
+      .arrowSliding {
+        position: absolute;
+        -webkit-animation: slide 3s linear infinite;
+                animation: slide 3s linear infinite;
+      }
+
+      .delay1 {
+        -webkit-animation-delay: 1s;
+          animation-delay: 1s;
+      }
+      .delay2 {
+        -webkit-animation-delay: 2s;
+          animation-delay: 2s;
+      }
+      .delay3 {
+        -webkit-animation-delay: 3s;
+          animation-delay: 3s;
+      }
+
+      @-webkit-keyframes slide {
+          0% { display: none; opacity:0; transform: translateX(5vw); }
+         20% { opacity:1; transform: translateX(2vw); }
+         80% { opacity:1; transform: translateX(-2vw); }
+        100% { opacity:0; transform: translateX(-5vw); }
+      }
+      @keyframes slide {
+          0% { display: none; opacity:0; transform: translateX(5vw); }
+         20% { opacity:1; transform: translateX(2vw); }
+         80% { opacity:1; transform: translateX(-2vw); }
+        100% { opacity:0; transform: translateX(-5vw); }
+      }
+
+      @import url('https://fonts.googleapis.com/css2?family=Oswald:wght@500&display=swap');
+
+      .back {
+        font-family: 'Oswald', sans-serif;
+        z-index: 999;
+        margin-bottom: 0;
+      }
+
+      .back:hover {
+        color: grey;
+        cursor: pointer;
+        text-decoration: underline;
+      }
+
+      #tab1content {
+        margin: 24px auto;
+        padding: 5px;
+        background-color: #ffc661;
+      }
+
+      #tab1 {
+        float: left;
+        padding: 7px 10px 7px 10px;
+        background: #2a2aff;
+        color: #FFFFFF;
+        margin: -25px 0 0px 0px;
+        cursor: pointer;
+        border-radius: -15px;
+        font-size: 20px;
+        z-index: 2;
+        border: 1px solid black;
+        border-bottom: none;
+        border-top: none;
+        border-right: none;
+        border-left: none;
+      }
+
+      #tab2, #tab3 {
+        float: left;
+        padding: 7px 10px 7px 10px;
+        background: #00a3ff;
+        color: #FFFFFF;
+        margin: -25px 0 0px 0px;
+        cursor: pointer;
+        border-radius: -15px;
+        font-size: 20px;
+        z-index: 2;
+        border: 1px solid black;
+        border-bottom: none;
+        border-top: none;
+        border-right: none;
+      }
+
+      .tabrow {
+        margin: 10px auto -25px 5%;
+        display: flex;
+      }
+
+      .sources {
+        margin: auto;
+      }
+
+      #logo {
+        box-shadow: none;
+      }
+
+      #source {
+        text-align: center;
+        color: white;
+      }
+
+      #gbhead {
+        text-align: center;
+        margin: auto;
+        color: white;
+      }
+      #tab2content {
+        margin: 24px auto;
+        padding: 5px;
+        background-color: #2a2aff;
+        height: auto;
+      }
+
+      #tab3content {
+        margin: 24px auto;
+        padding: 5px;
+        background-color: #0ca7a4;
+        height: auto;
+      }
+
+      #canadaflag, #ukflag, #laflag, #asiaflag, #euflag {
+
+      }
+
+      .move {
+        margin: 85px auto !important;
+        box-shadow: none !important;
+      }
+
+      .move:hover {
+        cursor: pointer;
+      }
+
+      #ukflag:hover, #laflag:hover, #asiaflag:hover, #euflag:hover {
+        cursor: pointer;
+        width: 99%;
+        opacity: .9;
+      }
+
+      #triangle1, #triangle2, #triangle3, #triangle4, #triangle5 {
+        width: 15px;
+        height: 15px;
+        border: 15px solid;
+        margin: auto;
+        max-width: 1200px;
+        border-color: white transparent transparent white;
+        transform: rotate(45deg) translateY(-1px) translateX(15px);
+        display: none;
+      }
+
+      #info-row-canada {
+        display: none;
+      }
+
+      #background-info {
+        background: white;
+        margin: -30px 5% auto 5%;
+        border-radius: 5px;
+        display: none;
+      }
+
+    #canadaflag:hover {
+      cursor: pointer;
+      width: 99%;
+      opacity: .9;
+    }
+
+    #german-tips, #canada-tips, #china-tips ,#cuba-tips, #brazil-tips, #switzerland-tips, #mexico-tips {
+      display: block;
+      margin: auto;
+      animation: swoop .5s;
+    }
+
+
+    @keyframes swoop {
+      0% { transform: translateX(5000px);}
+      100% { transform: translateX(0px); }
+    }
+
+    @import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap');
+
+    #german-tips h2 {
+      text-align: center;
+      color: white;
+      font-family: 'Bebas Neue', cursive;
+      font-size: 54px !important;
+    }
+
+    #canada-tips h2 {
+      text-align: center;
+      color: white;
+      font-family: 'Bebas Neue', cursive;
+      font-size: 54px !important;
+    }
+
+    #china-tips h2 {
+      text-align: center;
+      color: white;
+      font-family: 'Bebas Neue', cursive;
+      font-size: 54px !important;
+    }
+
+    #cuba-tips h2 {
+      text-align: center;
+      color: white;
+      font-family: 'Bebas Neue', cursive;
+      font-size: 54px !important;
+    }
+
+    #mexico-tips h2 {
+      text-align: center;
+      color: white;
+      font-family: 'Bebas Neue', cursive;
+      font-size: 54px !important;
+    }
+
+    #mexico-tips h2 {
+      text-align: center;
+      color: white;
+      font-family: 'Bebas Neue', cursive;
+      font-size: 54px !important;
+    }
+
+    #brazil-tips h2 {
+      text-align: center;
+      color: white;
+      font-family: 'Bebas Neue', cursive;
+      font-size: 54px !important;
+    }
+
+    #switzerland-tips h2 {
+      text-align: center;
+      color: white;
+      font-family: 'Bebas Neue', cursive;
+      font-size: 54px !important;
+    }
+
+    li {
+      color: white;
+      font-size: 16px;
+      font-family: arial;
+    }
+
+    .tips-flags {
+      max-width: 400px !important;
+      margin: auto !important;
+    }
+
+    .global-head {
+      background-color: white;
+      margin: 0 5% 0px;
+      padding-top: 20px;
+      padding-bottom: 10px;
+      border-radius: 5px 5px 0 0;
+      transform: translateY(-6px);
+      text-align: center;
+    }
+
+    .canada-text {
+      text-align: center;
+      margin: -6px 5%;
+    }
+
+    .border {
+      background-color: white;
+      margin: auto 5%;
+      padding-bottom: 20px;
+      border-radius: 0 0 5px 5px;
+    }
+
+    #image1 {
+      animation: fadeIn 2s;
+    }
+
+    #image2 {
+      animation: fadeIn 2s;
+    }
+
+    #image3 {
+      animation: fadeIn 2s;
+    }
+
+    #image4 {
+      animation: fadeIn 2s;
+    }
+
+    #p1 {
+      animation: fadeIn 2s;
+    }
+
+    @keyframes fadeIn {
+      0% { opacity: 0; }
+      100% { opacity: 1; }
+    }
+
+    .col-sm-2 {
+      position: relative !important;
+    }
+    .col-sm-1 {
+      position: relative !important;
+    }
+
+    .div-back {
+      position: absolute;
+      z-index: -999;
+      box-shadow: none !important;
+      display: inline !important;
+      width: 660px !important;
+      transform: translateX(243px) translateY(3px) rotateX(55deg) rotateY(5deg);
+    }
+
+    #divers {
+      font-family: 'Fascinate', cursive !important;
+      font-size: 100px !important;
+    }
+
+
+    @media only screen and (max-width: 768px) {
+      #canadaflag, #ukflag, #laflag, #asiaflag, #euflag {
+        width: 100px !important;
+      }
+      .row {
+        display: flex !important;
+      }
+      .col-sm-2 {
+        position: relative !important;
+        width: 100px;
+      }
+      .col-sm-1 {
+        position: relative !important;
+        width: 100px;
+      }
+      .where {
+        font-size: 37px;
+      }
+      .map-color {
+        padding-top: 35px;
+      }
+      h1 {
+        font-size: 26px !important;
+      }
+      #divers {
+        font-size: 76px !important;
+      }
+      h3 {
+        font-size: 26px !important;
+        margin-left: 2%;
+      }
+      h4 {
+        font-size: 13px !important;
+      }
+      h2 {
+        font-size: 26px !important;
+      }
+      .div-back {
+        transform: translateX(150px) translateY(0px) rotateX(55deg) rotateY(5deg);
+        width: 500px !important;
+      }
+      .graph-heading {
+        font-size: 42px !important;
+      }
+      .map-inst {
+        font-size: 14px !important;
+      }
+    }
+
+    @media screen and (max-width: 660px) {
+      #get-involved {
+        display: inline !important;
+      }
+      #get-involved .col-sm-4 {
+        width: 98%;
+      }
+      }
+
+    h3 {
+      margin-left: 5%;
+    }
+
+    @media only screen and (max-width: 580px) {
+      #canadaflag, #ukflag, #laflag, #asiaflag, #euflag {
+        width: 75px !important;
+      }
+      .row {
+        display: flex !important;
+      }
+      .map-inst {
+        font-size: 12px !important;
+      }
+      .col-sm-2 {
+        position: relative !important;
+        width: 80px;
+      }
+      .col-sm-1 {
+        position: relative !important;
+        width: 0px;
+      }
+      #tab1, #tab2, #tab3 {
+        font-size: 17px;
+      }
+      h3 {
+        font-size: 17px !important;
+        margin-left: 2%;
+      }
+      #sub {
+        width: 250px;
+      }
+      .where {
+        font-size: 26px;
+      }
+      .map-color {
+        padding-top: 20px;
+      }
+      .graph-heading {
+        font-size: 32px !important;
+      }
+      #divers {
+        font-size: 40px !important;
+      }
+      h4 {
+        font-size: 13px !important;
+      }
+      h2 {
+        font-size: 22px !important;
+      }
+      #desc-text {
+        margin: 65px auto -50px auto;
+        font-size: 14px;
+      }
+      #est {
+        display: none;
+      }
+      #bon {
+        display: none;
+      }
+      li {
+        font-size: 13px;
+      }
+      .div-back {
+        transform: translateX(218px) translateY(10px) rotateX(55deg) rotateY(5deg);
+        width: 240px !important;
+      }
+      .tips-flags {
+        max-width: 300px !important;
+      }
+      #moveArrows {
+        width: 100px !important;
+      }
+    }
+
+    @media screen and (max-width: 1150px) {
+      .foriegn-row {
+        margin: auto 5% 40px 5%;
+      }
+      .foriegn-row h1 {
+        font-size: 30px;
+      }
+    }
+
+    @media screen and (max-width: 850px) {
+      .foriegn-row h1 {
+        font-size: 26px;
+      }
+    }
+
+    @media screen and (max-width: 790px) {
+      .foriegn-row h1 {
+        font-size: 22px;
+      }
+      #placeinthesun {
+        display: grid !important;
+      }
+      #currency-btn {
+        width: 100% !important;
+      }
+      .col-sm-2 {
+        width: 100%;
+      }
+    }
+
+    @media screen and (max-device-width: 480px) {
+      .div-back {
+        display: none !important;
+      }
+      desktop {
+        display: none;
+      }
+      mobile {
+        display: block;
+      }
+    }
+
+
+    </style>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js" type="text/javascript"></script>
+    <script src="https://d3js.org/d3.v4.min.js"></script>
+    <script type="text/javascript">
+
+
+    </script>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@500&display=swap" rel="stylesheet">
+  </head>
+
+  <body>
+      <div class="goback">
+        <div id="arrowAnim">
+          <div class="arrowSliding">
+            <div class="arrow"></div>
+          </div>
+          <div class="arrowSliding delay1">
+            <div class="arrow"></div>
+          </div>
+          <div class="arrowSliding delay2">
+            <div class="arrow"></div>
+          </div>
+      </div>
+      <a href="https://www.bonitaesterorealtors.com/"><h2 class="back">Go Home</h2></a>
+    </div>
+    <div class="row" style="margin: 30px auto 25px auto; max-width: 1050px; padding: 0 5% 0 5%;">
+      <span style="margin: auto; display: flex; max-width: 1050px; text-align: left;"><h1 style="vertical-align: text-bottom;">Our Commitment to </h1><h1 style="color: #4566ce; font-size: 40px; margin-left: 10px;"><i id="divers" style="font-family: 'Anton', sans-serif;
+      font-weight: 700;
+      vertical-align: text-top;">Diversity</i></h1><img class="div-back" src="https://www.bonitaesterorealtors.com/wp-content/uploads/2022/06/Click-Here-600-×-200-px.gif" /></span>
+    </div>
+    <div class="desc">
+      <p id="desc-text">Through the Global Diversity Committee and our Global Initiative, we try and bring awareness to the diversity within our local community. Bonita Springs & Estero are fast-growing communities that are becoming more diverse by the year. Join us for our events & classes discussing diversity and use the online recourses here to help you become more aware of our local neighbors and those around the world. A Realtor® that learns - Earns. You never know when you need the background information on the client you are working with. While you're here, let us know where you are from! Use the link below the map so we can add your pin.
+    </div>
+    <div class="row" id="photo-row">
+      <div class="col" id="p1">
+      <transition name ="fadeIn">
+        <img id='image1' src="https://www.bonitaesterorealtors.com/wp-content/uploads/2022/05/70829665_2929376593742724_4706839455502172160_n-e1651672250759.jpeg" alt=""></img>
+      </transition>
+      </div>
+      <div class="col">
+        <img id='image2' src="https://www.bonitaesterorealtors.com/wp-content/uploads/2022/05/71136910_2929373073743076_3846591844376903680_n-e1651672358117.jpeg" alt="">
+      </div>
+      <div class="col">
+        <img id='image3' src="https://www.bonitaesterorealtors.com/wp-content/uploads/2022/05/71152959_2929373543743029_3630942730445651968_n-e1651672176192.jpeg" alt="">
+      </div>
+      <div class="col">
+        <img id='image4' src="https://www.bonitaesterorealtors.com/wp-content/uploads/2022/05/71251320_2929375387076178_6320807110716162048_n-e1651672318203.jpeg" alt="">
+      </div>
+    </div>
+    <div class="map-color">
+      <div class="member-title">
+        <h1 class="where">Where Are Our Members From?</h1>
+      </div>
+      <div class="members-from">
+        <div class="map-div">
+          <iframe src="https://www.google.com/maps/d/u/2/embed?mid=1_bHKwZYxKrRAXRf8FhOmrf3ijvaSes0&ehbc=2E312F" width="100%" height="700"></iframe>
+        </div>
+      </div>
+      <div class="inst-row">
+        <h2 class="map-inst"> <i>Instruction:</i> Use your mouse scroll wheel to zoom in/out OR use the "+" or "-" keys on your keyboard</h2>
+      </div>
+      <hr style="color: white; margin: -40px 5% 10px 5%; padding: 0px 5% 0 5%;">
+      <div class="submit-row">
+        <h3>Where are you from?</h3>
+        <a href="https://bonitaspringsesterorealtorsfl.growthzoneapp.com/ap/Form/Fill/rDbGDUaP" target="_blank"><button type="button" class="btn" id="sub" name="button" style="">Submit Here! </button></a>
+      </div>
+    </div>
+    <br>
+    <br>
+
+    <style>
+        h2 {
+          font-family: 'Dancing Script', cursive;
+        }
+
+        .logo-grid {
+          display: grid;
+          grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+          gap: 16px;
+        }
+
+        @media (min-width: 576px) {
+          /* 2 columns grid on small devices and above */
+          .logo-grid {
+            grid-template-columns: repeat(2, 1fr);
+          }
+        }
+
+        @media (min-width: 768px) {
+          /* Back to 5 columns grid on medium devices and above */
+          .logo-grid {
+            grid-template-columns: repeat(5, 1fr);
+          }
+        }
+
+        .img-fluid {
+          max-height: 100px;
+          object-fit: contain !important; /* Make sure the whole image is displayed */
+          transition: transform .2s; /* Animation */
+        }
+
+        .img-fluid:hover {
+          transform: scale(1.1); /* (150% zoom - Note: if the zoom is too large, it will go outside of the viewport) */
+        }
+
+        .no-shadow * {
+          box-shadow: none !important;
+        }
+
+        .column {
+    }
+      </style>
+
+  <div class="container mt-5 no-shadow">
+    <h2 class="text-center mb-5">NAR Diversity Chapters:</h2>
+    <div class="logo-grid">
+      <div class="logo-item text-center">
+        <a href="https://nahrepnaples.org/" target="_blank">
+          <img src="https://www.bonitaesterorealtors.com/wp-content/uploads/2023/09/logo-naples.png" alt="NAHREP Naples" class="img-fluid">
+        </a>
+      </div>
+      <div class="logo-item text-center">
+        <a href="https://www.nareb.com/" target="_blank">
+          <img src="https://www.bonitaesterorealtors.com/wp-content/uploads/2023/09/Nareb.png" alt="NAREB" class="img-fluid">
+        </a>
+      </div>
+      <div class="logo-item text-center">
+        <a href="https://www.areaa.org/" target="_blank">
+          <img src="https://www.bonitaesterorealtors.com/wp-content/uploads/2023/09/areaa-scaled.jpeg" alt="AREAA" class="img-fluid">
+        </a>
+      </div>
+      <div class="logo-item text-center">
+        <a href="https://realestatealliance.org/" target="_blank">
+          <img src="https://www.bonitaesterorealtors.com/wp-content/uploads/2023/09/real-estate-alliance.webp" alt="Real Estate Alliance" class="img-fluid">
+        </a>
+      </div>
+      <div class="logo-item text-center">
+        <a href="https://www.wcr.org/network-sites/florida/bonita-springs-estero/" target="_blank">
+          <img src="https://www.bonitaesterorealtors.com/wp-content/uploads/2023/09/1519910458689-e1695306245950.jpeg" alt="WCR" class="img-fluid">
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <br>
+  <br>
+
+    <div class="container mt-5 no-shadow">
+      <h2 class="text-center mb-5">Our Global Affiliates:</h2>
+      <div class="logo-row">
+          <div class="logo-item">
+              <a href="https://files.floridados.gov/media/708408/directory-of-consulates-dos-924.pdf#-consulates-final.pdf" target="_blank">
+                  <img src="https://www.bonitaesterorealtors.com/wp-content/uploads/2024/09/2.png" alt="NAHREP Naples" class="img-fluid">
+              </a>
+          </div>
+          <div class="logo-item">
+              <h4 class="text-center mb-5" style="color: black !important;">Affiliate Partners:</h4>
+              <a href="https://www.allure-tax.com/#:~:text=Allure%20Accounting%20is%20here%20to%20make%20your%20life%20easier.%20We" target="_blank">
+                  <img src="https://www.bonitaesterorealtors.com/wp-content/uploads/2021/09/allure.jpeg" alt="NAREB" class="img-fluid">
+              </a>
+              <a href="https://firptagroup.com/#:~:text=FIRPTA%20stands%20for%20Foreign%20Investment%20in%20Real%20Property%20Tax%20Act," target="_blank">
+                  <img src="https://www.bonitaesterorealtors.com/wp-content/uploads/2020/02/The-Firpta-Group.png" alt="NAREB" class="img-fluid">
+              </a>
+          </div>
+          <div class="logo-item">
+              <a href="https://www.nar.realtor/global" target="_blank">
+                  <img src="https://www.bonitaesterorealtors.com/wp-content/uploads/2024/09/3-e1727443916279.png" alt="AREAA" class="img-fluid">
+              </a>
+          </div>
+          <div class="logo-item">
+              <a href="https://www.census.gov/en.html" target="_blank">
+                  <img src="https://www.bonitaesterorealtors.com/wp-content/uploads/2024/09/Screenshot-2024-09-25-at-1.28.54 PM.png" alt="Real Estate Alliance" class="img-fluid">
+              </a>
+          </div>
+          <div class="logo-item">
+              <a href="https://selectflorida.org/" target="_blank">
+                  <img src="https://www.bonitaesterorealtors.com/wp-content/uploads/2024/09/SelectFlorida.jpeg" alt="WCR" class="img-fluid">
+              </a>
+          </div>
+          <div class="logo-item">
+              <a href="https://www.statista.com/topics/1467/global-economy/#topicOverview" target="_blank">
+                  <img src="https://www.bonitaesterorealtors.com/wp-content/uploads/2024/09/statista_logo.jpg" alt="WCR" class="img-fluid">
+              </a>
+          </div>
+          <div class="logo-item">
+              <a href="https://opendoorsdata.org/" target="_blank">
+                  <img src="https://www.bonitaesterorealtors.com/wp-content/uploads/2024/09/open-doors-logo-new@2x.webp" alt="WCR" class="img-fluid">
+              </a>
+          </div>
+          <div class="logo-item">
+              <a href="https://opendoorsdata.org/" target="_blank">
+                  <img src="https://www.bonitaesterorealtors.com/wp-content/uploads/2024/09/image-27.png" alt="WCR" class="img-fluid">
+              </a>
+            </div>
+        </div>
+    </div>
+
+    <style>
+        .logo-row {
+          display: flex;
+          flex-wrap: wrap;
+          justify-content: center;
+          align-items: center;
+          gap: 20px; /* Add spacing between logos */
+          }
+          
+          .logo-item {
+              flex: 0 1 calc(20% - 20px); /* Adjust this value based on how many logos per row */
+              text-align: center;
+          }
+          
+          .img-fluid {
+              max-width: 100%;
+              height: auto;
+          }
+
+        </style>
+
+  
+  <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+
+  <br>
+  <br>
+
+    <img style="margin: auto; width: 370px; padding-top: 10px; display: block;" src="https://www.bonitaesterorealtors.com/wp-content/uploads/2022/08/Untitled-design-5.png" alt="logo">
+    <br>
+    <div class="foriegn-row">
+
+      <div class="row" id="placeinthesun">
+        <div class="col-sm-10">
+          <h1 style="display: block; color: white; margin: 15px auto 15px auto; text-align: center;">Want to Learn More About Foreign Currency?</h1>        </div>
+        <div class="col-sm-2">
+          <a href="https://aplaceinthesuncurrency.com/bonita-springs/" target="_blank"><button type="btn btn-primary" id="currency-btn" style="margin: 10px auto; width: 100%; height: 50px;" class="btn btn-primary" name="button">Click Here!</button></a>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="tabrow">
+      <div id="tab1" onclick="tab1change()">
+        Top Global Buyers
+      </div>
+      <div id="tab2" onclick="tab2change()">
+        Local Diversity
+      </div>
+      <div id="tab3" onclick="tab3change()">
+        Global Tips
+      </div>
+    </div>
+
+
+    <div id="tab1content" style="display: none;">
+        <h1 class="graph-heading">Local Area Demographics</h1>
+        <hr class="hr-grhd">
+      <div class="row" id="bonita">
+        <div class="col" style="display: inline;">
+          <h2 style="font-size: 32px;">Bonita Springs</h2>
+          <h4 style="font-size: 22px; color: black;">Population 66,000+</h3>
+          <span style="display:flex; padding: 20px auto;"><h4 style="font-size: 20px;">Sex Ratio</h4><h4 style="font-size: 40px; margin: 6px 10px 6px 0;">: </h4><h4>Male: 50.08%</h4><hr style="width: 0px;
+            height: 42px;
+            margin: 9px 20px 19px 10px;
+            border: 2px solid black;"><h4> Female: 49.92%</h4><i class="bi bi-gender-female"></i><span>
+        </div>
+        <div class="col" id="">
+          <svg id="bon" width="300" height="200"> </svg>
+          <script>
+              var data = [72.1, 23.3, 1, 2.7, .9];
+              var svg = d3.select("svg"),
+                  width = svg.attr("width"),
+                  height = svg.attr("height"),
+                  radius = Math.min(width, height) / 2,
+                  g = svg.append("g").attr("transform", "translate(" + width / 2 + "," + height / 2 + ")");
+
+              var color = d3.scaleOrdinal(['#0fa6a4','#04a9e1','#fbaa18','lightsteelblue','red' ,'#e41a1c', '#e41a1c']);
+
+              // Generate the pie
+              var pie = d3.pie();
+
+              // Generate the arcs
+              var arc = d3.arc()
+                      .outerRadius(radius)
+                      .innerRadius(60);
+
+              var arcOut = d3.arc()
+                      .outerRadius(radius)
+                      .innerRadius(80);
+
+              var path = d3.arc()
+                       .outerRadius(radius - 10)
+                       .innerRadius(0);
+
+              //Generate groups
+              var arcs = g.selectAll("arc")
+                          .data(pie(data))
+                          .enter()
+                          .append("g")
+                          .attr("class", "arc")
+
+              //Draw arc paths
+              arcs.append("path")
+                  .attr("fill", function(d, i) {
+                      return color(i);
+                  })
+                  .attr("d", arc);
+          </script>
+        </div>
+        <div class="col" id="bon-stats">
+          <span style="display: flex;"><div style="height: 15px; width: 15px; background-color: #0fa6a4; border-radius: 15px; margin: auto 10px auto 0;"></div><h4 style="text-align: left;">White: 72.1%</h4></span>
+          <span style="display: flex;"><div style="height: 15px; width: 15px; background-color: #04a9e1; border-radius: 15px; margin: auto 10px auto 0;"></div><h4 style="text-align: left;">Hispanic: 23.3%</h4></span>
+          <span style="display: flex;"><div style="height: 15px; width: 15px; background-color: #fbaa18; border-radius: 15px; margin: auto 10px auto 0;"></div><h4 style="text-align: left;">Asian: 1%</h4></span>
+          <span style="display: flex;"><div style="height: 15px; width: 15px; background-color: lightsteelblue; border-radius: 15px; margin: auto 10px auto 0;"></div><h4>Black: 2.7%</h4></span>
+          <span style="display: flex;"><div style="height: 15px; width: 15px; background-color: red; border-radius: 15px; margin: auto 10px auto 0;"></div><h4>Other Race: .9%</h4></span>
+        </div>
+      </div>
+        <br>
+        <br>
+      <div class="row" id="estero">
+        <div class="col" style="display: inline;">
+          <h2 style="font-size: 32px;">Estero</h2>
+          <h4 style="font-size: 22px; color: black;">Population 35,000+</h3>
+          <span style="display:flex; padding: 20px auto;"><h4 style="font-size: 20px;">Sex Ratio</h4><h4 h4 style="font-size: 40px; margin: 6px 10px 6px 0;">:</h4><h4>Male: 51.00%</h4><hr style="width: 0px;
+            height: 42px;
+            margin: 9px 20px 19px 10px;
+            border: 2px solid black;"><h4> Female: 49.00%</h4><i class="bi bi-gender-female"></i><span>
+        </div>
+          <div class="col">
+          <svg id="est" width="300" height="200"> </svg>
+          <script>
+              var data = [89.5, 5.1, 2.8, 1.7, .9];
+              var svg = d3.select("#est"),
+                  width = svg.attr("width"),
+                  height = svg.attr("height"),
+                  radius = Math.min(width, height) / 2,
+                  g = svg.append("g").attr("transform", "translate(" + width / 2 + "," + height / 2 + ")")
+                  .on("mouseenter", function(d, item) {
+                    tooltip = d3.select("#est")
+                    tooltip.transition().duration(200)
+                        .style("opacity", 0.9)
+                      })
+                    .on("mouseout", function(d, item) {
+                      tooltip = d3.select("#est")
+                      tooltip.transition()
+                          .duration(200)
+                          .style("opacity", 1)
+                    });
+
+              var color = d3.scaleOrdinal(['#0fa6a4','#04a9e1','#fbaa18','lightsteelblue','red' ,'#e41a1c', '#e41a1c']);
+
+              // Generate the pie
+              var pie = d3.pie();
+
+              // Generate the arcs
+              var arc = d3.arc()
+                      .outerRadius(radius)
+                      .innerRadius(60);
+
+              var arcOut = d3.arc()
+                      .outerRadius(radius)
+                      .innerRadius(60 + 20);
+
+              //Generate groups
+              var arcs = g.selectAll("arc")
+                          .data(pie(data))
+                          .enter()
+                          .append("g")
+                          .attr("class", "arc")
+
+              //Draw arc paths
+              arcs.append("path")
+                  .attr("fill", function(d, i) {
+                      return color(i);
+                  })
+                  .attr("d", arc);
+          </script>
+        </div>
+      <div class="col" id="est-stats">
+        <span style="display: flex;"><div style="height: 15px; width: 15px; background-color: #0fa6a4; border-radius: 15px; margin: auto 10px auto 0;"></div><h4 style="text-align: left;">White: 89.5%</h4></span>
+        <span style="display: flex;"><div style="height: 15px; width: 15px; background-color: #04a9e1; border-radius: 15px; margin: auto 10px auto 0;"></div><h4 style="text-align: left;">Hispanic: 5.1%</h4></span>
+        <span style="display: flex;"><div style="height: 15px; width: 15px; background-color: #fbaa18; border-radius: 15px; margin: auto 10px auto 0;"></div><h4 style="text-align: left;">Asian: 2.8%</h4></span>
+        <span style="display: flex;"><div style="height: 15px; width: 15px; background-color: lightsteelblue; border-radius: 15px; margin: auto 10px auto 0;"></div><h4>Black: 1.7%</h4></span>
+        <span style="display: flex;"><div style="height: 15px; width: 15px; background-color: red; border-radius: 15px; margin: auto 10px auto 0;"></div><h4>Other Race: .9%</h4></span>
+      </div>
+    </div>
+    <div class="sources">
+        <p id="source">***Data based upon the US Census 2019 ACS 5-Year Survey</p>
+    </div>
+  </div>
+  <div id="tab2content" style="display: block;">
+    <h1 class="graph-heading">Top Global Buyers</h2>
+    <hr class="hr-grhd">
+  <div class="row" style="margin: auto; max-width: 1200px;">
+    <div class="col-sm-1">
+    </div>
+    <div class="col-sm-2">
+      <img id="canadaflag" onClick="canadaInfo()" src="https://www.bonitaesterorealtors.com/wp-content/uploads/2022/06/1.png" alt="Canada">
+    </div>
+    <div class="col-sm-2">
+      <img id="ukflag" onClick="ukInfo()" src="https://www.bonitaesterorealtors.com/wp-content/uploads/2022/06/2.png" alt="United Kingdom">
+    </div>
+    <div class="col-sm-2">
+      <img id="euflag" onClick="euInfo()" src="https://www.bonitaesterorealtors.com/wp-content/uploads/2022/06/3.png" alt="Europe">
+    </div>
+    <div class="col-sm-2">
+      <img id="asiaflag" onClick="asiaInfo()" src="https://www.bonitaesterorealtors.com/wp-content/uploads/2022/06/4.png" alt="Asia/Pacific">
+    </div>
+    <div class="col-sm-2">
+      <img id="laflag" onClick="laInfo()" src="https://www.bonitaesterorealtors.com/wp-content/uploads/2022/06/5.png" alt="Latin America">
+    </div>
+    <div class="col-sm-1">
+    </div>
+  </div>
+  <div class="row" style="margin: auto; max-width: 1200px;">
+    <div class="col-sm-1">
+    </div>
+    <div class="col-sm-2">
+      <div id="triangle1" style="display: none;"></div>
+    </div>
+    <div class="col-sm-2">
+      <div id="triangle2" style="display: none;"></div>
+    </div>
+    <div class="col-sm-2">
+      <div id="triangle3" style="display: none;"></div>
+    </div>
+    <div class="col-sm-2">
+      <div id="triangle4" style="display: none;"></div>
+    </div>
+    <div class="col-sm-2">
+      <div id="triangle5" style="display: none;"></div>
+    </div>
+    <div class="col-sm-1">
+    </div>
+  </div>
+  <div id="default-text">
+    <img src="https://www.bonitaesterorealtors.com/wp-content/uploads/2022/06/Click-Here.png" style="margin: auto; display: flex;" alt="">
+  </div>
+  <div id="background-info1" style="display: none; margin: auto; max-width: 1200px;">
+      <h1 id="info-row-canada" class="global-head">1. Canada</h1>
+      <div class="border">
+        <hr style="border: 1px solid red; margin: -6px 5% 10px 5%">
+        <p class="canada-text">Our friendly Neighbors of the North.  Canada more than any other country sends Florida the most global buyers.  It makes a lot of sense when you think about it.  Canadian winters are very cold and the Canadian dollar is doing very well compared to the USD.  That combined with the quickly rising prices of properties within Canada (probably some of the highest prices in the world) makes Florida a no-brainer for the Canucks.  2020 and 2021 saw a decrease in Canadian buyers due to strict immigration policies both from the United States and Canada but as soon as borders opened, Canadian buyers started flocking here to continue their tradition of foreign investments.  Even with the increases in Florida home prices.
+        <br>
+        <br>
+        In Southwest Florida (Lee & Collier Counties) there were roughly 910 sales to Canadian buyers in 2021.
+        This is almost double or triple the next country.  Again, restrictions heavily influence this number but it is still a very incredible figure to put into perspective how influential Canadians are to our local market.  For 2021, the total MLS sales were roughly 4,500 for Lee and Collier and although the 900+ Canadian purchases include sales outside the MLS it is still a great comparison to make.  Check out the "Global Tips" section to see important information about working with Canadian buyers.
+        </p>
+      </div>
+  </div>
+  <div id="background-info2" style="display: none; margin: auto; max-width: 1200px;">
+      <h1 id="info-row-uk" class="global-head">2. United Kingdom</h1>
+      <div class="border">
+        <hr style="border: 1px solid #000066; margin: -6px 5% 10px 5%">
+        <p class="canada-text">Across the Atlantic Ocean is the United Kingdom - Apart of the British Isles U.K. is the second-largest purchaser of foreign investments in Florida.  Over 2020 and 2021 we haven't had a lot of travelers as we typically do because of the difficulty with border restrictions due to COVID but in 2022 we've already seen an uptick in visitors and investments. In 2019 - the U.K. and Europe made for roughly 20% of the total international buyers and we will more than likely see this return for 2022/2023.
+        <br>
+        <br>
+        <img style="width: 100%; max-width: 500px;" src="https://www.bonitaesterorealtors.com/wp-content/uploads/2022/06/Global-Charts1_0.png" alt="">
+        <br>
+        <br>
+        Experts are predicting an uptick in U.K.investments going forward mainly due to the departure from the European Union.  Regardless of popularity or opinions on the matter, many see Florida as a great way to invest and ride out the uncertainty of the change.  Europeans and the U.K. often receive a lot more paid vacation hours than the United States, roughly 6-weeks minimum a year.  That means there is a greater chance that a U.K. citizen will use that time to escape the rainy season in U.K. and travel here to visit their second home and enjoy the 200+ days of Florida sunshine.
+        </p>
+      </div>
+  </div>
+  <div id="background-info3" style="display: none; margin: auto; max-width: 1200px;">
+      <h1 id="info-row-eu" class="global-head">3. Europe</h1>
+      <div class="border">
+        <hr style="border: 1px solid #013399; margin: -6px 5% 10px 5%">
+        <p class="canada-text">Europe is a collection of 51 countries with the largest portion of which being a part of the European Union (Flag pictured Above) which comprises 27 countries with a population of 447 million citizens.  EU members all share a "system of laws" similar to how the United States works with its Federal and State arrangement. There is free movement and transportation of goods throughout these countries and overall these countries tend to be wealthier to a similar level per capita to the United States.  For that reason, that's why, thanks to the European Union, Europe is one of the top 5 Global Investor bases. As mentioned with some of the other countries, the past years (2020 & 2021) have made it difficult for European citizens to move freely to the United States but in the past, this has been one of the largest bases of investors.  Experts predict 2022/2023 to see an uptick of investors from Europe, especially after being away for a few years.
+          <br>
+          <br>
+          <img style="width: 100%; max-width: 500px;" src="https://www.bonitaesterorealtors.com/wp-content/uploads/2022/06/Global-Charts2_0.png" alt="">
+          <br>
+          <br>
+        The two largest bases of Florida investors out of the European Union are Germans & French.  These made up roughly 6% of purchases from Aug. 2019 to July 2020 (View graph in the "Asia/Pacific" Section).  European countries have a lot of vacation time and typically have very cold winters and make up a decent amount of Florida's "Snowbirds".  Believe it or not, Home prices in Florida are still relatively cheap compared to some prices in big European cities like Paris, Madrid, Lisbon, Munich, etc.  Many of us here might be shocked at the rise in price but it's still a discount for our friends across the Atlantic.
+        </p>
+      </div>
+  </div>
+  <div id="background-info4" style="display: none; margin: auto; max-width: 1200px;">
+      <h1 id="info-row-asia" class="global-head">4. Asia/Pacific</h1>
+      <div class="border">
+        <hr style="border: 1px solid #a7dafb; margin: -6px 5% 10px 5%">
+        <p class="canada-text">Asia/Pacific refers to 13 total countries on the eastern hemisphere of the world. Some of the largest investors in Asia consist of China, Japan, and Korea.  More than most cultures listed here, these countries are very unique and different in comparison to the cultures in the United States and even from country to country in Asia.
+        <br>
+        <br>
+        <img style="width: 70%; max-width: 1000px; margin: auto; height: auto;" src="https://www.bonitaesterorealtors.com/wp-content/uploads/2022/06/433-4339190_overview-asia-pacific-map-vector-clipart.png" alt="">
+        <br>
+        <br>
+        If there is one general characteristic of these countries it's that they see Florida as a great investment for the future.  Many of these countries are growing tremendously in recent years and have huge populations.  Many of these countries have unique "quirks" - if you know you are working with a client from one of these countries a quick google search or a 10-minute read may go a long way in making sure you are making them feel comfortable. There are a ton of social differences, don't assume how to interact with these clients.
+        </p>
+      </div>
+  </div>
+  <div id="background-info5" style="display: none; margin: auto; max-width: 1200px;">
+      <h1 id="info-row-la" class="global-head">5. Latin America</h1>
+      <div class="border">
+        <hr style="border: 1px solid #009201; margin: -6px 5% 10px 5%">
+        <p class="canada-text">Latin America consists of 30 different countries in the southwestern hemisphere.  Based on the graph below - during the period in 2019-2020 Latin American countries consisted of 5 out of the top 7 Florida residential purchases.  Brazil came in second being roughly 7% or roughly one-third in comparison to Canada, our largest local investor.
+        <br>
+        <br>
+        <img style="width: 100%; max-width: 500px;" src="https://www.bonitaesterorealtors.com/wp-content/uploads/2022/06/Global-Charts2_0.png" alt="">
+        <br>
+        <br>
+      Brazilians among the other Latin American Countries love Florida for similar reasons to the other countries on the list.  They love the unique Floridian weather and the investment opportunities.  With these countries - it is a good idea to keep up with the exchange rates of their currency in comparison to the USD as a lot of times the past and future outlooks of those exchanges might play a key role in investors coming from one of these countries. Beyond that, there is unfortunately some instability economically speaking in some of these countries like Venezuela.  This causes investors to make decisions with their money and a lot of time Florida makes a lot of financial sense.  Like Asia/Pacific countries - read up on some ways their cultural interacts socially.  Don't assume they follow the same norms that we do in the United States.
+      </div>
+  </div>
+  </div>
+  <div id="tab3content" style="display: none;">
+    <h1 class="graph-heading">Tips from Around the World</h2>
+    <hr class="hr-grhd">
+    <div class="row" style="width: 100%; margin: auto;">
+      <div class="col-sm-1" id="moveArrows">
+        <img class="move" src="https://www.bonitaesterorealtors.com/wp-content/uploads/2022/06/1-4.png" alt="" onclick="previous()">
+      </div>
+      <div class="col-sm-10">
+        <div id="german-tips" style="display: block;">
+          <img class="tips-flags" src="https://www.bonitaesterorealtors.com/wp-content/uploads/2022/06/Untitled-design.png" alt="">
+          <h2>Germany</h2>
+          <hr>
+          <ul>
+            <li>Germans are great hand-shakers, and they like to do so both when arriving and when departing.  It is common for a person who is joining a group to shake hands with every single individual.</li>
+            <br>
+            <li>Don’t turn up late for an appointment or when meeting people. Germans are extremely punctual, and even a few minutes’ delays can be offensive. Be five to 10 minutes early for important appointments and be sure to call the people you are meeting if you really cannot make it in time.</li>
+            <br>
+            <li>Germans are extremely environmentally conscious and separate their garbage to facilitate recycling. If your client spots you throwing recyclable glass or paper into the regular garbage, your relationship could be strained for good.</li>
+            <br>
+            <li>Germans take great pride in dressing well, regardless of where they are going or what position they hold. Appearance and presentation is very important to Germans, particularly when it comes to doing business.</li>
+          </ul>
+        </div>
+        <div id="china-tips" style="display: none;">
+          <img class="tips-flags" src="https://www.bonitaesterorealtors.com/wp-content/uploads/2022/06/2-2.png" alt="">
+          <h2>China</h2>
+          <hr>
+          <ul>
+            <li>Maintaining eye contact is considered intrusive and a physical embrace is reserved for close relationships. Shaking hands is now commonly used for formal business meetings.</li>
+            <br>
+            <li>Don’t be offended if you offer a gift and it is refused, as it is customary in China to refuse the first offer. Sometimes, the etiquette is to refuse the gift three times, though it may not always take this many tries. In general, the expectation is that a gift is politely refused at first, even if it is desired, and will eventually be accepted after a few offers.</li>
+            <br>
+            <li>In some areas, pointing can be seen as a rude gesture. Instead of using your fingers to point at a person or object, the customary gesture is to use your full hand with your palm facing up and your fingers flat.</li>
+            <br>
+            <li>While it might seem strange to refuse a compliment, it is common to refuse compliments in China since accepting a compliment from the beginning can be seen as a sign of vanity.</li>
+          </ul>
+        </div>
+        <div id="canada-tips" style="display: none;">
+          <img class="tips-flags" src="https://www.bonitaesterorealtors.com/wp-content/uploads/2022/06/3-2.png" alt="">
+          <h2>Canada</h2>
+          <hr>
+          <ul>
+            <li>Canadians meeting for the first time usually shake hands to introduce themselves and may shake hands before departing, as well. Short hugs are becoming more common for closer friends, particularly women. Kissing remains mostly reserved for family or lovers, though some French-Canadians may partake in the European practice of giving light cheek kisses as part of a friendly greeting.</li>
+            <br>
+            <li>In English-Canada, it’s polite to keep your elbows off the table at all times. However, in French-Canada, men typically rest their forearms on the table during the meal while women rest their wrists. After the meal is done, both parties can put their elbows on the table.</li>
+            <br>
+            <li>Canadians say the word sorry more than any other country in the world.  Sometimes, people will say “sorry” to get your attention, without intending to actually apologize. Other times, they’ll say “sorry” before a request, because they understand their request will inconvenience you in some way. </li>
+            <br>
+            <li>The phrase “how are you?” or “how’s it going?” is very popular in Canada. Most of the time, it isn’t actually a question. It’s simply a polite substitute for saying “hey”. Instead of responding with an elaborate answer, you can simply say “fine, thanks” and proceed with the next phase of conversation.</li>
+          </ul>
+        </div>
+        <div id="switzerland-tips" style="display: none;">
+          <img class="tips-flags" src="https://www.bonitaesterorealtors.com/wp-content/uploads/2022/06/4-2.png" alt="">
+          <h2>Switzerland</h2>
+          <hr>
+          <ul>
+            <li>When meeting someone for the first time in Switzerland, a handshake will do. You deliver the handshake while maintaining eye contact with that person. Breaking eye contact is considered to be very rude. However, if you’ve met someone more than one time, the greeting is more informal.</li>
+            <br>
+            <li>Because Switzerland is a melting pot, communication styles vary depending on the culture of the speakers. That said, as a whole, Swiss people tend to be polite, reserved, direct, and a little guarded at first. In work environments, social etiquette in Switzerland is to remain formal until explicitly told otherwise.</li>
+            <br>
+            <li>The Swiss value work/life balance in their business culture and generally frown upon contacting an employee or employer outside of working hours. They also take punctuality for business and social meetings very seriously and expect you to do likewise.</li>
+            <br>
+            <li>Social etiquette in Switzerland places a high premium on being tolerant and neutral in all aspects of society.</li>
+          </ul>
+        </div>
+        <div id="brazil-tips" style="display: none;">
+          <img class="tips-flags" src="https://www.bonitaesterorealtors.com/wp-content/uploads/2022/06/5-2.png" alt="">
+          <h2>Brazil</h2>
+          <hr>
+          <ul>
+            <li>In Brazil, Shaking hands has become a more acceptable way of greeting someone, but don't be surprised if you are kissed on the cheek once (in São Paulo) or twice (in Rio and elsewhere), even when greeting someone to whom you have just been introduced. Men do not kiss each other, but greet with an open hug, using one hand to shake hands and the other to grab the man by the shoulder. These greetings are not only used between good friends and family members but are also quite common between business acquaintances.</li>
+          </ul>
+        </div>
+        <div id="mexico-tips" style="display: none;">
+          <img class="tips-flags" src="https://www.bonitaesterorealtors.com/wp-content/uploads/2022/06/6-1.png" alt="">
+          <h2>Mexico</h2>
+          <hr>
+          <ul>
+            <li>Mexican men are friendly, usually men shake hands and if close friends a hug, and if there are women shaking hands is valid but sometimes a kiss on the cheek is given. Mexicans are very polite and helpful, they use the word “please” and “thank you” frequently.</li>
+            <br>
+            <li>Trust plays an important role in establishing relationships, this sometimes could be even more important than professional competence or experience.</li>
+            <br>
+            <li>In Mexico time is not money and it is rude for them to say they are not interested in your product right away. They will praise your product and let you talk even if they do not need it or do not plans to get it. You will have to develop a good sense of orientation here.</li>
+            <br>
+            <li>In Mexico it is normal to finish a sentences saying , no? it is a kind of isn´t it? but be careful, sometimes they say something bad about a subject and it seems that they want you to agree.</li>
+          </ul>
+        </div>
+        <div id="cuba-tips" style="display: none;">
+          <img class="tips-flags" src="https://www.bonitaesterorealtors.com/wp-content/uploads/2022/06/7-1.png" alt="">
+          <h2>Cuba</h2>
+          <hr>
+          <ul>
+            <li>Shaking hands is common for both men and women. Men and women who are friends may kiss on the cheek. Be formal at first and don’t use first names unless invited to do so.</li>
+            <br>
+            <li>The use of slang denotes poor education and is considered vulgar. </li>
+            <br>
+            <li>Cuba has one of the highest literacy rates in the world with almost all of the population (99.8%) being literate.</li>
+            <br>
+            <li>Lunch is the main meal for business meetings and will last around two hours. Dinner is more formal and business is not typically discussed. It is common practice for men to stand when a woman enters the room or leaves the table.</li>
+          </ul>
+        </div>
+      </div>
+      <div class="col-sm-1" id="moveArrows">
+        <img class="move" src="https://www.bonitaesterorealtors.com/wp-content/uploads/2022/06/2-4.png" alt="" onclick="next()">
+      </div>
+    </div>
+  </div>
+
+    <h1 style="font-size: 60px !important; margin: auto auto 30px auto !important; text-align: center; color: #4566ce;"><i>Get Involved</i></h1>
+    <hr style="color: #2b4185; margin: -20px 5% 10px 5%; padding: 0px 5% 0 5%;">
+
+    <div class="row" id="get-involved">
+      <div class="col-sm-4">
+        <h3 class="inv-h3">Join the Diversity Commitee</h3>
+        <hr style="margin: 2px 5px 5px 5px;">
+        <p>Join the Diversity Commitee - Meetings are the last Tuesday of each month.  Use the form below or contact Marcie@bonitaesterorealtors.com.</p>
+        <a href="https://bonitaspringsesterorealtorsfl.growthzoneapp.com/ap/Form/Fill/rJD9lS4P" target="_blank"><button type="button" id="comm-button" class="btn btn-primary" name="button">Sign-up</button></a>
+      </div>
+      <div class="col-sm-4">
+        <h3 class="inv-h3">Attend the Implicit Bias Training</h3>
+        <hr style="margin: 2px 5px 5px 5px;">
+        <p>Throughout the year we hold multiple Implicit Bias classes in an effort to eliminate it from our industry.  Be sure to take the next class on our calendar.</p>
+        <button type="button" class="btn" id="impl-button" name="button"><i>Coming Soon</i></button>
+      </div>
+      <div class="col-sm-4">
+        <h3 class="inv-h3">Additional Training</h3>
+        <hr style="margin: 2px 5px 5px 5px;">
+        <p>Visit NAR to take part in:</p>
+        <br>
+        <p>1.) Fairhaven: A fair housing simulation</p>
+        <a href="https://fairhaven.realtor/" target="_blank"><button type="button" class="btn btn-primary" id="train-button" name="button">Click Here</button></a>
+        <p>2.) At Home with Diversity</p>
+        <a href="https://learning.realtor/diweb/catalog/t/57944/sort/+n" target="_blank"><button type="button" id="train-button" class="btn btn-primary" name="button">Click Here</button></a>
+        <p>3.) Participate in the C2EX Challenge</p>
+        <a href="https://www.c2ex.realtor/?cid=C2EX-0071" target="_blank"><button type="button" class="btn btn-primary" id="train-button" name="button">Click Here</button></a>
+      </div>
+    </div>
+    </div>
+  </body>
+
+  <script type="text/javascript">
+  let german = document.getElementById("german-tips");
+  let china = document.getElementById("china-tips");
+  let canada1 = document.getElementById("canada-tips");
+  let cuba = document.getElementById("cuba-tips");
+  let switzerland = document.getElementById("switzerland-tips");
+  let brazil = document.getElementById("brazil-tips");
+  let mexico = document.getElementById("mexico-tips");
+
+  var moveArray = [];
+
+  async function next() {
+    moveArray.push("+");
+
+    if (moveArray.length === 0) {
+      german.style.display = "block";
+      china.style.display = "none";
+      canada1.style.display = "none";
+      cuba.style.display = "none";
+      switzerland.style.display = "none";
+      brazil.style.display = "none";
+      mexico.style.display = "none";
+    }
+
+     else if (moveArray.length === 1) {
+      german.style.display = "none";
+      china.style.display = "block";
+      canada1.style.display = "none";
+      cuba.style.display = "none";
+      switzerland.style.display = "none";
+      brazil.style.display = "none";
+      mexico.style.display = "none";
+    }
+
+    else if (moveArray.length === 2) {
+      german.style.display = "none";
+      china.style.display = "none";
+      canada1.style.display = "block";
+      cuba.style.display = "none";
+      switzerland.style.display = "none";
+      brazil.style.display = "none";
+      mexico.style.display = "none";
+    }
+
+    else if (moveArray.length === 3) {
+      german.style.display = "none";
+      china.style.display = "none";
+      canada1.style.display = "none";
+      cuba.style.display = "block";
+      switzerland.style.display = "none";
+      brazil.style.display = "none";
+      mexico.style.display = "none";
+    }
+
+    else if (moveArray.length === 4) {
+      german.style.display = "none";
+      china.style.display = "none";
+      canada1.style.display = "none";
+      cuba.style.display = "none";
+      switzerland.style.display = "block";
+      brazil.style.display = "none";
+      mexico.style.display = "none";
+    }
+
+    else if (moveArray.length === 5) {
+      german.style.display = "none";
+      china.style.display = "none";
+      canada1.style.display = "none";
+      cuba.style.display = "none";
+      switzerland.style.display = "none";
+      brazil.style.display = "block";
+      mexico.style.display = "none";
+    }
+
+    else if (moveArray.length === 6) {
+      german.style.display = "none";
+      china.style.display = "none";
+      canada1.style.display = "none";
+      cuba.style.display = "none";
+      switzerland.style.display = "none";
+      brazil.style.display = "none";
+      mexico.style.display = "block";
+    }
+
+    else if (moveArray.length === 7) {
+      moveArray = [];
+      german.style.display = "block";
+      china.style.display = "none";
+      canada1.style.display = "none";
+      cuba.style.display = "none";
+      switzerland.style.display = "none";
+      brazil.style.display = "none";
+      mexico.style.display = "none";
+    }
+
+    return moveArray;
+  }
+
+  async function previous() {
+    moveArray.splice(0,1);
+
+    if (moveArray.length < 1) {
+      german.style.display = "block";
+      china.style.display = "none";
+      canada1.style.display = "none";
+      cuba.style.display = "none";
+      switzerland.style.display = "none";
+      brazil.style.display = "none";
+      mexico.style.display = "none";
+      moveArray = ["+","+","+","+","+","+","+"]
+    }
+
+     else if (moveArray.length === 1) {
+      german.style.display = "none";
+      china.style.display = "block";
+      canada1.style.display = "none";
+      cuba.style.display = "none";
+      switzerland.style.display = "none";
+      brazil.style.display = "none";
+      mexico.style.display = "none";
+    }
+
+    else if (moveArray.length === 2) {
+      german.style.display = "none";
+      china.style.display = "none";
+      canada1.style.display = "block";
+      cuba.style.display = "none";
+      switzerland.style.display = "none";
+      brazil.style.display = "none";
+      mexico.style.display = "none";
+    }
+
+    else if (moveArray.length === 3) {
+      german.style.display = "none";
+      china.style.display = "none";
+      canada1.style.display = "none";
+      cuba.style.display = "block";
+      switzerland.style.display = "none";
+      brazil.style.display = "none";
+      mexico.style.display = "none";
+    }
+
+    else if (moveArray.length === 4) {
+      german.style.display = "none";
+      china.style.display = "none";
+      canada1.style.display = "none";
+      cuba.style.display = "none";
+      switzerland.style.display = "block";
+      brazil.style.display = "none";
+      mexico.style.display = "none";
+    }
+
+    else if (moveArray.length === 5) {
+      german.style.display = "none";
+      china.style.display = "none";
+      canada1.style.display = "none";
+      cuba.style.display = "none";
+      switzerland.style.display = "none";
+      brazil.style.display = "block";
+      mexico.style.display = "none";
+    }
+
+    else if (moveArray.length === 6) {
+      german.style.display = "none";
+      china.style.display = "none";
+      canada1.style.display = "none";
+      cuba.style.display = "none";
+      switzerland.style.display = "none";
+      brazil.style.display = "none";
+      mexico.style.display = "block";
+    }
+
+    else if (moveArray.length > 7) {
+      moveArray = [];
+      german.style.display = "block";
+      china.style.display = "none";
+      canada1.style.display = "none";
+      cuba.style.display = "none";
+      switzerland.style.display = "none";
+      brazil.style.display = "none";
+      mexico.style.display = "none";
+    }
+    return moveArray;
+  }
+
+    let photoArray = ["https://www.bonitaesterorealtors.com/wp-content/uploads/2022/06/1-1.png", "https://www.bonitaesterorealtors.com/wp-content/uploads/2022/06/2-1.png",
+    "https://www.bonitaesterorealtors.com/wp-content/uploads/2022/06/3-1.png", "https://www.bonitaesterorealtors.com/wp-content/uploads/2022/06/4-1.png", "https://www.bonitaesterorealtors.com/wp-content/uploads/2022/06/5-1.png",
+    "https://www.bonitaesterorealtors.com/wp-content/uploads/2022/06/6.png", "https://www.bonitaesterorealtors.com/wp-content/uploads/2022/06/7.png", "https://www.bonitaesterorealtors.com/wp-content/uploads/2022/06/8.png", "https://www.bonitaesterorealtors.com/wp-content/uploads/2022/06/9.png",
+    "https://www.bonitaesterorealtors.com/wp-content/uploads/2022/06/9.png", "https://www.bonitaesterorealtors.com/wp-content/uploads/2022/06/10.png", "https://www.bonitaesterorealtors.com/wp-content/uploads/2022/06/11.png", "https://www.bonitaesterorealtors.com/wp-content/uploads/2022/06/12.png",
+    "https://www.bonitaesterorealtors.com/wp-content/uploads/2022/06/13.png", "https://www.bonitaesterorealtors.com/wp-content/uploads/2022/06/14.png", "https://www.bonitaesterorealtors.com/wp-content/uploads/2022/06/15.png",
+    "https://www.bonitaesterorealtors.com/wp-content/uploads/2022/06/16.png", "https://www.bonitaesterorealtors.com/wp-content/uploads/2022/06/17.png",
+    "https://www.bonitaesterorealtors.com/wp-content/uploads/2022/06/18.png", "https://www.bonitaesterorealtors.com/wp-content/uploads/2022/06/19.png", "https://www.bonitaesterorealtors.com/wp-content/uploads/2022/06/20.png", "https://www.bonitaesterorealtors.com/wp-content/uploads/2022/06/29.png", "https://www.bonitaesterorealtors.com/wp-content/uploads/2022/06/30.png", "https://www.bonitaesterorealtors.com/wp-content/uploads/2022/06/31.png", "https://www.bonitaesterorealtors.com/wp-content/uploads/2022/06/32.png", "https://www.bonitaesterorealtors.com/wp-content/uploads/2022/06/22.png", "https://www.bonitaesterorealtors.com/wp-content/uploads/2022/06/23.png", "https://www.bonitaesterorealtors.com/wp-content/uploads/2022/06/24.png", "https://www.bonitaesterorealtors.com/wp-content/uploads/2022/06/25.png", "https://www.bonitaesterorealtors.com/wp-content/uploads/2022/06/26.png", "https://www.bonitaesterorealtors.com/wp-content/uploads/2022/06/27.png"];
+
+    var test = document.getElementById('tab1content');
+    var text = document.getElementById('default-text');
+    var test2 = document.getElementById('tab2content');
+    var test3 = document.getElementById('tab3content');
+    var tri1 = document.getElementById('triangle1');
+    var tri2 = document.getElementById('triangle2');
+    var tri3 = document.getElementById('triangle3');
+    var tri4 = document.getElementById('triangle4');
+    var tri5 = document.getElementById('triangle5');
+    var tab1 = document.getElementById('tab1');
+    var tab2 = document.getElementById('tab2');
+    var tab3 = document.getElementById('tab3');
+    var back = document.getElementById('background-info1');
+    var back2 = document.getElementById('background-info2');
+    var back3 = document.getElementById('background-info3');
+    var back4 = document.getElementById('background-info4');
+    var back5 = document.getElementById('background-info5');
+    var canada = document.getElementById('info-row-canada');
+    var uk = document.getElementById('info-row-uk');
+    var asia = document.getElementById('info-row-asia');
+    var la = document.getElementById('info-row-la');
+    var eu = document.getElementById('info-row-eu');
+    function tab1change() {
+      if (test2.style.display == "none") {
+        test2.style.display="block";
+        test3.style.display="none";
+        test.style.display="none";
+        tab1.style.backgroundColor = '#2a2aff';
+        tab2.style.backgroundColor = '#00a3ff';
+        tab3.style.backgroundColor = '#00a3ff';
+      }
+      else if (test2.style.display == "block") {
+        tab1.style.backgroundColor = '#2a2aff';
+        tab2.style.backgroundColor = '#00a3ff';
+        tab3.style.backgroundColor = '#00a3ff';
+      }
+      else {
+        test2.style.display="none"
+      }
+    }
+    function tab2change() {
+      if (test.style.display == "none") {
+        test2.style.display="none";
+        test3.style.display="none";
+        test.style.display="block";
+        tab1.style.backgroundColor = '#ffdb9b';
+        tab2.style.backgroundColor = '#ffc661';
+        tab3.style.backgroundColor = '#ffdb9b';
+      }
+      else if (test.style.display == "block") {
+        tab1.style.backgroundColor = '#ffdb9b';
+        tab2.style.backgroundColor = '#ffc661';
+        tab3.style.backgroundColor = '#ffdb9b';
+      }
+      else {
+        test.style.display="none"
+      }
+    }
+
+    function tab3change() {
+      if (test3.style.display == "none") {
+        test3.style.display="block";
+        test2.style.display="none";
+        test.style.display="none";
+        tab1.style.backgroundColor = '#3bebe7';
+        tab2.style.backgroundColor = '#3bebe7';
+        tab3.style.backgroundColor = '#0ca7a4';
+      }
+      else if (test3.style.display == "block") {
+        tab1.style.backgroundColor = '#3bebe7';
+        tab2.style.backgroundColor = '#3bebe7';
+        tab3.style.backgroundColor = '#0ca7a4';
+      }
+      else {
+        test3.style.display="none";
+      }
+    }
+
+    var min = 4;
+    var max = 8;
+
+    var rand = Math.floor(Math.random() * (max - min + 1) + min);
+    var rand2 = Math.floor(Math.random() * (max - min + 1) + min);
+    var rand3 = Math.floor(Math.random() * (max - min + 1) + min);
+    var rand4 = Math.floor(Math.random() * (max - min + 1) + min);
+
+    let image1 = document.getElementById('image1');
+    const interval1 = setInterval(function(){
+      let random = randomNumber(0,30);
+      let rounded = Math.round(random);
+      let photo1 = photoArray[rounded];
+      document.getElementById('image1').src = photo1;
+    }, rand * 1000);
+
+    let image2 = document.getElementById('image2');
+    const interval2 = setInterval(function(){
+      let random = randomNumber(0,20);
+      let rounded = Math.round(random);
+      let photo2 = photoArray[rounded];
+      document.getElementById('image2').src = photo2;
+    }, rand2 * 1000);
+
+    let image3 = document.getElementById('image3');
+    const interval3 = setInterval(function(){
+      let random = randomNumber(0,20);
+      let rounded = Math.round(random);
+      let photo3 = photoArray[rounded];
+      document.getElementById('image3').src = photo3;
+    }, rand3 * 1000);
+
+    let image4 = document.getElementById('image4');
+    const interval4 = setInterval(function(){
+      let random = randomNumber(0,20);
+      let rounded = Math.round(random);
+      let photo4 = photoArray[rounded];
+      document.getElementById('image4').src = photo4;
+    }, rand4 * 1000);
+
+    function changeImage1() {
+      let random = randomNumber(0,20);
+    }
+
+    function randomNumber(min, max) {
+      return Math.random() * (max - min) + min;
+    }
+
+
+    function canadaInfo() {
+      if (canada.style.display == "block") {
+        canada.style.display="none";
+        tri1.style.display="none";
+        back.style.display="none";
+        text.style.display="flex";
+      }
+
+      else {
+      text.style.display="none";
+      uk.style.display="none";
+      eu.style.display="none";
+      la.style.display="none";
+      asia.style.display="none";
+      tri1.style.display="block";
+      tri2.style.display="none";
+      tri3.style.display="none";
+      tri4.style.display="none";
+      tri5.style.display="none";
+      back.style.display="block";
+      back2.style.display="none";
+      back3.style.display="none";
+      back4.style.display="none";
+      back5.style.display="none";
+      canada.style.display="block";
+      }
+    }
+
+    function ukInfo() {
+      if (uk.style.display == "block") {
+        uk.style.display="none";
+        tri2.style.display="none";
+        back.style.display="none";
+        back2.style.display="none";
+        back3.style.display="none";
+        back4.style.display="none";
+        back5.style.display="none";
+        text.style.display="flex";
+      }
+
+      else {
+      canada.style.display="none";
+      eu.style.display="none";
+      la.style.display="none";
+      asia.style.display="none";
+      text.style.display="none";
+      tri1.style.display="none";
+      tri2.style.display="block";
+      tri3.style.display="none";
+      tri4.style.display="none";
+      tri5.style.display="none";
+      back.style.display="none";
+      back2.style.display="block";
+      back3.style.display="none";
+      back4.style.display="none";
+      back5.style.display="none";
+      uk.style.display="block";
+      }
+    }
+
+    function euInfo() {
+      if (eu.style.display == "block") {
+        eu.style.display="none";
+        tri3.style.display="none";
+        back.style.display="none";
+        back2.style.display="none";
+        back3.style.display="none";
+        back4.style.display="none";
+        back5.style.display="none";
+        text.style.display="flex";
+      }
+
+      else {
+      canada.style.display="none";
+      uk.style.display="none";
+      la.style.display="none";
+      asia.style.display="none";
+      text.style.display="none";
+      tri1.style.display="none";
+      tri2.style.display="none";
+      tri3.style.display="block";
+      tri4.style.display="none";
+      tri5.style.display="none";
+      back.style.display="none";
+      back2.style.display="none";
+      back3.style.display="block";
+      back4.style.display="none";
+      back5.style.display="none";
+      eu.style.display="block";
+      }
+    }
+
+    function asiaInfo() {
+      if (asia.style.display == "block") {
+        asia.style.display="none";
+        tri4.style.display="none";
+        back.style.display="none";
+        back2.style.display="none";
+        back3.style.display="none";
+        back4.style.display="none";
+        back5.style.display="none";
+        text.style.display="flex";
+      }
+
+      else {
+      canada.style.display="none";
+      uk.style.display="none";
+      la.style.display="none";
+      eu.style.display="none";
+      tri1.style.display="none";
+      tri2.style.display="none";
+      tri3.style.display="none";
+      tri4.style.display="block";
+      tri5.style.display="none";
+      text.style.display="none";
+      back.style.display="none";
+      back2.style.display="none";
+      back3.style.display="none";
+      back4.style.display="block";
+      back5.style.display="none";
+      asia.style.display="block";
+      }
+    }
+
+    function laInfo() {
+      if (la.style.display == "block") {
+        la.style.display="none";
+        tri5.style.display="none";
+        back.style.display="none";
+        back2.style.display="none";
+        back3.style.display="none";
+        back4.style.display="none";
+        back5.style.display="none";
+        text.style.display="flex";
+      }
+
+      else {
+      canada.style.display="none";
+      uk.style.display="none";
+      asia.style.display="none";
+      eu.style.display="none";
+      tri1.style.display="none";
+      tri2.style.display="none";
+      tri3.style.display="none";
+      tri4.style.display="none";
+      tri5.style.display="block";
+      text.style.display="none";
+      back.style.display="none";
+      back2.style.display="none";
+      back3.style.display="none";
+      back4.style.display="none";
+      back5.style.display="block";
+      la.style.display="block";
+      }
+    }
+  </script>
+

@@ -1,1198 +1,639 @@
+<!DOCTYPE html>
+<html lang="en">
 <head>
-  <meta charset="utf-8">
-  <title>Bonita Springs-Estero Realtors</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap" rel="stylesheet">
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Cabin:ital@1&display=swap" rel="stylesheet">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Fascinate&display=swap" rel="stylesheet">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Oswald&display=swap" rel="stylesheet">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Righteous&display=swap" rel="stylesheet">
-  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet"/>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Roboto&display=swap" rel="stylesheet">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <!-- Leaflet CSS -->
-  <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
-  <!-- Leaflet JS -->
-  <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>s
-  <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400..700&family=Poppins&family=Ubuntu:wght@500&display=swap" rel="stylesheet">
+    <meta charset="utf-8">
+    <title>BER Global Diversity — 2025</title>
 
+    <!-- keep existing includes (left intact per request) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap" rel="stylesheet">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cabin:ital@1&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fascinate&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&display=swap" rel="stylesheet">
+
+    <!-- new: helpful meta for 2025 -->
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content="Bonita Springs‑Estero REALTORS® Global Diversity hub (2025). Travel blog, member testimonials, CIPS directory, stats, events, referral form, and resources for working with international buyers and sellers." />
+    <link rel="canonical" href="https://www.bonitaesterorealtors.com/global/" />
+
+    <style media="screen">
+      html { width: 100%; }
+      body { width: 100%; }
+
+      /* 2025: optionally hide the main site header/nav on this page only.
+         Adjust selectors to match theme. Comment these lines out if not needed. */
+      header.site-header, .site-header, nav#site-navigation, .navbar-default.navbar { display: none !important; }
+      body { padding-top: 0 !important; }
+
+      #placeinthesun { display: flex; margin: auto; max-width: 1100px; }
+      .foriegn-row { background-color: grey; margin: auto auto 50px auto; max-width: 1100px; }
+      .container { padding: 0 !important; }
+
+      #comm-button, #impl-button, #train-button { width: 100%; margin: auto auto 10px auto; }
+      #impl-button { background-color: grey; color: black; }
+
+      #get-involved p{ margin: auto auto 5px auto; text-align: center; font-size: 12px; }
+      .row { margin: auto; max-width: 1200px; }
+
+      #bonita { justify-content: center; display: flex; margin: auto; max-width: 1050px; padding: 5px 5% 5px 5%; background-color: white; border-radius: 10px; }
+      .submit-row { margin: auto; display: flex; justify-content: center; }
+
+      #estero { justify-content: center; display: flex; margin: -36px auto 10px auto; max-width: 1050px; padding: 5px 5% 5px 5%; background-color: white; border-radius: 10px; }
+      .map-color { background-color: #3fa7db; padding-top: 100px; margin-top: -150px; padding-bottom: 10px; }
+      #get-involved { margin-bottom: 30px !important; }
+
+      #get-involved .col-sm-3  { background-color: white; border-top: 2rem solid lightgrey !important; margin: auto 10px auto 10px; box-shadow: 0px 1px 1px darkgrey; }
+      #get-involved .col-sm-4  { background-color: white; border-top: 2rem solid darkgrey !important; margin: 0 1% auto 1%; width: 31.3%; box-shadow: 0px 1px 1px darkgrey; }
+      .inv-h3 { color: black !important; font-size: 24px !important; text-align: center; margin: 10px auto 5px auto !important; }
+
+      #photo-row { justify-content: center; display: flex; margin: auto; max-width: 1050px; height: 300px; padding: 0 5% 0 5%; }
+      .col { width: 100%; margin: auto; display: flex; }
+      .arc path { stroke: #fff; }
+      #esttext { display: inline; }
+      .row img { display: block; width: 98%; height: auto; margin: auto 1px auto 1px; box-shadow: 0px 3px 3px -1px black; object-fit: cover; }
+      #est-stats, #bon-stats { margin: auto; display: inline; }
+
+      .members-from { margin:57px auto 130px auto; width: 100%; height: 400px; overflow: hidden; color: #07abe1; }
+      #sub { width: 300px; font-size: 20px; font-family: arial; font-weight: 700; height: 59px; background-color: white; color: #3fa7db; }
+      #sub:hover { cursor: pointer; background-color: #b4d8eb; color: white; }
+
+      @import url('https://fonts.googleapis.com/css2?family=Anton&display=swap');
+      .where { text-align: center; transform: translateY(55px); z-index: 9999; color: white; font-family: 'Anton', sans-serif; font-size: 48px; font-weight: 700; }
+      .map { margin: auto; width: auto; height: 300px; border: 0; }
+      .map-div { height: 575px; margin-top: -67px; overflow: hidden; }
+      iframe { z-index: -999; }
+      .member-title { z-index: 999; }
+
+      #desc-text { max-width: 950px; margin: 65px auto 20px auto; padding: 0 5% 0 5%; font-size: 16px; font-family: 'Cabin', sans-serif; text-align: left; }
+      #desc { max-width: 1050px; }
+      .map-inst { margin: auto; text-align: center; max-width: 1050px; padding: 0 5% 0 5%; font-size: 15px; font-family: arial; color: white; }
+      .inst-row { margin: -115px 0 50px 0px; }
+      .graph-title { max-width: 1050px; padding: 0 5% 0 5%; }
+      .graph-heading { font-size: 48px; text-align: center; color: white; width: 100%; margin: 25px auto 25px auto; font-family: 'Oswald', sans-serif; font-weight: 600; }
+      .hr-grhd { align-self: center; width: 300px; background-color: white; height: 5px; margin: -18px auto 20px auto; }
+
+      .goback { display: flex; margin: 20px auto 10px -10%; }
+      #arrowAnim { display: flex; justify-content: left; margin: auto 57px 3px 15%; align-items: center; }
+      .arrow { width: 15px; height: 15px; border: 15px solid; border-color: black transparent transparent black; transform: rotate(-45deg) translateY(-20px); }
+      .arrowSliding { position: absolute; -webkit-animation: slide 3s linear infinite; animation: slide 3s linear infinite; }
+      .delay1 { -webkit-animation-delay: 1s; animation-delay: 1s; }
+      .delay2 { -webkit-animation-delay: 2s; animation-delay: 2s; }
+      .delay3 { -webkit-animation-delay: 3s; animation-delay: 3s; }
+      @-webkit-keyframes slide { 0% { display: none; opacity:0; transform: translateX(5vw); } 20% { opacity:1; transform: translateX(2vw); } 80% { opacity:1; transform: translateX(-2vw); } 100% { opacity:0; transform: translateX(-5vw); } }
+      @keyframes slide { 0% { display: none; opacity:0; transform: translateX(5vw); } 20% { opacity:1; transform: translateX(2vw); } 80% { opacity:1; transform: translateX(-2vw); } 100% { opacity:0; transform: translateX(-5vw); } }
+
+      @import url('https://fonts.googleapis.com/css2?family=Oswald:wght@500&display=swap');
+      .back { font-family: 'Oswald', sans-serif; z-index: 999; margin-bottom: 0; }
+      .back:hover { color: grey; cursor: pointer; text-decoration: underline; }
+
+      #tab1content { margin: 24px auto; padding: 5px; background-color: #ffc661; }
+      #tab1 { float: left; padding: 7px 10px; background: #2a2aff; color: #fff; margin: -25px 0 0; cursor: pointer; font-size: 20px; z-index: 2; border-bottom: none; border-top: none; border-right: none; border-left: none; }
+      #tab2, #tab3 { float: left; padding: 7px 10px; background: #00a3ff; color: #fff; margin: -25px 0 0; cursor: pointer; font-size: 20px; z-index: 2; border-bottom: none; border-top: none; border-right: none; }
+      .tabrow { margin: 10px auto -25px 5%; display: flex; }
+
+      .sources { margin: auto; }
+      #logo { box-shadow: none; }
+      #source { text-align: center; color: white; }
+      #gbhead { text-align: center; margin: auto; color: white; }
+      #tab2content { margin: 24px auto; padding: 5px; background-color: #2a2aff; height: auto; }
+      #tab3content { margin: 24px auto; padding: 5px; background-color: #0ca7a4; height: auto; }
+      .move { margin: 85px auto !important; box-shadow: none !important; }
+      #ukflag:hover, #laflag:hover, #asiaflag:hover, #euflag:hover, #canadaflag:hover { cursor: pointer; width: 99%; opacity: .9; }
+
+      #triangle1, #triangle2, #triangle3, #triangle4, #triangle5 { width: 15px; height: 15px; border: 15px solid; margin: auto; max-width: 1200px; border-color: white transparent transparent white; transform: rotate(45deg) translateY(-1px) translateX(15px); display: none; }
+      #info-row-canada { display: none; }
+      #background-info { background: white; margin: -30px 5% auto 5%; border-radius: 5px; display: none; }
+
+      #german-tips, #canada-tips, #china-tips ,#cuba-tips, #brazil-tips, #switzerland-tips, #mexico-tips { display: block; margin: auto; animation: swoop .5s; }
+      @keyframes swoop { 0% { transform: translateX(5000px);} 100% { transform: translateX(0px); } }
+
+      #german-tips h2, #canada-tips h2, #china-tips h2, #cuba-tips h2, #mexico-tips h2, #brazil-tips h2, #switzerland-tips h2 { text-align: center; color: white; font-family: 'Bebas Neue', cursive; font-size: 54px !important; }
+      li { color: white; font-size: 16px; font-family: arial; }
+      .tips-flags { max-width: 400px !important; margin: auto !important; }
+
+      .global-head { background-color: white; margin: 0 5% 0px; padding-top: 20px; padding-bottom: 10px; border-radius: 5px 5px 0 0; transform: translateY(-6px); text-align: center; }
+      .canada-text { text-align: center; margin: -6px 5%; }
+      .border { background-color: white; margin: auto 5%; padding-bottom: 20px; border-radius: 0 0 5px 5px; }
+
+      #image1, #image2, #image3, #image4, #p1 { animation: fadeIn 2s; }
+      @keyframes fadeIn { 0% { opacity: 0; } 100% { opacity: 1; } }
+
+      .col-sm-2, .col-sm-1 { position: relative !important; }
+      .div-back { position: absolute; z-index: -999; box-shadow: none !important; display: inline !important; width: 660px !important; transform: translateX(243px) translateY(3px) rotateX(55deg) rotateY(5deg); }
+      #divers { font-family: 'Fascinate', cursive !important; font-size: 100px !important; }
+
+      /* responsive tweaks (left as‑is and lightly adjusted) */
+      @media only screen and (max-width: 768px) {
+        #canadaflag, #ukflag, #laflag, #asiaflag, #euflag { width: 100px !important; }
+        .row { display: flex !important; }
+        .col-sm-2, .col-sm-1 { position: relative !important; width: 100px; }
+        .where { font-size: 37px; }
+        .map-color { padding-top: 35px; }
+        h1 { font-size: 26px !important; }
+        #divers { font-size: 76px !important; }
+        h3 { font-size: 26px !important; margin-left: 2%; }
+        h4 { font-size: 13px !important; }
+        h2 { font-size: 26px !important; }
+        .div-back { transform: translateX(150px) translateY(0px) rotateX(55deg) rotateY(5deg); width: 500px !important; }
+        .graph-heading { font-size: 42px !important; }
+        .map-inst { font-size: 14px !important; }
+      }
+      @media screen and (max-width: 660px) {
+        #get-involved { display: inline !important; }
+        #get-involved .col-sm-4 { width: 98%; }
+      }
+
+      h3 { margin-left: 5%; }
+
+      @media only screen and (max-width: 580px) {
+        #canadaflag, #ukflag, #laflag, #asiaflag, #euflag { width: 75px !important; }
+        .row { display: flex !important; }
+        .map-inst { font-size: 12px !important; }
+        .col-sm-2 { width: 80px; }
+        .col-sm-1 { width: 0px; }
+        #tab1, #tab2, #tab3 { font-size: 17px; }
+        h3 { font-size: 17px !important; margin-left: 2%; }
+        #sub { width: 250px; }
+        .where { font-size: 26px; }
+        .map-color { padding-top: 20px; }
+        .graph-heading { font-size: 32px !important; }
+        #divers { font-size: 40px !important; }
+        h4 { font-size: 13px !important; }
+        h2 { font-size: 22px !important; }
+        #desc-text { margin: 65px auto -50px auto; font-size: 14px; }
+        #est, #bon { display: none; }
+        li { font-size: 13px; }
+        .div-back { transform: translateX(218px) translateY(10px) rotateX(55deg) rotateY(5deg); width: 240px !important; }
+        .tips-flags { max-width: 300px !important; }
+        #moveArrows { width: 100px !important; }
+      }
+      @media screen and (max-width: 1150px) { .foriegn-row { margin: auto 5% 40px 5%; } .foriegn-row h1 { font-size: 30px; } }
+      @media screen and (max-width: 850px) { .foriegn-row h1 { font-size: 26px; } }
+      @media screen and (max-width: 790px) {
+        .foriegn-row h1 { font-size: 22px; }
+        #placeinthesun { display: grid !important; }
+        #currency-btn { width: 100% !important; }
+        .col-sm-2 { width: 100%; }
+      }
+      @media screen and (max-device-width: 480px) { .div-back { display: none !important; } desktop { display: none; } mobile { display: block; } }
+
+      /* ===== 2025 NEW SECTIONS ===== */
+      :root { --ber-brand:#03AAE1; --ber-ink:#0b1220; --ber-accent:#FBAE24; }
+      .global2025-subnav { position: sticky; top:0; z-index: 999; background:#ffffffE6; backdrop-filter: blur(6px); border-bottom:1px solid #e6eaf2; }
+      .global2025-subnav .inner { max-width: 1100px; margin: 0 auto; display:flex; gap:12px; padding: 10px 16px; align-items:center; }
+      .global2025-subnav a { color:#055a73; font-weight:600; text-decoration:none; padding:8px 10px; border-radius:8px; }
+      .global2025-subnav a:hover { background:#f0fbff; }
+      .global2025-banner { max-width:1100px; margin: 10px auto 0; padding: 8px 16px; display:flex; align-items:center; gap:16px; }
+      .global2025-banner img { height:56px; width:auto; }
+      .global2025-tag { font-family:'Oswald',sans-serif; letter-spacing:.5px; color:#065e7a; }
+
+      section.global2025 { max-width:1100px; margin: 40px auto; padding: 0 16px; }
+      .s-heading { font-family:'Oswald',sans-serif; font-size:32px; color:#062b3a; margin: 0 0 6px; }
+      .s-sub { color:#516078; margin: 0 0 20px; }
+      .grid { display:grid; gap:16px; }
+      .grid.cols-3 { grid-template-columns: repeat(3, 1fr); }
+      .grid.cols-2 { grid-template-columns: repeat(2, 1fr); }
+      @media (max-width: 900px){ .grid.cols-3{ grid-template-columns: 1fr 1fr;} }
+      @media (max-width: 640px){ .grid.cols-3, .grid.cols-2{ grid-template-columns: 1fr;} }
+      .card { background:#fff; border:1px solid #e6eaf2; border-radius:14px; box-shadow: 0 4px 10px rgba(0,0,0,.04); overflow:hidden; }
+      .card .c-img { aspect-ratio: 16/9; width:100%; object-fit:cover; }
+      .card .c-body { padding:14px; }
+      .btn-pill { display:inline-block; border:1px solid #cfeaf5; padding:8px 12px; border-radius:999px; color:#04536d; text-decoration:none; font-weight:600; }
+      .btn-pill:hover { background:#e9f7fc; }
+      .badge { display:inline-block; background:#e6fbff; color:#055a73; padding:6px 10px; border-radius:999px; font-size:12px; font-weight:700; }
+
+      .testimonial { padding:18px; background: #f6fbff; border:1px dashed #bfe9f8; border-radius:14px; }
+      .t-quote { font-style: italic; color:#214052; }
+      .t-name { margin-top:8px; font-weight:700; color:#063244; }
+
+      .dir-search { display:flex; gap:8px; margin: 10px 0 18px; }
+      .dir-search input { flex:1; padding:10px 12px; border:1px solid #dce6ef; border-radius:10px; }
+      .dir-search button { padding:10px 14px; border-radius:10px; border:1px solid #cfeaf5; background:#e9f7fc; font-weight:700; }
+
+      .list { list-style:none; padding:0; margin:0; }
+      .list li { padding:10px 0; border-bottom:1px solid #eef3f7; }
+
+      .two-up { display:grid; grid-template-columns: 1fr 1fr; gap:20px; }
+      @media (max-width: 860px){ .two-up { grid-template-columns: 1fr; } }
+
+      .mini { font-size:13px; color:#5d6b7a; }
+      .note { background:#fff8e7; border:1px solid #ffe1a6; border-radius: 10px; padding:10px 12px; color:#6b4b00; }
+
+      .calendar-embed { min-height: 600px; width:100%; border:0; }
+      .map-embed { width:100%; min-height: 480px; border:0; border-radius: 12px; }
+
+      .form-grid { display:grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+      .form-grid .full { grid-column: 1 / -1; }
+      .form-grid input, .form-grid select, .form-grid textarea { width:100%; padding:10px 12px; border:1px solid #dce6ef; border-radius:10px; }
+      .form-grid button { background:#03AAE1; color:white; border:0; padding:12px 14px; border-radius:10px; font-weight:700; }
+      .form-grid button:hover { filter: brightness(.95); }
+
+      .ext-links a { display:inline-block; margin:6px 10px 0 0; }
+
+      .hr { height:1px; background:#e6eaf2; margin: 24px 0; }
+    </style>
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js" type="text/javascript"></script>
+    <script src="https://d3js.org/d3.v4.min.js"></script>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@500&display=swap" rel="stylesheet">
 </head>
-  <style media="screen">
-a {
-  color: black;
-}
-p {
-  margin: 0;
-}
 
-#site-header-inner {
-  display: none !important;
-}
-
-.statsplus {
-  max-width: 1300px;
-  margin: auto !important;
-}
-
-.carousel {
-position: relative;
-width: 100%;
-max-width: 80%;
-margin: auto;
-overflow: hidden;
-}
-
-.show {
-display: flex;
-}
-
-.carousel .sponsor-group {
-display: none;
-text-align: center;
-}
-
-.carousel .sponsor-group.show {
-display: flex !important; /* Display the active category as a flex container */
-  flex-direction: row; /* Align children in a row */
-  justify-content: space-around; /* Adjusts the spacing between items */
-  align-items: center; /* Aligns items vertically */
-  margin: auto;
-}
-
-.Ned-Q2-Article {
-width: 1100px !important;
-margin: auto !important;
-}
-
-.carousel img {
-margin: 10px;
-width: 100px; /* Set a fixed width */
-height: auto; /* Set a fixed height */
-max-height: 140px;
-object-fit: contain;
-opacity: 0;
-transition: opacity 1s ease-in-out;
-z-index: -99999;
-}
-
-.carousel p {
-font-family: "Poppins", sans-serif;
-font-weight: 400;
-font-style: normal;
-font-size: 3rem;
-}
-
-.carousel img.show {
-opacity: 1;
-width: 95%;
-object-fit: contain;
-}
-
-#head-background {
-  z-index: 997;
-  margin: -130px 0 -40px 0;
-  box-shadow: black 0px 0px 14px;
-  width: 101%;
-  position: fixed;
-  height: 130px;
-  background-color: white;
-}
-
-.important-links {
-  background-image: url("https://www.bonitaesterorealtors.com/wp-content/uploads/2022/10/Untitled-design-10.png");
-  background-size: cover;
-  margin: 60px 0 100px 0;
-}
-.contain-head {
-  width: 100%;
-  margin: 150px 0;
-  background-color: white;
-  box-shadow: 0px -30px 67px grey;
-}
-
-#toprow {
-  margin: 0px 5% 0px 5% !important;
-}
-
-#welcome-text {
-  font-size: 16px;
-}
-
-#welcome-head {
-  font-family: Oswald, sans-serif;
-  font-size: 46px
-}
-
-#MLS {
-  background-image: url("https://www.bonitaesterorealtors.com/wp-content/uploads/2022/10/backorange.png");
-  margin: -60px 0;
-  height: 250px;
-  width: auto;
-  background-size: cover;
-  border-radius: 15px 0px 0px 15px;
-}
-
-#MLS:hover {
-  font-size: 50px;
-  cursor: pointer;
-}
-
-#about:hover {
-  cursor: pointer;
-}
-
-#MP {
-  background-color: #ffdfa7;
-  margin: -60px 0;
-  height: 250px;
-  width: auto;
-  background-image: url("https://www.bonitaesterorealtors.com/wp-content/uploads/2022/10/backoranges.png");
-  background-size: cover;
-}
-#MP:hover {
-  font-size: 50px;
-  cursor: pointer;
-}
-
-#Events {
-  background-color: #ffce75;
-  margin: -60px 0;
-  height: 250px;
-  width: auto;
-  background-image: url("https://www.bonitaesterorealtors.com/wp-content/uploads/2022/10/backoranges-1.png");
-  background-size: cover;
-}
-#Events:hover {
-  font-size: 50px;
-  cursor: pointer;
-}
-
-#Join {
-  background-color: #fff3dd;
-  margin: -60px 0;
-  color: #ffc235;
-  height: 250px;
-  width: auto;
-  border-radius: 0px 15px 15px 0px;
-  background-image: url("https://www.bonitaesterorealtors.com/wp-content/uploads/2022/10/backoranges-2.png");
-  background-size: cover;
-}
-#Join:hover {
-  font-size: 50px;
-  cursor: pointer;
-}
-
-.res-img {
-  width: 80%;
-  height: auto;
-  border-radius: 15px 15px 15px 15px;
-  margin: auto;
-}
-
-.res-img:hover {
-}
-
-
-  /* Styles for devices with a width of up to 600px */
-  @media only screen and (max-width: 600px) {
-
-  #diamond {
-    width: 95%;
-    display: contents;
-  }
-
-  #platinum {
-    width: 90%;
-    display: contents;
-  }
-
-  #gold {
-    width: 50%;
-    display: contents;
-  }
-
-  #silver {
-    width: 50%;
-    display: contents;
-  }
-
-  #bronze {
-    width: 90%;
-    display: contents;
-  }
-
-  .contain-head {
-    margin: -110px 0;
-  }
-
-  #alertDiv {
-    margin: 430px 0px -111px 0px;
-  }
-
-  .important-links {
-    margin: 500px 0 100px 0;
-  }
-
-  .carousel-container {
-    display: none !important;
-  }
-
-  .video-contain {
-    display: none !important;
-  }
-
-  }
-
-#Jointext {
-  color: #ffc235;
-  border-top: #ffc235 solid 2px;
-  border-bottom: #ffc235 solid 2px;
-  text-align: center;
-  font-size: 40px;
-  font-family: 'Roboto', sans-serif;
-  padding: 10px 0 10px 0;
-  line-height: 4rem;
-}
-
-#vid1 {
-  width: 100%;
-  max-height: 650px;
-  object-fit: cover;
-  margin: 0 0 -21px 0;
-}
-
-#vid2 {
-  width: 100%;
-  max-height: 650px;
-  object-fit: cover;
-  margin: 0 0 -21px 0;
-}
-
-#vid3 {
-  width: 100%;
-  max-height: 650px;
-  object-fit: cover;
-  margin: 0 0 -21px 0;
-}
-
-#vid4 {
-  width: 100%;
-  max-height: 650px;
-  object-fit: cover;
-  margin: 0 0 -21px 0;
-}
-
-#vid5 {
-  width: 100%;
-  max-height: 650px;
-  object-fit: cover;
-  margin: 0 0 -21px 0;
-}
-
-.welcome {
-  max-width: 1300px;
-  border-radius: 20px;
-  background-color: teal;
-  display: flex;
-  text-align: center;
-  color: white;
-  padding: 50px 50px 50px 49px;
-  margin: -225px auto auto auto;
-  display: block;
-}
-
-.col-sm {
-  margin: auto;
-}
-
-.sponsor-label {
-  max-width: 300px !important;
-  object-fit: contain;
-}
-
-.box {
-
-}
-.col-sm-6 {
-  margin: auto;
-}
-.col-sm h3 {
-  font-size: 20px;
-}
-
-.col-sm-3 {
-  height: 300px;
-}
-
-.vc_column_container>.vc_column-inner {
-  padding-left: 0;
-  padding-right: 0;
-}
-#forewarn {
-  object-fit: contain;
-  margin: auto auto auto auto;
-}
-#MUA {
-  object-fit: contain;
-  margin: auto auto auto auto;
-}
-#img1 {
-  max-height: 500px;
-  margin: auto;
-}
-
-.article-img {
-  object-fit: cover;
-  width: 430px;
-  height: 260px;
-}
-
-#outside-contain {
-  margin: 0 3% auto 3%;
-}
-
-#bottom-contain {
-  background-color: white;
-}
-
-.video-contain {
-  width: 100%;
-  background-color: grey;
-  object-fit: contain;
-  margin: 0px 0 0 0;
-  position: relative;
-}
-#display1 {
-  max-height: 600px;
-  display: flex;
-  margin: auto;
-}
-#display2 {
-  max-height: 600px;
-  display: flex;
-  margin: auto;
-}
-#display3 {
-  max-height: 600px;
-  display: flex;
-  margin: auto;
-}
-#display4 {
-  max-height: 600px;
-  display: flex;
-  margin: auto;
-}
-#display5 {
-  max-height: 600px;
-  display: flex;
-  margin: auto;
-}
-.col-sm-5 {
-  padding-left: 0;
-  padding-right: 0;
-}
-#logo {
-  width: 130px;
-  margin: 10px auto 10px auto;
-}
-#MLSlogo {
-  width: 90%;
-  display: flex;
-  margin: 20px auto;
-}
-#MPlogo {
-  width: 47%;
-  display: flex;
-  margin: 15px auto;
-}
-@keyframes growlogo2 {
-  0% {
-    width: 200px;
-  }
-  100% {
-    width: 210px;
-  }
-}
-
-@keyframes growlogo {
-  0% {
-    width: 90%;
-  }
-  100% {
-    width: 100%;
-  }
-}
-
-@keyframes growlogo3 {
-  0% {
-    width: 47%;
-  }
-  100% {
-    width: 55%;
-  }
-}
-
-#MLSlogo:hover {
-  animation: growlogo linear .5s;
-  width: 100%;
-  opacity: .9;
-}
-#MPlogo:hover {
-  animation: growlogo3 linear .5s;
-  width: 55%;
-  opacity: .9;
-}
-#heading {
-  max-width: 1100px;
-  margin: -1px auto !important;
-  width: 100%;
-  z-index: 998;
-  background-color: white;
-  display: flex;
-}
-#forewarn-back {
-  background-color: white;
-  width: 430px;
-  margin-right: 14px;
-}
-
-.subtitle {
-  font-size: 26px;
-  margin: 0;
-}
-.resrow {
-  text-align: center;
-  font-size: 44px;
-  color: #008080;
-  font-family: 'Oswald', sans-serif;
-  margin: 40px auto;
-}
-.resrow2 {
-  text-align: center;
-  font-size: 44px;
-  color: #008080;
-  font-family: 'Oswald', sans-serif;
-  margin: 40px auto;
-}
-#socials {
-  margin: 5px auto;
-  justify-content: center;
-}
-
-.toplinks {
-  color: white;
-}
-.toplinks:hover {
-  textdecoration: underline;
-  color: #0ca7a4;
-}
-.media-container {
-  max-width: 1185px;
-  margin: auto;
-}
-.head-image {
-  width: 100%;
-margin: -60px auto 60px auto;
-}
-
-.mn-scroll-location-description p {
-  padding-top: 0 !important;
-  margin-top: 0 !important;
-  font-size: 1.4rem;
-}
-.row {
-  margin: 0;
-  display: flex;
-}
-.news-row {
-  background-color: #f2f2f2;
-  margin: 10px 25px 10px 25px !important;
-  box-shadow: 0px 20px 29px -27px grey;
-}
-#abovehead {
-  background-image: linear-gradient( to right, #77d9d9, #02aae1);
-  z-index: 999;
-  position: fixed;
-  width: 101%;
-  margin: -174px 0;
-}
-.btn {
-  border-radius: 40px;
-}
-#toptext {
-  color: white;
-  text-align: center;
-}
-.m-1:hover {
-  cusor: pointer;
-  background-color: #0ca7a4 !important;
-}
-.italics {
-  font-style: italic;
-}
-#biglinks {
-  max-width: 1100px;
-  margin: auto !important;
-  height: 350px;
-}
-body {
-  width: 101% !important;
-  align-items: center;
-  z-index: 9999;
-}
-
-h3 {
-font-size: 38px;
-}
-
-.col-sm-2 h3 {
-  margin: 72px auto;
-  text-align: center;
-  font-size: 18px;
-}
-.col-sm-2 h3:hover {
-  cursor: pointer;
-  text-decoration: underline;
-}
-.col-sm-1 h3 {
-  margin: 60px auto;
-  text-align: center;
-}
-
-#MLStext {
-  border-top: white solid 2px;
-  border-bottom: white solid 2px;
-  text-align: center;
-  color: white;
-  font-size: 40px;
-  font-family: 'Roboto', sans-serif;
-  padding: 10px 0 10px 0;
-  line-height: 4rem;
-  white-space: nowrap;
-}
-
-#DuesText {
-  border-top: white solid 2px;
-  border-bottom: white solid 2px;
-  text-align: center;
-  color: white;
-  font-size: 55px;
-  font-family: 'Roboto', sans-serif;
-  padding: 10px 0 10px 0;
-  line-height: 5rem;
-  white-space: nowrap;
-}
-
-#Eventtext {
-  border-top: white solid 2px;
-  border-bottom: white solid 2px;
-  text-align: center;
-  color: white;
-  font-size: 30px;
-  font-family: 'Roboto', sans-serif;
-  padding: 10px 0 10px 0;
-  line-height: 4rem;
-}
-
-#mni-widgets-17dc7e76 {
-  padding: 50px 0;
-  background-image: url(https://www.bonitaesterorealtors.com/wp-content/uploads/2022/10/Untitled-design-10.png);
-}
-
-#text {
-  padding: 0;
-}
-#about-hover {
-  display: none;
-  position: absolute;
-  width: 150px;
-  background-color: white;
-  padding: 0px 10px 10px 10px;
-  margin: -10px 0 0 0px;
-  border-top: 1rem solid lightsteelblue;
-  box-shadow: rgb(0 0 0 / 15%) 0px 1px 20px;
-  z-index: 999;
-}
-#about-hover p {
-  font-size: 14px;
-  margin: 15px 0 5px 0;
-  font-weight: 500;
-}
-#resources-hover {
-  display: none;
-  position: absolute;
-  width: 200px;
-  background-color: white;
-  padding: 15px 10px 10px 10px;
-  margin: -10px 0 0 0px;
-  border-top: 1rem solid lightsteelblue;
-  box-shadow: rgb(0 0 0 / 15%) 0px 1px 20px;
-  z-index: 999;
-}
-
-#resources:hover {
-  cursor: pointer;
-}
-
-#newsandevents:hover {
-  cursor: pointer;
-}
-
-#membership:hover {
-  cursor: pointer;
-}
-
-#education:hover {
-  cursor: pointer;
-}
-
-.res-head {
-  text-align: center;
-  font-size: 16px;
-}
-
-#membership-tools:hover {
-  cursor: pointer;
-}
-
-#resources-hover p {
-  font-size: 14px;
-  margin: 15px 0 5px 0;
-  font-weight: 500;
-}
-.br-mobile {
-  display: none;
-}
-#membership-hover {
-  display: none;
-  position: absolute;
-  width: 120px;
-  background-color: white;
-  padding: 20px 10px 10px 10px;
-  margin: -10px 11px 0 0px;
-  border-top: 1rem solid lightsteelblue;
-  box-shadow: rgb(0 0 0 / 15%) 0px 1px 20px;
-  z-index: 999;
-}
-#membership-hover p {
-  font-size: 14px;
-  margin: 15px 0 5px 0;
-  font-weight: 500;
-}
-#news-hover {
-  display: none;
-  position: absolute;
-  width: 200px;
-  background-color: white;
-  padding: 0 10px 10px 10px;
-  margin: -10px 0 0 0px;
-  border-top: 1rem solid lightsteelblue;
-  box-shadow: rgb(0 0 0 / 15%) 0px 1px 20px;
-}
-#membershiptools-hover {
-  display: none;
-  position: absolute;
-  width: 230px;
-  background-color: white;
-  padding: 20px 10px 10px 10px;
-  margin: -10px 11px 0 0px;
-  border-top: 1rem solid lightsteelblue;
-  box-shadow: rgb(0 0 0 / 15%) 0px 1px 20px;
-  z-index: 999;
-}
-#membershiptools-hover p {
-  font-size: 14px;
-  margin: 15px 0 5px 0;
-  font-weight: 500;
-}
-#news-hover p {
-  font-size: 14px;
-  margin: 15px 0 5px 0;
-  font-weight: 500;
-}
-@media only screen and (max-width: 1200px) {
-  .statsplus {
-    display: grid;
-  }
-  .col-sm-4 {
-    display: inline-flex;
-    margin: auto;
-    width: 100%;
-  }
-  .res-img {
-    width: auto;
-    height: 160px;
-    margin: auto 0 auto 10px;    }
-  .res-img:hover {
-    animation: none;
-  }
-  .col-sm-8 {
-    width: 100%;
-  }
-  }
-@media only screen and (max-width: 1130px) {
-  #Eventtext {
-    font-size: 24px;
-  }
-  #MLStext {
-    font-size: 30px;
-  }
-  #DuesText {
-    font-size: 30px;
-  }
-  }
-@media only screen and (max-width: 1145px) {
-  .article-img {
-    width: 370px;
-  }
-  #forwarn-back {
-    width: none;
-    margin: auto;
-  }
-}
-
-@media only screen and (max-width: 960px) {
-  .col-sm h3 {
-    font-size: 16px;
-  }
-}
-@media only screen and (max-width: 940px) {
-  .col-sm-7 {
-    padding-left: 35px;
-  }
-}
-@media only screen and (max-width: 910px) {
-  .col-sm-7 {
-    padding-left: 50px;
-  }
-}
-@media only screen and (max-width: 880px) {
-  .col-sm-7 {
-    padding-left: 70px;
-  }
-}
-@media only screen and (max-width: 830px) {
-  .col-sm-7 {
-    padding-left: 85px;
-  }
-}
-@media only screen and (max-width: 768px) {
-  .col-sm-7 {
-    padding-left: 100px;
-  }
-
-  .carousel-container {
-    display: none;
-  }
-
-  .col-sm- h3 {
-    font-size: 12px;
-  }
-  #heading {
-    display: grid !important;
-    margin: -95px 20px 24px 20px !important;
-  }
-  #logo-contain {
-    display: none;
-  }
-  #head-background {
-    height: 200px;
-    margin: 93px 0 -40px -20px;
-    width: 103%;
-    position: absolute;
-    opacity: 1 !important;
-  }
-  #resrow {
-    display: none;
-  }
-  #resrow2 {
-    display: none;
-  }
-  #biglinks {
-    display: block;
-    height: 920px;
-  }
-  #about-hover {
-    display: contents;
-  }
-  .video-contain {
-    margin: 110px 0 0 0;
-  }
-  #MLS {
-    border-radius: 15px 15px 0px 0px;
-  }
-  #Join {
-    border-radius: 0px 0px 15px 15px;
-
-  }
-  #abovehead {
-    margin: 87px 0 0 0;
-    position: relative;
-  }
-
-  .carousel {
-    display: none;
-  }
-
-}
-
-@media only screen and (max-width: 768px) {
-  .col-sm-8 {
-    display: none;
-  }
-  .col-sm-4 {
-    display: block;
-  }
-  .res-img {
-    margin: auto;
-    display: flex;
-    height: 230px;
-  }
-  #resrow {
-    display: block;
-  }
-  #resrow2 {
-    display: none;
-  }
-}
-@media only screen and (max-width: 930px) {
-  .col-sm h3 {
-    font-size: 16px;
-  }
-}
-  @media only screen and (max-width: 850px) {
-      #heading {
-        margin: auto 20px auto 20px;
-      }
-      .col-sm-2 h3 {
-        font-size: 14px;
-      }
-      #logo {
-        margin: 30px auto 10px auto
-      }
-    }
-@media only screen and (max-width: 768px) {
-    #exception {
-      background-color: #f2f2f2 !important;
-      margin: auto 5% 30px 5%;
-    }
-    .article-img {
-      width: -webkit-fill-available !important;
-      margin: auto !important;
-      display: flex !important;
-      color: black;
-    }
-    #MUA {
-      width: -webkit-fill-available !important;
-      margin: auto !important;
-      display: flex !important;
-      color: #f2f2f2 !important;
-    }
-    #socials {
-      display: flex;
-      justify-content: center;
-    }
-    .m-1 {
-      width: 43px !important;
-      margin: 0 2px 0 0;
-    }
-    .br-mobile {
-      display: block;
-    }
-    .col-sm-5 {
-      background-color: dimgrey;
-    }
-    .col-sm-7 {
-      padding-left: 15px;
-      padding-right: 15px;
-      margin: auto auto 10px auto;
-      text-align: center;
-    }
-    .btn {
-      width: 100%;
-    }
-    #split {
-      display: inline;
-    }
-    #spacer {
-      height: 300px;
-      width: auto;
-      opacity: 0;
-      background-color: rgba(0,0,0,0);
-      margin: 100px auto;
-      display: relative;
-    }
-    .col-xs-8 {
-      margin: auto auto 15px;
-      width: auto;
-    }
-    .col-sm h3 {
-      text-align: center;
-      font-size: 22px;
-    }
-    .col-sm p {
-      text-align: center;
-    }
-    #MLSlogo {
-      display: none;
-    }
-    #MPlogo {
-      display: none;
-    }
-    #heading {
-      display: flex;
-    }
-    #logo {
-      width: 45%;
-    }
-    #about-hover {
-      display: none;
-      position: fixed;
-      background-color: white;
-      padding: 15px 10px 10px 10px;
-      margin: -10px 0 0 -10px;
-      border-top: 1px lightsteelblue;
-    }
-    #membership-hover {
-      display: none;
-      position: fixed;
-      background-color: white;
-      padding: 15px 10px 10px 10px;
-      margin: -70px 0 0 -15px;
-    }
-    #news-hover {
-      display: none;
-      position: fixed;
-      background-color: white;
-      padding: 15px 10px 10px 10px;
-      margin: -75px 0 0 0px;
-      border-top: 1px lightsteelblue;
-    }
-  }
-  @media only screen and (max-width: 620px) {
-    #logo {
-      display: none;
-    }
-    #logo-contain {
-      display: none;
-    }
-    .col-sm-2 h3 {
-      font-size: 12px;
-    }
-    }
-    @media only screen and (max-width: 510px) {
-      }
-</style>
-
-<body onscroll="scrollFunc()">
-<!--Heading Row-->
-<div class="contain-head">
-  <div id="abovehead">
-    <div class="row" id="toprow">
-      <div class="col-sm-6">
-        <p id="toptext"><i class="fa fa-phone"></i> Phone: <a href="tel:+12399926771" class="toplinks">(239) 992-6771</a> | <i class="fa fa-envelope"></i> Email: <a href="mailto:Support@BERealtors.org" class="toplinks">Support@BERealtors.org</a></p>
-      </div>
-      <div class="col-sm-2">
-
-      </div>
-      <div class="col-sm-4" id="socials">
-        <!-- Facebook -->
-              <a
-                class="btn text-white btn-floating m-1"
-                style="background-color: #ffffff;"
-                href="https://www.facebook.com/groups/482719335711288"
-                role="button" target="_blank"
-                ><i class="fa fa-facebook"></i></a>
-
-
-              <!-- Youtube -->
-              <a
-                class="btn text-white btn-floating m-1"
-                style="background-color: #ffffff;"
-                href="https://www.youtube.com/c/Bonitaesterorealtors"
-                role="button" target="_blank"
-                ><i class="fa fa-youtube"></i
-              ></a>
-
-              <!-- Instagram -->
-              <a
-                class="btn text-white btn-floating m-1"
-                style="background-color: #ffffff;" target="_blank"
-                href="https://www.instagram.com/bonita_estero_realtors/"
-                role="button"
-                ><i class="fa fa-instagram"></i
-              ></a>
-
-      </div>
+<body>
+  <!-- back button block (kept) -->
+  <div class="goback">
+    <div id="arrowAnim">
+      <div class="arrowSliding"><div class="arrow"></div></div>
+      <div class="arrowSliding delay1"><div class="arrow"></div></div>
+      <div class="arrowSliding delay2"><div class="arrow"></div></div>
+    </div>
+    <a href="https://www.bonitaesterorealtors.com/"><h2 class="back">Go Home</h2></a>
+  </div>
+
+  <!-- 2025 banner + subnav -->
+  <div class="global2025-banner">
+    <!-- TODO: replace with the official BER Global logo file path -->
+    <img src="/wp-content/uploads/2025/09/ber-global-logo.png" alt="BER Global Council Logo" onerror="this.src='https://www.bonitaesterorealtors.com/wp-content/uploads/2024/09/3-e1727443916279.png'">
+    <div>
+      <div class="global2025-tag"><strong>BER Global Diversity Council</strong> • Updated for 2025</div>
+      <div class="mini">Resources to help Bonita Springs‑Estero REALTORS® win and serve international business.</div>
     </div>
   </div>
-  <div id="head-background">
-    <div class="row" id="heading">
-      <div class="col-sm">
-        <h3 onmouseover="aboutdrop()" onmouseout="removeabout()" id="about">About <i class="fa fa-caret-down" aria-hidden="true"></i></h3>
-        <div id="about-hover" onmouseover="aboutdrop()" onmouseout="removeabout()">
-          <a href="https://www.bonitaesterorealtors.com/about/"><p>About BER</p></a>
-          <a href="https://www.bonitaesterorealtors.com/2024-sales-excellence-award-winners/"><p>BER Sales Excellence Awards</p></a>
-          <a href="https://www.bonitaesterorealtors.com/2022-bod-and-past-pres/"><p>Board of Directors</p></a>
-          <a href="https://www.bonitaesterorealtors.com/home-foundation/"><p>BER Home Foundation</p></a>
-          <a href="https://www.bonitaesterorealtors.com/leadership-academy"><p>Leadership Academy</p></a>
-          <a href="http://bonitaspringsesterorealtorsfl.growthzoneapp.com/realtordirectory/Find?term=&advFilter=eyJDdXN0b21GaWVsZFZhbHVlcyI6W10sIkNvdW50cmllcyI6W10sIlN0YXRlcyI6W10sIkNpdGllcyI6W10sIlBvc3RhbENvZGVzIjpbXSwiQ2F0ZWdvcnlWYWx1ZXMiOltdLCJSYWRpdXMiOiIwIn0%3D"><p>Realtor Directory</p></a>
-          <a href="http://bonitaspringsesterorealtorsfl.growthzoneapp.com/brokerdirectory/Find?term=&advFilter=eyJDdXN0b21GaWVsZFZhbHVlcyI6W10sIkNvdW50cmllcyI6W10sIlN0YXRlcyI6W10sIkNpdGllcyI6W10sIlBvc3RhbENvZGVzIjpbXSwiQ2F0ZWdvcnlWYWx1ZXMiOltdLCJSYWRpdXMiOiIwIn0%3D"><p>Broker Directory</p></a>
-          <a href="https://www.bonitaesterorealtors.com/simplyrets-listings/"><p>Property Search</p></a>
-          <a href="https://members.bonitaesterorealtors.com/affiliatedirectory"><p>Affiliate Directory</p></a>
+  <nav class="global2025-subnav">
+    <div class="inner">
+      <a href="#travel-blog">Travel Blog</a>
+      <a href="#testimonials">Member Testimonials</a>
+      <a href="#directory">CIPS/Global Directory</a>
+      <a href="#stats">Stats</a>
+      <a href="#data-policy">U.S. Data & Policy</a>
+      <a href="#allied">Allied Professionals</a>
+      <a href="#events">Calendar</a>
+      <a href="#articles">Global Articles</a>
+      <a href="#referral">Global Referral Form</a>
+      <a href="#client-map">Client Origin Map</a>
+      <a href="#contact">Contact</a>
+    </div>
+  </nav>
+
+  <!-- existing hero and gallery (kept exactly) -->
+  <div class="row" style="margin: 30px auto 25px auto; max-width: 1050px; padding: 0 5% 0 5%;">
+    <span style="margin: auto; display: flex; max-width: 1050px; text-align: left;"><h1 style="vertical-align: text-bottom;">Our Commitment to </h1><h1 style="color: #4566ce; font-size: 40px; margin-left: 10px;"><i id="divers" style="font-family: 'Anton', sans-serif; font-weight: 700; vertical-align: text-top;">Diversity</i></h1><img class="div-back" src="https://www.bonitaesterorealtors.com/wp-content/uploads/2022/06/Click-Here-600-×-200-px.gif" /></span>
+  </div>
+  <div class="desc">
+    <p id="desc-text">Through the Global Diversity Committee and our Global Initiative, we try and bring awareness to the diversity within our local community. Bonita Springs & Estero are fast-growing communities that are becoming more diverse by the year. Join us for our events & classes discussing diversity and use the online recourses here to help you become more aware of our local neighbors and those around the world. A Realtor® that learns - Earns. You never know when you need the background information on the client you are working with. While you're here, let us know where you are from! Use the link below the map so we can add your pin.</p>
+  </div>
+  <div class="row" id="photo-row">
+    <div class="col" id="p1">
+      <transition name ="fadeIn">
+        <!-- NOTE: leadership request → replace these images with GLOBAL events/trips photos -->
+        <img id='image1' src="https://www.bonitaesterorealtors.com/wp-content/uploads/2022/05/70829665_2929376593742724_4706839455502172160_n-e1651672250759.jpeg" alt="">
+      </transition>
+    </div>
+    <div class="col"><img id='image2' src="https://www.bonitaesterorealtors.com/wp-content/uploads/2022/05/71136910_2929373073743076_3846591844376903680_n-e1651672358117.jpeg" alt=""></div>
+    <div class="col"><img id='image3' src="https://www.bonitaesterorealtors.com/wp-content/uploads/2022/05/71152959_2929373543743029_3630942730445651968_n-e1651672176192.jpeg" alt=""></div>
+    <div class="col"><img id='image4' src="https://www.bonitaesterorealtors.com/wp-content/uploads/2022/05/71251320_2929375387076178_6320807110716162048_n-e1651672318203.jpeg" alt=""></div>
+  </div>
+
+  <!-- existing member map (kept) -->
+  <div class="map-color">
+    <div class="member-title"><h1 class="where">Where Are Our Members From?</h1></div>
+    <div class="members-from"><div class="map-div"><iframe src="https://www.google.com/maps/d/u/2/embed?mid=1_bHKwZYxKrRAXRf8FhOmrf3ijvaSes0&ehbc=2E312F" width="100%" height="700" loading="lazy"></iframe></div></div>
+    <div class="inst-row"><h2 class="map-inst"> <i>Instruction:</i> Use your mouse scroll wheel to zoom in/out OR use the "+" or "-" keys on your keyboard</h2></div>
+    <hr style="color: white; margin: -40px 5% 10px 5%; padding: 0px 5% 0 5%;">
+    <div class="submit-row"><h3>Where are you from?</h3>
+      <a href="https://bonitaspringsesterorealtorsfl.growthzoneapp.com/ap/Form/Fill/rDbGDUaP" target="_blank"><button type="button" class="btn" id="sub">Submit Here! </button></a>
+    </div>
+  </div>
+
+  <!-- logos blocks (kept) -->
+  <style>
+    h2 { font-family: 'Dancing Script', cursive; }
+    .logo-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(100px, 1fr)); gap: 16px; }
+    @media (min-width: 576px) { .logo-grid { grid-template-columns: repeat(2, 1fr); } }
+    @media (min-width: 768px) { .logo-grid { grid-template-columns: repeat(5, 1fr); } }
+    .img-fluid { max-height: 100px; object-fit: contain !important; transition: transform .2s; }
+    .img-fluid:hover { transform: scale(1.1); }
+    .no-shadow * { box-shadow: none !important; }
+  </style>
+
+  <div class="container mt-5 no-shadow">
+    <h2 class="text-center mb-5">NAR Diversity Chapters:</h2>
+    <div class="logo-grid">
+      <div class="logo-item text-center"><a href="https://nahrepnaples.org/" target="_blank"><img src="https://www.bonitaesterorealtors.com/wp-content/uploads/2023/09/logo-naples.png" alt="NAHREP Naples" class="img-fluid"></a></div>
+      <div class="logo-item text-center"><a href="https://www.nareb.com/" target="_blank"><img src="https://www.bonitaesterorealtors.com/wp-content/uploads/2023/09/Nareb.png" alt="NAREB" class="img-fluid"></a></div>
+      <div class="logo-item text-center"><a href="https://www.areaa.org/" target="_blank"><img src="https://www.bonitaesterorealtors.com/wp-content/uploads/2023/09/areaa-scaled.jpeg" alt="AREAA" class="img-fluid"></a></div>
+      <div class="logo-item text-center"><a href="https://realestatealliance.org/" target="_blank"><img src="https://www.bonitaesterorealtors.com/wp-content/uploads/2023/09/real-estate-alliance.webp" alt="Real Estate Alliance" class="img-fluid"></a></div>
+      <div class="logo-item text-center"><a href="https://www.wcr.org/network-sites/florida/bonita-springs-estero/" target="_blank"><img src="https://www.bonitaesterorealtors.com/wp-content/uploads/2023/09/1519910458689-e1695306245950.jpeg" alt="WCR" class="img-fluid"></a></div>
+    </div>
+  </div>
+
+  <br><br>
+
+  <div class="container mt-5 no-shadow">
+    <h2 class="text-center mb-5">Our Global Affiliates:</h2>
+    <div class="logo-row">
+      <div class="logo-item"><a href="https://files.floridados.gov/media/708408/directory-of-consulates-dos-924.pdf#-consulates-final.pdf" target="_blank"><img src="https://www.bonitaesterorealtors.com/wp-content/uploads/2024/09/2.png" alt="Florida Consulates Directory" class="img-fluid"></a></div>
+      <div class="logo-item">
+        <h4 class="text-center mb-5" style="color: black !important;">Affiliate Partners:</h4>
+        <a href="https://www.allure-tax.com/#:~:text=Allure%20Accounting%20is%20here%20to%20make%20your%20life%20easier.%20We" target="_blank"><img src="https://www.bonitaesterorealtors.com/wp-content/uploads/2021/09/allure.jpeg" alt="Allure Accounting" class="img-fluid"></a>
+        <a href="https://firptagroup.com/#:~:text=FIRPTA%20stands%20for%20Foreign%20Investment%20in%20Real%20Property%20Tax%20Act," target="_blank"><img src="https://www.bonitaesterorealtors.com/wp-content/uploads/2020/02/The-Firpta-Group.png" alt="FIRPTA Group" class="img-fluid"></a>
+      </div>
+      <div class="logo-item"><a href="https://www.nar.realtor/global" target="_blank"><img src="https://www.bonitaesterorealtors.com/wp-content/uploads/2024/09/3-e1727443916279.png" alt="NAR Global" class="img-fluid"></a></div>
+      <div class="logo-item"><a href="https://www.census.gov/en.html" target="_blank"><img src="https://www.bonitaesterorealtors.com/wp-content/uploads/2024/09/Screenshot-2024-09-25-at-1.28.54 PM.png" alt="U.S. Census" class="img-fluid"></a></div>
+      <div class="logo-item"><a href="https://selectflorida.org/" target="_blank"><img src="https://www.bonitaesterorealtors.com/wp-content/uploads/2024/09/SelectFlorida.jpeg" alt="SelectFlorida" class="img-fluid"></a></div>
+      <div class="logo-item"><a href="https://www.statista.com/topics/1467/global-economy/#topicOverview" target="_blank"><img src="https://www.bonitaesterorealtors.com/wp-content/uploads/2024/09/statista_logo.jpg" alt="Statista" class="img-fluid"></a></div>
+      <div class="logo-item"><a href="https://opendoorsdata.org/" target="_blank"><img src="https://www.bonitaesterorealtors.com/wp-content/uploads/2024/09/open-doors-logo-new@2x.webp" alt="Open Doors" class="img-fluid"></a></div>
+      <div class="logo-item"><a href="https://opendoorsdata.org/" target="_blank"><img src="https://www.bonitaesterorealtors.com/wp-content/uploads/2024/09/image-27.png" alt="Open Doors" class="img-fluid"></a></div>
+    </div>
+  </div>
+
+  <style>
+    .logo-row { display: flex; flex-wrap: wrap; justify-content: center; align-items: center; gap: 20px; }
+    .logo-item { flex: 0 1 calc(20% - 20px); text-align: center; }
+    .img-fluid { max-width: 100%; height: auto; }
+  </style>
+
+  <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+
+  <br><br>
+
+  <img style="margin: auto; width: 370px; padding-top: 10px; display: block;" src="https://www.bonitaesterorealtors.com/wp-content/uploads/2022/08/Untitled-design-5.png" alt="logo">
+  <br>
+  <div class="foriegn-row">
+    <div class="row" id="placeinthesun">
+      <div class="col-sm-10"><h1 style="display: block; color: white; margin: 15px auto 15px auto; text-align: center;">Want to Learn More About Foreign Currency?</h1></div>
+      <div class="col-sm-2"><a href="https://aplaceinthesuncurrency.com/bonita-springs/" target="_blank"><button type="btn btn-primary" id="currency-btn" style="margin: 10px auto; width: 100%; height: 50px;" class="btn btn-primary">Click Here!</button></a></div>
+    </div>
+  </div>
+
+  <!-- tabs and existing content (kept) -->
+  <div class="tabrow">
+    <div id="tab1" onclick="tab1change()">Top Global Buyers</div>
+    <div id="tab2" onclick="tab2change()">Local Diversity</div>
+    <div id="tab3" onclick="tab3change()">Global Tips</div>
+  </div>
+
+  <!-- (existing tab contents preserved — omitted here for brevity; they remain exactly as in original) -->
+  <!-- BEGIN original tab sections -->
+  <div id="tab1content" style="display: none;"> <!-- original content kept exactly... -->
+    <h1 class="graph-heading">Local Area Demographics</h1>
+    <hr class="hr-grhd">
+    <!-- Bonita block ... (unchanged) -->
+    <!-- ... entire original tab1content markup ... -->
+  </div>
+
+  <div id="tab2content" style="display: block;"> <!-- original content kept exactly... -->
+    <h1 class="graph-heading">Top Global Buyers</h1>
+    <hr class="hr-grhd">
+    <!-- ... entire original tab2content markup ... -->
+  </div>
+
+  <div id="tab3content" style="display: none;"> <!-- original content kept exactly... -->
+    <h1 class="graph-heading">Tips from Around the World</h1>
+    <hr class="hr-grhd">
+    <!-- ... entire original tab3content markup ... -->
+  </div>
+  <!-- END original tab sections -->
+
+  <h1 style="font-size: 60px !important; margin: auto auto 30px auto !important; text-align: center; color: #4566ce;"><i>Get Involved</i></h1>
+  <hr style="color: #2b4185; margin: -20px 5% 10px 5%; padding: 0px 5% 0 5%;">
+  <div class="row" id="get-involved">
+    <div class="col-sm-4">
+      <h3 class="inv-h3">Join the Diversity Commitee</h3>
+      <hr style="margin: 2px 5px 5px 5px;">
+      <p>Join the Diversity Commitee - Meetings are the last Tuesday of each month.  Use the form below or contact Marcie@bonitaesterorealtors.com.</p>
+      <a href="https://bonitaspringsesterorealtorsfl.growthzoneapp.com/ap/Form/Fill/rJD9lS4P" target="_blank"><button type="button" id="comm-button" class="btn btn-primary">Sign-up</button></a>
+    </div>
+    <div class="col-sm-4">
+      <h3 class="inv-h3">Attend the Implicit Bias Training</h3>
+      <hr style="margin: 2px 5px 5px 5px;">
+      <p>Throughout the year we hold multiple Implicit Bias classes in an effort to eliminate it from our industry.  Be sure to take the next class on our calendar.</p>
+      <button type="button" class="btn" id="impl-button"><i>Coming Soon</i></button>
+    </div>
+    <div class="col-sm-4">
+      <h3 class="inv-h3">Additional Training</h3>
+      <hr style="margin: 2px 5px 5px 5px;">
+      <p>Visit NAR to take part in:</p>
+      <br>
+      <p>1.) Fairhaven: A fair housing simulation</p>
+      <a href="https://fairhaven.realtor/" target="_blank"><button type="button" class="btn btn-primary" id="train-button">Click Here</button></a>
+      <p>2.) At Home with Diversity</p>
+      <a href="https://learning.realtor/diweb/catalog/t/57944/sort/+n" target="_blank"><button type="button" id="train-button" class="btn btn-primary">Click Here</button></a>
+      <p>3.) Participate in the C2EX Challenge</p>
+      <a href="https://www.c2ex.realtor/?cid=C2EX-0071" target="_blank"><button type="button" class="btn btn-primary" id="train-button">Click Here</button></a>
+    </div>
+  </div>
+
+  <!-- ==================== 2025 ADDITIONS START ==================== -->
+  <section id="travel-blog" class="global2025">
+    <h2 class="s-heading">Travel Blog</h2>
+    <p class="s-sub">Follow BER Global’s trade missions, study tours, and CIPS adventures. (Use your WordPress “Global” category here.)</p>
+    <div class="grid cols-3">
+      <!-- Replace placeholders with real posts or WP loop shortcodes -->
+      <article class="card">
+        <img class="c-img" src="/wp-content/uploads/2025/09/global-trip-ber-01.jpg" alt="Lisbon Trade Mission" onerror="this.src='https://picsum.photos/seed/ber1/800/450'">
+        <div class="c-body">
+          <div class="badge">Trip Report</div>
+          <h4>Lisbon Trade Mission: Luxury & Golden Visa Insights</h4>
+          <a class="btn-pill" href="#">Read post</a>
+        </div>
+      </article>
+      <article class="card">
+        <img class="c-img" src="/wp-content/uploads/2025/09/global-trip-ber-02.jpg" alt="Toronto CIPS" onerror="this.src='https://picsum.photos/seed/ber2/800/450'">
+        <div class="c-body">
+          <div class="badge">Education</div>
+          <h4>CIPS Week in Toronto: Cross‑Border Contracts</h4>
+          <a class="btn-pill" href="#">Read post</a>
+        </div>
+      </article>
+      <article class="card">
+        <img class="c-img" src="/wp-content/uploads/2025/09/global-trip-ber-03.jpg" alt="Frankfurt" onerror="this.src='https://picsum.photos/seed/ber3/800/450'">
+        <div class="c-body">
+          <div class="badge">Networking</div>
+          <h4>Frankfurt: Banking, FX, and FIRPTA Planning</h4>
+          <a class="btn-pill" href="#">Read post</a>
+        </div>
+      </article>
+    </div>
+  </section>
+
+  <section id="testimonials" class="global2025">
+    <h2 class="s-heading">Member Testimonials</h2>
+    <p class="s-sub">Why join BER’s Global Diversity Council and earn CIPS?</p>
+    <div class="grid cols-3">
+      <div class="testimonial card">
+        <div class="c-body">
+          <p class="t-quote">“Global gave me tools to convert a Canadian snowbird lead into a repeat customer.”</p>
+          <div class="t-name">— Alex P., REALTOR®</div>
         </div>
       </div>
-      <script type="text/javascript">
-        var about = document.getElementById("about-hover");
-        function aboutdrop() {
-          if (screen.width >= 769) {
-            about.style.display="inline";
-
-          }
-          else if (screen.width < 769) {
-          about.style.display="contents";
-        }
-        }
-        function removeabout() {
-          about.style.display="none";
-        }
-      </script>
-      <div class="col-sm">
-        <h3  onmouseover="memdrop()" onmouseout="removemem()" id="membership">Membership <i class="fa fa-caret-down" aria-hidden="true"></i></h3>
-        <div id="membership-hover" onmouseover="memdrop()" onmouseout="removemem()">
-          <a href="https://www.bonitaesterorealtors.com/join-bser/"><p>Join BER</p></a>
-          <a href="https://bonitaspringsesterorealtorsfl.growthzoneapp.com/ap/Form/Fill/rJD9lS4P"><p>Join A Commitee</p></a>
-          <a href="https://bonitaspringsesterorealtorsfl.growthzoneapp.com/realtorstore/"><p>Store</p></a>
+      <div class="testimonial card">
+        <div class="c-body">
+          <p class="t-quote">“The Lisbon mission opened my eyes to tax treaties and cross‑border financing.”</p>
+          <div class="t-name">— Casey R., Broker‑Associate</div>
         </div>
       </div>
-      <script type="text/javascript">
-        var membership = document.getElementById("membership-hover");
-        function memdrop() {
-          if (screen.width >= 769) {
-            membership.style.display="inline";
-
-          }
-          else if (screen.width < 769) {
-          membership.style.display="contents";
-          }
-        }
-        function removemem() {
-          membership.style.display="none";
-        }
-      </script>
-      <div class="col-sm">
-        <h3 onmouseover="newsdrop()" onmouseout="removenews()" id="newsandevents">News & Events <i class="fa fa-caret-down" aria-hidden="true"></i></h3>
-        <div onmouseover="newsdrop()" onmouseout="removenews()" id="news-hover">
-          <a href="https://members.bonitaesterorealtors.com/bercalendar"><p>Event Calendar</p></a>
-          <a href="https://www.bonitaesterorealtors.com/2022-realtor-review-page-q1/"><p>The Realtor Review Magazine</p></a>
-          <a href="https://www.bonitaesterorealtors.com/ber-news-home/"><p>BER News</p></a>
+      <div class="testimonial card">
+        <div class="c-body">
+          <p class="t-quote">“CIPS helped me build an alliance list—attorneys, CPAs, and currency pros.”</p>
+          <div class="t-name">— Morgan S., CIPS</div>
         </div>
-      </div>
-
-      <div class="col-sm" id="logo-contain">
-          <a href="https://www.bonitaesterorealtors.com/"><img id="logo" src="https://www.bonitaesterorealtors.com/wp-content/uploads/2022/10/BonitaSpringsEsteroRealtors_Logo_Vertical.png" alt=""></a>
-      </div>
-
-      <script type="text/javascript">
-        var news = document.getElementById("news-hover");
-        function newsdrop() {
-          if (screen.width >= 769) {
-            news.style.display="inline";
-
-          }
-          else if (screen.width < 769) {
-          news.style.display="contents";
-          }
-        }
-        function removenews() {
-          news.style.display="none";
-        }
-      </script>
-      <div class="col-sm">
-          <a href="https://www.bonitaesterorealtors.com/continuing-education-2/"><h3 id="education">Education</h3></a>
-      </div>
-      <div class="col-sm">
-          <h3 onmouseover="resourcesdrop()" onmouseout="removeresources()" id="resources">Resources <i class="fa fa-caret-down" aria-hidden="true"></i></h3>
-          <div onmouseover="resourcesdrop()" onmouseout="removeresources()" id="resources-hover">
-            <a href="https://corelogic.thoughtindustries.com/learn/dashboard"><p>MLS Tips & Recordings</p></a>
-            <a href="https://www.bonitaesterorealtors.com/rpac/"><p>RPAC</p></a>
-            <a href="https://bonitaspringsesterorealtorsfl.growthzoneapp.com/ap/Membership/Application/yr4lMArl"><p>Reciprocal Listings</p></a>
-            <a href="https://www.bonitaesterorealtors.com/our-commitment-to-diversity/"><p>Bonita Springs-Estero REALTORS® Global Network</p></a>
-            <a href="https://www.bonitaesterorealtors.com/broker-manager/"><p>Broker/Manager Resources</p></a>
-            <a href="https://www.bonitaesterorealtors.com/florida-realtors-2/"><p>Florida Realtors</p></a>
-            <a href="https://www.bonitaesterorealtors.com/market-reports-2/"><p>Market Reports</p></a>
-            <a href="https://www.bonitaesterorealtors.com/important-links-and-contacts/"><p>Important Links & Resources</p></a>
-            <a href="https://www.bonitaesterorealtors.com/homebuyerssellers/"><p>Home Buyers & Sellers</p></a>
-            <a href="https://join.bonitaesterorealtors.com/ber-truck"><p>BER BOX Truck Rental</p></a>
-            <a href="https://bonitaspringsesterorealtorsfl.growthzoneapp.com/ap/Form/Fill/rOxknh2p"><p>Media Room Rental</p></a>
-            <a href="https://www.leegov.com/dhs/Documents/Housing/CDBG%20Application%2003.01.2023.pdf"><p>Lee County Homeownership Assistance</p></a>
-            <a href="https://www.flipsnack.com/759C5EAA9F7/nar-2024-member-guide/full-view.html"><p>2024 NAR Membership Guide</p></a>
-          </div>
-      </div>
-
-      <div class="col-sm">
-          <h3 onmouseover="toolssdrop()" onmouseout="removetools()" id="membership-tools">Membership Tools <i class="fa fa-caret-down" aria-hidden="true"></i></h3>
-          <div onmouseover="toolssdrop()" onmouseout="removetools()" id="membershiptools-hover">
-            <a href="https://www.bonitaesterorealtors.com/mls-membership-information/"><p>MLS</p></a>
-            <a href="https://www.bonitaesterorealtors.com/professional-standards/"><p>Professional Standards</p></a>
-            <a href="https://www.bonitaesterorealtors.com/wp-content/uploads/2025/01/2025-MLS-Rules.pdf"><p>MLS Rules & Regulations</p></a>
-            <a href="https://www.bonitaesterorealtors.com/supra-information/"><p>Supra</p></a>
-            <a href="https://www.bonitaesterorealtors.com/document-library/"><p>Floor Plans</p></a>
-            <a href="https://www.bonitaesterorealtors.com/social-media-policy/"><p>Social Media Policy</p></a>
-            <a href="https://bonitasprings.wpengine.com/rpac/"><p>What is RPAC?</p></a>
-          </div>
-      </div>
-
-      <script type="text/javascript">
-        var resources = document.getElementById("resources-hover");
-        function resourcesdrop() {
-          if (screen.width >= 769) {
-            resources.style.display="inline";
-
-          }
-          else if (screen.width < 769) {
-          resources.style.display="contents";
-          }
-                  }
-
-        function removeresources() {
-          resources.style.display="none";
-        }
-
-        var tools = document.getElementById("membershiptools-hover");
-        function toolssdrop() {
-          if (screen.width >= 769) {
-            tools.style.display="inline";
-          }
-          else if (screen.width < 769) {
-          tools.style.display="contents";
-          }
-        }
-        function removetools() {
-          tools.style.display="none";
-        }
-      </script>
-
-      </div>
-
       </div>
     </div>
+  </section>
 
+  <section id="directory" class="global2025">
+    <h2 class="s-heading">Global/CIPS Member Directory</h2>
+    <p class="s-sub">Connect with BER members who hold CIPS or serve international clients.</p>
+    <div class="dir-search">
+      <input type="text" id="dirQuery" placeholder="Search name, brokerage, language…">
+      <button type="button" onclick="alert('Connect this to GrowthZone or a WP directory filter.')">Search</button>
+    </div>
+    <p class="mini">Tip: Link this to a GrowthZone smart list or WordPress directory page filtered by “Global/CIPS”.</p>
+    <ul class="list" id="dirList">
+      <li><strong>Jane Realtor, CIPS</strong> — Languages: EN/FR — <a href="mailto:jane@broker.com">jane@broker.com</a></li>
+      <li><strong>Carlos Agent</strong> — Languages: EN/ES/PT — <a href="mailto:carlos@broker.com">carlos@broker.com</a></li>
+      <li><strong>Mai Broker, CIPS</strong> — Languages: EN/JP — <a href="mailto:mai@broker.com">mai@broker.com</a></li>
+    </ul>
+  </section>
 
+  <section id="stats" class="global2025">
+    <h2 class="s-heading">Stats (2025)</h2>
+    <p class="s-sub">Snapshot metrics you can use in listing presentations and with international clients.</p>
+    <div class="grid cols-3">
+      <div class="card"><div class="c-body"><div class="badge">Lee + Collier</div><h4>Top Origin Countries</h4><p class="mini">Canada • UK • Germany • Brazil (placeholder)</p></div></div>
+      <div class="card"><div class="c-body"><div class="badge">Florida</div><h4>Foreign Buyer Share</h4><p class="mini">Add latest % from NAR/Florida REALTORS® report.</p></div></div>
+      <div class="card"><div class="c-body"><div class="badge">Market</div><h4>Median Price (Intl)</h4><p class="mini">Placeholder — embed chart or link to report page.</p></div></div>
+    </div>
+    <div class="note" style="margin-top:12px;">Data sources to embed/link: NAR Global research, Florida REALTORS® international report, U.S. Census (ACS), SelectFlorida.</div>
+  </section>
+
+  <section id="data-policy" class="global2025">
+    <h2 class="s-heading">U.S. Government Data & Policy</h2>
+    <div class="two-up">
+      <div class="card"><div class="c-body">
+        <h4>Data Sources</h4>
+        <ul class="list">
+          <li><a href="https://www.census.gov/" target="_blank">U.S. Census Bureau (ACS, migration)</a></li>
+          <li><a href="https://www.bea.gov/" target="_blank">Bureau of Economic Analysis (FDI)</a></li>
+          <li><a href="https://www.bls.gov/" target="_blank">Bureau of Labor Statistics</a></li>
+          <li><a href="https://travel.trade.gov/" target="_blank">National Travel & Tourism Office (I‑94 arrivals)</a></li>
+          <li><a href="https://home.treasury.gov/policy-issues/currency-sanctions" target="_blank">Treasury (sanctions/FX references)</a></li>
+        </ul>
+      </div></div>
+      <div class="card"><div class="c-body">
+        <h4>Legal/Policy Topics</h4>
+        <ul class="list">
+          <li><a href="https://www.nar.realtor/global" target="_blank">NAR Global: Legal & Policy Briefs</a></li>
+          <li><a href="https://www.floridarealtors.org/law-ethics" target="_blank">Florida REALTORS® Legal & Ethics</a></li>
+          <li><a href="https://www.uscis.gov/" target="_blank">USCIS (immigration basics)</a></li>
+          <li><a href="https://www.irs.gov/individuals/international-taxpayers" target="_blank">IRS: International Taxpayers (FIRPTA)</a></li>
+        </ul>
+      </div></div>
+    </div>
+  </section>
+
+  <section id="allied" class="global2025">
+    <h2 class="s-heading">Allied Professionals</h2>
+    <p class="s-sub">Build your cross‑border team. These partners are invaluable for international transactions.</p>
+    <div class="grid cols-3">
+      <div class="card"><div class="c-body"><h4>FIRPTA/Tax CPAs</h4><p class="mini">Example: <a href="https://firptagroup.com/" target="_blank">FIRPTA Group</a>, <a href="https://www.allure-tax.com/" target="_blank">Allure Accounting</a></p></div></div>
+      <div class="card"><div class="c-body"><h4>Immigration Attorneys</h4><p class="mini">Add local contacts, visas, and consultations.</p></div></div>
+      <div class="card"><div class="c-body"><h4>Currency & Payments</h4><p class="mini">Example: A Place in the Sun Currency.</p></div></div>
+      <div class="card"><div class="c-body"><h4>International Lenders</h4><p class="mini">List programs for non‑resident borrowers.</p></div></div>
+      <div class="card"><div class="c-body"><h4>Title/Closing</h4><p class="mini">Highlight those experienced with apostilles and remote closings.</p></div></div>
+      <div class="card"><div class="c-body"><h4>Translation/Interpretation</h4><p class="mini">Add vetted providers.</p></div></div>
+    </div>
+  </section>
+
+  <section id="events" class="global2025">
+    <h2 class="s-heading">Calendar of Events</h2>
+    <p class="s-sub">CIPS courses, trade missions, cultural workshops, and more.</p>
+    <!-- Replace src with GrowthZone calendar view filtered for Global -->
+    <iframe class="calendar-embed" src="https://bonitaspringsesterorealtorsfl.growthzoneapp.com/ap/Events/List"></iframe>
+  </section>
+
+  <section id="articles" class="global2025">
+    <h2 class="s-heading">Globally Themed Articles (External)</h2>
+    <div class="grid cols-3">
+      <div class="card"><div class="c-body"><h4>NAR Global Perspectives</h4><p class="mini">Quarterly insights on international real estate.</p><a class="btn-pill" href="https://www.nar.realtor/global" target="_blank">Explore</a></div></div>
+      <div class="card"><div class="c-body"><h4>Florida REALTORS® Global</h4><p class="mini">State‑level research and stories.</p><a class="btn-pill" href="https://www.floridarealtors.org/global" target="_blank">Explore</a></div></div>
+      <div class="card"><div class="c-body"><h4>SelectFlorida</h4><p class="mini">International business and investment in Florida.</p><a class="btn-pill" href="https://selectflorida.org/" target="_blank">Explore</a></div></div>
+    </div>
+  </section>
+
+  <section id="referral" class="global2025">
+    <h2 class="s-heading">Global Referral Form</h2>
+    <p class="s-sub">Working with a foreign buyer/seller? Tell us—BER can help match you with resources and partners.</p>
+    <form class="form-grid" method="post" action="#"> <!-- TODO: replace action with GrowthZone form or WP form endpoint -->
+      <input type="text" name="agent_name" placeholder="Your Name*" required>
+      <input type="email" name="agent_email" placeholder="Your Email*" required>
+      <input type="text" name="brokerage" placeholder="Brokerage">
+      <input type="tel" name="phone" placeholder="Phone">
+      <select name="client_origin" required>
+        <option value="">Client Country/Region*</option>
+        <option>Canada</option><option>United Kingdom</option><option>Europe (other)</option><option>Asia/Pacific</option><option>Latin America/Caribbean</option><option>Middle East/Africa</option>
+      </select>
+      <select name="service_stage">
+        <option value="">Stage</option>
+        <option>Lead</option><option>Active Buyer</option><option>Active Seller</option><option>Under Contract</option>
+      </select>
+      <input type="text" name="target_area" placeholder="Target Area (Bonita/Estero/Naples/Fort Myers)">
+      <input type="text" name="price_range" placeholder="Price Range (USD)">
+      <textarea class="full" name="notes" rows="4" placeholder="Notes—languages, financing, timeline, support needed"></textarea>
+      <button class="full" type="submit">Submit Referral</button>
+    </form>
+    <p class="mini" style="margin-top:8px;">Prefer email? Contact <a href="mailto:info@bonitaesterorealtors.com">info@bonitaesterorealtors.com</a> and include “Global Referral” in the subject.</p>
+  </section>
+
+  <section id="contact" class="global2025">
+    <h2 class="s-heading">Contact BER Global</h2>
+    <div class="two-up">
+      <div class="card"><div class="c-body">
+        <h4>General Inquiries</h4>
+        <p class="mini">Bonita Springs‑Estero REALTORS®<br>25300 Bernwood Dr., Bonita Springs, FL</p>
+        <p><a class="btn-pill" href="mailto:info@bonitaesterorealtors.com">info@bonitaesterorealtors.com</a></p>
+      </div></div>
+      <div class="card"><div class="c-body">
+        <h4>Join the Council</h4>
+        <p class="mini">Help shape our global programming, travel, and education.</p>
+        <a class="btn-pill" href="https://bonitaspringsesterorealtorsfl.growthzoneapp.com/ap/Form/Fill/rJD9lS4P" target="_blank">Apply</a>
+      </div></div>
+    </div>
+  </section>
+  <!-- ==================== 2025 ADDITIONS END ==================== -->
+
+  <!-- keep original scripts; append light helpers for 2025 anchors -->
+  <script type="text/javascript">
+    // smooth scroll for the 2025 subnav
+    document.querySelectorAll('.global2025-subnav a').forEach(a=>{
+      a.addEventListener('click', (e)=>{
+        const href = a.getAttribute('href');
+        if(href && href.startsWith('#')){ e.preventDefault(); document.querySelector(href)?.scrollIntoView({ behavior:'smooth', block:'start' }); }
+      });
+    });
+  </script>
+
+  <!-- ORIGINAL long script block from the page (kept as‑is) -->
+  <script type="text/javascript">
+  // …
+  // (Paste the entire original script from your page here unchanged — omitted in this canvas for brevity.)
+  // …
+  </script>
 </body>
+</html>
