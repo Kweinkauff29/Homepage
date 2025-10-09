@@ -36,22 +36,7 @@
       href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" 
       rel="stylesheet"
     />
-    <link
-      rel="stylesheet"
-      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"
-      integrity="sha512-dyZ88n1Kis7J1gY9+jnuv6QylsHY2Rz+5PjqF3tU5hAnk3q1uI5wVzW+Z3G6CVJz4N97Z8vaUeQb+J6aQ1mX0g=="
-      crossorigin="anonymous"
-      referrerpolicy="no-referrer"
-    />
     
-    <!-- FontAwesome -->
-    <link
-      rel="stylesheet"
-      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"
-      integrity="sha512-dyZ88n1Kis7J1gY9+jnuv6QylsHY2Rz+5PjqF3tU5hAnk3q1uI5wVzW+Z3G6CVJz4N97Z8vaUeQb+J6aQ1mX0g=="
-      crossorigin="anonymous"
-      referrerpolicy="no-referrer"
-    />
 
     </head>
       <style media="screen">
@@ -315,21 +300,21 @@
   
     #vid1 {
       width: 100%;
-      max-height: 650px;
+      max-height: 575px;
       object-fit: cover;
       margin: 0 0 -21px 0;
     }
   
     #vid2 {
       width: 100%;
-      max-height: 650px;
+      max-height: 575px;
       object-fit: cover;
       margin: 0 0 -21px 0;
     }
   
     #vid3 {
       width: auto;
-      max-height: 650px;
+      max-height: 575px;
       object-fit: cover;
       margin: 0 auto 0px auto;
       display: flex;
@@ -337,7 +322,7 @@
   
     #vid4 {
       width: auto;
-      max-height: 650px;
+      max-height: 575px;
       object-fit: cover;
       margin: 0 auto 0px auto;
       display: flex;
@@ -345,7 +330,7 @@
   
     #vid5 {
       width: 100%;
-      max-height: 650px;
+      max-height: 575px;
       object-fit: cover;
       margin: 0 0 -21px 0;
     }
@@ -690,7 +675,7 @@
       border-bottom: white solid 2px;
       text-align: center;
       color: white;
-      font-size: 55px;
+      font-size: 38px;
       font-family: 'Roboto', sans-serif;
       padding: 10px 0 10px 0;
       line-height: 5rem;
@@ -1247,7 +1232,7 @@
             <a href="https://members.bonitaesterorealtors.com/MIC/Login" target="_blank"><div class="col-sm-3" id="MP">
               <img id="MPlogo" src="https://www.bonitaesterorealtors.com/wp-content/uploads/2022/10/Untitled-design-21-e1666029842341.png" alt="">
               <br class="br-mobile">
-              <h4 id="DuesText">Pay Dues</h4>
+              <h4 id="DuesText">Member Portal</h4>
             </div></a>
             <!--Events-->
             <a href="https://members.bonitaesterorealtors.com/bercalendar" target="_blank"><div class="col-sm-3" id="Events">
@@ -1344,12 +1329,32 @@
             <p id="welcome-text">Core Values:</p>
             <p id="welcome-text">Integrity - Inclusive - Innovative - Authentic - Opportunity</p>
           </div>
-        </div>
-  
-        <link 
-        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" 
-        rel="stylesheet"
-      />
+      <!-- Support Section -->
+      <div class="welcome" style="margin-top:10px; background-color:#FFCB52; display:flex; flex-direction:column; align-items:center; text-align:center; color:white;">
+        <i class="fas fa-life-ring" style="font-size:48px; margin-bottom:15px; color:white;"></i>
+        <h2 id="support-head" style="font-family:Oswald, sans-serif; font-size:40px; margin-bottom:10px;">
+          Need Help? We're Here for You
+        </h2>
+        <p id="support-text" style="font-size:18px; max-width:700px; margin:0 auto 25px;">
+          Submit a support ticket and our staff will assist you quickly with your MLS, membership, or website needs.
+        </p>
+        <a href="https://link.bonitaesterorealtors.com/widget/form/Hd5mn3VD7WAw64tEku9D?notrack=true" target="_blank"
+          class="btn btn-primary"
+          style="background-color:white; color:#FFCB52; font-size:20px; font-weight:700; padding:12px 32px; border-radius:40px; text-decoration:none; display:inline-flex; align-items:center; gap:8px;">
+          <i class="fas fa-paper-plane" style="color:#FFCB52;"></i> Submit a Ticket
+        </a>
+      </div>
+
+              </div>
+
+      <style>
+        /* Optional: hover effect for the button */
+        .welcome a.btn-primary:hover {
+          background-color: #f7f7f7;
+          text-decoration: none;
+        }
+      </style>
+
       <style>
         .stats-container {
           max-width: 1200px;
@@ -1591,7 +1596,7 @@
       <!-- LEFT: Market Stats -->
       <div class="bemSection__col">
         <div class="bemStats">
-          <h2 class="bemStats__title">August 2025 – Bonita-Estero Market Statistics</h2>
+          <h2 class="bemStats__title">September 2025 – Bonita-Estero Market Statistics</h2>
           <div class="bemStats__grid" id="bemStatsGrid"></div>
           <div class="bemStats__disclaimer">
             The data presented is based on the most accurate information available at the time  
@@ -1636,12 +1641,12 @@
       /* Inject stats cards */
       (function(){
         const stats = [
-          { icon:'fa-home',        label:'Closed Sales',            value:'228',          change:'+4.1% vs August 2024', up:true },
-          { icon:'fa-tag',         label:'Median Price',            value:'$500,000',     change:'-8.3% vs August 2024', up:false },
-          { icon:'fa-clock',       label:'Days on Market (Median)', value:'94 Days',       change:'+22.1% vs August 2024', up:true  },
-          { icon:'fa-pencil-alt',  label:'Pending Sales',           value:'322',          change:'+33.6% vs August 2024', up:true  },
-          { icon:'fa-dollar-sign', label:'Dollar Volume',           value:'$143 Million', change:'+11.3% vs August 2024',  up:false  },
-          { icon:'fa-archive',     label:'Active Inventory',        value:'1,704',        change:'+14.1% vs August 2024', up:true  }
+          { icon:'fa-home',        label:'Closed Sales',            value:'221',          change:'+31.5% vs September 2024', up:true },
+          { icon:'fa-tag',         label:'Median Price',            value:'$550,000',     change:'+4.2% vs September 2024', up:true },
+          { icon:'fa-clock',       label:'Days on Market (Median)', value:'71 Days',       change:'-1.4% vs September 2024', up:false  },
+          { icon:'fa-pencil-alt',  label:'Pending Sales',           value:'299',          change:'+23.6% vs September 2024', up:true  },
+          { icon:'fa-dollar-sign', label:'Dollar Volume',           value:'$161 Million', change:'+56.4% vs September 2024',  up:false  },
+          { icon:'fa-archive',     label:'Active Inventory',        value:'1,683',        change:'+9.2% vs September 2024', up:true  }
         ];
         const grid = document.getElementById('bemStatsGrid');
         stats.forEach(s => {
@@ -2113,6 +2118,31 @@
 
     
   <!-- NEW: How to Sell Your Vacant Home Faster -->
+  <div class="row news-row">
+    <div class="col-sm-5" id="exception">
+      <img
+        class="article-img"
+        style="object-fit:contain !important;"
+        src="https://bonitaesterorealtors.com/wp-content/uploads/2025/10/District-54.png"
+        alt="Southwest Florida Real Estate Market Report – September 2025">
+    </div>
+    <div class="col-sm-7">
+      <h4>Southwest Florida Real Estate Market Report – September 2025</h4>
+      <p class="italics">October 9th, 2025</p>
+      <p>
+        September’s data shows Southwest Florida’s housing market stabilizing: sales are rising, 
+        inventory is leveling off, and prices remain steady across Bonita Springs, Estero, Naples, 
+        and Fort Myers—signaling a shift toward balance after years of volatility.
+      </p>
+      <a href="https://bonitaesterorealtors.com/southwest-florida-real-estate-market-report-september-2025/" 
+         target="_blank" rel="noopener">
+        <button class="btn btn-primary" type="button">Read More</button>
+      </a>
+    </div>
+  </div>
+  
+
+
   <div class="row news-row">
     <div class="col-sm-5" id="exception">
       <img
@@ -2974,7 +3004,7 @@
             </div>
           </div>
           <div class="col-sm-8">
-            <h3 class="resrow">Upcoming at BER - September 12th, 2025</h3>
+            <h3 class="resrow">Upcoming at BER - October 3rd, 2025</h3>
             
             <style>
             .frame-class {
@@ -2995,7 +3025,7 @@
               }
             </style>
   
-            <iframe class="frame-class" src="https://bonitaspringsesterorealtorsfl.growthzoneapp.com/ap/EmailViewer/rDyeAMzp">
+            <iframe class="frame-class" src="https://bonitaspringsesterorealtorsfl.growthzoneapp.com/ap/EmailViewer/LE468R9P">
             </iframe>
           </div>
         </div>
