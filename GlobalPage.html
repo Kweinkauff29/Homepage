@@ -2,7 +2,8 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>BER Global Diversity — 2025</title>
+    <!-- UPDATED: title per notes -->
+    <title>BER Global & Inclusion — 2025</title>
 
     <!-- keep existing includes (left intact per request) -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -21,17 +22,16 @@
     <link href="https://fonts.googleapis.com/css2?family=Fascinate&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&display=swap" rel="stylesheet">
 
-    <!-- new: helpful meta for 2025 -->
+    <!-- refreshed meta -->
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="description" content="Bonita Springs‑Estero REALTORS® Global Diversity hub (2025). Travel blog, member testimonials, CIPS directory, stats, events, referral form, and resources for working with international buyers and sellers." />
+    <meta name="description" content="BER Global & Inclusion hub (2025): testimonials, CIPS/Global directory, allied professionals, US policy docs, housing programs, community highlights, and resources for working with international buyers/sellers." />
     <link rel="canonical" href="https://www.bonitaesterorealtors.com/global/" />
 
     <style media="screen">
       html { width: 100%; }
       body { width: 100%; }
 
-      /* 2025: optionally hide the main site header/nav on this page only.
-         Adjust selectors to match theme. Comment these lines out if not needed. */
+      /* keep original page-specific header hiding */
       header.site-header, .site-header, nav#site-navigation, .navbar-default.navbar { display: none !important; }
       body { padding-top: 0 !important; }
 
@@ -132,7 +132,7 @@
       .div-back { position: absolute; z-index: -999; box-shadow: none !important; display: inline !important; width: 660px !important; transform: translateX(243px) translateY(3px) rotateX(55deg) rotateY(5deg); }
       #divers { font-family: 'Fascinate', cursive !important; font-size: 100px !important; }
 
-      /* responsive tweaks (left as‑is and lightly adjusted) */
+      /* responsive tweaks kept */
       @media only screen and (max-width: 768px) {
         #canadaflag, #ukflag, #laflag, #asiaflag, #euflag { width: 100px !important; }
         .row { display: flex !important; }
@@ -187,15 +187,15 @@
       }
       @media screen and (max-device-width: 480px) { .div-back { display: none !important; } desktop { display: none; } mobile { display: block; } }
 
-      /* ===== 2025 NEW SECTIONS ===== */
+      /* ===== 2025 NEW/UPDATED SECTIONS ===== */
       :root { --ber-brand:#03AAE1; --ber-ink:#0b1220; --ber-accent:#FBAE24; }
       .global2025-subnav { position: sticky; top:0; z-index: 999; background:#ffffffE6; backdrop-filter: blur(6px); border-bottom:1px solid #e6eaf2; }
-      .global2025-subnav .inner { max-width: 1100px; margin: 0 auto; display:flex; gap:12px; padding: 10px 16px; align-items:center; }
+      .global2025-subnav .inner { max-width: 1100px; margin: 0 auto; display:flex; gap:12px; padding: 10px 16px; align-items:center; flex-wrap:wrap; }
       .global2025-subnav a { color:#055a73; font-weight:600; text-decoration:none; padding:8px 10px; border-radius:8px; }
       .global2025-subnav a:hover { background:#f0fbff; }
+
       .global2025-banner { max-width:1100px; margin: 10px auto 0; padding: 8px 16px; display:flex; align-items:center; gap:16px; }
       .global2025-banner img { height:56px; width:auto; }
-      .global2025-tag { font-family:'Oswald',sans-serif; letter-spacing:.5px; color:#065e7a; }
 
       section.global2025 { max-width:1100px; margin: 40px auto; padding: 0 16px; }
       .s-heading { font-family:'Oswald',sans-serif; font-size:32px; color:#062b3a; margin: 0 0 6px; }
@@ -223,24 +223,45 @@
       .list { list-style:none; padding:0; margin:0; }
       .list li { padding:10px 0; border-bottom:1px solid #eef3f7; }
 
-      .two-up { display:grid; grid-template-columns: 1fr 1fr; gap:20px; }
-      @media (max-width: 860px){ .two-up { grid-template-columns: 1fr; } }
-
-      .mini { font-size:13px; color:#5d6b7a; }
       .note { background:#fff8e7; border:1px solid #ffe1a6; border-radius: 10px; padding:10px 12px; color:#6b4b00; }
+    
+    /* --- Fix legend clipping & give the layout more breathing room --- */
+    #tab1content { overflow: visible; }              /* safety */
+    .demo-card { overflow: visible; }                /* was hidden; caused the cut-off */
 
-      .calendar-embed { min-height: 600px; width:100%; border:0; }
-      .map-embed { width:100%; min-height: 480px; border:0; border-radius: 12px; }
+    .demo-body{
+      /* make the left column a fixed comfortable band for the donut,
+        and let the legend take the rest */
+      grid-template-columns: minmax(260px, 340px) 1fr !important;
+      padding-right: 16px;                           /* tiny cushion on the right */
+    }
 
-      .form-grid { display:grid; grid-template-columns: 1fr 1fr; gap: 12px; }
-      .form-grid .full { grid-column: 1 / -1; }
-      .form-grid input, .form-grid select, .form-grid textarea { width:100%; padding:10px 12px; border:1px solid #dce6ef; border-radius:10px; }
-      .form-grid button { background:#03AAE1; color:white; border:0; padding:12px 14px; border-radius:10px; font-weight:700; }
-      .form-grid button:hover { filter: brightness(.95); }
+    .demo-legend{ padding-right: 12px; }
+    .demo-legend li{ align-items: center; gap: 8px; }
 
-      .ext-links a { display:inline-block; margin:6px 10px 0 0; }
+    /* optional: slightly smaller numbers so long values never hit the edge */
+    .legend-val{ font-size: 13px; }
 
-      .hr { height:1px; background:#e6eaf2; margin: 24px 0; }
+    /* Make lists readable inside Top Global Buyers cards */
+    #tab2content .gb-box li,
+    #tab2content .gb-box ul li {
+      color: #063244 !important;       /* dark ink */
+      font-family: Arial, Helvetica, sans-serif;
+      font-size: 15px;
+      line-height: 1.45;
+      list-style: disc;
+    }
+    #tab2content .gb-box ul { margin: 0 0 0 18px; padding-left: 0; }
+
+    #tab3content .tip-slide li,
+    #tab3content .tip-slide ul li {
+      color: #0b1220 !important;   /* dark ink on white card */
+      font-family: Arial, Helvetica, sans-serif;
+      font-size: 15px;
+      line-height: 1.5;
+    }
+
+
     </style>
 
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
@@ -253,37 +274,28 @@
 </head>
 
 <body>
-  <!-- back button block (kept) -->
-  <div class="goback">
-    <div id="arrowAnim">
-      <div class="arrowSliding"><div class="arrow"></div></div>
-      <div class="arrowSliding delay1"><div class="arrow"></div></div>
-      <div class="arrowSliding delay2"><div class="arrow"></div></div>
-    </div>
-    <a href="https://www.bonitaesterorealtors.com/"><h2 class="back">Go Home</h2></a>
-  </div>
 
   <!-- 2025 banner + subnav -->
   <div class="global2025-banner">
     <!-- TODO: replace with the official BER Global logo file path -->
     <img src="/wp-content/uploads/2025/09/ber-global-logo.png" alt="BER Global Council Logo" onerror="this.src='https://www.bonitaesterorealtors.com/wp-content/uploads/2024/09/3-e1727443916279.png'">
     <div>
-      <div class="global2025-tag"><strong>BER Global Diversity Council</strong> • Updated for 2025</div>
+      <div class="global2025-tag"><strong>BER Global Diversity Council</strong></div>
       <div class="mini">Resources to help Bonita Springs‑Estero REALTORS® win and serve international business.</div>
     </div>
   </div>
+
   <nav class="global2025-subnav">
     <div class="inner">
       <a href="#travel-blog">Travel Blog</a>
-      <a href="#testimonials">Member Testimonials</a>
+      <a href="#testimonials">Client Testimonials</a>
       <a href="#directory">CIPS/Global Directory</a>
-      <a href="#stats">Stats</a>
-      <a href="#data-policy">U.S. Data & Policy</a>
       <a href="#allied">Allied Professionals</a>
-      <a href="#events">Calendar</a>
-      <a href="#articles">Global Articles</a>
-      <a href="#referral">Global Referral Form</a>
-      <a href="#client-map">Client Origin Map</a>
+      <a href="#housing">Housing Programs</a>
+      <a href="#community">Community Highlights</a>
+      <a href="#data-policy">U.S. Data & Policy</a>
+      <a href="#docs">Documents & PDFs</a>
+      <a href="#partnerships">Partnerships</a>
       <a href="#contact">Contact</a>
     </div>
   </nav>
@@ -342,17 +354,19 @@
 
   <br><br>
 
+  <!-- Our Global Affiliates block (kept as an informational system) -->
   <div class="container mt-5 no-shadow">
-    <h2 class="text-center mb-5">Our Global Affiliates:</h2>
+    <h2 class="text-center mb-5">Our Global Affiliates (Info Hub)</h2>
     <div class="logo-row">
       <div class="logo-item"><a href="https://files.floridados.gov/media/708408/directory-of-consulates-dos-924.pdf#-consulates-final.pdf" target="_blank"><img src="https://www.bonitaesterorealtors.com/wp-content/uploads/2024/09/2.png" alt="Florida Consulates Directory" class="img-fluid"></a></div>
       <div class="logo-item">
         <h4 class="text-center mb-5" style="color: black !important;">Affiliate Partners:</h4>
-        <a href="https://www.allure-tax.com/#:~:text=Allure%20Accounting%20is%20here%20to%20make%20your%20life%20easier.%20We" target="_blank"><img src="https://www.bonitaesterorealtors.com/wp-content/uploads/2021/09/allure.jpeg" alt="Allure Accounting" class="img-fluid"></a>
-        <a href="https://firptagroup.com/#:~:text=FIRPTA%20stands%20for%20Foreign%20Investment%20in%20Real%20Property%20Tax%20Act," target="_blank"><img src="https://www.bonitaesterorealtors.com/wp-content/uploads/2020/02/The-Firpta-Group.png" alt="FIRPTA Group" class="img-fluid"></a>
+        <a href="https://www.allure-tax.com/" target="_blank"><img src="https://www.bonitaesterorealtors.com/wp-content/uploads/2021/09/allure.jpeg" alt="Allure Accounting" class="img-fluid"></a>
+        <a href="https://firptagroup.com/" target="_blank"><img src="https://www.bonitaesterorealtors.com/wp-content/uploads/2020/02/The-Firpta-Group.png" alt="FIRPTA Group" class="img-fluid"></a>
+        <p class="mini" style="color:black;margin-top:8px;">Includes integration topics like migration trends and local banks with recourse.</p>
       </div>
       <div class="logo-item"><a href="https://www.nar.realtor/global" target="_blank"><img src="https://www.bonitaesterorealtors.com/wp-content/uploads/2024/09/3-e1727443916279.png" alt="NAR Global" class="img-fluid"></a></div>
-      <div class="logo-item"><a href="https://www.census.gov/en.html" target="_blank"><img src="https://www.bonitaesterorealtors.com/wp-content/uploads/2024/09/Screenshot-2024-09-25-at-1.28.54 PM.png" alt="U.S. Census" class="img-fluid"></a></div>
+      <div class="logo-item"><a href="https://www.census.gov/en.html" target="_blank"><img src="https://www.bonitaesterorealtors.com/wp-content/uploads/2024/09/Screenshot-2024-09-25-at-1.28.54 PM.png" alt="U.S. Census" class="img-fluid"></a></div>
       <div class="logo-item"><a href="https://selectflorida.org/" target="_blank"><img src="https://www.bonitaesterorealtors.com/wp-content/uploads/2024/09/SelectFlorida.jpeg" alt="SelectFlorida" class="img-fluid"></a></div>
       <div class="logo-item"><a href="https://www.statista.com/topics/1467/global-economy/#topicOverview" target="_blank"><img src="https://www.bonitaesterorealtors.com/wp-content/uploads/2024/09/statista_logo.jpg" alt="Statista" class="img-fluid"></a></div>
       <div class="logo-item"><a href="https://opendoorsdata.org/" target="_blank"><img src="https://www.bonitaesterorealtors.com/wp-content/uploads/2024/09/open-doors-logo-new@2x.webp" alt="Open Doors" class="img-fluid"></a></div>
@@ -381,70 +395,706 @@
     </div>
   </div>
 
-  <!-- tabs and existing content (kept) -->
-  <div class="tabrow">
-    <div id="tab1" onclick="tab1change()">Top Global Buyers</div>
-    <div id="tab2" onclick="tab2change()">Local Diversity</div>
-    <div id="tab3" onclick="tab3change()">Global Tips</div>
-  </div>
+<!-- ===== Local Demographics + Tabs (2025 refresh) ===== -->
+<div class="tabrow">
+  <div id="tab1" onclick="tab1change()">Local Area Demographics</div>
+  <div id="tab2" onclick="tab2change()">Top Global Buyers</div>
+  <div id="tab3" onclick="tab3change()">Global Tips</div>
+</div>
 
-  <!-- (existing tab contents preserved — omitted here for brevity; they remain exactly as in original) -->
-  <!-- BEGIN original tab sections -->
-  <div id="tab1content" style="display: none;"> <!-- original content kept exactly... -->
+<!-- ===== Tab 1: Local Demographics (2025 Interactive) ===== -->
+<div id="tab1content" style="display:block;">
     <h1 class="graph-heading">Local Area Demographics</h1>
-    <hr class="hr-grhd">
-    <!-- Bonita block ... (unchanged) -->
-    <!-- ... entire original tab1content markup ... -->
+  <hr class="hr-grhd">
+
+  <div class="demo-grid">
+    <!-- Bonita Springs -->
+    <section class="demo-card">
+      <header class="demo-head">
+        <h3>Bonita Springs</h3>
+        <div class="demo-meta">Population ~57,112 <span>(2024 est.)</span></div>
+        <div class="demo-meta">Sex Ratio: ~50% ♂ / ~50% ♀</div>
+      </header>
+      <div class="demo-body">
+        <svg id="chart-bonita" width="340" height="260" role="img" aria-label="Bonita Springs race and ethnicity"></svg>
+        <ul id="legend-bonita" class="demo-legend"></ul>
+      </div>
+    </section>
+
+    <!-- Estero -->
+    <section class="demo-card">
+      <header class="demo-head">
+        <h3>Estero</h3>
+        <div class="demo-meta">Population ~38,443 <span>(2024 est.)</span></div>
+        <div class="demo-meta">Sex Ratio: ~51% ♂ / ~49% ♀</div>
+      </header>
+      <div class="demo-body">
+        <svg id="chart-estero" width="340" height="260" role="img" aria-label="Estero race and ethnicity"></svg>
+        <ul id="legend-estero" class="demo-legend"></ul>
+      </div>
+    </section>
   </div>
 
-  <div id="tab2content" style="display: block;"> <!-- original content kept exactly... -->
-    <h1 class="graph-heading">Top Global Buyers</h1>
-    <hr class="hr-grhd">
-    <!-- ... entire original tab2content markup ... -->
+  <div class="sources">
+    <p id="source">Data sources: U.S. Census Population Estimates (2024) & ACS 2023 5-year (Hispanic is any race). Reviewed 2025.</p>
   </div>
+</div>
 
-  <div id="tab3content" style="display: none;"> <!-- original content kept exactly... -->
-    <h1 class="graph-heading">Tips from Around the World</h1>
-    <hr class="hr-grhd">
-    <!-- ... entire original tab3content markup ... -->
-  </div>
-  <!-- END original tab sections -->
+<!-- ===== 2025 Demographics CSS ===== -->
+<style>
+  .demo-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(280px, 1fr));
+    gap: 18px;
+    max-width: 1100px;
+    margin: 0 auto 20px;
+    padding: 0 16px;
+  }
+  @media (max-width: 900px){ .demo-grid { grid-template-columns: 1fr; } }
 
-  <h1 style="font-size: 60px !important; margin: auto auto 30px auto !important; text-align: center; color: #4566ce;"><i>Get Involved</i></h1>
-  <hr style="color: #2b4185; margin: -20px 5% 10px 5%; padding: 0px 5% 0 5%;">
-  <div class="row" id="get-involved">
-    <div class="col-sm-4">
-      <h3 class="inv-h3">Join the Diversity Commitee</h3>
-      <hr style="margin: 2px 5px 5px 5px;">
-      <p>Join the Diversity Commitee - Meetings are the last Tuesday of each month.  Use the form below or contact Marcie@bonitaesterorealtors.com.</p>
-      <a href="https://bonitaspringsesterorealtorsfl.growthzoneapp.com/ap/Form/Fill/rJD9lS4P" target="_blank"><button type="button" id="comm-button" class="btn btn-primary">Sign-up</button></a>
+  .demo-card {
+    background: #fff;
+    border: 1px solid #e6eaf2;
+    border-radius: 14px;
+    box-shadow: 0 6px 18px rgba(0,0,0,.05);
+    overflow: hidden;
+  }
+  .demo-head { padding: 14px 16px 4px; }
+  .demo-head h3 {
+    margin: 0; font-family: 'Oswald', sans-serif; letter-spacing:.2px; color:#063244;
+  }
+  .demo-meta { color:#516078; font-size: 13px; }
+  .demo-meta span { opacity:.8; }
+
+  .demo-body {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 6px;
+    align-items: center;
+    padding: 6px 10px 14px 10px;
+  }
+  @media (max-width: 560px){ .demo-body { grid-template-columns: 1fr; } }
+
+  .demo-legend { list-style: none; margin: 0; padding: 4px 10px; }
+  .demo-legend li { display: flex; align-items: center; gap: 10px; padding: 6px 4px; border-radius: 8px; cursor: pointer; }
+  .demo-legend li:hover { background: #f6fbff; }
+  .demo-swatch { width: 14px; height: 14px; border-radius: 50%; flex: none; }
+  .legend-label { color:#0b1220; font-weight:600; font-size:14px; }
+  .legend-val { color:#516078; margin-left: auto; font-variant-numeric: tabular-nums; }
+
+  /* hover/highlight states */
+  .slice-active { filter: drop-shadow(0 6px 8px rgba(0,0,0,.15)); }
+  .legend-active { background: #e9f7fc !important; }
+  .chart-center-label {
+    font-family: 'Oswald', sans-serif; font-size: 16px; fill: #063244; text-anchor: middle;
+  }
+  .chart-center-value {
+    font-family: 'Oswald', sans-serif; font-size: 22px; fill: #1d8ec7; text-anchor: middle;
+  }
+
+  /* simple tooltip */
+  .demo-tip {
+    position: fixed; pointer-events: none; z-index: 9999;
+    background: #0b1220; color:#fff; font-size: 12px; padding: 6px 8px; border-radius: 8px;
+    box-shadow: 0 6px 18px rgba(0,0,0,.2); opacity: 0; transform: translateY(-6px);
+    transition: opacity .12s ease, transform .12s ease;
+  }
+</style>
+
+<!-- ===== 2025 Demographics JS (D3 v4+) ===== -->
+<script>
+  // Shared color palette (kept from your earlier styling)
+  const demoColors = ['#0fa6a4','#04a9e1','#fbaa18','lightsteelblue','red'];
+
+  // Data (ACS 2023; Hispanic is any race)
+  const BONITA_DATA = [
+    { key:'white',  label:'White (Non-Hispanic)',       value:72.3, color:demoColors[0] },
+    { key:'hisp',   label:'Hispanic (any race)',        value:22.8, color:demoColors[1] },
+    { key:'asian',  label:'Asian',                      value:1.2,  color:demoColors[2] },
+    { key:'black',  label:'Black/African American',     value:1.9,  color:demoColors[3] },
+    { key:'other',  label:'Other / Two+ races',         value:1.8,  color:demoColors[4] },
+  ];
+  const ESTERO_DATA = [
+    { key:'white',  label:'White (Non-Hispanic)',       value:86.9, color:demoColors[0] },
+    { key:'hisp',   label:'Hispanic (any race)',        value:7.9,  color:demoColors[1] },
+    { key:'asian',  label:'Asian',                      value:2.5,  color:demoColors[2] },
+    { key:'black',  label:'Black/African American',     value:0.8,  color:demoColors[3] },
+    { key:'other',  label:'Other / Two+ races',         value:1.9,  color:demoColors[4] },
+  ];
+
+  // Lightweight tooltip
+  const tip = document.createElement('div');
+  tip.className = 'demo-tip';
+  document.body.appendChild(tip);
+  function showTip(html, x, y){
+    tip.innerHTML = html;
+    tip.style.left = (x + 12) + 'px';
+    tip.style.top  = (y + 12) + 'px';
+    tip.style.opacity = '1';
+    tip.style.transform = 'translateY(0)';
+  }
+  function hideTip(){
+    tip.style.opacity = '0';
+    tip.style.transform = 'translateY(-6px)';
+  }
+
+  // Donut creator
+  function createDonutChart(svgId, legendId, data){
+    const svg = d3.select('#'+svgId),
+          w   = +svg.attr('width'),
+          h   = +svg.attr('height'),
+          r   = Math.min(w,h)/2 - 6,
+          g   = svg.append('g').attr('transform',`translate(${w/2},${h/2})`);
+
+    const pie  = d3.pie().value(d=>d.value).sort(null);
+    const arc  = d3.arc().outerRadius(r).innerRadius(r*0.58);
+    const arcHover = d3.arc().outerRadius(r+6).innerRadius(r*0.52);
+
+    // Center labels
+    const centerLabel = g.append('text').attr('class','chart-center-label').attr('y',-4).text('Hover a slice');
+    const centerValue = g.append('text').attr('class','chart-center-value').attr('y',18).text('');
+
+    // Slices
+    const slices = g.selectAll('.slice')
+      .data(pie(data))
+      .enter().append('path')
+      .attr('class','slice')
+      .attr('d', arc)
+      .attr('fill', d=>d.data.color)
+      .attr('stroke','#fff')
+      .attr('stroke-width',2)
+      .style('cursor','pointer')
+      .on('mousemove', function(d){
+        const [x, y] = d3.mouse(document.body);
+        showTip(`<strong>${d.data.label}</strong><br>${d.data.value.toFixed(1)}%`, x, y);
+      })
+      .on('mouseover', function(d){
+        d3.select(this).classed('slice-active', true).transition().duration(120).attr('d', arcHover);
+        centerLabel.text(d.data.label);
+        centerValue.text(d.data.value.toFixed(1) + '%');
+        highlightLegendItem(legendId, d.data.key, true);
+      })
+      .on('mouseout', function(d){
+        d3.select(this).classed('slice-active', false).transition().duration(120).attr('d', arc);
+        centerLabel.text('Hover a slice'); centerValue.text('');
+        highlightLegendItem(legendId, d.data.key, false);
+        hideTip();
+      });
+
+    // Legend
+    const legend = d3.select('#'+legendId)
+      .selectAll('li')
+      .data(data)
+      .enter().append('li')
+      .attr('data-key', d=>d.key)
+      .on('mouseover', function(d){
+        slices.filter(s=>s.data.key===d.key)
+              .classed('slice-active', true)
+              .transition().duration(120).attr('d', arcHover);
+        d3.select(this).classed('legend-active', true);
+        centerLabel.text(d.label); centerValue.text(d.value.toFixed(1) + '%');
+      })
+      .on('mouseout', function(d){
+        slices.filter(s=>s.data.key===d.key)
+              .classed('slice-active', false)
+              .transition().duration(120).attr('d', arc);
+        d3.select(this).classed('legend-active', false);
+        centerLabel.text('Hover a slice'); centerValue.text('');
+      });
+
+    legend.append('span').attr('class','demo-swatch').style('background', d=>d.color);
+    legend.append('span').attr('class','legend-label').text(d=>d.label);
+    legend.append('span').attr('class','legend-val').text(d=>d.value.toFixed(1) + '%');
+
+    function highlightLegendItem(legendId, key, on){
+      const node = document.querySelector(`#${legendId} li[data-key="${key}"]`);
+      if (node) node.classList.toggle('legend-active', !!on);
+    }
+  }
+
+  // Build both charts once the DOM is ready
+  document.addEventListener('DOMContentLoaded', function(){
+    createDonutChart('chart-bonita', 'legend-bonita', BONITA_DATA);
+    createDonutChart('chart-estero', 'legend-estero', ESTERO_DATA);
+  });
+</script>
+
+<!-- ===== Tab 2: Top Global Buyers (2025 expanded) ===== -->
+<div id="tab2content" style="display:none;">
+  <h1 class="graph-heading">Top Global Buyers</h1>
+  <hr class="hr-grhd">
+
+  <!-- Key stats row -->
+  <style>
+    .gb-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;max-width:1100px;margin:0 auto 10px;padding:0 12px}
+    .gb-card{background:#fff;border:1px solid #e6eaf2;border-radius:14px;box-shadow:0 6px 18px rgba(0,0,0,.05);padding:12px 14px}
+    .gb-k{font:700 13px/1.2 'Oswald',sans-serif;letter-spacing:.2px;color:#063244;opacity:.75;margin:0 0 6px}
+    .gb-v{font:700 22px/1.1 'Oswald',sans-serif;color:#1d8ec7;margin:0}
+    .gb-mini{font-size:12px;color:#516078;margin-top:2px}
+    @media (max-width:900px){.gb-stats{grid-template-columns:1fr 1fr}}
+    @media (max-width:560px){.gb-stats{grid-template-columns:1fr}}
+    .gb-flagrow .col-sm-2 img{transition:transform .12s ease}
+    .gb-flagrow .col-sm-2 img:hover{transform:scale(1.02);opacity:.95;cursor:pointer}
+    .region-panel .border{border:1px solid #e6eaf2}
+    .region-panel .canada-text{max-width:900px}
+    .gb-lists{display:grid;grid-template-columns:1fr 1fr;gap:12px;max-width:1100px;margin:10px auto;padding:0 12px}
+    @media (max-width:800px){.gb-lists{grid-template-columns:1fr}}
+    .gb-box{background:#fff;border:1px dashed #cfeaf5;border-radius:12px;padding:12px}
+    .gb-box h4{margin:0 0 6px;color:#063244}
+    .gb-box ul{margin:0 0 0 16px}
+    .gb-note{background:#fff8e7;border:1px solid #ffe1a6;border-radius:10px;padding:10px;color:#6b4b00}
+  </style>
+
+  <div class="gb-stats">
+    <div class="gb-card">
+      <p class="gb-k">U.S. foreign-buyer volume (Apr ’24–Mar ’25)</p>
+      <p class="gb-v">$56B</p>
+      <div class="gb-mini">Up ~33% YoY; 78,100 properties</div>
     </div>
-    <div class="col-sm-4">
-      <h3 class="inv-h3">Attend the Implicit Bias Training</h3>
-      <hr style="margin: 2px 5px 5px 5px;">
-      <p>Throughout the year we hold multiple Implicit Bias classes in an effort to eliminate it from our industry.  Be sure to take the next class on our calendar.</p>
-      <button type="button" class="btn" id="impl-button"><i>Coming Soon</i></button>
+    <div class="gb-card">
+      <p class="gb-k">Florida’s share of U.S. international sales</p>
+      <p class="gb-v">~21%</p>
+      <div class="gb-mini">Still the No.1 destination</div>
     </div>
-    <div class="col-sm-4">
-      <h3 class="inv-h3">Additional Training</h3>
-      <hr style="margin: 2px 5px 5px 5px;">
-      <p>Visit NAR to take part in:</p>
-      <br>
-      <p>1.) Fairhaven: A fair housing simulation</p>
-      <a href="https://fairhaven.realtor/" target="_blank"><button type="button" class="btn btn-primary" id="train-button">Click Here</button></a>
-      <p>2.) At Home with Diversity</p>
-      <a href="https://learning.realtor/diweb/catalog/t/57944/sort/+n" target="_blank"><button type="button" id="train-button" class="btn btn-primary">Click Here</button></a>
-      <p>3.) Participate in the C2EX Challenge</p>
-      <a href="https://www.c2ex.realtor/?cid=C2EX-0071" target="_blank"><button type="button" class="btn btn-primary" id="train-button">Click Here</button></a>
+    <div class="gb-card">
+      <p class="gb-k">Top buyer countries in Florida</p>
+      <p class="gb-v">Canada, AR, CO, BR, UK</p>
+      <div class="gb-mini">By transactions</div>
+    </div>
+    <div class="gb-card">
+      <p class="gb-k">How they pay in Florida</p>
+      <p class="gb-v">~67% Cash</p>
+      <div class="gb-mini">All-cash is common; esp. Canada/AR</div>
     </div>
   </div>
 
-  <!-- ==================== 2025 ADDITIONS START ==================== -->
+  <!-- Flag Row (click to reveal) -->
+  <div class="row gb-flagrow" style="margin:auto;max-width:1200px;">
+    <div class="col-sm-1"></div>
+    <div class="col-sm-2">
+      <img id="canadaflag" onclick="showRegion('canada')" src="https://www.bonitaesterorealtors.com/wp-content/uploads/2022/06/1.png" alt="Canada">
+    </div>
+    <div class="col-sm-2">
+      <img id="ukflag" onclick="showRegion('uk')" src="https://www.bonitaesterorealtors.com/wp-content/uploads/2022/06/2.png" alt="United Kingdom">
+    </div>
+    <div class="col-sm-2">
+      <img id="euflag" onclick="showRegion('eu')" src="https://www.bonitaesterorealtors.com/wp-content/uploads/2022/06/3.png" alt="Europe">
+    </div>
+    <div class="col-sm-2">
+      <img id="asiaflag" onclick="showRegion('asia')" src="https://www.bonitaesterorealtors.com/wp-content/uploads/2022/06/4.png" alt="Asia/Pacific">
+    </div>
+    <div class="col-sm-2">
+      <img id="laflag" onclick="showRegion('la')" src="https://www.bonitaesterorealtors.com/wp-content/uploads/2022/06/5.png" alt="Latin America">
+    </div>
+    <div class="col-sm-1"></div>
+  </div>
+
+  <!-- Triangles -->
+  <div class="row" style="margin:auto;max-width:1200px;">
+    <div class="col-sm-1"></div>
+    <div class="col-sm-2"><div id="triangle1" style="display:none;"></div></div>
+    <div class="col-sm-2"><div id="triangle2" style="display:none;"></div></div>
+    <div class="col-sm-2"><div id="triangle3" style="display:none;"></div></div>
+    <div class="col-sm-2"><div id="triangle4" style="display:none;"></div></div>
+    <div class="col-sm-2"><div id="triangle5" style="display:none;"></div></div>
+    <div class="col-sm-1"></div>
+  </div>
+
+  <!-- Default prompt -->
+  <div id="default-text" style="margin-top:10px;">
+    <img src="https://www.bonitaesterorealtors.com/wp-content/uploads/2022/06/Click-Here.png" style="margin:auto;display:flex;" alt="Click a region">
+  </div>
+
+  <!-- ===== Region Panels ===== -->
+
+  <!-- CANADA -->
+  <div id="background-info1" class="region-panel" style="display:none;margin:auto;max-width:1200px;">
+    <h1 class="global-head">1. Canada</h1>
+    <div class="border">
+      <hr style="border:1px solid red;margin:-6px 5% 10px 5%">
+      <div class="gb-lists">
+        <div class="gb-box">
+          <h4>Market Snapshot</h4>
+          <ul>
+            <li>Top buyer country in FL by sales share.</li>
+            <li><strong>Cash heavy:</strong> ~87% buy all-cash (vs. ~67% overall FL).</li>
+            <li>Popular metros include <em>Naples–Marco, Cape Coral–Fort Myers, Punta Gorda</em> (plus Miami).</li>
+            <li>Common property use: winter/vacation; condos and SFH both in play.</li>
+          </ul>
+        </div>
+        <div class="gb-box">
+          <h4>Agent Playbook</h4>
+          <ul>
+            <li>Prep FIRPTA + tax-pro referrals early (sale/withholding planning).</li>
+            <li>Quote costs in USD and CAD; offer a trusted FX partner.</li>
+            <li>Streamline remote closings and insurance setup; outline auto/vehicle & HOA rules for snowbirds.</li>
+          </ul>
+        </div>
+      </div>
+      <p class="canada-text">Tip: Canadians skew non-resident (Type-A) buyers, so U.S. mortgages are uncommon; focus on proof-of-funds, wire-safety, and condo association approvals.</p>
+    </div>
+  </div>
+
+  <!-- UNITED KINGDOM -->
+  <div id="background-info2" class="region-panel" style="display:none;margin:auto;max-width:1200px;">
+    <h1 class="global-head">2. United Kingdom</h1>
+    <div class="border">
+      <hr style="border:1px solid #000066;margin:-6px 5% 10px 5%">
+      <div class="gb-lists">
+        <div class="gb-box">
+          <h4>Market Snapshot</h4>
+          <ul>
+            <li>Among FL’s top 5 buyer countries by sales.</li>
+            <li>Shift toward <strong>single-family</strong> homes (about three-quarters of UK buyers).</li>
+            <li>Primary uses: vacation + some primary residence moves.</li>
+          </ul>
+        </div>
+        <div class="gb-box">
+          <h4>Agent Playbook</h4>
+          <ul>
+            <li>Clarify HOA, insurance, reserves & post-2022 condo reforms when comparing SFH vs. condo.</li>
+            <li>Provide rental-rule summaries (short-term limits vary widely).</li>
+            <li>Offer guidance on bank accounts, SIM/credit, and travel-insurance for extended stays.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- EUROPE (non-UK) -->
+  <div id="background-info3" class="region-panel" style="display:none;margin:auto;max-width:1200px;">
+    <h1 class="global-head">3. Europe</h1>
+    <div class="border">
+      <hr style="border:1px solid #013399;margin:-6px 5% 10px 5%">
+      <div class="gb-lists">
+        <div class="gb-box">
+          <h4>Market Snapshot</h4>
+          <ul>
+            <li>Consistent demand from Germany, France, Italy & Nordics.</li>
+            <li>Value energy-efficiency, building standards, storm-hardening.</li>
+            <li>Urban/coastal preference; many buy for vacation + occasional rental.</li>
+          </ul>
+        </div>
+        <div class="gb-box">
+          <h4>Agent Playbook</h4>
+          <ul>
+            <li>Provide condo reserves, insurance deductibles, and wind/flood details up front.</li>
+            <li>Expect document requests (spec sheets, seller disclosures, 3- to 5-year HOA budgets).</li>
+            <li>Offer wire-fraud education and remote-notary workflows.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ASIA / PACIFIC -->
+  <div id="background-info4" class="region-panel" style="display:none;margin:auto;max-width:1200px;">
+    <h1 class="global-head">4. Asia/Pacific</h1>
+    <div class="border">
+      <hr style="border:1px solid #a7dafb;margin:-6px 5% 10px 5%">
+      <div class="gb-lists">
+        <div class="gb-box">
+          <h4>Market Snapshot</h4>
+          <ul>
+            <li>Active groups: Japan, Korea, India, Australia; mix of new-build and turnkey condos.</li>
+            <li>Often remote closings with <em>strict</em> bank transfer limits and ID checks.</li>
+            <li>Student-use and second homes present in university/tech corridors.</li>
+          </ul>
+        </div>
+        <div class="gb-box">
+          <h4>Agent Playbook</h4>
+          <ul>
+            <li>Provide step-by-step cross-border wire instructions and 2FA escrow processes.</li>
+            <li>Have lender options for non-resident borrowers; outline seasoning & reserve rules.</li>
+            <li>Offer bilingual summaries and name-order confirmation for contracts/wires.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- LATIN AMERICA -->
+  <div id="background-info5" class="region-panel" style="display:none;margin:auto;max-width:1200px;">
+    <h1 class="global-head">5. Latin America</h1>
+    <div class="border">
+      <hr style="border:1px solid #009201;margin:-6px 5% 10px 5%">
+      <div class="gb-lists">
+        <div class="gb-box">
+          <h4>Market Snapshot</h4>
+          <ul>
+            <li>Top-five countries include <strong>Argentina, Colombia, Brazil</strong>.</li>
+            <li><strong>Price tiers:</strong> Brazilians trend higher (median among highest); Argentines buy more condos; Colombians split use between vacation & rental.</li>
+            <li>Urban/coastal preference (Miami-tri-county dominates, but SWFL sees Canadian/British/LATAM demand).</li>
+          </ul>
+        </div>
+        <div class="gb-box">
+          <h4>Agent Playbook</h4>
+          <ul>
+            <li>Track FX moves; time wires and walkthroughs around currency swings.</li>
+            <li>Clarify rental rules, licensing, and condo approval timelines.</li>
+            <li>Collect apostilles early for POAs/passports; plan for in-person/remote notarization.</li>
+          </ul>
+        </div>
+      </div>
+      <div class="gb-note" style="max-width:1100px;margin:10px auto;">
+        Median price for Florida international buyers was ~<strong>$469K</strong> (2024 window) and cash share ~<strong>67%</strong>—well above statewide averages. Expect strong interest in $500K–$750K segments and premium waterfront.  
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== Tab 3: Global Tips (2025 Overhaul) ===== -->
+<div id="tab3content" style="display: none;">
+  <h1 class="graph-heading">Global Business & Culture Tips</h1>
+  <hr class="hr-grhd">
+
+  <div class="tip-container">
+    <button class="tip-nav tip-prev" onclick="previousTip()">‹</button>
+    <div class="tip-slider-wrapper">
+      <div class="tip-slider">
+        <div id="tip-china" class="tip-slide">
+          <img class="tips-flags" src="https://www.bonitaesterorealtors.com/wp-content/uploads/2022/06/2-2.png" alt="China">
+          <h2>China</h2><hr>
+          <ul>
+            <li>Provide bilingual docs (English + Mandarin) and confirm name order for contracts and wires.</li>
+            <li>They often expect multiple levels of review — be patient and precise.</li>
+            <li>Avoid direct “yes/no” until agreement is finalized — they might defer initially.</li>
+            <li>Highlight security, HOA rules, flood risk; visuals of community layout help.</li>
+            <li>Remote closing is often a must; ensure escrow, notary, and apostille flows are clear.</li>
+          </ul>
+        </div>
+
+        <div id="tip-india" class="tip-slide">
+          <img class="tips-flags" src="" alt="India">
+          <h2>India</h2><hr>
+          <ul>
+            <li>Trust is key — offer references, testimonials, and detailed credentials.</li>
+            <li>Many Indian buyers expect to rent out; clarify local tax, short-term rules, and yield projections.</li>
+            <li>Be ready for multiple decision points — sometimes families decide together from abroad.</li>
+            <li>Present comparisons (Sqft, cost per unit) — Indian clients often like side-by-side metrics.</li>
+            <li>Provide clarity on visas, banking, repatriation, and capital gains rules.</li>
+          </ul>
+        </div>
+
+        <div id="tip-mexico" class="tip-slide">
+          <img class="tips-flags" src="https://www.bonitaesterorealtors.com/wp-content/uploads/2022/06/6-1.png" alt="Mexico">
+          <h2>Mexico</h2><hr>
+          <ul>
+            <li>Build rapport, address their concerns about legal title and property rights.</li>
+            <li>Provide Spanish versions of key docs; translations + POAs help smooth process.</li>
+            <li>Clarify how U.S. mortgages vs all-cash offers work locally.</li>
+            <li>Explain HOA, flood insurance, hurricane prep clearly — many buyers unfamiliar with U.S. standards.</li>
+            <li>Use visual comparisons to properties in Mexico — helps ground expectations.</li>
+          </ul>
+        </div>
+
+        <div id="tip-canada" class="tip-slide">
+          <img class="tips-flags" src="https://www.bonitaesterorealtors.com/wp-content/uploads/2022/06/3-2.png" alt="Canada">
+          <h2>Canada</h2><hr>
+          <ul>
+            <li>Taxes: explain FIRPTA withholding, nonresident returns, capital gains.</li>
+            <li>Provide dual currencies (USD & CAD) in all key documents/estimates.</li>
+            <li>Many Canadian buyers expect cash deals — have proof-of-funds protocols ready.</li>
+            <li>Snowbird logistics: mail, insurance, vehicle rules, utilities setup.</li>
+            <li>Condo rules: short-term rental, reserve funds, special assessments — make them transparent.</li>
+          </ul>
+        </div>
+
+        <div id="tip-uk" class="tip-slide">
+          <img class="tips-flags" src="https://www.bonitaesterorealtors.com/wp-content/uploads/2022/06/2.png" alt="United Kingdom">
+          <h2>United Kingdom</h2><hr>
+          <ul>
+            <li>Emphasize stability, regulatory transparency, and property right protections.</li>
+            <li>Flood and storm risk matter; show mitigation features, elevation, wind-resistance specs.</li>
+            <li>Rental potential: many expect to rent when not using. Show comps & legal limits.</li>
+            <li>Explain closing costs (stamp duty equivalents) and U.S. property taxes.</li>
+            <li>Offer GBP ↔ USD pricing and periodic exchange check snapshots.</li>
+          </ul>
+        </div>
+
+        <div id="tip-eu" class="tip-slide">
+          <img class="tips-flags" src="https://www.bonitaesterorealtors.com/wp-content/uploads/2022/06/3.png" alt="Europe">
+          <h2>Europe (Continental)</h2><hr>
+          <ul>
+            <li>Varied buyer cultures: Germans favor precision, Italians appreciate narrative storytelling.</li>
+            <li>Energy & insulation: European buyers often expect high performance, so share specs & utility data.</li>
+            <li>Condo governance: budgets, reserve, debt history, insurance transparency matter here.</li>
+            <li>Rental/vacation use: many own vacation property — show tourist rental zoning, HOA rules.</li>
+            <li>Offer floor plans with metric ↔ imperial conversions, and local comparables.</li>
+          </ul>
+        </div>
+
+        <div id="tip-asia" class="tip-slide">
+          <img class="tips-flags" src="https://www.bonitaesterorealtors.com/wp-content/uploads/2022/06/4.png" alt="Asia / Pacific">
+          <h2>Asia / Pacific</h2><hr>
+          <ul>
+            <li>Safety, security, maintenance: many want low-maintenance properties in gated communities.</li>
+            <li>Modern finishes and turn-key delivery are highly valued — highlight premium features.</li>
+            <li>Remote closing and escrow: many won’t travel — ensure digital workflows are clear.</li>
+            <li>Bank transfer constraints and foreign exchange quirks need step-by-step guidance.</li>
+            <li>Explain hurricane/flood backup systems, generator options, structural safeguards.</li>
+          </ul>
+        </div>
+
+        <div id="tip-latam" class="tip-slide">
+          <img class="tips-flags" src="https://www.bonitaesterorealtors.com/wp-content/uploads/2022/06/5.png" alt="Latin America">
+          <h2>Latin America</h2><hr>
+          <ul>
+            <li>Currency risk: timing wires matters. Offer escrow paths or forward contracts when possible.</li>
+            <li>Trust: use referrals, client stories, bilingual team members.</li>
+            <li>Documents: ensure apostilles, POAs, translations are ready early.</li>
+            <li>Rental expectations: many expect high yields; show comps, vacancy data, licensing rules.</li>
+            <li>Political volatility: buyers like reassurance around long-term stability and exit strategies.</li>
+          </ul>
+        </div>
+
+      </div>
+    </div>
+    <button class="tip-nav tip-next" onclick="nextTip()">›</button>
+  </div>
+</div>
+
+<style>
+  .tip-container {
+    display: flex;
+    align-items: center;
+    max-width: 1100px;
+    margin: 0 auto 20px;
+    position: relative;
+  }
+  .tip-nav {
+    background: none;
+    border: none;
+    font-size: 32px;
+    color: #055a73;
+    cursor: pointer;
+    padding: 8px 12px;
+  }
+  .tip-slider-wrapper {
+    overflow: hidden;
+    flex: 1;
+  }
+  .tip-slider {
+    display: flex;
+    transition: transform 0.3s ease;
+  }
+  .tip-slide {
+    min-width: 100%;
+    box-sizing: border-box;
+    padding: 16px 24px;
+    background: #fff;
+    border-radius: 14px;
+    border: 1px solid #e6eaf2;
+    box-shadow: 0 4px 12px rgba(0,0,0,.04);
+  }
+  .tip-slide h2 {
+    margin-top: 0;
+    font-family: 'Oswald', sans-serif;
+    color: #063244;
+  }
+  .tips-flags {
+    max-width: 120px;
+    display: block;
+    margin-bottom: 12px;
+  }
+  .tip-slide ul {
+    margin: 0;
+    padding-left: 20px;
+    color: #0b1220;
+    line-height: 1.5;
+  }
+  .tip-slide ul li {
+    margin-bottom: 8px;
+  }
+</style>
+
+<script>
+  const tipOrder = ['tip-china','tip-india','tip-mexico','tip-canada','tip-uk','tip-eu','tip-asia','tip-latam'];
+  let tipIndex = 0;
+  function renderTip(){
+    const slider = document.querySelector('.tip-slider');
+    if (!slider) return;
+    const offset = - tipIndex * slider.clientWidth;
+    slider.style.transform = `translateX(${offset}px)`;
+  }
+  function nextTip(){
+    tipIndex = (tipIndex + 1) % tipOrder.length;
+    renderTip();
+  }
+  function previousTip(){
+    tipIndex = (tipIndex - 1 + tipOrder.length) % tipOrder.length;
+    renderTip();
+  }
+  document.addEventListener('DOMContentLoaded', () => {
+    renderTip();
+  });
+</script>
+
+
+<!-- ===== Tab Controller + Region / Tips JS ===== -->
+<script>
+  // Tab switching
+  function setTab(which) {
+    const tabs = [
+      {btn:'#tab1', panel:'#tab1content'},
+      {btn:'#tab2', panel:'#tab2content'},
+      {btn:'#tab3', panel:'#tab3content'}
+    ];
+    tabs.forEach((t, idx) => {
+      const isActive = (idx+1) === which;
+      document.querySelector(t.panel).style.display = isActive ? 'block' : 'none';
+      const el = document.querySelector(t.btn);
+      if (el) el.classList[isActive ? 'add' : 'remove']('active-tab');
+    });
+    // optional: scroll into view on mobile
+    document.querySelector('.tabrow')?.scrollIntoView({behavior:'smooth', block:'start'});
+  }
+  function tab1change(){ setTab(1); }
+  function tab2change(){ setTab(2); }
+  function tab3change(){ setTab(3); }
+
+  // Add a subtle active style
+  (function injectActiveStyle(){
+    const css = ".tabrow div.active-tab{ background:#1d8ec7 !important; }";
+    const s = document.createElement('style'); s.innerHTML = css; document.head.appendChild(s);
+  })();
+
+  // Region flag logic
+  const regionTriangles = {
+    canada: '#triangle1',
+    uk:     '#triangle2',
+    eu:     '#triangle3',
+    asia:   '#triangle4',
+    la:     '#triangle5'
+  };
+  const regionPanels = {
+    canada: '#background-info1',
+    uk:     '#background-info2',
+    eu:     '#background-info3',
+    asia:   '#background-info4',
+    la:     '#background-info5'
+  };
+  function showRegion(key){
+    // hide default text
+    const def = document.getElementById('default-text');
+    if (def) def.style.display = 'none';
+    // hide all triangles/panels
+    Object.values(regionTriangles).forEach(sel => { const n = document.querySelector(sel); if(n) n.style.display='none'; });
+    Object.values(regionPanels).forEach(sel => { const n = document.querySelector(sel); if(n) n.style.display='none'; });
+    // show the chosen ones
+    const tri = document.querySelector(regionTriangles[key]);
+    const pan = document.querySelector(regionPanels[key]);
+    if (tri) tri.style.display = 'block';
+    if (pan) pan.style.display = 'block';
+  }
+
+</script>
+
+  <!-- 2025 ADDITIONS / UPDATES -->
   <section id="travel-blog" class="global2025">
     <h2 class="s-heading">Travel Blog</h2>
-    <p class="s-sub">Follow BER Global’s trade missions, study tours, and CIPS adventures. (Use your WordPress “Global” category here.)</p>
+    <p class="s-sub">Follow BER Global’s trade missions, study tours, and CIPS adventures.</p>
     <div class="grid cols-3">
-      <!-- Replace placeholders with real posts or WP loop shortcodes -->
       <article class="card">
         <img class="c-img" src="/wp-content/uploads/2025/09/global-trip-ber-01.jpg" alt="Lisbon Trade Mission" onerror="this.src='https://picsum.photos/seed/ber1/800/450'">
         <div class="c-body">
@@ -457,7 +1107,7 @@
         <img class="c-img" src="/wp-content/uploads/2025/09/global-trip-ber-02.jpg" alt="Toronto CIPS" onerror="this.src='https://picsum.photos/seed/ber2/800/450'">
         <div class="c-body">
           <div class="badge">Education</div>
-          <h4>CIPS Week in Toronto: Cross‑Border Contracts</h4>
+          <h4>CIPS Week in Toronto: Cross-Border Contracts</h4>
           <a class="btn-pill" href="#">Read post</a>
         </div>
       </article>
@@ -472,26 +1122,27 @@
     </div>
   </section>
 
+  <!-- UPDATED: Testimonials renamed to Client Testimonials -->
   <section id="testimonials" class="global2025">
-    <h2 class="s-heading">Member Testimonials</h2>
-    <p class="s-sub">Why join BER’s Global Diversity Council and earn CIPS?</p>
+    <h2 class="s-heading">Client Testimonials</h2>
+    <p class="s-sub">Real stories from international buyers & sellers served by BER members.</p>
     <div class="grid cols-3">
       <div class="testimonial card">
         <div class="c-body">
-          <p class="t-quote">“Global gave me tools to convert a Canadian snowbird lead into a repeat customer.”</p>
-          <div class="t-name">— Alex P., REALTOR®</div>
+          <p class="t-quote">“Our Canadian purchase was seamless—our agent’s currency partner and FIRPTA guidance were clutch.”</p>
+          <div class="t-name">— Client, Snowbird Buyer</div>
         </div>
       </div>
       <div class="testimonial card">
         <div class="c-body">
-          <p class="t-quote">“The Lisbon mission opened my eyes to tax treaties and cross‑border financing.”</p>
-          <div class="t-name">— Casey R., Broker‑Associate</div>
+          <p class="t-quote">“We found a bilingual team and closed remotely with apostilles handled correctly.”</p>
+          <div class="t-name">— Client, EMEA Seller</div>
         </div>
       </div>
       <div class="testimonial card">
         <div class="c-body">
-          <p class="t-quote">“CIPS helped me build an alliance list—attorneys, CPAs, and currency pros.”</p>
-          <div class="t-name">— Morgan S., CIPS</div>
+          <p class="t-quote">“The global directory matched us with a CIPS who knew bank options for non-resident borrowers.”</p>
+          <div class="t-name">— Client, LATAM Buyer</div>
         </div>
       </div>
     </div>
@@ -512,39 +1163,22 @@
     </ul>
   </section>
 
-  <section id="stats" class="global2025">
-    <h2 class="s-heading">Stats (2025)</h2>
-    <p class="s-sub">Snapshot metrics you can use in listing presentations and with international clients.</p>
+  <section id="allied" class="global2025">
+    <h2 class="s-heading">Allied Professionals — Build Your Global Team</h2>
+    <p class="s-sub">FIRPTA/Tax CPAs, immigration attorneys, international lenders, currency/payments, title/closing, translation.</p>
     <div class="grid cols-3">
-      <div class="card"><div class="c-body"><div class="badge">Lee + Collier</div><h4>Top Origin Countries</h4><p class="mini">Canada • UK • Germany • Brazil (placeholder)</p></div></div>
-      <div class="card"><div class="c-body"><div class="badge">Florida</div><h4>Foreign Buyer Share</h4><p class="mini">Add latest % from NAR/Florida REALTORS® report.</p></div></div>
-      <div class="card"><div class="c-body"><div class="badge">Market</div><h4>Median Price (Intl)</h4><p class="mini">Placeholder — embed chart or link to report page.</p></div></div>
+      <div class="card"><div class="c-body"><h4>FIRPTA/Tax CPAs</h4><p class="mini">Example: <a href="https://firptagroup.com/" target="_blank">FIRPTA Group</a>, <a href="https://www.allure-tax.com/" target="_blank">Allure Accounting</a></p></div></div>
+      <div class="card"><div class="c-body"><h4>Immigration Attorneys</h4><p class="mini">Add local contacts; visas & consultations.</p></div></div>
+      <div class="card"><div class="c-body"><h4>International Lenders</h4><p class="mini">Programs for foreign buyers / non-resident borrowers.</p></div></div>
+      <div class="card"><div class="c-body"><h4>Currency & Payments</h4><p class="mini">A Place in the Sun Currency and others.</p></div></div>
+      <div class="card"><div class="c-body"><h4>Title/Closing</h4><p class="mini">Apostilles • Remote closings • Multilingual support.</p></div></div>
+      <div class="card"><div class="c-body"><h4>Translation/Interpretation</h4><p class="mini">Add vetted providers.</p></div></div>
     </div>
-    <div class="note" style="margin-top:12px;">Data sources to embed/link: NAR Global research, Florida REALTORS® international report, U.S. Census (ACS), SelectFlorida.</div>
-  </section>
 
-  <section id="data-policy" class="global2025">
-    <h2 class="s-heading">U.S. Government Data & Policy</h2>
-    <div class="two-up">
-      <div class="card"><div class="c-body">
-        <h4>Data Sources</h4>
-        <ul class="list">
-          <li><a href="https://www.census.gov/" target="_blank">U.S. Census Bureau (ACS, migration)</a></li>
-          <li><a href="https://www.bea.gov/" target="_blank">Bureau of Economic Analysis (FDI)</a></li>
-          <li><a href="https://www.bls.gov/" target="_blank">Bureau of Labor Statistics</a></li>
-          <li><a href="https://travel.trade.gov/" target="_blank">National Travel & Tourism Office (I‑94 arrivals)</a></li>
-          <li><a href="https://home.treasury.gov/policy-issues/currency-sanctions" target="_blank">Treasury (sanctions/FX references)</a></li>
-        </ul>
-      </div></div>
-      <div class="card"><div class="c-body">
-        <h4>Legal/Policy Topics</h4>
-        <ul class="list">
-          <li><a href="https://www.nar.realtor/global" target="_blank">NAR Global: Legal & Policy Briefs</a></li>
-          <li><a href="https://www.floridarealtors.org/law-ethics" target="_blank">Florida REALTORS® Legal & Ethics</a></li>
-          <li><a href="https://www.uscis.gov/" target="_blank">USCIS (immigration basics)</a></li>
-          <li><a href="https://www.irs.gov/individuals/international-taxpayers" target="_blank">IRS: International Taxpayers (FIRPTA)</a></li>
-        </ul>
-      </div></div>
+    <!-- UPDATED: Affiliate Lender Survey callout -->
+    <div class="note" style="margin-top:12px;">
+      Affiliate Lender Survey: Tell us about programs for working with foreign buyers.
+      <a class="btn-pill" href="#" target="_blank">Complete Survey (add Kris/GrowthZone link)</a>
     </div>
   </section>
 
@@ -568,54 +1202,91 @@
     <iframe class="calendar-embed" src="https://bonitaspringsesterorealtorsfl.growthzoneapp.com/ap/Events/List"></iframe>
   </section>
 
-  <section id="articles" class="global2025">
-    <h2 class="s-heading">Globally Themed Articles (External)</h2>
+  <!-- NEW: Housing Programs -->
+  <section id="housing" class="global2025">
+    <h2 class="s-heading">Housing Programs</h2>
+    <p class="s-sub">Links to down payment assistance, local bank offerings with recourse, and county/state programs relevant to global clients.</p>
+    <ul class="list">
+      <li><a href="#" target="_blank">Local Bank Programs (PDF)</a></li>
+      <li><a href="#" target="_blank">Lee & Collier Assistance Overview (PDF)</a></li>
+      <li><a href="#" target="_blank">Foreign National Loan Options (One-pager)</a></li>
+    </ul>
+  </section>
+
+  <!-- NEW: Community Highlights -->
+  <section id="community" class="global2025">
+    <h2 class="s-heading">Community Highlights: Diverse Businesses & Culture</h2>
+    <p class="s-sub">Spotlighting diverse local business owners and cultural organizations.</p>
     <div class="grid cols-3">
-      <div class="card"><div class="c-body"><h4>NAR Global Perspectives</h4><p class="mini">Quarterly insights on international real estate.</p><a class="btn-pill" href="https://www.nar.realtor/global" target="_blank">Explore</a></div></div>
-      <div class="card"><div class="c-body"><h4>Florida REALTORS® Global</h4><p class="mini">State‑level research and stories.</p><a class="btn-pill" href="https://www.floridarealtors.org/global" target="_blank">Explore</a></div></div>
-      <div class="card"><div class="c-body"><h4>SelectFlorida</h4><p class="mini">International business and investment in Florida.</p><a class="btn-pill" href="https://selectflorida.org/" target="_blank">Explore</a></div></div>
+      <div class="card"><img class="c-img" src="https://picsum.photos/seed/ch1/800/450" alt=""><div class="c-body"><h4>Business Feature #1</h4><p class="mini">Owner story, services, languages.</p></div></div>
+      <div class="card"><img class="c-img" src="https://picsum.photos/seed/ch2/800/450" alt=""><div class="c-body"><h4>Cultural Org #1</h4><p class="mini">Events, language classes, festivals.</p></div></div>
+      <div class="card"><img class="c-img" src="https://picsum.photos/seed/ch3/800/450" alt=""><div class="c-body"><h4>Business Feature #2</h4><p class="mini">Owner story, services, languages.</p></div></div>
     </div>
   </section>
 
-  <section id="referral" class="global2025">
-    <h2 class="s-heading">Global Referral Form</h2>
-    <p class="s-sub">Working with a foreign buyer/seller? Tell us—BER can help match you with resources and partners.</p>
-    <form class="form-grid" method="post" action="#"> <!-- TODO: replace action with GrowthZone form or WP form endpoint -->
-      <input type="text" name="agent_name" placeholder="Your Name*" required>
-      <input type="email" name="agent_email" placeholder="Your Email*" required>
-      <input type="text" name="brokerage" placeholder="Brokerage">
-      <input type="tel" name="phone" placeholder="Phone">
-      <select name="client_origin" required>
-        <option value="">Client Country/Region*</option>
-        <option>Canada</option><option>United Kingdom</option><option>Europe (other)</option><option>Asia/Pacific</option><option>Latin America/Caribbean</option><option>Middle East/Africa</option>
-      </select>
-      <select name="service_stage">
-        <option value="">Stage</option>
-        <option>Lead</option><option>Active Buyer</option><option>Active Seller</option><option>Under Contract</option>
-      </select>
-      <input type="text" name="target_area" placeholder="Target Area (Bonita/Estero/Naples/Fort Myers)">
-      <input type="text" name="price_range" placeholder="Price Range (USD)">
-      <textarea class="full" name="notes" rows="4" placeholder="Notes—languages, financing, timeline, support needed"></textarea>
-      <button class="full" type="submit">Submit Referral</button>
-    </form>
-    <p class="mini" style="margin-top:8px;">Prefer email? Contact <a href="mailto:info@bonitaesterorealtors.com">info@bonitaesterorealtors.com</a> and include “Global Referral” in the subject.</p>
-  </section>
-
-  <section id="contact" class="global2025">
-    <h2 class="s-heading">Contact BER Global</h2>
-    <div class="two-up">
+  <section id="data-policy" class="global2025">
+    <h2 class="s-heading">U.S. Government Data & Policy</h2>
+    <div class="grid cols-2">
       <div class="card"><div class="c-body">
-        <h4>General Inquiries</h4>
-        <p class="mini">Bonita Springs‑Estero REALTORS®<br>25300 Bernwood Dr., Bonita Springs, FL</p>
-        <p><a class="btn-pill" href="mailto:info@bonitaesterorealtors.com">info@bonitaesterorealtors.com</a></p>
+        <h4>Data Sources</h4>
+        <ul class="list">
+          <li><a href="https://www.census.gov/" target="_blank">U.S. Census Bureau (ACS, migration)</a></li>
+          <li><a href="https://www.bea.gov/" target="_blank">Bureau of Economic Analysis (FDI)</a></li>
+          <li><a href="https://www.bls.gov/" target="_blank">Bureau of Labor Statistics</a></li>
+          <li><a href="https://travel.trade.gov/" target="_blank">National Travel & Tourism Office (I-94 arrivals)</a></li>
+          <li><a href="https://home.treasury.gov/policy-issues/currency-sanctions" target="_blank">Treasury (sanctions/FX references)</a></li>
+        </ul>
       </div></div>
       <div class="card"><div class="c-body">
-        <h4>Join the Council</h4>
-        <p class="mini">Help shape our global programming, travel, and education.</p>
-        <a class="btn-pill" href="https://bonitaspringsesterorealtorsfl.growthzoneapp.com/ap/Form/Fill/rJD9lS4P" target="_blank">Apply</a>
+        <h4>Legal/Policy Topics</h4>
+        <ul class="list">
+          <li><a href="https://www.nar.realtor/global" target="_blank">NAR Global: Legal & Policy Briefs</a></li>
+          <li><a href="https://www.floridarealtors.org/law-ethics" target="_blank">Florida REALTORS® Legal & Ethics</a></li>
+          <li><a href="https://www.uscis.gov/" target="_blank">USCIS (immigration basics)</a></li>
+          <li><a href="https://www.irs.gov/individuals/international-taxpayers" target="_blank">IRS: International Taxpayers (FIRPTA)</a></li>
+          <li>Instructor spotlight: <strong>Russel Riggs</strong> (NABOR) — add class/resource link as available.</li>
+        </ul>
       </div></div>
     </div>
   </section>
+
+ <!-- NEW: Documents & PDFs (incl. Kris printout and info-sharing link) -->
+ <section id="docs" class="global2025">
+  <h2 class="s-heading">Documents & PDFs</h2>
+  <p class="s-sub">Centralized handouts and references for your global work.</p>
+  <ul class="list">
+    <li><a href="#" target="_blank">Downloadable Printout from Kris (PDF)</a> <!-- add actual file path --></li>
+    <li><a href="#" target="_blank">Kris Link for Sharing Info (Form/Upload)</a> <!-- add actual link --></li>
+    <li><a href="#" target="_blank">What to Ask: Questions for Foreign Buyers/Sellers (PDF)</a></li>
+    <li><a href="#" target="_blank">US Gov Documents & Policy Overview (PDF)</a></li>
+  </ul>
+</section>
+
+<!-- NEW: Partnerships -->
+<section id="partnerships" class="global2025">
+  <h2 class="s-heading">Partnerships</h2>
+  <p class="s-sub">Growing collaboration with third parties and international partners.</p>
+  <div class="grid cols-2">
+    <div class="card"><div class="c-body"><h4>Jamaica</h4><p class="mini">Outline of partnership goals, upcoming exchanges, and co-marketing opportunities.</p></div></div>
+    <div class="card"><div class="c-body"><h4>Third-Party Collaborations</h4><p class="mini">Consulates, chambers of commerce, and education partners.</p></div></div>
+  </div>
+</section>
+
+<section id="contact" class="global2025">
+  <h2 class="s-heading">Contact BER Global</h2>
+  <div class="grid cols-2">
+    <div class="card"><div class="c-body">
+      <h4>General Inquiries</h4>
+      <p class="mini">Bonita Springs-Estero REALTORS®<br>25300 Bernwood Dr., Bonita Springs, FL</p>
+      <p><a class="btn-pill" href="mailto:info@bonitaesterorealtors.com">info@bonitaesterorealtors.com</a></p>
+    </div></div>
+    <div class="card"><div class="c-body">
+      <h4>Join the Council</h4>
+      <p class="mini">Help shape our global programming, travel, and education.</p>
+      <a class="btn-pill" href="https://bonitaspringsesterorealtorsfl.growthzoneapp.com/ap/Form/Fill/rJD9lS4P" target="_blank">Apply</a>
+    </div></div>
+  </div>
+</section>
   <!-- ==================== 2025 ADDITIONS END ==================== -->
 
   <!-- keep original scripts; append light helpers for 2025 anchors -->

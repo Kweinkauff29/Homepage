@@ -1,0 +1,263 @@
+<!-- BER Shorts – Horizontal Scroll & Click-to-Play -->
+<div class="ber-shorts-wrap">
+  <div class="ber-shorts-header">
+    <h3>What to Know — 2025 Shorts</h3>
+    <div class="ber-shorts-ctrls">
+      <button class="ber-nav" data-dir="-1" aria-label="Scroll left">‹</button>
+      <button class="ber-nav" data-dir="1" aria-label="Scroll right">›</button>
+    </div>
+  </div>
+
+  <div class="ber-shorts-row" id="ber-shorts-row" role="list"></div>
+</div>
+
+<style>
+    /* === Updated Visual Style: Dark gradient + Taller cards === */
+    .ber-shorts-wrap {
+      --card-w: 240px;        /* was 220px */
+      --radius: 16px;
+      --gap: 16px;
+      --shadow: 0 6px 24px rgba(0,0,0,.25);
+      background: linear-gradient(180deg, #1b1b1b 0%, #232323 50%, #2a2a2a 100%);
+      padding: 28px 0 40px;
+      border-radius: 12px;
+      box-shadow: inset 0 2px 16px rgba(255,255,255,0.03);
+    }
+  
+    .ber-shorts-header {
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      margin:0 2px 18px;
+      color:#f5f5f5;
+    }
+    .ber-shorts-header h3 {
+      margin:0;
+      font:600 1.1rem/1.2 system-ui, -apple-system, Segoe UI, Roboto, "Helvetica Neue", Arial;
+      letter-spacing:.3px;
+    }
+  
+    .ber-shorts-ctrls { display:flex; gap:8px; }
+    .ber-nav {
+      border:1px solid #444;
+      background:#2e2e2e;
+      color:#f9f9f9;
+      padding:6px 10px;
+      border-radius:12px;
+      cursor:pointer;
+      font-size:18px;
+      line-height:1;
+      transition:all .2s ease;
+    }
+    .ber-nav:hover {
+      background:#3a3a3a;
+      border-color:#666;
+    }
+  
+    .ber-shorts-row {
+      display:flex;
+      gap:var(--gap);
+      overflow-x:auto;
+      overscroll-behavior-x: contain;
+      scroll-snap-type:x mandatory;
+      padding:6px 8px 16px;
+      margin:0 -6px;
+      scrollbar-width: thin;
+    }
+    .ber-shorts-row::-webkit-scrollbar { height:10px; }
+    .ber-shorts-row::-webkit-scrollbar-thumb {
+      background:#444;
+      border-radius:20px;
+    }
+  
+    .ber-card {
+      flex:0 0 var(--card-w);
+      scroll-snap-align:center;
+      border-radius:var(--radius);
+      overflow:hidden;
+      position:relative;
+      background:#111;
+      box-shadow:var(--shadow);
+      aspect-ratio: 9 / 15; /* slightly taller (was 9/16) */
+      transition:transform .25s ease, box-shadow .25s ease;
+    }
+    .ber-card:hover {
+      transform:translateY(-4px);
+      box-shadow:0 10px 30px rgba(0,0,0,.35);
+    }
+  
+    /* Thumbnail state */
+    .ber-thumb {
+      position:absolute;
+      inset:0;
+      display:grid;
+      place-items:center;
+      cursor:pointer;
+      user-select:none;
+      color:#fff;
+      text-align:center;
+      background:#000;
+    }
+    .ber-thumb img {
+      width:100%;
+      height:100%;
+      object-fit:cover;
+      display:block;
+      filter:saturate(1.1) contrast(1.08);
+    }
+    .ber-play {
+      position:absolute;
+      bottom:10px;
+      left:0; right:0;
+      margin:auto;
+      width:60px;
+      height:60px;
+      border-radius:50%;
+      border:none;
+      cursor:pointer;
+      background:rgba(255,255,255,.92);
+      display:grid;
+      place-items:center;
+      box-shadow:0 6px 18px rgba(0,0,0,.35);
+    }
+    .ber-play:before {
+      content:"";
+      display:block;
+      margin-left:3px;
+      width:0; height:0;
+      border-left:17px solid #000;
+      border-top:10px solid transparent;
+      border-bottom:10px solid transparent;
+    }
+    .ber-title {
+      position:absolute;
+      left:8px; right:8px; bottom:10px;
+      font:600 13px/1.25 system-ui, -apple-system, Segoe UI, Roboto, Arial;
+      color:#fff;
+      text-shadow:0 2px 8px rgba(0,0,0,.6);
+      -webkit-line-clamp:2;
+      display:-webkit-box;
+      -webkit-box-orient:vertical;
+      overflow:hidden;
+    }
+  
+    /* Iframe player */
+    .ber-player, .ber-player iframe {
+      position:absolute;
+      inset:0;
+      width:100%;
+      height:100%;
+      border:0;
+    }
+  
+    @media (min-width: 900px) {
+      .ber-shorts-wrap { --card-w: 260px; }
+    }
+  </style>
+  
+
+<script>
+  // paste/update this list as needed
+  const embedLinks = [
+    "https://www.youtube.com/embed/C3q1qy9AF5Y",
+    "https://www.youtube.com/embed/G7WAL9mV7Ow",
+    "https://www.youtube.com/embed/aHN626_BpGI",
+    "https://www.youtube.com/embed/SRpJU5KIhgU",
+    "https://www.youtube.com/embed/1xCO4T5uO_k",
+    "https://www.youtube.com/embed/6z84xdppvWw",
+    "https://www.youtube.com/embed/SiDWciKIpIA",
+    "https://www.youtube.com/embed/9b3eEgamADk",
+    "https://www.youtube.com/embed/CD1b6o4oAus",
+    "https://www.youtube.com/embed/0YrF2vkstBI",
+    "https://www.youtube.com/embed/NjP3vnVivdQ",
+    "https://www.youtube.com/embed/EIlcnwr1G_w",
+    "https://www.youtube.com/embed/gShSHIVyp1M",
+    "https://www.youtube.com/embed/Vdg8QJsSjUY",
+    "https://www.youtube.com/embed/qZTAaUY0gnk",
+    "https://www.youtube.com/embed/fpArXuXUnv8",
+    "https://www.youtube.com/embed/EUjF7enBilU",
+    "https://www.youtube.com/embed/16aSGlZIa7o",
+    "https://www.youtube.com/embed/vfA4uLD9To8",
+    "https://www.youtube.com/embed/_vF_c51H13I",
+  ];
+
+  // Optional: titles (same order as embedLinks). If you don’t want titles, leave this empty array.
+  const shortTitles = [
+    "Turn Client Questions Into Referrals",
+    "Your REALTOR® Toolkit — Essential Apps",
+    "WTKW — Sips & Tips Roundtable",
+    "Agent 3000 Listing Collage — TTT",
+    "Delayed MLS & Syndication Are Here",
+    "FL Real Estate Roundup (FR Convention)",
+    "Lee County Flood Map Updates",
+    "RPR Neighborhood Reports",
+    "Jamaica Inbound Trade Mission",
+    "BrokerBay is Coming — Tech Tip",
+    "MemberPlus & App Stack Highlights",
+    "2026 Housing Outlook — 60s",
+    "TrustedOnly Vendor Network",
+    "Market/Policy Quick Hits",
+    "Member Perk Spotlight",
+    "Event/Training Micro-Recap",
+    "Policy Bite — Fast Facts",
+    "Open House Weekend Tips",
+    "Stats Snapshot — Fast",
+    "As-Is Contract Update",
+  ];
+
+  const row = document.getElementById("ber-shorts-row");
+
+  function idFromEmbed(url){ const m = url.match(/embed\/([^?]+)/); return m ? m[1] : ""; }
+
+  // Build cards
+  embedLinks.forEach((url, i) => {
+    const vid = idFromEmbed(url);
+    const card = document.createElement("div");
+    card.className = "ber-card";
+    card.setAttribute("role", "listitem");
+    card.innerHTML = `
+      <div class="ber-thumb" data-embed="${url}">
+        <img loading="lazy" alt="Shorts thumbnail"
+             src="https://i.ytimg.com/vi/${vid}/hqdefault.jpg"
+             srcset="https://i.ytimg.com/vi/${vid}/mqdefault.jpg 320w,
+                     https://i.ytimg.com/vi/${vid}/hqdefault.jpg 480w,
+                     https://i.ytimg.com/vi/${vid}/maxresdefault.jpg 1280w"
+             sizes="(max-width: 500px) 70vw, 220px">
+        <button class="ber-play" aria-label="Play short"></button>
+        ${shortTitles[i] ? `<div class="ber-title">${shortTitles[i]}</div>` : ``}
+      </div>
+    `;
+    row.appendChild(card);
+  });
+
+  // Click-to-play (swap to iframe)
+  row.addEventListener("click", (e) => {
+    const thumb = e.target.closest(".ber-thumb");
+    if (!thumb) return;
+    const embed = thumb.getAttribute("data-embed");
+    if (!embed) return;
+
+    const url = `${embed}?autoplay=1&playsinline=1&rel=0&modestbranding=1`;
+    const player = document.createElement("div");
+    player.className = "ber-player";
+    player.innerHTML = `<iframe allow="autoplay; encrypted-media; picture-in-picture" allowfullscreen loading="lazy" src="${url}"></iframe>`;
+    thumb.replaceWith(player);
+  });
+
+  // Drag-to-scroll on desktop
+  (() => {
+    let isDown=false, startX=0, scrollLeft=0;
+    row.addEventListener("mousedown", (e)=>{ isDown=true; row.classList.add("drag"); startX=e.pageX-row.offsetLeft; scrollLeft=row.scrollLeft; });
+    row.addEventListener("mouseleave", ()=>{ isDown=false; row.classList.remove("drag"); });
+    row.addEventListener("mouseup", ()=>{ isDown=false; row.classList.remove("drag"); });
+    row.addEventListener("mousemove", (e)=>{ if(!isDown) return; e.preventDefault(); const x=e.pageX-row.offsetLeft; const walk=(x-startX)*1.2; row.scrollLeft=scrollLeft-walk; });
+  })();
+
+  // Arrow buttons
+  document.querySelectorAll(".ber-nav").forEach(btn => {
+    btn.addEventListener("click", () => {
+      const dir = Number(btn.dataset.dir) || 1;
+      row.scrollBy({ left: dir * (row.clientWidth * 0.85), behavior: "smooth" });
+    });
+  });
+</script>
