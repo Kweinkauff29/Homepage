@@ -162,19 +162,26 @@
       border-radius:999px;padding:6px 12px;font-weight:800;letter-spacing:.02em}
     .ber-values--compact{gap:6px;margin-top:8px}
     .ber-values--compact .ber-value{padding:4px 10px;font-weight:700;font-size:12px}
+    /* small descriptor under each committee */
+    .ber-committee .desc{margin-top:2px;color:var(--muted);font-size:14px}
 
+
+    /* Fix Core Values list bullets/spacing */
+    .ber-values{list-style:none; padding:0; margin:10px 0 0; display:flex; flex-wrap:wrap; gap:8px}
+    .ber-values li{list-style:none; margin:0; padding:0}
+
+    /* Kill theme-injected markers/separators */
+    .ber-values li::marker{content:''}
+    .ber-values li::before{content:none !important}
+
+    /* Tidy chip sizing/alignment */
+    .ber-value{display:inline-flex; align-items:center; border-radius:999px; padding:6px 12px;
+      font-weight:800; font-size:14px; line-height:1.2; background:rgba(5,170,225,.08);
+      border:1px solid var(--line); color:#0b1220}
+    .ber-values--compact{gap:6px; margin-top:8px}
+    .ber-values--compact .ber-value{padding:4px 10px; font-weight:700; font-size:12px}
 
     </style>
-
-  <nav class="ber-tabs" aria-label="Page sections">
-    <a class="ber-tab" href="#what">What We Do</a>
-    <a class="ber-tab" href="#service">Service Area</a>
-    <a class="ber-tab" href="#leadership">Leadership & Staff</a>
-    <a class="ber-tab" href="#committees">Committees & Chairs</a>
-    <a class="ber-tab" href="#threeway">3-Way Membership</a>
-    <a class="ber-tab" href="#helpful">Helpful Info</a>
-    <a class="ber-tab" href="#get-involved">Get Involved</a>
-  </nav>
   
     <div class="container">
       <div id="about" class="ber-hero">
@@ -182,13 +189,17 @@
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 1v22M1 12h22"/></svg>
           Bonita Springs–Estero REALTORS®
         </span>
+        <nav class="ber-tabs" aria-label="Page sections">
+          <a class="ber-tab" href="#what">What We Do</a>
+          <a class="ber-tab" href="#service">Service Area</a>
+          <a class="ber-tab" href="#leadership">Leadership & Staff</a>
+          <a class="ber-tab" href="#committees">Committees & Chairs</a>
+          <a class="ber-tab" href="#threeway">3-Way Membership</a>
+          <a class="ber-tab" href="#helpful">Helpful Info</a>
+          <a class="ber-tab" href="#get-involved">Get Involved</a>
+        </nav>
         <p><strong>Mission:</strong> Creating value-driven success for our members and the communities we serve.</p>
 
-        <p>We are a local trade organization of <strong>1,400 REALTORS<sup>®</sup></strong> and <strong>160+ affiliated industry partners</strong>. As part of the <strong>National Association of REALTORS<sup>®</sup></strong> and <strong>Florida REALTORS<sup>®</sup></strong>, we provide education, advocacy, MLS access (<strong>Matrix–SWFLAMLS</strong>), and community programs through the <strong>Bonita Springs‑Estero REALTORS<sup>®</sup> Home Foundation</strong>.</p>
-        <div class="ber-actions">
-          <a class="ber-btn" href="https://www.bonitaesterorealtors.com/join-bser/" target="_blank" rel="noopener">Join BER</a>
-          <a class="ber-btn ber-btn--ghost" href="https://members.bonitaesterorealtors.com/bercalendar" target="_blank" rel="noopener">Education &amp; Events</a>
-        </div>
         <ul class="ber-values" aria-label="Core Values">
           <li class="ber-value">Integrity</li>
           <li class="ber-value">Inclusive</li>
@@ -196,6 +207,12 @@
           <li class="ber-value">Authentic</li>
           <li class="ber-value">Opportunity</li>
         </ul>
+
+        <p>We are a local trade organization of <strong>1,400 REALTORS<sup>®</sup></strong> and <strong>160+ affiliated industry partners</strong>. As part of the <strong>National Association of REALTORS<sup>®</sup></strong> and <strong>Florida REALTORS<sup>®</sup></strong>, we provide education, advocacy, MLS access (<strong>Matrix–SWFLAMLS</strong>), and community programs through the <strong>Bonita Springs‑Estero REALTORS<sup>®</sup> Home Foundation</strong>.</p>
+        <div class="ber-actions">
+          <a class="ber-btn" href="https://www.bonitaesterorealtors.com/join-bser/" target="_blank" rel="noopener">Join BER</a>
+          <a class="ber-btn ber-btn--ghost" href="https://members.bonitaesterorealtors.com/bercalendar" target="_blank" rel="noopener">Education &amp; Events</a>
+        </div>
         
       </div>
   
@@ -230,27 +247,6 @@
             <h3>Community &amp; Leadership</h3>
             <p>Leadership Academy, volunteer days, and partnerships that keep REALTORS<sup>®</sup> at the heart of SWFL.</p>
           </article>
-        </div>
-      </section>
-  
-      <section class="ber-section" id="mission" aria-label="Mission and About">
-        <div class="ber-split">
-          <div class="ber-pane">
-            <h3>Our Mission</h3>
-          <p>Creating value-driven success for our members and the communities we serve.</p>
-          <ul class="ber-values ber-values--compact" aria-label="Core Values">
-            <li class="ber-value">Integrity</li>
-            <li class="ber-value">Inclusive</li>
-            <li class="ber-value">Innovative</li>
-            <li class="ber-value">Authentic</li>
-            <li class="ber-value">Opportunity</li>
-          </ul>
-          
-          </div>
-          <div class="ber-pane">
-            <h3>Who We Are</h3>
-            <p>Part of NAR and Florida REALTORS®, BER supports more than 1,400 REALTORS® and 160+ Affiliates with education, ethics, advocacy, and technology—powered by Matrix–SWFLAMLS and supported by our Supra services.</p>
-          </div>
         </div>
       </section>
   
@@ -304,25 +300,77 @@
         </div>
       </section>
   
-      <section class="ber-section" id="region" aria-label="About Bonita Springs &amp; Estero">
-        <h2>About Bonita Springs &amp; Estero</h2>
+      <section class="ber-section" id="region" aria-label="About Southwest Florida (SWFL)">
+        <h2>About Southwest Florida (SWFL)</h2>
+        <p class="lead"><strong>BER serves ALL of Southwest Florida</strong> — Bonita Springs, Estero, Naples, Fort Myers, Cape Coral, Marco Island, Sanibel &amp; Captiva, Lehigh Acres, Babcock Ranch, Punta Gorda and more. (<a href="#service">See full GEO coverage</a>)</p>
+      
+        <!-- Optional: quick chips (re-uses existing pill styles) -->
+        <div class="ber-county-pills" aria-label="Key communities">
+          <span class="ber-pill">Bonita Springs</span>
+          <span class="ber-pill">Estero</span>
+          <span class="ber-pill">Naples</span>
+          <span class="ber-pill">Fort Myers</span>
+          <span class="ber-pill">Cape Coral</span>
+          <span class="ber-pill">Marco Island</span>
+          <span class="ber-pill">Sanibel &amp; Captiva</span>
+          <span class="ber-pill">Lehigh Acres</span>
+          <span class="ber-pill">Babcock Ranch</span>
+          <span class="ber-pill">Punta Gorda</span>
+        </div>
+      
         <div class="ber-grid">
+
+          <!-- Bonita Springs -->
+        <article class="ber-card">
+          <h3>Bonita Springs — “Gateway to the Gulf”</h3>
+          <p>Gulf-front beaches and waterways with year-round shelling, boating, and fishing—from Bonita Beach to Barefoot Beach Preserve.</p>
+        </article>
+
+        <!-- Estero -->
+        <article class="ber-card">
+          <h3>Estero</h3>
+          <p>Resort-style communities and world-class shopping/dining at Coconut Point and Miromar Outlets, plus FGCU and Hertz Arena nearby.</p>
+        </article>
+
+          <!-- Naples -->
           <article class="ber-card">
-            <h3>Bonita Springs — “Gateway to the Gulf”</h3>
-            <p>Beaches and the Gulf of Mexico define our western edge—year‑round shelling, sunning, fishing, and boating.</p>
+            <h3>Naples</h3>
+            <p>Luxury coastal living, arts &amp; dining on Fifth Ave South and Third Street, golf communities, and Gulf beaches.</p>
           </article>
+
+          <!-- Fort Myers -->
           <article class="ber-card">
-            <h3>Strategic Location</h3>
-            <p>Situated between the Fort Myers and Naples MSAs, the region is a commercial epicenter with strong employment growth and family‑first values.</p>
+            <h3>Fort Myers</h3>
+            <p>River District core, healthcare &amp; education hubs, historic neighborhoods, and access to RSW and I-75.</p>
           </article>
+
+          <!-- Cape Coral -->
           <article class="ber-card">
-            <h3>Estero Lifestyle</h3>
-            <p>Resort‑style communities and world‑class shopping and dining at Coconut Point, Miromar Outlets, and Miromar Design Center—plus nearby Florida Gulf Coast University.</p>
+            <h3>Cape Coral</h3>
+            <p>400+ miles of navigable canals, boating lifestyle, family neighborhoods, and a growing small-business scene.</p>
           </article>
+
+          <!-- (Optional but recommended to make it feel “way more”) -->
           <article class="ber-card">
-            <h3>Attractions</h3>
-            <p>Hertz Arena (home of the Florida Everblades) and two nearby performing arts centers offer concerts, Broadway, jazz, and more.</p>
+            <h3>Marco Island</h3>
+            <p>Resort island living with beachfront condos, boating, and eco-tourism on the Ten Thousand Islands.</p>
           </article>
+
+          <article class="ber-card">
+            <h3>Sanibel &amp; Captiva</h3>
+            <p>World-class shelling, wildlife refuges, and conservation-minded coastal communities.</p>
+          </article>
+
+          <article class="ber-card">
+            <h3>Lehigh Acres</h3>
+            <p>Value-focused housing and rapid growth along the SR-82 corridor with quick access to Fort Myers and Immokalee.</p>
+          </article>
+
+          <article class="ber-card">
+            <h3>Babcock Ranch &amp; Punta Gorda</h3>
+            <p>Solar-powered master-planned living and a historic harborfront downtown with outdoor recreation.</p>
+          </article>
+
         </div>
       </section>
   
@@ -376,68 +424,92 @@
           <article class="ber-committee">
             <h3>Professional Development</h3>
             <p class="chair">Chair: <strong>Sandy Wilder</strong></p>
+            <p class="desc">Develops and administers a well-balanced education program to meet members’ needs.</p>
           </article>
       
           <article class="ber-committee">
             <h3>Leadership Academy</h3>
             <p class="chair">Chair: <strong>Danielle Damianov</strong></p>
             <p class="cochair">Co-Chair: <strong>Corlin Tucker</strong></p>
+            <p class="desc">Application & interview required (academy participation).</p>
           </article>
       
           <article class="ber-committee">
             <h3>REALTOR® Review</h3>
             <p class="chair">Chair: <strong>Sarah Anstett</strong></p>
+            <p class="desc">Provides content for the quarterly publication and assists with review and edits.</p>
+
           </article>
       
           <article class="ber-committee">
             <h3>MLS</h3>
             <p class="chair">Chair: <strong>Jesse McGreevy</strong></p>
+            <p class="desc">Vets MLS products/services and reviews CoreLogic Matrix functionality; recommends changes.</p>
+
           </article>
       
           <article class="ber-committee">
             <h3>Government Affairs / RPAC</h3>
             <p class="chair">Chair: <strong>Josie Mendiola</strong></p>
+            <p class="desc">Builds support and advocates for candidates/issues that protect private property rights and industry positions.</p>
+
           </article>
       
           <article class="ber-committee">
             <h3>Global Diversity</h3>
             <p class="chair">Chair: <strong>Kris Boyle</strong></p>
+            <p class="desc">Advances equity/inclusion, expands global business education, and educates on fair housing.</p>
+
           </article>
       
           <article class="ber-committee">
             <h3>Leadership Development</h3>
             <p class="chair">Chair: <strong>Mark Ledbetter</strong></p>
+            <p class="desc">Plans Leadership Academy and nominations; leads strategic planning and annual leadership training.</p>
+
           </article>
       
           <!-- Right column from your image -->
           <article class="ber-committee">
             <h3>Grievance</h3>
             <p class="chair">Chair: <strong>Karen McIntyre</strong></p>
+            <p class="desc">Reviews complaints to determine if ethics or arbitration hearings are warranted.</p>
+
           </article>
       
           <article class="ber-committee">
             <h3>Events</h3>
             <p class="chair">Chair: <strong>Mark True</strong></p>
+            <p class="desc">Plans association events to drive engagement, charitable impact, and affiliate marketing opportunities.</p>
+
           </article>
       
           <article class="ber-committee">
             <h3>YPN</h3>
             <p class="chair">Chair: <strong>Keaton West</strong></p>
+            <p class="desc">Network of up-and-coming REALTORS®/Affiliates focused on community service and professional growth.</p>
+
           </article>
       
           <article class="ber-committee">
             <h3>Professional Standards</h3>
             <p class="chair">Chair: <strong>Robert Klein</strong></p>
+            <p class="desc">Conducts hearings and enforces the Code of Ethics.</p>
+
           </article>
       
           <article class="ber-committee">
             <h3>Media</h3>
             <p class="chair">Chair: <strong>Mike Hughes</strong></p>
+            <p class="desc">Reviews market stats/trends and issues press releases for consumers and members.</p>
+
           </article>
       
           <article class="ber-committee">
             <h3>REALTOR® Safety</h3>
             <p class="chair">Chair: <strong>David Scott</strong></p>
+            <p class="desc">Creates programs and systems that educate members on REALTOR® safety.</p>
+
           </article>
         </div>
       
@@ -489,10 +561,14 @@
             <p>Office hours: <strong>Mon–Fri, 8:30am–4:30pm</strong>.</p>
             <p>Closed in observance of: New Year’s Day, Martin Luther King Jr. Day, Presidents’ Day, Memorial Day, Juneteenth, Independence Day, Labor Day, Veterans Day, Thanksgiving Day &amp; Friday, Christmas Eve, Christmas Day, New Year’s Eve.</p>
           </details>
-          <details class="ber-card">
-            <summary>Contact &amp; MLS support</summary>
-            <p>Email <a href="mailto:info@bonitaesterorealtors.com">info@bonitaesterorealtors.com</a> or call (239) 992‑6771. For Supra and Matrix–SWFLAMLS assistance, contact <a href="mailto:Membership@BERealtors.org">Membership@BERealtors.org</a>.</p>
+          <details class="ber-card" open>
+            <summary>Contact &amp; Support</summary>
+            <p>Phone: <a href="tel:+12399926771">(239) 992-6771</a></p>
+            <p><strong>MLS inquiries</strong>: <a href="mailto:MLS@BERealtors.org">MLS@BERealtors.org</a></p>
+            <p><strong>Membership</strong> (Matrix–SWFLAMLS &amp; Supra): <a href="mailto:Membership@BERealtors.org">Membership@BERealtors.org</a></p>
+            <p><strong>All other questions</strong>: <a href="mailto:Support@BERealtors.org">Support@BERealtors.org</a></p>
           </details>
+          
         </div>
       </section>
   
