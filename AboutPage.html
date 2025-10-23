@@ -10,6 +10,9 @@
       .ber-hero{display:grid;gap:18px;align-items:center;padding:clamp(18px,3.5vw,40px) 0 6px}
       .ber-kicker{display:inline-flex;align-items:center;gap:.6rem;font:700 12px/1.1 'Open Sans',sans-serif;letter-spacing:.08em;text-transform:uppercase;color:var(--brand-2)}
       .ber-kicker svg{width:18px;height:18px}
+      .animated {
+        padding: 0 0 0 0 !important;
+      }
       .ber-hero p{color:var(--muted);font-size:clamp(16px,1.3vw,18px);line-height:1.6;max-width:75ch;margin:0}
       .ber-actions{display:flex;flex-wrap:wrap;gap:12px;margin-top:6px}
       .ber-btn{appearance:none;border:none;border-radius:999px;padding:12px 18px;min-height:44px;font-weight:800;letter-spacing:.01em;cursor:pointer;box-shadow:var(--shadow);transition:transform .15s ease, box-shadow .2s ease;background:var(--brand);color:#fff;text-decoration:none;display:inline-flex;align-items:center;gap:10px}
@@ -110,30 +113,100 @@
       @media (max-width:900px){.service-wrap{grid-template-columns:1fr}.geo-compact{grid-template-columns:1fr}}
       /* Force white in dark mode */
       @media (prefers-color-scheme: dark){.ber-about{--bg:#ffffff;--ink:#0b1220;--muted:#5b6577;--line:#e5e7eb}.ber-stat,.ber-card,.ber-pane,.ber-person,.ber-faq details{background:#ffffff;border-color:var(--line)}}
+
+    /* Sticky tabs (quick jump) */
+    .ber-tabs{
+      position: sticky; top: 0; z-index: 20;
+      background: color-mix(in srgb, var(--bg) 92%, white 8%);
+      border-bottom: 1px solid var(--line);
+      backdrop-filter: blur(6px);
+      display: flex; gap: 10px; align-items: center; flex-wrap: nowrap;
+      overflow-x: auto; padding: 10px var(--pad);
+      margin: 0 0 10px;
+    }
+    .ber-tab{
+      flex: 0 0 auto;
+      font-weight: 800;
+      padding: 8px 12px;
+      border-radius: 999px;
+      text-decoration: none;
+      color: var(--ink);
+      border: 1px solid var(--line);
+      background: #fff;
+    }
+    .ber-tab:hover{ box-shadow: var(--shadow); transform: translateY(-1px); }
+    @media (max-width:560px){ .ber-tab{ padding: 8px 10px; font-size: 14px; } }
+
+    /* Ensure anchor targets aren't hidden under sticky tabs */
+    [id]{ scroll-margin-top: 72px; }
+
+    /* Committees grid */
+    .ber-committee-grid{
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0,1fr));
+      gap: 16px;
+      margin-top: 14px;
+    }
+    @media (max-width:1024px){ .ber-committee-grid{ grid-template-columns: repeat(2,1fr); } }
+    @media (max-width:640px){ .ber-committee-grid{ grid-template-columns: 1fr; } }
+
+    .ber-committee{
+      background:#fff;border:1px solid var(--line);border-radius:var(--radius);
+      padding:16px;box-shadow:var(--shadow);display:grid;gap:6px
+    }
+    .ber-committee h3{ margin:0; font:800 18px/1.25 'Open Sans',sans-serif; color:#0a0f1a; }
+    .ber-committee .chair,.ber-committee .cochair{ margin:0; color:var(--muted); }
+    /* Core Values chips */
+    .ber-values{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}
+    .ber-value{background:rgba(5,170,225,.08);border:1px solid var(--line);color:#0b1220;
+      border-radius:999px;padding:6px 12px;font-weight:800;letter-spacing:.02em}
+    .ber-values--compact{gap:6px;margin-top:8px}
+    .ber-values--compact .ber-value{padding:4px 10px;font-weight:700;font-size:12px}
+
+
     </style>
+
+  <nav class="ber-tabs" aria-label="Page sections">
+    <a class="ber-tab" href="#what">What We Do</a>
+    <a class="ber-tab" href="#service">Service Area</a>
+    <a class="ber-tab" href="#leadership">Leadership & Staff</a>
+    <a class="ber-tab" href="#committees">Committees & Chairs</a>
+    <a class="ber-tab" href="#threeway">3-Way Membership</a>
+    <a class="ber-tab" href="#helpful">Helpful Info</a>
+    <a class="ber-tab" href="#get-involved">Get Involved</a>
+  </nav>
   
     <div class="container">
-      <div class="ber-hero">
-        <span class="ber-kicker" aria-hidden="true">
+      <div id="about" class="ber-hero">
+            <span class="ber-kicker" aria-hidden="true">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 1v22M1 12h22"/></svg>
           Bonita Springs–Estero REALTORS®
         </span>
-        <p><strong>Mission:</strong> Serve and enhance the professionalism of our members, promote an environment where our members can prosper, and contribute to our community.</p>
+        <p><strong>Mission:</strong> Creating value-driven success for our members and the communities we serve.</p>
+
         <p>We are a local trade organization of <strong>1,400 REALTORS<sup>®</sup></strong> and <strong>160+ affiliated industry partners</strong>. As part of the <strong>National Association of REALTORS<sup>®</sup></strong> and <strong>Florida REALTORS<sup>®</sup></strong>, we provide education, advocacy, MLS access (<strong>Matrix–SWFLAMLS</strong>), and community programs through the <strong>Bonita Springs‑Estero REALTORS<sup>®</sup> Home Foundation</strong>.</p>
         <div class="ber-actions">
           <a class="ber-btn" href="https://www.bonitaesterorealtors.com/join-bser/" target="_blank" rel="noopener">Join BER</a>
           <a class="ber-btn ber-btn--ghost" href="https://members.bonitaesterorealtors.com/bercalendar" target="_blank" rel="noopener">Education &amp; Events</a>
         </div>
+        <ul class="ber-values" aria-label="Core Values">
+          <li class="ber-value">Integrity</li>
+          <li class="ber-value">Inclusive</li>
+          <li class="ber-value">Innovative</li>
+          <li class="ber-value">Authentic</li>
+          <li class="ber-value">Opportunity</li>
+        </ul>
+        
       </div>
   
-      <section class="ber-stats" aria-label="Organization at a glance">
+      <section class="ber-stats" id="stats" aria-label="Organization at a glance">
         <article class="ber-stat" aria-labelledby="stat1"><div class="num" id="stat1">1,400+</div><div class="label">REALTORS<sup>®</sup></div></article>
         <article class="ber-stat" aria-labelledby="stat2"><div class="num" id="stat2">160+</div><div class="label">Affiliated Members</div></article>
         <article class="ber-stat" aria-labelledby="stat3"><div class="num" id="stat3">1966</div><div class="label">Established</div></article>
         <article class="ber-stat" aria-labelledby="stat4"><div class="num" id="stat4">108</div><div class="label">Square miles served</div></article>
       </section>
   
-      <section class="ber-section" aria-label="What we do">
+      <section class="ber-section" id="what" aria-label="What we do">
         <h2>What we do</h2>
         <p class="lead">BER is your hub for growth and professionalism—combining classroom training, technology tools, advocacy, and community leadership.</p>
         <div class="ber-grid">
@@ -160,11 +233,19 @@
         </div>
       </section>
   
-      <section class="ber-section" aria-label="Mission and About">
+      <section class="ber-section" id="mission" aria-label="Mission and About">
         <div class="ber-split">
           <div class="ber-pane">
             <h3>Our Mission</h3>
-            <p>Serve and enhance the professionalism of our members, promote an environment where our members can prosper, and contribute to our community.</p>
+          <p>Creating value-driven success for our members and the communities we serve.</p>
+          <ul class="ber-values ber-values--compact" aria-label="Core Values">
+            <li class="ber-value">Integrity</li>
+            <li class="ber-value">Inclusive</li>
+            <li class="ber-value">Innovative</li>
+            <li class="ber-value">Authentic</li>
+            <li class="ber-value">Opportunity</li>
+          </ul>
+          
           </div>
           <div class="ber-pane">
             <h3>Who We Are</h3>
@@ -173,7 +254,7 @@
         </div>
       </section>
   
-      <section class="ber-section ber-service" aria-label="Service Area">
+      <section class="ber-section ber-service" id="service" aria-label="Service Area">
         <div class="service-head">
           <h2>Our Service Area</h2>
           <p class="lead">We proudly serve <strong>Lee</strong>, <strong>Collier</strong>, and <strong>Charlotte</strong> counties, with additional coverage across adjacent SWFL communities.</p>
@@ -223,7 +304,7 @@
         </div>
       </section>
   
-      <section class="ber-section" aria-label="About Bonita Springs &amp; Estero">
+      <section class="ber-section" id="region" aria-label="About Bonita Springs &amp; Estero">
         <h2>About Bonita Springs &amp; Estero</h2>
         <div class="ber-grid">
           <article class="ber-card">
@@ -245,7 +326,7 @@
         </div>
       </section>
   
-      <section class="ber-section" aria-label="Leadership &amp; Staff">
+      <section class="ber-section" aria-label="Leadership &amp; Staff" id="leadership">
         <h2>Leadership &amp; Staff</h2>
         <div class="ber-team">
           <article class="ber-person">
@@ -285,8 +366,89 @@
           </article>
         </div>
       </section>
+
+      <section id="committees" class="ber-section ber-committees" aria-label="Committees & Chairs">
+        <h2>Committees & Chairs</h2>
+        <p class="lead">Find the right contact fast. Chairs lead each area and are your first stop for questions or to get involved.</p>
+      
+        <div class="ber-committee-grid">
+          <!-- Left column from your image -->
+          <article class="ber-committee">
+            <h3>Professional Development</h3>
+            <p class="chair">Chair: <strong>Sandy Wilder</strong></p>
+          </article>
+      
+          <article class="ber-committee">
+            <h3>Leadership Academy</h3>
+            <p class="chair">Chair: <strong>Danielle Damianov</strong></p>
+            <p class="cochair">Co-Chair: <strong>Corlin Tucker</strong></p>
+          </article>
+      
+          <article class="ber-committee">
+            <h3>REALTOR® Review</h3>
+            <p class="chair">Chair: <strong>Sarah Anstett</strong></p>
+          </article>
+      
+          <article class="ber-committee">
+            <h3>MLS</h3>
+            <p class="chair">Chair: <strong>Jesse McGreevy</strong></p>
+          </article>
+      
+          <article class="ber-committee">
+            <h3>Government Affairs / RPAC</h3>
+            <p class="chair">Chair: <strong>Josie Mendiola</strong></p>
+          </article>
+      
+          <article class="ber-committee">
+            <h3>Global Diversity</h3>
+            <p class="chair">Chair: <strong>Kris Boyle</strong></p>
+          </article>
+      
+          <article class="ber-committee">
+            <h3>Leadership Development</h3>
+            <p class="chair">Chair: <strong>Mark Ledbetter</strong></p>
+          </article>
+      
+          <!-- Right column from your image -->
+          <article class="ber-committee">
+            <h3>Grievance</h3>
+            <p class="chair">Chair: <strong>Karen McIntyre</strong></p>
+          </article>
+      
+          <article class="ber-committee">
+            <h3>Events</h3>
+            <p class="chair">Chair: <strong>Mark True</strong></p>
+          </article>
+      
+          <article class="ber-committee">
+            <h3>YPN</h3>
+            <p class="chair">Chair: <strong>Keaton West</strong></p>
+          </article>
+      
+          <article class="ber-committee">
+            <h3>Professional Standards</h3>
+            <p class="chair">Chair: <strong>Robert Klein</strong></p>
+          </article>
+      
+          <article class="ber-committee">
+            <h3>Media</h3>
+            <p class="chair">Chair: <strong>Mike Hughes</strong></p>
+          </article>
+      
+          <article class="ber-committee">
+            <h3>REALTOR® Safety</h3>
+            <p class="chair">Chair: <strong>David Scott</strong></p>
+          </article>
+        </div>
+      
+        <div class="ber-actions" style="margin-top:14px">
+          <a class="ber-btn" href="https://bonitaspringsesterorealtorsfl.growthzoneapp.com/ap/Form/Fill/rJD9lS4P" target="_blank" rel="noopener">Join a Committee</a>
+          <a class="ber-btn ber-btn--ghost" href="mailto:support@bonitaesterorealtors.com">Ask about a Committee</a>
+        </div>
+      </section>
+      
   
-      <section class="ber-section ber-3way" aria-label="Three-Way Membership System">
+      <section class="ber-section ber-3way" id="threeway" aria-label="Three-Way Membership System">
         <h2>The REALTOR<sup>®</sup> Three‑Way Membership</h2>
         <p class="lead">Join once, belong to three organizations: your local board <strong>Bonita Springs‑Estero REALTORS<sup>®</sup> (BER)</strong>, <strong>Florida REALTORS<sup>®</sup></strong>, and the <strong>National Association of REALTORS<sup>®</sup> (NAR)</strong>. One application, one set of dues, three levels of benefits.</p>
   
@@ -314,10 +476,12 @@
         <div class="ber-actions" style="margin-top:14px">
           <a class="ber-btn" href="https://www.bonitaesterorealtors.com/join-bser/" target="_blank" rel="noopener">Join BER</a>
           <a class="ber-btn ber-btn--ghost" href="https://www.bonitaesterorealtors.com/join-bser/" target="_blank" rel="noopener">How Membership Works</a>
+          <a class="ber-btn ber-btn--ghost" href="#committees">Committees & Chairs</a>
         </div>
+        
       </section>
   
-      <section class="ber-section ber-faq" aria-label="Helpful info">
+      <section class="ber-section ber-faq" id="helpful" aria-label="Helpful info">
         <h2>Helpful info</h2>
         <div class="ber-grid">
           <details class="ber-card" open>
@@ -332,7 +496,7 @@
         </div>
       </section>
   
-      <section class="ber-section" aria-label="Get involved">
+      <section class="ber-section" id="get-involved" aria-label="Get involved">
         <div class="ber-cta">
           <h2 style="margin:0 0 8px">Ready to get more from your membership?</h2>
           <p class="lead">Join a committee, attend an upcoming class, or talk with our team about benefits you might be missing.</p>
