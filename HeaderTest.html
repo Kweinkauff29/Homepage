@@ -508,82 +508,619 @@
 
   /* Dataset */
   const berLinks = [
-    { title:"Member Portal", category:"Membership", url:"https://members.bonitaesterorealtors.com/MIC/Login",
-      keywords:["member","portal","login","account","renew","renewal","pay","dues","invoice","profile","password","payment","bill","mic"],
-      questions:["how do i renew my membership","pay my dues","where do i pay dues","log in to member portal","update my info","change password","see my invoices","view my bills","membership payment","account access"]},
-    { title:"Join BER", category:"Membership", url:"https://www.bonitaesterorealtors.com/join-bser/",
-      keywords:["join","apply","become member","sign up","application","membership","membership benefits","what's included","member benefits","what membership do i need","membership costs","dues","fees","how to join"],
-      questions:["become a member","apply for membership","join association","join bonita springs estero realtors","what are the membership benefits","how much does membership cost","which membership do i need","compare membership types"]},
-    { title:"Continuing Education (License / CE)", category:"Education", url:"https://www.bonitaesterorealtors.com/continuing-education-2/",
-      keywords:["license renewal","renew license","ce credits","post-licensing","post licensing","pre-licensing","pre licensing","real estate license","get my real estate license"],
-      questions:["renew my real estate license","get my real estate license","how to earn ce credits","post-licensing requirements","pre-licensing course"]},
-    { title:"Event Calendar (Classes & Education)", category:"Events", url:"https://members.bonitaesterorealtors.com/bercalendar",
-      keywords:["calendar","classes","events","training","seminars","upcoming","schedule","register","education","education calendar","education schedule","education classes","class calendar","training schedule"],
-      questions:["see upcoming events","class calendar","training schedule","what classes are available","find education classes","register for a class","education events"]},
-    { title:"MLS Login", category:"MLS", url:"https://matrix.swflamls.com/matrix/login.aspx",
-      keywords:["mls","matrix","login","listings","property input","add listing","access mls"],
-      questions:["how to log into mls","open matrix","input a listing","enter new listing","mls access"]},
-    { title:"MLS Rules & Regulations", category:"MLS", url:"https://www.bonitaesterorealtors.com/wp-content/uploads/2025/01/2025-MLS-Rules.pdf",
-      keywords:["mls rules","regulations","policies","standards","compliance"],
-      questions:["where to find mls rules","mls policies","mls compliance rules","matrix guidelines"]},
-    { title:"RPAC", category:"Advocacy", url:"https://www.bonitaesterorealtors.com/rpac/",
-      keywords:["rpac","advocacy","donate","political action","support"],
-      questions:["what is rpac","donate to rpac","contribute to rpac","support advocacy"]},
-    { title:"Market Reports", category:"Research", url:"https://www.bonitaesterorealtors.com/market-reports-2/",
-      keywords:["market","statistics","data","trends","reports","local housing"],
-      questions:["see housing data","local market trends","monthly housing report","market stats bonita springs"]},
-    { title:"Realtor Store", category:"Resources", url:"https://bonitaspringsesterorealtorsfl.growthzoneapp.com/realtorstore/",
-      keywords:["store","shop","supplies","lockbox","merchandise","signs"],
-      questions:["buy realtor supplies","purchase signs","get lockboxes","where is the store"]},
-    { title:"Affiliate Application", category:"Affiliates", url:"https://bonitaspringsesterorealtorsfl.growthzoneapp.com/ap/Membership/Application/4pVedor8",
-      keywords:["affiliate","vendor","apply","join affiliate","partner"],
-      questions:["join as an affiliate","apply as a vendor","affiliate membership","become affiliate"]},
-    { title:"Leadership Academy", category:"Leadership", url:"https://www.bonitaesterorealtors.com/leadership-academy/",
-      keywords:["leadership","academy","program","development","training"],
-      questions:["join leadership academy","leadership training","realtor leadership program","professional development"]},
-    { title:"BER Global Network", category:"Global", url:"https://www.bonitaesterorealtors.com/b-e-a-r-global-network/",
-      keywords:["global","international","foreign buyers","network","global business","gbc"],
-      questions:["international real estate network","connect with foreign buyers","global business council"]},
-    { title:"Our Commitment to Diversity", category:"Diversity", url:"https://www.bonitaesterorealtors.com/our-commitment-to-diversity/",
-      keywords:["diversity","inclusion","global diversity","equal opportunity","commitment"],
-      questions:["diversity and inclusion at ber","global diversity page"]},
-    { title:"Important Links & Contacts", category:"Support", url:"https://www.bonitaesterorealtors.com/important-links-and-contacts/",
-      keywords:["links","contacts","help","support","phone","email","directory"],
-      questions:["who do i contact","support number","board staff directory","find contact info","important links"]},
-    { title:"Home Buyers & Sellers", category:"Public", url:"https://www.bonitaesterorealtors.com/homebuyerssellers/",
-      keywords:["buyers","sellers","homeowner","resources","guide","advice"],
-      questions:["resources for buyers","resources for sellers","homebuyer guide","homeseller tips"]},
-    { title:"Join a Committee", category:"Membership", url:"https://bonitaspringsesterorealtorsfl.growthzoneapp.com/ap/Form/Fill/rJD9lS4P",
-      keywords:["committee","volunteer","serve","get involved","leadership"],
-      questions:["how to join a committee","volunteer opportunities","serve on a committee"]},
-    { title:"New Sales Associate Application", category:"Membership", url:"https://bonitaspringsesterorealtorsfl.growthzoneapp.com/ap/Membership/Application/DLb3lMr7",
-      keywords:["new agent","sales associate","application","join realtor"],
-      questions:["apply as new sales associate","new agent membership","sales associate application"]},
-    { title:"Office/Broker Application", category:"Membership", url:"https://bonitaspringsesterorealtorsfl.growthzoneapp.com/ap/Membership/Application/MrDg3QLx",
-      keywords:["office","broker","application","new office"],
-      questions:["apply as a broker","open office application","office membership"]},
-    { title:"Property Search", category:"Public", url:"https://www.bonitaesterorealtors.com/simplyrets-listings/",
-      keywords:["property","homes","search","mls search","listings","buyers"],
-      questions:["search for homes","find listings","mls search on site"]},
-    { title:"MLS Tips & Recordings", category:"MLS", url:"https://corelogic.thoughtindustries.com/learn/dashboard",
-      keywords:["mls tips","recordings","training","videos","matrix help"],
-      questions:["where are mls trainings","watch matrix recordings","mls how to videos"]},
-    { title:"BER News & Articles", category:"News", url:"https://bonitaesterorealtors.com/",
-      keywords:["news","articles","updates","announcements","blog"],
-      questions:["latest news","association updates","recent articles"]},
-    { title:"Floor Plans Library", category:"Resources", url:"https://bonitaesterorealtors.com/document-library/",
-      keywords:["floor plans","templates","documents","library","forms"],
-      questions:["download floor plans","find floor plan templates","document library"]},
-    { title:"BER BOX TRUCK Rentals", category:"Logistics", url:"https://join.bonitaesterorealtors.com/ber-truck",
-      keywords:["box truck","truck rental","moving","move","ber truck","rent truck"],
-      questions:["rent the ber box truck","how to book the box truck","moving truck rental"]},
-      {
+  {
+    title: "Member Portal",
+    category: "Membership",
+    url: "https://members.bonitaesterorealtors.com/MIC/Login",
+    keywords: [
+      "member","portal","login","account","renew","renewal",
+      "pay","dues","invoice","profile","password","payment",
+      "bill","mic"
+    ],
+    questions: [
+      "how do I renew my membership",
+      "pay my dues",
+      "where do I pay dues",
+      "log in to member portal",
+      "update my info",
+      "change password",
+      "see my invoices",
+      "view my bills",
+      "membership payment",
+      "account access",
+      "renew membership online",
+      "pay my membership invoice",
+      "update contact information",
+      "login to my account",
+      "where do I find membership payment"
+    ]
+  },
+  {
+    title: "Join BER",
+    category: "Membership",
+    url: "https://www.bonitaesterorealtors.com/join-bser/",
+    keywords: [
+      "join","apply","become member","sign up","application",
+      "membership","membership benefits","what's included",
+      "member benefits","what membership do I need",
+      "membership costs","dues","fees","how to join"
+    ],
+    questions: [
+      "become a member",
+      "apply for membership",
+      "join association",
+      "join bonita springs estero realtors",
+      "what are the membership benefits",
+      "how much does membership cost",
+      "which membership do I need",
+      "compare membership types",
+      "how to join BER",
+      "becoming a member process",
+      "apply to be a realtor",
+      "what does membership include",
+      "how to get started with membership",
+      "cost to join",
+      "membership application process"
+    ]
+  },
+  {
+    title: "Continuing Education (License / CE)",
+    category: "Education",
+    url: "https://www.bonitaesterorealtors.com/continuing-education-2/",
+    keywords: [
+      "license renewal","renew license","ce credits",
+      "post-licensing","post licensing","pre-licensing",
+      "pre licensing","real estate license","get my real estate license"
+    ],
+    questions: [
+      "renew my real estate license",
+      "get my real estate license",
+      "how to earn ce credits",
+      "post-licensing requirements",
+      "pre-licensing course",
+      "what are CE requirements",
+      "where to take continuing education",
+      "CE credits needed",
+      "license renewal classes",
+      "online CE courses",
+      "post licensing vs pre licensing",
+      "exam prep courses",
+      "CE deadlines",
+      "how to register for CE classes",
+      "CE requirements for Florida real estate license"
+    ]
+  },
+  {
+    title: "Event Calendar (Classes & Education)",
+    category: "Events",
+    url: "https://members.bonitaesterorealtors.com/bercalendar",
+    keywords: [
+      "calendar","classes","events","training","seminars",
+      "upcoming","schedule","register","education",
+      "education calendar","education schedule","education classes",
+      "class calendar","training schedule"
+    ],
+    questions: [
+      "see upcoming events",
+      "class calendar",
+      "training schedule",
+      "what classes are available",
+      "find education classes",
+      "register for a class",
+      "education events",
+      "view event calendar",
+      "upcoming training sessions",
+      "what events are happening",
+      "how to register for events",
+      "class schedule",
+      "browse events by date",
+      "calendar of seminars",
+      "education events near me"
+    ]
+  },
+  {
+    title: "MLS Login",
+    category: "MLS",
+    url: "https://matrix.swflamls.com/matrix/login.aspx",
+    keywords: [
+      "mls","matrix","login","listings",
+      "property input","add listing","access mls"
+    ],
+    questions: [
+      "how to log into mls",
+      "open matrix",
+      "input a listing",
+      "enter new listing",
+      "mls access",
+      "login to SWFL MLS",
+      "mls login link",
+      "where to sign into MLS",
+      "enter listing into MLS",
+      "access property search",
+      "reset my MLS password",
+      "matrix login page",
+      "how to add a listing to MLS",
+      "connect to MLS system",
+      "open MLS portal"
+    ]
+  },
+  {
+    title: "MLS Rules & Regulations",
+    category: "MLS",
+    url: "https://www.bonitaesterorealtors.com/wp-content/uploads/2025/01/2025-MLS-Rules.pdf",
+    keywords: [
+      "mls rules","regulations","policies",
+      "standards","compliance"
+    ],
+    questions: [
+      "where to find mls rules",
+      "mls policies",
+      "mls compliance rules",
+      "matrix guidelines",
+      "download MLS rules",
+      "MLS compliance handbook",
+      "matrix rules",
+      "what are the MLS policies",
+      "MLS violation rules",
+      "where to find MLS standards",
+      "MLS guidelines PDF",
+      "rules for listing a property",
+      "MLS rulebook",
+      "MLS regs 2025",
+      "MLS compliance requirements"
+    ]
+  },
+  {
+    title: "RPAC",
+    category: "Advocacy",
+    url: "https://www.bonitaesterorealtors.com/rpac/",
+    keywords: [
+      "rpac","advocacy","donate",
+      "political action","support"
+    ],
+    questions: [
+      "what is rpac",
+      "donate to rpac",
+      "contribute to rpac",
+      "support advocacy",
+      "what does RPAC stand for",
+      "RPAC donation page",
+      "support RPAC cause",
+      "how to contribute to RPAC",
+      "RPAC membership",
+      "what is RPAC's mission",
+      "why donate to RPAC",
+      "political advocacy contributions",
+      "RPAC fundraising",
+      "RPAC events",
+      "RPAC involvement"
+    ]
+  },
+  {
+    title: "Market Reports",
+    category: "Research",
+    url: "https://www.bonitaesterorealtors.com/market-reports-2/",
+    keywords: [
+      "market","statistics","data",
+      "trends","reports","local housing"
+    ],
+    questions: [
+      "see housing data",
+      "local market trends",
+      "monthly housing report",
+      "market stats bonita springs",
+      "housing market stats",
+      "view market reports",
+      "latest housing statistics",
+      "local real estate trends",
+      "how to access market reports",
+      "market data for Bonita Springs",
+      "monthly stats report",
+      "download market report",
+      "housing data analysis",
+      "current market conditions",
+      "regional market statistics"
+    ]
+  },
+  {
+    title: "Realtor Store",
+    category: "Resources",
+    url: "https://bonitaspringsesterorealtorsfl.growthzoneapp.com/realtorstore/",
+    keywords: [
+      "store","shop","supplies",
+      "lockbox","merchandise","signs"
+    ],
+    questions: [
+      "buy realtor supplies",
+      "purchase signs",
+      "get lockboxes",
+      "where is the store",
+      "where to buy realtor supplies",
+      "order real estate signs",
+      "purchase lockbox",
+      "store hours and location",
+      "get realtor merchandise",
+      "real estate store items",
+      "where is the realtor store located",
+      "buy open house signs",
+      "shop for realtor gear",
+      "order supplies online",
+      "store contact"
+    ]
+  },
+  {
+    title: "Affiliate Application",
+    category: "Affiliates",
+    url: "https://bonitaspringsesterorealtorsfl.growthzoneapp.com/ap/Membership/Application/4pVedor8",
+    keywords: [
+      "affiliate","vendor","apply",
+      "join affiliate","partner"
+    ],
+    questions: [
+      "join as an affiliate",
+      "apply as a vendor",
+      "affiliate membership",
+      "become affiliate",
+      "how to become an affiliate",
+      "affiliate application form",
+      "vendor membership",
+      "partner application process",
+      "apply to be a vendor",
+      "affiliate benefits",
+      "affiliate membership cost",
+      "qualify as affiliate",
+      "steps to join as affiliate",
+      "affiliate sign‑up",
+      "affiliate registration"
+    ]
+  },
+  {
+    title: "Leadership Academy",
+    category: "Leadership",
+    url: "https://www.bonitaesterorealtors.com/leadership-academy/",
+    keywords: [
+      "leadership","academy","program",
+      "development","training"
+    ],
+    questions: [
+      "join leadership academy",
+      "leadership training",
+      "realtor leadership program",
+      "professional development",
+      "apply for leadership academy",
+      "leadership academy details",
+      "what is leadership academy",
+      "leadership training program",
+      "professional development program",
+      "academy schedule",
+      "leadership classes",
+      "leadership program requirements",
+      "who can join leadership academy",
+      "how to enroll in leadership academy",
+      "leadership academy cost"
+    ]
+  },
+  {
+    title: "BER Global Network",
+    category: "Global",
+    url: "https://www.bonitaesterorealtors.com/b-e-a-r-global-network/",
+    keywords: [
+      "global","international","foreign buyers",
+      "network","global business","gbc"
+    ],
+    questions: [
+      "international real estate network",
+      "connect with foreign buyers",
+      "global business council",
+      "global network membership",
+      "international real estate resources",
+      "foreign buyer network",
+      "join global business council",
+      "global network benefits",
+      "global real estate group",
+      "network for international clients",
+      "attend global network events",
+      "global business training",
+      "global membership cost",
+      "connect with international buyers",
+      "learn about global real estate"
+    ]
+  },
+  {
+    title: "Our Commitment to Diversity",
+    category: "Diversity",
+    url: "https://www.bonitaesterorealtors.com/our-commitment-to-diversity/",
+    keywords: [
+      "diversity","inclusion","global diversity",
+      "equal opportunity","commitment"
+    ],
+    questions: [
+      "diversity and inclusion at ber",
+      "global diversity page",
+      "diversity initiatives",
+      "inclusion policy",
+      "equal opportunity statement",
+      "diversity programs",
+      "BER diversity commitment",
+      "how does BER support diversity",
+      "diversity resources",
+      "diversity page",
+      "commitment to diversity and inclusion",
+      "diversity mission",
+      "equal opportunity pledge",
+      "diversity statement",
+      "DEI at BER"
+    ]
+  },
+  {
+    title: "Important Links & Contacts",
+    category: "Support",
+    url: "https://www.bonitaesterorealtors.com/important-links-and-contacts/",
+    keywords: [
+      "links","contacts","help",
+      "support","phone","email","directory"
+    ],
+    questions: [
+      "who do I contact",
+      "support number",
+      "board staff directory",
+      "find contact info",
+      "important links",
+      "contact BER",
+      "important phone numbers",
+      "support contact",
+      "helpdesk email",
+      "association contacts",
+      "links to resources",
+      "staff directory",
+      "who do I call for help",
+      "important contact list",
+      "member services contact"
+    ]
+  },
+  {
+    title: "Home Buyers & Sellers",
+    category: "Public",
+    url: "https://www.bonitaesterorealtors.com/homebuyerssellers/",
+    keywords: [
+      "buyers","sellers","homeowner",
+      "resources","guide","advice"
+    ],
+    questions: [
+      "resources for buyers",
+      "resources for sellers",
+      "homebuyer guide",
+      "homeseller tips",
+      "homebuyer resources",
+      "seller resources",
+      "advice for buyers",
+      "selling tips",
+      "home buying guide",
+      "home selling guide",
+      "buyer and seller information",
+      "guides for homeowners",
+      "homeowner resources",
+      "how to buy a home",
+      "how to sell a home"
+    ]
+  },
+  {
+    title: "Join a Committee",
+    category: "Membership",
+    url: "https://bonitaspringsesterorealtorsfl.growthzoneapp.com/ap/Form/Fill/rJD9lS4P",
+    keywords: [
+      "committee","volunteer","serve",
+      "get involved","leadership"
+    ],
+    questions: [
+      "how to join a committee",
+      "volunteer opportunities",
+      "serve on a committee",
+      "committee application",
+      "volunteer for a committee",
+      "committee sign up",
+      "how to get involved with BER",
+      "join committees",
+      "serve on a committee",
+      "committee membership",
+      "volunteer opportunities at BER",
+      "committee involvement",
+      "committee volunteer sign up",
+      "committee service",
+      "participate on a committee"
+    ]
+  },
+  {
+    title: "New Sales Associate Application",
+    category: "Membership",
+    url: "https://bonitaspringsesterorealtorsfl.growthzoneapp.com/ap/Membership/Application/DLb3lMr7",
+    keywords: [
+      "new agent","sales associate",
+      "application","join realtor"
+    ],
+    questions: [
+      "apply as new sales associate",
+      "new agent membership",
+      "sales associate application",
+      "new agent application form",
+      "join as a sales associate",
+      "become a new real estate agent",
+      "sales associate membership cost",
+      "apply to be a new agent",
+      "sales associate benefits",
+      "new agent form",
+      "sales associate registration",
+      "requirements for new agents",
+      "new sales associate sign up",
+      "how to join as a new agent",
+      "sales associate fee"
+    ]
+  },
+  {
+    title: "Office/Broker Application",
+    category: "Membership",
+    url: "https://bonitaspringsesterorealtorsfl.growthzoneapp.com/ap/Membership/Application/MrDg3QLx",
+    keywords: [
+      "office","broker","application",
+      "new office"
+    ],
+    questions: [
+      "apply as a broker",
+      "open office application",
+      "office membership",
+      "broker office application form",
+      "apply for office membership",
+      "start a new brokerage with BER",
+      "office membership cost",
+      "broker application requirements",
+      "open an office membership",
+      "office registration",
+      "join as a brokerage",
+      "become a broker member",
+      "office membership application",
+      "broker membership process",
+      "brokerage sign up"
+    ]
+  },
+  {
+    title: "Property Search",
+    category: "Public",
+    url: "https://www.bonitaesterorealtors.com/simplyrets-listings/",
+    keywords: [
+      "property","homes","search",
+      "mls search","listings","buyers"
+    ],
+    questions: [
+      "search for homes",
+      "find listings",
+      "mls search on site",
+      "search properties",
+      "home search tool",
+      "MLS property search",
+      "find homes for sale",
+      "house search",
+      "search real estate listings",
+      "property search website",
+      "MLS search",
+      "home listings search",
+      "search by address",
+      "property finder",
+      "find houses online"
+    ]
+  },
+  {
+    title: "MLS Tips & Recordings",
+    category: "MLS",
+    url: "https://corelogic.thoughtindustries.com/learn/dashboard",
+    keywords: [
+      "mls tips","recordings","training",
+      "videos","matrix help"
+    ],
+    questions: [
+      "where are mls trainings",
+      "watch matrix recordings",
+      "mls how to videos",
+      "MLS training videos",
+      "matrix tips and tricks",
+      "MLS tutorial",
+      "learn MLS features",
+      "matrix recordings",
+      "MLS video library",
+      "watch MLS tutorials",
+      "MLS help videos",
+      "matrix help center",
+      "MLS on‑demand training",
+      "online MLS training",
+      "matrix training resources"
+    ]
+  },
+  {
+    title: "BER News & Articles",
+    category: "News",
+    url: "https://bonitaesterorealtors.com/",
+    keywords: [
+      "news","articles","updates",
+      "announcements","blog"
+    ],
+    questions: [
+      "latest news",
+      "association updates",
+      "recent articles",
+      "news and articles",
+      "association news updates",
+      "latest BER articles",
+      "recent news posts",
+      "news blog",
+      "association announcements",
+      "BER updates",
+      "real estate news",
+      "what’s new at BER",
+      "read latest articles",
+      "news homepage",
+      "association blog"
+    ]
+  },
+  {
+    title: "Floor Plans Library",
+    category: "Resources",
+    url: "https://bonitaesterorealtors.com/document-library/",
+    keywords: [
+      "floor plans","templates","documents",
+      "library","forms"
+    ],
+    questions: [
+      "download floor plans",
+      "find floor plan templates",
+      "document library",
+      "download floor plan templates",
+      "floor plan documents",
+      "floor plan resources",
+      "find floor plans",
+      "floor plan library access",
+      "floor plan drawings",
+      "home floor plan templates",
+      "floor plan library page",
+      "floor plan files",
+      "floor plan database",
+      "floor plan docs",
+      "access document library"
+    ]
+  },
+  {
+    title: "BER BOX TRUCK Rentals",
+    category: "Logistics",
+    url: "https://join.bonitaesterorealtors.com/ber-truck",
+    keywords: [
+      "box truck","truck rental",
+      "moving","move","ber truck","rent truck"
+    ],
+    questions: [
+      "rent the ber box truck",
+      "how to book the box truck",
+      "moving truck rental",
+      "book the BER box truck",
+      "box truck rental cost",
+      "truck rental schedule",
+      "reserve moving truck",
+      "moving truck booking",
+      "BER box truck availability",
+      "truck rental reservation",
+      "box truck rental process",
+      "how to rent the box truck",
+      "book a moving truck",
+      "truck rental details",
+      "box truck guidelines"
+    ]
+  },
+  /* New items (already at 15 questions each) */
+  {
     title: "Reciprocal Listings",
     category: "MLS",
     url: "https://www.bonitaesterorealtors.com/reciprocal-listings/",
     keywords: [
-      "reciprocal", "listing", "reciprocal listings", "out-of-area access",
-      "temporary access", "mls reciprocity", "mls agreement", "form"
+      "reciprocal","listing","reciprocal listings",
+      "out-of-area access","temporary access",
+      "mls reciprocity","mls agreement","form"
     ],
     questions: [
       "how do I get reciprocal MLS access",
@@ -608,8 +1145,9 @@
     category: "Facilities",
     url: "https://bonitaspringsesterorealtorsfl.growthzoneapp.com/ap/Form/Fill/rOxknh2p",
     keywords: [
-      "media room", "studio rental", "podcast room", "video equipment",
-      "meeting space", "room reservation", "rent studio", "recording space"
+      "media room","studio rental","podcast room",
+      "video equipment","meeting space",
+      "room reservation","rent studio","recording space"
     ],
     questions: [
       "how do I book the media room",
@@ -634,8 +1172,9 @@
     category: "Broker Tools",
     url: "https://www.bonitaesterorealtors.com/broker-manager/",
     keywords: [
-      "broker resources", "manager tools", "risk management", "broker compliance",
-      "office management", "legal resources", "broker forms", "training"
+      "broker resources","manager tools","risk management",
+      "broker compliance","office management",
+      "legal resources","broker forms","training"
     ],
     questions: [
       "resources for managing brokers",
@@ -660,8 +1199,8 @@
     category: "Affiliates",
     url: "https://members.bonitaesterorealtors.com/affiliatedirectory",
     keywords: [
-      "affiliate directory", "vendor list", "trusted vendors", "business partners",
-      "service providers", "affiliate members"
+      "affiliate directory","vendor list","trusted vendors",
+      "business partners","service providers","affiliate members"
     ],
     questions: [
       "find a local affiliate",
@@ -686,8 +1225,8 @@
     category: "Membership",
     url: "https://bonitaspringsesterorealtorsfl.growthzoneapp.com/realtordirectory/Find",
     keywords: [
-      "realtor directory", "agent search", "member lookup",
-      "find a realtor", "agent directory", "member list"
+      "realtor directory","agent search","member lookup",
+      "find a realtor","agent directory","member list"
     ],
     questions: [
       "find a local REALTOR",
@@ -712,8 +1251,8 @@
     category: "Membership",
     url: "https://bonitaspringsesterorealtorsfl.growthzoneapp.com/brokerdirectory/Find",
     keywords: [
-      "broker directory", "broker list", "find broker",
-      "brokerage lookup", "office directory"
+      "broker directory","broker list","find broker",
+      "brokerage lookup","office directory"
     ],
     questions: [
       "search for a broker",
@@ -738,8 +1277,8 @@
     category: "Compliance",
     url: "https://www.bonitaesterorealtors.com/professional-standards/",
     keywords: [
-      "professional standards", "ethics complaint", "grievance",
-      "code of ethics", "disciplinary process", "complaint form"
+      "professional standards","ethics complaint","grievance",
+      "code of ethics","disciplinary process","complaint form"
     ],
     questions: [
       "how do I file an ethics complaint",
@@ -764,8 +1303,8 @@
     category: "Facilities",
     url: "https://www.bonitaesterorealtors.com/facility-rental-rates-and-forms/",
     keywords: [
-      "facility rental", "meeting room", "classroom rental",
-      "rental rates", "facility forms", "room booking"
+      "facility rental","meeting room","classroom rental",
+      "rental rates","facility forms","room booking"
     ],
     questions: [
       "rent a meeting room",
@@ -790,8 +1329,8 @@
     category: "MLS",
     url: "https://www.bonitaesterorealtors.com/supra/",
     keywords: [
-      "supra", "lockbox", "keybox", "supra lockbox",
-      "access keys", "e‑key"
+      "supra","lockbox","keybox",
+      "supra lockbox","access keys","e‑key"
     ],
     questions: [
       "how do I get a supra lockbox",
@@ -816,8 +1355,8 @@
     category: "Legal",
     url: "https://www.bonitaesterorealtors.com/social-media-policy/",
     keywords: [
-      "social media policy", "online conduct", "guidelines",
-      "posting rules", "communications policy"
+      "social media policy","online conduct","guidelines",
+      "posting rules","communications policy"
     ],
     questions: [
       "what is the BER social media policy",
@@ -837,7 +1376,7 @@
       "social media best practices"
     ]
   }
-  ];
+];
 
   /* Helpers */
   function normalize(str){ return (str||"").toLowerCase().replace(/[^\w\s]/g,"").trim(); }
