@@ -1,0 +1,354 @@
+<!-- BSER — Supra Information Page (Body only) -->
+<main class="ber-supra" id="top">
+    <style>
+      /* ====== Scoped styles (namespace: .ber-supra) ====== */
+      :root{
+        /* Brand hooks: use site vars if present, else fall back */
+        --ink:var(--ber-ink, #0f172a);
+        --paper:var(--ber-paper, #ffffff);
+        --muted:var(--ber-muted, #4b5563);
+        --rule:var(--ber-rule, var(--ink));
+        --rule-soft:var(--ber-rule-soft, #e9eaec);
+        --accent:var(--ber-teal, #0ea5a0);     /* BER teal */
+        --accent-2:var(--ber-gold, #c8a24a);   /* BER gold */
+        --link:var(--ber-link, var(--accent));
+      }
+      @media (prefers-color-scheme: dark){
+        :root{ 
+          /* Force light look on this page for brand consistency */
+          --ink:#0f172a;
+          --paper:#ffffff;
+          --muted:#4b5563;
+          --rule:#0f172a;
+          --rule-soft:#e9eaec;
+          --link:var(--ber-teal, #0ea5a0);
+        }
+      }
+      }
+  
+      .ber-supra{color:var(--ink); font:16px/1.5 system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial,"Noto Sans";}
+      .ber-supra *{box-sizing:border-box}
+      .ber-supra a{color:var(--link); text-decoration:underline; text-underline-offset:2px}
+      .ber-supra .wrap{max-width:1100px; margin-inline:auto; padding:clamp(16px,2.6vw,32px)}
+  
+      /* Swiss‑Modern header */
+      .ber-supra .hero{border-block-end:6px solid var(--ink); background:linear-gradient(180deg,var(--paper),rgba(0,0,0,0));}
+      .ber-supra .eyebrow{letter-spacing:.14em; text-transform:uppercase; font-weight:700; color:var(--muted)}
+      .ber-supra .title{font-size:clamp(32px,5vw,54px); line-height:1.0; margin:.2rem 0 .6rem; font-weight:800; letter-spacing:-.01em}
+      .ber-supra .subtitle{font-size:clamp(16px,2.2vw,20px); color:var(--muted)}
+  
+      /* Quick actions */
+      .ber-supra .actions{display:grid; grid-template-columns:repeat(6,1fr); gap:10px; margin:22px 0 6px}
+      .ber-supra .action{display:flex; align-items:center; gap:10px; padding:12px 14px; background:#fff; border:2px solid var(--rule); border-radius:14px; text-decoration:none; color:var(--ink); font-weight:700; box-shadow:4px 4px 0 var(--rule); transition:transform .08s ease}
+      .ber-supra .action:hover{transform:translate(-1px,-1px)}
+      .ber-supra .badge{display:inline-flex; align-items:center; justify-content:center; width:28px; height:28px; border-radius:999px; background:var(--accent); color:#fff; font-weight:800}
+      .ber-supra .action small{font-weight:600; color:var(--muted); display:block; font-size:12px; margin-top:2px}
+  
+      @media (max-width:980px){ .ber-supra .actions{grid-template-columns:repeat(2,1fr)} }
+  
+      /* Section layout */
+      .ber-supra .grid{display:grid; grid-template-columns:2.2fr 1fr; gap:32px; align-items:start}
+      @media (max-width:980px){ .ber-supra .grid{grid-template-columns:1fr} }
+  
+      .ber-supra section{padding-block:32px; border-bottom:1px solid var(--rule-soft)}
+      .ber-supra h2{font-size:clamp(22px,2.6vw,30px); margin:0 0 12px; font-weight:800; letter-spacing:-.01em}
+      .ber-supra h3{font-size:18px; margin:18px 0 8px; font-weight:800}
+      .ber-supra p{margin:0 0 10px}
+      .ber-supra .lead{font-size:18px; color:var(--muted)}
+  
+      /* Numbered steps */
+      .ber-supra .steps{counter-reset:step; display:grid; gap:10px}
+      .ber-supra .step{position:relative; padding:16px 16px 16px 54px; background:#fff; border:1px solid var(--rule-soft); border-radius:14px}
+      .ber-supra .step:before{counter-increment:step; content:counter(step); position:absolute; inset-inline-start:12px; inset-block-start:12px; width:28px; height:28px; border-radius:50%; background:var(--ink); color:#fff; font-weight:800; display:grid; place-items:center}
+      .ber-supra .step small{color:var(--muted)}
+  
+      /* Side card */
+      .ber-supra .card{background:#fff; border:1.5px solid var(--rule); border-radius:14px; padding:18px; box-shadow:5px 5px 0 var(--rule)}
+      .ber-supra .card h3{margin-top:0}
+  
+      /* Media blocks */
+      .ber-supra .media{display:grid; grid-template-columns:120px 1fr; gap:16px; align-items:center}
+      .ber-supra .media img{width:100%; height:auto; border-radius:10px; border:1px solid var(--rule-soft); background:#f1f5f9}
+      .ber-supra .media img.logo-vert{object-fit:contain; background:#fff; border:0; padding:8px;}
+      @media (max-width:640px){ .ber-supra .media{grid-template-columns:1fr} }
+  
+      /* Inline callouts */
+      .ber-supra .callout{padding:14px 16px; border-left:6px solid var(--accent); background:#f8fafc; border-radius:10px}
+      .ber-supra .warning{border-left-color:#ef4444}
+  
+      /* Sticky mini‑nav */
+      .ber-supra .sidenav{position:sticky; top:18px; display:flex; flex-direction:column; gap:10px}
+      .ber-supra .sidenav a{display:block; padding:10px 12px; border:1px solid var(--rule-soft); border-radius:12px; text-decoration:none; color:var(--ink); font-weight:700}
+      .ber-supra .sidenav a:hover{background:#f8fafc}
+  
+      /* Footer help bar */
+      .ber-supra .helpbar{position:sticky; bottom:0; background:var(--accent); color:#fff; padding:10px 16px; display:flex; gap:14px; align-items:center; justify-content:space-between}
+      .ber-supra .helpbar a{color:#fff; text-decoration:none; font-weight:800}
+  
+      /* Utility */
+      .ber-supra .btn{display:inline-flex; align-items:center; gap:10px; padding:10px 14px; background:var(--ink); color:#fff; text-decoration:none; border-radius:12px; font-weight:800}
+      .ber-supra .btn.alt{background:var(--accent)}
+      .ber-supra .btn.ghost{background:transparent; color:var(--ink); border:2px solid var(--ink)}
+      .ber-supra .btn .mini{font-size:12px; font-weight:600; opacity:.8}
+  
+      .ber-supra .tag{display:inline-block; padding:.15rem .5rem; border:1px solid var(--rule); border-radius:999px; font-size:12px; font-weight:700}
+      /* Motion & scroll‑reveal (fun fly‑ins) */
+      .ber-supra{scroll-behavior:smooth; scroll-padding-top:84px; padding-bottom:max(80px, env(safe-area-inset-bottom))}
+      .ber-supra section, .ber-supra [id]{scroll-margin-top:84px}
+  
+      @media (prefers-reduced-motion: no-preference){
+        .ber-supra.motion-safe .reveal{opacity:0; transform:translate3d(var(--fly-x,0), var(--fly-y,16px), 0) scale(.98); transition:opacity .6s cubic-bezier(.2,.7,.2,1), transform .6s cubic-bezier(.2,.7,.2,1); will-change:transform,opacity; transition-delay:var(--delay,0ms)}
+        .ber-supra.motion-safe .reveal.in{opacity:1; transform:none}
+        /* playful alternating fly‑ins for quick actions */
+        .ber-supra .actions .action:nth-child(odd){--fly-x:-16px}
+        .ber-supra .actions .action:nth-child(even){--fly-x:16px}
+      }
+  
+      /* Mobile optimizations */
+      @media (max-width:980px){
+        .ber-supra .sidenav{position:static; flex-direction:row; overflow-x:auto; gap:8px; -webkit-overflow-scrolling:touch}
+        .ber-supra .sidenav a{white-space:nowrap}
+      }
+      @media (max-width:560px){
+        .ber-supra .actions{display:flex; overflow-x:auto; gap:10px; padding-bottom:8px; -webkit-overflow-scrolling:touch}
+        .ber-supra .action{min-width:220px; flex:0 0 auto}
+        .ber-supra .helpbar{flex-wrap:wrap; row-gap:8px}
+      }
+  
+      /* ===== Theme overrides — keep these last so background wins ===== */
+      .ber-supra{background:#ffffff}
+    </style>
+  
+    <!-- HERO -->
+    <header class="hero wrap" aria-labelledby="page-title">
+      <div class="eyebrow">Tools & Support</div>
+      <h1 id="page-title" class="title">Supra eKEY® & Lockbox Help</h1>
+      <p class="subtitle">Download, activate, and use Supra in Southwest Florida. Quick links, step‑by‑steps, and who to call when you need help.</p>
+  
+      <!-- Quick Actions row -->
+      <nav class="actions" aria-label="Quick actions">
+        <a class="action" href="#get-app">
+          <span class="badge">⇩</span>
+          <div>Get the App<small>iOS / Android</small></div>
+        </a>
+        <a class="action" href="#activate">
+          <span class="badge">✓</span>
+          <div>Activate eKEY<small>Text/Email link</small></div>
+        </a>
+        <a class="action" href="#use">
+          <span class="badge">⚙︎</span>
+          <div>Use a Lockbox<small>Open & shackle</small></div>
+        </a>
+        <a class="action" href="#train">
+          <span class="badge">☰</span>
+          <div>Training Docs<small>Quick guides</small></div>
+        </a>
+        <a class="action" href="#contact">
+          <span class="badge">☎︎</span>
+          <div>Call Support<small>Supra & BER</small></div>
+        </a>
+        <a class="action" href="https://supraweb.suprakim.com" target="_blank" rel="noopener">
+          <span class="badge">↗︎</span>
+          <div>SupraWEB<small>Agent login</small></div>
+        </a>
+      </nav>
+    </header>
+  
+    <!-- CONTENT GRID -->
+    <div class="wrap grid">
+      <!-- MAIN COLUMN -->
+      <div>
+        <!-- DOWNLOAD -->
+        <section id="get-app" aria-labelledby="get-app-title">
+          <h2 id="get-app-title">Download the eKEY® App</h2>
+          <p class="lead">Install the official Supra eKEY app on your phone, then sign in with your authorization code (see <a href="#activate">Activate</a> below).</p>
+  
+          <div class="media" style="margin-top:12px">
+            <img src="https://images.carriercms.com/image/upload/w_auto,q_auto,f_auto/v1660918659/supra/products/real-estate/supra-ibox-btle-front-with-ekey-app-home-3x4.png" alt="Supra eKEY app and iBox BT LE lockbox">
+            <div>
+              <p><strong>Choose your store:</strong></p>
+              <p>
+                <a class="btn alt" href="https://apps.apple.com/us/app/supra-ekey/id379909266" target="_blank" rel="noopener"> App Store<span class="mini">(iPhone / iPad)</span></a>
+                &nbsp;
+                <a class="btn alt" href="https://play.google.com/store/apps/details?id=com.utc.fs.ekey" target="_blank" rel="noopener">Android / Google Play<span class="mini">(Phones & tablets)</span></a>
+              </p>
+              <p class="callout" style="margin-top:12px"><strong>Tip:</strong> Allow Bluetooth® and Notifications for faster entry and showing alerts.</p>
+            </div>
+          </div>
+        </section>
+  
+        <!-- ACTIVATE -->
+        <section id="activate" aria-labelledby="activate-title">
+          <h2 id="activate-title">Activate Your eKEY</h2>
+          <div class="steps">
+            <div class="step">
+              <h3>1) Call BER Membership</h3>
+              <p>Call <a href="tel:+12399926771">(239) 992‑6771</a> (Mon–Fri, 8:30a–5:00p ET) or email <a href="mailto:membership@berealtors.org">membership@berealtors.org</a>. We'll enable your account and send you a <strong>text/email</strong> with a secure setup link.</p>
+              <p class="tag">Local setup</p>
+            </div>
+            <div class="step">
+              <h3>2) Open the secure link</h3>
+              <p>From our message, tap the link on your phone to launch the <strong>eKEY</strong> app and follow the prompts to complete setup.</p>
+              <p class="muted">The app may guide you to verify your eKEY serial number or request an authorization code automatically.</p>
+            </div>
+            <div class="step">
+              <h3>3) Set your PIN & biometrics</h3>
+              <p>Choose a 4‑digit PIN you’ll use at boxes. Enable Face/Touch ID for speed.</p>
+            </div>
+            <div class="step">
+              <h3>4) Pair with a Bluetooth® iBox</h3>
+              <p>Stand near the lockbox, press up on the bottom of the iBox to wake it, then follow in‑app prompts.</p>
+            </div>
+          </div>
+          <p class="callout" style="margin-top:12px"><strong>Didn’t get our text/email?</strong> Call Membership and we’ll resend instantly. Also check spam and confirm SMS is enabled on your line.</p>
+          <p class="callout" style="margin-top:12px"><strong>Pricing note:</strong> New activations include a one‑time Supra fee and monthly service billed by Supra. Contact Membership for current rates.</p>
+        </section>
+  
+        <!-- USE SUPRA -->
+        <section id="use" aria-labelledby="use-title">
+          <h2 id="use-title">Using Supra: Common Tasks</h2>
+  
+          <h3>Open a Lockbox / Get Keys</h3>
+          <ol class="steps" style="margin-top:8px">
+            <li class="step">
+              <p>In eKEY: tap <strong>Obtain Key</strong>, then enter your PIN.</p>
+            </li>
+            <li class="step">
+              <p>At the property, <strong>press up</strong> on the bottom of the iBox to turn on Bluetooth®.</p>
+            </li>
+            <li class="step">
+              <p>When you see <em>Successful</em>, press up again to release the key container.</p>
+            </li>
+          </ol>
+  
+          <h3 style="margin-top:14px">Release the Shackle (attach to a listing)</h3>
+          <ol class="steps" style="margin-top:8px">
+            <li class="step"><p>In eKEY: tap <strong>Open Shackle</strong> and enter your 4‑digit shackle code.</p></li>
+            <li class="step"><p>Choose a <strong>Reason</strong> (e.g., Adding a new listing), optionally enter address/MLS #, then tap <strong>Begin</strong>.</p></li>
+            <li class="step"><p>Press up on the bottom of the box → wait for <em>Success</em> → push the shackle down and pull up to remove.</p></li>
+          </ol>
+  
+          <div class="callout" style="margin-top:12px">
+            <strong>Pro tip:</strong> From <em>My Keyboxes → Program Keybox</em> you can change the shackle code, require a CBS code, and set access hours.
+          </div>
+  
+          <h3 style="margin-top:16px">Assign a Lockbox to a Listing</h3>
+          <p>In eKEY: <em>My Keyboxes → select box → Assign Listing</em>, then enter the address or MLS number and save. This helps track showings and battery health.</p>
+        </section>
+  
+        <!-- TROUBLESHOOTING / TIPS -->
+        <section id="tips" aria-labelledby="tips-title">
+          <h2 id="tips-title">Tips & Troubleshooting</h2>
+          <div class="steps">
+            <div class="step"><h3>Box won’t wake up</h3><p>Press up firmly on the bottom to wake Bluetooth®. Check the app for battery status after connect.</p></div>
+            <div class="step"><h3>Need to show with poor cell service</h3><p>Open eKEY and refresh before you leave coverage so your access is current. At the property, Bluetooth® communication still works offline.</p></div>
+            <div class="step"><h3>Forgot your PIN</h3><p>Use <strong>SupraWEB → Change PIN</strong> or call Supra Support; you’ll need your eKEY serial number.</p></div>
+            <div class="step"><h3>New phone?</h3><p>Install eKEY on the new device and use a fresh <strong>Authorization Code</strong> from SupraWEB to sign in.</p></div>
+          </div>
+        </section>
+  
+        <!-- TRAINING & DOCS -->
+        <section id="train" aria-labelledby="train-title">
+          <h2 id="train-title">Training & Quick Guides</h2>
+          <div class="grid" style="grid-template-columns:1fr 1fr; gap:16px">
+            <a class="card" href="https://www.suprasystems.com/media/Supra-eKEY-Quick-Guide-RevD_tcm1105-192058.pdf" target="_blank" rel="noopener">
+              <h3>eKEY 5.0 Quick Guide (PDF)</h3>
+              <p class="muted">Fast reference for getting keys, shackle release, and programming.</p>
+            </a>
+            <a class="card" href="https://www.suprasystems.com/media/10103303P1f_iBox_BTLE_User_Guide_tcm1105-187224.pdf" target="_blank" rel="noopener">
+              <h3>iBox BT LE User Guide (PDF)</h3>
+              <p>All features of the Bluetooth® lockbox.</p>
+            </a>
+            <a class="card" href="https://www.suprasystems.com/media/SupraWEB-Guide-For-Agents_tcm1105-190869.pdf" target="_blank" rel="noopener">
+              <h3>SupraWEB Guide for Agents (PDF)</h3>
+              <p>Obtain authorization codes, set notifications, view activity reports.</p>
+            </a>
+            <a class="card" href="https://www.suprasystems.com/tips-support/" target="_blank" rel="noopener">
+              <h3>Tips & Support Hub</h3>
+              <p>Video how‑tos and FAQs from Supra.</p>
+            </a>
+          </div>
+        </section>
+  
+        <!-- CONTACTS -->
+        <section id="contact" aria-labelledby="contact-title">
+          <h2 id="contact-title">Who to Contact</h2>
+          <div class="media">
+            <img src="https://images.unsplash.com/photo-1525182008055-f88b95ff7980?auto=format&fit=crop&w=600&q=80" alt="Supra Agent Support representative with headset">
+            <div>
+              <h3>Supra Agent Support</h3>
+              <p class="lead">7 days a week • 5:00a–7:00p Pacific</p>
+              <p><a class="btn alt" href="tel:+18776996787">Call 1‑877‑699‑6787</a> &nbsp; <a class="btn ghost" href="https://supraweb.suprakim.com" target="_blank" rel="noopener">Open SupraWEB</a></p>
+              <p class="muted">Have your eKEY serial number handy (top of the eKEY home screen).</p>
+            </div>
+          </div>
+          <div class="media" style="margin-top:14px">
+            <img class="logo-vert" src="https://www.bonitaesterorealtors.com/wp-content/uploads/2022/10/BonitaSpringsEsteroRealtors_Logo_Vertical.png" alt="Bonita Springs–Estero REALTORS® vertical logo">
+            <div>
+              <h3>BER Membership</h3>
+              <p class="lead">Local setup, billing questions, device changes</p>
+              <p>
+                <a class="btn alt" href="tel:+12399926771">Call (239) 992‑6771</a>
+                &nbsp;
+                <a class="btn ghost" href="mailto:membership@berealtors.org">membership@berealtors.org</a>
+              </p>
+              <p class="muted">Office hours: Mon–Fri, 8:30a–5:00p ET</p>
+            </div>
+          </div>
+        </section>
+      </div>
+  
+      <!-- SIDE NAV + LOCAL INFO -->
+      <aside aria-label="On‑page navigation and local info">
+        <nav class="sidenav" aria-label="Section navigation">
+          <a href="#get-app">Download eKEY</a>
+          <a href="#activate">Activate eKEY</a>
+          <a href="#use">Use a Lockbox</a>
+          <a href="#tips">Tips & Troubleshooting</a>
+          <a href="#train">Training & Docs</a>
+          <a href="#contact">Contacts</a>
+        </nav>
+  
+        <div class="card" style="margin-top:14px">
+          <h3>BER Quick Facts</h3>
+          <p>Supra access is enabled by our Membership team. Fees are billed by Supra monthly. Please verify current rates when you activate.</p>
+          <p class="callout" style="margin-top:10px"><strong>Need MLS tools?</strong> See <a href="https://bonitaesterorealtors.com/mls-membership-information/" target="_blank" rel="noopener">MLS Membership Info</a>.</p>
+        </div>
+      </aside>
+    </div>
+  
+    <!-- Sticky help bar -->
+    <div class="helpbar" role="region" aria-label="Immediate help">
+      <div><strong>Need help now?</strong> Supra Support <a href="tel:+18776996787">1‑877‑699‑6787</a> • BER Membership <a href="tel:+12399926771">(239) 992‑6771</a></div>
+      <a class="btn alt" href="#contact">Contact Options</a>
+    </div>
+    <script>
+      (function(){
+        var root = document.querySelector('.ber-supra');
+        if(!root) return;
+        var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+        if(!reduce) root.classList.add('motion-safe');
+        var selectors = [
+          '.hero .eyebrow', '.hero .title', '.hero .subtitle',
+          '.actions .action', '.step', '.media', '.card', 'section h2'
+        ].join(',');
+        var els = root.querySelectorAll(selectors);
+        els.forEach(function(el, i){
+          el.classList.add('reveal');
+          var stagger = (i % 8) * 50; // gentle stagger
+          el.style.setProperty('--delay', stagger + 'ms');
+        });
+        if(reduce) return;
+        var io = new IntersectionObserver(function(entries){
+          entries.forEach(function(entry){
+            if(entry.isIntersecting){
+              entry.target.classList.add('in');
+              io.unobserve(entry.target);
+            }
+          });
+        }, { threshold: 0.12, rootMargin: '0px 0px -10% 0px' });
+        els.forEach(function(el){ io.observe(el); });
+      })();
+    </script>
+  </main>
+  
