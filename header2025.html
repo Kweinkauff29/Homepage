@@ -998,6 +998,21 @@ font-size: 38px;
       }
       @media only screen and (max-width: 510px) {
         }
+
+        /* Quick-link CTAs */
+.ber-cta{
+  background: linear-gradient(90deg, var(--brand), var(--accent));
+  color:#fff !important;
+  border:0;
+  border-radius:12px;
+  box-shadow: var(--shadow);
+}
+.ber-cta:hover{ filter: brightness(0.95); }
+.ber-cta::after{ display:none; } /* hide underline bar for CTAs */
+
+@media (max-width:1024px){
+  .ber-cta{ border:0 !important; } /* override mobile border */
+}
 </style>
 
 <body onscroll="scrollFunc()">
@@ -1369,6 +1384,32 @@ font-size: 38px;
   
         <nav class="ber-nav" aria-label="Primary">
           <ul id="ber-primary-nav" class="ber-menu" data-close-on-outside="true">
+
+            <!-- Quick access buttons -->
+            <li>
+              <!-- If you prefer your internal MLS page instead, swap href to
+                  https://www.bonitaesterorealtors.com/mls-membership-information/ -->
+              <a class="ber-link ber-cta" href="https://login.stellarmls.com/" target="_blank" rel="noopener">
+                MLS
+              </a>
+            </li>
+            <li>
+              <a class="ber-link ber-cta" href="https://members.bonitaesterorealtors.com/" target="_blank" rel="noopener">
+                Member Portal
+              </a>
+            </li>
+
+            <!-- Existing “About” item continues here -->
+            <li>
+              <button class="ber-subbtn" aria-expanded="false" aria-controls="menu-about">
+                About <span class="ber-caret" aria-hidden="true"></span>
+              </button>
+              <ul id="menu-about" class="ber-submenu" role="menu">
+                ...
+              </ul>
+            </li>
+
+
             <!-- About -->
             <li>
               <button class="ber-subbtn" aria-expanded="false" aria-controls="menu-about">About <span class="ber-caret" aria-hidden="true"></span></button>

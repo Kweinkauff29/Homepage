@@ -1,0 +1,335 @@
+<!-- BER — Important Links & Contacts (body-only, no header/footer) -->
+<section class="ber-links" id="top" aria-labelledby="page-title">
+    <style>
+      /* ===== Scoped styles (namespace: .ber-links) =====
+         Matches BER Swiss-modern language: hero kicker, sticky tabs, cards, reveal.
+         Based on About/BOD/MLS pages. */
+      :root{
+        --ink:#0b1220; --paper:#ffffff; --muted:#5b6577; --line:#e5e7eb;
+        --teal:#0ea5a0;         /* BER teal */
+        --gold:#c8a24a;         /* BER gold */
+        --accent:#08325f;       /* deep blue accent used across site */
+        --radius:18px; --shadow:0 6px 22px rgba(0,0,0,.08);
+        --pad:clamp(16px,2.6vw,32px); --ease:cubic-bezier(.2,.65,.2,1);
+        --wrap:1100px;
+      }
+      .ber-links{background:var(--paper);color:var(--ink);font:16px/1.55 system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial}
+      .ber-links .wrap{max-width:var(--wrap);margin-inline:auto;padding:var(--pad)}
+      a{color:inherit;text-decoration:underline;text-underline-offset:2px}
+      [id]{scroll-margin-top:84px}
+  
+      /* Hero */
+      .hero{border-bottom:6px solid var(--ink);background:linear-gradient(180deg,#fff,rgba(0,0,0,0))}
+      .kicker{display:inline-flex;gap:8px;align-items:center;letter-spacing:.14em;text-transform:uppercase;font-weight:800;color:var(--gold)}
+      .title{font-family:"Montserrat",system-ui,Arial,sans-serif;font-weight:900;font-size:clamp(32px,5vw,54px);letter-spacing:-.01em;margin:.35rem 0 .65rem}
+      .sub{color:var(--muted);max-width:72ch}
+  
+      /* Quick actions (Swiss pills) */
+      .actions{display:grid;grid-template-columns:repeat(6,1fr);gap:10px;margin:18px 0 6px}
+      .action{display:flex;align-items:center;gap:10px;padding:12px 14px;background:#fff;border:2px solid var(--ink);border-radius:14px;text-decoration:none;color:var(--ink);font-weight:800;letter-spacing:.02em;box-shadow:4px 4px 0 var(--ink);transition:transform .08s ease}
+      .action small{display:block;font-weight:600;color:var(--muted);letter-spacing:0}
+      .action:hover{transform:translate(-1px,-1px)}
+      .badge{display:inline-grid;place-items:center;width:28px;height:28px;border:2px solid var(--ink);border-radius:50%;font-weight:900}
+  
+      /* Sticky tabs */
+      .tabs{position:sticky;top:0;z-index:20;background:color-mix(in srgb,#fff 92%,white 8%);border-bottom:1px solid var(--line);backdrop-filter:blur(6px);display:flex;gap:10px;align-items:center;overflow-x:auto;padding:10px var(--pad);margin:0 0 12px}
+      .tab{flex:0 0 auto;font-weight:800;padding:8px 12px;border-radius:999px;text-decoration:none;color:var(--ink);border:1px solid var(--line);background:#fff}
+      .tab:hover{box-shadow:var(--shadow);transform:translateY(-1px)}
+  
+      /* Sections & cards */
+      h2{font-family:"Montserrat",system-ui,Arial,sans-serif;font:800 26px/1.2 "Montserrat",system-ui,Arial;margin:18px 0 8px}
+      h3{font-family:"Montserrat",system-ui,Arial,sans-serif;font:800 18px/1.25 "Montserrat";margin:10px 0 6px}
+      .lead{color:var(--muted)}
+      .grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
+      .grid-2{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+      .card{background:#fff;border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow);padding:14px}
+      .list{margin:10px 0;padding-left:18px}
+      .hr{border:0;height:1px;background:var(--line);margin:16px 0}
+      .callout{border:2px solid var(--ink);border-radius:14px;padding:12px 14px;background:#fafafa}
+      .callout.warn{background:#fff8f1}
+      .btn-row{display:flex;gap:10px;flex-wrap:wrap;margin-top:10px}
+      .btn{appearance:none;border:none;border-radius:999px;padding:10px 14px;font-weight:800;cursor:pointer;text-decoration:none;display:inline-flex;align-items:center;justify-content:center}
+      .btn.primary{background:var(--teal);color:#fff}
+      .btn.secondary{background:var(--accent);color:#fff}
+      .btn.ghost{background:#fff;border:1px solid var(--line);color:var(--accent)}
+  
+      /* Contacts table */
+      table{width:100%;border-collapse:collapse;font-size:.95rem}
+      th,td{border-bottom:1px solid var(--line);padding:10px 8px;text-align:left;vertical-align:top}
+      th{font-weight:800;color:#0a0f1a}
+      td small{color:var(--muted)}
+  
+      /* Helpbar (sticky footer action) */
+      .helpbar{position:sticky;bottom:0;z-index:10;display:flex;gap:10px;align-items:center;justify-content:space-between;background:#0a0f1a;color:#fff;padding:12px var(--pad)}
+      .helpbar .btn{border:1px solid rgba(255,255,255,.25);color:#fff;background:transparent}
+  
+      /* Reveal-on-scroll (from MLS page) */
+      .reveal{opacity:0;transform:translateY(22px);filter:saturate(.92);will-change:opacity,transform,filter;transition:opacity .7s var(--ease),transform .7s var(--ease),filter .7s var(--ease);transition-delay:var(--d,0ms)}
+      .reveal.in{opacity:1;transform:none;filter:saturate(1)}
+      .reveal-up{transform:translateY(28px)} .reveal-left{transform:translateX(-28px)} .reveal-right{transform:translateX(28px)} .reveal-zoom{transform:scale(.98)}
+      @media (prefers-reduced-motion:reduce){.reveal,.reveal.in{opacity:1 !important;transform:none !important;filter:none !important;transition:none !important}}
+  
+      /* Responsive */
+      @media (max-width:1024px){
+        .actions{grid-template-columns:repeat(3,1fr)}
+        .grid{grid-template-columns:repeat(2,1fr)}
+        .grid-2{grid-template-columns:1fr}
+      }
+      @media (max-width:560px){
+        .actions{display:flex;overflow-x:auto;gap:10px;padding-bottom:8px;-webkit-overflow-scrolling:touch}
+        .action{min-width:220px;flex:0 0 auto}
+        .grid{grid-template-columns:1fr}
+      }
+    </style>
+  
+    <!-- HERO -->
+    <header class="hero wrap">
+      <div class="kicker reveal reveal-right" aria-hidden="true">Bonita Springs–Estero REALTORS®</div>
+      <h1 id="page-title" class="title reveal reveal-up">Important Links & Contacts</h1>
+      <p class="sub reveal reveal-up" style="--d:120ms">
+        Quick access to BER staff, MLS &amp; Supra support, membership links, and everyday resources — all in one place.
+      </p>
+  
+      <!-- Quick Actions -->
+      <nav class="actions" aria-label="Quick actions">
+        <a class="action reveal reveal-up" href="https://bonitaesterorealtors.com/join-bser/" target="_blank" rel="noopener">
+          <span class="badge">➕</span><div>Join BER<small>Apply • Dues • Calculator</small></div>
+        </a>
+        <a class="action reveal reveal-up" href="https://members.bonitaesterorealtors.com/MIC/Login" target="_blank" rel="noopener">
+          <span class="badge">★</span><div>Member Portal<small>Billing &amp; Profile</small></div>
+        </a>
+        <a class="action reveal reveal-up" href="https://matrix.swflamls.com/matrix/login.aspx" target="_blank" rel="noopener">
+          <span class="badge">↗</span><div>MLS Login<small>Matrix (SWFLAMLS)</small></div>
+        </a>
+        <a class="action reveal reveal-up" href="https://bonitaesterorealtors.com/supra-information/" target="_blank" rel="noopener">
+          <span class="badge">✓</span><div>Supra eKEY<small>Download &amp; Activate</small></div>
+        </a>
+        <a class="action reveal reveal-up" href="https://members.bonitaesterorealtors.com/bercalendar" target="_blank" rel="noopener">
+          <span class="badge">📅</span><div>Education &amp; Events<small>Classes • CE • Trainings</small></div>
+        </a>
+        <a class="action reveal reveal-up" href="#contact">
+          <span class="badge">☎︎</span><div>Contact BER<small>Phone • Email • Visit</small></div>
+        </a>
+      </nav>
+    </header>
+  
+    <!-- TABS -->
+    <nav class="tabs reveal reveal-down" aria-label="Page sections" style="--d:120ms">
+      <a class="tab" href="#about-ber">About BER</a>
+      <a class="tab" href="#key-links">Key Links</a>
+      <a class="tab" href="#membership">Membership Support</a>
+      <a class="tab" href="#mls">MLS &amp; Supra</a>
+      <a class="tab" href="#contact">Contacts</a>
+      <a class="tab" href="#visit">Visit Us</a>
+    </nav>
+  
+    <div class="wrap">
+      <!-- ABOUT BER -->
+      <section id="about-ber" class="reveal reveal-zoom" aria-labelledby="about-title">
+        <h2 id="about-title" class="reveal reveal-left">Who We Are &amp; What We Do</h2>
+        <p class="lead reveal reveal-up">
+          BER is a local REALTOR<sup>®</sup> association serving Southwest Florida — delivering education &amp; designations, MLS &amp; technology, advocacy, and community leadership for our members and partners. Our mission: <em>Creating value-driven success for our members and the communities we serve.</em>
+        </p>
+        <div class="grid" style="margin-top:10px">
+          <article class="card reveal reveal-up">
+            <h3>Education &amp; Designations</h3>
+            <p>Live, livestream, and on-demand CE; pathways to GRI, PSA, SFR, and more to sharpen your practice.</p>
+          </article>
+          <article class="card reveal reveal-up">
+            <h3>Advocacy &amp; RPAC</h3>
+            <p>We protect homeownership and your ability to do business — locally, in Tallahassee, and in DC.</p>
+          </article>
+          <article class="card reveal reveal-up">
+            <h3>MLS &amp; Technology</h3>
+            <p>Matrix (SWFLAMLS) access, Supra support, showing tools, and integrations to keep you connected.</p>
+          </article>
+        </div>
+        <p class="lead" style="margin-top:10px">
+          BER represents <strong>1,400+ REALTORS<sup>®</sup></strong> and <strong>160+ affiliates</strong>, and participates in the REALTOR<sup>®</sup> three-way membership model (local–state–national).
+        </p>
+        <div class="btn-row">
+          <a class="btn primary" href="https://bonitaesterorealtors.com/about/" target="_blank" rel="noopener">Learn more about BER</a>
+          <a class="btn ghost" href="https://bonitaesterorealtors.com/join-bser/" target="_blank" rel="noopener">Join BER</a>
+        </div>
+      </section>
+  
+      <hr class="hr reveal reveal-up">
+  
+      <!-- KEY LINKS -->
+      <section id="key-links" class="reveal reveal-zoom" aria-labelledby="links-title">
+        <h2 id="links-title" class="reveal reveal-left">Key Links</h2>
+        <div class="grid">
+          <article class="card reveal reveal-up">
+            <h3>About BER</h3>
+            <p>Mission, leadership, service area, committees, and helpful info.</p>
+            <div class="btn-row">
+              <a class="btn secondary" href="https://bonitaesterorealtors.com/about/" target="_blank" rel="noopener">About Page</a>
+            </div>
+          </article>
+          <article class="card reveal reveal-up">
+            <h3>MLS Membership Info</h3>
+            <p>Join steps, recurring fees, rules &amp; compliance, apps, and included tools.</p>
+            <div class="btn-row">
+              <a class="btn secondary" href="https://bonitaesterorealtors.com/mls-membership-information/" target="_blank" rel="noopener">MLS &amp; Membership</a>
+            </div>
+          </article>
+          <article class="card reveal reveal-up">
+            <h3>Supra Information</h3>
+            <p>Download eKEY, activate, and lockbox details; cooperating keys guidance.</p>
+            <div class="btn-row">
+              <a class="btn secondary" href="https://bonitaesterorealtors.com/supra-information/" target="_blank" rel="noopener">Supra eKEY</a>
+            </div>
+          </article>
+          <article class="card reveal reveal-up">
+            <h3>Education &amp; Events</h3>
+            <p>Classes, CE, professional development, and member networking.</p>
+            <div class="btn-row">
+              <a class="btn secondary" href="https://members.bonitaesterorealtors.com/bercalendar" target="_blank" rel="noopener">Calendar</a>
+            </div>
+          </article>
+          <article class="card reveal reveal-up">
+            <h3>Market Reports</h3>
+            <p>Local market stats and monthly updates for BER service areas.</p>
+            <div class="btn-row">
+              <a class="btn secondary" href="https://bonitaesterorealtors.com/market-reports-2/" target="_blank" rel="noopener">Market Reports</a>
+            </div>
+          </article>
+          <article class="card reveal reveal-up">
+            <h3>Member Portal</h3>
+            <p>Pay dues, update your profile, and manage billing.</p>
+            <div class="btn-row">
+              <a class="btn secondary" href="https://members.bonitaesterorealtors.com/MIC/Login" target="_blank" rel="noopener">Open Portal</a>
+            </div>
+          </article>
+        </div>
+      </section>
+  
+      <hr class="hr reveal reveal-up">
+  
+      <!-- MEMBERSHIP SUPPORT -->
+      <section id="membership" class="reveal reveal-zoom" aria-labelledby="member-title">
+        <h2 id="member-title" class="reveal reveal-left">Membership Support</h2>
+        <div class="grid-2">
+          <article class="card reveal reveal-up">
+            <h3>New &amp; Returning Members</h3>
+            <ol class="list">
+              <li>Apply via <a href="https://bonitaesterorealtors.com/join-bser/" target="_blank" rel="noopener">Join BER</a> (dues info + calculator).</li>
+              <li>Broker of Record approval &amp; setup.</li>
+              <li>Pay initiation/prorated dues; receive your MLS (Matrix) login.</li>
+              <li>Activate Supra eKEY and showing tools.</li>
+            </ol>
+            <div class="btn-row">
+              <a class="btn primary" href="https://bonitaesterorealtors.com/join-bser/" target="_blank" rel="noopener">Start: Join BER</a>
+              <a class="btn ghost" href="https://members.bonitaesterorealtors.com/MIC/Login" target="_blank" rel="noopener">Member Portal</a>
+            </div>
+          </article>
+          <article class="card reveal reveal-up">
+            <h3>Transfers &amp; Reactivation</h3>
+            <ol class="list">
+              <li>New broker updates your DBPR license.</li>
+              <li>Email <strong>MLS@BERealtors.org</strong> to update your office/roster.</li>
+              <li>Settle any balance in the Member Portal (if lapsed).</li>
+            </ol>
+            <p class="callout">Tip: If you’re secondary with another board, request a Letter of Good Standing be sent to <strong>Membership@BERealtors.org</strong>. Details and structure mirror our MLS page. :contentReference[oaicite:5]{index=5}</p>
+          </article>
+        </div>
+      </section>
+  
+      <hr class="hr reveal reveal-up">
+  
+      <!-- MLS & SUPRA -->
+      <section id="mls" class="reveal reveal-zoom" aria-labelledby="mls-title">
+        <h2 id="mls-title" class="reveal reveal-left">MLS &amp; Supra</h2>
+        <div class="grid-2">
+          <article class="card reveal reveal-up">
+            <h3>Matrix (SWFLAMLS)</h3>
+            <p>Login, training, rules &amp; compliance resources, and included tools.</p>
+            <div class="btn-row">
+              <a class="btn secondary" href="https://matrix.swflamls.com/matrix/login.aspx" target="_blank" rel="noopener">MLS Login</a>
+              <a class="btn ghost" href="https://bonitaesterorealtors.com/mls-membership-information/" target="_blank" rel="noopener">MLS Membership Info</a>
+            </div>
+          </article>
+          <article class="card reveal reveal-up">
+            <h3>Supra eKEY &amp; Lockboxes</h3>
+            <p>We’ll send your secure activation link when your MLS is provisioned. Lockboxes available at Membership.</p>
+            <p class="callout warn"><strong>Cooperating keys:</strong> Please contact BER at least <strong>24 hours in advance</strong> to set up cooperating access with other boards.</p>
+            <div class="btn-row">
+              <a class="btn primary" href="https://bonitaesterorealtors.com/supra-information/" target="_blank" rel="noopener">Supra Info</a>
+              <a class="btn ghost" href="tel:+12399926771">(239) 992-6771</a>
+            </div>
+          </article>
+        </div>
+      </section>
+  
+      <hr class="hr reveal reveal-up">
+  
+      <!-- CONTACTS -->
+      <section id="contact" class="reveal reveal-zoom" aria-labelledby="contact-title">
+        <h2 id="contact-title" class="reveal reveal-left">Contacts</h2>
+        <div class="grid-2">
+          <article class="card reveal reveal-up">
+            <h3>Key Emails</h3>
+            <table aria-label="Key contacts">
+              <thead><tr><th>Area</th><th>Contact</th></tr></thead>
+              <tbody>
+                <tr><td>Membership / Supra</td><td><a href="mailto:Membership@BERealtors.org">Membership@BERealtors.org</a></td></tr>
+                <tr><td>MLS (Matrix)</td><td><a href="mailto:MLS@BERealtors.org">MLS@BERealtors.org</a></td></tr>
+                <tr><td>Technology</td><td><a href="mailto:Tech@BERealtors.org">Tech@BERealtors.org</a></td></tr>
+                <tr><td>General Support</td><td><a href="mailto:Support@BERealtors.org">Support@BERealtors.org</a></td></tr>
+                <tr><td>Member Portal Help</td><td><a href="mailto:Support@BERealtors.org">Support@BERealtors.org</a></td></tr>
+              </tbody>
+            </table>
+            <p class="lead" style="margin-top:8px">Leadership & committee chairs follow the same hero/flag/card pattern as your BOD page. :contentReference[oaicite:7]{index=7}</p>
+          </article>
+  
+          <article class="card reveal reveal-up">
+            <h3>Phone &amp; Address</h3>
+            <p><strong>Phone:</strong> <a href="tel:+12399926771">(239) 992-6771</a></p>
+            <p><strong>Address:</strong><br>
+              25300 Bernwood Dr., Suite 1<br>
+              Bonita Springs, FL 34135
+            </p>
+            <div class="btn-row">
+              <a class="btn secondary" href="https://maps.apple.com/?address=25300%20Bernwood%20Dr%20Suite%201,%20Bonita%20Springs,%20FL%2034135" target="_blank" rel="noopener">Open in Maps</a>
+              <a class="btn ghost" href="mailto:Support@BERealtors.org">Email Support</a>
+            </div>
+          </article>
+        </div>
+      </section>
+  
+      <hr class="hr reveal reveal-up">
+  
+      <!-- VISIT -->
+      <section id="visit" class="reveal reveal-zoom" aria-labelledby="visit-title">
+        <h2 id="visit-title" class="reveal reveal-left">Visit Us</h2>
+        <p class="lead reveal reveal-up">Stop by our office for membership, lockboxes, or education assistance. For classes and events, check the calendar for location details.</p>
+        <div class="btn-row">
+          <a class="btn primary" href="https://members.bonitaesterorealtors.com/bercalendar" target="_blank" rel="noopener">Education &amp; Events</a>
+          <a class="btn ghost" href="#contact">Contact BER</a>
+        </div>
+      </section>
+  
+    </div>
+  
+    <!-- Sticky Helpbar -->
+    <div class="helpbar" role="region" aria-label="Quick help">
+      <strong>Need help with Membership, MLS, or Supra?</strong>
+      <div class="btn-row">
+        <a class="btn" href="tel:+12399926771">Call (239) 992-6771</a>
+        <a class="btn" href="mailto:Support@BERealtors.org">Email Support</a>
+      </div>
+    </div>
+  
+    <!-- Tiny observer to toggle .in for .reveal elements -->
+    <script>
+      (function(){
+        const els=[...document.querySelectorAll('.ber-links .reveal')];
+        if(!('IntersectionObserver'in window)){els.forEach(e=>e.classList.add('in'));return;}
+        const io=new IntersectionObserver((entries)=>{
+          entries.forEach(ent=>{ if(ent.isIntersecting){ ent.target.classList.add('in'); io.unobserve(ent.target);} });
+        },{rootMargin:'0px 0px -10% 0px',threshold:.1});
+        els.forEach(e=>io.observe(e));
+      })();
+    </script>
+  </section>
+  

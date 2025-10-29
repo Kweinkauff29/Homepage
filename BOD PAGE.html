@@ -1,973 +1,473 @@
-<html>
-  <!--Loading Bar-->
-  <style>
-    /* Full-screen white overlay */
-    #loading-overlay {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background-color: white;
-      z-index: 9999;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-    }
-  
-    /* Loading bar container */
-    #loading-bar-container {
-      width: 80%;
-      max-width: 600px;
-      height: 6px;
-      background-color: rgba(0, 0, 0, 0.1);
-      border-radius: 3px;
-      overflow: hidden;
-    }
-  
-    /* Loading bar */
-    #loading-bar {
-      height: 100%;
-      width: 0%;
-      background-color: #007BFF;
-      transition: width 3.5s linear;
-    }
-  
-    /* Hide the overlay */
-    #loading-overlay.hidden {
-      display: none;
-    }
-  </style>
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>2025 Board of Directors — Bonita Springs–Estero REALTORS®</title>
 
-  <style>
+<!-- Optional fonts to match your other pages -->
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700;800&family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
 
-  html {
-    width: 100%;
-    background-color: #fdfdfd;
-    overflow-y: scroll;
+<style>
+  :root{
+    --ink:#0f172a; --paper:#ffffff; --muted:#64748b;
+    --rule:#111827; --rule-soft:#e5e7eb;
+    --teal:#0ea5a0; --gold:#c8a24a; --accent:#e0002a;
+    --chip:#f7f7f8;
+    --ticker:55s;           /* desktop ticker speed */
+    --fx-opacity:.14;       /* background ornaments opacity */
+  }
+  @media (max-width:860px){
+    :root{ --ticker:72s; --fx-opacity:.10; }  /* calmer motion on mobile */
+  }
+  [data-theme="dark"]{
+    --ink:#e5e7eb; --paper:#0b0e13; --muted:#9aa1a9;
+    --rule:#e5e7eb; --rule-soft:#1f2937; --chip:#111318;
   }
 
-  #pastpres {
-    margin: 30px 0 0 0;
-    color: white;
-    text-align: center;
-    display: flex;
-    width: 100%;
-    font-size: 70px;
-    text-shadow: 0 0 1px black;
-    font-family: 'Dancing Script', cursive;
+  html,body{margin:0;background:var(--paper);color:var(--ink);font:16px/1.5 Inter, ui-sans-serif, system-ui, Helvetica, Arial}
+  img{max-width:100%;height:auto;display:block}
+  .wrap{max-width:1200px;margin:0 auto;padding:24px 20px}
+
+  /* ===== Ambient Swiss background (grid + light diagonal field) ===== */
+  body::before{
+    content:""; position:fixed; inset:0; z-index:-3;
+    background:
+      radial-gradient(circle at 12px 12px, rgba(0,0,0,.05) 1px, transparent 1px) 0 0/24px 24px,
+      linear-gradient(110deg, rgba(14,165,160,.08) 0%, rgba(232,232,232,0) 45%) 0 0/100% 100%;
+  }
+  body::after{
+    content:""; position:fixed; left:-22vw; top:-30vh; width:80vw; height:64vh; z-index:-2;
+    transform:rotate(-12deg);
+    background:linear-gradient(90deg, var(--teal), #079c97);
+    opacity:.12; border-radius:28px; filter:saturate(120%);
   }
 
-  #bgvideo {
-        position: fixed;
-        right: 0;
-        bottom: 0;
-        min-width: 100%;
-        min-height: 100%;
-        width: auto;
-        height: auto;
-        z-index: -100;
-        background-size: cover;
+  /* ===== Additional background ornaments (lightweight) ===== */
+  .bg-ornaments{position:fixed; inset:0; z-index:-1; pointer-events:none}
+  .fx{position:absolute; opacity:var(--fx-opacity)}
+  .fx.plus{ width:22px; height:22px }
+  .fx.plus::before, .fx.plus::after{
+    content:""; position:absolute; left:50%; top:50%; transform:translate(-50%,-50%);
+    background:var(--ink); border-radius:2px
+  }
+  .fx.plus::before{ width:22px; height:3px }
+  .fx.plus::after{ width:3px; height:22px }
+
+  .fx.stripe{
+    width:22vw; height:10px; background:var(--accent);
+    transform:rotate(-18deg); border-radius:6px; box-shadow:0 6px 14px rgba(0,0,0,.08)
   }
 
-  .commrow h3 {
-      color: white;
-      font-size: 2rem;
-      font-family: 'Oswald';
-      justify-content: center;
-      text-align: center;
-      margin: auto;
-    }
-    .commrow h4 {
-      color: white;
-      font-size: 1.3rem;
-      text-align: center;
-      margin: 5px auto;
-    }
+  .fx.ring{ width:64px; height:64px; border:3px solid var(--ink); border-radius:50% }
+  .fx.ring::after{ content:""; position:absolute; inset:8px; border:2px solid var(--ink); border-radius:50% }
 
-  .col-md-4 {
-    margin: 10px;
-    min-width: 250px;
-    border-radius: 10px;
+  /* Soft drift animation */
+  @keyframes driftX{ 0%{transform:translateX(0)} 50%{transform:translateX(12px)} 100%{transform:translateX(0)} }
+  @keyframes driftY{ 0%{transform:translateY(0)} 50%{transform:translateY(-10px)} 100%{transform:translateY(0)} }
+  .fx.drift-x{ animation:driftX 14s ease-in-out infinite }
+  .fx.drift-y{ animation:driftY 16s ease-in-out infinite }
+  @media (prefers-reduced-motion:reduce){
+    .fx.drift-x,.fx.drift-y{ animation:none }
   }
 
-  .col-md-4 img{
-    padding: 10px;
+  /* ===== Hero ===== */
+  .hero{padding:56px 20px 28px; border-bottom:1px solid var(--rule-soft)}
+  .kicker{font:800 12px/1 Montserrat; letter-spacing:.22em; text-transform:uppercase; color:var(--muted)}
+  .hero h1{margin:10px 0 8px; font:800 clamp(28px,4.2vw,48px)/1.05 Montserrat; text-transform:uppercase; letter-spacing:.5px}
+  .hero p{margin:0; color:var(--muted)}
+  .marks{display:flex; gap:8px; align-items:center}
+  .marks .dot{width:6px;height:6px;border-radius:50%;background:var(--accent)}
+  .marks .line{height:6px;width:32px;background:var(--rule);opacity:.18}
+
+  /* ===== Section headers (flag) ===== */
+  .section-title{
+    display:flex; align-items:center; gap:12px; margin:34px 0 14px;
+    font:800 clamp(18px,2.4vw,24px)/1 Montserrat; text-transform:uppercase; letter-spacing:.5px;
+  }
+  .flag{height:8px; width:92px; background:var(--ink); clip-path:polygon(0 0, 100% 0, 86% 100%, 0 100%)}
+
+  /* ===== Cards & grids ===== */
+  .grid{display:grid; gap:16px}
+  .grid.exec{grid-template-columns:repeat(4,minmax(200px,1fr))}
+  .grid.directors{grid-template-columns:repeat(5,minmax(160px,1fr))}
+  @media (max-width:1100px){
+    .grid.exec{grid-template-columns:repeat(3,minmax(200px,1fr))}
+    .grid.directors{grid-template-columns:repeat(4,minmax(160px,1fr))}
+  }
+  @media (max-width:900px){
+    .grid.exec{grid-template-columns:repeat(2,minmax(200px,1fr))}
+    .grid.directors{grid-template-columns:repeat(3,minmax(160px,1fr))}
+  }
+  @media (max-width:640px){
+    .grid.exec{grid-template-columns:1fr}
+    .grid.directors{grid-template-columns:repeat(2,minmax(150px,1fr))}
   }
 
-  @media (max-width: 1000px) {
-      .commrow {
-        display: flex;
-      }
-      .commrow h4 {
-        font-size: 1rem;
-      }
-    }
-
-  @media (max-width: 850px) {
-      .wininfo p{
-        font-size: 1.4rem;
-      }
-      .arrowright {
-        margin: -62px 0 0 auto;
-      }
-      .winnerselect {
-        width: 319%;
-      }
-      .divcol h2 {
-        font-size: 1.3rem;
-      }
-      .bodcol h2 {
-        font-size: 2rem;
-      }
-      .bodcol h3 {
-        font-size: 1rem;
-      }
-      .commrow h4 {
-        font-size: 1rem;
-      }
-      .goldrow {
-        display: block !important;
-      }
-      #gold {
-        width: 100% !important;
-      }
-    }
-
-  @media (max-width: 950px) {
-    .col-md-4 {
-    margin: 5px;
-    min-width: 200px;
-      }
-      .commrow h3 {
-      font-size: 1.2rem;
-    }
-    }
-
-    @media (max-width: 700px) {
-    .col-md-4 {
-    margin: 5px;
-    min-width: 200px;
-      }
-    }
-
-    @media (max-width: 550px) {
-    .col-md-4 {
-    margin: 5px;
-    min-width: 100px;
-      }
-    }
-
-  .marquee {
-    width: 100%;
-    height: 230px;
-    background-image: linear-gradient(to right, #006ee2 0%, #05aae1 15%, #05aae1 85%, #006ee2 100%);
-    align-items: center;
-    align-self: center;
-    justify-content: center;
-    margin: -30px auto;
+  .card{
+    background:linear-gradient(180deg,#fff, #fafafa);
+    border:1px solid var(--rule-soft);
+    border-radius:18px; overflow:hidden;
+    box-shadow:0 1px 0 rgba(0,0,0,.03);
+    transition:transform .2s ease, box-shadow .2s ease;
   }
+  .card:hover{ transform:translateY(-2px); box-shadow:0 6px 20px rgba(0,0,0,.06) }
+  .card .ph{ aspect-ratio:1/1; background:#e9eef1; display:flex; align-items:center; justify-content:center; position:relative }
+  .card .ph img{ width:100%; height:100%; object-fit:cover }
+  .badge{ position:absolute; right:10px; top:10px; background:var(--teal); color:#fff; font-size:.72rem; padding:6px 10px; border-radius:999px; letter-spacing:.3px }
+  .meta{padding:12px 14px}
+  .role{margin:0 0 6px; font-weight:800; text-transform:uppercase; font-size:.8rem; color:var(--teal)}
+  .name{margin:0; font-weight:700; font-size:1.05rem}
 
-  .commrow {
-      display: flex;
-      margin: -15px auto -25px auto;
-    }
+  /* Chairs */
+  .chairs{display:grid; gap:16px; grid-template-columns:repeat(3,minmax(240px,1fr))}
+  @media (max-width:1000px){ .chairs{grid-template-columns:repeat(2,minmax(240px,1fr))} }
+  @media (max-width:640px){ .chairs{grid-template-columns:1fr} }
+  .chair{ display:grid; grid-template-columns:96px 1fr; gap:14px; align-items:center; border:1px solid var(--rule-soft); border-radius:14px; background:#fff; padding:12px 14px }
+  .chair .ph{ aspect-ratio:1/1; border-radius:12px; overflow:hidden }
+  .chair h3{margin:0; font-size:1.05rem}
+  .chair p{margin:4px 0 0; color:var(--muted); font-size:.9rem}
 
-  #marquee-content {
-    display: flex;
-    height: 100%;
-    width: 100%;
-    animation: scrolling 130s linear infinite;
+  /* Brand strip (Thrive bigger) */
+  .brand-strip{
+    margin:28px 0 8px; padding:26px 16px;
+    background:linear-gradient(90deg, var(--teal), #0aa39e);
+    display:flex; justify-content:center; align-items:center; border-radius:16px
   }
+  .brand-strip img{ height:120px; width:auto; filter:drop-shadow(0 6px 12px rgba(0,0,0,.18)) }
+  @media (max-width:520px){ .brand-strip img{ height:94px } }
 
-  @keyframes scrolling {
-    0%{ transform: translateX(100vw); }
-    100%{ transform: translateX(-870vw); }
+  /* Past Presidents ticker */
+  .ticker{
+    border-top:1px solid var(--rule-soft); border-bottom:1px solid var(--rule-soft);
+    background:linear-gradient(180deg,#fff, #f6f7f9);
+    padding:16px 0; overflow:hidden; position:relative
   }
-
-  #marquee-content li {
-      list-style: none;
-      justify-content: center;
-      align-items: center;
-      display: flex;
-      padding: 10px auto 10px auto;
-      margin: 20px 50px auto 150px;
-      height: 100px;
-      max-width: 400px;
+  .rail{ display:flex; gap:16px; width:max-content; animation:scroll var(--ticker) linear infinite }
+  .rail:hover{ animation-play-state:paused }
+  @media (prefers-reduced-motion:reduce){ .rail{ animation:none } }
+  @keyframes scroll{ from{ transform:translateX(0) } to{ transform:translateX(-50%) } }
+  .chip{
+    display:flex; align-items:center; gap:10px;
+    border:1px solid var(--rule-soft); background:#fff; padding:10px 12px; border-radius:999px;
+    box-shadow:0 1px 0 rgba(0,0,0,.02)
   }
+  .yy{ background:var(--ink); color:#fff; font-weight:800; padding:6px 10px; border-radius:999px; font-size:.8rem; letter-spacing:.3px }
+  .nm{ font-weight:600; white-space:nowrap }
 
-  #marquee-content li:hover {
-    cursor: pointer;
+  /* Loader */
+  #loading-overlay{position:fixed; inset:0; background:rgba(255,255,255,.92); z-index:999; display:flex; align-items:center; justify-content:center; transition:opacity .4s ease}
+  #loading-bar-container{width:min(600px,80%); height:6px; background:rgba(0,0,0,.08); overflow:hidden; border-radius:4px}
+  #loading-bar{width:0%; height:100%; background:var(--teal); transition:width 1.8s ease}
+  #loading-overlay.hidden{opacity:0; pointer-events:none}
+
+  /* Background video — reduce footprint on small screens */
+  @media (max-width:760px){
+    #bgvideo{ display:none }
   }
-
-  #container {
-    align-items: center;
-    display: block;
-    text-align: left;
-    justify-content: center;
-    width: 130px;
-  }
-
-  #year {
-    font-size: 40px;
-    border-bottom: 2px solid #FFF;
-    margin-bottom: 5px;
-    color: #FFF;
-    font-weight: bold;
-    padding: 10px auto 10px auto;
-  }
-
-  #name {
-    font-size: 30px;
-    color: #FFF;
-    line-height: 1;
-  }
-
-  #test {
-    width: 100%;
-    height: 100%;
-    max-width: 100%;
-    position: sticky;
-  }
-
-  #bgimg {
-    position: fixed;
-    z-index: -3;
-    top: -1%;
-    left: -1%;
-    width: 105%;
-    object-fit: cover;
-    height: 100%;
-    background-color: #fdfdfd;
-    }
-
-    #photos {
-      margin: 20px 10% 0 10%;
-      columns: 5;
-      justify-content: center;
-      display: flex;
-      position: relative;
-    }
-
-    #top {
-      justify-content: center;
-      width: 225px;
-      height: 225px;
-      object-fit: contain;
-      display: inherit;
-      margin-bottom: -20px;
-    }
-
-    #top:hover {
-      width: 250px;
-      height: 250px;
-    }
-
-    #middle {
-      justify-content: center;
-      width: 150px;
-      height: 150px;
-      object-fit: cover;
-      display: inherit;
-      margin-bottom: 0px;
-    }
-
-    #middle:hover {
-      width: 175px;
-      height: 175px;
-    }
-
-    h1 {
-      justify-content: center;
-      text-align: center;
-      font-family: 'Oswald', sans-serif;
-      font-size: 48px;
-      color: white;
-      text-shadow: 0 0 5px black;
-      line-height: 1;
-      margin-top: 0;
-    }
-
-    h2 {
-      text-align: center;
-      margin: 20px auto auto auto;
-      font-size: 28px;
-      font-family: 'Pathway Gothic One', sans-serif;
-      font-weight: 100;
-      color: white;
-      text-shadow: 0 0 5px black;
-    }
-
-    #directors {
-      font-size: 34px;
-      font-family: 'Oswald', sans-serif;
-      margin: 5px auto;
-      color: white;
-    }
-
-    @media screen and (max-width: 1150px) {
-      #top {
-        justify-content: center;
-        width: 200px;
-        height: 200px;
-        object-fit: cover;
-      }
-
-      #middle {
-        width: 130px;
-        height: 130px;
-      }
-
-      h1 {
-        justify-content: center;
-        text-align: center;
-        font-size: 38px;
-      }
-
-      #top:hover {
-        width: 225px;
-        height: 225px;
-      }
-    }
-
-    @media screen and (max-width: 1000px) {
-      #top {
-        justify-content: center;
-        width: 150px;
-        height: 150px;
-        object-fit: cover;
-      }
-
-      #middle {
-        width: 100px;
-        height: 100px;
-      }
-
-      #middle:hover {
-        width: 110px;
-        height: 110px;
-      }
-
-      #pastpres {
-        font-size: 50px;
-      }
-
-      .marquee {
-        height: 220px;
-      }
-
-      h1 {
-        justify-content: center;
-        text-align: center;
-        font-size: 32px;
-      }
-
-      h2 {
-        font-size: 14px;
-      }
-
-      #directors {
-        font-size: 24px;
-      }
-
-      #top:hover {
-        width: 175px;
-        height: 175px;
-      }
-    }
-
-    @media screen and (max-width: 750px) {
-      #top {
-        justify-content: center;
-        width: 120px;
-        height: 120px;
-        object-fit: cover;
-      }
-
-      #middle {
-        width: 80px;
-        height: 80px;
-        margin: auto;
-      }
-
-      #middle:hover {
-        width: 90px;
-        height: 90px;
-      }
-
-      #pastpres {
-        font-size: 40px;
-      }
-
-      h1 {
-        justify-content: center;
-        text-align: center;
-        font-size: 28px;
-      }
-
-      h2 {
-        font-size: 12px;
-      }
-
-      .marquee {
-        height: 180px;
-      }
-
-      #name {
-        font-size: 24px;
-      }
-
-    }
-
-    @media screen and (max-width: 600px) {
-      #top {
-        justify-content: center;
-        width: 95px;
-        height: 95px;
-        object-fit: cover;
-      }
-
-      #middle {
-        width: 60px;
-        height: 60px;
-      }
-
-      #middle:hover {
-        width: 70px;
-        height: 70px;
-      }
-
-      #name {
-        font-size: 22px;
-      }
-
-      .marquee {
-        height: 160px;
-      }
-
-      h1 {
-        justify-content: center;
-        text-align: center;
-        font-size: 20px;
-      }
-
-      h2 {
-        font-size: 10px;
-      }
-
-      #pastpres {
-        font-size: 30px;
-      }
-
-      #directors {
-        font-size: 18px;
-      }
-
-      #top:hover {
-        width: 125px;
-        height: 125px;
-      }
-    }
-
-    #bodh1 {
-      margin-top: 40px;
-      font-size: 70px;
-      font-family: 'Oswald', sans-serif;
-    }
-
-    #bodh2 {
-      justify-content: center;
-      font-family: 'Oswald', sans-serif;
-      border-bottom: 5px solid white;
-      font-size: 44px;
-      width: 400px;
-      text-align: center;
-      margin: 60px auto 10px auto;
-    }
-
-    #bodh21 {
-      justify-content: center;
-      font-family: 'Oswald', sans-serif;
-      border-bottom: 5px solid white;
-      width: 200px;
-      font-size: 38px;
-      text-align: center;
-      margin: 60px auto 10px auto;
-    }
-
-
-  </style>
-
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@500&display=swap" rel="stylesheet">
-
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Pathway+Gothic+One&display=swap" rel="stylesheet">
-
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Oswald&display=swap" rel="stylesheet">
-
-
-  <body id="test">
-
-    <div id="loading-overlay">
-      <div id="loading-bar-container">
-        <div id="loading-bar"></div>
-      </div>
-    </div>
-
-    <video id="bgvideo" autoplay muted loop>
-      <source src="https://www.bonitaesterorealtors.com/wp-content/uploads/2025/01/BackGroundBOD2025.mp4" type="video/mp4">
-    </video>
-
-    <h1 id="bodh1">2025 Board of Directors</h1>
-
-
-    <h2 id="bodh2">Executive Commitee</h2>
-
-    <div id="photos">
-      <div><img id="top" src="https://www.bonitaesterorealtors.com/wp-content/uploads/2024/07/DSC_0997-Enhanced-NR-1-e1721915134640.png"><h2>President</h2><h1>Adam<br>Ruud</h1></div>
-      <div><img id="top" src="https://www.bonitaesterorealtors.com/wp-content/uploads/2021/12/Untitled-design-70.png"><h2>Vice President</h2><h1>Fawn<br>Estes</h1></div>
-      <div><img id="top" src="https://www.bonitaesterorealtors.com/wp-content/uploads/2022/11/image-12.png"><h2>Secretary</h2><h1>Wade<br>Abed</h1></div>
-      <div><img id="top" src="https://www.bonitaesterorealtors.com/wp-content/uploads/2024/10/Primary-Headshot-Reduced-Cropped.png"><h2>Treasurer</h2><h1>Jeanne<br>Drath</h1></div>
-
-    </div>
-
-    <h2 id="bodh21">Directors</h2>
-
-    <div id=photos>
-      <div><img id="middle" src="https://www.bonitaesterorealtors.com/wp-content/uploads/2025/01/AprilRitchie.png"><h1 id="directors">April<br>Ritche</h1></div>
-      <div><img id="middle" src="https://www.bonitaesterorealtors.com/wp-content/uploads/2023/09/e764e00a-0be4-4ca0-8929-4e8c47684ade.png"><h1 id="directors">Brent<br>Greer</h1></div>
-      <div><img id="middle" src="https://www.bonitaesterorealtors.com/wp-content/uploads/2023/09/2e76b3c0-9e96-46a5-abd6-0917414dc87b-e1694719709205.png"><h1 id="directors">Ellen<br>Boyce</h1></div>
-      <div><img id="middle" src="https://www.bonitaesterorealtors.com/wp-content/uploads/2024/01/Untitled-design-13.png"><h1 id="directors">Erin<br>McDonald</h1></div>
-      <div><img id="middle" src="https://www.bonitaesterorealtors.com/wp-content/uploads/2021/12/Untitled-design-74.png"><h1 id="directors">Gina<br>Lamouth</h1></div>
-      <div><img id="middle" src="https://www.bonitaesterorealtors.com/wp-content/uploads/2024/11/michael-mahan.jpg"><h1 id="directors">Michael<br>Mahan</h1></div>
-      <div><img id="middle" src="https://www.bonitaesterorealtors.com/wp-content/uploads/2021/12/Untitled-design-76.png"><h1 id="directors">Doug<br>Purcell</h1></div>
-      <div><img id="middle" src="https://www.bonitaesterorealtors.com/wp-content/uploads/2022/11/Saundra_Hinton_Online-2-Edited-e1670344579585.png"><h1 id="directors">Saundra<br>Hinton</h1></div>
-
-    </div>
-    <br>
-
-    <div class="" style="background-color: rgba(0, 0, 128, .9);">
-
-      <h4 style="font-weight: 200;color: white; font-family: 'Oswald', sans-serif; font-size: 3rem; margin: 0px auto; text-align: center;">2025 Committee Chairs</h4>
-
-      <div class="row commrow" style=" padding:0; justify-content: center;">
-      <div class="col-md-4" style="padding:0; padding: 10px;">
-        <div class="row" >
-          <div class="col-md-4" style="margin: auto;display: flex;justify-content: center;">
-            <img style="max-width: 100%; max-height: 150px;" src="https://www.bonitaesterorealtors.com/wp-content/uploads/2024/11/DC8E8E67-1BAF-4A18-A8D7-6462736A1FDC.jpeg" alt="photo" />
-          </div>
-          <div class="col-md-4">
-            <h3>Sandy Wilder</h3>
-            <h4>Profesional Development</h4>
-          </div>
-        </div>
-      </div>
-      <div class="col-md-4" style="padding:0; padding: 10px;">
-        <div class="row" >
-          <div class="col-md-4" style="margin: auto;display: flex;justify-content: center;">
-            <img style="max-width: 100%; max-height: 150px;" src="https://www.bonitaesterorealtors.com/wp-content/uploads/2024/01/3-1-e1706645328268.png" alt="photo" />
-          </div>
-          <div class="col-md-4">
-            <h3>Danielle Damianov</h3>
-            <h4>Leadership Academy co-chair</h4>
-          </div>
-        </div>
-      </div>
-      <div class="col-md-4" style="padding:0;padding: 10px;">
-        <div class="row" >
-          <div class="col-md-4" style="margin: auto;display: flex;justify-content: center;">
-            <img style="max-width: 100%; max-height: 150px;" src="https://www.bonitaesterorealtors.com/wp-content/uploads/2024/11/1516985786660.jpeg" alt="photo" />
-          </div>
-          <div class="col-md-4">
-            <h3>Karen McIntyre</h3>
-            <h4>Grievance</h4>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <div class="row commrow" style=" padding:0; justify-content: center;">
-    <div class="col-md-4" style="padding:0; padding: 10px;">
-      <div class="row">
-        <div class="col-md-4" style="margin: auto;display: flex;justify-content: center;">
-          <img style="max-width: 100%; max-height: 150px;" src="https://www.bonitaesterorealtors.com/wp-content/uploads/2024/11/c195d3d0248b30c43bde01b3dd05ad90-h_l.jpg" alt="photo" />
-        </div>
-        <div class="col-md-4">
-          <h3>Mark True</h3>
-          <h4>Events</h4>
-        </div>
-      </div>
-    </div>
-    <div class="col-md-4" style="padding:0; padding: 10px;">
-      <div class="row" >
-        <div class="col-md-4" style="margin: auto;display: flex;justify-content: center;">
-          <img style="max-width: 100%; max-height: 150px;" src="https://www.bonitaesterorealtors.com/wp-content/uploads/2024/01/8-e1706645206858.png" alt="photo" />
-        </div>
-        <div class="col-md-4">
-          <h3>Sarah Anstett</h3>
-          <h4>Realtor Review</h4>
-        </div>
-      </div>
-    </div>
-    <div class="col-md-4" style="padding:0; padding: 10px;">
-      <div class="row">
-        <div class="col-md-6" style="margin: auto;display: flex;justify-content: center;">
-          <img style="max-width: 100%; max-height: 150px;" src="https://bonitaesterorealtors.com/wp-content/uploads/2025/06/083A4663-scaled-e1751294037285.jpg" alt="photo" />
-        </div>
-        <div class="col-md-6">
-          <h3>Keaton West</h3>
-          <h4>YPN</h4>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <div class="row commrow" style="padding:0; justify-content: center; padding: 10px;">
-  <div class="col-md-4" style="padding:0;">
-    <div class="row" style="">
-      <div class="col-md-4" style="margin: auto;display: flex;justify-content: center;">
-        <img style="max-width: 100%; max-height: 150px;" src="https://www.bonitaesterorealtors.com/wp-content/uploads/2024/01/9-e1706645182709.png" alt="photo" />
-      </div>
-      <div class="col-md-4">
-        <h3>Jesse McGreevy</h3>
-        <h4>MLS</h4>
-      </div>
-    </div>
-  </div>
-  <div class="col-md-4" style="padding:0;">
-    <div class="row" style="">
-      <div class="col-md-4" style="margin: auto;display: flex;justify-content: center;">
-        <img style="max-width: 100%; max-height: 150px;" src="https://www.bonitaesterorealtors.com/wp-content/uploads/2024/11/748a9727408eb537a1256e80709e3b4da-e177830566rd-w260_h260.webp" alt="photo" />
-      </div>
-      <div class="col-md-4">
-        <h3>Robert Klein</h3>
-        <h4>Professional Standards</h4>
-      </div>
-    </div>
-  </div>
-  <div class="col-md-4" style="padding:0;">
-    <div class="row" style="">
-      <div class="col-md-4" style="margin: auto;display: flex;justify-content: center;">
-        <img style="max-width: 100%; max-height: 150px;" src="https://www.bonitaesterorealtors.com/wp-content/uploads/2024/11/53b6226f2442676b9803d84611355ed0-h_l.jpg" alt="photo" />
-      </div>
-      <div class="col-md-4">
-        <h3>Josie Mendiola</h3>
-        <h4>Gov. Affairs/RPAC</h4>
-      </div>
-    </div>
-  </div>
+</style>
+</head>
+<body>
+
+<!-- Lightweight background ornaments -->
+<div class="bg-ornaments" aria-hidden="true">
+  <!-- plus marks -->
+  <span class="fx plus drift-y" style="top:6vh; left:6vw"></span>
+  <span class="fx plus drift-x" style="top:18vh; right:8vw"></span>
+  <span class="fx plus drift-y" style="top:36vh; left:14vw"></span>
+  <span class="fx plus drift-x" style="bottom:22vh; right:12vw"></span>
+  <span class="fx plus" style="bottom:8vh; left:10vw"></span>
+  <!-- ring outlines -->
+  <span class="fx ring drift-x" style="top:14vh; left:48vw"></span>
+  <span class="fx ring drift-y" style="bottom:16vh; left:58vw"></span>
+  <!-- accent stripe -->
+  <span class="fx stripe" style="top:28vh; left:-4vw"></span>
 </div>
 
-<div class="row commrow" style="padding:0; justify-content: center; padding: 10px;">
-<div class="col-md-4" style="padding:0;">
-  <div class="row" style="">
-    <div class="col-md-6" style="margin: auto;display: flex;justify-content: center;">
-      <img style="max-width: 100%; max-height: 150px;" src="https://www.bonitaesterorealtors.com/wp-content/uploads/2024/01/Untitled-design-15.png" alt="photo" />
+<!-- Loading overlay -->
+<div id="loading-overlay" aria-hidden="true">
+  <div id="loading-bar-container"><div id="loading-bar"></div></div>
+</div>
+
+<!-- HERO -->
+<section class="hero wrap" id="top">
+  <div class="marks" aria-hidden="true"><span class="dot"></span><span class="line"></span><span class="line"></span></div>
+  <div class="kicker">Bonita Springs–Estero REALTORS®</div>
+  <h1>2025 Board of Directors</h1>
+  <p>Executive Committee, Directors, and Committee Chairs</p>
+</section>
+
+<!-- EXECUTIVE COMMITTEE -->
+<section class="wrap">
+  <h2 class="section-title"><span class="flag"></span> Executive Committee</h2>
+  <div class="grid exec">
+    <article class="card">
+      <div class="ph"><img src="https://www.bonitaesterorealtors.com/wp-content/uploads/2024/07/DSC_0997-Enhanced-NR-1-e1721915134640.png" alt="President Adam Ruud"><span class="badge">President</span></div>
+      <div class="meta"><p class="role">President</p><p class="name">Adam Ruud</p></div>
+    </article>
+    <article class="card">
+      <div class="ph"><img src="https://www.bonitaesterorealtors.com/wp-content/uploads/2021/12/Untitled-design-70.png" alt="Vice President Fawn Estes"><span class="badge">Vice President</span></div>
+      <div class="meta"><p class="role">Vice President</p><p class="name">Fawn Estes</p></div>
+    </article>
+    <article class="card">
+      <div class="ph"><img src="https://www.bonitaesterorealtors.com/wp-content/uploads/2024/10/Primary-Headshot-Reduced-Cropped.png" alt="Treasurer Jeanne Drath"><span class="badge">Treasurer</span></div>
+      <div class="meta"><p class="role">Treasurer</p><p class="name">Jeanne Drath</p></div>
+    </article>
+    <article class="card">
+      <div class="ph"><img src="https://www.bonitaesterorealtors.com/wp-content/uploads/2022/11/image-12.png" alt="Secretary Wade Abed"><span class="badge">Secretary</span></div>
+      <div class="meta"><p class="role">Secretary</p><p class="name">Wade Abed</p></div>
+    </article>
+  </div>
+</section>
+
+<!-- DIRECTORS -->
+<section class="wrap">
+  <h2 class="section-title"><span class="flag" style="background:var(--teal)"></span> Directors</h2>
+  <div class="grid directors">
+    <article class="card">
+      <div class="ph"><img src="https://www.bonitaesterorealtors.com/wp-content/uploads/2025/01/AprilRitchie.png" alt="Director April Ritchie"></div>
+      <div class="meta"><p class="role">Director</p><p class="name">April Ritchie</p></div>
+    </article>
+
+    <article class="card">
+      <div class="ph"><img src="https://bonitaesterorealtors.com/wp-content/uploads/2025/02/Todd-Golnick-scaled.jpeg" alt="Director Todd Golnick"></div>
+      <div class="meta"><p class="role">Director</p><p class="name">Todd Golnick</p></div>
+    </article>
+
+    <article class="card">
+      <div class="ph"><img src="https://www.bonitaesterorealtors.com/wp-content/uploads/2024/01/Untitled-design-13.png" alt="Director Erin McDonald"></div>
+      <div class="meta"><p class="role">Director</p><p class="name">Erin McDonald</p></div>
+    </article>
+
+    <article class="card">
+      <div class="ph"><img src="https://www.bonitaesterorealtors.com/wp-content/uploads/2023/09/2e76b3c0-9e96-46a5-abd6-0917414dc87b-e1694719709205.png" alt="Director Ellen Boyce"></div>
+      <div class="meta"><p class="role">Director</p><p class="name">Ellen Boyce</p></div>
+    </article>
+
+    <article class="card">
+      <div class="ph"><img src="https://www.bonitaesterorealtors.com/wp-content/uploads/2021/12/Untitled-design-74.png" alt="Director Gina Lamouth"></div>
+      <div class="meta"><p class="role">Director</p><p class="name">Gina Lamouth</p></div>
+    </article>
+
+    <article class="card">
+      <div class="ph"><img src="https://www.bonitaesterorealtors.com/wp-content/uploads/2021/12/Untitled-design-76.png" alt="Director Doug Purcell"></div>
+      <div class="meta"><p class="role">Director</p><p class="name">Doug Purcell</p></div>
+    </article>
+
+    <article class="card">
+      <div class="ph"><img src="https://www.bonitaesterorealtors.com/wp-content/uploads/2022/11/Saundra_Hinton_Online-2-Edited-e1670344579585.png" alt="Director Saundra Hinton"></div>
+      <div class="meta"><p class="role">Director</p><p class="name">Saundra Hinton</p></div>
+    </article>
+
+    <article class="card">
+      <div class="ph"><img src="https://bonitaesterorealtors.com/wp-content/uploads/2023/07/Alice-Schwer-e1696345332173.jpeg" alt="Director Alice Schwer"></div>
+      <div class="meta"><p class="role">Director</p><p class="name">Alice Schwer</p></div>
+    </article>
+
+    <article class="card">
+      <div class="ph"><img src="https://bonitaesterorealtors.com/wp-content/uploads/2024/03/Ally-Miller.jpg" alt="Director Ally Miller"></div>
+      <div class="meta"><p class="role">Director</p><p class="name">Ally Miller</p></div>
+    </article>
+  </div>
+</section>
+
+<!-- COMMITTEE CHAIRS -->
+<section class="wrap">
+  <h2 class="section-title"><span class="flag" style="background:var(--accent)"></span> 2025 Committee Chairs</h2>
+  <div class="chairs">
+    <div class="chair">
+      <div class="ph"><img src="https://www.bonitaesterorealtors.com/wp-content/uploads/2024/11/DC8E8E67-1BAF-4A18-A8D7-6462736A1FDC.jpeg" alt="Sandy Wilder"></div>
+      <div><h3>Sandy Wilder</h3><p>Professional Development</p></div>
     </div>
-    <div class="col-md-6">
-      <h3>Mike Hughes</h3>
-      <h4>Media</h4>
+    <div class="chair">
+      <div class="ph"><img src="https://www.bonitaesterorealtors.com/wp-content/uploads/2024/01/3-1-e1706645328268.png" alt="Danielle Damianov"></div>
+      <div><h3>Danielle Damianov</h3><p>Leadership Academy — Co-Chair</p></div>
+    </div>
+    <div class="chair">
+      <div class="ph"><img src="https://www.bonitaesterorealtors.com/wp-content/uploads/2024/11/1516985786660.jpeg" alt="Karen McIntyre"></div>
+      <div><h3>Karen McIntyre</h3><p>Grievance</p></div>
+    </div>
+    <div class="chair">
+      <div class="ph"><img src="https://www.bonitaesterorealtors.com/wp-content/uploads/2024/11/c195d3d0248b30c43bde01b3dd05ad90-h_l.jpg" alt="Mark True"></div>
+      <div><h3>Mark True</h3><p>Events</p></div>
+    </div>
+    <div class="chair">
+      <div class="ph"><img src="https://www.bonitaesterorealtors.com/wp-content/uploads/2024/01/8-e1706645206858.png" alt="Sarah Anstett"></div>
+      <div><h3>Sarah Anstett</h3><p>Realtor Review</p></div>
+    </div>
+    <div class="chair">
+      <div class="ph"><img src="https://bonitaesterorealtors.com/wp-content/uploads/2025/06/083A4663-scaled-e1751294037285.jpg" alt="Keaton West"></div>
+      <div><h3>Keaton West</h3><p>YPN</p></div>
+    </div>
+    <div class="chair">
+      <div class="ph"><img src="https://www.bonitaesterorealtors.com/wp-content/uploads/2024/01/9-e1706645182709.png" alt="Jesse McGreevy"></div>
+      <div><h3>Jesse McGreevy</h3><p>MLS</p></div>
+    </div>
+    <div class="chair">
+      <div class="ph"><img src="https://www.bonitaesterorealtors.com/wp-content/uploads/2024/11/748a9727408eb537a1256e80709e3b4da-e177830566rd-w260_h260.webp" alt="Robert Klein"></div>
+      <div><h3>Robert Klein</h3><p>Professional Standards</p></div>
+    </div>
+    <div class="chair">
+      <div class="ph"><img src="https://www.bonitaesterorealtors.com/wp-content/uploads/2024/11/53b6226f2442676b9803d84611355ed0-h_l.jpg" alt="Josie Mendiola"></div>
+      <div><h3>Josie Mendiola</h3><p>Gov. Affairs / RPAC</p></div>
+    </div>
+    <div class="chair">
+      <div class="ph"><img src="https://www.bonitaesterorealtors.com/wp-content/uploads/2024/01/Untitled-design-15.png" alt="Mike Hughes"></div>
+      <div><h3>Mike Hughes</h3><p>Media</p></div>
+    </div>
+    <div class="chair">
+      <div class="ph"><img src="https://www.bonitaesterorealtors.com/wp-content/uploads/2024/11/243958530_278266954026330_3009223501871701699_n.jpg" alt="Kris Boyle"></div>
+      <div><h3>Kris Boyle</h3><p>Global Diversity</p></div>
+    </div>
+    <div class="chair">
+      <div class="ph"><img src="https://www.bonitaesterorealtors.com/wp-content/uploads/2024/11/David-Scott.jpg" alt="David Scott"></div>
+      <div><h3>David Scott</h3><p>Realtor Safety</p></div>
+    </div>
+    <div class="chair">
+      <div class="ph"><img src="https://www.bonitaesterorealtors.com/wp-content/uploads/2024/11/Corlin.jpg" alt="Corlin Tucker"></div>
+      <div><h3>Corlin Tucker</h3><p>Leadership Academy — Co-Chair</p></div>
+    </div>
+    <div class="chair">
+      <div class="ph"><img src="https://www.bonitaesterorealtors.com/wp-content/uploads/2024/11/Mark_Ledbetter_For-printing-4-1-scaled.jpg" alt="Mark Ledbetter"></div>
+      <div><h3>Mark Ledbetter</h3><p>Leadership Development</p></div>
     </div>
   </div>
-</div>
-<div class="col-md-4" style="padding:0;">
-  <div class="row" style="">
-    <div class="col-md-6" style="margin: auto;display: flex;justify-content: center;">
-      <img style="max-width: 100%; max-height: 150px;" src="https://www.bonitaesterorealtors.com/wp-content/uploads/2024/11/243958530_278266954026330_3009223501871701699_n.jpg" alt="photo" />
-    </div>
-    <div class="col-md-6">
-      <h3>Kris Boyle</h3>
-      <h4>Global Diversity</h4>
+</section>
+
+<!-- Thrive strip -->
+<section class="wrap">
+  <div class="brand-strip">
+    <img src="https://www.bonitaesterorealtors.com/wp-content/uploads/2025/01/Believe-in-the-Brand1.png" alt="Thrive in 2025" />
+  </div>
+</section>
+
+<!-- Past Presidents (header + auto-scrolling ribbon) -->
+<section class="wrap">
+  <h2 class="section-title"><span class="flag" style="background:var(--accent)"></span> Past Presidents</h2>
+</section>
+<section class="ticker">
+  <div class="wrap">
+    <div class="rail" id="rail">
+      <!-- One copy -->
+      <div class="chip"><span class="yy">2024</span><span class="nm">Mark Ledbetter</span></div>
+      <div class="chip"><span class="yy">2023</span><span class="nm">Angie Parker</span></div>
+      <div class="chip"><span class="yy">2022</span><span class="nm">Hunter Habib</span></div>
+      <div class="chip"><span class="yy">2020</span><span class="nm">Dena Wilcoxen</span></div>
+      <div class="chip"><span class="yy">2019</span><span class="nm">Ursula Weinkauff</span></div>
+      <div class="chip"><span class="yy">2018</span><span class="nm">Joe Pavich Sr.</span></div>
+      <div class="chip"><span class="yy">2017</span><span class="nm">Roger Brunswick</span></div>
+      <div class="chip"><span class="yy">2016</span><span class="nm">D. Michael Burke</span></div>
+      <div class="chip"><span class="yy">2015</span><span class="nm">Judi Gietzen</span></div>
+      <div class="chip"><span class="yy">2014</span><span class="nm">Anita Colletti</span></div>
+      <div class="chip"><span class="yy">2013</span><span class="nm">Al Speach</span></div>
+      <div class="chip"><span class="yy">2012</span><span class="nm">Joe Harris</span></div>
+      <div class="chip"><span class="yy">2011</span><span class="nm">Pam Olsen</span></div>
+      <div class="chip"><span class="yy">2009</span><span class="nm">Joe Pavich Sr.</span></div>
+      <div class="chip"><span class="yy">2008</span><span class="nm">Sherry Haas</span></div>
+      <div class="chip"><span class="yy">2007</span><span class="nm">James “Jim” Scartz</span></div>
+      <div class="chip"><span class="yy">2006</span><span class="nm">Wes Brodersen</span></div>
+      <div class="chip"><span class="yy">2005</span><span class="nm">Robert Schmidt</span></div>
+      <div class="chip"><span class="yy">2004</span><span class="nm">Betty Jean Christensen</span></div>
+      <div class="chip"><span class="yy">2003</span><span class="nm">David C. Morton</span></div>
+      <div class="chip"><span class="yy">2002</span><span class="nm">Marilyn Plath</span></div>
+      <div class="chip"><span class="yy">2001</span><span class="nm">Bruce Mazzola</span></div>
+      <div class="chip"><span class="yy">2000</span><span class="nm">Edward R. Zant</span></div>
+      <div class="chip"><span class="yy">1999</span><span class="nm">John Mitchell</span></div>
+      <div class="chip"><span class="yy">1998</span><span class="nm">Bill Hopmann</span></div>
+      <div class="chip"><span class="yy">1997</span><span class="nm">Rod F. Mease</span></div>
+      <div class="chip"><span class="yy">1996</span><span class="nm">Henry J. Hochstetler</span></div>
+      <div class="chip"><span class="yy">1995</span><span class="nm">Andrew P. DeSalvo</span></div>
+      <div class="chip"><span class="yy">1994</span><span class="nm">Thomas A. Brodersen</span></div>
+      <div class="chip"><span class="yy">1993</span><span class="nm">Kenneth A. Johnson</span></div>
+      <div class="chip"><span class="yy">1992</span><span class="nm">Milton F. Ohlman, II</span></div>
+      <div class="chip"><span class="yy">1991</span><span class="nm">Kenneth A. Johnson</span></div>
+      <div class="chip"><span class="yy">1990</span><span class="nm">Brenda Hengel White</span></div>
+      <div class="chip"><span class="yy">1989</span><span class="nm">Tom O’Rourke</span></div>
+      <div class="chip"><span class="yy">1988</span><span class="nm">Kathy Bode</span></div>
+      <div class="chip"><span class="yy">1986</span><span class="nm">Ralph P. Frengel</span></div>
+      <div class="chip"><span class="yy">1985</span><span class="nm">Clifford R. Baker</span></div>
+      <div class="chip"><span class="yy">1984</span><span class="nm">Beverly Glazier</span></div>
+      <div class="chip"><span class="yy">1983</span><span class="nm">Blanche C. Emmons</span></div>
+      <div class="chip"><span class="yy">1982</span><span class="nm">John Mathes</span></div>
+      <div class="chip"><span class="yy">1981</span><span class="nm">Sue Sundstrom</span></div>
+      <div class="chip"><span class="yy">1980</span><span class="nm">Sue Lowe</span></div>
+      <div class="chip"><span class="yy">1979</span><span class="nm">Mary Foster</span></div>
+      <div class="chip"><span class="yy">1978</span><span class="nm">Paul Schmidt</span></div>
+      <div class="chip"><span class="yy">1976</span><span class="nm">Arnold Glazier</span></div>
+      <div class="chip"><span class="yy">1975</span><span class="nm">Franke E. Crane, Jr.</span></div>
+      <div class="chip"><span class="yy">1970</span><span class="nm">Marion Gulder</span></div>
+      <div class="chip"><span class="yy">1967</span><span class="nm">Lee Ledford</span></div>
+      <div class="chip"><span class="yy">1966</span><span class="nm">W.A. Armstrong</span></div>
+      <!-- Duplicate for seamless loop -->
+      <div class="chip"><span class="yy">2024</span><span class="nm">Mark Ledbetter</span></div>
+      <div class="chip"><span class="yy">2023</span><span class="nm">Angie Parker</span></div>
+      <div class="chip"><span class="yy">2022</span><span class="nm">Hunter Habib</span></div>
+      <div class="chip"><span class="yy">2020</span><span class="nm">Dena Wilcoxen</span></div>
+      <div class="chip"><span class="yy">2019</span><span class="nm">Ursula Weinkauff</span></div>
+      <div class="chip"><span class="yy">2018</span><span class="nm">Joe Pavich Sr.</span></div>
+      <div class="chip"><span class="yy">2017</span><span class="nm">Roger Brunswick</span></div>
+      <div class="chip"><span class="yy">2016</span><span class="nm">D. Michael Burke</span></div>
+      <div class="chip"><span class="yy">2015</span><span class="nm">Judi Gietzen</span></div>
+      <div class="chip"><span class="yy">2014</span><span class="nm">Anita Colletti</span></div>
+      <div class="chip"><span class="yy">2013</span><span class="nm">Al Speach</span></div>
+      <div class="chip"><span class="yy">2012</span><span class="nm">Joe Harris</span></div>
+      <div class="chip"><span class="yy">2011</span><span class="nm">Pam Olsen</span></div>
+      <div class="chip"><span class="yy">2009</span><span class="nm">Joe Pavich Sr.</span></div>
+      <div class="chip"><span class="yy">2008</span><span class="nm">Sherry Haas</span></div>
+      <div class="chip"><span class="yy">2007</span><span class="nm">James “Jim” Scartz</span></div>
+      <div class="chip"><span class="yy">2006</span><span class="nm">Wes Brodersen</span></div>
+      <div class="chip"><span class="yy">2005</span><span class="nm">Robert Schmidt</span></div>
+      <div class="chip"><span class="yy">2004</span><span class="nm">Betty Jean Christensen</span></div>
+      <div class="chip"><span class="yy">2003</span><span class="nm">David C. Morton</span></div>
+      <div class="chip"><span class="yy">2002</span><span class="nm">Marilyn Plath</span></div>
+      <div class="chip"><span class="yy">2001</span><span class="nm">Bruce Mazzola</span></div>
+      <div class="chip"><span class="yy">2000</span><span class="nm">Edward R. Zant</span></div>
+      <div class="chip"><span class="yy">1999</span><span class="nm">John Mitchell</span></div>
+      <div class="chip"><span class="yy">1998</span><span class="nm">Bill Hopmann</span></div>
+      <div class="chip"><span class="yy">1997</span><span class="nm">Rod F. Mease</span></div>
+      <div class="chip"><span class="yy">1996</span><span class="nm">Henry J. Hochstetler</span></div>
+      <div class="chip"><span class="yy">1995</span><span class="nm">Andrew P. DeSalvo</span></div>
+      <div class="chip"><span class="yy">1994</span><span class="nm">Thomas A. Brodersen</span></div>
+      <div class="chip"><span class="yy">1993</span><span class="nm">Kenneth A. Johnson</span></div>
+      <div class="chip"><span class="yy">1992</span><span class="nm">Milton F. Ohlman, II</span></div>
+      <div class="chip"><span class="yy">1991</span><span class="nm">Kenneth A. Johnson</span></div>
+      <div class="chip"><span class="yy">1990</span><span class="nm">Brenda Hengel White</span></div>
+      <div class="chip"><span class="yy">1989</span><span class="nm">Tom O’Rourke</span></div>
+      <div class="chip"><span class="yy">1988</span><span class="nm">Kathy Bode</span></div>
+      <div class="chip"><span class="yy">1986</span><span class="nm">Ralph P. Frengel</span></div>
+      <div class="chip"><span class="yy">1985</span><span class="nm">Clifford R. Baker</span></div>
+      <div class="chip"><span class="yy">1984</span><span class="nm">Beverly Glazier</span></div>
+      <div class="chip"><span class="yy">1983</span><span class="nm">Blanche C. Emmons</span></div>
+      <div class="chip"><span class="yy">1982</span><span class="nm">John Mathes</span></div>
+      <div class="chip"><span class="yy">1981</span><span class="nm">Sue Sundstrom</span></div>
+      <div class="chip"><span class="yy">1980</span><span class="nm">Sue Lowe</span></div>
+      <div class="chip"><span class="yy">1979</span><span class="nm">Mary Foster</span></div>
+      <div class="chip"><span class="yy">1978</span><span class="nm">Paul Schmidt</span></div>
+      <div class="chip"><span class="yy">1976</span><span class="nm">Arnold Glazier</span></div>
+      <div class="chip"><span class="yy">1975</span><span class="nm">Franke E. Crane, Jr.</span></div>
+      <div class="chip"><span class="yy">1970</span><span class="nm">Marion Gulder</span></div>
+      <div class="chip"><span class="yy">1967</span><span class="nm">Lee Ledford</span></div>
+      <div class="chip"><span class="yy">1966</span><span class="nm">W.A. Armstrong</span></div>
     </div>
   </div>
-</div>
-<div class="col-md-4" style="padding:0;">
-  <div class="row" style="">
-    <div class="col-md-6" style="margin: auto;display: flex;justify-content: center;">
-      <img style="max-width: 100%; max-height: 150px;" src="https://www.bonitaesterorealtors.com/wp-content/uploads/2024/11/David-Scott.jpg" alt="photo" />
-    </div>
-    <div class="col-md-6">
-      <h3>David Scott</h3>
-      <h4>Realtor Safety</h4>
-    </div>
-  </div>
-</div>
-</div>
-<div class="row commrow" style="padding:0; justify-content: center; padding: 10px;">
+</section>
 
-<div class="col-md-4" style="padding:0;">
-  <div class="row" style="">
-    <div class="col-md-6" style="margin: auto;display: flex;justify-content: center;">
-      <img style="max-width: 100%; max-height: 150px;" src="https://www.bonitaesterorealtors.com/wp-content/uploads/2024/11/Corlin.jpg" alt="photo" />
-    </div>
-    <div class="col-md-6">
-      <h3>Corlin Tucker</h3>
-      <h4>Leadership Academy co-chair</h4>
-    </div>
-  </div>
-</div>
+<!-- Subtle background video (disabled on small screens) -->
+<video id="bgvideo" autoplay muted loop playsinline style="position:fixed;right:0;bottom:0;min-width:100%;min-height:100%;width:auto;height:auto;z-index:-4;object-fit:cover;opacity:.07">
+  <source src="https://www.bonitaesterorealtors.com/wp-content/uploads/2025/01/BackGroundBOD2025.mp4" type="video/mp4">
+</video>
 
-<div class="col-md-4" style="padding:0;">
-  <div class="row" style="">
-    <div class="col-md-6" style="margin: auto;display: flex;justify-content: center;">
-      <img style="max-width: 100%; max-height: 150px;" src="https://www.bonitaesterorealtors.com/wp-content/uploads/2024/11/Mark_Ledbetter_For-printing-4-1-scaled.jpg" alt="photo" />
-    </div>
-    <div class="col-md-6">
-      <h3>Mark Ledbetter</h3>
-      <h4>Leadership Development</h4>
-    </div>
-  </div>
-</div>
-</div>
-
-      <img src="https://www.bonitaesterorealtors.com/wp-content/uploads/2025/01/Believe-in-the-Brand1.png" style="    width: 50%;
-    margin: auto;
-    justify-content: center;
-    display: block;" alt="">
-    </div>
-
-    <div class="marquee">
-      <h1 id="pastpres">Past Presidents</h1>
-      <ul id="marquee-content">
-        <li><div id="container">
-          <span id="year">2024</span><br>
-          <span id="name">Mark Ledbetter</span></div>
-        </li>
-        <li><div id="container">
-          <span id="year">2023</span><br>
-          <span id="name">Angie Parker</span></div>
-        </li>
-        <li><div id="container">
-          <span id="year">2022</span><br>
-          <span id="name">Hunter Habib</span></div>
-        </li>
-        <li><div id="container">
-          <span id="year">2020</span><br>
-          <span id="name">Dena Wilcoxen</span></div>
-        </li>
-        <li><div id="container">
-          <span id="year">2019</span><br>
-          <span id="name">Ursula Weinkauff</span></div>
-        </li>
-        <li><div id="container">
-          <span id="year">2018</span><br>
-          <span id="name">Joe Pavich Sr.</span></div>
-        </li>
-        <li><div id="container">
-          <span id="year">2017</span><br>
-          <span id="name">Roger Brunswick</span></div>
-        </li>
-        <li><div id="container">
-          <span id="year">2016</span><br>
-          <span id="name">D. Michael Burke</span></div>
-        </li>
-        <li><div id="container">
-          <span id="year">2015</span><br>
-          <span id="name">Judi Gietzen</span></div>
-        </li>
-        <li><div id="container">
-          <span id="year">2014</span><br>
-          <span id="name">Anita Colletti</span></div>
-        </li>
-        <li><div id="container">
-          <span id="year">2013</span><br>
-          <span id="name">Al Speach</span></div>
-        </li>
-        <li><div id="container">
-          <span id="year">2012</span><br>
-          <span id="name">Joe Harris</span></div>
-        </li>
-        <li><div id="container">
-          <span id="year">2011</span><br>
-          <span id="name">Pam Olsen</span></div>
-        </li>
-        <li><div id="container">
-          <span id="year">2009</span><br>
-          <span id="name">Joe Pavich Sr.</span></div>
-        </li>
-        <li><div id="container">
-          <span id="year">2008</span><br>
-          <span id="name">Sherry Haas</span></div>
-        </li>
-        <li><div id="container">
-          <span id="year">2007</span><br>
-          <span id="name">James "Jim" Scartz</span></div>
-        </li>
-        <li><div id="container">
-          <span id="year">2006</span><br>
-          <span id="name">Wes Brodersen</span></div>
-        </li>
-        <li><div id="container">
-          <span id="year">2005</span><br>
-          <span id="name">Robert Schmidt</span></div>
-        </li>
-        <li><div id="container">
-          <span id="year">2004</span><br>
-          <span id="name">Betty Jean Christensen</span></div>
-        </li>
-        <li><div id="container">
-          <span id="year">2003</span><br>
-          <span id="name">David C. Morton</span></div>
-        </li>
-        <li><div id="container">
-          <span id="year">2002</span><br>
-          <span id="name">Marilyn Plath</span></div>
-        </li>
-        <li><div id="container">
-          <span id="year">2001</span><br>
-          <span id="name">Bruce Mazzola</span></div>
-        </li>
-        <li><div id="container">
-          <span id="year">2000</span><br>
-          <span id="name">Edward R. Zant</span></div>
-        </li>
-        <li><div id="container">
-          <span id="year">1999</span><br>
-          <span id="name">John Mitchell</span></div>
-        </li>
-        <li><div id="container">
-          <span id="year">1998</span><br>
-          <span id="name">Bill Hopmann</span></div>
-        </li>
-        <li><div id="container">
-          <span id="year">1997</span><br>
-          <span id="name">Rod F. Mease</span></div>
-        </li>
-        <li><div id="container">
-          <span id="year">1996</span><br>
-          <span id="name">Henry J. Hochstetler</span></div>
-        </li>
-        <li><div id="container">
-          <span id="year">1995</span><br>
-          <span id="name">Andrew P. DeSalvo</span></div>
-        </li>
-        <li><div id="container">
-          <span id="year">1994</span><br>
-          <span id="name">Thomas A. Brodersen</span></div>
-        </li>
-        <li><div id="container">
-          <span id="year">1993</span><br>
-          <span id="name">Kenneth A. Johnson</span></div>
-        </li>
-        <li><div id="container">
-          <span id="year">1992</span><br>
-          <span id="name">Milton F. Ohlman, II</span></div>
-        </li>
-        <li><div id="container">
-          <span id="year">1991</span><br>
-          <span id="name">Kenneth A. Johnson</span></div>
-        </li>
-        <li><div id="container">
-          <span id="year">1990</span><br>
-          <span id="name">Brenda Hengel White</span></div>
-        </li>
-        <li><div id="container">
-          <span id="year">1989</span><br>
-          <span id="name">Tom O' Rourke</span></div>
-        </li>
-        <li><div id="container">
-          <span id="year">1988</span><br>
-          <span id="name">Kathy Bode</span></div>
-        </li>
-        <li><div id="container">
-          <span id="year">1986</span><br>
-          <span id="name">Ralph P. Frengel</span></div>
-        </li>
-        <li><div id="container">
-          <span id="year">1985</span><br>
-          <span id="name">Clifford R. Baker</span></div>
-        </li>
-        <li><div id="container">
-          <span id="year">1984</span><br>
-          <span id="name">Beverly Glazier</span></div>
-        </li>
-        <li><div id="container">
-          <span id="year">1983</span><br>
-          <span id="name">Blanche C. Emmons</span></div>
-        </li>
-        <li><div id="container">
-          <span id="year">1982</span><br>
-          <span id="name">John Mathes</span></div>
-        </li>
-        <li><div id="container">
-          <span id="year">1981</span><br>
-          <span id="name">Sue Sundstrom</span></div>
-        </li>
-        <li><div id="container">
-          <span id="year">1980</span><br>
-          <span id="name">Sue Lowe</span></div>
-        </li>
-        <li><div id="container">
-          <span id="year">1979</span><br>
-          <span id="name">Mary Foster</span></div>
-        </li>
-        <li><div id="container">
-          <span id="year">1978</span><br>
-          <span id="name">Paul Schmidt</span></div>
-        </li>
-        <li><div id="container">
-          <span id="year">1976</span><br>
-          <span id="name">Arnold Glazier</span></div>
-        </li>
-        <li><div id="container">
-          <span id="year">1975</span><br>
-          <span id="name">Franke E. Crane, Jr.</span></div>
-        </li>
-        <li><div id="container">
-          <span id="year">1970</span><br>
-          <span id="name">Marion Gulder</span></div>
-        </li>
-        <li><div id="container">
-          <span id="year">1967</span><br>
-          <span id="name">Lee Ledford</span></div>
-        </li>
-        <li><div id="container">
-          <span id="year">1966</span><br>
-          <span id="name">W.A. Armstrong</span></div>
-        </li>
-      </div>
-
-  </body>
-
-  <!--Wait for video to load for the page to load-->
-
-  <script>
-    const video = document.getElementById('bgvideo');
-    const loadingOverlay = document.getElementById('loading-overlay');
-    const loadingBar = document.getElementById('loading-bar');
-  
-    // Animate the loading bar
-    loadingBar.style.width = "100%";
-  
-    // Window onload function to scroll down and back up
-    window.onload = function() {
-      window.scrollTo(0, 50); // Scroll down 50px
-      setTimeout(() => {
-        window.scrollTo(0, 0); // Scroll back to the top after a brief delay
-      }, 1000); // Adjust delay as needed
-    };
-  
-    // Video onloadeddata function to manage scroll and hide overlay
-    video.onloadeddata = function() {
-      setTimeout(() => {
-        window.scrollTo(0, 50); // Scroll down 50px
-        setTimeout(() => {
-          window.scrollTo(0, 0); // Scroll back to the top after another delay
-        }, 3500); // Wait for 3.5 seconds
-      }, 1000); // Allow some buffer time after window.onload
-  
-      // Hide the loading overlay after 3500ms
-      setTimeout(() => {
-        loadingOverlay.classList.add('hidden');
-      }, 1000);
-    };
-  </script>
-  
-
-
+<script>
+  // Loader
+  const loadingOverlay = document.getElementById('loading-overlay');
+  const bar = document.getElementById('loading-bar');
+  window.addEventListener('load', () => {
+    requestAnimationFrame(()=>{ bar.style.width = '100%'; });
+    setTimeout(()=> loadingOverlay.classList.add('hidden'), 600);
+    window.scrollTo(0, 40);
+    setTimeout(()=>window.scrollTo(0, 0), 600);
+  });
+</script>
+</body>
 </html>

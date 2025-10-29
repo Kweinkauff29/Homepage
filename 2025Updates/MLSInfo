@@ -1,0 +1,309 @@
+<html><!-- BSER — MLS Membership Information (Body only, 2025 refresh) -->
+<main class="ber-mls" id="top" aria-labelledby="page-title">
+  <style>
+    /* ===== Scoped styles (namespace: .ber-mls) ===== */
+    :root{
+      --ink:var(--ber-ink,#0b1220);
+      --paper:var(--ber-paper,#ffffff);
+      --muted:var(--ber-muted,#5b6577);
+      --line:var(--ber-line,#e5e7eb);
+      --accent:var(--ber-teal,#0ea5a0);     /* BER teal */
+      --accent-2:var(--ber-gold,#c8a24a);   /* BER gold */
+      --radius:18px;
+      --shadow:0 6px 22px rgba(0,0,0,.08);
+      --pad:clamp(16px,2.6vw,32px);
+    }
+    .ber-mls{background:#fff; color:var(--ink); font:16px/1.5 system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial,"Noto Sans";}
+    .ber-mls *{box-sizing:border-box}
+    .ber-mls a{color:inherit; text-decoration:underline; text-underline-offset:2px}
+    .ber-mls .wrap{max-width:1100px; margin-inline:auto; padding:var(--pad)}
+    [id]{scroll-margin-top:84px}
+
+    /* Swiss-Modern hero */
+    .ber-mls .hero{border-bottom:6px solid var(--ink); background:linear-gradient(180deg,#fff,rgba(0,0,0,0));}
+    .ber-mls .kicker{display:inline-flex; gap:8px; align-items:center; letter-spacing:.14em; text-transform:uppercase; font-weight:800; color:var(--muted)}
+    .ber-mls .title{font-weight:900; font-size:clamp(32px,5vw,54px); letter-spacing:-.01em; margin:.35rem 0 .65rem}
+    .ber-mls .sub{color:var(--muted); max-width:72ch}
+
+    /* Quick actions (Swiss pills) */
+    .ber-mls .actions{display:grid; grid-template-columns:repeat(6,1fr); gap:10px; margin:18px 0 6px}
+    .ber-mls .action{display:flex; align-items:center; gap:10px; padding:12px 14px; background:#fff; border:2px solid var(--ink); border-radius:14px; text-decoration:none; color:var(--ink); font-weight:800; letter-spacing:.02em; box-shadow:4px 4px 0 var(--ink); transition:transform .08s ease;}
+    .ber-mls .action small{display:block; font-weight:600; color:var(--muted); letter-spacing:0}
+    .ber-mls .action:hover{transform:translate(-1px,-1px)}
+    .ber-mls .badge{display:inline-grid; place-items:center; width:28px; height:28px; border:2px solid var(--ink); border-radius:50%; font-weight:800}
+
+    /* Sticky tabs (matches About/Market pages look) */
+    .ber-mls .tabs{
+      position:sticky; top:0; z-index:20; background:color-mix(in srgb, #fff 92%, white 8%);
+      border-bottom:1px solid var(--line); backdrop-filter:blur(6px);
+      display:flex; gap:10px; align-items:center; overflow-x:auto; padding:10px var(--pad); margin:0 0 12px;
+    }
+    .ber-mls .tab{flex:0 0 auto; font-weight:800; padding:8px 12px; border-radius:999px; text-decoration:none; color:var(--ink); border:1px solid var(--line); background:#fff}
+    .ber-mls .tab:hover{box-shadow:var(--shadow); transform:translateY(-1px)}
+
+    /* Sections & cards */
+    .ber-mls h2{font:800 26px/1.2 system-ui,Arial,sans-serif; margin:18px 0 8px}
+    .ber-mls h3{font:800 18px/1.25 system-ui,Arial,sans-serif; margin:10px 0 6px}
+    .ber-mls .lead{color:var(--muted)}
+    .ber-mls .grid{display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:14px}
+    .ber-mls .grid-2{display:grid; grid-template-columns:1fr 1fr; gap:14px}
+    .ber-mls .card{background:#fff; border:1px solid var(--line); border-radius:var(--radius); box-shadow:var(--shadow); padding:14px}
+    .ber-mls .list{margin:10px 0; padding-left:18px}
+    .ber-mls .hr{border:0; height:1px; background:var(--line); margin:16px 0}
+    .ber-mls .callout{border:2px solid var(--ink); border-radius:14px; padding:12px 14px; background:#fafafa}
+    .ber-mls .callout.warn{background:#fff8f1; border-color:#111}
+    .ber-mls .btn-row{display:flex; gap:10px; flex-wrap:wrap; margin-top:10px}
+    .ber-mls .btn{appearance:none; border:none; border-radius:999px; padding:10px 14px; font-weight:800; cursor:pointer; text-decoration:none; display:inline-flex; align-items:center; justify-content:center}
+    .ber-mls .btn.primary{background:var(--accent); color:#fff}
+    .ber-mls .btn.secondary{background:#08325f; color:#fff}
+    .ber-mls .btn.ghost{background:#fff; border:1px solid var(--line); color:#08325f}
+
+    /* Tables */
+    .ber-mls table{width:100%; border-collapse:collapse; font-size:.95rem}
+    .ber-mls th,.ber-mls td{border-bottom:1px solid var(--line); padding:10px 8px; text-align:left}
+    .ber-mls th{font-weight:800; color:#0a0f1a}
+
+    /* Bottom help bar */
+    .ber-mls .helpbar{position:sticky; bottom:0; z-index:10; display:flex; gap:10px; align-items:center; justify-content:space-between; background:#0a0f1a; color:#fff; padding:12px var(--pad)}
+    .ber-mls .helpbar .btn{border:1px solid rgba(255,255,255,.25); color:#fff; background:transparent}
+
+    /* Responsive */
+    @media (max-width:1024px){
+      .ber-mls .actions{grid-template-columns:repeat(3,1fr)}
+      .ber-mls .grid{grid-template-columns:repeat(2,1fr)}
+      .ber-mls .grid-2{grid-template-columns:1fr}
+    }
+    @media (max-width:560px){
+      .ber-mls .actions{display:flex; overflow-x:auto; gap:10px; padding-bottom:8px; -webkit-overflow-scrolling:touch}
+      .ber-mls .action{min-width:220px; flex:0 0 auto}
+      .ber-mls .grid{grid-template-columns:1fr}
+    }
+  </style>
+
+  <!-- HERO -->
+  <header class="hero wrap">
+    <div class="kicker" aria-hidden="true">Membership & MLS</div>
+    <h1 id="page-title" class="title">MLS Membership Information</h1>
+    <p class="sub">How to join, dues & fees, Supra eKEY/lockbox setup, IDX/data access, rules & compliance, and quick downloads — all in one place.</p>
+
+    <!-- Quick Actions -->
+    <nav class="actions" aria-label="Quick actions">
+      <a class="action" href="https://matrix.swflamls.com/matrix/login.aspx" target="_blank" rel="noopener">
+        <span class="badge">↗</span><div>MLS Login<small>Matrix (SWFLAMLS)</small></div>
+      </a>
+      <a class="action" href="https://members.bonitaesterorealtors.com/MIC/Login" target="_blank" rel="noopener">
+        <span class="badge">★</span><div>Member Portal<small>Billing & Profile</small></div>
+      </a>
+      <a class="action" href="https://bonitaesterorealtors.com/supra-information/" target="_blank" rel="noopener">
+        <span class="badge">✓</span><div>Supra eKEY<small>Download & Activate</small></div>
+      </a>
+      <a class="action" href="https://dashboard.brokerbay.com/" target="_blank" rel="noopener">
+        <span class="badge">◎</span><div>BrokerBay<small>Showings</small></div>
+      </a>
+      <a class="action" href="https://www.narrpr.com/" target="_blank" rel="noopener">
+        <span class="badge">R</span><div>RPR<small>Property & CMAs</small></div>
+      </a>
+      <a class="action" href="https://trestle.corelogic.com/" target="_blank" rel="noopener">
+        <span class="badge">↯</span><div>IDX / Data<small>Trestle & Bridge</small></div>
+      </a>
+    </nav>
+  </header>
+
+  <!-- TABS -->
+  <nav class="tabs" aria-label="Page sections">
+    <a class="tab" href="#join">Join</a>
+    <a class="tab" href="#dues">Dues & Fees</a>
+    <a class="tab" href="#transfer">Transfer / Reactivate</a>
+    <a class="tab" href="#supra">Supra & Keys</a>
+    <a class="tab" href="#compliance">Rules & Compliance</a>
+    <a class="tab" href="#idx">IDX / Data Access</a>
+    <a class="tab" href="#forms">Forms & Downloads</a>
+    <a class="tab" href="#contact">Contact</a>
+  </nav>
+
+  <div class="wrap">
+    <!-- JOIN -->
+    <section id="join" aria-labelledby="join-title">
+      <h2 id="join-title">Join the MLS</h2>
+      <p class="lead">Welcome! You’ll create (or connect) your REALTOR<sup>®</sup> membership and add **MLS (Matrix – SWFLAMLS)** access. Have your license number, broker info, and payment method ready.</p>
+      <div class="grid-2" style="margin-top:10px">
+        <article class="card">
+          <h3>New to BER / SWFLAMLS</h3>
+          <ol class="list">
+            <li>Apply online in the <strong>Member Portal</strong> → select Membership + MLS.</li>
+            <li>Broker of Record approves your request (we’ll ping them automatically).</li>
+            <li>Pay initiation & prorated dues; we’ll send your MLS login.</li>
+            <li>Activate <strong>Supra eKEY</strong> (see Supra section) and set up showing tools.</li>
+          </ol>
+          <div class="btn-row">
+            <a class="btn primary" href="https://members.bonitaesterorealtors.com/MIC/Login" target="_blank" rel="noopener">Apply Online</a>
+            <a class="btn ghost" href="#dues">See Dues & Fees</a>
+          </div>
+        </article>
+        <article class="card">
+          <h3>Already a REALTOR<sup>®</sup> elsewhere?</h3>
+          <ol class="list">
+            <li>Submit <strong>Letter of Good Standing</strong> from your primary board.</li>
+            <li>Complete BER secondary membership + MLS add-on.</li>
+            <li>We’ll coordinate any needed reciprocity with your broker.</li>
+          </ol>
+          <p class="callout">Tip: Ask your AE to email your good-standing letter to <strong>Membership@BERealtors.org</strong>.</p>
+        </article>
+      </div>
+    </section>
+
+    <hr class="hr">
+
+    <!-- DUES & FEES -->
+    <section id="dues" aria-labelledby="dues-title">
+      <h2 id="dues-title">Dues & Fees (2025)</h2>
+      <p class="lead">Below is the standard schedule. Your first invoice will prorate by month. (Download the official schedule for full details.)</p>
+      <div class="grid-2">
+        <article class="card">
+          <h3>Membership + MLS</h3>
+          <table aria-label="Membership and MLS fees">
+            <thead><tr><th>Item</th><th>Amount</th></tr></thead>
+            <tbody>
+              <tr><td>Association Dues (Annual)</td><td><em>Fill in current amount</em></td></tr>
+              <tr><td>MLS Access (Annual)</td><td><em>Fill in current amount</em></td></tr>
+              <tr><td>Initiation / Application</td><td><em>Fill in current amount</em></td></tr>
+              <tr><td>RPAC (optional contribution)</td><td>Member-selected</td></tr>
+            </tbody>
+          </table>
+          <div class="btn-row">
+            <a class="btn ghost" href="#" target="_blank" rel="noopener">Download 2025 Fee Schedule (PDF)</a>
+          </div>
+        </article>
+        <article class="card">
+          <h3>Supra eKEY</h3>
+          <table aria-label="Supra fee info">
+            <thead><tr><th>Item</th><th>Amount</th></tr></thead>
+            <tbody>
+              <tr><td>Activation (one-time)</td><td><em>Supra current rate</em></td></tr>
+              <tr><td>Monthly Service (billed by Supra)</td><td><em>Supra current rate</em></td></tr>
+              <tr><td>Lockbox (if purchased)</td><td>Varies</td></tr>
+            </tbody>
+          </table>
+          <p class="lead">Questions? See <a href="#supra">Supra & Keys</a> below.</p>
+        </article>
+      </div>
+    </section>
+
+    <hr class="hr">
+
+    <!-- TRANSFER / REACTIVATE -->
+    <section id="transfer" aria-labelledby="transfer-title">
+      <h2 id="transfer-title">Transfer or Reactivate</h2>
+      <div class="grid-2">
+        <article class="card">
+          <h3>Transfer Offices / Brokers</h3>
+          <ol class="list">
+            <li>Your new broker updates the license with DBPR.</li>
+            <li>Email <strong>MLS@BERealtors.org</strong> to update your MLS office and roster.</li>
+            <li>We’ll confirm billing moves with Membership.</li>
+          </ol>
+        </article>
+        <article class="card">
+          <h3>Reinstate (Lapsed)</h3>
+          <ol class="list">
+            <li>Clear any outstanding balance in the Member Portal.</li>
+            <li>Request MLS reactivation — we’ll restore access and Supra as needed.</li>
+          </ol>
+          <div class="btn-row">
+            <a class="btn secondary" href="https://members.bonitaesterorealtors.com/MIC/Login" target="_blank" rel="noopener">Member Portal</a>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <hr class="hr">
+
+    <!-- SUPRA -->
+    <section id="supra" aria-labelledby="supra-title">
+      <h2 id="supra-title">Supra & Keys</h2>
+      <div class="grid-2">
+        <article class="card">
+          <h3>Get eKEY on Your Phone</h3>
+          <p>We’ll text/email you a secure activation link once your MLS setup is complete.</p>
+          <div class="btn-row">
+            <a class="btn primary" href="https://bonitaesterorealtors.com/supra-information/" target="_blank" rel="noopener">Supra How-To Page</a>
+            <a class="btn ghost" href="tel:+12399926771">(239) 992-6771</a>
+          </div>
+        </article>
+        <article class="card">
+          <h3>Cooperating Keys (Other Boards)</h3>
+          <p class="callout warn"><strong>Plan ahead:</strong> please contact BER <u>at least 24 hours in advance</u> if you need cooperating keys for another association.</p>
+          <p class="lead" style="margin-top:8px">Membership can advise which boards require paperwork or fees.</p>
+        </article>
+      </div>
+    </section>
+
+    <hr class="hr">
+
+    <!-- RULES & COMPLIANCE -->
+    <section id="compliance" aria-labelledby="comp-title">
+      <h2 id="comp-title">Rules & Compliance</h2>
+      <div class="grid">
+        <a class="card" href="#" target="_blank" rel="noopener"><h3>MLS Rules & Regulations (PDF)</h3><p class="lead">Data entry, photo and status rules, fine schedule.</p></a>
+        <a class="card" href="#" target="_blank" rel="noopener"><h3>Clear Cooperation Policy</h3><p class="lead">Coming-soon / public marketing requirements.</p></a>
+        <a class="card" href="#" target="_blank" rel="noopener"><h3>IDX / VOW Policy</h3><p class="lead">Display rules for websites & apps.</p></a>
+      </div>
+    </section>
+
+    <hr class="hr">
+
+    <!-- IDX / DATA -->
+    <section id="idx" aria-labelledby="idx-title">
+      <h2 id="idx-title">IDX & Data Access</h2>
+      <p class="lead">Vendors and brokers can connect via <strong>CoreLogic Trestle</strong> (broker-authorized) and <strong>Bridge API</strong> (select tools). We’ll help you choose the right path.</p>
+      <div class="grid">
+        <a class="card" href="https://trestle.corelogic.com/" target="_blank" rel="noopener"><h3>Trestle (CoreLogic)</h3><p>IDX, VOW, Broker Back-Office feeds. OAuth-style approvals.</p></a>
+        <a class="card" href="https://www.flexmls.com/bridge-api/" target="_blank" rel="noopener"><h3>Bridge API</h3><p>API access for apps and integrations.</p></a>
+        <a class="card" href="https://www.narrpr.com/" target="_blank" rel="noopener"><h3>RPR</h3><p>Property research, CMAs, reports — included with NAR.</p></a>
+        <a class="card" href="https://www.mlstouch.com/" target="_blank" rel="noopener"><h3>MLS-Touch</h3><p>Mobile app for search, CMAs, and client collaboration.</p></a>
+      </div>
+    </section>
+
+    <hr class="hr">
+
+    <!-- FORMS -->
+    <section id="forms" aria-labelledby="forms-title">
+      <h2 id="forms-title">Forms & Downloads</h2>
+      <div class="grid">
+        <a class="card" href="#" target="_blank" rel="noopener"><h3>New Member Checklist (PDF)</h3><p class="lead">Everything you’ll complete in your first week.</p></a>
+        <a class="card" href="#" target="_blank" rel="noopener"><h3>Secondary Member Packet</h3><p class="lead">For REALTORS<sup>®</sup> joining from another board.</p></a>
+        <a class="card" href="#" target="_blank" rel="noopener"><h3>Office / Broker Change</h3><p class="lead">How to move offices or add branches.</p></a>
+      </div>
+    </section>
+
+    <hr class="hr">
+
+    <!-- CONTACT -->
+    <section id="contact" aria-labelledby="contact-title">
+      <h2 id="contact-title">Who to Contact</h2>
+      <div class="grid-2">
+        <article class="card">
+          <h3>Membership (Join / Billing / Supra)</h3>
+          <p class="lead"><a href="mailto:Membership@BERealtors.org">Membership@BERealtors.org</a> · <a href="tel:+12399926771">(239) 992-6771</a></p>
+          <p>Mon–Fri, 8:30a–5:00p ET</p>
+        </article>
+        <article class="card">
+          <h3>MLS (Matrix / Compliance / IDX)</h3>
+          <p class="lead"><a href="mailto:MLS@BERealtors.org">MLS@BERealtors.org</a> · <a href="tel:+12399926771">(239) 992-6771</a></p>
+          <p>Mon–Fri, 8:30a–5:00p ET</p>
+        </article>
+      </div>
+      <div class="btn-row" style="margin-top:10px">
+        <a class="btn secondary" href="https://matrix.swflamls.com/matrix/login.aspx" target="_blank" rel="noopener">MLS Login</a>
+        <a class="btn primary" href="https://members.bonitaesterorealtors.com/MIC/Login" target="_blank" rel="noopener">Member Portal</a>
+      </div>
+    </section>
+  </div>
+
+  <!-- Sticky Helpbar -->
+  <div class="helpbar" role="region" aria-label="Immediate help">
+    <div><strong>Need help now?</strong> Call Membership <a href="tel:+12399926771" style="color:#fff">(239) 992-6771</a></div>
+    <a class="btn" href="#contact">All contact options</a>
+  </div>
+</main>
+</html>
