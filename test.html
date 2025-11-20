@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Affiliate Marquee Demo</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <style>
+    :root {
+      --marquee-height: 110px;
+      --marquee-speed: 45s; /* Lower = faster */
+      --marquee-bg: #ffffff;
+    }
+
+    body {
+      margin: 0;
+      padding: 2rem;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: #f5f5f5;
+    }
+
+    .marquee-wrapper {
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .marquee-title {
+      font-size: 1rem;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: #333;
+      margin-bottom: 0.75rem;
+    }
+
+    .marquee {
+      position: relative;
+      overflow: hidden;
+      width: 100%;
+      background: var(--marquee-bg);
+      border-radius: 16px;
+      box-shadow: 0 8px 18px rgba(0, 0, 0, 0.06);
+      padding: 0.75rem 0;
+      cursor: pointer;
+    }
+
+    /* Track that scrolls */
+    .marquee-track {
+      display: flex;
+      width: max-content;
+      align-items: center;
+      animation: marquee-scroll var(--marquee-speed) linear infinite;
+      will-change: transform;
+    }
+
+    /* Pause on hover */
+    .marquee:hover .marquee-track {
+      animation-play-state: paused;
+    }
+
+    .marquee-group {
+      display: flex;
+      align-items: center;
+    }
+
+    .marquee-logo {
+      flex: 0 0 auto;
+      height: var(--marquee-height);
+      max-width: 200px;
+      margin: 0 2.5rem;
+      object-fit: contain;
+      filter: grayscale(0.1);
+      opacity: 0.92;
+      transition: transform 0.25s ease, filter 0.25s ease, opacity 0.25s ease;
+    }
+
+    .marquee-logo:hover {
+      transform: scale(1.06);
+      filter: grayscale(0);
+      opacity: 1;
+    }
+
+    @keyframes marquee-scroll {
+      from {
+        transform: translateX(0);
+      }
+      to {
+        /* Because we duplicate the group twice, -50% gives a seamless loop */
+        transform: translateX(-50%);
+      }
+    }
+
+    /* Small screens tweak */
+    @media (max-width: 600px) {
+      .marquee-logo {
+        height: 80px;
+        margin: 0 1.5rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="marquee-wrapper">
+    <div class="marquee-title">Our Affiliate Partners</div>
+
+    <div
+      class="marquee"
+      onclick="window.open('https://members.bonitaesterorealtors.com/affiliatedirectory','_blank')"
+    >
+      <div class="marquee-track">
+        <!-- Group 1 -->
+        <div class="marquee-group">
+          <img class="marquee-logo" src="https://www.bonitaesterorealtors.com/wp-content/uploads/2021/09/239.jpeg" alt="239 Logo" />
+          <img class="marquee-logo" src="https://www.bonitaesterorealtors.com/wp-content/uploads/2021/09/911.png" alt="911 Logo" />
+          <img class="marquee-logo" src="https://www.bonitaesterorealtors.com/wp-content/uploads/2021/09/Screen-Shot-2021-09-15-at-11.54.04-AM-1.png" alt="Affiliate Logo" />
+          <img class="marquee-logo" src="https://www.bonitaesterorealtors.com/wp-content/uploads/2022/12/Amerifirst.jpeg" alt="Amerifirst" />
+          <img class="marquee-logo" src="https://www.bonitaesterorealtors.com/wp-content/uploads/2021/09/AccessTitleLogo1-300x89-1.jpeg" alt="Access Title" />
+          <img class="marquee-logo" src="https://www.bonitaesterorealtors.com/wp-content/uploads/2021/09/allied.jpeg" alt="Allied" />
+          <img class="marquee-logo" src="https://www.bonitaesterorealtors.com/wp-content/uploads/2021/09/allure.jpeg" alt="Allure" />
+          <img class="marquee-logo" src="https://www.bonitaesterorealtors.com/wp-content/uploads/2021/09/ares.png" alt="ARES" />
+          <img class="marquee-logo" src="https://www.bonitaesterorealtors.com/wp-content/uploads/2021/09/acm-logo-primary-blue.png" alt="ACM" />
+          <img class="marquee-logo" src="https://www.bonitaesterorealtors.com/wp-content/uploads/2022/01/Apex-Painting-e1642528424622.webp" alt="Apex Painting" />
+        </div>
+
+        <!-- Group 2 (exact duplicate for seamless loop) -->
+        <div class="marquee-group" aria-hidden="true">
+          <img class="marquee-logo" src="https://www.bonitaesterorealtors.com/wp-content/uploads/2021/09/239.jpeg" alt="" />
+          <img class="marquee-logo" src="https://www.bonitaesterorealtors.com/wp-content/uploads/2021/09/911.png" alt="" />
+          <img class="marquee-logo" src="https://www.bonitaesterorealtors.com/wp-content/uploads/2021/09/Screen-Shot-2021-09-15-at-11.54.04-AM-1.png" alt="" />
+          <img class="marquee-logo" src="https://www.bonitaesterorealtors.com/wp-content/uploads/2022/12/Amerifirst.jpeg" alt="" />
+          <img class="marquee-logo" src="https://www.bonitaesterorealtors.com/wp-content/uploads/2021/09/AccessTitleLogo1-300x89-1.jpeg" alt="" />
+          <img class="marquee-logo" src="https://www.bonitaesterorealtors.com/wp-content/uploads/2021/09/allied.jpeg" alt="" />
+          <img class="marquee-logo" src="https://www.bonitaesterorealtors.com/wp-content/uploads/2021/09/allure.jpeg" alt="" />
+          <img class="marquee-logo" src="https://www.bonitaesterorealtors.com/wp-content/uploads/2021/09/ares.png" alt="" />
+          <img class="marquee-logo" src="https://www.bonitaesterorealtors.com/wp-content/uploads/2021/09/acm-logo-primary-blue.png" alt="" />
+          <img class="marquee-logo" src="https://www.bonitaesterorealtors.com/wp-content/uploads/2022/01/Apex-Painting-e1642528424622.webp" alt="" />
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>
