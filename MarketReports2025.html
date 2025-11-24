@@ -48,6 +48,10 @@
     .year-btn:hover{transform:translateY(-1px)}
     .year-btn.active{background:var(--brand-primary);color:#fff}
 
+    .e-con {
+        padding: 0 !important;
+    }
+
     /* Feature block (hero) */
     .feature{
       display:grid;grid-template-columns:1fr 1fr;gap:var(--gap);align-items:stretch;margin-bottom:28px;
@@ -181,15 +185,15 @@
     const REPORTS = [
       /* ===== 2025 ===== */
 
-      { year: 2025, month: "October",      fastStats: "https://bonitaesterorealtors.com/wp-content/uploads/2025/11/BER-FAST-STATS-6.pdf", frStats: "https://bonitaesterorealtors.com/wp-content/uploads/2025/11/October-FR-Report.pdf", indicators: "https://bonitaesterorealtors.com/wp-content/uploads/2025/11/Monthly-Indicator-Reports-October-2025-1.pdf", thumb: "https://bonitaesterorealtors.com/wp-content/uploads/2025/08/Screenshot-2025-08-22-at-9.04.32 AM.png" },
+      { year: 2025, month: "October",      fastStats: "https://bonitaesterorealtors.com/wp-content/uploads/2025/11/BER-FAST-STATS-6.pdf", frStats: "http://bonitaesterorealtors.com/wp-content/uploads/2025/11/October-FR-Report.pdf", indicators: "https://bonitaesterorealtors.com/wp-content/uploads/2025/11/Monthly-Indicator-Reports-October-2025-1.pdf", thumb: "https://bonitaesterorealtors.com/wp-content/uploads/2025/08/Screenshot-2025-08-22-at-9.04.32 AM.png" },
 
-      { year: 2025, month: "September",      fastStats: "https://bonitaesterorealtors.com/wp-content/uploads/2025/10/BER-FAST-STATS-September.pdf", frStats: "https://bonitaesterorealtors.com/wp-content/uploads/2025/10/Sept-FR-report.pdf", indicators: "https://bonitaesterorealtors.com/wp-content/uploads/2025/10/Monthly-Indicator-Reports-September-2025.pdf", thumb: "https://bonitaesterorealtors.com/wp-content/uploads/2025/08/Screenshot-2025-08-22-at-9.04.32 AM.png" },
+      { year: 2025, month: "September",      fastStats: "https://bonitaesterorealtors.com/wp-content/uploads/2025/10/BER-FAST-STATS-September.pdf", frStats: "http://bonitaesterorealtors.com/wp-content/uploads/2025/11/Sept-FR-report.pdf", indicators: "https://bonitaesterorealtors.com/wp-content/uploads/2025/10/Monthly-Indicator-Reports-September-2025.pdf", thumb: "https://bonitaesterorealtors.com/wp-content/uploads/2025/08/Screenshot-2025-08-22-at-9.04.32 AM.png" },
 
       { year: 2025, month: "August",      fastStats: "https://bonitaesterorealtors.com/wp-content/uploads/2025/09/BER-FAST-STATS-5.pdf", frStats: null, indicators: "https://bonitaesterorealtors.com/wp-content/uploads/2025/09/Monthly-Indicator-Reports-August-2025-2.pdf", thumb: "https://bonitaesterorealtors.com/wp-content/uploads/2025/08/Screenshot-2025-08-22-at-9.04.32 AM.png" },
       { year: 2025, month: "July",      fastStats: "https://bonitaesterorealtors.com/wp-content/uploads/2025/08/BER-FAST-STATS-1.pdf", frStats: "https://bonitaesterorealtors.com/wp-content/uploads/2025/08/FR-Stats-July-2025.pdf", indicators: "https://bonitaesterorealtors.com/wp-content/uploads/2025/08/Monthly-Indicator-Reports-July-2025-2.pdf", thumb: "https://bonitaesterorealtors.com/wp-content/uploads/2025/08/Screenshot-2025-08-22-at-9.04.32 AM.png" },
 
       { year: 2025, month: "June",      fastStats: "https://bonitaesterorealtors.com/wp-content/uploads/2025/08/BER-FAST-STATS.pdf",               frStats: null,                                            thumb: DEFAULT_THUMB },
-      { year: 2025, month: "May",       fastStats: null,                                                                                            frStats: "https://bonitaesterorealtors.com/wp-content/uploads/2025/06/May-FR-stats.pdf",      thumb: DEFAULT_THUMB_FR },
+      { year: 2025, month: "May",       fastStats: null,                                                                                            frStats: "http://bonitaesterorealtors.com/wp-content/uploads/2025/11/May-FR-stats.pdf",      thumb: DEFAULT_THUMB_FR },
       { year: 2025, month: "April",     fastStats: "https://bonitaesterorealtors.com/wp-content/uploads/2025/05/AprFastStats.pdf",                 frStats: "https://bonitaesterorealtors.com/wp-content/uploads/2025/05/April-FR-Stats-25.pdf", thumb: DEFAULT_THUMB },
       { year: 2025, month: "March",     fastStats: "https://bonitaesterorealtors.com/wp-content/uploads/2025/04/March-Fast-Stats.pdf",             frStats: "https://bonitaesterorealtors.com/wp-content/uploads/2025/04/March-FR-Reports.pdf",  thumb: DEFAULT_THUMB },
       { year: 2025, month: "February",  fastStats: "https://bonitaesterorealtors.com/wp-content/uploads/2025/03/FebFastStats.pdf",                 frStats: "https://bonitaesterorealtors.com/wp-content/uploads/2025/03/Feb-2025-FR-MR.pdf",    thumb: DEFAULT_THUMB },
@@ -202,7 +206,7 @@
       { year: 2024, month: "September", fastStats:"https://www.bonitaesterorealtors.com/wp-content/uploads/2024/10/BonitaSprings-Estero-7.pdf",   frStats:"https://www.bonitaesterorealtors.com/wp-content/uploads/2024/10/September-FR-Report.pdf", thumb: DEFAULT_THUMB },
       { year: 2024, month: "August",    fastStats:"https://www.bonitaesterorealtors.com/wp-content/uploads/2024/09/BonitaSprings-Estero-6.pdf",   frStats:"https://www.bonitaesterorealtors.com/wp-content/uploads/2024/09/August-2024-FR-Stats.pdf", thumb: DEFAULT_THUMB },
       { year: 2024, month: "July",      fastStats:"https://www.bonitaesterorealtors.com/wp-content/uploads/2024/08/July-Fasts-Stats.pdf",        frStats:"https://www.bonitaesterorealtors.com/wp-content/uploads/2024/08/July-2024-FR-Stats.pdf", thumb: DEFAULT_THUMB },
-      { year: 2024, month: "June",      fastStats:"https://www.bonitaesterorealtors.com/wp-content/uploads/2024/07/June-2024-Fast-Stats.pdf",    frStats:"https://www.bonitaesterorealtors.com/wp-content/uploads/2024/07/June-2024-FR.pdf", thumb: DEFAULT_THUMB },
+      { year: 2024, month: "June",      fastStats:"https://www.bonitaesterorealtors.com/wp-content/uploads/2024/07/June-2024-Fast-Stats.pdf",    frStats:"http://bonitaesterorealtors.com/wp-content/uploads/2025/11/June-2025-FR-STATS-updated.pdf", thumb: DEFAULT_THUMB },
       { year: 2024, month: "May",       fastStats:"https://www.bonitaesterorealtors.com/wp-content/uploads/2024/06/May-Fast-Stats-1.pdf",        frStats:"https://www.bonitaesterorealtors.com/wp-content/uploads/2024/06/May-FR-Stats.pdf", thumb: DEFAULT_THUMB },
       { year: 2024, month: "April",     fastStats:"https://www.bonitaesterorealtors.com/wp-content/uploads/2024/06/April-Fast-Stats.pdf",         frStats:"https://www.bonitaesterorealtors.com/wp-content/uploads/2024/06/April-FR-Stats.pdf", thumb: DEFAULT_THUMB },
       { year: 2024, month: "March",     fastStats:"https://www.bonitaesterorealtors.com/wp-content/uploads/2024/04/BonitaSprings-Estero-2.pdf",   frStats:"https://www.bonitaesterorealtors.com/wp-content/uploads/2024/04/April-2024.pdf", thumb: DEFAULT_THUMB },

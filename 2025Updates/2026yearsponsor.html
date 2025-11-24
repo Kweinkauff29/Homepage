@@ -1,0 +1,781 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>2026 Year Sponsorship Packages – Bonita Springs–Estero REALTORS®</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <!-- Swiss-modern style fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Montserrat:wght@600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" />
+
+  <style>
+    :root{
+      --ink:#101114;
+      --ink-soft:#4b4f57;
+      --paper:#ffffff;
+      --muted:#f3f5f8;
+
+      /* Level accents */
+      --diamond-deep:#021a3f;
+      --diamond-accent:#00c2b7;
+      --platinum-deep:#033b63;
+      --platinum-accent:#00a1ff;
+      --gold-deep:#4a3500;
+      --gold-accent:#f2c200;
+      --silver-deep:#404552;
+      --silver-accent:#c3ccd9;
+      --bronze-deep:#5a3621;
+      --bronze-accent:#c47a3c;
+
+      --radius-lg:20px;
+      --shadow-soft:0 14px 40px rgba(0,0,0,.14);
+      --shadow-small:0 8px 24px rgba(0,0,0,.10);
+    }
+    *{box-sizing:border-box;}
+    html,body{
+      margin:0;
+      padding:0;
+      background:var(--paper);
+      color:var(--ink);
+      font-family:Inter,system-ui,-apple-system,Segoe UI,Arial,sans-serif;
+    }
+    a{color:inherit;text-decoration:none;}
+    a:focus-visible,button:focus-visible{
+      outline:3px solid #000;
+      outline-offset:2px;
+    }
+
+    .wrap{
+      max-width:1240px;
+      margin:0 auto;
+      padding:32px 18px 48px;
+    }
+
+    /* Swiss-modern header */
+    .page-head{
+      display:grid;
+      grid-template-columns:minmax(0,2.4fr) minmax(0,1.2fr);
+      gap:18px;
+      align-items:end;
+      margin-bottom:28px;
+      border-bottom:1px solid #dfe3eb;
+      padding-bottom:18px;
+    }
+    @media (max-width:900px){
+      .page-head{
+        grid-template-columns:1fr;
+        gap:10px;
+      }
+    }
+    .page-tag{
+      font-family:Montserrat,system-ui,Arial,sans-serif;
+      font-weight:600;
+      font-size:11px;
+      letter-spacing:.25em;
+      text-transform:uppercase;
+      color:#ff3b30;
+    }
+    h1{
+      font-family:Montserrat,system-ui,Arial,sans-serif;
+      font-weight:700;
+      font-size:32px;
+      line-height:1.05;
+      margin:4px 0 10px;
+      text-transform:uppercase;
+    }
+    .sub{
+      max-width:640px;
+      font-size:14px;
+      color:var(--ink-soft);
+      margin:0;
+    }
+
+    .meta-block{
+      justify-self:end;
+      text-align:right;
+      font-size:11px;
+      text-transform:uppercase;
+      letter-spacing:.18em;
+      font-weight:500;
+    }
+    .meta-row{
+      padding:4px 0;
+      border-top:1px solid #dfe3eb;
+    }
+    .meta-label{
+      color:#868b93;
+      display:block;
+    }
+    .meta-value{
+      font-family:Montserrat,system-ui,Arial,sans-serif;
+      margin-top:2px;
+    }
+    @media (max-width:900px){
+      .meta-block{
+        justify-self:start;
+        text-align:left;
+      }
+    }
+
+    /* Layout grid */
+    .layout{
+      display:grid;
+      grid-template-columns:minmax(0,2.1fr) minmax(0,1fr);
+      gap:24px;
+      align-items:flex-start;
+    }
+    @media (max-width:900px){
+      .layout{
+        grid-template-columns:1fr;
+      }
+    }
+
+    /* Tier grid */
+    .tier-grid{
+      display:grid;
+      grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
+      gap:18px;
+    }
+
+    .tier-card{
+      position:relative;
+      border-radius:var(--radius-lg);
+      padding:18px 18px 16px;
+      box-shadow:var(--shadow-small);
+      overflow:hidden;
+      background:#ffffff;
+      border:1px solid #dfe3eb;
+      display:flex;
+      flex-direction:column;
+      min-height:260px;
+    }
+
+    /* Swiss color bars */
+    .tier-card::before{
+      content:"";
+      position:absolute;
+      inset:0 60% auto 0;
+      height:6px;
+      background:#000;
+    }
+    .tier-card::after{
+      content:"";
+      position:absolute;
+      top:18px;
+      right:18px;
+      width:22px;
+      height:22px;
+      border-radius:50%;
+      border:2px solid rgba(0,0,0,.18);
+    }
+
+    .tier-label{
+      font-family:Montserrat,system-ui,Arial,sans-serif;
+      font-weight:600;
+      font-size:11px;
+      letter-spacing:.22em;
+      text-transform:uppercase;
+      margin-bottom:6px;
+      color:#7a7f88;
+    }
+    .tier-name{
+      font-family:Montserrat,system-ui,Arial,sans-serif;
+      font-weight:700;
+      font-size:19px;
+      line-height:1.15;
+      margin:0;
+      text-transform:uppercase;
+    }
+    .tier-name span{
+      display:block;
+      font-size:11px;
+      font-weight:500;
+      color:var(--ink-soft);
+      text-transform:none;
+      letter-spacing:.08em;
+      margin-top:2px;
+    }
+
+    /* Price with strikethrough */
+    .price{
+      margin-top:10px;
+      font-size:14px;
+      display:flex;
+      flex-wrap:wrap;
+      gap:6px 10px;
+      align-items:baseline;
+    }
+    .price-was{
+      text-decoration:line-through;
+      opacity:.6;
+      font-weight:400;
+    }
+    .price-now{
+      font-family:Montserrat,system-ui,Arial,sans-serif;
+      font-weight:700;
+      font-size:18px;
+    }
+    .price-note{
+      font-size:11px;
+      text-transform:uppercase;
+      letter-spacing:.16em;
+      color:var(--ink-soft);
+    }
+
+    .perk-list{
+      list-style:none;
+      padding:12px 0 0;
+      margin:0 0 14px;
+      flex:1;
+      font-size:13px;
+      color:var(--ink-soft);
+    }
+    .perk-list li{
+      display:flex;
+      gap:6px;
+      align-items:flex-start;
+      margin-bottom:6px;
+    }
+    .perk-list li i{
+      font-size:10px;
+      margin-top:3px;
+      flex-shrink:0;
+    }
+
+    .btn{
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      gap:8px;
+      border-radius:999px;
+      border:2px solid var(--ink);
+      padding:9px 14px;
+      font-family:Montserrat,system-ui,Arial,sans-serif;
+      font-size:11px;
+      letter-spacing:.16em;
+      text-transform:uppercase;
+      cursor:pointer;
+      background:#fff;
+      color:var(--ink);
+      transition:background .12s ease, color .12s ease, transform .08s ease, box-shadow .12s ease, border-color .12s ease;
+    }
+    .btn.full{
+      width:100%;
+      justify-content:center;
+    }
+    .btn.primary{
+      background:#000;
+      color:#fff;
+      border-color:#000;
+    }
+    .btn.secondary{
+      border-color:#000;
+    }
+    .btn.cart-selected{
+      box-shadow:0 0 0 1px #000, 0 10px 26px rgba(0,0,0,.26);
+      transform:translateY(-1px);
+    }
+    .btn:hover{
+      transform:translateY(-1px);
+      box-shadow:0 8px 20px rgba(0,0,0,.22);
+    }
+
+    /* Level-specific Swiss styling */
+    .tier-card--diamond{
+      border-color:var(--diamond-accent);
+      box-shadow:var(--shadow-soft);
+      background:linear-gradient(135deg,rgba(0,194,183,.16) 0%,rgba(1,29,78,.04) 40%,#ffffff 60%);
+    }
+    .tier-card--diamond::before{
+      background:linear-gradient(90deg,var(--diamond-accent),#13a1ff);
+    }
+    .tier-card--diamond::after{
+      border-color:var(--diamond-accent);
+      box-shadow:0 0 0 4px rgba(0,194,183,.28);
+    }
+    .tier-card--diamond .tier-label,
+    .tier-card--diamond .tier-name{
+      color:var(--diamond-deep);
+    }
+    .tier-card--diamond .price-now{
+      color:var(--diamond-deep);
+    }
+    .tier-card--diamond .perk-list li i{
+      color:var(--diamond-accent);
+    }
+
+    .tier-card--platinum{
+      border-color:var(--platinum-accent);
+      background:linear-gradient(135deg,rgba(0,161,255,.16) 0%,rgba(3,59,99,.03) 45%,#ffffff 65%);
+    }
+    .tier-card--platinum::before{
+      background:linear-gradient(90deg,var(--platinum-accent),#6fffe0);
+    }
+    .tier-card--platinum::after{
+      border-color:var(--platinum-accent);
+    }
+    .tier-card--platinum .tier-label,
+    .tier-card--platinum .tier-name{
+      color:var(--platinum-deep);
+    }
+    .tier-card--platinum .price-now{
+      color:var(--platinum-deep);
+    }
+    .tier-card--platinum .perk-list li i{
+      color:var(--platinum-accent);
+    }
+
+    .tier-card--gold{
+      border-color:var(--gold-accent);
+      background:linear-gradient(135deg,rgba(242,194,0,.18) 0%,rgba(255,247,220,.9) 40%,#ffffff 70%);
+    }
+    .tier-card--gold::before{
+      background:var(--gold-accent);
+    }
+    .tier-card--gold::after{
+      border-color:var(--gold-accent);
+    }
+    .tier-card--gold .tier-label,
+    .tier-card--gold .tier-name{
+      color:var(--gold-deep);
+    }
+    .tier-card--gold .price-now{
+      color:var(--gold-deep);
+    }
+    .tier-card--gold .perk-list li i{
+      color:var(--gold-accent);
+    }
+
+    .tier-card--silver{
+      border-color:var(--silver-accent);
+      background:linear-gradient(135deg,rgba(195,204,217,.35) 0%,#ffffff 50%);
+    }
+    .tier-card--silver::before{
+      background:var(--silver-accent);
+    }
+    .tier-card--silver::after{
+      border-color:var(--silver-accent);
+    }
+    .tier-card--silver .tier-label,
+    .tier-card--silver .tier-name{
+      color:var(--silver-deep);
+    }
+    .tier-card--silver .price-now{
+      color:var(--silver-deep);
+    }
+    .tier-card--silver .perk-list li i{
+      color:var(--silver-accent);
+    }
+
+    .tier-card--bronze{
+      border-color:var(--bronze-accent);
+      background:linear-gradient(135deg,rgba(196,122,60,.18) 0%,#ffffff 55%);
+    }
+    .tier-card--bronze::before{
+      background:var(--bronze-accent);
+    }
+    .tier-card--bronze::after{
+      border-color:var(--bronze-accent);
+    }
+    .tier-card--bronze .tier-label,
+    .tier-card--bronze .tier-name{
+      color:var(--bronze-deep);
+    }
+    .tier-card--bronze .price-now{
+      color:var(--bronze-deep);
+    }
+    .tier-card--bronze .perk-list li i{
+      color:var(--bronze-accent);
+    }
+
+    /* Cart panel */
+    .cart-panel{
+      position:sticky;
+      top:18px;
+      border-radius:var(--radius-lg);
+      padding:18px 18px 16px;
+      box-shadow:var(--shadow-soft);
+      background:#000;
+      color:#fff;
+    }
+    .cart-panel::before{
+      content:"+ YEAR SPONSOR";
+      position:absolute;
+      top:16px;
+      right:18px;
+      font-family:Montserrat,system-ui,Arial,sans-serif;
+      font-size:9px;
+      letter-spacing:.24em;
+      text-transform:uppercase;
+      opacity:.45;
+    }
+    .cart-title{
+      font-family:Montserrat,system-ui,Arial,sans-serif;
+      font-size:18px;
+      text-transform:uppercase;
+      margin:0 0 4px;
+    }
+    .cart-sub{
+      font-size:12px;
+      color:#c9ccd4;
+      margin-bottom:12px;
+    }
+    .cart-items{
+      border-radius:14px;
+      background:#12141a;
+      padding:10px 12px;
+      min-height:60px;
+      font-size:13px;
+    }
+    .cart-empty{
+      color:#7e8290;
+      font-size:12px;
+    }
+    .cart-selected-name{
+      font-weight:600;
+      font-family:Montserrat,system-ui,Arial,sans-serif;
+      font-size:14px;
+    }
+    .cart-total{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      margin:14px 0 10px;
+      font-weight:500;
+    }
+    .cart-total span:last-child{
+      font-family:Montserrat,system-ui,Arial,sans-serif;
+      font-size:18px;
+    }
+    .cart-note{
+      font-size:11px;
+      color:#a2a6b4;
+      margin-top:8px;
+    }
+
+    /* Fine print */
+    .fine-print{
+      margin-top:32px;
+      padding-top:22px;
+      border-top:1px solid #dfe3eb;
+      font-size:13px;
+      color:var(--ink-soft);
+      max-width:920px;
+    }
+    .fine-print h2{
+      font-family:Montserrat,system-ui,Arial,sans-serif;
+      font-size:16px;
+      text-transform:uppercase;
+      margin:0 0 8px;
+    }
+    .fine-print ul{
+      padding-left:18px;
+      margin:4px 0 0;
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <header class="page-head">
+      <div>
+        <div class="page-tag">2026 Year Sponsorships</div>
+        <h1>Year Sponsor Packages</h1>
+        <p class="sub">
+          One annual commitment. Clean, consistent visibility. Choose a single level that aligns with your goals and gain
+          access to class and event opportunities, Monthly Market Stats video mentions, and year-round placement on both
+          our homepage and Member Portal.
+        </p>
+      </div>
+      <div class="meta-block">
+        <div class="meta-row">
+          <span class="meta-label">Association</span>
+          <span class="meta-value">Bonita Springs–Estero REALTORS®</span>
+        </div>
+        <div class="meta-row">
+          <span class="meta-label">Year</span>
+          <span class="meta-value">2026 Sponsor Program</span>
+        </div>
+        <div class="meta-row">
+          <span class="meta-label">Deadline</span>
+          <span class="meta-value">January 31, 2026</span>
+        </div>
+      </div>
+    </header>
+
+    <section class="layout" aria-label="Sponsorship packages and cart">
+      <!-- Tiers -->
+      <div class="tier-grid" aria-label="Year sponsor tiers">
+        <!-- Diamond -->
+        <article class="tier-card tier-card--diamond">
+          <div class="tier-label">Level 1</div>
+          <h2 class="tier-name">
+            Diamond Year Sponsor
+            <span>Premier visibility + maximum flexibility</span>
+          </h2>
+          <div class="price">
+            <span class="price-was">$4,500 value</span>
+            <span class="price-now">$4,000</span>
+            <span class="price-note">2026 annual investment</span>
+          </div>
+          <ul class="perk-list">
+            <li><i class="fa fa-plus" aria-hidden="true"></i><span>NEW FOR 2026 – Solo sponsor of Open House Weekend ($1,000 value).</span></li>
+            <li><i class="fa fa-plus" aria-hidden="true"></i><span>NEW FOR 2026 – Poker Run “Full House” sponsor ($250 value).</span></li>
+            <li><i class="fa fa-plus" aria-hidden="true"></i><span>Two tickets to each Membership Breakfast for the year.</span></li>
+            <li><i class="fa fa-plus" aria-hidden="true"></i><span>Tier 1 Safety Kit sponsor – kits included for every new member and Open House.</span></li>
+            <li><i class="fa fa-plus" aria-hidden="true"></i><span>Sales Excellence Awards Platinum package ($500 value): logo in press release and on winners webpage, logo on all marketing, four (4) tickets, and logo in the <em>Realtor Review</em> winners spread.</span></li>
+            <li><i class="fa fa-plus" aria-hidden="true"></i><span>Diversity Event sponsor with logo recognition.</span></li>
+            <li><i class="fa fa-plus" aria-hidden="true"></i><span>2026 Installation GOLD sponsor ($500 value): two (2) tickets, logo on all materials, ¼-page program ad, social media shout-out, and reserved seating.</span></li>
+            <li><i class="fa fa-plus" aria-hidden="true"></i><span>½-page ad in <em>Realtor Review</em> magazine.</span></li>
+            <li><i class="fa fa-plus" aria-hidden="true"></i><span>31st Annual Golf Challenge sponsorship ($500 value) – choice of premium sponsor options such as Broker Cup, Breakfast, Lunch, GPS, scoring awards, on-course features, and more.</span></li>
+            <li><i class="fa fa-plus" aria-hidden="true"></i><span>Logo on the Annual Sponsor banner displayed at every BER event.</span></li>
+            <li><i class="fa fa-plus" aria-hidden="true"></i><span>One (1) month of Friday General E-blast marketing.</span></li>
+            <li><i class="fa fa-plus" aria-hidden="true"></i><span>One free Associate Affiliate membership.</span></li>
+            <li><i class="fa fa-plus" aria-hidden="true"></i><span>Diamond level placement on the homepage scrolling banner.</span></li>
+          </ul>
+          <button class="btn primary full js-add-cart" data-product-id="diamond">
+            <i class="fa fa-shopping-cart" aria-hidden="true"></i> Select Diamond
+          </button>
+        </article>
+
+        <!-- Platinum -->
+        <article class="tier-card tier-card--platinum">
+          <div class="tier-label">Level 2</div>
+          <h2 class="tier-name">
+            Platinum Year Sponsor
+            <span>High-impact coverage across core events</span>
+          </h2>
+          <div class="price">
+            <span class="price-was">$3,500 value</span>
+            <span class="price-now">$3,000</span>
+            <span class="price-note">2026 annual investment</span>
+          </div>
+          <ul class="perk-list">
+            <li><i class="fa fa-plus" aria-hidden="true"></i><span>NEW FOR 2026 – Joint Open House Weekend sponsor ($500 value, shared with one other sponsor).</span></li>
+            <li><i class="fa fa-plus" aria-hidden="true"></i><span>NEW FOR 2026 – Poker Run “Full House” sponsor ($250 value).</span></li>
+            <li><i class="fa fa-plus" aria-hidden="true"></i><span>Two tickets to each Membership Breakfast.</span></li>
+            <li><i class="fa fa-plus" aria-hidden="true"></i><span>Tier 2 Safety Kit sponsor – included for every new member and Open House.</span></li>
+            <li><i class="fa fa-plus" aria-hidden="true"></i><span>Sales Excellence Awards Gold package ($250 value): logo on the winners webpage and all marketing, two (2) tickets, and logo in the <em>Realtor Review</em> winners page.</span></li>
+            <li><i class="fa fa-plus" aria-hidden="true"></i><span>Diversity Event sponsor with recognition.</span></li>
+            <li><i class="fa fa-plus" aria-hidden="true"></i><span>2026 Installation SILVER sponsor ($250 value): one (1) ticket, name on all marketing, logo in the program, and Board of Directors photo opportunity.</span></li>
+            <li><i class="fa fa-plus" aria-hidden="true"></i><span>¼-page ad in <em>Realtor Review</em> magazine.</span></li>
+            <li><i class="fa fa-plus" aria-hidden="true"></i><span>31st Annual Golf Challenge manned hole sponsor ($250 value).</span></li>
+            <li><i class="fa fa-plus" aria-hidden="true"></i><span>Logo on the Annual Sponsor banner at every event.</span></li>
+            <li><i class="fa fa-plus" aria-hidden="true"></i><span>Two (2) weeks of Friday General E-blast marketing.</span></li>
+            <li><i class="fa fa-plus" aria-hidden="true"></i><span>One free Associate Affiliate membership.</span></li>
+            <li><i class="fa fa-plus" aria-hidden="true"></i><span>Platinum level position on the homepage scrolling banner.</span></li>
+          </ul>
+          <button class="btn primary full js-add-cart" data-product-id="platinum">
+            <i class="fa fa-shopping-cart" aria-hidden="true"></i> Select Platinum
+          </button>
+        </article>
+
+        <!-- Gold -->
+        <article class="tier-card tier-card--gold">
+          <div class="tier-label">Level 3</div>
+          <h2 class="tier-name">
+            Gold Year Sponsor
+            <span>Strong presence across signature events</span>
+          </h2>
+          <div class="price">
+            <span class="price-was">$2,500 value</span>
+            <span class="price-now">$2,000</span>
+            <span class="price-note">2026 annual investment</span>
+          </div>
+          <ul class="perk-list">
+            <li><i class="fa fa-plus" aria-hidden="true"></i><span>NEW FOR 2026 – Joint Open House Weekend sponsor ($250 value).</span></li>
+            <li><i class="fa fa-plus" aria-hidden="true"></i><span>NEW FOR 2026 – Poker Run “Full House” sponsor ($250 value).</span></li>
+            <li><i class="fa fa-plus" aria-hidden="true"></i><span>Two tickets to each Membership Breakfast.</span></li>
+            <li><i class="fa fa-plus" aria-hidden="true"></i><span>Tier 3 Safety Kit sponsor – included for every new member and Open House.</span></li>
+            <li><i class="fa fa-plus" aria-hidden="true"></i><span>Sales Excellence Awards Gold package ($250 value): logo on winners webpage and all marketing, two (2) tickets, and logo in the <em>Realtor Review</em> winners page.</span></li>
+            <li><i class="fa fa-plus" aria-hidden="true"></i><span>Diversity Event sponsor.</span></li>
+            <li><i class="fa fa-plus" aria-hidden="true"></i><span>2026 Installation SILVER sponsor ($250 value): one (1) ticket, name on all marketing, and logo in the program.</span></li>
+            <li><i class="fa fa-plus" aria-hidden="true"></i><span>⅛-page ad in <em>Realtor Review</em> magazine.</span></li>
+            <li><i class="fa fa-plus" aria-hidden="true"></i><span>31st Annual Golf Challenge unmanned sign sponsor ($100 value).</span></li>
+            <li><i class="fa fa-plus" aria-hidden="true"></i><span>Logo on the Annual Sponsor banner at all events.</span></li>
+            <li><i class="fa fa-plus" aria-hidden="true"></i><span>One (1) week of Friday General E-blast marketing.</span></li>
+            <li><i class="fa fa-plus" aria-hidden="true"></i><span>Gold level placement on the homepage scrolling banner.</span></li>
+          </ul>
+          <button class="btn primary full js-add-cart" data-product-id="gold">
+            <i class="fa fa-shopping-cart" aria-hidden="true"></i> Select Gold
+          </button>
+        </article>
+
+        <!-- Silver -->
+        <article class="tier-card tier-card--silver">
+          <div class="tier-label">Level 4</div>
+          <h2 class="tier-name">
+            Silver Year Sponsor
+            <span>Consistent recognition at BER events</span>
+          </h2>
+          <div class="price">
+            <span class="price-now">$1,000</span>
+            <span class="price-note">2026 annual investment</span>
+          </div>
+          <ul class="perk-list">
+            <li><i class="fa fa-plus" aria-hidden="true"></i><span>One (1) ticket to each Membership Breakfast.</span></li>
+            <li><i class="fa fa-plus" aria-hidden="true"></i><span>Exclusive name recognition as a sponsor at all events.</span></li>
+            <li><i class="fa fa-plus" aria-hidden="true"></i><span>Logo on Member Portal homepage.</span></li>
+            <li><i class="fa fa-plus" aria-hidden="true"></i><span>Logo on Installation program and registration page.</span></li>
+            <li><i class="fa fa-plus" aria-hidden="true"></i><span>Logo on Sales Excellence Awards program and registration page.</span></li>
+            <li><i class="fa fa-plus" aria-hidden="true"></i><span>Golf Challenge unmanned hole sponsor.</span></li>
+            <li><i class="fa fa-plus" aria-hidden="true"></i><span>Logo on front office lobby loop.</span></li>
+            <li><i class="fa fa-plus" aria-hidden="true"></i><span>Logo recognition in all quarterly magazines.</span></li>
+            <li><i class="fa fa-plus" aria-hidden="true"></i><span>Name on the Annual Sponsor banner at all events.</span></li>
+          </ul>
+          <button class="btn primary full js-add-cart" data-product-id="silver">
+            <i class="fa fa-shopping-cart" aria-hidden="true"></i> Select Silver
+          </button>
+        </article>
+
+        <!-- Bronze -->
+        <article class="tier-card tier-card--bronze">
+          <div class="tier-label">Level 5</div>
+          <h2 class="tier-name">
+            Bronze Year Sponsor
+            <span>Entry-level annual visibility</span>
+          </h2>
+          <div class="price">
+            <span class="price-now">$750</span>
+            <span class="price-note">2026 annual investment</span>
+          </div>
+          <ul class="perk-list">
+            <li><i class="fa fa-plus" aria-hidden="true"></i><span>One (1) ticket to each Membership Breakfast.</span></li>
+            <li><i class="fa fa-plus" aria-hidden="true"></i><span>Exclusive name recognition as a sponsor at all events.</span></li>
+            <li><i class="fa fa-plus" aria-hidden="true"></i><span>Logo on Member Portal homepage sponsor area.</span></li>
+            <li><i class="fa fa-plus" aria-hidden="true"></i><span>Logo on front office lobby loop.</span></li>
+            <li><i class="fa fa-plus" aria-hidden="true"></i><span>Logo recognition in all quarterly magazines.</span></li>
+            <li><i class="fa fa-plus" aria-hidden="true"></i><span>Name on the Annual Sponsor banner at all events.</span></li>
+          </ul>
+          <button class="btn primary full js-add-cart" data-product-id="bronze">
+            <i class="fa fa-shopping-cart" aria-hidden="true"></i> Select Bronze
+          </button>
+        </article>
+      </div>
+
+      <!-- Cart / Checkout -->
+      <aside class="cart-panel" aria-label="Sponsorship cart">
+        <h2 class="cart-title">Your Selected Package</h2>
+        <p class="cart-sub">
+          You may select one Year Sponsor level. Use checkout to email our team and reserve your 2026 placement.
+        </p>
+
+        <div class="cart-items" id="cartItems">
+          <div class="cart-empty">
+            No package selected yet. Click “Select” on one of the sponsorship levels to continue.
+          </div>
+        </div>
+
+        <div class="cart-total">
+          <span>Total</span>
+          <span id="cartTotal">$0</span>
+        </div>
+
+        <button id="checkoutBtn" class="btn secondary full">
+          <i class="fa fa-envelope" aria-hidden="true"></i> Checkout / Email BER
+        </button>
+
+        <p class="cart-note">
+          Checkout opens a pre-filled email to Support@BERealtors.org with your selected sponsorship package.
+          A staff member will follow up to confirm availability and payment.
+        </p>
+      </aside>
+    </section>
+
+    <!-- Fine print -->
+    <section class="fine-print" aria-label="Additional details">
+      <h2>Details & deadlines</h2>
+      <ul>
+        <li>Deadline to purchase: January 31, 2026.</li>
+        <li>Seats at individual events are determined based on sponsorship values per event.</li>
+        <li>Year sponsorships do not include annual membership dues.</li>
+        <li>Sponsorship upgrades are available per event; the event value included in your package will be credited toward any upgrade.</li>
+        <li>Magazine upgrades: equal value is credited toward higher-level ad placements, or as a credit if you are already a magazine sponsor.</li>
+      </ul>
+    </section>
+  </div>
+
+  <script>
+    (function(){
+      const products = {
+        diamond:{ id:"diamond", name:"Diamond Year Sponsor", price:4000 },
+        platinum:{ id:"platinum", name:"Platinum Year Sponsor", price:3000 },
+        gold:{ id:"gold", name:"Gold Year Sponsor", price:2000 },
+        silver:{ id:"silver", name:"Silver Year Sponsor", price:1000 },
+        bronze:{ id:"bronze", name:"Bronze Year Sponsor", price:750 }
+      };
+
+      let selectedId = null;
+      const btns = Array.from(document.querySelectorAll(".js-add-cart"));
+      const cartItemsEl = document.getElementById("cartItems");
+      const cartTotalEl = document.getElementById("cartTotal");
+      const checkoutBtn = document.getElementById("checkoutBtn");
+
+      function formatCurrency(v){
+        return new Intl.NumberFormat("en-US",{style:"currency",currency:"USD"}).format(v);
+      }
+
+      function renderCart(){
+        if(!selectedId){
+          cartItemsEl.innerHTML =
+            '<div class="cart-empty">No package selected yet. Click “Select” on one of the sponsorship levels to continue.</div>';
+          cartTotalEl.textContent = "$0";
+        }else{
+          const p = products[selectedId];
+          cartItemsEl.innerHTML =
+            '<div><span class="cart-selected-name">'+p.name+
+            '</span><br><span>'+formatCurrency(p.price)+'</span></div>';
+          cartTotalEl.textContent = formatCurrency(p.price);
+        }
+
+        btns.forEach(btn=>{
+          const id = btn.dataset.productId;
+          const isSelected = (id === selectedId);
+          const baseName = products[id].name.split(" ")[0]; // Diamond/Platinum/etc.
+          btn.textContent = isSelected
+            ? "Selected – Click to Clear"
+            : "Select " + baseName;
+          if(isSelected){
+            btn.classList.add("cart-selected");
+          }else{
+            btn.classList.remove("cart-selected");
+          }
+        });
+      }
+
+      btns.forEach(btn=>{
+        btn.addEventListener("click", ()=>{
+          const id = btn.dataset.productId;
+          if(selectedId === id){
+            selectedId = null;
+          }else{
+            selectedId = id;
+          }
+          renderCart();
+        });
+      });
+
+      checkoutBtn.addEventListener("click", ()=>{
+        if(!selectedId){
+          alert("Please select a sponsorship package before checking out.");
+          return;
+        }
+        const p = products[selectedId];
+        const body =
+          "Hello BER Team,%0D%0A%0D%0A" +
+          "I would like to reserve the following 2026 Year Sponsorship package:%0D%0A%0D%0A" +
+          "- " + p.name + " (" + formatCurrency(p.price) + ")%0D%0A%0D%0A" +
+          "Total estimated investment: " + formatCurrency(p.price) + "%0D%0A%0D%0A" +
+          "Please contact me to confirm availability and arrange payment.%0D%0A%0D%0A" +
+          "Name:%0D%0ACompany:%0D%0APhone:%0D%0A%0D%0AThank you!";
+        const subject = "2026 Year Sponsorship Reservation – " + p.name;
+        window.location.href = "mailto:Support@BERealtors.org"
+          + "?subject=" + encodeURIComponent(subject)
+          + "&body=" + body;
+      });
+
+      renderCart();
+    })();
+  </script>
+</body>
+</html>

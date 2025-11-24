@@ -1,0 +1,809 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>CCOR Name Change – Info Sessions & FAQ</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <!-- Swiss-modern fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Montserrat:wght@600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" />
+
+  <style>
+    :root{
+      --ink:#101114;
+      --ink-soft:#4b4f57;
+      --paper:#ffffff;
+      --canvas:#f3f4f7;
+
+      --accent-red:#ff3b30;
+      --accent-core:#00c2b7;
+      --accent-dark:#111214;
+
+      --radius-lg:20px;
+      --shadow-soft:0 18px 46px rgba(0,0,0,.18);
+      --shadow-small:0 10px 30px rgba(0,0,0,.14);
+    }
+
+    *{box-sizing:border-box;}
+    html,body{
+      margin:0;
+      padding:0;
+      background:var(--canvas);
+      color:var(--ink);
+      font-family:Inter,system-ui,-apple-system,Segoe UI,Arial,sans-serif;
+    }
+    a{color:inherit;text-decoration:none;}
+    a:focus-visible,button:focus-visible{
+      outline:3px solid #000;
+      outline-offset:2px;
+    }
+
+    /* Outer frame */
+    .frame{
+      max-width:1320px;
+      margin:32px auto;
+      padding:0 16px;
+    }
+
+    .wrap{
+      background:var(--paper);
+      border-radius:26px;
+      box-shadow:var(--shadow-soft);
+      overflow:hidden;
+      position:relative;
+    }
+
+    /* Vertical CCOR rail */
+    .rail{
+      position:absolute;
+      inset:0 auto 0 0;
+      width:54px;
+      background:#000;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+    }
+    .rail-inner{
+      writing-mode:vertical-rl;
+      text-orientation:mixed;
+      color:#fff;
+      font-family:Montserrat,system-ui,Arial,sans-serif;
+      font-size:11px;
+      letter-spacing:.28em;
+      text-transform:uppercase;
+      opacity:.85;
+    }
+    .rail-accent{
+      position:absolute;
+      top:18px;
+      left:0;
+      width:54px;
+      height:12px;
+      background:linear-gradient(90deg,var(--accent-red),var(--accent-core));
+    }
+
+    .content{
+      margin-left:54px;
+      padding:26px 26px 38px;
+    }
+    @media (max-width:800px){
+      .rail{
+        display:none;
+      }
+      .content{
+        margin-left:0;
+        padding:22px 20px 30px;
+      }
+    }
+
+    /* Header */
+    .page-head{
+      display:grid;
+      grid-template-columns:minmax(0,2.6fr) minmax(0,1.2fr);
+      gap:22px;
+      align-items:end;
+      margin-bottom:28px;
+      border-bottom:1px solid #dfe3eb;
+      padding-bottom:18px;
+      position:relative;
+    }
+    .page-head::before{
+      content:"+";
+      position:absolute;
+      top:-16px;
+      right:0;
+      font-family:Montserrat,system-ui,Arial,sans-serif;
+      font-weight:700;
+      font-size:26px;
+      color:var(--accent-red);
+      opacity:.6;
+    }
+    @media (max-width:900px){
+      .page-head{
+        grid-template-columns:1fr;
+        gap:12px;
+      }
+      .page-head::before{
+        display:none;
+      }
+    }
+
+    .page-tag{
+      font-family:Montserrat,system-ui,Arial,sans-serif;
+      font-weight:600;
+      font-size:11px;
+      letter-spacing:.25em;
+      text-transform:uppercase;
+      color:var(--accent-red);
+    }
+    h1{
+      font-family:Montserrat,system-ui,Arial,sans-serif;
+      font-weight:700;
+      font-size:30px;
+      line-height:1.05;
+      margin:4px 0 10px;
+      text-transform:uppercase;
+    }
+    .sub{
+      max-width:640px;
+      font-size:14px;
+      color:var(--ink-soft);
+      margin:0;
+    }
+
+    .meta-block{
+      justify-self:end;
+      text-align:right;
+      font-size:11px;
+      text-transform:uppercase;
+      letter-spacing:.18em;
+      font-weight:500;
+    }
+    .meta-row{
+      padding:4px 0;
+      border-top:1px solid #dfe3eb;
+    }
+    .meta-label{
+      color:#868b93;
+      display:block;
+    }
+    .meta-value{
+      font-family:Montserrat,system-ui,Arial,sans-serif;
+      margin-top:2px;
+    }
+    @media (max-width:900px){
+      .meta-block{
+        justify-self:start;
+        text-align:left;
+      }
+    }
+
+    /* Layout */
+    .layout{
+      display:grid;
+      grid-template-columns:minmax(0,1.7fr) minmax(0,1.1fr);
+      gap:24px;
+      align-items:flex-start;
+      margin-bottom:32px;
+    }
+    @media (max-width:900px){
+      .layout{
+        grid-template-columns:1fr;
+      }
+    }
+
+    /* Events column */
+    .events-column{
+      display:grid;
+      gap:16px;
+    }
+
+    .event-card{
+      position:relative;
+      border-radius:20px;
+      padding:18px 18px 16px;
+      background:#ffffff;
+      box-shadow:var(--shadow-small);
+      border:1px solid #dfe3eb;
+      overflow:hidden;
+    }
+    .event-card::before{
+      content:"";
+      position:absolute;
+      inset:0 35% auto 0;
+      height:5px;
+      background:linear-gradient(90deg,var(--accent-core),#13a1ff);
+    }
+    .event-card--inperson::before{
+      background:linear-gradient(90deg,var(--accent-red),#ffb000);
+    }
+
+    .event-tag{
+      font-family:Montserrat,system-ui,Arial,sans-serif;
+      font-weight:600;
+      font-size:10px;
+      letter-spacing:.20em;
+      text-transform:uppercase;
+      color:#7a7f88;
+      margin-bottom:4px;
+    }
+    .event-title{
+      font-family:Montserrat,system-ui,Arial,sans-serif;
+      font-weight:700;
+      font-size:17px;
+      margin:0 0 6px;
+      text-transform:uppercase;
+    }
+    .event-meta{
+      font-size:13px;
+      color:var(--ink-soft);
+      margin-bottom:10px;
+    }
+    .event-meta strong{
+      font-weight:600;
+    }
+    .event-meta span{
+      display:block;
+    }
+
+    .btn{
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      gap:8px;
+      border-radius:999px;
+      border:2px solid var(--accent-dark);
+      padding:9px 14px;
+      font-family:Montserrat,system-ui,Arial,sans-serif;
+      font-size:11px;
+      letter-spacing:.16em;
+      text-transform:uppercase;
+      cursor:pointer;
+      background:#fff;
+      color:var(--accent-dark);
+      transition:background .12s ease, color .12s ease, transform .08s ease, box-shadow .12s ease, border-color .12s ease;
+    }
+    .btn.full{
+      width:100%;
+      justify-content:center;
+    }
+    .btn.primary{
+      background:var(--accent-dark);
+      color:#fff;
+    }
+    .btn:hover{
+      transform:translateY(-1px);
+      box-shadow:0 8px 20px rgba(0,0,0,.18);
+    }
+
+    /* Quote / framing */
+    .quote-card{
+      border-radius:22px;
+      padding:18px 18px 20px;
+      background:#000;
+      color:#fff;
+      box-shadow:var(--shadow-soft);
+      position:relative;
+      overflow:hidden;
+    }
+    .quote-card::before{
+      content:"CCOR";
+      position:absolute;
+      top:16px;
+      right:18px;
+      font-family:Montserrat,system-ui,Arial,sans-serif;
+      font-size:9px;
+      letter-spacing:.24em;
+      text-transform:uppercase;
+      opacity:.35;
+    }
+    .quote-card::after{
+      content:"+";
+      position:absolute;
+      bottom:-10px;
+      left:12px;
+      font-family:Montserrat,system-ui,Arial,sans-serif;
+      font-weight:700;
+      font-size:38px;
+      color:var(--accent-core);
+      opacity:.4;
+    }
+    .quote-strip{
+      width:32px;
+      height:4px;
+      background:linear-gradient(90deg,var(--accent-red),var(--accent-core));
+      margin-bottom:10px;
+    }
+    .quote-label{
+      font-family:Montserrat,system-ui,Arial,sans-serif;
+      font-size:12px;
+      text-transform:uppercase;
+      letter-spacing:.18em;
+      color:#9ea2af;
+      margin-bottom:6px;
+    }
+    .quote-text{
+      font-size:13px;
+      line-height:1.6;
+      color:#e4e6ec;
+      margin-bottom:12px;
+    }
+    .quote-author{
+      font-size:11px;
+      text-transform:uppercase;
+      letter-spacing:.20em;
+      color:#9ea2af;
+    }
+
+    .framing-list{
+      margin-top:14px;
+      padding-top:14px;
+      border-top:1px solid #2b2f3a;
+      font-size:12px;
+    }
+    .framing-list strong{
+      display:block;
+      text-transform:uppercase;
+      letter-spacing:.14em;
+      font-size:10px;
+      margin-bottom:4px;
+      color:#c9ccd7;
+    }
+    .framing-list ul{
+      list-style:none;
+      padding:0;
+      margin:0;
+    }
+    .framing-list li{
+      margin-bottom:6px;
+      color:#d2d5df;
+    }
+
+    /* FAQ */
+    .faq-section{
+      margin-top:4px;
+    }
+    .faq-header{
+      display:flex;
+      flex-wrap:wrap;
+      justify-content:space-between;
+      gap:12px;
+      align-items:flex-end;
+      margin-bottom:12px;
+    }
+    .faq-title{
+      font-family:Montserrat,system-ui,Arial,sans-serif;
+      font-size:20px;
+      text-transform:uppercase;
+    }
+    .faq-sub{
+      font-size:12px;
+      color:var(--ink-soft);
+      max-width:420px;
+    }
+
+    .faq-grid{
+      display:grid;
+      grid-template-columns:minmax(0,2.1fr) minmax(0,1.1fr);
+      gap:24px;
+      align-items:flex-start;
+    }
+    @media (max-width:900px){
+      .faq-grid{
+        grid-template-columns:1fr;
+      }
+    }
+
+    .faq-list{
+      border-radius:20px;
+      background:var(--canvas);
+      padding:10px 10px 6px;
+      border:1px solid #d6dbe4;
+    }
+
+    .faq-item{
+      border-bottom:1px solid #d1d6e0;
+    }
+    .faq-item:last-child{
+      border-bottom:none;
+    }
+    .faq-q{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:12px;
+      padding:10px 8px;
+      cursor:pointer;
+    }
+    .faq-q-text{
+      font-size:13px;
+      font-weight:600;
+    }
+    .faq-icon{
+      width:18px;
+      height:18px;
+      border-radius:50%;
+      border:1px solid #888;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      font-size:11px;
+    }
+    .faq-a{
+      max-height:0;
+      overflow:hidden;
+      transition:max-height .18s ease;
+      font-size:13px;
+      color:var(--ink-soft);
+      padding:0 8px;
+    }
+    .faq-a-inner{
+      padding:0 0 10px;
+    }
+    .faq-item.is-open .faq-a{
+      max-height:520px;
+    }
+    .faq-item.is-open .faq-icon{
+      background:#000;
+      color:#fff;
+      border-color:#000;
+    }
+
+    .faq-side{
+      font-size:13px;
+      color:var(--ink-soft);
+    }
+    .faq-side h3{
+      font-family:Montserrat,system-ui,Arial,sans-serif;
+      font-size:13px;
+      text-transform:uppercase;
+      letter-spacing:.18em;
+      margin:0 0 6px;
+    }
+    .faq-side p{
+      margin:0 0 8px;
+    }
+    .faq-quote{
+      font-size:12px;
+      line-height:1.6;
+      padding-left:10px;
+      border-left:3px solid var(--accent-core);
+      margin:10px 0;
+    }
+  </style>
+</head>
+<body>
+  <div class="frame">
+    <div class="wrap">
+      <div class="rail">
+        <div class="rail-accent"></div>
+        <div class="rail-inner">Coconut Coast Organization of REALTORS® · CCOR</div>
+      </div>
+
+      <div class="content">
+        <header class="page-head">
+          <div>
+            <div class="page-tag">CCOR Name Change</div>
+            <h1>Member Info Sessions & FAQ</h1>
+            <p class="sub">
+              Join a live session to ask questions and hear directly from leadership about our proposed rebrand to
+              the Coconut Coast Organization of REALTORS® (CCOR). We will walk through the “why,” the benefits for you,
+              and how this honors our 60-year history while positioning us for the next 60.
+            </p>
+          </div>
+          <div class="meta-block">
+            <div class="meta-row">
+              <span class="meta-label">Format</span>
+              <span class="meta-value">Zoom + In-Person Town Hall</span>
+            </div>
+            <div class="meta-row">
+              <span class="meta-label">Sessions</span>
+              <span class="meta-value">December 12 · January 6 · January 15</span>
+            </div>
+            <div class="meta-row">
+              <span class="meta-label">Organization</span>
+              <span class="meta-value">Bonita Springs–Estero REALTORS® → CCOR</span>
+            </div>
+          </div>
+        </header>
+
+        <!-- Events + quote -->
+        <section class="layout" aria-label="Name change info session registration">
+          <div class="events-column">
+            <!-- TODO: replace href="#" with actual Zoom registration links -->
+            <article class="event-card">
+              <div class="event-tag">Zoom Session</div>
+              <h2 class="event-title">CCOR Name Change – Member Q&amp;A</h2>
+              <div class="event-meta">
+                <span><strong>Date:</strong> December 12</span>
+                <span><strong>Time:</strong> 10:00 AM (Zoom)</span>
+              </div>
+              <a class="btn primary full" href="#" target="_blank" rel="noopener">
+                <i class="fa fa-video-camera" aria-hidden="true"></i> Register for December 12
+              </a>
+            </article>
+
+            <article class="event-card">
+              <div class="event-tag">Zoom Session</div>
+              <h2 class="event-title">CCOR Name Change – Member Q&amp;A</h2>
+              <div class="event-meta">
+                <span><strong>Date:</strong> January 6</span>
+                <span><strong>Time:</strong> 12:00 PM (Zoom)</span>
+              </div>
+              <a class="btn primary full" href="#" target="_blank" rel="noopener">
+                <i class="fa fa-video-camera" aria-hidden="true"></i> Register for January 6
+              </a>
+            </article>
+
+            <article class="event-card event-card--inperson">
+              <div class="event-tag">In-Person Session</div>
+              <h2 class="event-title">CCOR Name Change – Town Hall at Spring Run</h2>
+              <div class="event-meta">
+                <span><strong>Date:</strong> January 15</span>
+                <span><strong>Time:</strong> 10:30 AM</span>
+                <span><strong>Location:</strong> Spring Run</span>
+              </div>
+              <a class="btn primary full" href="#" target="_blank" rel="noopener">
+                <i class="fa fa-calendar" aria-hidden="true"></i> Register for January 15
+              </a>
+            </article>
+          </div>
+
+          <aside class="quote-card" aria-label="Message from leadership">
+            <div class="quote-strip"></div>
+            <div class="quote-label">Message from Leadership</div>
+            <div class="quote-text">
+              “I understand change feels uncomfortable, and that comes from a place of love for what we've built together.
+              That same love is what drove this decision. We're not fixing something broken—we're ensuring the next generation
+              of REALTORS® has the same opportunities for success that you've had. The Coconut Coast Organization of REALTORS®
+              honors our past while removing limitations on our future. I hope you'll give CCOR a chance to prove itself, just
+              as our founders took a chance 60 years ago on an idea that became this incredible association.”
+            </div>
+            <div class="quote-author">Proposed: Coconut Coast Organization of REALTORS® (CCOR)</div>
+
+            <div class="framing-list">
+              <strong>Key positive framing points</strong>
+              <ul>
+                <li>We are not changing who we are—we are accurately reflecting who we have become.</li>
+                <li>CCOR represents what we have always been: the essential foundation of real estate excellence.</li>
+                <li>This positions our association and our members for growth, not just survival.</li>
+                <li>Sixty years of success gave us the strength to make this bold move.</li>
+                <li>We are honoring our heritage while removing artificial barriers to membership and influence.</li>
+                <li>Every major, thriving association eventually expands beyond its original city boundaries—it is a sign of success, not failure.</li>
+                <li>This change benefits every member through stronger advocacy, broader networks, and enhanced regional influence.</li>
+              </ul>
+            </div>
+          </aside>
+        </section>
+
+        <!-- FAQ -->
+        <section class="faq-section" aria-label="CCOR name change FAQ">
+          <div class="faq-header">
+            <div class="faq-title">FAQ: Why CCOR? Why now?</div>
+            <div class="faq-sub">
+              These talking points are designed to help you understand the rationale behind the proposed name change and
+              confidently communicate it to colleagues and clients.
+            </div>
+          </div>
+
+          <div class="faq-grid">
+            <div class="faq-list" id="faqList">
+              <!-- Q1 -->
+              <article class="faq-item">
+                <div class="faq-q">
+                  <div class="faq-q-text">“Are we losing our identity and connection to Bonita Springs and Estero?”</div>
+                  <div class="faq-icon">+</div>
+                </div>
+                <div class="faq-a">
+                  <div class="faq-a-inner">
+                    <p>
+                      We are actually strengthening our connection by honoring the deeper history that predates city boundaries:
+                      the coconut coast has been part of our regional identity for centuries.
+                    </p>
+                    <p>
+                      Bonita Springs and Estero will always be the heart of our association—we are not abandoning them; we are
+                      celebrating the broader region they anchor. Our office location, community involvement, and commitment to
+                      these cities remain unchanged.
+                    </p>
+                    <p>
+                      Think of it like a family growing up: you do not love your hometown less when you buy a bigger house.
+                    </p>
+                  </div>
+                </div>
+              </article>
+
+              <!-- Q2 -->
+              <article class="faq-item">
+                <div class="faq-q">
+                  <div class="faq-q-text">“What was wrong with our current name?”</div>
+                  <div class="faq-icon">+</div>
+                </div>
+                <div class="faq-a">
+                  <div class="faq-a-inner">
+                    <p>
+                      Nothing was wrong—our name served us beautifully for 60 years, which is exactly why this is the
+                      right time to evolve. We have simply outgrown it.
+                    </p>
+                    <p>
+                      Members regularly serve clients in communities such as Estero Lakes, Coconut Point, West Bay Club, and
+                      other areas that do not identify as strictly “Bonita Springs” or “Estero.” New members often ask,
+                      “Can I join if I work in [adjacent area]?” Our current geographic name creates unnecessary barriers.
+                    </p>
+                    <p>
+                      This change is not about fixing something broken; it is about preparing for continued growth and relevance.
+                    </p>
+                  </div>
+                </div>
+              </article>
+
+              <!-- Q3 -->
+              <article class="faq-item">
+                <div class="faq-q">
+                  <div class="faq-q-text">“I do not like the new name. Does ‘Coconut Coast’ sound too casual?”</div>
+                  <div class="faq-icon">+</div>
+                </div>
+                <div class="faq-a">
+                  <div class="faq-a-inner">
+                    <p>
+                      “Coconut Coast” reflects the premium, desirable coastal lifestyle that makes our market unique—it is an
+                      asset, not a liability. Buyers and sellers already think of our area as a cohesive coastal destination.
+                    </p>
+                    <p>
+                      The real power is in CCOR. It positions us as the essential foundation of real estate in our region.
+                      Many successful associations use geographic names—Gulf Coast, Emerald Coast, Space Coast—because they
+                      create broad appeal beyond single city limits.
+                    </p>
+                    <p>
+                      The name tested well with focus groups and reflects how consumers already talk about and search for our area.
+                    </p>
+                  </div>
+                </div>
+              </article>
+
+              <!-- Q4 -->
+              <article class="faq-item">
+                <div class="faq-q">
+                  <div class="faq-q-text">“Isn’t this a waste of money that could go to member benefits?”</div>
+                  <div class="faq-icon">+</div>
+                </div>
+                <div class="faq-a">
+                  <div class="faq-a-inner">
+                    <p>
+                      Strategic rebranding is an investment in member benefits. A stronger, more inclusive brand yields
+                      better advocacy, more influence, and enhanced professional standing for all members.
+                    </p>
+                    <p>
+                      A limited geographic name can cost us members, sponsorships, and regional influence—that is real
+                      opportunity left on the table. The rebrand budget was carefully planned and approved and does not
+                      reduce our commitment to education, technology, or member services.
+                    </p>
+                    <p>
+                      Think of it as infrastructure: just like updating an MLS system, updating our brand keeps us competitive.
+                    </p>
+                  </div>
+                </div>
+              </article>
+
+              <!-- Q5 -->
+              <article class="faq-item">
+                <div class="faq-q">
+                  <div class="faq-q-text">“We have always been Bonita Springs-Estero. Doesn’t tradition matter?”</div>
+                  <div class="faq-icon">+</div>
+                </div>
+                <div class="faq-a">
+                  <div class="faq-a-inner">
+                    <p>
+                      Tradition absolutely matters—that is why we waited until our 60th anniversary, a milestone that honors
+                      our history while embracing the future.
+                    </p>
+                    <p>
+                      Many of the traditions we value most—MLS technology, education standards, the Code of Ethics—have
+                      evolved dramatically over the past 60 years. The Koreshan pioneers who helped establish Estero did
+                      not resist change; they embraced vision and possibility. We are doing the same.
+                    </p>
+                    <p>
+                      We are not erasing 60 years of history; we are building on that foundation for the next 60. Our legacy
+                      is not in a name—it is in the professionalism, integrity, and service our members have always provided.
+                    </p>
+                  </div>
+                </div>
+              </article>
+
+              <!-- Q6 -->
+              <article class="faq-item">
+                <div class="faq-q">
+                  <div class="faq-q-text">“Were members consulted, or was this a top-down decision?”</div>
+                  <div class="faq-icon">+</div>
+                </div>
+                <div class="faq-a">
+                  <div class="faq-a-inner">
+                    <p>
+                      The Board conducted research including member surveys, focus groups, and market analysis before
+                      bringing this recommendation forward. Strategic decisions often require Board leadership—that is
+                      what you elected your directors to do.
+                    </p>
+                    <p>
+                      We intentionally timed the announcement to allow for member feedback and a thoughtful transition
+                      period. Your input now shapes how we implement the change, which is just as important as the decision itself.
+                    </p>
+                    <p>
+                      We are committed to transparent communication throughout the transition.
+                    </p>
+                  </div>
+                </div>
+              </article>
+
+              <!-- Q7 -->
+              <article class="faq-item">
+                <div class="faq-q">
+                  <div class="faq-q-text">“Will this confuse my clients or hurt my business?”</div>
+                  <div class="faq-icon">+</div>
+                </div>
+                <div class="faq-a">
+                  <div class="faq-a-inner">
+                    <p>
+                      Your personal brand and reputation are what clients remember—not the association name. We will provide
+                      transition materials, updated logos, and talking points so you can communicate the change clearly.
+                    </p>
+                    <p>
+                      Research shows association rebrands often strengthen member businesses by creating positive buzz and
+                      renewed energy. The expanded geographic reach of CCOR opens doors to clients and collaborations that
+                      were harder to access under a narrowly defined name.
+                    </p>
+                    <p>
+                      We will support you with marketing resources, messaging guidance, and client-facing explanations every
+                      step of the way.
+                    </p>
+                  </div>
+                </div>
+              </article>
+            </div>
+
+            <aside class="faq-side">
+              <h3>Context</h3>
+              <p>
+                The CCOR rebrand is about aligning our name with the way our members already work and the way consumers
+                already experience our market: as a connected coastal region with Bonita Springs and Estero at its center.
+              </p>
+              <p class="faq-quote">
+                “If the rate of change outside of your business is faster than the rate of change inside… you are becoming
+                less relevant.”
+              </p>
+              <p>
+                CCOR is designed to keep our association ahead of that curve—protecting your relevance, your advocacy, and
+                your opportunities for the long term.
+              </p>
+            </aside>
+          </div>
+        </section>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Simple FAQ accordion
+    (function(){
+      const items = Array.from(document.querySelectorAll(".faq-item"));
+      items.forEach(item=>{
+        const q = item.querySelector(".faq-q");
+        const icon = item.querySelector(".faq-icon");
+        q.addEventListener("click", ()=>{
+          const isOpen = item.classList.contains("is-open");
+          // close all
+          items.forEach(i=>{
+            i.classList.remove("is-open");
+            const ic = i.querySelector(".faq-icon");
+            if(ic) ic.textContent = "+";
+          });
+          // toggle selected
+          if(!isOpen){
+            item.classList.add("is-open");
+            if(icon) icon.textContent = "–";
+          }
+        });
+      });
+    })();
+  </script>
+</body>
+</html>

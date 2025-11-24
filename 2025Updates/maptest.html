@@ -1,0 +1,670 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>Cape Coral Boating Map</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+<!-- Leaflet CSS -->
+<link
+  rel="stylesheet"
+  href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+  integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
+  crossorigin="anonymous"
+/>
+
+<!-- Leaflet JS -->
+<script
+  src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+  integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
+  crossorigin="anonymous">
+</script>
+
+
+  <style>
+    :root {
+      --bg: #0b1120;
+      --bg-soft: #111827;
+      --accent: #22c55e;
+      --danger: #ef4444;
+      --muted: #9ca3af;
+      --ink: #f9fafb;
+      --border: #1f2933;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html, body {
+      height: 100%;
+      margin: 0;
+      padding: 0;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: var(--bg);
+      color: var(--ink);
+    }
+
+    .app {
+      display: flex;
+      height: 100vh;
+      width: 100vw;
+      overflow: hidden;
+    }
+
+    #sidebar {
+      width: 320px;
+      max-width: 100%;
+      background: var(--bg-soft);
+      border-right: 1px solid var(--border);
+      padding: 1rem 1rem 0.75rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+
+    #sidebar h1 {
+      font-size: 1.1rem;
+      margin: 0;
+      font-weight: 700;
+      letter-spacing: 0.02em;
+    }
+
+    #sidebar small {
+      color: var(--muted);
+    }
+
+    .section-label {
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--muted);
+      margin-top: 0.75rem;
+      margin-bottom: 0.25rem;
+    }
+
+    .control-group {
+      border-radius: 0.5rem;
+      border: 1px solid var(--border);
+      padding: 0.5rem 0.75rem;
+      background: rgba(15, 23, 42, 0.8);
+    }
+
+    .control-row {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      margin-bottom: 0.35rem;
+    }
+
+    .control-row:last-child {
+      margin-bottom: 0;
+    }
+
+    label {
+      font-size: 0.8rem;
+      color: var(--muted);
+      flex-shrink: 0;
+    }
+
+    input[type="number"], select {
+      width: 100%;
+      padding: 0.25rem 0.4rem;
+      font-size: 0.8rem;
+      border-radius: 0.35rem;
+      border: 1px solid var(--border);
+      background: #020617;
+      color: var(--ink);
+    }
+
+    input[type="checkbox"] {
+      transform: scale(1.1);
+    }
+
+    .legend {
+      font-size: 0.75rem;
+      margin-top: 0.35rem;
+    }
+
+    .legend-item {
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+      margin-bottom: 0.15rem;
+    }
+
+    .legend-swatch {
+      width: 12px;
+      height: 12px;
+      border-radius: 999px;
+      border: 1px solid #020617;
+    }
+
+    .legend-swatch.safe {
+      background: var(--accent);
+    }
+
+    .legend-swatch.unsafe {
+      background: var(--danger);
+    }
+
+    .legend-swatch.neutral {
+      background: #38bdf8;
+    }
+
+    #notes {
+      font-size: 0.7rem;
+      color: var(--muted);
+      margin-top: 0.5rem;
+      padding-bottom: 0.5rem;
+    }
+
+    #map {
+      flex: 1;
+      height: 100%;
+      width: 100%;
+    }
+
+    /* Leaflet tweaks for dark background */
+    .leaflet-container {
+      background: #020617;
+    }
+
+    .leaflet-popup-content-wrapper {
+      border-radius: 0.5rem;
+    }
+
+    .leaflet-popup-content {
+      font-size: 0.8rem;
+      margin: 0.4rem 0.5rem;
+    }
+
+    .popup-title {
+      font-weight: 700;
+      margin-bottom: 0.2rem;
+    }
+
+    .popup-subtle {
+      font-size: 0.7rem;
+      color: #6b7280;
+      margin-bottom: 0.25rem;
+    }
+
+    .popup-grid {
+      display: grid;
+      grid-template-columns: auto auto;
+      gap: 0.15rem 0.75rem;
+      font-size: 0.75rem;
+      margin-bottom: 0.25rem;
+    }
+
+    .popup-label {
+      color: #9ca3af;
+    }
+
+    .popup-value {
+      font-weight: 500;
+    }
+
+    .popup-notes {
+      font-size: 0.7rem;
+      color: #9ca3af;
+      margin-top: 0.25rem;
+    }
+
+    @media (max-width: 768px) {
+      .app {
+        flex-direction: column;
+      }
+      #sidebar {
+        width: 100%;
+        max-height: 260px;
+        border-right: none;
+        border-bottom: 1px solid var(--border);
+      }
+      #map {
+        height: calc(100vh - 260px);
+      }
+    }
+  </style>
+</head>
+<body>
+<div class="app">
+  <aside id="sidebar">
+    <div>
+      <h1>Cape Coral Boating Map</h1>
+      <small>Interactive canals & bridges — depths, clearances, and tides.</small>
+    </div>
+
+    <div class="section-label">Tide view</div>
+    <div class="control-group">
+      <div class="control-row">
+        <label for="tideMode">Tide mode</label>
+        <select id="tideMode">
+          <option value="low">Low tide (shallowest)</option>
+          <option value="mid" selected>Average / mid tide</option>
+          <option value="high">High tide (deepest water)</option>
+        </select>
+      </div>
+      <small style="font-size:0.7rem;color:var(--muted);">
+        This just switches which numbers are used from your data (low vs high). It does not pull live tide data.
+      </small>
+    </div>
+
+    <div class="section-label">My boat filters</div>
+    <div class="control-group">
+      <div class="control-row">
+        <label for="boatDraft">Draft (ft)</label>
+        <input type="number" id="boatDraft" step="0.1" min="0" placeholder="e.g. 3.0" />
+      </div>
+      <div class="control-row">
+        <label for="boatHeight">Air draft (ft)</label>
+        <input type="number" id="boatHeight" step="0.1" min="0" placeholder="e.g. 9.5" />
+      </div>
+      <div class="control-row">
+        <input type="checkbox" id="onlySafe" />
+        <label for="onlySafe">Only highlight routes safe for my boat</label>
+      </div>
+    </div>
+
+    <div class="section-label">Layers</div>
+    <div class="control-group">
+      <div class="control-row">
+        <input type="checkbox" id="showCanals" checked />
+        <label for="showCanals">Show canals</label>
+      </div>
+      <div class="control-row">
+        <input type="checkbox" id="showBridges" checked />
+        <label for="showBridges">Show bridges</label>
+      </div>
+      <div class="legend">
+        <div class="legend-item">
+          <div class="legend-swatch neutral"></div>
+          <span>Canal / bridge (no boat filters)</span>
+        </div>
+        <div class="legend-item">
+          <div class="legend-swatch safe"></div>
+          <span>Safe for your boat at selected tide</span>
+        </div>
+        <div class="legend-item">
+          <div class="legend-swatch unsafe"></div>
+          <span>Not safe for your boat</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Leaflet JS 
+    <div id="notes">
+      <strong>How to edit data:</strong><br />
+      Scroll down in the code to the <code>canals</code> and <code>bridges</code> arrays.<br />
+      Each entry is one canal segment or bridge — just replace the sample numbers
+      with your survey or chart data.<br /><br />
+      <em>Not for official navigation. Always verify with up-to-date charts / local knowledge.</em>
+    </div>
+
+-->
+  </aside>
+
+  <div id="map"></div>
+</div>
+
+<!-- Leaflet JS -->
+<script
+  src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+  integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9zk0HfQvEOfv1m/mrVY="
+  crossorigin="anonymous">
+</script>
+<script>
+  // ===============================
+  // 1) DATA DEFINITIONS — EDIT HERE
+  // ===============================
+
+  // Units: all depths & clearances in feet.
+  // Coords: [lat, lng] pairs (WGS84, same as Google Maps).
+
+  const canals = [
+    {
+      id: "rubicon",
+      name: "Rubicon Canal (sample)",
+      type: "Primary canal",
+      depthLowFt: 3.5,   // at lowest typical tide
+      depthHighFt: 5.5,  // at highest typical tide
+      widthFt: 80,
+      notes: "Replace with your real Rubicon data or any canal you like.",
+      coords: [
+        [26.5798, -81.9615],
+        [26.5760, -81.9550],
+        [26.5720, -81.9490]
+      ]
+    },
+    {
+      id: "bimini",
+      name: "Bimini Canal (sample)",
+      type: "Primary canal",
+      depthLowFt: 4.0,
+      depthHighFt: 6.0,
+      widthFt: 90,
+      notes: "Sample line — plug in your own widths, depths & coordinates.",
+      coords: [
+        [26.5638, -81.9660],
+        [26.5610, -81.9600],
+        [26.5580, -81.9540]
+      ]
+    }
+  ];
+
+  const bridges = [
+    {
+      id: "cc-parkway",
+      name: "Cape Coral Pkwy Bridge (sample)",
+      type: "Road bridge",
+      coords: [26.5625, -81.9444],
+      waterDepthLowFt: 4.0,
+      waterDepthHighFt: 6.0,
+      clearanceLowTideFt: 11.0,   // max boat height at LOW tide
+      clearanceHighTideFt: 9.0,   // max boat height at HIGH tide
+      notes: "Illustrative numbers only."
+    },
+    {
+      id: "delprado",
+      name: "Del Prado Blvd Bridge (sample)",
+      type: "Road bridge",
+      coords: [26.6060, -81.9400],
+      waterDepthLowFt: 3.8,
+      waterDepthHighFt: 5.8,
+      clearanceLowTideFt: 13.0,
+      clearanceHighTideFt: 11.0,
+      notes: "Replace all of this with your measurements."
+    }
+  ];
+
+  // Safety margin: how much extra water / clearance we want (feet)
+  const WATER_SAFETY_MARGIN_FT = 0.5;
+  const CLEARANCE_SAFETY_MARGIN_FT = 0.5;
+
+  // ============================
+  // 2) MAP SETUP
+  // ============================
+  const map = L.map("map").setView([26.5629, -81.9495], 12);
+
+  // Base map tiles from OpenStreetMap (free, keyless)
+  L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+    maxZoom: 19,
+    attribution: "&copy; OpenStreetMap contributors"
+  }).addTo(map);
+
+  // Layers to hold canals and bridges
+  const canalLayer = L.layerGroup().addTo(map);
+  const bridgeLayer = L.layerGroup().addTo(map);
+
+  // Keep references so we can restyle based on filters
+  const canalFeatures = [];
+  const bridgeFeatures = [];
+
+  // ============================
+  // 3) HELPERS
+  // ============================
+
+  function getTideMode() {
+    return document.getElementById("tideMode").value; // "low" | "mid" | "high"
+  }
+
+  function depthForTide(low, high) {
+    const mode = getTideMode();
+    if (mode === "low") return low;
+    if (mode === "high") return high;
+    // mid or unknown: average
+    return (low + high) / 2;
+  }
+
+  function clearanceForTide(lowClear, highClear) {
+    const mode = getTideMode();
+    if (mode === "low") return lowClear;
+    if (mode === "high") return highClear;
+    // mid: average
+    return (lowClear + highClear) / 2;
+  }
+
+  function getBoatDraft() {
+    const val = parseFloat(document.getElementById("boatDraft").value);
+    return isNaN(val) ? null : val;
+  }
+
+  function getBoatHeight() {
+    const val = parseFloat(document.getElementById("boatHeight").value);
+    return isNaN(val) ? null : val;
+  }
+
+  function onlySafe() {
+    return document.getElementById("onlySafe").checked;
+  }
+
+  function isCanalSafe(canal) {
+    const boatDraft = getBoatDraft();
+    if (boatDraft == null) return null; // no judgment without numbers
+
+    const depthNow = depthForTide(canal.depthLowFt, canal.depthHighFt);
+    return depthNow >= boatDraft + WATER_SAFETY_MARGIN_FT;
+  }
+
+  function isBridgeSafe(bridge) {
+    const boatHeight = getBoatHeight();
+    if (boatHeight == null) return null;
+
+    const clearanceNow = clearanceForTide(
+      bridge.clearanceLowTideFt,
+      bridge.clearanceHighTideFt
+    );
+    return clearanceNow >= boatHeight + CLEARANCE_SAFETY_MARGIN_FT;
+  }
+
+  function canalPopupHTML(canal) {
+    const depthLow = canal.depthLowFt;
+    const depthHigh = canal.depthHighFt;
+    const depthNow = depthForTide(depthLow, depthHigh);
+
+    return `
+      <div class="popup">
+        <div class="popup-title">${canal.name}</div>
+        <div class="popup-subtle">${canal.type || "Canal"}</div>
+
+        <div class="popup-grid">
+          <div class="popup-label">Depth (low tide)</div>
+          <div class="popup-value">${depthLow.toFixed(1)} ft</div>
+          <div class="popup-label">Depth (high tide)</div>
+          <div class="popup-value">${depthHigh.toFixed(1)} ft</div>
+          <div class="popup-label">Depth (current view)</div>
+          <div class="popup-value">${depthNow.toFixed(1)} ft</div>
+          <div class="popup-label">Width</div>
+          <div class="popup-value">${canal.widthFt.toFixed(0)} ft</div>
+        </div>
+
+        ${canal.notes ? `<div class="popup-notes">${canal.notes}</div>` : ""}
+      </div>
+    `;
+  }
+
+  function bridgePopupHTML(bridge) {
+    const depthLow = bridge.waterDepthLowFt;
+    const depthHigh = bridge.waterDepthHighFt;
+    const depthNow = depthForTide(depthLow, depthHigh);
+
+    const clearLow = bridge.clearanceLowTideFt;
+    const clearHigh = bridge.clearanceHighTideFt;
+    const clearNow = clearanceForTide(clearLow, clearHigh);
+
+    return `
+      <div class="popup">
+        <div class="popup-title">${bridge.name}</div>
+        <div class="popup-subtle">${bridge.type || "Bridge"}</div>
+
+        <div class="popup-grid">
+          <div class="popup-label">Water depth (low)</div>
+          <div class="popup-value">${depthLow.toFixed(1)} ft</div>
+          <div class="popup-label">Water depth (high)</div>
+          <div class="popup-value">${depthHigh.toFixed(1)} ft</div>
+          <div class="popup-label">Depth (current view)</div>
+          <div class="popup-value">${depthNow.toFixed(1)} ft</div>
+
+          <div class="popup-label">Clearance (low)</div>
+          <div class="popup-value">${clearLow.toFixed(1)} ft</div>
+          <div class="popup-label">Clearance (high)</div>
+          <div class="popup-value">${clearHigh.toFixed(1)} ft</div>
+          <div class="popup-label">Clearance (current view)</div>
+          <div class="popup-value">${clearNow.toFixed(1)} ft</div>
+        </div>
+
+        ${bridge.notes ? `<div class="popup-notes">${bridge.notes}</div>` : ""}
+      </div>
+    `;
+  }
+
+  // ============================
+  // 4) DRAW INITIAL FEATURES
+  // ============================
+
+  function drawCanals() {
+    canalLayer.clearLayers();
+    canalFeatures.length = 0;
+
+    canals.forEach((canal) => {
+      const polyline = L.polyline(canal.coords, {
+        color: "#38bdf8", // default neutral
+        weight: 4,
+        opacity: 0.85
+      });
+
+      polyline.bindPopup(() => canalPopupHTML(canal));
+      polyline.addTo(canalLayer);
+
+      canalFeatures.push({ canal, polyline });
+    });
+  }
+
+  function drawBridges() {
+    bridgeLayer.clearLayers();
+    bridgeFeatures.length = 0;
+
+    bridges.forEach((bridge) => {
+      const marker = L.circleMarker(bridge.coords, {
+        radius: 7,
+        color: "#020617",
+        weight: 1,
+        fillColor: "#38bdf8",
+        fillOpacity: 0.9
+      });
+
+      marker.bindPopup(() => bridgePopupHTML(bridge));
+      marker.addTo(bridgeLayer);
+
+      bridgeFeatures.push({ bridge, marker });
+    });
+  }
+
+  drawCanals();
+  drawBridges();
+
+  // ============================
+  // 5) STYLING BASED ON BOAT / TIDE
+  // ============================
+
+  function updateStylesAndVisibility() {
+    const showCanals = document.getElementById("showCanals").checked;
+    const showBridges = document.getElementById("showBridges").checked;
+    const restrictSafe = onlySafe();
+
+    // Canals
+    if (showCanals) {
+      if (!map.hasLayer(canalLayer)) map.addLayer(canalLayer);
+    } else {
+      map.removeLayer(canalLayer);
+    }
+
+    canalFeatures.forEach(({ canal, polyline }) => {
+      let visible = showCanals;
+      let color = "#38bdf8"; // neutral
+      const safe = isCanalSafe(canal);
+
+      if (safe === true) {
+        color = "#22c55e"; // safe green
+      } else if (safe === false) {
+        color = "#ef4444"; // unsafe red
+      }
+
+      if (restrictSafe && safe === false) {
+        visible = false;
+      }
+
+      polyline.setStyle({
+        color: color,
+        opacity: visible ? 0.9 : 0
+      });
+
+      if (!visible && map.hasLayer(polyline)) {
+        canalLayer.removeLayer(polyline);
+      } else if (visible && !map.hasLayer(polyline)) {
+        polyline.addTo(canalLayer);
+      }
+    });
+
+    // Bridges
+    if (showBridges) {
+      if (!map.hasLayer(bridgeLayer)) map.addLayer(bridgeLayer);
+    } else {
+      map.removeLayer(bridgeLayer);
+    }
+
+    bridgeFeatures.forEach(({ bridge, marker }) => {
+      let visible = showBridges;
+      let fill = "#38bdf8";
+      const safe = isBridgeSafe(bridge);
+
+      if (safe === true) {
+        fill = "#22c55e";
+      } else if (safe === false) {
+        fill = "#ef4444";
+      }
+
+      marker.setStyle({
+        fillColor: fill,
+        fillOpacity: visible ? 0.9 : 0
+      });
+
+      if (!visible && map.hasLayer(marker)) {
+        bridgeLayer.removeLayer(marker);
+      } else if (visible && !map.hasLayer(marker)) {
+        marker.addTo(bridgeLayer);
+      }
+
+      if (restrictSafe && safe === false && showBridges) {
+        bridgeLayer.removeLayer(marker);
+      }
+    });
+  }
+
+  // ============================
+  // 6) WIRE UP CONTROLS
+  // ============================
+
+  document.getElementById("tideMode").addEventListener("change", () => {
+    // Rebind popup content so "current view" depths are updated
+    canalFeatures.forEach(({ canal, polyline }) => {
+      polyline.bindPopup(() => canalPopupHTML(canal));
+    });
+    bridgeFeatures.forEach(({ bridge, marker }) => {
+      marker.bindPopup(() => bridgePopupHTML(bridge));
+    });
+    updateStylesAndVisibility();
+  });
+
+  document.getElementById("boatDraft").addEventListener("input", updateStylesAndVisibility);
+  document.getElementById("boatHeight").addEventListener("input", updateStylesAndVisibility);
+  document.getElementById("onlySafe").addEventListener("change", updateStylesAndVisibility);
+  document.getElementById("showCanals").addEventListener("change", updateStylesAndVisibility);
+  document.getElementById("showBridges").addEventListener("change", updateStylesAndVisibility);
+
+  // Initial style pass
+  updateStylesAndVisibility();
+</script>
+</body>
+</html>

@@ -1,0 +1,1442 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>REALTOR® Store – Bonita Springs–Estero REALTORS®</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+
+  <!-- Swiss-modern style typefaces -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Montserrat:wght@600;800&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --paper: #f6f6f6;
+      --paper-elevated: #ffffff;
+      --ink: #111216;
+      --muted: #6b7177;
+      --rule: #dedede;
+      --accent-red: #e53935;
+      --accent-soft: #ffe5e3;
+      --accent-blue: #0086b3;
+      --accent-gold: #f5a623;
+      --accent-teal: #00a29b;
+      --badge-sold: #222222;
+      --badge-member: #004b6b;
+      --shadow-soft: 0 18px 45px rgba(0, 0, 0, 0.08);
+      --radius-lg: 20px;
+      --radius-sm: 10px;
+      --page-max: 1240px;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html, body {
+      margin: 0;
+      padding: 0;
+      background: radial-gradient(circle at top left, #ffffff 0, #f2f2f2 55%, #e9e9e9 100%);
+      color: var(--ink);
+      font-family: "Inter", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+
+    body {
+      padding: 32px 16px 40px;
+    }
+
+    .page {
+      max-width: var(--page-max);
+      margin: 0 auto;
+    }
+
+    header {
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+      gap: 24px;
+      margin-bottom: 32px;
+      border-bottom: 1px solid var(--rule);
+      padding-bottom: 18px;
+    }
+
+    .brand-block {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .brand-kicker {
+      font-size: 11px;
+      letter-spacing: 0.24em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+
+    .brand-title {
+      font-family: "Montserrat", system-ui;
+      font-weight: 800;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      font-size: clamp(18px, 2.4vw, 22px);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .brand-title span.core-dot {
+      display: inline-block;
+      width: 10px;
+      height: 10px;
+      border-radius: 999px;
+      background: var(--accent-red);
+    }
+
+    .tagline {
+      font-size: 11px;
+      letter-spacing: 0.17em;
+      text-transform: uppercase;
+      color: var(--muted);
+      text-align: right;
+      max-width: 260px;
+    }
+
+    .layout {
+      display: grid;
+      grid-template-columns: minmax(0, 2.4fr) minmax(260px, 0.9fr);
+      gap: 24px;
+      align-items: flex-start;
+    }
+
+    @media (max-width: 960px) {
+      .layout {
+        grid-template-columns: minmax(0, 1fr);
+      }
+    }
+
+    /* HERO / INTRO */
+
+    .hero-card {
+      background: var(--paper-elevated);
+      border-radius: var(--radius-lg);
+      padding: 22px 22px 18px;
+      box-shadow: var(--shadow-soft);
+      margin-bottom: 18px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero-card::before {
+      content: "+";
+      position: absolute;
+      top: 14px;
+      right: 18px;
+      font-family: "Montserrat", system-ui;
+      font-size: 32px;
+      font-weight: 800;
+      color: rgba(0, 0, 0, 0.06);
+    }
+
+    .hero-title-row {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: baseline;
+      gap: 10px 16px;
+      margin-bottom: 4px;
+    }
+
+    .hero-eyebrow {
+      font-size: 11px;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+
+    .hero-title {
+      font-family: "Montserrat", system-ui;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.18em;
+      font-size: 15px;
+    }
+
+    .hero-subline {
+      font-size: 13px;
+      color: var(--muted);
+      max-width: 520px;
+      margin-top: 4px;
+    }
+
+    .hero-pill-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 12px;
+    }
+
+    .pill {
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.14em;
+      padding: 6px 10px;
+      border-radius: 999px;
+      border: 1px solid var(--rule);
+      color: var(--muted);
+      background: #fafafa;
+    }
+
+    .pill.accent {
+      border-color: var(--accent-red);
+      background: var(--accent-soft);
+      color: var(--accent-red);
+    }
+
+    /* FILTER BAR */
+
+    .toolbar {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      margin-bottom: 18px;
+    }
+
+    .toolbar-left {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .toolbar-right {
+      font-size: 11px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+
+    .field {
+      border-radius: 999px;
+      border: 1px solid var(--rule);
+      padding: 6px 12px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      background: rgba(255, 255, 255, 0.82);
+      backdrop-filter: blur(10px);
+    }
+
+    .field input,
+    .field select {
+      border: none;
+      outline: none;
+      background: transparent;
+      font-size: 13px;
+      color: var(--ink);
+      min-width: 0;
+      font-family: inherit;
+    }
+
+    .field label {
+      font-size: 11px;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--muted);
+      white-space: nowrap;
+    }
+
+    /* STORE GRID */
+
+    .store-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 14px;
+    }
+
+    .item-card {
+      background: var(--paper-elevated);
+      border-radius: 16px;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      border: 1px solid rgba(0, 0, 0, 0.04);
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.06);
+      min-height: 260px;
+      position: relative;
+    }
+
+    .item-thumb {
+      position: relative;
+      padding: 12px 12px 0;
+    }
+
+    .item-thumb-inner {
+      overflow: hidden;
+      border-radius: 12px;
+      background: linear-gradient(135deg, #efefef, #dcdcdc);
+      aspect-ratio: 4 / 3;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .item-thumb img {
+      max-width: 100%;
+      max-height: 100%;
+      display: block;
+      object-fit: cover;
+    }
+
+    .badge {
+      position: absolute;
+      left: 16px;
+      bottom: 8px;
+      padding: 4px 10px;
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: 0.16em;
+      border-radius: 999px;
+      color: #fff;
+      background: var(--badge-sold);
+    }
+
+    .badge.member {
+      background: var(--badge-member);
+    }
+
+    .badge.soldout {
+      background: var(--badge-sold);
+    }
+
+    .item-body {
+      padding: 10px 14px 12px;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .item-name {
+      font-size: 13px;
+      font-weight: 600;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      line-height: 1.3;
+    }
+
+    .item-meta {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: 8px;
+      margin-top: 2px;
+    }
+
+    .item-price {
+      font-size: 13px;
+      font-weight: 600;
+    }
+
+    .item-category {
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: 0.14em;
+      color: var(--muted);
+      white-space: nowrap;
+    }
+
+    .item-actions {
+      margin-top: 6px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .btn {
+      border-radius: 999px;
+      border: none;
+      cursor: pointer;
+      font-family: inherit;
+      font-size: 11px;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      padding: 7px 12px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      white-space: nowrap;
+      background: var(--ink);
+      color: #fff;
+      transition: transform 0.08s ease, box-shadow 0.08s ease, background 0.1s ease, color 0.1s ease;
+    }
+
+    .btn-quiet {
+      background: transparent;
+      color: var(--muted);
+      border: 1px solid var(--rule);
+    }
+
+    .btn-small {
+      padding: 6px 10px;
+      font-size: 10px;
+    }
+
+    .btn:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 8px 18px rgba(0, 0, 0, 0.14);
+    }
+
+    .btn:active {
+      transform: translateY(0);
+      box-shadow: none;
+    }
+
+    .btn[disabled] {
+      opacity: 0.5;
+      cursor: default;
+      box-shadow: none;
+      transform: none;
+    }
+
+    .item-card.is-soldout {
+      opacity: 0.70;
+    }
+
+    /* CART Panel */
+
+    .cart-panel {
+      background: rgba(255, 255, 255, 0.96);
+      border-radius: var(--radius-lg);
+      padding: 18px 16px 14px;
+      box-shadow: var(--shadow-soft);
+      position: sticky;
+      top: 24px;
+      border: 1px solid rgba(0, 0, 0, 0.06);
+    }
+
+    .cart-title {
+      font-family: "Montserrat", system-ui;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.18em;
+      font-size: 12px;
+      margin-bottom: 4px;
+    }
+
+    .cart-kicker {
+      font-size: 11px;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 10px;
+    }
+
+    .cart-summary {
+      font-size: 11px;
+      color: var(--muted);
+      margin-bottom: 10px;
+    }
+
+    .cart-items {
+      border-top: 1px solid var(--rule);
+      border-bottom: 1px solid var(--rule);
+      padding: 8px 0;
+      max-height: 280px;
+      overflow-y: auto;
+      margin-bottom: 8px;
+    }
+
+    .cart-empty {
+      font-size: 12px;
+      color: var(--muted);
+      padding: 8px 0;
+    }
+
+    .cart-row {
+      display: grid;
+      grid-template-columns: auto 1fr auto;
+      gap: 4px 8px;
+      align-items: center;
+      font-size: 12px;
+      padding: 6px 0;
+    }
+
+    .cart-row-title {
+      font-weight: 500;
+    }
+
+    .cart-row-meta {
+      font-size: 11px;
+      color: var(--muted);
+    }
+
+    .cart-row-actions {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      justify-content: flex-end;
+    }
+
+    .qty-pill {
+      border-radius: 999px;
+      border: 1px solid var(--rule);
+      padding: 2px 8px;
+      font-size: 11px;
+    }
+
+    .cart-totals {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: 8px;
+      margin-bottom: 10px;
+    }
+
+    .cart-total-label {
+      font-size: 11px;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+
+    .cart-total-amount {
+      font-size: 18px;
+      font-weight: 700;
+    }
+
+    .cart-footer-note {
+      font-size: 10px;
+      color: var(--muted);
+      line-height: 1.4;
+      margin-top: 6px;
+    }
+
+    .cart-actions-row {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 6px;
+    }
+
+    @media (max-width: 960px) {
+      .cart-panel {
+        position: static;
+      }
+    }
+
+  </style>
+</head>
+<body>
+  <div class="page">
+    <header>
+      <div class="brand-block">
+        <div class="brand-kicker">Bonita Springs–Estero REALTORS®</div>
+        <div class="brand-title">
+          <span class="core-dot"></span>
+          REALTOR Store
+        </div>
+      </div>
+      <div class="tagline">
+        Swiss-modern, member-focused storefront for signs, Supra tools, maps, and REALTOR® gifts.
+      </div>
+    </header>
+
+    <main class="layout">
+      <section aria-label="Store items">
+        <section class="hero-card">
+          <div class="hero-title-row">
+            <div class="hero-eyebrow">Member Tools</div>
+            <div class="hero-title">In-Office REALTOR® Store</div>
+          </div>
+          <p class="hero-subline">
+            All items are for <strong>pickup only</strong> at the BER office. Use this page to plan your order, then
+            complete payment through the Member Portal or at the front desk.
+          </p>
+          <div class="hero-pill-row">
+            <div class="pill accent">72 items</div>
+            <div class="pill">Signs &amp; riders</div>
+            <div class="pill">Supra &amp; lockbox tools</div>
+            <div class="pill">Maps &amp; marketing</div>
+            <div class="pill">Apparel &amp; gifts</div>
+          </div>
+        </section>
+
+        <section class="toolbar" aria-label="Store filters">
+          <div class="toolbar-left">
+            <div class="field">
+              <label for="search">Search</label>
+              <input id="search" type="search" placeholder="signs, Supra, maps, shirts…" />
+            </div>
+            <div class="field">
+              <label for="category">Filter</label>
+              <select id="category">
+                <option value="all">All categories</option>
+                <option value="signs">Signs & riders</option>
+                <option value="supra-mls">Supra & MLS tools</option>
+                <option value="maps">Maps & area guides</option>
+                <option value="apparel-gifts">Apparel & gifts</option>
+                <option value="office-supplies">Office & open house tools</option>
+                <option value="other">Other</option>
+              </select>
+            </div>
+          </div>
+          <div class="toolbar-right">
+            Pickup only • Mon–Fri, 8:30 AM–4:30 PM
+          </div>
+        </section>
+
+        <section class="store-grid" data-store-grid></section>
+      </section>
+
+      <aside class="cart-panel" aria-label="Cart">
+        <div class="cart-kicker">Planning your order</div>
+        <div class="cart-title">Cart &amp; Checkout</div>
+        <p class="cart-summary">
+          Add items from the grid to build your order. When you’re ready, use checkout to copy a summary
+          into the Member Portal or email it to the BER team.
+        </p>
+
+        <div class="cart-items" data-cart-items>
+          <div class="cart-empty">No items yet. Start by adding a sign, Supra tool, or map.</div>
+        </div>
+
+        <div class="cart-totals">
+          <div class="cart-total-label">Estimated total</div>
+          <div class="cart-total-amount" data-cart-total>$0.00</div>
+        </div>
+
+        <div class="cart-actions-row">
+          <button class="btn btn-small" type="button" data-checkout>
+            Checkout Summary
+          </button>
+          <button class="btn btn-small btn-quiet" type="button" data-clear-cart>
+            Clear
+          </button>
+        </div>
+
+        <p class="cart-footer-note">
+          Checkout will display a text summary you can paste into the
+          <strong>Member Portal</strong> or send to staff. Taxes, availability,
+          and member pricing (where applicable) are finalized at the time of payment.
+        </p>
+      </aside>
+    </main>
+  </div>
+
+  <script>
+    // You can use this placeholder image for any items that don't have photography yet.
+    const PLACEHOLDER_IMG = "https://via.placeholder.com/600x420?text=Product+Photo";
+
+    // 72 items pulled from GrowthZone REALTOR Store.
+    // status: "available" | "sold-out" | "member-only"
+    const PRODUCTS = [
+      {
+        id: "stainless-steel-tumbler-30oz",
+        name: "Stainless Steel Tumbler - 30oz",
+        price: 25.0,
+        category: "apparel-gifts",
+        status: "member-only",
+        image: "https://res.cloudinary.com/micronetonline/image/upload/ar_1%2Cc_pad/c_crop%2Cw_469%2Ch_627%2Cx_80/v1583859493/tenants/6c24b0da-8a6e-4f2b-8547-26a8c1dc4581/5a43e79368d742579dff90dc2d66b5ed/Insulated-BER-Tumbler-30oz.jpg"
+      },
+      {
+        id: "door-knob-bags-lg-100",
+        name: "Door Knob Bags Lg 100 Ct",
+        price: 4.95,
+        category: "office-supplies",
+        status: "available",
+        image: PLACEHOLDER_IMG
+      },
+      {
+        id: "st-joseph",
+        name: "St. Joseph",
+        price: 8.95,
+        category: "other",
+        status: "member-only",
+        image: PLACEHOLDER_IMG
+      },
+      {
+        id: "info-2-go-tube-red-ends",
+        name: "Info 2 GO Tube - Red Ends",
+        price: 12.95,
+        category: "signs",
+        status: "member-only",
+        image: PLACEHOLDER_IMG
+      },
+      {
+        id: "brochure-box-with-stakes",
+        name: "Brochure Box w/ Stakes",
+        price: 17.95,
+        category: "signs",
+        status: "available",
+        image: PLACEHOLDER_IMG
+      },
+      {
+        id: "sold-star",
+        name: "SOLD Star",
+        price: 6.95,
+        category: "signs",
+        status: "available",
+        image: PLACEHOLDER_IMG
+      },
+      {
+        id: "under-contract-rider",
+        name: "Under Contract Rider",
+        price: 4.95,
+        category: "signs",
+        status: "available",
+        image: PLACEHOLDER_IMG
+      },
+      {
+        id: "open-house-red-arrow",
+        name: "Open House Red Arrow",
+        price: 5.5,
+        category: "signs",
+        status: "sold-out",
+        image: PLACEHOLDER_IMG
+      },
+      {
+        id: "open-house-blue-arrow",
+        name: "Open House Blue Arrow",
+        price: 5.5,
+        category: "signs",
+        status: "available",
+        image: PLACEHOLDER_IMG
+      },
+      {
+        id: "realtor-coffee-mug",
+        name: "Realtor Coffee Mug",
+        price: 7.95,
+        category: "apparel-gifts",
+        status: "sold-out",
+        image: PLACEHOLDER_IMG
+      },
+      {
+        id: "open-house-tan-green",
+        name: "Open House Tan / Green",
+        price: 15.0,
+        category: "signs",
+        status: "sold-out",
+        image: PLACEHOLDER_IMG
+      },
+      {
+        id: "open-house-tan-green-arrow",
+        name: "Open House Tan / Green w/ Arrow",
+        price: 15.0,
+        category: "signs",
+        status: "available",
+        image: PLACEHOLDER_IMG
+      },
+      {
+        id: "open-house-black-gold-house",
+        name: "Open House Blk / Gold House Shaped",
+        price: 7.95,
+        category: "signs",
+        status: "sold-out",
+        image: PLACEHOLDER_IMG
+      },
+      {
+        id: "sprinkler-head-key-hider",
+        name: "Sprinkler Head Key Hider",
+        price: 5.95,
+        category: "other",
+        status: "available",
+        image: PLACEHOLDER_IMG
+      },
+      {
+        id: "open-house-blue-house-shaped",
+        name: "Open House (blue) House Shaped",
+        price: 7.95,
+        category: "signs",
+        status: "sold-out",
+        image: PLACEHOLDER_IMG
+      },
+      {
+        id: "open-house-red-house-shaped",
+        name: "Open House (red) House Shaped",
+        price: 7.95,
+        category: "signs",
+        status: "sold-out",
+        image: PLACEHOLDER_IMG
+      },
+      {
+        id: "open-house-18x24-blue",
+        name: "Open House 18 x 24 Dir (blue)",
+        price: 9.95,
+        category: "signs",
+        status: "available",
+        image: PLACEHOLDER_IMG
+      },
+      {
+        id: "open-house-18x24-red",
+        name: "Open House 18 x 24 Dir (red)",
+        price: 9.95,
+        category: "signs",
+        status: "available",
+        image: PLACEHOLDER_IMG
+      },
+      {
+        id: "h-stake-tall",
+        name: "H Stake for Signs (tall)",
+        price: 1.25,
+        category: "signs",
+        status: "available",
+        image: PLACEHOLDER_IMG
+      },
+      {
+        id: "h-stake-short-sturdy",
+        name: "H Stakes for Signs (short & sturdy)",
+        price: 1.5,
+        category: "signs",
+        status: "sold-out",
+        image: PLACEHOLDER_IMG
+      },
+      {
+        id: "home-for-sale-arrow-blue",
+        name: "Home for Sale Arrow - Blue",
+        price: 5.5,
+        category: "signs",
+        status: "available",
+        image: PLACEHOLDER_IMG
+      },
+      {
+        id: "sale-pending-star-blue",
+        name: "Sale Pending Star - Blue",
+        price: 6.95,
+        category: "signs",
+        status: "available",
+        image: PLACEHOLDER_IMG
+      },
+      {
+        id: "sale-pending-star-red",
+        name: "Sale Pending Star - Red",
+        price: 6.95,
+        category: "signs",
+        status: "sold-out",
+        image: PLACEHOLDER_IMG
+      },
+      {
+        id: "reduced-price-star-red-white",
+        name: "Reduced Price Star - Red / Wht",
+        price: 6.95,
+        category: "signs",
+        status: "sold-out",
+        image: PLACEHOLDER_IMG
+      },
+      {
+        id: "open-house-green-white",
+        name: "Open House - Grn / Wht",
+        price: 12.95,
+        category: "signs",
+        status: "sold-out",
+        image: PLACEHOLDER_IMG
+      },
+      {
+        id: "open-house-arrow-shape-red",
+        name: "Open House Arrow Shape - Red",
+        price: 7.95,
+        category: "signs",
+        status: "available",
+        image: PLACEHOLDER_IMG
+      },
+      {
+        id: "open-house-arrow-shaped-blue",
+        name: "Open House Arrow Shaped - Blue",
+        price: 7.95,
+        category: "signs",
+        status: "available",
+        image: PLACEHOLDER_IMG
+      },
+      {
+        id: "house-brochure-holder-red",
+        name: "House Shaped Brochure Hldr - Red",
+        price: 12.95,
+        category: "signs",
+        status: "sold-out",
+        image: PLACEHOLDER_IMG
+      },
+      {
+        id: "house-brochure-holder-black",
+        name: "House Shaped Brochure Holder - Black",
+        price: 12.95,
+        category: "signs",
+        status: "sold-out",
+        image: PLACEHOLDER_IMG
+      },
+      {
+        id: "for-rent-18x24-red-corr",
+        name: "For Rent 18\" x 24\" wht / red corr",
+        price: 8.75,
+        category: "signs",
+        status: "available",
+        image: PLACEHOLDER_IMG
+      },
+      {
+        id: "home-for-sale-blue-white-arrow",
+        name: "Home For Sale Blue/Wht Arrow",
+        price: 7.95,
+        category: "signs",
+        status: "available",
+        image: PLACEHOLDER_IMG
+      },
+      {
+        id: "home-for-sale-white-red-arrow",
+        name: "Home For Sale Wht/red/wht arrow",
+        price: 7.95,
+        category: "signs",
+        status: "sold-out",
+        image: PLACEHOLDER_IMG
+      },
+      {
+        id: "open-house-with-arrow-red",
+        name: "Open House w/Arrow (Red)",
+        price: 4.95,
+        category: "signs",
+        status: "available",
+        image: PLACEHOLDER_IMG
+      },
+      {
+        id: "magnets",
+        name: "Magnets",
+        price: 2.95,
+        category: "office-supplies",
+        status: "available",
+        image: PLACEHOLDER_IMG
+      },
+      {
+        id: "lot-for-sale-rider-blue",
+        name: "Lot for Sale Rider (lg) Blue",
+        price: 4.85,
+        category: "signs",
+        status: "available",
+        image: PLACEHOLDER_IMG
+      },
+      {
+        id: "open-house-balloons",
+        name: "Open House Balloons",
+        price: 0.35,
+        category: "signs",
+        status: "available",
+        image: PLACEHOLDER_IMG
+      },
+      {
+        id: "kids-grandma-tshirt-pink",
+        name: "Kids Grandma T-Shirts (pink)",
+        price: 11.95,
+        category: "apparel-gifts",
+        status: "available",
+        image: PLACEHOLDER_IMG
+      },
+      {
+        id: "kids-grandpa-tshirt-raspberry",
+        name: "Kids Grandpa TShirts (raspberry)",
+        price: 11.95,
+        category: "apparel-gifts",
+        status: "available",
+        image: PLACEHOLDER_IMG
+      },
+      {
+        id: "kids-mom-tshirt-blue",
+        name: "Kids Mom Tshirt (blue)",
+        price: 11.95,
+        category: "apparel-gifts",
+        status: "available",
+        image: PLACEHOLDER_IMG
+      },
+      {
+        id: "kids-dad-tshirt-pink",
+        name: "Kids Dad Tshirt (pink)",
+        price: 11.95,
+        category: "apparel-gifts",
+        status: "available",
+        image: PLACEHOLDER_IMG
+      },
+      {
+        id: "kids-grandpa-shirt-blue",
+        name: "Kids Grandpa Shirt (blue)",
+        price: 11.95,
+        category: "apparel-gifts",
+        status: "available",
+        image: PLACEHOLDER_IMG
+      },
+      {
+        id: "business-card-case",
+        name: "Business Card Case",
+        price: 12.95,
+        category: "office-supplies",
+        status: "available",
+        image: PLACEHOLDER_IMG
+      },
+      {
+        id: "open-house-registry-refill",
+        name: "Open House Registry - Refill",
+        price: 18.5,
+        category: "office-supplies",
+        status: "available",
+        image: PLACEHOLDER_IMG
+      },
+      {
+        id: "open-house-register-small",
+        name: "Open House Register (small)",
+        price: 26.95,
+        category: "office-supplies",
+        status: "available",
+        image: PLACEHOLDER_IMG
+      },
+      {
+        id: "waterfront-rider-corrugated",
+        name: "Waterfront Rider (corrugated)",
+        price: 4.85,
+        category: "signs",
+        status: "available",
+        image: PLACEHOLDER_IMG
+      },
+      {
+        id: "realtor-logo-decal",
+        name: "Realtor Logo Decal",
+        price: 1.0,
+        category: "apparel-gifts",
+        status: "available",
+        image: PLACEHOLDER_IMG
+      },
+      {
+        id: "stickers",
+        name: "Stickers",
+        price: 1.0,
+        category: "apparel-gifts",
+        status: "available",
+        image: PLACEHOLDER_IMG
+      },
+      {
+        id: "door-knob-bags-sm-100",
+        name: "Door Knob Bags Sm - 100ct",
+        price: 3.75,
+        category: "office-supplies",
+        status: "available",
+        image: PLACEHOLDER_IMG
+      },
+      {
+        id: "sale-pending-rider-red-corr",
+        name: "Sale Pending Rider - Red/wht - Corrugated",
+        price: 4.95,
+        category: "signs",
+        status: "sold-out",
+        image: PLACEHOLDER_IMG
+      },
+      {
+        id: "sale-pending-rider-blue-corr",
+        name: "Sale Pending Rider (corrugated) Blue",
+        price: 4.95,
+        category: "signs",
+        status: "sold-out",
+        image: PLACEHOLDER_IMG
+      },
+      {
+        id: "price-reduced-rider-red-corr",
+        name: "Price Reduced Rider (corrugated) Red/wht",
+        price: 4.95,
+        category: "signs",
+        status: "available",
+        image: PLACEHOLDER_IMG
+      },
+      {
+        id: "supra-lockbox",
+        name: "Supra Lockbox",
+        price: 110.0,
+        category: "supra-mls",
+        status: "member-only",
+        image: PLACEHOLDER_IMG
+      },
+      {
+        id: "home-for-sale-rider-red-corr",
+        name: "Home For Sale Corrugated Rider Red/Wht",
+        price: 4.95,
+        category: "signs",
+        status: "available",
+        image: PLACEHOLDER_IMG
+      },
+      {
+        id: "magnetic-phone-kitchen-notes-10pk",
+        name: "Magnetic Phone/Kitchen/Notes 10pk",
+        price: 4.95,
+        category: "office-supplies",
+        status: "available",
+        image: PLACEHOLDER_IMG
+      },
+      {
+        id: "movie-tickets",
+        name: "Movie Tickets",
+        price: 9.25,
+        category: "tickets",
+        status: "available",
+        image: PLACEHOLDER_IMG
+      },
+      {
+        id: "supra-lockbox-tags",
+        name: "Supra Lockbox Tags",
+        price: 13.95,
+        category: "supra-mls",
+        status: "available",
+        image: PLACEHOLDER_IMG
+      },
+      {
+        id: "shoe-covers-5-pair",
+        name: "Shoe Covers pk of 5 pair",
+        price: 2.95,
+        category: "office-supplies",
+        status: "available",
+        image: PLACEHOLDER_IMG
+      },
+      {
+        id: "sold-smiley-rider-corrugated",
+        name: "SOLD Smiley Rider - Corrugated",
+        price: 4.85,
+        category: "signs",
+        status: "available",
+        image: PLACEHOLDER_IMG
+      },
+      {
+        id: "sold-rider-corrugated",
+        name: "Sold Rider - Corrugated",
+        price: 4.85,
+        category: "signs",
+        status: "available",
+        image: PLACEHOLDER_IMG
+      },
+      {
+        id: "umbrella",
+        name: "Umbrella",
+        price: 13.95,
+        category: "apparel-gifts",
+        status: "available",
+        image: PLACEHOLDER_IMG
+      },
+      {
+        id: "realtor-charm-bracelet",
+        name: "Realtor Charm Bracelet",
+        price: 17.0,
+        category: "apparel-gifts",
+        status: "available",
+        image: PLACEHOLDER_IMG
+      },
+      {
+        id: "for-sale-green-tan",
+        name: "For Sale Green/Tan",
+        price: 12.95,
+        category: "signs",
+        status: "available",
+        image: PLACEHOLDER_IMG
+      },
+      {
+        id: "zippered-realtor-logo-tote",
+        name: "Zippered Realtor Logo Tote",
+        price: 19.95,
+        category: "apparel-gifts",
+        status: "available",
+        image: PLACEHOLDER_IMG
+      },
+      {
+        id: "custom-mask",
+        name: "Custom Mask",
+        price: 10.0,
+        category: "apparel-gifts",
+        status: "available",
+        image: PLACEHOLDER_IMG
+      },
+      {
+        id: "bonita-springs-estero-map",
+        name: "Bonita Springs-Estero Map",
+        price: 2.45,
+        category: "maps",
+        status: "member-only",
+        image: PLACEHOLDER_IMG
+      },
+      {
+        id: "cape-coral-map",
+        name: "Cape Coral Map",
+        price: 2.25,
+        category: "maps",
+        status: "member-only",
+        image: PLACEHOLDER_IMG
+      },
+      {
+        id: "naples-area-maps",
+        name: "Naples Area Maps",
+        price: 2.25,
+        category: "maps",
+        status: "available",
+        image: PLACEHOLDER_IMG
+      },
+      {
+        id: "pool-spa-rider",
+        name: "Pool/Spa rider",
+        price: 2.95,
+        category: "signs",
+        status: "available",
+        image: PLACEHOLDER_IMG
+      },
+      {
+        id: "for-rent-rider",
+        name: "For Rent rider",
+        price: 4.85,
+        category: "signs",
+        status: "available",
+        image: PLACEHOLDER_IMG
+      },
+      {
+        id: "spa-rider",
+        name: "Spa rider",
+        price: 4.85,
+        category: "signs",
+        status: "available",
+        image: PLACEHOLDER_IMG
+      },
+      {
+        id: "pool-rider",
+        name: "Pool rider",
+        price: 2.85,
+        category: "signs",
+        status: "available",
+        image: PLACEHOLDER_IMG
+      },
+      {
+        id: "contract-pending-rider",
+        name: "Contract Pending rider",
+        price: 2.85,
+        category: "signs",
+        status: "sold-out",
+        image: PLACEHOLDER_IMG
+      }
+    ];
+
+    const storeGridEl = document.querySelector("[data-store-grid]");
+    const cartItemsEl = document.querySelector("[data-cart-items]");
+    const cartTotalEl = document.querySelector("[data-cart-total]");
+    const searchInput = document.getElementById("search");
+    const categorySelect = document.getElementById("category");
+    const checkoutBtn = document.querySelector("[data-checkout]");
+    const clearCartBtn = document.querySelector("[data-clear-cart]");
+
+    const cart = new Map();
+
+    function formatPrice(value) {
+      return "$" + value.toFixed(2);
+    }
+
+    function renderStore() {
+      const term = (searchInput.value || "").toLowerCase();
+      const category = categorySelect.value;
+
+      storeGridEl.innerHTML = "";
+
+      PRODUCTS.forEach((product) => {
+        const matchesSearch =
+          !term ||
+          product.name.toLowerCase().includes(term) ||
+          product.category.toLowerCase().includes(term);
+
+        const matchesCategory =
+          category === "all" || product.category === category;
+
+        if (!matchesSearch || !matchesCategory) return;
+
+        const card = document.createElement("article");
+        card.className =
+          "item-card" + (product.status === "sold-out" ? " is-soldout" : "");
+        card.dataset.productId = product.id;
+
+        const badgeHTML =
+          product.status === "sold-out"
+            ? '<span class="badge soldout">Sold out</span>'
+            : product.status === "member-only"
+            ? '<span class="badge member">Member portal</span>'
+            : "";
+
+        const buttonHTML =
+          product.status === "sold-out"
+            ? '<button class="btn btn-small" type="button" disabled>Sold out</button>'
+            : `<button class="btn btn-small add-to-cart" type="button" data-product-id="${product.id}">Add to cart</button>`;
+
+        card.innerHTML = `
+          <div class="item-thumb">
+            <div class="item-thumb-inner">
+              <img src="${product.image}" alt="${product.name}">
+            </div>
+            ${badgeHTML}
+          </div>
+          <div class="item-body">
+            <div class="item-name">${product.name}</div>
+            <div class="item-meta">
+              <div class="item-price">${formatPrice(product.price)}</div>
+              <div class="item-category">${labelForCategory(
+                product.category
+              )}</div>
+            </div>
+            <div class="item-actions">
+              ${buttonHTML}
+            </div>
+          </div>
+        `;
+        storeGridEl.appendChild(card);
+      });
+    }
+
+    function labelForCategory(cat) {
+      switch (cat) {
+        case "signs":
+          return "Signs / Riders";
+        case "supra-mls":
+          return "Supra / MLS";
+        case "maps":
+          return "Maps";
+        case "apparel-gifts":
+          return "Apparel / Gifts";
+        case "office-supplies":
+          return "Open House / Office";
+        case "tickets":
+          return "Tickets";
+        default:
+          return "Misc.";
+      }
+    }
+
+    function addToCart(productId) {
+      const product = PRODUCTS.find((p) => p.id === productId);
+      if (!product) return;
+
+      const existing = cart.get(productId) || { product, qty: 0 };
+      existing.qty += 1;
+      cart.set(productId, existing);
+      renderCart();
+    }
+
+    function updateQty(productId, nextQty) {
+      if (!cart.has(productId)) return;
+      if (nextQty <= 0) {
+        cart.delete(productId);
+      } else {
+        cart.get(productId).qty = nextQty;
+      }
+      renderCart();
+    }
+
+    function clearCart() {
+      cart.clear();
+      renderCart();
+    }
+
+    function renderCart() {
+      cartItemsEl.innerHTML = "";
+      if (cart.size === 0) {
+        cartItemsEl.innerHTML =
+          '<div class="cart-empty">No items yet. Start by adding a sign, Supra tool, or map.</div>';
+        cartTotalEl.textContent = "$0.00";
+        return;
+      }
+
+      let total = 0;
+
+      cart.forEach(({ product, qty }) => {
+        const row = document.createElement("div");
+        row.className = "cart-row";
+
+        const lineTotal = product.price * qty;
+        total += lineTotal;
+
+        row.innerHTML = `
+          <div class="cart-row-title">${product.name}</div>
+          <div class="cart-row-meta">
+            ${qty} × ${formatPrice(product.price)}
+          </div>
+          <div class="cart-row-actions">
+            <button class="btn btn-small btn-quiet" type="button" data-decrease="${product.id}">−</button>
+            <span class="qty-pill">${qty}</span>
+            <button class="btn btn-small btn-quiet" type="button" data-increase="${product.id}">+</button>
+          </div>
+        `;
+        cartItemsEl.appendChild(row);
+      });
+
+      cartTotalEl.textContent = formatPrice(total);
+    }
+
+    function buildCheckoutSummary() {
+      if (cart.size === 0) {
+        return "Cart is empty.";
+      }
+
+      let lines = [];
+      lines.push("REALTOR® Store – Planned Order");
+      lines.push("--------------------------------");
+      cart.forEach(({ product, qty }) => {
+        const lineTotal = (product.price * qty).toFixed(2);
+        lines.push(
+          `${qty} × ${product.name} @ $${product.price.toFixed(
+            2
+          )} = $${lineTotal}`
+        );
+      });
+      lines.push("--------------------------------");
+      lines.push(`Estimated subtotal: ${cartTotalEl.textContent}`);
+      lines.push("");
+      lines.push(
+        "Next steps: paste this summary into the Member Portal or include it in your email to the BER office when arranging payment and pickup."
+      );
+      return lines.join("\n");
+    }
+
+    // Event listeners
+    document.addEventListener("click", (event) => {
+      const addBtn = event.target.closest(".add-to-cart");
+      if (addBtn) {
+        const productId = addBtn.dataset.productId;
+        if (productId) addToCart(productId);
+      }
+
+      const decreaseId = event.target.getAttribute("data-decrease");
+      if (decreaseId) {
+        const entry = cart.get(decreaseId);
+        if (entry) updateQty(decreaseId, entry.qty - 1);
+      }
+
+      const increaseId = event.target.getAttribute("data-increase");
+      if (increaseId) {
+        const entry = cart.get(increaseId);
+        if (entry) updateQty(increaseId, entry.qty + 1);
+      }
+    });
+
+    searchInput.addEventListener("input", () => {
+      renderStore();
+    });
+
+    categorySelect.addEventListener("change", () => {
+      renderStore();
+    });
+
+    checkoutBtn.addEventListener("click", () => {
+      const summary = buildCheckoutSummary();
+      // Show the summary in a prompt-style window so users can copy.
+      const win = window.open("", "_blank", "width=640,height=720");
+      if (!win) {
+        alert(summary);
+        return;
+      }
+      win.document.write(
+        "<pre style='font-family: system-ui, -apple-system, BlinkMacSystemFont, \"Segoe UI\", sans-serif; font-size:13px; padding:16px; white-space:pre-wrap;'>" +
+          summary.replace(/</g, "&lt;") +
+          "</pre>"
+      );
+      win.document.close();
+    });
+
+    clearCartBtn.addEventListener("click", () => {
+      clearCart();
+    });
+
+    // Initial render
+    renderStore();
+    renderCart();
+  </script>
+</body>
+</html>
