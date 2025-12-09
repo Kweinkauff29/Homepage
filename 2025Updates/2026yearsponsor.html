@@ -473,6 +473,118 @@
       padding-left:18px;
       margin:4px 0 0;
     }
+
+    /* À la carte panel */
+    .ala-carte-panel{
+      margin-top:24px;
+      padding:18px 20px;
+      border-radius:var(--radius-lg);
+      border:1px dashed #dfe3eb;
+      background:#f8fafc;
+      display:flex;
+      flex-wrap:wrap;
+      gap:12px 18px;
+      align-items:center;
+      font-size:13px;
+      color:var(--ink-soft);
+    }
+    .ala-carte-heading{
+      font-family:Montserrat,system-ui,Arial,sans-serif;
+      font-size:13px;
+      text-transform:uppercase;
+      letter-spacing:.16em;
+      color:var(--ink);
+      margin-bottom:4px;
+    }
+    .ala-carte-text{
+      flex:1 1 260px;
+      max-width:720px;
+    }
+    .ala-carte-actions{
+      flex:0 0 auto;
+    }
+    @media (max-width:700px){
+      .ala-carte-panel{
+        align-items:flex-start;
+      }
+      .ala-carte-actions{
+        width:100%;
+      }
+      .ala-carte-actions .btn{
+        width:100%;
+        justify-content:center;
+      }
+    }
+
+    /* 2025 & 2026 Year Sponsors wall */
+    .sponsor-wall{
+      margin-top:40px;
+      padding:24px 20px 18px;
+      border-radius:var(--radius-lg);
+      border:1px solid #dfe3eb;
+      background:var(--muted);
+    }
+    .sponsor-wall h2{
+      font-family:Montserrat,system-ui,Arial,sans-serif;
+      font-size:18px;
+      text-transform:uppercase;
+      margin:0 0 6px;
+    }
+    .sponsor-wall p{
+      margin:0 0 14px;
+      font-size:13px;
+      color:var(--ink-soft);
+      max-width:720px;
+    }
+    .sponsor-tier-row{
+      display:flex;
+      flex-wrap:wrap;
+      align-items:flex-start;
+      border-top:1px solid #d1d7e2;
+      padding-top:12px;
+      margin-top:12px;
+      gap:16px;
+    }
+    .sponsor-tier-label{
+      font-family:Montserrat,system-ui,Arial,sans-serif;
+      font-size:11px;
+      letter-spacing:.22em;
+      text-transform:uppercase;
+      flex:0 0 120px;
+      color:#6b717a;
+    }
+    .sponsor-logos{
+      display:flex;
+      flex-wrap:wrap;
+      gap:12px 18px;
+    }
+    .sponsor-logos a,
+    .sponsor-logos .sponsor-logo{
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      padding:6px 10px;
+      border-radius:12px;
+      background:#fff;
+      box-shadow:0 4px 10px rgba(0,0,0,.06);
+    }
+    .sponsor-logos img{
+      max-height:46px;
+      max-width:160px;
+      height:auto;
+      width:auto;
+      object-fit:contain;
+      display:block;
+    }
+    @media (max-width:600px){
+      .sponsor-tier-row{
+        flex-direction:column;
+      }
+      .sponsor-tier-label{
+        flex:0 0 auto;
+      }
+    }
+
   </style>
 </head>
 <body>
@@ -527,10 +639,10 @@
             <li><i class="fa fa-plus" aria-hidden="true"></i><span>Diversity Event sponsor with logo recognition.</span></li>
             <li><i class="fa fa-plus" aria-hidden="true"></i><span>2026 Installation GOLD sponsor ($500 value): two (2) tickets, logo on all materials, ¼-page program ad, social media shout-out, and reserved seating.</span></li>
             <li><i class="fa fa-plus" aria-hidden="true"></i><span>½-page ad in <em>Realtor Review</em> magazine.</span></li>
-            <li><i class="fa fa-plus" aria-hidden="true"></i><span>31st Annual Golf Challenge sponsorship ($500 value) – choice of premium sponsor options such as Broker Cup, Breakfast, Lunch, GPS, scoring awards, on-course features, and more.</span></li>
+            <li><i class="fa fa-plus" aria-hidden="true"></i><span>33rd Annual Golf Challenge sponsorship ($500 value) – choice of premium sponsor options such as Broker Cup, Breakfast, Lunch, GPS, scoring awards, on-course features, and more.</span></li>
             <li><i class="fa fa-plus" aria-hidden="true"></i><span>Logo on the Annual Sponsor banner displayed at every BER event.</span></li>
             <li><i class="fa fa-plus" aria-hidden="true"></i><span>One (1) month of Friday General E-blast marketing.</span></li>
-            <li><i class="fa fa-plus" aria-hidden="true"></i><span>One free Associate Affiliate membership.</span></li>
+            <li><i class="fa fa-plus" aria-hidden="true"></i><span>One free Affiliate membership.</span></li>
             <li><i class="fa fa-plus" aria-hidden="true"></i><span>Diamond level placement on the homepage scrolling banner.</span></li>
           </ul>
           <button class="btn primary full js-add-cart" data-product-id="diamond">
@@ -559,10 +671,10 @@
             <li><i class="fa fa-plus" aria-hidden="true"></i><span>Diversity Event sponsor with recognition.</span></li>
             <li><i class="fa fa-plus" aria-hidden="true"></i><span>2026 Installation SILVER sponsor ($250 value): one (1) ticket, name on all marketing, logo in the program, and Board of Directors photo opportunity.</span></li>
             <li><i class="fa fa-plus" aria-hidden="true"></i><span>¼-page ad in <em>Realtor Review</em> magazine.</span></li>
-            <li><i class="fa fa-plus" aria-hidden="true"></i><span>31st Annual Golf Challenge manned hole sponsor ($250 value).</span></li>
+            <li><i class="fa fa-plus" aria-hidden="true"></i><span>33rd Annual Golf Challenge manned hole sponsor ($250 value).</span></li>
             <li><i class="fa fa-plus" aria-hidden="true"></i><span>Logo on the Annual Sponsor banner at every event.</span></li>
             <li><i class="fa fa-plus" aria-hidden="true"></i><span>Two (2) weeks of Friday General E-blast marketing.</span></li>
-            <li><i class="fa fa-plus" aria-hidden="true"></i><span>One free Associate Affiliate membership.</span></li>
+            <li><i class="fa fa-plus" aria-hidden="true"></i><span>One free Affiliate membership.</span></li>
             <li><i class="fa fa-plus" aria-hidden="true"></i><span>Platinum level position on the homepage scrolling banner.</span></li>
           </ul>
           <button class="btn primary full js-add-cart" data-product-id="platinum">
@@ -579,7 +691,7 @@
           </h2>
           <div class="price">
             <span class="price-was">$2,500 value</span>
-            <span class="price-now">$2,000</span>
+            <span class="price-now">$2,250</span>
             <span class="price-note">2026 annual investment</span>
           </div>
           <ul class="perk-list">
@@ -591,7 +703,7 @@
             <li><i class="fa fa-plus" aria-hidden="true"></i><span>Diversity Event sponsor.</span></li>
             <li><i class="fa fa-plus" aria-hidden="true"></i><span>2026 Installation SILVER sponsor ($250 value): one (1) ticket, name on all marketing, and logo in the program.</span></li>
             <li><i class="fa fa-plus" aria-hidden="true"></i><span>⅛-page ad in <em>Realtor Review</em> magazine.</span></li>
-            <li><i class="fa fa-plus" aria-hidden="true"></i><span>31st Annual Golf Challenge unmanned sign sponsor ($100 value).</span></li>
+            <li><i class="fa fa-plus" aria-hidden="true"></i><span>33rd Annual Golf Challenge unmanned sign sponsor ($100 value).</span></li>
             <li><i class="fa fa-plus" aria-hidden="true"></i><span>Logo on the Annual Sponsor banner at all events.</span></li>
             <li><i class="fa fa-plus" aria-hidden="true"></i><span>One (1) week of Friday General E-blast marketing.</span></li>
             <li><i class="fa fa-plus" aria-hidden="true"></i><span>Gold level placement on the homepage scrolling banner.</span></li>
@@ -691,8 +803,167 @@
         <li>Year sponsorships do not include annual membership dues.</li>
         <li>Sponsorship upgrades are available per event; the event value included in your package will be credited toward any upgrade.</li>
         <li>Magazine upgrades: equal value is credited toward higher-level ad placements, or as a credit if you are already a magazine sponsor.</li>
+        <li>Prefer à la carte options instead of an annual package? Use the contact box below or email Support@BERealtors.org for current opportunities.</li>
       </ul>
     </section>
+
+    <!-- À la carte contact box -->
+    <section class="ala-carte-panel" aria-label="À la carte sponsorship options">
+      <div class="ala-carte-text">
+        <div class="ala-carte-heading">Not ready for an annual package?</div>
+        <p>
+          If you’d prefer to sponsor individual events, classes, or marketing pieces instead of a 2026 Year Sponsor level,
+          let us know and we’ll share the current à la carte opportunities.
+        </p>
+      </div>
+      <div class="ala-carte-actions">
+        <button id="alaCarteBtn" class="btn secondary">
+          <i class="fa fa-envelope" aria-hidden="true"></i> Contact us about à la carte options
+        </button>
+      </div>
+    </section>
+
+    <!-- 2026 Year Sponsors (Confirmed so far) -->
+    <section class="sponsor-wall" aria-label="2026 Year Sponsors">
+      <h2>2026 Year Sponsors (Confirmed so far)</h2>
+      <p>
+        Thank you to our 2026 Year Sponsors who have already committed to supporting BER programs, education,
+        and advocacy throughout Bonita Springs and Estero.
+      </p>
+
+      <!-- Diamond -->
+      <div class="sponsor-tier-row">
+        <div class="sponsor-tier-label">Diamond</div>
+        <div class="sponsor-logos">
+          <!-- Law Office of Sam J. Saad III -->
+          <a href="https://www.saadlegal.com/" target="_blank" rel="noopener">
+            <img src="http://bonitaesterorealtors.com/wp-content/uploads/2025/11/Law-Office-of-Sam-J.-Saad-III-logo.webp" alt="Law Office of Sam J. Saad III">
+          </a>
+
+          <!-- Movement Mortgage -->
+          <a href="https://movement.com/" target="_blank" rel="noopener">
+            <img src="https://bonitaesterorealtors.com/wp-content/uploads/2025/12/Movement-mortgage.png" alt="Movement Mortgage">
+          </a>
+
+          <!-- Woods · Weidenmiller · Michetti · Rudnick -->
+          <a href="https://www.lawfirmnaples.com/" target="_blank" rel="noopener">
+            <img src="http://bonitaesterorealtors.com/wp-content/uploads/2025/11/Woods-·-Weidenmiller-·-Michetti-·-Rudnick-logo.jpg" alt="Woods · Weidenmiller · Michetti · Rudnick">
+          </a>
+        </div>
+      </div>
+
+      <!-- Platinum -->
+      <div class="sponsor-tier-row">
+        <div class="sponsor-tier-label">Platinum</div>
+        <div class="sponsor-logos">
+          <a href="https://cottrelltitle.com/" target="_blank" rel="noopener">
+            <img src="http://bonitaesterorealtors.com/wp-content/uploads/2025/11/Cottrell-Title-logo.png" alt="Cottrell Title &amp; Escrow">
+          </a>
+        </div>
+      </div>
+
+      <!-- Gold -->
+      <div class="sponsor-tier-row">
+        <div class="sponsor-tier-label">Gold</div>
+        <div class="sponsor-logos">
+          <!-- Reused Premium Mortgage logo -->
+          <div class="sponsor-logo">
+            <img src="http://bonitaesterorealtors.com/wp-content/uploads/2025/11/Premium-Mortgage-Corporation-logo.png" alt="Premium Mortgage Corporation">
+          </div>
+        </div>
+      </div>
+
+      <!-- Silver -->
+      <div class="sponsor-tier-row">
+        <div class="sponsor-tier-label">Silver</div>
+        <div class="sponsor-logos">
+          <a href="https://hiltonmovers.com/" target="_blank" rel="noopener">
+            <img src="http://bonitaesterorealtors.com/wp-content/uploads/2025/11/Hilton-Moving-and-Storage-logo.png" alt="Hilton Moving and Storage">
+          </a>
+        </div>
+      </div>
+
+      <!-- Photography -->
+      <div class="sponsor-tier-row">
+        <div class="sponsor-tier-label">Photography</div>
+        <div class="sponsor-logos">
+          <a href="https://www.frameandformstudio.com/" target="_blank" rel="noopener">
+            <img src="https://bonitaesterorealtors.com/wp-content/uploads/2025/12/Frame-Form.png" alt="Frame &amp; Form Studio">
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- 2025 Year Sponsors -->
+    <section class="sponsor-wall" aria-label="2025 Year Sponsors">
+      <h2>2025 Year Sponsors</h2>
+      <p>
+        Thank you to our 2025 Year Sponsors for supporting BER programs, education, and advocacy
+        throughout Bonita Springs and Estero.
+      </p>
+
+      <!-- Diamond -->
+      <div class="sponsor-tier-row">
+        <div class="sponsor-tier-label">Diamond</div>
+        <div class="sponsor-logos">
+          <a href="https://cottrelltitle.com/" target="_blank" rel="noopener">
+            <img src="http://bonitaesterorealtors.com/wp-content/uploads/2025/11/Cottrell-Title-logo.png" alt="Cottrell Title &amp; Escrow">
+          </a>
+          <a href="https://stateinsuranceusa.com/" target="_blank" rel="noopener">
+            <img src="http://bonitaesterorealtors.com/wp-content/uploads/2025/11/SIUSA.png" alt="State Insurance USA">
+          </a>
+          <a href="https://housemaster.com" target="_blank" rel="noopener">
+            <img src="http://bonitaesterorealtors.com/wp-content/uploads/2025/11/HouseMaster-Home-Inspections-logo.png" alt="HouseMaster Home Inspections">
+          </a>
+          <a href="https://www.saadlegal.com/" target="_blank" rel="noopener">
+            <img src="http://bonitaesterorealtors.com/wp-content/uploads/2025/11/Law-Office-of-Sam-J.-Saad-III-logo.webp" alt="Law Office of Sam J. Saad III">
+          </a>
+          <a href="https://www.lawfirmnaples.com/" target="_blank" rel="noopener">
+            <img src="http://bonitaesterorealtors.com/wp-content/uploads/2025/11/Woods-·-Weidenmiller-·-Michetti-·-Rudnick-logo.jpg" alt="Woods · Weidenmiller · Michetti · Rudnick">
+          </a>
+        </div>
+      </div>
+
+      <!-- Gold -->
+      <div class="sponsor-tier-row">
+        <div class="sponsor-tier-label">Gold</div>
+        <div class="sponsor-logos">
+          <a href="https://hiltonmovers.com/" target="_blank" rel="noopener">
+            <img src="http://bonitaesterorealtors.com/wp-content/uploads/2025/11/Hilton-Moving-and-Storage-logo.png" alt="Hilton Moving and Storage">
+          </a>
+          <a href="https://www.privateclienttitle.com/" target="_blank" rel="noopener">
+            <img src="http://bonitaesterorealtors.com/wp-content/uploads/2025/11/Private-Client-Title-Escrow-logo.webp" alt="Private Client Title &amp; Escrow">
+          </a>
+          <a href="https://www.daviesduke.com/" target="_blank" rel="noopener">
+            <img src="http://bonitaesterorealtors.com/wp-content/uploads/2025/11/Davies-Duke-logo.webp" alt="Davies Duke">
+          </a>
+        </div>
+      </div>
+
+      <!-- Silver -->
+      <div class="sponsor-tier-row">
+        <div class="sponsor-tier-label">Silver</div>
+        <div class="sponsor-logos">
+          <div class="sponsor-logo">
+            <img src="http://bonitaesterorealtors.com/wp-content/uploads/2025/11/239-Inspection-Services-logo.png" alt="239 Inspection Services">
+          </div>
+        </div>
+      </div>
+
+      <!-- Bronze -->
+      <div class="sponsor-tier-row">
+        <div class="sponsor-tier-label">Bronze</div>
+        <div class="sponsor-logos">
+          <div class="sponsor-logo">
+            <img src="http://bonitaesterorealtors.com/wp-content/uploads/2025/11/Premium-Mortgage-Corporation-logo.png" alt="Premium Mortgage Corporation">
+          </div>
+          <div class="sponsor-logo">
+            <img src="http://bonitaesterorealtors.com/wp-content/uploads/2025/11/Dwelling-Check-Home-Inspections-logo.png" alt="Dwelling Check Home Inspections">
+          </div>
+        </div>
+      </div>
+    </section>
+
   </div>
 
   <script>
@@ -700,7 +971,7 @@
       const products = {
         diamond:{ id:"diamond", name:"Diamond Year Sponsor", price:4000 },
         platinum:{ id:"platinum", name:"Platinum Year Sponsor", price:3000 },
-        gold:{ id:"gold", name:"Gold Year Sponsor", price:2000 },
+        gold:{ id:"gold", name:"Gold Year Sponsor", price:2250 },
         silver:{ id:"silver", name:"Silver Year Sponsor", price:1000 },
         bronze:{ id:"bronze", name:"Bronze Year Sponsor", price:750 }
       };
@@ -710,6 +981,7 @@
       const cartItemsEl = document.getElementById("cartItems");
       const cartTotalEl = document.getElementById("cartTotal");
       const checkoutBtn = document.getElementById("checkoutBtn");
+      const alaCarteBtn = document.getElementById("alaCarteBtn");
 
       function formatCurrency(v){
         return new Intl.NumberFormat("en-US",{style:"currency",currency:"USD"}).format(v);
@@ -773,6 +1045,20 @@
           + "?subject=" + encodeURIComponent(subject)
           + "&body=" + body;
       });
+
+      if (alaCarteBtn){
+        alaCarteBtn.addEventListener("click", ()=>{
+          const subject = "A la carte sponsorship options";
+          const body = "Hello BER Team,\n\n"
+            + "I am interested in learning more about a la carte sponsorship opportunities instead of a full year sponsorship.\n\n"
+            + "Please contact me with current options.\n\n"
+            + "Name:\nCompany:\nPhone:\n\n"
+            + "Thank you!";
+          window.location.href = "mailto:Support@BERealtors.org"
+            + "?subject=" + encodeURIComponent(subject)
+            + "&body=" + encodeURIComponent(body);
+        });
+      }
 
       renderCart();
     })();
