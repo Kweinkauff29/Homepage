@@ -1,276 +1,1106 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <meta charset="utf-8">
-    <!-- UPDATED: title per notes -->
-    <title>BER Global & Inclusion — 2025</title>
+  <meta charset="utf-8">
+  <!-- UPDATED: title per notes -->
+  <title>BER Global & Inclusion — 2025</title>
 
-    <!-- keep existing includes (left intact per request) -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap" rel="stylesheet">
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Cabin:ital@1&display=swap" rel="stylesheet">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Fascinate&display=swap" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&display=swap" rel="stylesheet">
+  <!-- keep existing includes (left intact per request) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap" rel="stylesheet">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+  <!-- Globe.gl + Three.js for 3D Member Origins Map -->
+  <script src="https://unpkg.com/three@0.160.0/build/three.min.js"></script>
+  <script src="https://unpkg.com/globe.gl@2.32.2/dist/globe.gl.min.js"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cabin:ital@1&display=swap" rel="stylesheet">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fascinate&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&display=swap" rel="stylesheet">
 
-    <!-- refreshed meta -->
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="description" content="BER Global & Inclusion hub (2025): testimonials, CIPS/Global directory, allied professionals, US policy docs, housing programs, community highlights, and resources for working with international buyers/sellers." />
-    <link rel="canonical" href="https://www.bonitaesterorealtors.com/global/" />
+  <!-- refreshed meta -->
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="description"
+    content="BER Global & Inclusion hub (2025): testimonials, CIPS/Global directory, allied professionals, US policy docs, housing programs, community highlights, and resources for working with international buyers/sellers." />
+  <link rel="canonical" href="https://www.bonitaesterorealtors.com/global/" />
 
-    <style media="screen">
-      html { width: 100%; }
-      body { width: 100%; }
+  <style media="screen">
+    html {
+      width: 100%;
+    }
 
-      /* keep original page-specific header hiding */
-      header.site-header, .site-header, nav#site-navigation, .navbar-default.navbar { display: none !important; }
-      body { padding-top: 0 !important; }
+    body {
+      width: 100%;
+    }
 
-      #placeinthesun { display: flex; margin: auto; max-width: 1100px; }
-      .foriegn-row { background-color: grey; margin: auto auto 50px auto; max-width: 1100px; }
-      .container { padding: 0 !important; }
+    /* keep original page-specific header hiding */
+    header.site-header,
+    .site-header,
+    nav#site-navigation,
+    .navbar-default.navbar {
+      display: none !important;
+    }
 
-      #comm-button, #impl-button, #train-button { width: 100%; margin: auto auto 10px auto; }
-      #impl-button { background-color: grey; color: black; }
+    body {
+      padding-top: 0 !important;
+    }
 
-      #get-involved p{ margin: auto auto 5px auto; text-align: center; font-size: 12px; }
-      .row { margin: auto; max-width: 1200px; }
+    #placeinthesun {
+      display: flex;
+      margin: auto;
+      max-width: 1100px;
+    }
 
-      #bonita { justify-content: center; display: flex; margin: auto; max-width: 1050px; padding: 5px 5% 5px 5%; background-color: white; border-radius: 10px; }
-      .submit-row { margin: auto; display: flex; justify-content: center; }
+    .foriegn-row {
+      background-color: grey;
+      margin: auto auto 50px auto;
+      max-width: 1100px;
+    }
 
-      #estero { justify-content: center; display: flex; margin: -36px auto 10px auto; max-width: 1050px; padding: 5px 5% 5px 5%; background-color: white; border-radius: 10px; }
-      .map-color { background-color: #3fa7db; padding-top: 100px; margin-top: -150px; padding-bottom: 10px; }
-      #get-involved { margin-bottom: 30px !important; }
+    .container {
+      padding: 0 !important;
+    }
 
-      #get-involved .col-sm-3  { background-color: white; border-top: 2rem solid lightgrey !important; margin: auto 10px auto 10px; box-shadow: 0px 1px 1px darkgrey; }
-      #get-involved .col-sm-4  { background-color: white; border-top: 2rem solid darkgrey !important; margin: 0 1% auto 1%; width: 31.3%; box-shadow: 0px 1px 1px darkgrey; }
-      .inv-h3 { color: black !important; font-size: 24px !important; text-align: center; margin: 10px auto 5px auto !important; }
+    #comm-button,
+    #impl-button,
+    #train-button {
+      width: 100%;
+      margin: auto auto 10px auto;
+    }
 
-      #photo-row { justify-content: center; display: flex; margin: auto; max-width: 1050px; height: 300px; padding: 0 5% 0 5%; }
-      .col { width: 100%; margin: auto; display: flex; }
-      .arc path { stroke: #fff; }
-      #esttext { display: inline; }
-      .row img { display: block; width: 98%; height: auto; margin: auto 1px auto 1px; box-shadow: 0px 3px 3px -1px black; object-fit: cover; }
-      #est-stats, #bon-stats { margin: auto; display: inline; }
+    #impl-button {
+      background-color: grey;
+      color: black;
+    }
 
-      .members-from { margin:57px auto 130px auto; width: 100%; height: 400px; overflow: hidden; color: #07abe1; }
-      #sub { width: 300px; font-size: 20px; font-family: arial; font-weight: 700; height: 59px; background-color: white; color: #3fa7db; }
-      #sub:hover { cursor: pointer; background-color: #b4d8eb; color: white; }
+    #get-involved p {
+      margin: auto auto 5px auto;
+      text-align: center;
+      font-size: 12px;
+    }
 
-      @import url('https://fonts.googleapis.com/css2?family=Anton&display=swap');
-      .where { text-align: center; transform: translateY(55px); z-index: 9999; color: white; font-family: 'Anton', sans-serif; font-size: 48px; font-weight: 700; }
-      .map { margin: auto; width: auto; height: 300px; border: 0; }
-      .map-div { height: 575px; margin-top: -67px; overflow: hidden; }
-      iframe { z-index: -999; }
-      .member-title { z-index: 999; }
+    .row {
+      margin: auto;
+      max-width: 1200px;
+    }
 
-      #desc-text { max-width: 950px; margin: 65px auto 20px auto; padding: 0 5% 0 5%; font-size: 16px; font-family: 'Cabin', sans-serif; text-align: left; }
-      #desc { max-width: 1050px; }
-      .map-inst { margin: auto; text-align: center; max-width: 1050px; padding: 0 5% 0 5%; font-size: 15px; font-family: arial; color: white; }
-      .inst-row { margin: -115px 0 50px 0px; }
-      .graph-title { max-width: 1050px; padding: 0 5% 0 5%; }
-      .graph-heading { font-size: 48px; text-align: center; color: white; width: 100%; margin: 25px auto 25px auto; font-family: 'Oswald', sans-serif; font-weight: 600; }
-      .hr-grhd { align-self: center; width: 300px; background-color: white; height: 5px; margin: -18px auto 20px auto; }
+    #bonita {
+      justify-content: center;
+      display: flex;
+      margin: auto;
+      max-width: 1050px;
+      padding: 5px 5% 5px 5%;
+      background-color: white;
+      border-radius: 10px;
+    }
 
-      .goback { display: flex; margin: 20px auto 10px -10%; }
-      #arrowAnim { display: flex; justify-content: left; margin: auto 57px 3px 15%; align-items: center; }
-      .arrow { width: 15px; height: 15px; border: 15px solid; border-color: black transparent transparent black; transform: rotate(-45deg) translateY(-20px); }
-      .arrowSliding { position: absolute; -webkit-animation: slide 3s linear infinite; animation: slide 3s linear infinite; }
-      .delay1 { -webkit-animation-delay: 1s; animation-delay: 1s; }
-      .delay2 { -webkit-animation-delay: 2s; animation-delay: 2s; }
-      .delay3 { -webkit-animation-delay: 3s; animation-delay: 3s; }
-      @-webkit-keyframes slide { 0% { display: none; opacity:0; transform: translateX(5vw); } 20% { opacity:1; transform: translateX(2vw); } 80% { opacity:1; transform: translateX(-2vw); } 100% { opacity:0; transform: translateX(-5vw); } }
-      @keyframes slide { 0% { display: none; opacity:0; transform: translateX(5vw); } 20% { opacity:1; transform: translateX(2vw); } 80% { opacity:1; transform: translateX(-2vw); } 100% { opacity:0; transform: translateX(-5vw); } }
+    .submit-row {
+      margin: auto;
+      display: flex;
+      justify-content: center;
+    }
 
-      @import url('https://fonts.googleapis.com/css2?family=Oswald:wght@500&display=swap');
-      .back { font-family: 'Oswald', sans-serif; z-index: 999; margin-bottom: 0; }
-      .back:hover { color: grey; cursor: pointer; text-decoration: underline; }
+    #estero {
+      justify-content: center;
+      display: flex;
+      margin: -36px auto 10px auto;
+      max-width: 1050px;
+      padding: 5px 5% 5px 5%;
+      background-color: white;
+      border-radius: 10px;
+    }
 
-      #tab1content { margin: 24px auto; padding: 5px; background-color: #ffc661; }
-      #tab1 { float: left; padding: 7px 10px; background: #2a2aff; color: #fff; margin: -25px 0 0; cursor: pointer; font-size: 20px; z-index: 2; border-bottom: none; border-top: none; border-right: none; border-left: none; }
-      #tab2, #tab3 { float: left; padding: 7px 10px; background: #00a3ff; color: #fff; margin: -25px 0 0; cursor: pointer; font-size: 20px; z-index: 2; border-bottom: none; border-top: none; border-right: none; }
-      .tabrow { margin: 10px auto -25px 5%; display: flex; }
+    .map-color {
+      background-color: #3fa7db;
+      padding-top: 100px;
+      margin-top: -150px;
+      padding-bottom: 10px;
+    }
 
-      .sources { margin: auto; }
-      #logo { box-shadow: none; }
-      #source { text-align: center; color: white; }
-      #gbhead { text-align: center; margin: auto; color: white; }
-      #tab2content { margin: 24px auto; padding: 5px; background-color: #2a2aff; height: auto; }
-      #tab3content { margin: 24px auto; padding: 5px; background-color: #0ca7a4; height: auto; }
-      .move { margin: 85px auto !important; box-shadow: none !important; }
-      #ukflag:hover, #laflag:hover, #asiaflag:hover, #euflag:hover, #canadaflag:hover { cursor: pointer; width: 99%; opacity: .9; }
+    #get-involved {
+      margin-bottom: 30px !important;
+    }
 
-      #triangle1, #triangle2, #triangle3, #triangle4, #triangle5 { width: 15px; height: 15px; border: 15px solid; margin: auto; max-width: 1200px; border-color: white transparent transparent white; transform: rotate(45deg) translateY(-1px) translateX(15px); display: none; }
-      #info-row-canada { display: none; }
-      #background-info { background: white; margin: -30px 5% auto 5%; border-radius: 5px; display: none; }
+    #get-involved .col-sm-3 {
+      background-color: white;
+      border-top: 2rem solid lightgrey !important;
+      margin: auto 10px auto 10px;
+      box-shadow: 0px 1px 1px darkgrey;
+    }
 
-      #german-tips, #canada-tips, #china-tips ,#cuba-tips, #brazil-tips, #switzerland-tips, #mexico-tips { display: block; margin: auto; animation: swoop .5s; }
-      @keyframes swoop { 0% { transform: translateX(5000px);} 100% { transform: translateX(0px); } }
+    #get-involved .col-sm-4 {
+      background-color: white;
+      border-top: 2rem solid darkgrey !important;
+      margin: 0 1% auto 1%;
+      width: 31.3%;
+      box-shadow: 0px 1px 1px darkgrey;
+    }
 
-      #german-tips h2, #canada-tips h2, #china-tips h2, #cuba-tips h2, #mexico-tips h2, #brazil-tips h2, #switzerland-tips h2 { text-align: center; color: white; font-family: 'Bebas Neue', cursive; font-size: 54px !important; }
-      li { color: white; font-size: 16px; font-family: arial; }
-      .tips-flags { max-width: 400px !important; margin: auto !important; }
+    .inv-h3 {
+      color: black !important;
+      font-size: 24px !important;
+      text-align: center;
+      margin: 10px auto 5px auto !important;
+    }
 
-      .global-head { background-color: white; margin: 0 5% 0px; padding-top: 20px; padding-bottom: 10px; border-radius: 5px 5px 0 0; transform: translateY(-6px); text-align: center; }
-      .canada-text { text-align: center; margin: -6px 5%; }
-      .border { background-color: white; margin: auto 5%; padding-bottom: 20px; border-radius: 0 0 5px 5px; }
+    #photo-row {
+      justify-content: center;
+      display: flex;
+      margin: auto auto 20px auto;
+      max-width: 1050px;
+      min-height: 200px;
+      height: auto;
+      padding: 0 5% 0 5%;
+    }
 
-      #image1, #image2, #image3, #image4, #p1 { animation: fadeIn 2s; }
-      @keyframes fadeIn { 0% { opacity: 0; } 100% { opacity: 1; } }
+    .col {
+      width: 100%;
+      margin: auto;
+      display: flex;
+    }
 
-      .col-sm-2, .col-sm-1 { position: relative !important; }
-      .div-back { position: absolute; z-index: -999; box-shadow: none !important; display: inline !important; width: 660px !important; transform: translateX(243px) translateY(3px) rotateX(55deg) rotateY(5deg); }
-      #divers { font-family: 'Fascinate', cursive !important; font-size: 100px !important; }
+    .arc path {
+      stroke: #fff;
+    }
 
-      /* responsive tweaks kept */
-      @media only screen and (max-width: 768px) {
-        #canadaflag, #ukflag, #laflag, #asiaflag, #euflag { width: 100px !important; }
-        .row { display: flex !important; }
-        .col-sm-2, .col-sm-1 { position: relative !important; width: 100px; }
-        .where { font-size: 37px; }
-        .map-color { padding-top: 35px; }
-        h1 { font-size: 26px !important; }
-        #divers { font-size: 76px !important; }
-        h3 { font-size: 26px !important; margin-left: 2%; }
-        h4 { font-size: 13px !important; }
-        h2 { font-size: 26px !important; }
-        .div-back { transform: translateX(150px) translateY(0px) rotateX(55deg) rotateY(5deg); width: 500px !important; }
-        .graph-heading { font-size: 42px !important; }
-        .map-inst { font-size: 14px !important; }
+    #esttext {
+      display: inline;
+    }
+
+    .row img {
+      display: block;
+      width: 98%;
+      height: auto;
+      margin: auto 1px auto 1px;
+      box-shadow: 0px 3px 3px -1px black;
+      object-fit: cover;
+    }
+
+    #est-stats,
+    #bon-stats {
+      margin: auto;
+      display: inline;
+    }
+
+    .members-from {
+      margin: 57px auto 130px auto;
+      width: 100%;
+      height: 400px;
+      overflow: hidden;
+      color: #07abe1;
+    }
+
+    #sub {
+      width: 300px;
+      font-size: 20px;
+      font-family: arial;
+      font-weight: 700;
+      height: 59px;
+      background-color: white;
+      color: #3fa7db;
+    }
+
+    #sub:hover {
+      cursor: pointer;
+      background-color: #b4d8eb;
+      color: white;
+    }
+
+    @import url('https://fonts.googleapis.com/css2?family=Anton&display=swap');
+
+    .where {
+      text-align: center;
+      transform: translateY(55px);
+      z-index: 9999;
+      color: white;
+      font-family: 'Anton', sans-serif;
+      font-size: 48px;
+      font-weight: 700;
+    }
+
+    .map {
+      margin: auto;
+      width: auto;
+      height: 300px;
+      border: 0;
+    }
+
+    .map-div {
+      height: 575px;
+      margin-top: -67px;
+      overflow: hidden;
+    }
+
+    iframe {
+      z-index: -999;
+    }
+
+    .member-title {
+      z-index: 999;
+    }
+
+    #desc-text {
+      max-width: 950px;
+      margin: 65px auto 20px auto;
+      padding: 0 5% 0 5%;
+      font-size: 16px;
+      font-family: 'Cabin', sans-serif;
+      text-align: left;
+    }
+
+    #desc {
+      max-width: 1050px;
+    }
+
+    .map-inst {
+      margin: auto;
+      text-align: center;
+      max-width: 1050px;
+      padding: 0 5% 0 5%;
+      font-size: 15px;
+      font-family: arial;
+      color: white;
+    }
+
+    .inst-row {
+      margin: -115px 0 50px 0px;
+    }
+
+    .graph-title {
+      max-width: 1050px;
+      padding: 0 5% 0 5%;
+    }
+
+    .graph-heading {
+      font-size: 48px;
+      text-align: center;
+      color: white;
+      width: 100%;
+      margin: 25px auto 25px auto;
+      font-family: 'Oswald', sans-serif;
+      font-weight: 600;
+    }
+
+    .hr-grhd {
+      align-self: center;
+      width: 300px;
+      background-color: white;
+      height: 5px;
+      margin: -18px auto 20px auto;
+    }
+
+    .goback {
+      display: flex;
+      margin: 20px auto 10px -10%;
+    }
+
+    #arrowAnim {
+      display: flex;
+      justify-content: left;
+      margin: auto 57px 3px 15%;
+      align-items: center;
+    }
+
+    .arrow {
+      width: 15px;
+      height: 15px;
+      border: 15px solid;
+      border-color: black transparent transparent black;
+      transform: rotate(-45deg) translateY(-20px);
+    }
+
+    .arrowSliding {
+      position: absolute;
+      -webkit-animation: slide 3s linear infinite;
+      animation: slide 3s linear infinite;
+    }
+
+    .delay1 {
+      -webkit-animation-delay: 1s;
+      animation-delay: 1s;
+    }
+
+    .delay2 {
+      -webkit-animation-delay: 2s;
+      animation-delay: 2s;
+    }
+
+    .delay3 {
+      -webkit-animation-delay: 3s;
+      animation-delay: 3s;
+    }
+
+    @-webkit-keyframes slide {
+      0% {
+        display: none;
+        opacity: 0;
+        transform: translateX(5vw);
       }
-      @media screen and (max-width: 660px) {
-        #get-involved { display: inline !important; }
-        #get-involved .col-sm-4 { width: 98%; }
+
+      20% {
+        opacity: 1;
+        transform: translateX(2vw);
       }
 
-      h3 { margin-left: 5%; }
-
-      @media only screen and (max-width: 580px) {
-        #canadaflag, #ukflag, #laflag, #asiaflag, #euflag { width: 75px !important; }
-        .row { display: flex !important; }
-        .map-inst { font-size: 12px !important; }
-        .col-sm-2 { width: 80px; }
-        .col-sm-1 { width: 0px; }
-        #tab1, #tab2, #tab3 { font-size: 17px; }
-        h3 { font-size: 17px !important; margin-left: 2%; }
-        #sub { width: 250px; }
-        .where { font-size: 26px; }
-        .map-color { padding-top: 20px; }
-        .graph-heading { font-size: 32px !important; }
-        #divers { font-size: 40px !important; }
-        h4 { font-size: 13px !important; }
-        h2 { font-size: 22px !important; }
-        #desc-text { margin: 65px auto -50px auto; font-size: 14px; }
-        #est, #bon { display: none; }
-        li { font-size: 13px; }
-        .div-back { transform: translateX(218px) translateY(10px) rotateX(55deg) rotateY(5deg); width: 240px !important; }
-        .tips-flags { max-width: 300px !important; }
-        #moveArrows { width: 100px !important; }
+      80% {
+        opacity: 1;
+        transform: translateX(-2vw);
       }
-      @media screen and (max-width: 1150px) { .foriegn-row { margin: auto 5% 40px 5%; } .foriegn-row h1 { font-size: 30px; } }
-      @media screen and (max-width: 850px) { .foriegn-row h1 { font-size: 26px; } }
-      @media screen and (max-width: 790px) {
-        .foriegn-row h1 { font-size: 22px; }
-        #placeinthesun { display: grid !important; }
-        #currency-btn { width: 100% !important; }
-        .col-sm-2 { width: 100%; }
+
+      100% {
+        opacity: 0;
+        transform: translateX(-5vw);
       }
-      @media screen and (max-device-width: 480px) { .div-back { display: none !important; } desktop { display: none; } mobile { display: block; } }
+    }
 
-      /* ===== 2025 NEW/UPDATED SECTIONS ===== */
-      :root { --ber-brand:#03AAE1; --ber-ink:#0b1220; --ber-accent:#FBAE24; }
-      .global2025-subnav { position: sticky; top:0; z-index: 999; background:#ffffffE6; backdrop-filter: blur(6px); border-bottom:1px solid #e6eaf2; }
-      .global2025-subnav .inner { max-width: 1100px; margin: 0 auto; display:flex; gap:12px; padding: 10px 16px; align-items:center; flex-wrap:wrap; }
-      .global2025-subnav a { color:#055a73; font-weight:600; text-decoration:none; padding:8px 10px; border-radius:8px; }
-      .global2025-subnav a:hover { background:#f0fbff; }
+    @keyframes slide {
+      0% {
+        display: none;
+        opacity: 0;
+        transform: translateX(5vw);
+      }
 
-      .global2025-banner { max-width:1100px; margin: 10px auto 0; padding: 8px 16px; display:flex; align-items:center; gap:16px; }
-      .global2025-banner img { height:56px; width:auto; }
+      20% {
+        opacity: 1;
+        transform: translateX(2vw);
+      }
 
-      section.global2025 { max-width:1100px; margin: 40px auto; padding: 0 16px; }
-      .s-heading { font-family:'Oswald',sans-serif; font-size:32px; color:#062b3a; margin: 0 0 6px; }
-      .s-sub { color:#516078; margin: 0 0 20px; }
-      .grid { display:grid; gap:16px; }
-      .grid.cols-3 { grid-template-columns: repeat(3, 1fr); }
-      .grid.cols-2 { grid-template-columns: repeat(2, 1fr); }
-      @media (max-width: 900px){ .grid.cols-3{ grid-template-columns: 1fr 1fr;} }
-      @media (max-width: 640px){ .grid.cols-3, .grid.cols-2{ grid-template-columns: 1fr;} }
-      .card { background:#fff; border:1px solid #e6eaf2; border-radius:14px; box-shadow: 0 4px 10px rgba(0,0,0,.04); overflow:hidden; }
-      .card .c-img { aspect-ratio: 16/9; width:100%; object-fit:cover; }
-      .card .c-body { padding:14px; }
-      .btn-pill { display:inline-block; border:1px solid #cfeaf5; padding:8px 12px; border-radius:999px; color:#04536d; text-decoration:none; font-weight:600; }
-      .btn-pill:hover { background:#e9f7fc; }
-      .badge { display:inline-block; background:#e6fbff; color:#055a73; padding:6px 10px; border-radius:999px; font-size:12px; font-weight:700; }
+      80% {
+        opacity: 1;
+        transform: translateX(-2vw);
+      }
 
-      .testimonial { padding:18px; background: #f6fbff; border:1px dashed #bfe9f8; border-radius:14px; }
-      .t-quote { font-style: italic; color:#214052; }
-      .t-name { margin-top:8px; font-weight:700; color:#063244; }
+      100% {
+        opacity: 0;
+        transform: translateX(-5vw);
+      }
+    }
 
-      .dir-search { display:flex; gap:8px; margin: 10px 0 18px; }
-      .dir-search input { flex:1; padding:10px 12px; border:1px solid #dce6ef; border-radius:10px; }
-      .dir-search button { padding:10px 14px; border-radius:10px; border:1px solid #cfeaf5; background:#e9f7fc; font-weight:700; }
+    @import url('https://fonts.googleapis.com/css2?family=Oswald:wght@500&display=swap');
 
-      .list { list-style:none; padding:0; margin:0; }
-      .list li { padding:10px 0; border-bottom:1px solid #eef3f7; }
+    .back {
+      font-family: 'Oswald', sans-serif;
+      z-index: 999;
+      margin-bottom: 0;
+    }
 
-      .note { background:#fff8e7; border:1px solid #ffe1a6; border-radius: 10px; padding:10px 12px; color:#6b4b00; }
-    
+    .back:hover {
+      color: grey;
+      cursor: pointer;
+      text-decoration: underline;
+    }
+
+    #tab1content {
+      margin: 24px auto;
+      padding: 5px;
+      background-color: #ffc661;
+    }
+
+    #tab1 {
+      float: left;
+      padding: 7px 10px;
+      background: #2a2aff;
+      color: #fff;
+      margin: -25px 0 0;
+      cursor: pointer;
+      font-size: 20px;
+      z-index: 2;
+      border-bottom: none;
+      border-top: none;
+      border-right: none;
+      border-left: none;
+    }
+
+    #tab2,
+    #tab3 {
+      float: left;
+      padding: 7px 10px;
+      background: #00a3ff;
+      color: #fff;
+      margin: -25px 0 0;
+      cursor: pointer;
+      font-size: 20px;
+      z-index: 2;
+      border-bottom: none;
+      border-top: none;
+      border-right: none;
+    }
+
+    .tabrow {
+      margin: 10px auto -25px 5%;
+      display: flex;
+    }
+
+    .sources {
+      margin: auto;
+    }
+
+    #logo {
+      box-shadow: none;
+    }
+
+    #source {
+      text-align: center;
+      color: white;
+    }
+
+    #gbhead {
+      text-align: center;
+      margin: auto;
+      color: white;
+    }
+
+    #tab2content {
+      margin: 24px auto;
+      padding: 5px;
+      background-color: #2a2aff;
+      height: auto;
+    }
+
+    #tab3content {
+      margin: 24px auto;
+      padding: 5px;
+      background-color: #0ca7a4;
+      height: auto;
+    }
+
+    .move {
+      margin: 85px auto !important;
+      box-shadow: none !important;
+    }
+
+    #ukflag:hover,
+    #laflag:hover,
+    #asiaflag:hover,
+    #euflag:hover,
+    #canadaflag:hover {
+      cursor: pointer;
+      width: 99%;
+      opacity: .9;
+    }
+
+    #triangle1,
+    #triangle2,
+    #triangle3,
+    #triangle4,
+    #triangle5 {
+      width: 15px;
+      height: 15px;
+      border: 15px solid;
+      margin: auto;
+      max-width: 1200px;
+      border-color: white transparent transparent white;
+      transform: rotate(45deg) translateY(-1px) translateX(15px);
+      display: none;
+    }
+
+    #info-row-canada {
+      display: none;
+    }
+
+    #background-info {
+      background: white;
+      margin: -30px 5% auto 5%;
+      border-radius: 5px;
+      display: none;
+    }
+
+    #german-tips,
+    #canada-tips,
+    #china-tips,
+    #cuba-tips,
+    #brazil-tips,
+    #switzerland-tips,
+    #mexico-tips {
+      display: block;
+      margin: auto;
+      animation: swoop .5s;
+    }
+
+    @keyframes swoop {
+      0% {
+        transform: translateX(5000px);
+      }
+
+      100% {
+        transform: translateX(0px);
+      }
+    }
+
+    #german-tips h2,
+    #canada-tips h2,
+    #china-tips h2,
+    #cuba-tips h2,
+    #mexico-tips h2,
+    #brazil-tips h2,
+    #switzerland-tips h2 {
+      text-align: center;
+      color: white;
+      font-family: 'Bebas Neue', cursive;
+      font-size: 54px !important;
+    }
+
+    li {
+      color: white;
+      font-size: 16px;
+      font-family: arial;
+    }
+
+    .tips-flags {
+      max-width: 400px !important;
+      margin: auto !important;
+    }
+
+    .global-head {
+      background-color: white;
+      margin: 0 5% 0px;
+      padding-top: 20px;
+      padding-bottom: 10px;
+      border-radius: 5px 5px 0 0;
+      transform: translateY(-6px);
+      text-align: center;
+    }
+
+    .canada-text {
+      text-align: center;
+      margin: -6px 5%;
+    }
+
+    .border {
+      background-color: white;
+      margin: auto 5%;
+      padding-bottom: 20px;
+      border-radius: 0 0 5px 5px;
+    }
+
+    #image1,
+    #image2,
+    #image3,
+    #image4,
+    #p1 {
+      animation: fadeIn 2s;
+    }
+
+    @keyframes fadeIn {
+      0% {
+        opacity: 0;
+      }
+
+      100% {
+        opacity: 1;
+      }
+    }
+
+    .col-sm-2,
+    .col-sm-1 {
+      position: relative !important;
+    }
+
+    .div-back {
+      position: absolute;
+      z-index: -999;
+      box-shadow: none !important;
+      display: inline !important;
+      width: 660px !important;
+      transform: translateX(243px) translateY(3px) rotateX(55deg) rotateY(5deg);
+    }
+
+    #divers {
+      font-family: 'Fascinate', cursive !important;
+      font-size: 100px !important;
+    }
+
+    /* responsive tweaks kept */
+    @media only screen and (max-width: 768px) {
+
+      #canadaflag,
+      #ukflag,
+      #laflag,
+      #asiaflag,
+      #euflag {
+        width: 100px !important;
+      }
+
+      .row {
+        display: flex !important;
+      }
+
+      .col-sm-2,
+      .col-sm-1 {
+        position: relative !important;
+        width: 100px;
+      }
+
+      .where {
+        font-size: 37px;
+      }
+
+      .map-color {
+        padding-top: 35px;
+      }
+
+      h1 {
+        font-size: 26px !important;
+      }
+
+      #divers {
+        font-size: 76px !important;
+      }
+
+      h3 {
+        font-size: 26px !important;
+        margin-left: 2%;
+      }
+
+      h4 {
+        font-size: 13px !important;
+      }
+
+      h2 {
+        font-size: 26px !important;
+      }
+
+      .div-back {
+        transform: translateX(150px) translateY(0px) rotateX(55deg) rotateY(5deg);
+        width: 500px !important;
+      }
+
+      .graph-heading {
+        font-size: 42px !important;
+      }
+
+      .map-inst {
+        font-size: 14px !important;
+      }
+    }
+
+    @media screen and (max-width: 660px) {
+      #get-involved {
+        display: inline !important;
+      }
+
+      #get-involved .col-sm-4 {
+        width: 98%;
+      }
+    }
+
+    h3 {
+      margin-left: 5%;
+    }
+
+    @media only screen and (max-width: 580px) {
+
+      #canadaflag,
+      #ukflag,
+      #laflag,
+      #asiaflag,
+      #euflag {
+        width: 75px !important;
+      }
+
+      .row {
+        display: flex !important;
+      }
+
+      .map-inst {
+        font-size: 12px !important;
+      }
+
+      .col-sm-2 {
+        width: 80px;
+      }
+
+      .col-sm-1 {
+        width: 0px;
+      }
+
+      #tab1,
+      #tab2,
+      #tab3 {
+        font-size: 17px;
+      }
+
+      h3 {
+        font-size: 17px !important;
+        margin-left: 2%;
+      }
+
+      #sub {
+        width: 250px;
+      }
+
+      .where {
+        font-size: 26px;
+      }
+
+      .map-color {
+        padding-top: 20px;
+      }
+
+      .graph-heading {
+        font-size: 32px !important;
+      }
+
+      #divers {
+        font-size: 40px !important;
+      }
+
+      h4 {
+        font-size: 13px !important;
+      }
+
+      h2 {
+        font-size: 22px !important;
+      }
+
+      #desc-text {
+        margin: 65px auto -50px auto;
+        font-size: 14px;
+      }
+
+      #est,
+      #bon {
+        display: none;
+      }
+
+      li {
+        font-size: 13px;
+      }
+
+      .div-back {
+        transform: translateX(218px) translateY(10px) rotateX(55deg) rotateY(5deg);
+        width: 240px !important;
+      }
+
+      .tips-flags {
+        max-width: 300px !important;
+      }
+
+      #moveArrows {
+        width: 100px !important;
+      }
+    }
+
+    @media screen and (max-width: 1150px) {
+      .foriegn-row {
+        margin: auto 5% 40px 5%;
+      }
+
+      .foriegn-row h1 {
+        font-size: 30px;
+      }
+    }
+
+    @media screen and (max-width: 850px) {
+      .foriegn-row h1 {
+        font-size: 26px;
+      }
+    }
+
+    @media screen and (max-width: 790px) {
+      .foriegn-row h1 {
+        font-size: 22px;
+      }
+
+      #placeinthesun {
+        display: grid !important;
+      }
+
+      #currency-btn {
+        width: 100% !important;
+      }
+
+      .col-sm-2 {
+        width: 100%;
+      }
+    }
+
+    @media screen and (max-device-width: 480px) {
+      .div-back {
+        display: none !important;
+      }
+
+      desktop {
+        display: none;
+      }
+
+      mobile {
+        display: block;
+      }
+    }
+
+    /* ===== 2025 NEW/UPDATED SECTIONS ===== */
+    :root {
+      --ber-brand: #03AAE1;
+      --ber-ink: #0b1220;
+      --ber-accent: #FBAE24;
+    }
+
+    .global2025-subnav {
+      position: sticky;
+      top: 0;
+      z-index: 999;
+      background: #ffffffE6;
+      backdrop-filter: blur(6px);
+      border-bottom: 1px solid #e6eaf2;
+    }
+
+    .global2025-subnav .inner {
+      max-width: 1100px;
+      margin: 0 auto;
+      display: flex;
+      gap: 12px;
+      padding: 10px 16px;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+
+    .global2025-subnav a {
+      color: #055a73;
+      font-weight: 600;
+      text-decoration: none;
+      padding: 8px 10px;
+      border-radius: 8px;
+    }
+
+    .global2025-subnav a:hover {
+      background: #f0fbff;
+    }
+
+    .global2025-banner {
+      max-width: 1100px;
+      margin: 10px auto 0;
+      padding: 8px 16px;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .global2025-banner img {
+      height: 56px;
+      width: auto;
+    }
+
+    section.global2025 {
+      max-width: 1100px;
+      margin: 40px auto;
+      padding: 0 16px;
+    }
+
+    .s-heading {
+      font-family: 'Oswald', sans-serif;
+      font-size: 32px;
+      color: #062b3a;
+      margin: 0 0 6px;
+    }
+
+    .s-sub {
+      color: #516078;
+      margin: 0 0 20px;
+    }
+
+    .grid {
+      display: grid;
+      gap: 16px;
+    }
+
+    .grid.cols-3 {
+      grid-template-columns: repeat(3, 1fr);
+    }
+
+    .grid.cols-2 {
+      grid-template-columns: repeat(2, 1fr);
+    }
+
+    @media (max-width: 900px) {
+      .grid.cols-3 {
+        grid-template-columns: 1fr 1fr;
+      }
+    }
+
+    @media (max-width: 640px) {
+
+      .grid.cols-3,
+      .grid.cols-2 {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .card {
+      background: #fff;
+      border: 1px solid #e6eaf2;
+      border-radius: 14px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, .04);
+      overflow: hidden;
+    }
+
+    .card .c-img {
+      aspect-ratio: 16/9;
+      width: 100%;
+      object-fit: cover;
+    }
+
+    .card .c-body {
+      padding: 14px;
+    }
+
+    .btn-pill {
+      display: inline-block;
+      border: 1px solid #cfeaf5;
+      padding: 8px 12px;
+      border-radius: 999px;
+      color: #04536d;
+      text-decoration: none;
+      font-weight: 600;
+    }
+
+    .btn-pill:hover {
+      background: #e9f7fc;
+    }
+
+    .badge {
+      display: inline-block;
+      background: #e6fbff;
+      color: #055a73;
+      padding: 6px 10px;
+      border-radius: 999px;
+      font-size: 12px;
+      font-weight: 700;
+    }
+
+    .testimonial {
+      padding: 18px;
+      background: #f6fbff;
+      border: 1px dashed #bfe9f8;
+      border-radius: 14px;
+    }
+
+    .t-quote {
+      font-style: italic;
+      color: #214052;
+    }
+
+    .t-name {
+      margin-top: 8px;
+      font-weight: 700;
+      color: #063244;
+    }
+
+    .dir-search {
+      display: flex;
+      gap: 8px;
+      margin: 10px 0 18px;
+    }
+
+    .dir-search input {
+      flex: 1;
+      padding: 10px 12px;
+      border: 1px solid #dce6ef;
+      border-radius: 10px;
+    }
+
+    .dir-search button {
+      padding: 10px 14px;
+      border-radius: 10px;
+      border: 1px solid #cfeaf5;
+      background: #e9f7fc;
+      font-weight: 700;
+    }
+
+    .list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+
+    .list li {
+      padding: 10px 0;
+      border-bottom: 1px solid #eef3f7;
+    }
+
+    .note {
+      background: #fff8e7;
+      border: 1px solid #ffe1a6;
+      border-radius: 10px;
+      padding: 10px 12px;
+      color: #6b4b00;
+    }
+
     /* --- Fix legend clipping & give the layout more breathing room --- */
-    #tab1content { overflow: visible; }              /* safety */
-    .demo-card { overflow: visible; }                /* was hidden; caused the cut-off */
+    #tab1content {
+      overflow: visible;
+    }
 
-    .demo-body{
+    /* safety */
+    .demo-card {
+      overflow: visible;
+    }
+
+    /* was hidden; caused the cut-off */
+
+    .demo-body {
       /* make the left column a fixed comfortable band for the donut,
         and let the legend take the rest */
       grid-template-columns: minmax(260px, 340px) 1fr !important;
-      padding-right: 16px;                           /* tiny cushion on the right */
+      padding-right: 16px;
+      /* tiny cushion on the right */
     }
 
-    .demo-legend{ padding-right: 12px; }
-    .demo-legend li{ align-items: center; gap: 8px; }
+    .demo-legend {
+      padding-right: 12px;
+    }
+
+    .demo-legend li {
+      align-items: center;
+      gap: 8px;
+    }
 
     /* optional: slightly smaller numbers so long values never hit the edge */
-    .legend-val{ font-size: 13px; }
+    .legend-val {
+      font-size: 13px;
+    }
 
     /* Make lists readable inside Top Global Buyers cards */
     #tab2content .gb-box li,
     #tab2content .gb-box ul li {
-      color: #063244 !important;       /* dark ink */
+      color: #063244 !important;
+      /* dark ink */
       font-family: Arial, Helvetica, sans-serif;
       font-size: 15px;
       line-height: 1.45;
       list-style: disc;
     }
-    #tab2content .gb-box ul { margin: 0 0 0 18px; padding-left: 0; }
+
+    #tab2content .gb-box ul {
+      margin: 0 0 0 18px;
+      padding-left: 0;
+    }
 
     #tab3content .tip-slide li,
     #tab3content .tip-slide ul li {
-      color: #0b1220 !important;   /* dark ink on white card */
+      color: #0b1220 !important;
+      /* dark ink on white card */
       font-family: Arial, Helvetica, sans-serif;
       font-size: 15px;
       line-height: 1.5;
     }
+  </style>
 
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+  <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js" type="text/javascript"></script>
+  <script src="https://d3js.org/d3.v4.min.js"></script>
 
-    </style>
-
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
-    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js" type="text/javascript"></script>
-    <script src="https://d3js.org/d3.v4.min.js"></script>
-
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@500&display=swap" rel="stylesheet">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@500&display=swap" rel="stylesheet">
 </head>
 
 <body>
@@ -278,7 +1108,8 @@
   <!-- 2025 banner + subnav -->
   <div class="global2025-banner">
     <!-- TODO: replace with the official BER Global logo file path -->
-    <img src="/wp-content/uploads/2025/09/ber-global-logo.png" alt="BER Global Council Logo" onerror="this.src='https://www.bonitaesterorealtors.com/wp-content/uploads/2024/09/3-e1727443916279.png'">
+    <img src="/wp-content/uploads/2025/09/ber-global-logo.png" alt="BER Global Council Logo"
+      onerror="this.src='https://www.bonitaesterorealtors.com/wp-content/uploads/2024/09/3-e1727443916279.png'">
     <div>
       <div class="global2025-tag"><strong>BER Global Diversity Council</strong></div>
       <div class="mini">Resources to help Bonita Springs‑Estero REALTORS® win and serve international business.</div>
@@ -302,53 +1133,868 @@
 
   <!-- existing hero and gallery (kept exactly) -->
   <div class="row" style="margin: 30px auto 25px auto; max-width: 1050px; padding: 0 5% 0 5%;">
-    <span style="margin: auto; display: flex; max-width: 1050px; text-align: left;"><h1 style="vertical-align: text-bottom;">Our Commitment to </h1><h1 style="color: #4566ce; font-size: 40px; margin-left: 10px;"><i id="divers" style="font-family: 'Anton', sans-serif; font-weight: 700; vertical-align: text-top;">Diversity</i></h1><img class="div-back" src="https://www.bonitaesterorealtors.com/wp-content/uploads/2022/06/Click-Here-600-×-200-px.gif" /></span>
+    <span style="margin: auto; display: flex; max-width: 1050px; text-align: left;">
+      <h1 style="vertical-align: text-bottom;">Our Commitment to </h1>
+      <h1 style="color: #4566ce; font-size: 40px; margin-left: 10px;"><i id="divers"
+          style="font-family: 'Anton', sans-serif; font-weight: 700; vertical-align: text-top;">Diversity</i></h1><img
+        class="div-back"
+        src="https://www.bonitaesterorealtors.com/wp-content/uploads/2022/06/Click-Here-600-×-200-px.gif" />
+    </span>
   </div>
   <div class="desc">
-    <p id="desc-text">Through the Global Diversity Committee and our Global Initiative, we try and bring awareness to the diversity within our local community. Bonita Springs & Estero are fast-growing communities that are becoming more diverse by the year. Join us for our events & classes discussing diversity and use the online recourses here to help you become more aware of our local neighbors and those around the world. A Realtor® that learns - Earns. You never know when you need the background information on the client you are working with. While you're here, let us know where you are from! Use the link below the map so we can add your pin.</p>
+    <p id="desc-text">Through the Global Diversity Committee and our Global Initiative, we try and bring awareness to
+      the diversity within our local community. Bonita Springs & Estero are fast-growing communities that are becoming
+      more diverse by the year. Join us for our events & classes discussing diversity and use the online recourses here
+      to help you become more aware of our local neighbors and those around the world. A Realtor® that learns - Earns.
+      You never know when you need the background information on the client you are working with. While you're here, let
+      us know where you are from! Use the link below the map so we can add your pin.</p>
   </div>
   <div class="row" id="photo-row">
     <div class="col" id="p1">
-      <transition name ="fadeIn">
+      <transition name="fadeIn">
         <!-- NOTE: leadership request → replace these images with GLOBAL events/trips photos -->
-        <img id='image1' src="https://www.bonitaesterorealtors.com/wp-content/uploads/2022/05/70829665_2929376593742724_4706839455502172160_n-e1651672250759.jpeg" alt="">
+        <img id='image1'
+          src="https://www.bonitaesterorealtors.com/wp-content/uploads/2022/05/70829665_2929376593742724_4706839455502172160_n-e1651672250759.jpeg"
+          alt="">
       </transition>
     </div>
-    <div class="col"><img id='image2' src="https://www.bonitaesterorealtors.com/wp-content/uploads/2022/05/71136910_2929373073743076_3846591844376903680_n-e1651672358117.jpeg" alt=""></div>
-    <div class="col"><img id='image3' src="https://www.bonitaesterorealtors.com/wp-content/uploads/2022/05/71152959_2929373543743029_3630942730445651968_n-e1651672176192.jpeg" alt=""></div>
-    <div class="col"><img id='image4' src="https://www.bonitaesterorealtors.com/wp-content/uploads/2022/05/71251320_2929375387076178_6320807110716162048_n-e1651672318203.jpeg" alt=""></div>
+    <div class="col"><img id='image2'
+        src="https://www.bonitaesterorealtors.com/wp-content/uploads/2022/05/71136910_2929373073743076_3846591844376903680_n-e1651672358117.jpeg"
+        alt=""></div>
+    <div class="col"><img id='image3'
+        src="https://www.bonitaesterorealtors.com/wp-content/uploads/2022/05/71152959_2929373543743029_3630942730445651968_n-e1651672176192.jpeg"
+        alt=""></div>
+    <div class="col"><img id='image4'
+        src="https://www.bonitaesterorealtors.com/wp-content/uploads/2022/05/71251320_2929375387076178_6320807110716162048_n-e1651672318203.jpeg"
+        alt=""></div>
   </div>
 
-  <!-- existing member map (kept) -->
-  <div class="map-color">
-    <div class="member-title"><h1 class="where">Where Are Our Members From?</h1></div>
-    <div class="members-from"><div class="map-div"><iframe src="https://www.google.com/maps/d/u/2/embed?mid=1_bHKwZYxKrRAXRf8FhOmrf3ijvaSes0&ehbc=2E312F" width="100%" height="700" loading="lazy"></iframe></div></div>
-    <div class="inst-row"><h2 class="map-inst"> <i>Instruction:</i> Use your mouse scroll wheel to zoom in/out OR use the "+" or "-" keys on your keyboard</h2></div>
-    <hr style="color: white; margin: -40px 5% 10px 5%; padding: 0px 5% 0 5%;">
-    <div class="submit-row"><h3>Where are you from?</h3>
-      <a href="https://bonitaspringsesterorealtorsfl.growthzoneapp.com/ap/Form/Fill/rDbGDUaP" target="_blank"><button type="button" class="btn" id="sub">Submit Here! </button></a>
+  <!-- 3D Globe Section - Side by Side Layout -->
+  <style>
+    .globe-section {
+      background: #020617;
+      padding: 40px 16px 50px;
+      margin-top: 30px;
+    }
+
+    .globe-section .member-title {
+      display: block !important;
+      width: 100%;
+      text-align: center;
+    }
+
+    .globe-section .where {
+      margin-bottom: 20px !important;
+      color: white !important;
+      text-align: center !important;
+      font-size: 32px !important;
+      font-family: 'Anton', sans-serif !important;
+      transform: none !important;
+      display: block !important;
+    }
+
+    .globe-wrapper {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 20px;
+      max-width: 1000px;
+      margin: 0 auto;
+      align-items: flex-start;
+      justify-content: center;
+    }
+
+    .globe-panel {
+      flex: 0 0 auto;
+      width: 480px;
+      max-width: 100%;
+      position: relative;
+    }
+
+    #globe-container {
+      position: relative;
+      width: 100%;
+      height: 350px !important;
+      min-height: 350px !important;
+      background: radial-gradient(circle at center, #0a1628 0%, #020617 100%);
+      border-radius: 16px;
+      overflow: hidden;
+    }
+
+    #globe-container.enlarged {
+      height: 70vh !important;
+      min-height: 500px !important;
+    }
+
+    #globeCanvas {
+      width: 100%;
+      height: 100%;
+      position: absolute;
+      top: 0;
+      left: 0;
+    }
+
+    .globe-controls {
+      position: absolute;
+      bottom: 10px;
+      right: 10px;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      z-index: 10;
+    }
+
+    .legend-pill {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      padding: 5px 8px;
+      border-radius: 999px;
+      background: rgba(15, 23, 42, 0.9);
+      border: 1px solid rgba(148, 163, 184, 0.5);
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: .1em;
+      color: #e5e7eb;
+    }
+
+    .legend-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 999px;
+      background: #e0002a;
+      box-shadow: 0 0 8px rgba(220, 38, 38, 0.8);
+    }
+
+    .size-toggle-btn {
+      background: rgba(15, 23, 42, 0.9);
+      border: 1px solid rgba(148, 163, 184, 0.5);
+      border-radius: 999px;
+      padding: 6px 10px;
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+      color: #e5e7eb;
+      cursor: pointer;
+    }
+
+    .size-toggle-btn:hover {
+      background: rgba(56, 189, 248, 0.2);
+    }
+
+    .globe-side-panel {
+      flex: 1 1 40%;
+      min-width: 280px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .side-card {
+      background: rgba(15, 23, 42, 0.95);
+      border-radius: 12px;
+      border: 1px solid rgba(148, 163, 184, 0.4);
+      padding: 14px;
+      backdrop-filter: blur(10px);
+    }
+
+    .side-card-title {
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: .15em;
+      color: #12d0c9;
+      margin: 0 0 8px;
+      font-weight: 700;
+    }
+
+    .side-card-text {
+      font-size: 12px;
+      color: #cbd5f5;
+      margin: 0;
+      line-height: 1.4;
+    }
+
+    .pin-form-card {
+      flex: 1;
+    }
+
+    .pin-form {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .field {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .field label {
+      font-size: 10px;
+      color: #9ca3af;
+      text-transform: uppercase;
+      letter-spacing: .1em;
+    }
+
+    .field input[type="text"] {
+      width: 100%;
+      padding: 8px 10px;
+      border-radius: 8px;
+      border: 1px solid rgba(148, 163, 184, 0.5);
+      background: rgba(15, 23, 42, 0.8);
+      color: #e5e7eb;
+      font-size: 13px;
+      outline: none;
+    }
+
+    .field input[type="text"]::placeholder {
+      color: #6b7280;
+    }
+
+    .field input[type="text"]:focus {
+      border-color: #12d0c9;
+      box-shadow: 0 0 0 2px rgba(18, 208, 201, 0.2);
+    }
+
+    .btn-row {
+      display: flex;
+      gap: 8px;
+      margin-top: 4px;
+    }
+
+    .globe-btn {
+      flex: 1;
+      border: none;
+      border-radius: 8px;
+      padding: 10px 12px;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+      cursor: pointer;
+      background: linear-gradient(135deg, #e0002a, #12d0c9);
+      color: #020617;
+      transition: transform 0.1s ease;
+    }
+
+    .globe-btn:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+    }
+
+    .globe-btn-ghost {
+      background: transparent;
+      color: #e5e7eb;
+      border: 1px solid rgba(148, 163, 184, 0.5);
+      flex: 0 0 auto;
+      padding: 10px 16px;
+    }
+
+    .globe-btn-ghost:hover {
+      background: rgba(15, 23, 42, 0.8);
+      transform: none;
+    }
+
+    .status {
+      font-size: 11px;
+      color: #9ca3af;
+      min-height: 14px;
+    }
+
+    .status-error {
+      color: #fecaca;
+    }
+
+    .status-success {
+      color: #a7f3d0;
+    }
+
+    .results-list {
+      max-height: 100px;
+      overflow-y: auto;
+      margin-top: 6px;
+      border-radius: 8px;
+      border: 1px solid rgba(31, 41, 55, 0.8);
+      background: rgba(15, 23, 42, 0.95);
+    }
+
+    .results-item {
+      padding: 6px 8px;
+      font-size: 11px;
+      cursor: pointer;
+      color: #e5e7eb;
+      border-bottom: 1px solid rgba(31, 41, 55, 0.8);
+    }
+
+    .results-item:last-child {
+      border-bottom: none;
+    }
+
+    .results-item:hover {
+      background: rgba(56, 189, 248, 0.1);
+    }
+
+    .pin-note {
+      font-size: 9px;
+      color: #6b7280;
+      margin-top: 6px;
+    }
+
+    @media (max-width:800px) {
+      .globe-wrapper {
+        flex-direction: column;
+      }
+
+      .globe-panel,
+      .globe-side-panel {
+        flex: 1 1 100%;
+        min-width: 100%;
+      }
+
+      #globe-container {
+        height: 300px !important;
+        min-height: 300px !important;
+      }
+    }
+
+    /* Spotlight callout for cycling member display */
+    .spotlight-callout {
+      position: absolute;
+      top: 20px;
+      left: 20px;
+      z-index: 20;
+      pointer-events: none;
+      opacity: 0;
+      transform: translateY(-10px);
+      transition: opacity 0.4s ease, transform 0.4s ease;
+    }
+
+    .spotlight-callout.active {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .spotlight-card {
+      background: linear-gradient(135deg, rgba(15, 23, 42, 0.95), rgba(15, 23, 42, 0.9));
+      border: 1px solid rgba(18, 208, 201, 0.5);
+      border-radius: 12px;
+      padding: 10px 14px;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.6), 0 0 20px rgba(18, 208, 201, 0.15);
+      backdrop-filter: blur(10px);
+      max-width: 200px;
+    }
+
+    .spotlight-label {
+      font-size: 9px;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      color: #12d0c9;
+      margin-bottom: 4px;
+    }
+
+    .spotlight-name {
+      font-size: 14px;
+      font-weight: 700;
+      color: #f9fafb;
+      margin: 0 0 2px;
+    }
+
+    .spotlight-city {
+      font-size: 11px;
+      color: #94a3b8;
+      margin: 0;
+    }
+
+    .spotlight-line {
+      position: absolute;
+      width: 2px;
+      background: linear-gradient(to bottom, rgba(18, 208, 201, 0.8), rgba(18, 208, 201, 0));
+      height: 60px;
+      left: 30px;
+      top: 100%;
+      transform-origin: top center;
+    }
+  </style>
+
+  <div class="globe-section">
+    <div class="member-title">
+      <h1 class="where">Where Are Our Members From?</h1>
+    </div>
+    <div class="globe-wrapper">
+      <div class="globe-panel">
+        <div id="globe-container">
+          <div id="globeCanvas"></div>
+
+          <!-- Spotlight callout for cycling member display -->
+          <div id="spotlightCallout" class="spotlight-callout">
+            <div class="spotlight-card">
+              <div class="spotlight-label">★ Featured Member</div>
+              <p id="spotlightName" class="spotlight-name"></p>
+              <p id="spotlightCity" class="spotlight-city"></p>
+            </div>
+            <div class="spotlight-line"></div>
+          </div>
+
+          <div class="globe-controls">
+            <div class="legend-pill"><span class="legend-dot"></span><span>Member</span></div>
+            <button id="globeSizeToggle" class="size-toggle-btn" onclick="toggleGlobeSize()">⛶ Enlarge</button>
+          </div>
+        </div>
+      </div>
+      <div class="globe-side-panel">
+        <div class="side-card">
+          <div class="side-card-title">Member Origins Globe</div>
+          <p class="side-card-text">Drag to rotate, scroll to zoom. Drop a pin to mark your hometown!</p>
+        </div>
+        <div class="side-card pin-form-card">
+          <div class="side-card-title">Place Your Pin</div>
+          <div class="pin-form">
+            <div class="field">
+              <label for="nameInput">Your Name</label>
+              <input id="nameInput" type="text" placeholder="e.g., Jane Doe" autocomplete="off" />
+            </div>
+            <div class="field">
+              <label for="cityInput">City / Area</label>
+              <input id="cityInput" type="text" placeholder="e.g., Bonita Springs, FL" autocomplete="off" />
+            </div>
+            <div class="btn-row">
+              <button class="globe-btn" id="searchBtn">Search &amp; Place</button>
+              <button class="globe-btn globe-btn-ghost" id="clearBtn" type="button">Clear</button>
+            </div>
+            <div id="searchStatus" class="status"></div>
+            <div id="resultsContainer" class="results-list" style="display:none;"></div>
+            <div class="pin-note">One pin per name • Pins shared across all visitors</div>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
+
+
+
+
+
+
+  <script>
+    // Globe Pin Map - Cloudflare Worker Integration
+    const WORKER_BASE_URL = "https://ber-globe.bonitaspringsrealtors.workers.dev";
+    let pins = [];
+    let world;
+
+    function getColorForIndex(index) {
+      const hue = (index * 137.508) % 360;
+      return `hsl(${hue}, 80%, 60%)`;
+    }
+
+    async function fetchAllPinsFromWorker() {
+      const resp = await fetch(`${WORKER_BASE_URL}/pins`, { headers: { "Accept": "application/json" } });
+      if (!resp.ok) throw new Error("Failed to load pins");
+      const data = await resp.json();
+      return Array.isArray(data) ? data : [];
+    }
+
+    async function addPinViaWorker(name, city, lat, lng) {
+      const resp = await fetch(`${WORKER_BASE_URL}/pins`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json", "Accept": "application/json" },
+        body: JSON.stringify({ name, city, lat, lng })
+      });
+      if (resp.status === 409) {
+        const data = await resp.json().catch(() => ({}));
+        const msg = data.message || "This name already has a pin.";
+        throw new Error(`NAME_EXISTS:${msg}`);
+      }
+      if (!resp.ok) throw new Error("Failed to save pin");
+      const data = await resp.json();
+      return Array.isArray(data.pins) ? data.pins : [];
+    }
+
+    function initGlobe() {
+      const container = document.getElementById("globeCanvas");
+      const globeContainer = document.getElementById("globe-container");
+      if (!container || !globeContainer) return;
+
+      // Get actual container dimensions
+      const width = globeContainer.clientWidth;
+      const height = globeContainer.clientHeight;
+
+      world = Globe()(container)
+        .width(width)
+        .height(height)
+        .globeImageUrl("//unpkg.com/three-globe/example/img/earth-night.jpg")
+        .bumpImageUrl("//unpkg.com/three-globe/example/img/earth-topology.png")
+        .backgroundColor("#020617")
+        .showAtmosphere(true)
+        .atmosphereColor("#38bdf8")
+        .atmosphereAltitude(0.22)
+        .pointLat("lat")
+        .pointLng("lng")
+        .pointAltitude(0.03)
+        .pointColor(d => d.color || "#e0002a")
+        .pointLabel(d => `${d.city || "Member City"} – ${d.name || "Member"}`)
+        .onPointClick(handlePinClick)
+        .onGlobeClick(handleGlobeClick);
+
+      world.pointOfView({ lat: 26.3398, lng: -81.7787, altitude: 2.6 });
+      const cam = world.camera();
+      cam.fov = 45;
+      cam.updateProjectionMatrix();
+
+      const controls = world.controls();
+      if (controls) {
+        controls.autoRotate = true;
+        controls.autoRotateSpeed = 0.4;
+        controls.enableDamping = true;
+        controls.dampingFactor = 0.04;
+      }
+      refreshGlobePoints();
+
+      // Force resize after a short delay to ensure proper sizing
+      setTimeout(() => {
+        if (world && globeContainer) {
+          world.width(globeContainer.clientWidth).height(globeContainer.clientHeight);
+        }
+      }, 100);
+    }
+
+    // Pin click zoom state
+    let previousCameraState = null;
+    let isZoomedIn = false;
+
+    function handlePinClick(point, event) {
+      if (!world || !point) return;
+
+      // Store current camera state before zooming
+      const currentPov = world.pointOfView();
+      previousCameraState = { lat: currentPov.lat, lng: currentPov.lng, altitude: currentPov.altitude };
+
+      // Stop auto-rotation
+      const controls = world.controls();
+      if (controls) {
+        controls.autoRotate = false;
+      }
+
+      // Pause spotlight cycling
+      if (spotlightInterval) {
+        clearInterval(spotlightInterval);
+        spotlightInterval = null;
+      }
+
+      // Update spotlight to show this pin
+      const callout = document.getElementById("spotlightCallout");
+      const nameEl = document.getElementById("spotlightName");
+      const cityEl = document.getElementById("spotlightCity");
+      if (callout && nameEl && cityEl) {
+        nameEl.textContent = point.name || "Member";
+        cityEl.textContent = point.city || "Unknown Location";
+        callout.classList.add("active");
+      }
+
+      // Zoom into the clicked pin
+      world.pointOfView({ lat: point.lat, lng: point.lng, altitude: 1.2 }, 1000);
+      isZoomedIn = true;
+    }
+
+    function handleGlobeClick(coords, event) {
+      if (!world || !isZoomedIn) return;
+
+      // Restore previous camera state
+      if (previousCameraState) {
+        world.pointOfView(previousCameraState, 1000);
+      }
+
+      // Resume auto-rotation
+      const controls = world.controls();
+      if (controls) {
+        controls.autoRotate = true;
+      }
+
+      // Resume spotlight cycling
+      if (pins.length > 0) {
+        startSpotlightCycle();
+      }
+
+      isZoomedIn = false;
+    }
+
+    function refreshGlobePoints() {
+      if (!world) return;
+      world.pointsData(pins);
+    }
+
+    // Spotlight feature - cycle through pins every 8 seconds
+    let spotlightIndex = 0;
+    let spotlightInterval = null;
+
+    function updateSpotlight() {
+      const callout = document.getElementById("spotlightCallout");
+      const nameEl = document.getElementById("spotlightName");
+      const cityEl = document.getElementById("spotlightCity");
+
+      if (!callout || !nameEl || !cityEl) return;
+
+      if (pins.length === 0) {
+        callout.classList.remove("active");
+        return;
+      }
+
+      // Fade out, update, fade in
+      callout.classList.remove("active");
+
+      setTimeout(() => {
+        const pin = pins[spotlightIndex];
+        if (pin) {
+          nameEl.textContent = pin.name || "Member";
+          cityEl.textContent = pin.city || "Unknown Location";
+          callout.classList.add("active");
+
+          // Gently pan to show the spotlight pin (maintain altitude)
+          if (world && !isZoomedIn) {
+            const currentPov = world.pointOfView();
+            world.pointOfView({ lat: pin.lat, lng: pin.lng, altitude: currentPov.altitude }, 2000);
+          }
+        }
+
+        // Move to next pin
+        spotlightIndex = (spotlightIndex + 1) % pins.length;
+      }, 400);
+    }
+
+    function startSpotlightCycle() {
+      if (spotlightInterval) clearInterval(spotlightInterval);
+      if (pins.length > 0) {
+        updateSpotlight(); // Show first one immediately
+        spotlightInterval = setInterval(updateSpotlight, 8000); // 8 seconds for slower rotation
+      }
+    }
+
+
+    async function geocodeCity(query, memberName) {
+      const statusEl = document.getElementById("searchStatus");
+      const resultsContainer = document.getElementById("resultsContainer");
+      statusEl.className = "status";
+      statusEl.textContent = "Searching…";
+      resultsContainer.style.display = "none";
+      resultsContainer.innerHTML = "";
+
+      try {
+        const url = `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(query)}&limit=5&addressdetails=1`;
+        const resp = await fetch(url, { headers: { "Accept": "application/json" } });
+        if (!resp.ok) throw new Error("Geocoding failed");
+        const data = await resp.json();
+
+        if (!data || !data.length) {
+          statusEl.className = "status status-error";
+          statusEl.textContent = "No results found. Try being more specific with city, state, or country.";
+          return;
+        }
+
+        statusEl.className = "status status-success";
+        statusEl.textContent = "Select your location from the list below to place your pin.";
+        resultsContainer.style.display = "block";
+
+        data.forEach(item => {
+          const li = document.createElement("div");
+          li.className = "results-item";
+          li.textContent = item.display_name;
+          li.onclick = async () => {
+            const lat = parseFloat(item.lat);
+            const lng = parseFloat(item.lon);
+            const cityLabel = buildCityLabel(item);
+            await addPin(memberName, cityLabel, lat, lng);
+          };
+          resultsContainer.appendChild(li);
+        });
+      } catch (err) {
+        console.error(err);
+        statusEl.className = "status status-error";
+        statusEl.textContent = "Error contacting geocoding service. Please try again.";
+      }
+    }
+
+    function buildCityLabel(item) {
+      const addr = item.address || {};
+      const parts = [];
+      if (addr.city || addr.town || addr.village) {
+        parts.push(addr.city || addr.town || addr.village);
+      } else if (addr.hamlet || addr.municipality) {
+        parts.push(addr.hamlet || addr.municipality);
+      }
+      if (addr.state) parts.push(addr.state);
+      if (addr.country_code) parts.push(addr.country_code.toUpperCase());
+      if (!parts.length) return item.display_name;
+      return parts.join(", ");
+    }
+
+    async function addPin(name, city, lat, lng) {
+      const statusEl = document.getElementById("searchStatus");
+      const resultsContainer = document.getElementById("resultsContainer");
+
+      try {
+        statusEl.className = "status";
+        statusEl.textContent = "Saving your pin…";
+
+        const updatedPinsFromServer = await addPinViaWorker(name, city, lat, lng);
+        pins = updatedPinsFromServer.map((p, idx) => ({ ...p, color: getColorForIndex(idx) }));
+        refreshGlobePoints();
+
+        statusEl.className = "status status-success";
+        statusEl.textContent = `Pin placed for ${city} – ${name}.`;
+        resultsContainer.style.display = "none";
+        resultsContainer.innerHTML = "";
+        document.getElementById("cityInput").value = "";
+
+        if (world) {
+          world.pointOfView({ lat, lng, altitude: 2.0 }, 1500);
+        }
+      } catch (err) {
+        console.error(err);
+        statusEl.className = "status status-error";
+        if (String(err.message).startsWith("NAME_EXISTS")) {
+          const msg = err.message.split(":")[1] || "This name already has a pin.";
+          statusEl.textContent = msg.trim();
+        } else {
+          statusEl.textContent = "There was a problem saving your pin. Please try again.";
+        }
+      }
+    }
+
+    function clearFormAndResults() {
+      document.getElementById("cityInput").value = "";
+      const statusEl = document.getElementById("searchStatus");
+      statusEl.className = "status";
+      statusEl.textContent = "";
+      const resultsContainer = document.getElementById("resultsContainer");
+      resultsContainer.style.display = "none";
+      resultsContainer.innerHTML = "";
+    }
+
+    // Enlarge/Shrink toggle
+    function toggleGlobeSize() {
+      const container = document.getElementById("globe-container");
+      const btn = document.getElementById("globeSizeToggle");
+      if (container.classList.contains("enlarged")) {
+        container.classList.remove("enlarged");
+        btn.textContent = "⛶ Enlarge";
+      } else {
+        container.classList.add("enlarged");
+        btn.textContent = "⛶ Shrink";
+      }
+      // Trigger resize for globe.gl to recalculate
+      setTimeout(() => { if (world) world.width(container.clientWidth).height(container.clientHeight); }, 450);
+    }
+
+    window.addEventListener("DOMContentLoaded", async () => {
+      initGlobe();
+      const nameInput = document.getElementById("nameInput");
+      const cityInput = document.getElementById("cityInput");
+      const searchBtn = document.getElementById("searchBtn");
+      const clearBtn = document.getElementById("clearBtn");
+      const statusEl = document.getElementById("searchStatus");
+
+      try {
+        const serverPins = await fetchAllPinsFromWorker();
+        pins = serverPins.map((p, idx) => ({ ...p, color: getColorForIndex(idx) }));
+        refreshGlobePoints();
+        startSpotlightCycle(); // Start the cycling spotlight feature
+      } catch (e) {
+        console.error(e);
+        if (statusEl) {
+          statusEl.className = "status status-error";
+          statusEl.textContent = "Could not load existing pins (server error).";
+        }
+      }
+
+      function handleSearch() {
+        const name = nameInput.value.trim();
+        const cityQuery = cityInput.value.trim();
+        statusEl.className = "status";
+
+        if (!name) {
+          statusEl.className = "status status-error";
+          statusEl.textContent = "Please enter your name before placing a pin.";
+          return;
+        }
+        const existing = pins.find(p => p.name && p.name.toLowerCase() === name.toLowerCase());
+        if (existing) {
+          statusEl.className = "status status-error";
+          statusEl.textContent = `It looks like "${existing.name}" already has a pin on the globe. Each name can only place one pin.`;
+          return;
+        }
+        if (!cityQuery) {
+          statusEl.className = "status status-error";
+          statusEl.textContent = "Please enter a city or area to search.";
+          return;
+        }
+        geocodeCity(cityQuery, name);
+      }
+
+      if (searchBtn) searchBtn.addEventListener("click", (e) => { e.preventDefault(); handleSearch(); });
+      if (clearBtn) clearBtn.addEventListener("click", (e) => { e.preventDefault(); clearFormAndResults(); });
+      if (cityInput) cityInput.addEventListener("keydown", (e) => { if (e.key === "Enter") { e.preventDefault(); handleSearch(); } });
+      if (nameInput) nameInput.addEventListener("keydown", (e) => { if (e.key === "Enter") { e.preventDefault(); handleSearch(); } });
+    });
+  </script>
 
   <!-- logos blocks (kept) -->
   <style>
-    h2 { font-family: 'Dancing Script', cursive; }
-    .logo-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(100px, 1fr)); gap: 16px; }
-    @media (min-width: 576px) { .logo-grid { grid-template-columns: repeat(2, 1fr); } }
-    @media (min-width: 768px) { .logo-grid { grid-template-columns: repeat(5, 1fr); } }
-    .img-fluid { max-height: 100px; object-fit: contain !important; transition: transform .2s; }
-    .img-fluid:hover { transform: scale(1.1); }
-    .no-shadow * { box-shadow: none !important; }
+    h2 {
+      font-family: 'Dancing Script', cursive;
+    }
+
+    .logo-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+      gap: 16px;
+    }
+
+    @media (min-width: 576px) {
+      .logo-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    @media (min-width: 768px) {
+      .logo-grid {
+        grid-template-columns: repeat(5, 1fr);
+      }
+    }
+
+    .img-fluid {
+      max-height: 100px;
+      object-fit: contain !important;
+      transition: transform .2s;
+    }
+
+    .img-fluid:hover {
+      transform: scale(1.1);
+    }
+
+    .no-shadow * {
+      box-shadow: none !important;
+    }
   </style>
 
   <div class="container mt-5 no-shadow">
     <h2 class="text-center mb-5">NAR Diversity Chapters:</h2>
     <div class="logo-grid">
-      <div class="logo-item text-center"><a href="https://nahrepnaples.org/" target="_blank"><img src="https://www.bonitaesterorealtors.com/wp-content/uploads/2023/09/logo-naples.png" alt="NAHREP Naples" class="img-fluid"></a></div>
-      <div class="logo-item text-center"><a href="https://www.nareb.com/" target="_blank"><img src="https://www.bonitaesterorealtors.com/wp-content/uploads/2023/09/Nareb.png" alt="NAREB" class="img-fluid"></a></div>
-      <div class="logo-item text-center"><a href="https://www.areaa.org/" target="_blank"><img src="https://www.bonitaesterorealtors.com/wp-content/uploads/2023/09/areaa-scaled.jpeg" alt="AREAA" class="img-fluid"></a></div>
-      <div class="logo-item text-center"><a href="https://realestatealliance.org/" target="_blank"><img src="https://www.bonitaesterorealtors.com/wp-content/uploads/2023/09/real-estate-alliance.webp" alt="Real Estate Alliance" class="img-fluid"></a></div>
-      <div class="logo-item text-center"><a href="https://www.wcr.org/network-sites/florida/bonita-springs-estero/" target="_blank"><img src="https://www.bonitaesterorealtors.com/wp-content/uploads/2023/09/1519910458689-e1695306245950.jpeg" alt="WCR" class="img-fluid"></a></div>
+      <div class="logo-item text-center"><a href="https://nahrepnaples.org/" target="_blank"><img
+            src="https://www.bonitaesterorealtors.com/wp-content/uploads/2023/09/logo-naples.png" alt="NAHREP Naples"
+            class="img-fluid"></a></div>
+      <div class="logo-item text-center"><a href="https://www.nareb.com/" target="_blank"><img
+            src="https://www.bonitaesterorealtors.com/wp-content/uploads/2023/09/Nareb.png" alt="NAREB"
+            class="img-fluid"></a></div>
+      <div class="logo-item text-center"><a href="https://www.areaa.org/" target="_blank"><img
+            src="https://www.bonitaesterorealtors.com/wp-content/uploads/2023/09/areaa-scaled.jpeg" alt="AREAA"
+            class="img-fluid"></a></div>
+      <div class="logo-item text-center"><a href="https://realestatealliance.org/" target="_blank"><img
+            src="https://www.bonitaesterorealtors.com/wp-content/uploads/2023/09/real-estate-alliance.webp"
+            alt="Real Estate Alliance" class="img-fluid"></a></div>
+      <div class="logo-item text-center"><a href="https://www.wcr.org/network-sites/florida/bonita-springs-estero/"
+          target="_blank"><img
+            src="https://www.bonitaesterorealtors.com/wp-content/uploads/2023/09/1519910458689-e1695306245950.jpeg"
+            alt="WCR" class="img-fluid"></a></div>
     </div>
   </div>
 
@@ -358,26 +2004,60 @@
   <div class="container mt-5 no-shadow">
     <h2 class="text-center mb-5">Our Global Affiliates (Info Hub)</h2>
     <div class="logo-row">
-      <div class="logo-item"><a href="https://files.floridados.gov/media/708408/directory-of-consulates-dos-924.pdf#-consulates-final.pdf" target="_blank"><img src="https://www.bonitaesterorealtors.com/wp-content/uploads/2024/09/2.png" alt="Florida Consulates Directory" class="img-fluid"></a></div>
+      <div class="logo-item"><a
+          href="https://files.floridados.gov/media/708408/directory-of-consulates-dos-924.pdf#-consulates-final.pdf"
+          target="_blank"><img src="https://www.bonitaesterorealtors.com/wp-content/uploads/2024/09/2.png"
+            alt="Florida Consulates Directory" class="img-fluid"></a></div>
       <div class="logo-item">
         <h4 class="text-center mb-5" style="color: black !important;">Affiliate Partners:</h4>
-        <a href="https://www.allure-tax.com/" target="_blank"><img src="https://www.bonitaesterorealtors.com/wp-content/uploads/2021/09/allure.jpeg" alt="Allure Accounting" class="img-fluid"></a>
-        <a href="https://firptagroup.com/" target="_blank"><img src="https://www.bonitaesterorealtors.com/wp-content/uploads/2020/02/The-Firpta-Group.png" alt="FIRPTA Group" class="img-fluid"></a>
-        <p class="mini" style="color:black;margin-top:8px;">Includes integration topics like migration trends and local banks with recourse.</p>
+        <a href="https://www.allure-tax.com/" target="_blank"><img
+            src="https://www.bonitaesterorealtors.com/wp-content/uploads/2021/09/allure.jpeg" alt="Allure Accounting"
+            class="img-fluid"></a>
+        <a href="https://firptagroup.com/" target="_blank"><img
+            src="https://www.bonitaesterorealtors.com/wp-content/uploads/2020/02/The-Firpta-Group.png"
+            alt="FIRPTA Group" class="img-fluid"></a>
+        <p class="mini" style="color:black;margin-top:8px;">Includes integration topics like migration trends and local
+          banks with recourse.</p>
       </div>
-      <div class="logo-item"><a href="https://www.nar.realtor/global" target="_blank"><img src="https://www.bonitaesterorealtors.com/wp-content/uploads/2024/09/3-e1727443916279.png" alt="NAR Global" class="img-fluid"></a></div>
-      <div class="logo-item"><a href="https://www.census.gov/en.html" target="_blank"><img src="https://www.bonitaesterorealtors.com/wp-content/uploads/2024/09/Screenshot-2024-09-25-at-1.28.54 PM.png" alt="U.S. Census" class="img-fluid"></a></div>
-      <div class="logo-item"><a href="https://selectflorida.org/" target="_blank"><img src="https://www.bonitaesterorealtors.com/wp-content/uploads/2024/09/SelectFlorida.jpeg" alt="SelectFlorida" class="img-fluid"></a></div>
-      <div class="logo-item"><a href="https://www.statista.com/topics/1467/global-economy/#topicOverview" target="_blank"><img src="https://www.bonitaesterorealtors.com/wp-content/uploads/2024/09/statista_logo.jpg" alt="Statista" class="img-fluid"></a></div>
-      <div class="logo-item"><a href="https://opendoorsdata.org/" target="_blank"><img src="https://www.bonitaesterorealtors.com/wp-content/uploads/2024/09/open-doors-logo-new@2x.webp" alt="Open Doors" class="img-fluid"></a></div>
-      <div class="logo-item"><a href="https://opendoorsdata.org/" target="_blank"><img src="https://www.bonitaesterorealtors.com/wp-content/uploads/2024/09/image-27.png" alt="Open Doors" class="img-fluid"></a></div>
+      <div class="logo-item"><a href="https://www.nar.realtor/global" target="_blank"><img
+            src="https://www.bonitaesterorealtors.com/wp-content/uploads/2024/09/3-e1727443916279.png" alt="NAR Global"
+            class="img-fluid"></a></div>
+      <div class="logo-item"><a href="https://www.census.gov/en.html" target="_blank"><img
+            src="https://www.bonitaesterorealtors.com/wp-content/uploads/2024/09/Screenshot-2024-09-25-at-1.28.54 PM.png"
+            alt="U.S. Census" class="img-fluid"></a></div>
+      <div class="logo-item"><a href="https://selectflorida.org/" target="_blank"><img
+            src="https://www.bonitaesterorealtors.com/wp-content/uploads/2024/09/SelectFlorida.jpeg" alt="SelectFlorida"
+            class="img-fluid"></a></div>
+      <div class="logo-item"><a href="https://www.statista.com/topics/1467/global-economy/#topicOverview"
+          target="_blank"><img src="https://www.bonitaesterorealtors.com/wp-content/uploads/2024/09/statista_logo.jpg"
+            alt="Statista" class="img-fluid"></a></div>
+      <div class="logo-item"><a href="https://opendoorsdata.org/" target="_blank"><img
+            src="https://www.bonitaesterorealtors.com/wp-content/uploads/2024/09/open-doors-logo-new@2x.webp"
+            alt="Open Doors" class="img-fluid"></a></div>
+      <div class="logo-item"><a href="https://opendoorsdata.org/" target="_blank"><img
+            src="https://www.bonitaesterorealtors.com/wp-content/uploads/2024/09/image-27.png" alt="Open Doors"
+            class="img-fluid"></a></div>
     </div>
   </div>
 
   <style>
-    .logo-row { display: flex; flex-wrap: wrap; justify-content: center; align-items: center; gap: 20px; }
-    .logo-item { flex: 0 1 calc(20% - 20px); text-align: center; }
-    .img-fluid { max-width: 100%; height: auto; }
+    .logo-row {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      align-items: center;
+      gap: 20px;
+    }
+
+    .logo-item {
+      flex: 0 1 calc(20% - 20px);
+      text-align: center;
+    }
+
+    .img-fluid {
+      max-width: 100%;
+      height: auto;
+    }
   </style>
 
   <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
@@ -386,709 +2066,928 @@
 
   <br><br>
 
-  <img style="margin: auto; width: 370px; padding-top: 10px; display: block;" src="https://www.bonitaesterorealtors.com/wp-content/uploads/2022/08/Untitled-design-5.png" alt="logo">
+  <img style="margin: auto; width: 370px; padding-top: 10px; display: block;"
+    src="https://www.bonitaesterorealtors.com/wp-content/uploads/2022/08/Untitled-design-5.png" alt="logo">
   <br>
   <div class="foriegn-row">
     <div class="row" id="placeinthesun">
-      <div class="col-sm-10"><h1 style="display: block; color: white; margin: 15px auto 15px auto; text-align: center;">Want to Learn More About Foreign Currency?</h1></div>
-      <div class="col-sm-2"><a href="https://aplaceinthesuncurrency.com/bonita-springs/" target="_blank"><button type="btn btn-primary" id="currency-btn" style="margin: 10px auto; width: 100%; height: 50px;" class="btn btn-primary">Click Here!</button></a></div>
+      <div class="col-sm-10">
+        <h1 style="display: block; color: white; margin: 15px auto 15px auto; text-align: center;">Want to Learn More
+          About Foreign Currency?</h1>
+      </div>
+      <div class="col-sm-2"><a href="https://aplaceinthesuncurrency.com/bonita-springs/" target="_blank"><button
+            type="btn btn-primary" id="currency-btn" style="margin: 10px auto; width: 100%; height: 50px;"
+            class="btn btn-primary">Click Here!</button></a></div>
     </div>
   </div>
 
-<!-- ===== Local Demographics + Tabs (2025 refresh) ===== -->
-<div class="tabrow">
-  <div id="tab1" onclick="tab1change()">Local Area Demographics</div>
-  <div id="tab2" onclick="tab2change()">Top Global Buyers</div>
-  <div id="tab3" onclick="tab3change()">Global Tips</div>
-</div>
+  <!-- ===== Local Demographics + Tabs (2025 refresh) ===== -->
+  <div class="tabrow">
+    <div id="tab1" onclick="tab1change()">Local Area Demographics</div>
+    <div id="tab2" onclick="tab2change()">Top Global Buyers</div>
+    <div id="tab3" onclick="tab3change()">Global Tips</div>
+  </div>
 
-<!-- ===== Tab 1: Local Demographics (2025 Interactive) ===== -->
-<div id="tab1content" style="display:block;">
+  <!-- ===== Tab 1: Local Demographics (2025 Interactive) ===== -->
+  <div id="tab1content" style="display:block;">
     <h1 class="graph-heading">Local Area Demographics</h1>
-  <hr class="hr-grhd">
+    <hr class="hr-grhd">
 
-  <div class="demo-grid">
-    <!-- Bonita Springs -->
-    <section class="demo-card">
-      <header class="demo-head">
-        <h3>Bonita Springs</h3>
-        <div class="demo-meta">Population ~57,112 <span>(2024 est.)</span></div>
-        <div class="demo-meta">Sex Ratio: ~50% ♂ / ~50% ♀</div>
-      </header>
-      <div class="demo-body">
-        <svg id="chart-bonita" width="340" height="260" role="img" aria-label="Bonita Springs race and ethnicity"></svg>
-        <ul id="legend-bonita" class="demo-legend"></ul>
-      </div>
-    </section>
+    <div class="demo-grid">
+      <!-- Bonita Springs -->
+      <section class="demo-card">
+        <header class="demo-head">
+          <h3>Bonita Springs</h3>
+          <div class="demo-meta">Population ~57,112 <span>(2024 est.)</span></div>
+          <div class="demo-meta">Sex Ratio: ~50% ♂ / ~50% ♀</div>
+        </header>
+        <div class="demo-body">
+          <svg id="chart-bonita" width="340" height="260" role="img"
+            aria-label="Bonita Springs race and ethnicity"></svg>
+          <ul id="legend-bonita" class="demo-legend"></ul>
+        </div>
+      </section>
 
-    <!-- Estero -->
-    <section class="demo-card">
-      <header class="demo-head">
-        <h3>Estero</h3>
-        <div class="demo-meta">Population ~38,443 <span>(2024 est.)</span></div>
-        <div class="demo-meta">Sex Ratio: ~51% ♂ / ~49% ♀</div>
-      </header>
-      <div class="demo-body">
-        <svg id="chart-estero" width="340" height="260" role="img" aria-label="Estero race and ethnicity"></svg>
-        <ul id="legend-estero" class="demo-legend"></ul>
-      </div>
-    </section>
+      <!-- Estero -->
+      <section class="demo-card">
+        <header class="demo-head">
+          <h3>Estero</h3>
+          <div class="demo-meta">Population ~38,443 <span>(2024 est.)</span></div>
+          <div class="demo-meta">Sex Ratio: ~51% ♂ / ~49% ♀</div>
+        </header>
+        <div class="demo-body">
+          <svg id="chart-estero" width="340" height="260" role="img" aria-label="Estero race and ethnicity"></svg>
+          <ul id="legend-estero" class="demo-legend"></ul>
+        </div>
+      </section>
+    </div>
+
+    <div class="sources">
+      <p id="source">Data sources: U.S. Census Population Estimates (2024) & ACS 2023 5-year (Hispanic is any race).
+        Reviewed 2025.</p>
+    </div>
   </div>
 
-  <div class="sources">
-    <p id="source">Data sources: U.S. Census Population Estimates (2024) & ACS 2023 5-year (Hispanic is any race). Reviewed 2025.</p>
-  </div>
-</div>
-
-<!-- ===== 2025 Demographics CSS ===== -->
-<style>
-  .demo-grid {
-    display: grid;
-    grid-template-columns: repeat(2, minmax(280px, 1fr));
-    gap: 18px;
-    max-width: 1100px;
-    margin: 0 auto 20px;
-    padding: 0 16px;
-  }
-  @media (max-width: 900px){ .demo-grid { grid-template-columns: 1fr; } }
-
-  .demo-card {
-    background: #fff;
-    border: 1px solid #e6eaf2;
-    border-radius: 14px;
-    box-shadow: 0 6px 18px rgba(0,0,0,.05);
-    overflow: hidden;
-  }
-  .demo-head { padding: 14px 16px 4px; }
-  .demo-head h3 {
-    margin: 0; font-family: 'Oswald', sans-serif; letter-spacing:.2px; color:#063244;
-  }
-  .demo-meta { color:#516078; font-size: 13px; }
-  .demo-meta span { opacity:.8; }
-
-  .demo-body {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 6px;
-    align-items: center;
-    padding: 6px 10px 14px 10px;
-  }
-  @media (max-width: 560px){ .demo-body { grid-template-columns: 1fr; } }
-
-  .demo-legend { list-style: none; margin: 0; padding: 4px 10px; }
-  .demo-legend li { display: flex; align-items: center; gap: 10px; padding: 6px 4px; border-radius: 8px; cursor: pointer; }
-  .demo-legend li:hover { background: #f6fbff; }
-  .demo-swatch { width: 14px; height: 14px; border-radius: 50%; flex: none; }
-  .legend-label { color:#0b1220; font-weight:600; font-size:14px; }
-  .legend-val { color:#516078; margin-left: auto; font-variant-numeric: tabular-nums; }
-
-  /* hover/highlight states */
-  .slice-active { filter: drop-shadow(0 6px 8px rgba(0,0,0,.15)); }
-  .legend-active { background: #e9f7fc !important; }
-  .chart-center-label {
-    font-family: 'Oswald', sans-serif; font-size: 16px; fill: #063244; text-anchor: middle;
-  }
-  .chart-center-value {
-    font-family: 'Oswald', sans-serif; font-size: 22px; fill: #1d8ec7; text-anchor: middle;
-  }
-
-  /* simple tooltip */
-  .demo-tip {
-    position: fixed; pointer-events: none; z-index: 9999;
-    background: #0b1220; color:#fff; font-size: 12px; padding: 6px 8px; border-radius: 8px;
-    box-shadow: 0 6px 18px rgba(0,0,0,.2); opacity: 0; transform: translateY(-6px);
-    transition: opacity .12s ease, transform .12s ease;
-  }
-</style>
-
-<!-- ===== 2025 Demographics JS (D3 v4+) ===== -->
-<script>
-  // Shared color palette (kept from your earlier styling)
-  const demoColors = ['#0fa6a4','#04a9e1','#fbaa18','lightsteelblue','red'];
-
-  // Data (ACS 2023; Hispanic is any race)
-  const BONITA_DATA = [
-    { key:'white',  label:'White (Non-Hispanic)',       value:72.3, color:demoColors[0] },
-    { key:'hisp',   label:'Hispanic (any race)',        value:22.8, color:demoColors[1] },
-    { key:'asian',  label:'Asian',                      value:1.2,  color:demoColors[2] },
-    { key:'black',  label:'Black/African American',     value:1.9,  color:demoColors[3] },
-    { key:'other',  label:'Other / Two+ races',         value:1.8,  color:demoColors[4] },
-  ];
-  const ESTERO_DATA = [
-    { key:'white',  label:'White (Non-Hispanic)',       value:86.9, color:demoColors[0] },
-    { key:'hisp',   label:'Hispanic (any race)',        value:7.9,  color:demoColors[1] },
-    { key:'asian',  label:'Asian',                      value:2.5,  color:demoColors[2] },
-    { key:'black',  label:'Black/African American',     value:0.8,  color:demoColors[3] },
-    { key:'other',  label:'Other / Two+ races',         value:1.9,  color:demoColors[4] },
-  ];
-
-  // Lightweight tooltip
-  const tip = document.createElement('div');
-  tip.className = 'demo-tip';
-  document.body.appendChild(tip);
-  function showTip(html, x, y){
-    tip.innerHTML = html;
-    tip.style.left = (x + 12) + 'px';
-    tip.style.top  = (y + 12) + 'px';
-    tip.style.opacity = '1';
-    tip.style.transform = 'translateY(0)';
-  }
-  function hideTip(){
-    tip.style.opacity = '0';
-    tip.style.transform = 'translateY(-6px)';
-  }
-
-  // Donut creator
-  function createDonutChart(svgId, legendId, data){
-    const svg = d3.select('#'+svgId),
-          w   = +svg.attr('width'),
-          h   = +svg.attr('height'),
-          r   = Math.min(w,h)/2 - 6,
-          g   = svg.append('g').attr('transform',`translate(${w/2},${h/2})`);
-
-    const pie  = d3.pie().value(d=>d.value).sort(null);
-    const arc  = d3.arc().outerRadius(r).innerRadius(r*0.58);
-    const arcHover = d3.arc().outerRadius(r+6).innerRadius(r*0.52);
-
-    // Center labels
-    const centerLabel = g.append('text').attr('class','chart-center-label').attr('y',-4).text('Hover a slice');
-    const centerValue = g.append('text').attr('class','chart-center-value').attr('y',18).text('');
-
-    // Slices
-    const slices = g.selectAll('.slice')
-      .data(pie(data))
-      .enter().append('path')
-      .attr('class','slice')
-      .attr('d', arc)
-      .attr('fill', d=>d.data.color)
-      .attr('stroke','#fff')
-      .attr('stroke-width',2)
-      .style('cursor','pointer')
-      .on('mousemove', function(d){
-        const [x, y] = d3.mouse(document.body);
-        showTip(`<strong>${d.data.label}</strong><br>${d.data.value.toFixed(1)}%`, x, y);
-      })
-      .on('mouseover', function(d){
-        d3.select(this).classed('slice-active', true).transition().duration(120).attr('d', arcHover);
-        centerLabel.text(d.data.label);
-        centerValue.text(d.data.value.toFixed(1) + '%');
-        highlightLegendItem(legendId, d.data.key, true);
-      })
-      .on('mouseout', function(d){
-        d3.select(this).classed('slice-active', false).transition().duration(120).attr('d', arc);
-        centerLabel.text('Hover a slice'); centerValue.text('');
-        highlightLegendItem(legendId, d.data.key, false);
-        hideTip();
-      });
-
-    // Legend
-    const legend = d3.select('#'+legendId)
-      .selectAll('li')
-      .data(data)
-      .enter().append('li')
-      .attr('data-key', d=>d.key)
-      .on('mouseover', function(d){
-        slices.filter(s=>s.data.key===d.key)
-              .classed('slice-active', true)
-              .transition().duration(120).attr('d', arcHover);
-        d3.select(this).classed('legend-active', true);
-        centerLabel.text(d.label); centerValue.text(d.value.toFixed(1) + '%');
-      })
-      .on('mouseout', function(d){
-        slices.filter(s=>s.data.key===d.key)
-              .classed('slice-active', false)
-              .transition().duration(120).attr('d', arc);
-        d3.select(this).classed('legend-active', false);
-        centerLabel.text('Hover a slice'); centerValue.text('');
-      });
-
-    legend.append('span').attr('class','demo-swatch').style('background', d=>d.color);
-    legend.append('span').attr('class','legend-label').text(d=>d.label);
-    legend.append('span').attr('class','legend-val').text(d=>d.value.toFixed(1) + '%');
-
-    function highlightLegendItem(legendId, key, on){
-      const node = document.querySelector(`#${legendId} li[data-key="${key}"]`);
-      if (node) node.classList.toggle('legend-active', !!on);
-    }
-  }
-
-  // Build both charts once the DOM is ready
-  document.addEventListener('DOMContentLoaded', function(){
-    createDonutChart('chart-bonita', 'legend-bonita', BONITA_DATA);
-    createDonutChart('chart-estero', 'legend-estero', ESTERO_DATA);
-  });
-</script>
-
-<!-- ===== Tab 2: Top Global Buyers (2025 expanded) ===== -->
-<div id="tab2content" style="display:none;">
-  <h1 class="graph-heading">Top Global Buyers</h1>
-  <hr class="hr-grhd">
-
-  <!-- Key stats row -->
+  <!-- ===== 2025 Demographics CSS ===== -->
   <style>
-    .gb-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;max-width:1100px;margin:0 auto 10px;padding:0 12px}
-    .gb-card{background:#fff;border:1px solid #e6eaf2;border-radius:14px;box-shadow:0 6px 18px rgba(0,0,0,.05);padding:12px 14px}
-    .gb-k{font:700 13px/1.2 'Oswald',sans-serif;letter-spacing:.2px;color:#063244;opacity:.75;margin:0 0 6px}
-    .gb-v{font:700 22px/1.1 'Oswald',sans-serif;color:#1d8ec7;margin:0}
-    .gb-mini{font-size:12px;color:#516078;margin-top:2px}
-    @media (max-width:900px){.gb-stats{grid-template-columns:1fr 1fr}}
-    @media (max-width:560px){.gb-stats{grid-template-columns:1fr}}
-    .gb-flagrow .col-sm-2 img{transition:transform .12s ease}
-    .gb-flagrow .col-sm-2 img:hover{transform:scale(1.02);opacity:.95;cursor:pointer}
-    .region-panel .border{border:1px solid #e6eaf2}
-    .region-panel .canada-text{max-width:900px}
-    .gb-lists{display:grid;grid-template-columns:1fr 1fr;gap:12px;max-width:1100px;margin:10px auto;padding:0 12px}
-    @media (max-width:800px){.gb-lists{grid-template-columns:1fr}}
-    .gb-box{background:#fff;border:1px dashed #cfeaf5;border-radius:12px;padding:12px}
-    .gb-box h4{margin:0 0 6px;color:#063244}
-    .gb-box ul{margin:0 0 0 16px}
-    .gb-note{background:#fff8e7;border:1px solid #ffe1a6;border-radius:10px;padding:10px;color:#6b4b00}
+    .demo-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(280px, 1fr));
+      gap: 18px;
+      max-width: 1100px;
+      margin: 0 auto 20px;
+      padding: 0 16px;
+    }
+
+    @media (max-width: 900px) {
+      .demo-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .demo-card {
+      background: #fff;
+      border: 1px solid #e6eaf2;
+      border-radius: 14px;
+      box-shadow: 0 6px 18px rgba(0, 0, 0, .05);
+      overflow: hidden;
+    }
+
+    .demo-head {
+      padding: 14px 16px 4px;
+    }
+
+    .demo-head h3 {
+      margin: 0;
+      font-family: 'Oswald', sans-serif;
+      letter-spacing: .2px;
+      color: #063244;
+    }
+
+    .demo-meta {
+      color: #516078;
+      font-size: 13px;
+    }
+
+    .demo-meta span {
+      opacity: .8;
+    }
+
+    .demo-body {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 6px;
+      align-items: center;
+      padding: 6px 10px 14px 10px;
+    }
+
+    @media (max-width: 560px) {
+      .demo-body {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .demo-legend {
+      list-style: none;
+      margin: 0;
+      padding: 4px 10px;
+    }
+
+    .demo-legend li {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 6px 4px;
+      border-radius: 8px;
+      cursor: pointer;
+    }
+
+    .demo-legend li:hover {
+      background: #f6fbff;
+    }
+
+    .demo-swatch {
+      width: 14px;
+      height: 14px;
+      border-radius: 50%;
+      flex: none;
+    }
+
+    .legend-label {
+      color: #0b1220;
+      font-weight: 600;
+      font-size: 14px;
+    }
+
+    .legend-val {
+      color: #516078;
+      margin-left: auto;
+      font-variant-numeric: tabular-nums;
+    }
+
+    /* hover/highlight states */
+    .slice-active {
+      filter: drop-shadow(0 6px 8px rgba(0, 0, 0, .15));
+    }
+
+    .legend-active {
+      background: #e9f7fc !important;
+    }
+
+    .chart-center-label {
+      font-family: 'Oswald', sans-serif;
+      font-size: 16px;
+      fill: #063244;
+      text-anchor: middle;
+    }
+
+    .chart-center-value {
+      font-family: 'Oswald', sans-serif;
+      font-size: 22px;
+      fill: #1d8ec7;
+      text-anchor: middle;
+    }
+
+    /* simple tooltip */
+    .demo-tip {
+      position: fixed;
+      pointer-events: none;
+      z-index: 9999;
+      background: #0b1220;
+      color: #fff;
+      font-size: 12px;
+      padding: 6px 8px;
+      border-radius: 8px;
+      box-shadow: 0 6px 18px rgba(0, 0, 0, .2);
+      opacity: 0;
+      transform: translateY(-6px);
+      transition: opacity .12s ease, transform .12s ease;
+    }
   </style>
 
-  <div class="gb-stats">
-    <div class="gb-card">
-      <p class="gb-k">U.S. foreign-buyer volume (Apr ’24–Mar ’25)</p>
-      <p class="gb-v">$56B</p>
-      <div class="gb-mini">Up ~33% YoY; 78,100 properties</div>
-    </div>
-    <div class="gb-card">
-      <p class="gb-k">Florida’s share of U.S. international sales</p>
-      <p class="gb-v">~21%</p>
-      <div class="gb-mini">Still the No.1 destination</div>
-    </div>
-    <div class="gb-card">
-      <p class="gb-k">Top buyer countries in Florida</p>
-      <p class="gb-v">Canada, AR, CO, BR, UK</p>
-      <div class="gb-mini">By transactions</div>
-    </div>
-    <div class="gb-card">
-      <p class="gb-k">How they pay in Florida</p>
-      <p class="gb-v">~67% Cash</p>
-      <div class="gb-mini">All-cash is common; esp. Canada/AR</div>
-    </div>
-  </div>
+  <!-- ===== 2025 Demographics JS (D3 v4+) ===== -->
+  <script>
+    // Shared color palette (kept from your earlier styling)
+    const demoColors = ['#0fa6a4', '#04a9e1', '#fbaa18', 'lightsteelblue', 'red'];
 
-  <!-- Flag Row (click to reveal) -->
-  <div class="row gb-flagrow" style="margin:auto;max-width:1200px;">
-    <div class="col-sm-1"></div>
-    <div class="col-sm-2">
-      <img id="canadaflag" onclick="showRegion('canada')" src="https://www.bonitaesterorealtors.com/wp-content/uploads/2022/06/1.png" alt="Canada">
-    </div>
-    <div class="col-sm-2">
-      <img id="ukflag" onclick="showRegion('uk')" src="https://www.bonitaesterorealtors.com/wp-content/uploads/2022/06/2.png" alt="United Kingdom">
-    </div>
-    <div class="col-sm-2">
-      <img id="euflag" onclick="showRegion('eu')" src="https://www.bonitaesterorealtors.com/wp-content/uploads/2022/06/3.png" alt="Europe">
-    </div>
-    <div class="col-sm-2">
-      <img id="asiaflag" onclick="showRegion('asia')" src="https://www.bonitaesterorealtors.com/wp-content/uploads/2022/06/4.png" alt="Asia/Pacific">
-    </div>
-    <div class="col-sm-2">
-      <img id="laflag" onclick="showRegion('la')" src="https://www.bonitaesterorealtors.com/wp-content/uploads/2022/06/5.png" alt="Latin America">
-    </div>
-    <div class="col-sm-1"></div>
-  </div>
-
-  <!-- Triangles -->
-  <div class="row" style="margin:auto;max-width:1200px;">
-    <div class="col-sm-1"></div>
-    <div class="col-sm-2"><div id="triangle1" style="display:none;"></div></div>
-    <div class="col-sm-2"><div id="triangle2" style="display:none;"></div></div>
-    <div class="col-sm-2"><div id="triangle3" style="display:none;"></div></div>
-    <div class="col-sm-2"><div id="triangle4" style="display:none;"></div></div>
-    <div class="col-sm-2"><div id="triangle5" style="display:none;"></div></div>
-    <div class="col-sm-1"></div>
-  </div>
-
-  <!-- Default prompt -->
-  <div id="default-text" style="margin-top:10px;">
-    <img src="https://www.bonitaesterorealtors.com/wp-content/uploads/2022/06/Click-Here.png" style="margin:auto;display:flex;" alt="Click a region">
-  </div>
-
-  <!-- ===== Region Panels ===== -->
-
-  <!-- CANADA -->
-  <div id="background-info1" class="region-panel" style="display:none;margin:auto;max-width:1200px;">
-    <h1 class="global-head">1. Canada</h1>
-    <div class="border">
-      <hr style="border:1px solid red;margin:-6px 5% 10px 5%">
-      <div class="gb-lists">
-        <div class="gb-box">
-          <h4>Market Snapshot</h4>
-          <ul>
-            <li>Top buyer country in FL by sales share.</li>
-            <li><strong>Cash heavy:</strong> ~87% buy all-cash (vs. ~67% overall FL).</li>
-            <li>Popular metros include <em>Naples–Marco, Cape Coral–Fort Myers, Punta Gorda</em> (plus Miami).</li>
-            <li>Common property use: winter/vacation; condos and SFH both in play.</li>
-          </ul>
-        </div>
-        <div class="gb-box">
-          <h4>Agent Playbook</h4>
-          <ul>
-            <li>Prep FIRPTA + tax-pro referrals early (sale/withholding planning).</li>
-            <li>Quote costs in USD and CAD; offer a trusted FX partner.</li>
-            <li>Streamline remote closings and insurance setup; outline auto/vehicle & HOA rules for snowbirds.</li>
-          </ul>
-        </div>
-      </div>
-      <p class="canada-text">Tip: Canadians skew non-resident (Type-A) buyers, so U.S. mortgages are uncommon; focus on proof-of-funds, wire-safety, and condo association approvals.</p>
-    </div>
-  </div>
-
-  <!-- UNITED KINGDOM -->
-  <div id="background-info2" class="region-panel" style="display:none;margin:auto;max-width:1200px;">
-    <h1 class="global-head">2. United Kingdom</h1>
-    <div class="border">
-      <hr style="border:1px solid #000066;margin:-6px 5% 10px 5%">
-      <div class="gb-lists">
-        <div class="gb-box">
-          <h4>Market Snapshot</h4>
-          <ul>
-            <li>Among FL’s top 5 buyer countries by sales.</li>
-            <li>Shift toward <strong>single-family</strong> homes (about three-quarters of UK buyers).</li>
-            <li>Primary uses: vacation + some primary residence moves.</li>
-          </ul>
-        </div>
-        <div class="gb-box">
-          <h4>Agent Playbook</h4>
-          <ul>
-            <li>Clarify HOA, insurance, reserves & post-2022 condo reforms when comparing SFH vs. condo.</li>
-            <li>Provide rental-rule summaries (short-term limits vary widely).</li>
-            <li>Offer guidance on bank accounts, SIM/credit, and travel-insurance for extended stays.</li>
-          </ul>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- EUROPE (non-UK) -->
-  <div id="background-info3" class="region-panel" style="display:none;margin:auto;max-width:1200px;">
-    <h1 class="global-head">3. Europe</h1>
-    <div class="border">
-      <hr style="border:1px solid #013399;margin:-6px 5% 10px 5%">
-      <div class="gb-lists">
-        <div class="gb-box">
-          <h4>Market Snapshot</h4>
-          <ul>
-            <li>Consistent demand from Germany, France, Italy & Nordics.</li>
-            <li>Value energy-efficiency, building standards, storm-hardening.</li>
-            <li>Urban/coastal preference; many buy for vacation + occasional rental.</li>
-          </ul>
-        </div>
-        <div class="gb-box">
-          <h4>Agent Playbook</h4>
-          <ul>
-            <li>Provide condo reserves, insurance deductibles, and wind/flood details up front.</li>
-            <li>Expect document requests (spec sheets, seller disclosures, 3- to 5-year HOA budgets).</li>
-            <li>Offer wire-fraud education and remote-notary workflows.</li>
-          </ul>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- ASIA / PACIFIC -->
-  <div id="background-info4" class="region-panel" style="display:none;margin:auto;max-width:1200px;">
-    <h1 class="global-head">4. Asia/Pacific</h1>
-    <div class="border">
-      <hr style="border:1px solid #a7dafb;margin:-6px 5% 10px 5%">
-      <div class="gb-lists">
-        <div class="gb-box">
-          <h4>Market Snapshot</h4>
-          <ul>
-            <li>Active groups: Japan, Korea, India, Australia; mix of new-build and turnkey condos.</li>
-            <li>Often remote closings with <em>strict</em> bank transfer limits and ID checks.</li>
-            <li>Student-use and second homes present in university/tech corridors.</li>
-          </ul>
-        </div>
-        <div class="gb-box">
-          <h4>Agent Playbook</h4>
-          <ul>
-            <li>Provide step-by-step cross-border wire instructions and 2FA escrow processes.</li>
-            <li>Have lender options for non-resident borrowers; outline seasoning & reserve rules.</li>
-            <li>Offer bilingual summaries and name-order confirmation for contracts/wires.</li>
-          </ul>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- LATIN AMERICA -->
-  <div id="background-info5" class="region-panel" style="display:none;margin:auto;max-width:1200px;">
-    <h1 class="global-head">5. Latin America</h1>
-    <div class="border">
-      <hr style="border:1px solid #009201;margin:-6px 5% 10px 5%">
-      <div class="gb-lists">
-        <div class="gb-box">
-          <h4>Market Snapshot</h4>
-          <ul>
-            <li>Top-five countries include <strong>Argentina, Colombia, Brazil</strong>.</li>
-            <li><strong>Price tiers:</strong> Brazilians trend higher (median among highest); Argentines buy more condos; Colombians split use between vacation & rental.</li>
-            <li>Urban/coastal preference (Miami-tri-county dominates, but SWFL sees Canadian/British/LATAM demand).</li>
-          </ul>
-        </div>
-        <div class="gb-box">
-          <h4>Agent Playbook</h4>
-          <ul>
-            <li>Track FX moves; time wires and walkthroughs around currency swings.</li>
-            <li>Clarify rental rules, licensing, and condo approval timelines.</li>
-            <li>Collect apostilles early for POAs/passports; plan for in-person/remote notarization.</li>
-          </ul>
-        </div>
-      </div>
-      <div class="gb-note" style="max-width:1100px;margin:10px auto;">
-        Median price for Florida international buyers was ~<strong>$469K</strong> (2024 window) and cash share ~<strong>67%</strong>—well above statewide averages. Expect strong interest in $500K–$750K segments and premium waterfront.  
-      </div>
-    </div>
-  </div>
-</div>
-
-<!-- ===== Tab 3: Global Tips (2025 Overhaul) ===== -->
-<div id="tab3content" style="display: none;">
-  <h1 class="graph-heading">Global Business & Culture Tips</h1>
-  <hr class="hr-grhd">
-
-  <div class="tip-container">
-    <button class="tip-nav tip-prev" onclick="previousTip()">‹</button>
-    <div class="tip-slider-wrapper">
-      <div class="tip-slider">
-        <div id="tip-china" class="tip-slide">
-          <img class="tips-flags" src="https://www.bonitaesterorealtors.com/wp-content/uploads/2022/06/2-2.png" alt="China">
-          <h2>China</h2><hr>
-          <ul>
-            <li>Provide bilingual docs (English + Mandarin) and confirm name order for contracts and wires.</li>
-            <li>They often expect multiple levels of review — be patient and precise.</li>
-            <li>Avoid direct “yes/no” until agreement is finalized — they might defer initially.</li>
-            <li>Highlight security, HOA rules, flood risk; visuals of community layout help.</li>
-            <li>Remote closing is often a must; ensure escrow, notary, and apostille flows are clear.</li>
-          </ul>
-        </div>
-
-        <div id="tip-india" class="tip-slide">
-          <img class="tips-flags" src="" alt="India">
-          <h2>India</h2><hr>
-          <ul>
-            <li>Trust is key — offer references, testimonials, and detailed credentials.</li>
-            <li>Many Indian buyers expect to rent out; clarify local tax, short-term rules, and yield projections.</li>
-            <li>Be ready for multiple decision points — sometimes families decide together from abroad.</li>
-            <li>Present comparisons (Sqft, cost per unit) — Indian clients often like side-by-side metrics.</li>
-            <li>Provide clarity on visas, banking, repatriation, and capital gains rules.</li>
-          </ul>
-        </div>
-
-        <div id="tip-mexico" class="tip-slide">
-          <img class="tips-flags" src="https://www.bonitaesterorealtors.com/wp-content/uploads/2022/06/6-1.png" alt="Mexico">
-          <h2>Mexico</h2><hr>
-          <ul>
-            <li>Build rapport, address their concerns about legal title and property rights.</li>
-            <li>Provide Spanish versions of key docs; translations + POAs help smooth process.</li>
-            <li>Clarify how U.S. mortgages vs all-cash offers work locally.</li>
-            <li>Explain HOA, flood insurance, hurricane prep clearly — many buyers unfamiliar with U.S. standards.</li>
-            <li>Use visual comparisons to properties in Mexico — helps ground expectations.</li>
-          </ul>
-        </div>
-
-        <div id="tip-canada" class="tip-slide">
-          <img class="tips-flags" src="https://www.bonitaesterorealtors.com/wp-content/uploads/2022/06/3-2.png" alt="Canada">
-          <h2>Canada</h2><hr>
-          <ul>
-            <li>Taxes: explain FIRPTA withholding, nonresident returns, capital gains.</li>
-            <li>Provide dual currencies (USD & CAD) in all key documents/estimates.</li>
-            <li>Many Canadian buyers expect cash deals — have proof-of-funds protocols ready.</li>
-            <li>Snowbird logistics: mail, insurance, vehicle rules, utilities setup.</li>
-            <li>Condo rules: short-term rental, reserve funds, special assessments — make them transparent.</li>
-          </ul>
-        </div>
-
-        <div id="tip-uk" class="tip-slide">
-          <img class="tips-flags" src="https://www.bonitaesterorealtors.com/wp-content/uploads/2022/06/2.png" alt="United Kingdom">
-          <h2>United Kingdom</h2><hr>
-          <ul>
-            <li>Emphasize stability, regulatory transparency, and property right protections.</li>
-            <li>Flood and storm risk matter; show mitigation features, elevation, wind-resistance specs.</li>
-            <li>Rental potential: many expect to rent when not using. Show comps & legal limits.</li>
-            <li>Explain closing costs (stamp duty equivalents) and U.S. property taxes.</li>
-            <li>Offer GBP ↔ USD pricing and periodic exchange check snapshots.</li>
-          </ul>
-        </div>
-
-        <div id="tip-eu" class="tip-slide">
-          <img class="tips-flags" src="https://www.bonitaesterorealtors.com/wp-content/uploads/2022/06/3.png" alt="Europe">
-          <h2>Europe (Continental)</h2><hr>
-          <ul>
-            <li>Varied buyer cultures: Germans favor precision, Italians appreciate narrative storytelling.</li>
-            <li>Energy & insulation: European buyers often expect high performance, so share specs & utility data.</li>
-            <li>Condo governance: budgets, reserve, debt history, insurance transparency matter here.</li>
-            <li>Rental/vacation use: many own vacation property — show tourist rental zoning, HOA rules.</li>
-            <li>Offer floor plans with metric ↔ imperial conversions, and local comparables.</li>
-          </ul>
-        </div>
-
-        <div id="tip-asia" class="tip-slide">
-          <img class="tips-flags" src="https://www.bonitaesterorealtors.com/wp-content/uploads/2022/06/4.png" alt="Asia / Pacific">
-          <h2>Asia / Pacific</h2><hr>
-          <ul>
-            <li>Safety, security, maintenance: many want low-maintenance properties in gated communities.</li>
-            <li>Modern finishes and turn-key delivery are highly valued — highlight premium features.</li>
-            <li>Remote closing and escrow: many won’t travel — ensure digital workflows are clear.</li>
-            <li>Bank transfer constraints and foreign exchange quirks need step-by-step guidance.</li>
-            <li>Explain hurricane/flood backup systems, generator options, structural safeguards.</li>
-          </ul>
-        </div>
-
-        <div id="tip-latam" class="tip-slide">
-          <img class="tips-flags" src="https://www.bonitaesterorealtors.com/wp-content/uploads/2022/06/5.png" alt="Latin America">
-          <h2>Latin America</h2><hr>
-          <ul>
-            <li>Currency risk: timing wires matters. Offer escrow paths or forward contracts when possible.</li>
-            <li>Trust: use referrals, client stories, bilingual team members.</li>
-            <li>Documents: ensure apostilles, POAs, translations are ready early.</li>
-            <li>Rental expectations: many expect high yields; show comps, vacancy data, licensing rules.</li>
-            <li>Political volatility: buyers like reassurance around long-term stability and exit strategies.</li>
-          </ul>
-        </div>
-
-      </div>
-    </div>
-    <button class="tip-nav tip-next" onclick="nextTip()">›</button>
-  </div>
-</div>
-
-<style>
-  .tip-container {
-    display: flex;
-    align-items: center;
-    max-width: 1100px;
-    margin: 0 auto 20px;
-    position: relative;
-  }
-  .tip-nav {
-    background: none;
-    border: none;
-    font-size: 32px;
-    color: #055a73;
-    cursor: pointer;
-    padding: 8px 12px;
-  }
-  .tip-slider-wrapper {
-    overflow: hidden;
-    flex: 1;
-  }
-  .tip-slider {
-    display: flex;
-    transition: transform 0.3s ease;
-  }
-  .tip-slide {
-    min-width: 100%;
-    box-sizing: border-box;
-    padding: 16px 24px;
-    background: #fff;
-    border-radius: 14px;
-    border: 1px solid #e6eaf2;
-    box-shadow: 0 4px 12px rgba(0,0,0,.04);
-  }
-  .tip-slide h2 {
-    margin-top: 0;
-    font-family: 'Oswald', sans-serif;
-    color: #063244;
-  }
-  .tips-flags {
-    max-width: 120px;
-    display: block;
-    margin-bottom: 12px;
-  }
-  .tip-slide ul {
-    margin: 0;
-    padding-left: 20px;
-    color: #0b1220;
-    line-height: 1.5;
-  }
-  .tip-slide ul li {
-    margin-bottom: 8px;
-  }
-</style>
-
-<script>
-  const tipOrder = ['tip-china','tip-india','tip-mexico','tip-canada','tip-uk','tip-eu','tip-asia','tip-latam'];
-  let tipIndex = 0;
-  function renderTip(){
-    const slider = document.querySelector('.tip-slider');
-    if (!slider) return;
-    const offset = - tipIndex * slider.clientWidth;
-    slider.style.transform = `translateX(${offset}px)`;
-  }
-  function nextTip(){
-    tipIndex = (tipIndex + 1) % tipOrder.length;
-    renderTip();
-  }
-  function previousTip(){
-    tipIndex = (tipIndex - 1 + tipOrder.length) % tipOrder.length;
-    renderTip();
-  }
-  document.addEventListener('DOMContentLoaded', () => {
-    renderTip();
-  });
-</script>
-
-
-<!-- ===== Tab Controller + Region / Tips JS ===== -->
-<script>
-  // Tab switching
-  function setTab(which) {
-    const tabs = [
-      {btn:'#tab1', panel:'#tab1content'},
-      {btn:'#tab2', panel:'#tab2content'},
-      {btn:'#tab3', panel:'#tab3content'}
+    // Data (ACS 2023; Hispanic is any race)
+    const BONITA_DATA = [
+      { key: 'white', label: 'White (Non-Hispanic)', value: 72.3, color: demoColors[0] },
+      { key: 'hisp', label: 'Hispanic (any race)', value: 22.8, color: demoColors[1] },
+      { key: 'asian', label: 'Asian', value: 1.2, color: demoColors[2] },
+      { key: 'black', label: 'Black/African American', value: 1.9, color: demoColors[3] },
+      { key: 'other', label: 'Other / Two+ races', value: 1.8, color: demoColors[4] },
     ];
-    tabs.forEach((t, idx) => {
-      const isActive = (idx+1) === which;
-      document.querySelector(t.panel).style.display = isActive ? 'block' : 'none';
-      const el = document.querySelector(t.btn);
-      if (el) el.classList[isActive ? 'add' : 'remove']('active-tab');
+    const ESTERO_DATA = [
+      { key: 'white', label: 'White (Non-Hispanic)', value: 86.9, color: demoColors[0] },
+      { key: 'hisp', label: 'Hispanic (any race)', value: 7.9, color: demoColors[1] },
+      { key: 'asian', label: 'Asian', value: 2.5, color: demoColors[2] },
+      { key: 'black', label: 'Black/African American', value: 0.8, color: demoColors[3] },
+      { key: 'other', label: 'Other / Two+ races', value: 1.9, color: demoColors[4] },
+    ];
+
+    // Lightweight tooltip
+    const tip = document.createElement('div');
+    tip.className = 'demo-tip';
+    document.body.appendChild(tip);
+    function showTip(html, x, y) {
+      tip.innerHTML = html;
+      tip.style.left = (x + 12) + 'px';
+      tip.style.top = (y + 12) + 'px';
+      tip.style.opacity = '1';
+      tip.style.transform = 'translateY(0)';
+    }
+    function hideTip() {
+      tip.style.opacity = '0';
+      tip.style.transform = 'translateY(-6px)';
+    }
+
+    // Donut creator
+    function createDonutChart(svgId, legendId, data) {
+      const svg = d3.select('#' + svgId),
+        w = +svg.attr('width'),
+        h = +svg.attr('height'),
+        r = Math.min(w, h) / 2 - 6,
+        g = svg.append('g').attr('transform', `translate(${w / 2},${h / 2})`);
+
+      const pie = d3.pie().value(d => d.value).sort(null);
+      const arc = d3.arc().outerRadius(r).innerRadius(r * 0.58);
+      const arcHover = d3.arc().outerRadius(r + 6).innerRadius(r * 0.52);
+
+      // Center labels
+      const centerLabel = g.append('text').attr('class', 'chart-center-label').attr('y', -4).text('Hover a slice');
+      const centerValue = g.append('text').attr('class', 'chart-center-value').attr('y', 18).text('');
+
+      // Slices
+      const slices = g.selectAll('.slice')
+        .data(pie(data))
+        .enter().append('path')
+        .attr('class', 'slice')
+        .attr('d', arc)
+        .attr('fill', d => d.data.color)
+        .attr('stroke', '#fff')
+        .attr('stroke-width', 2)
+        .style('cursor', 'pointer')
+        .on('mousemove', function (d) {
+          const [x, y] = d3.mouse(document.body);
+          showTip(`<strong>${d.data.label}</strong><br>${d.data.value.toFixed(1)}%`, x, y);
+        })
+        .on('mouseover', function (d) {
+          d3.select(this).classed('slice-active', true).transition().duration(120).attr('d', arcHover);
+          centerLabel.text(d.data.label);
+          centerValue.text(d.data.value.toFixed(1) + '%');
+          highlightLegendItem(legendId, d.data.key, true);
+        })
+        .on('mouseout', function (d) {
+          d3.select(this).classed('slice-active', false).transition().duration(120).attr('d', arc);
+          centerLabel.text('Hover a slice'); centerValue.text('');
+          highlightLegendItem(legendId, d.data.key, false);
+          hideTip();
+        });
+
+      // Legend
+      const legend = d3.select('#' + legendId)
+        .selectAll('li')
+        .data(data)
+        .enter().append('li')
+        .attr('data-key', d => d.key)
+        .on('mouseover', function (d) {
+          slices.filter(s => s.data.key === d.key)
+            .classed('slice-active', true)
+            .transition().duration(120).attr('d', arcHover);
+          d3.select(this).classed('legend-active', true);
+          centerLabel.text(d.label); centerValue.text(d.value.toFixed(1) + '%');
+        })
+        .on('mouseout', function (d) {
+          slices.filter(s => s.data.key === d.key)
+            .classed('slice-active', false)
+            .transition().duration(120).attr('d', arc);
+          d3.select(this).classed('legend-active', false);
+          centerLabel.text('Hover a slice'); centerValue.text('');
+        });
+
+      legend.append('span').attr('class', 'demo-swatch').style('background', d => d.color);
+      legend.append('span').attr('class', 'legend-label').text(d => d.label);
+      legend.append('span').attr('class', 'legend-val').text(d => d.value.toFixed(1) + '%');
+
+      function highlightLegendItem(legendId, key, on) {
+        const node = document.querySelector(`#${legendId} li[data-key="${key}"]`);
+        if (node) node.classList.toggle('legend-active', !!on);
+      }
+    }
+
+    // Build both charts once the DOM is ready
+    document.addEventListener('DOMContentLoaded', function () {
+      createDonutChart('chart-bonita', 'legend-bonita', BONITA_DATA);
+      createDonutChart('chart-estero', 'legend-estero', ESTERO_DATA);
     });
-    // optional: scroll into view on mobile
-    document.querySelector('.tabrow')?.scrollIntoView({behavior:'smooth', block:'start'});
-  }
-  function tab1change(){ setTab(1); }
-  function tab2change(){ setTab(2); }
-  function tab3change(){ setTab(3); }
+  </script>
 
-  // Add a subtle active style
-  (function injectActiveStyle(){
-    const css = ".tabrow div.active-tab{ background:#1d8ec7 !important; }";
-    const s = document.createElement('style'); s.innerHTML = css; document.head.appendChild(s);
-  })();
+  <!-- ===== Tab 2: Top Global Buyers (2025 expanded) ===== -->
+  <div id="tab2content" style="display:none;">
+    <h1 class="graph-heading">Top Global Buyers</h1>
+    <hr class="hr-grhd">
 
-  // Region flag logic
-  const regionTriangles = {
-    canada: '#triangle1',
-    uk:     '#triangle2',
-    eu:     '#triangle3',
-    asia:   '#triangle4',
-    la:     '#triangle5'
-  };
-  const regionPanels = {
-    canada: '#background-info1',
-    uk:     '#background-info2',
-    eu:     '#background-info3',
-    asia:   '#background-info4',
-    la:     '#background-info5'
-  };
-  function showRegion(key){
-    // hide default text
-    const def = document.getElementById('default-text');
-    if (def) def.style.display = 'none';
-    // hide all triangles/panels
-    Object.values(regionTriangles).forEach(sel => { const n = document.querySelector(sel); if(n) n.style.display='none'; });
-    Object.values(regionPanels).forEach(sel => { const n = document.querySelector(sel); if(n) n.style.display='none'; });
-    // show the chosen ones
-    const tri = document.querySelector(regionTriangles[key]);
-    const pan = document.querySelector(regionPanels[key]);
-    if (tri) tri.style.display = 'block';
-    if (pan) pan.style.display = 'block';
-  }
+    <!-- Key stats row -->
+    <style>
+      .gb-stats {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 10px;
+        max-width: 1100px;
+        margin: 0 auto 10px;
+        padding: 0 12px
+      }
 
-</script>
+      .gb-card {
+        background: #fff;
+        border: 1px solid #e6eaf2;
+        border-radius: 14px;
+        box-shadow: 0 6px 18px rgba(0, 0, 0, .05);
+        padding: 12px 14px
+      }
+
+      .gb-k {
+        font: 700 13px/1.2 'Oswald', sans-serif;
+        letter-spacing: .2px;
+        color: #063244;
+        opacity: .75;
+        margin: 0 0 6px
+      }
+
+      .gb-v {
+        font: 700 22px/1.1 'Oswald', sans-serif;
+        color: #1d8ec7;
+        margin: 0
+      }
+
+      .gb-mini {
+        font-size: 12px;
+        color: #516078;
+        margin-top: 2px
+      }
+
+      @media (max-width:900px) {
+        .gb-stats {
+          grid-template-columns: 1fr 1fr
+        }
+      }
+
+      @media (max-width:560px) {
+        .gb-stats {
+          grid-template-columns: 1fr
+        }
+      }
+
+      .gb-flagrow .col-sm-2 img {
+        transition: transform .12s ease
+      }
+
+      .gb-flagrow .col-sm-2 img:hover {
+        transform: scale(1.02);
+        opacity: .95;
+        cursor: pointer
+      }
+
+      .region-panel .border {
+        border: 1px solid #e6eaf2
+      }
+
+      .region-panel .canada-text {
+        max-width: 900px
+      }
+
+      .gb-lists {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 12px;
+        max-width: 1100px;
+        margin: 10px auto;
+        padding: 0 12px
+      }
+
+      @media (max-width:800px) {
+        .gb-lists {
+          grid-template-columns: 1fr
+        }
+      }
+
+      .gb-box {
+        background: #fff;
+        border: 1px dashed #cfeaf5;
+        border-radius: 12px;
+        padding: 12px
+      }
+
+      .gb-box h4 {
+        margin: 0 0 6px;
+        color: #063244
+      }
+
+      .gb-box ul {
+        margin: 0 0 0 16px
+      }
+
+      .gb-note {
+        background: #fff8e7;
+        border: 1px solid #ffe1a6;
+        border-radius: 10px;
+        padding: 10px;
+        color: #6b4b00
+      }
+    </style>
+
+    <div class="gb-stats">
+      <div class="gb-card">
+        <p class="gb-k">U.S. foreign-buyer volume (Apr ’24–Mar ’25)</p>
+        <p class="gb-v">$56B</p>
+        <div class="gb-mini">Up ~33% YoY; 78,100 properties</div>
+      </div>
+      <div class="gb-card">
+        <p class="gb-k">Florida’s share of U.S. international sales</p>
+        <p class="gb-v">~21%</p>
+        <div class="gb-mini">Still the No.1 destination</div>
+      </div>
+      <div class="gb-card">
+        <p class="gb-k">Top buyer countries in Florida</p>
+        <p class="gb-v">Canada, AR, CO, BR, UK</p>
+        <div class="gb-mini">By transactions</div>
+      </div>
+      <div class="gb-card">
+        <p class="gb-k">How they pay in Florida</p>
+        <p class="gb-v">~67% Cash</p>
+        <div class="gb-mini">All-cash is common; esp. Canada/AR</div>
+      </div>
+    </div>
+
+    <!-- Flag Row (click to reveal) -->
+    <div class="row gb-flagrow" style="margin:auto;max-width:1200px;">
+      <div class="col-sm-1"></div>
+      <div class="col-sm-2">
+        <img id="canadaflag" onclick="showRegion('canada')"
+          src="https://www.bonitaesterorealtors.com/wp-content/uploads/2022/06/1.png" alt="Canada">
+      </div>
+      <div class="col-sm-2">
+        <img id="ukflag" onclick="showRegion('uk')"
+          src="https://www.bonitaesterorealtors.com/wp-content/uploads/2022/06/2.png" alt="United Kingdom">
+      </div>
+      <div class="col-sm-2">
+        <img id="euflag" onclick="showRegion('eu')"
+          src="https://www.bonitaesterorealtors.com/wp-content/uploads/2022/06/3.png" alt="Europe">
+      </div>
+      <div class="col-sm-2">
+        <img id="asiaflag" onclick="showRegion('asia')"
+          src="https://www.bonitaesterorealtors.com/wp-content/uploads/2022/06/4.png" alt="Asia/Pacific">
+      </div>
+      <div class="col-sm-2">
+        <img id="laflag" onclick="showRegion('la')"
+          src="https://www.bonitaesterorealtors.com/wp-content/uploads/2022/06/5.png" alt="Latin America">
+      </div>
+      <div class="col-sm-1"></div>
+    </div>
+
+    <!-- Triangles -->
+    <div class="row" style="margin:auto;max-width:1200px;">
+      <div class="col-sm-1"></div>
+      <div class="col-sm-2">
+        <div id="triangle1" style="display:none;"></div>
+      </div>
+      <div class="col-sm-2">
+        <div id="triangle2" style="display:none;"></div>
+      </div>
+      <div class="col-sm-2">
+        <div id="triangle3" style="display:none;"></div>
+      </div>
+      <div class="col-sm-2">
+        <div id="triangle4" style="display:none;"></div>
+      </div>
+      <div class="col-sm-2">
+        <div id="triangle5" style="display:none;"></div>
+      </div>
+      <div class="col-sm-1"></div>
+    </div>
+
+    <!-- Default prompt -->
+    <div id="default-text" style="margin-top:10px;">
+      <img src="https://www.bonitaesterorealtors.com/wp-content/uploads/2022/06/Click-Here.png"
+        style="margin:auto;display:flex;" alt="Click a region">
+    </div>
+
+    <!-- ===== Region Panels ===== -->
+
+    <!-- CANADA -->
+    <div id="background-info1" class="region-panel" style="display:none;margin:auto;max-width:1200px;">
+      <h1 class="global-head">1. Canada</h1>
+      <div class="border">
+        <hr style="border:1px solid red;margin:-6px 5% 10px 5%">
+        <div class="gb-lists">
+          <div class="gb-box">
+            <h4>Market Snapshot</h4>
+            <ul>
+              <li>Top buyer country in FL by sales share.</li>
+              <li><strong>Cash heavy:</strong> ~87% buy all-cash (vs. ~67% overall FL).</li>
+              <li>Popular metros include <em>Naples–Marco, Cape Coral–Fort Myers, Punta Gorda</em> (plus Miami).</li>
+              <li>Common property use: winter/vacation; condos and SFH both in play.</li>
+            </ul>
+          </div>
+          <div class="gb-box">
+            <h4>Agent Playbook</h4>
+            <ul>
+              <li>Prep FIRPTA + tax-pro referrals early (sale/withholding planning).</li>
+              <li>Quote costs in USD and CAD; offer a trusted FX partner.</li>
+              <li>Streamline remote closings and insurance setup; outline auto/vehicle & HOA rules for snowbirds.</li>
+            </ul>
+          </div>
+        </div>
+        <p class="canada-text">Tip: Canadians skew non-resident (Type-A) buyers, so U.S. mortgages are uncommon; focus
+          on proof-of-funds, wire-safety, and condo association approvals.</p>
+      </div>
+    </div>
+
+    <!-- UNITED KINGDOM -->
+    <div id="background-info2" class="region-panel" style="display:none;margin:auto;max-width:1200px;">
+      <h1 class="global-head">2. United Kingdom</h1>
+      <div class="border">
+        <hr style="border:1px solid #000066;margin:-6px 5% 10px 5%">
+        <div class="gb-lists">
+          <div class="gb-box">
+            <h4>Market Snapshot</h4>
+            <ul>
+              <li>Among FL’s top 5 buyer countries by sales.</li>
+              <li>Shift toward <strong>single-family</strong> homes (about three-quarters of UK buyers).</li>
+              <li>Primary uses: vacation + some primary residence moves.</li>
+            </ul>
+          </div>
+          <div class="gb-box">
+            <h4>Agent Playbook</h4>
+            <ul>
+              <li>Clarify HOA, insurance, reserves & post-2022 condo reforms when comparing SFH vs. condo.</li>
+              <li>Provide rental-rule summaries (short-term limits vary widely).</li>
+              <li>Offer guidance on bank accounts, SIM/credit, and travel-insurance for extended stays.</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- EUROPE (non-UK) -->
+    <div id="background-info3" class="region-panel" style="display:none;margin:auto;max-width:1200px;">
+      <h1 class="global-head">3. Europe</h1>
+      <div class="border">
+        <hr style="border:1px solid #013399;margin:-6px 5% 10px 5%">
+        <div class="gb-lists">
+          <div class="gb-box">
+            <h4>Market Snapshot</h4>
+            <ul>
+              <li>Consistent demand from Germany, France, Italy & Nordics.</li>
+              <li>Value energy-efficiency, building standards, storm-hardening.</li>
+              <li>Urban/coastal preference; many buy for vacation + occasional rental.</li>
+            </ul>
+          </div>
+          <div class="gb-box">
+            <h4>Agent Playbook</h4>
+            <ul>
+              <li>Provide condo reserves, insurance deductibles, and wind/flood details up front.</li>
+              <li>Expect document requests (spec sheets, seller disclosures, 3- to 5-year HOA budgets).</li>
+              <li>Offer wire-fraud education and remote-notary workflows.</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ASIA / PACIFIC -->
+    <div id="background-info4" class="region-panel" style="display:none;margin:auto;max-width:1200px;">
+      <h1 class="global-head">4. Asia/Pacific</h1>
+      <div class="border">
+        <hr style="border:1px solid #a7dafb;margin:-6px 5% 10px 5%">
+        <div class="gb-lists">
+          <div class="gb-box">
+            <h4>Market Snapshot</h4>
+            <ul>
+              <li>Active groups: Japan, Korea, India, Australia; mix of new-build and turnkey condos.</li>
+              <li>Often remote closings with <em>strict</em> bank transfer limits and ID checks.</li>
+              <li>Student-use and second homes present in university/tech corridors.</li>
+            </ul>
+          </div>
+          <div class="gb-box">
+            <h4>Agent Playbook</h4>
+            <ul>
+              <li>Provide step-by-step cross-border wire instructions and 2FA escrow processes.</li>
+              <li>Have lender options for non-resident borrowers; outline seasoning & reserve rules.</li>
+              <li>Offer bilingual summaries and name-order confirmation for contracts/wires.</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- LATIN AMERICA -->
+    <div id="background-info5" class="region-panel" style="display:none;margin:auto;max-width:1200px;">
+      <h1 class="global-head">5. Latin America</h1>
+      <div class="border">
+        <hr style="border:1px solid #009201;margin:-6px 5% 10px 5%">
+        <div class="gb-lists">
+          <div class="gb-box">
+            <h4>Market Snapshot</h4>
+            <ul>
+              <li>Top-five countries include <strong>Argentina, Colombia, Brazil</strong>.</li>
+              <li><strong>Price tiers:</strong> Brazilians trend higher (median among highest); Argentines buy more
+                condos; Colombians split use between vacation & rental.</li>
+              <li>Urban/coastal preference (Miami-tri-county dominates, but SWFL sees Canadian/British/LATAM demand).
+              </li>
+            </ul>
+          </div>
+          <div class="gb-box">
+            <h4>Agent Playbook</h4>
+            <ul>
+              <li>Track FX moves; time wires and walkthroughs around currency swings.</li>
+              <li>Clarify rental rules, licensing, and condo approval timelines.</li>
+              <li>Collect apostilles early for POAs/passports; plan for in-person/remote notarization.</li>
+            </ul>
+          </div>
+        </div>
+        <div class="gb-note" style="max-width:1100px;margin:10px auto;">
+          Median price for Florida international buyers was ~<strong>$469K</strong> (2024 window) and cash share
+          ~<strong>67%</strong>—well above statewide averages. Expect strong interest in $500K–$750K segments and
+          premium waterfront.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== Tab 3: Global Tips (2025 Overhaul) ===== -->
+  <div id="tab3content" style="display: none;">
+    <h1 class="graph-heading">Global Business & Culture Tips</h1>
+    <hr class="hr-grhd">
+
+    <div class="tip-container">
+      <button class="tip-nav tip-prev" onclick="previousTip()">‹</button>
+      <div class="tip-slider-wrapper">
+        <div class="tip-slider">
+          <div id="tip-china" class="tip-slide">
+            <img class="tips-flags" src="https://www.bonitaesterorealtors.com/wp-content/uploads/2022/06/2-2.png"
+              alt="China">
+            <h2>China</h2>
+            <hr>
+            <ul>
+              <li>Provide bilingual docs (English + Mandarin) and confirm name order for contracts and wires.</li>
+              <li>They often expect multiple levels of review — be patient and precise.</li>
+              <li>Avoid direct “yes/no” until agreement is finalized — they might defer initially.</li>
+              <li>Highlight security, HOA rules, flood risk; visuals of community layout help.</li>
+              <li>Remote closing is often a must; ensure escrow, notary, and apostille flows are clear.</li>
+            </ul>
+          </div>
+
+          <div id="tip-india" class="tip-slide">
+            <img class="tips-flags" src="" alt="India">
+            <h2>India</h2>
+            <hr>
+            <ul>
+              <li>Trust is key — offer references, testimonials, and detailed credentials.</li>
+              <li>Many Indian buyers expect to rent out; clarify local tax, short-term rules, and yield projections.
+              </li>
+              <li>Be ready for multiple decision points — sometimes families decide together from abroad.</li>
+              <li>Present comparisons (Sqft, cost per unit) — Indian clients often like side-by-side metrics.</li>
+              <li>Provide clarity on visas, banking, repatriation, and capital gains rules.</li>
+            </ul>
+          </div>
+
+          <div id="tip-mexico" class="tip-slide">
+            <img class="tips-flags" src="https://www.bonitaesterorealtors.com/wp-content/uploads/2022/06/6-1.png"
+              alt="Mexico">
+            <h2>Mexico</h2>
+            <hr>
+            <ul>
+              <li>Build rapport, address their concerns about legal title and property rights.</li>
+              <li>Provide Spanish versions of key docs; translations + POAs help smooth process.</li>
+              <li>Clarify how U.S. mortgages vs all-cash offers work locally.</li>
+              <li>Explain HOA, flood insurance, hurricane prep clearly — many buyers unfamiliar with U.S. standards.
+              </li>
+              <li>Use visual comparisons to properties in Mexico — helps ground expectations.</li>
+            </ul>
+          </div>
+
+          <div id="tip-canada" class="tip-slide">
+            <img class="tips-flags" src="https://www.bonitaesterorealtors.com/wp-content/uploads/2022/06/3-2.png"
+              alt="Canada">
+            <h2>Canada</h2>
+            <hr>
+            <ul>
+              <li>Taxes: explain FIRPTA withholding, nonresident returns, capital gains.</li>
+              <li>Provide dual currencies (USD & CAD) in all key documents/estimates.</li>
+              <li>Many Canadian buyers expect cash deals — have proof-of-funds protocols ready.</li>
+              <li>Snowbird logistics: mail, insurance, vehicle rules, utilities setup.</li>
+              <li>Condo rules: short-term rental, reserve funds, special assessments — make them transparent.</li>
+            </ul>
+          </div>
+
+          <div id="tip-uk" class="tip-slide">
+            <img class="tips-flags" src="https://www.bonitaesterorealtors.com/wp-content/uploads/2022/06/2.png"
+              alt="United Kingdom">
+            <h2>United Kingdom</h2>
+            <hr>
+            <ul>
+              <li>Emphasize stability, regulatory transparency, and property right protections.</li>
+              <li>Flood and storm risk matter; show mitigation features, elevation, wind-resistance specs.</li>
+              <li>Rental potential: many expect to rent when not using. Show comps & legal limits.</li>
+              <li>Explain closing costs (stamp duty equivalents) and U.S. property taxes.</li>
+              <li>Offer GBP ↔ USD pricing and periodic exchange check snapshots.</li>
+            </ul>
+          </div>
+
+          <div id="tip-eu" class="tip-slide">
+            <img class="tips-flags" src="https://www.bonitaesterorealtors.com/wp-content/uploads/2022/06/3.png"
+              alt="Europe">
+            <h2>Europe (Continental)</h2>
+            <hr>
+            <ul>
+              <li>Varied buyer cultures: Germans favor precision, Italians appreciate narrative storytelling.</li>
+              <li>Energy & insulation: European buyers often expect high performance, so share specs & utility data.
+              </li>
+              <li>Condo governance: budgets, reserve, debt history, insurance transparency matter here.</li>
+              <li>Rental/vacation use: many own vacation property — show tourist rental zoning, HOA rules.</li>
+              <li>Offer floor plans with metric ↔ imperial conversions, and local comparables.</li>
+            </ul>
+          </div>
+
+          <div id="tip-asia" class="tip-slide">
+            <img class="tips-flags" src="https://www.bonitaesterorealtors.com/wp-content/uploads/2022/06/4.png"
+              alt="Asia / Pacific">
+            <h2>Asia / Pacific</h2>
+            <hr>
+            <ul>
+              <li>Safety, security, maintenance: many want low-maintenance properties in gated communities.</li>
+              <li>Modern finishes and turn-key delivery are highly valued — highlight premium features.</li>
+              <li>Remote closing and escrow: many won’t travel — ensure digital workflows are clear.</li>
+              <li>Bank transfer constraints and foreign exchange quirks need step-by-step guidance.</li>
+              <li>Explain hurricane/flood backup systems, generator options, structural safeguards.</li>
+            </ul>
+          </div>
+
+          <div id="tip-latam" class="tip-slide">
+            <img class="tips-flags" src="https://www.bonitaesterorealtors.com/wp-content/uploads/2022/06/5.png"
+              alt="Latin America">
+            <h2>Latin America</h2>
+            <hr>
+            <ul>
+              <li>Currency risk: timing wires matters. Offer escrow paths or forward contracts when possible.</li>
+              <li>Trust: use referrals, client stories, bilingual team members.</li>
+              <li>Documents: ensure apostilles, POAs, translations are ready early.</li>
+              <li>Rental expectations: many expect high yields; show comps, vacancy data, licensing rules.</li>
+              <li>Political volatility: buyers like reassurance around long-term stability and exit strategies.</li>
+            </ul>
+          </div>
+
+        </div>
+      </div>
+      <button class="tip-nav tip-next" onclick="nextTip()">›</button>
+    </div>
+  </div>
+
+  <style>
+    .tip-container {
+      display: flex;
+      align-items: center;
+      max-width: 1100px;
+      margin: 0 auto 20px;
+      position: relative;
+    }
+
+    .tip-nav {
+      background: none;
+      border: none;
+      font-size: 32px;
+      color: #055a73;
+      cursor: pointer;
+      padding: 8px 12px;
+    }
+
+    .tip-slider-wrapper {
+      overflow: hidden;
+      flex: 1;
+    }
+
+    .tip-slider {
+      display: flex;
+      transition: transform 0.3s ease;
+    }
+
+    .tip-slide {
+      min-width: 100%;
+      box-sizing: border-box;
+      padding: 16px 24px;
+      background: #fff;
+      border-radius: 14px;
+      border: 1px solid #e6eaf2;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, .04);
+    }
+
+    .tip-slide h2 {
+      margin-top: 0;
+      font-family: 'Oswald', sans-serif;
+      color: #063244;
+    }
+
+    .tips-flags {
+      max-width: 120px;
+      display: block;
+      margin-bottom: 12px;
+    }
+
+    .tip-slide ul {
+      margin: 0;
+      padding-left: 20px;
+      color: #0b1220;
+      line-height: 1.5;
+    }
+
+    .tip-slide ul li {
+      margin-bottom: 8px;
+    }
+  </style>
+
+  <script>
+    const tipOrder = ['tip-china', 'tip-india', 'tip-mexico', 'tip-canada', 'tip-uk', 'tip-eu', 'tip-asia', 'tip-latam'];
+    let tipIndex = 0;
+    function renderTip() {
+      const slider = document.querySelector('.tip-slider');
+      if (!slider) return;
+      const offset = - tipIndex * slider.clientWidth;
+      slider.style.transform = `translateX(${offset}px)`;
+    }
+    function nextTip() {
+      tipIndex = (tipIndex + 1) % tipOrder.length;
+      renderTip();
+    }
+    function previousTip() {
+      tipIndex = (tipIndex - 1 + tipOrder.length) % tipOrder.length;
+      renderTip();
+    }
+    document.addEventListener('DOMContentLoaded', () => {
+      renderTip();
+    });
+  </script>
+
+
+  <!-- ===== Tab Controller + Region / Tips JS ===== -->
+  <script>
+    // Tab switching
+    function setTab(which) {
+      const tabs = [
+        { btn: '#tab1', panel: '#tab1content' },
+        { btn: '#tab2', panel: '#tab2content' },
+        { btn: '#tab3', panel: '#tab3content' }
+      ];
+      tabs.forEach((t, idx) => {
+        const isActive = (idx + 1) === which;
+        document.querySelector(t.panel).style.display = isActive ? 'block' : 'none';
+        const el = document.querySelector(t.btn);
+        if (el) el.classList[isActive ? 'add' : 'remove']('active-tab');
+      });
+      // optional: scroll into view on mobile
+      document.querySelector('.tabrow')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+    function tab1change() { setTab(1); }
+    function tab2change() { setTab(2); }
+    function tab3change() { setTab(3); }
+
+    // Add a subtle active style
+    (function injectActiveStyle() {
+      const css = ".tabrow div.active-tab{ background:#1d8ec7 !important; }";
+      const s = document.createElement('style'); s.innerHTML = css; document.head.appendChild(s);
+    })();
+
+    // Region flag logic
+    const regionTriangles = {
+      canada: '#triangle1',
+      uk: '#triangle2',
+      eu: '#triangle3',
+      asia: '#triangle4',
+      la: '#triangle5'
+    };
+    const regionPanels = {
+      canada: '#background-info1',
+      uk: '#background-info2',
+      eu: '#background-info3',
+      asia: '#background-info4',
+      la: '#background-info5'
+    };
+    function showRegion(key) {
+      // hide default text
+      const def = document.getElementById('default-text');
+      if (def) def.style.display = 'none';
+      // hide all triangles/panels
+      Object.values(regionTriangles).forEach(sel => { const n = document.querySelector(sel); if (n) n.style.display = 'none'; });
+      Object.values(regionPanels).forEach(sel => { const n = document.querySelector(sel); if (n) n.style.display = 'none'; });
+      // show the chosen ones
+      const tri = document.querySelector(regionTriangles[key]);
+      const pan = document.querySelector(regionPanels[key]);
+      if (tri) tri.style.display = 'block';
+      if (pan) pan.style.display = 'block';
+    }
+
+  </script>
 
   <!-- 2025 ADDITIONS / UPDATES -->
   <section id="travel-blog" class="global2025">
@@ -1096,7 +2995,8 @@
     <p class="s-sub">Follow BER Global’s trade missions, study tours, and CIPS adventures.</p>
     <div class="grid cols-3">
       <article class="card">
-        <img class="c-img" src="/wp-content/uploads/2025/09/global-trip-ber-01.jpg" alt="Lisbon Trade Mission" onerror="this.src='https://picsum.photos/seed/ber1/800/450'">
+        <img class="c-img" src="/wp-content/uploads/2025/09/global-trip-ber-01.jpg" alt="Lisbon Trade Mission"
+          onerror="this.src='https://picsum.photos/seed/ber1/800/450'">
         <div class="c-body">
           <div class="badge">Trip Report</div>
           <h4>Lisbon Trade Mission: Luxury & Golden Visa Insights</h4>
@@ -1104,7 +3004,8 @@
         </div>
       </article>
       <article class="card">
-        <img class="c-img" src="/wp-content/uploads/2025/09/global-trip-ber-02.jpg" alt="Toronto CIPS" onerror="this.src='https://picsum.photos/seed/ber2/800/450'">
+        <img class="c-img" src="/wp-content/uploads/2025/09/global-trip-ber-02.jpg" alt="Toronto CIPS"
+          onerror="this.src='https://picsum.photos/seed/ber2/800/450'">
         <div class="c-body">
           <div class="badge">Education</div>
           <h4>CIPS Week in Toronto: Cross-Border Contracts</h4>
@@ -1112,7 +3013,8 @@
         </div>
       </article>
       <article class="card">
-        <img class="c-img" src="/wp-content/uploads/2025/09/global-trip-ber-03.jpg" alt="Frankfurt" onerror="this.src='https://picsum.photos/seed/ber3/800/450'">
+        <img class="c-img" src="/wp-content/uploads/2025/09/global-trip-ber-03.jpg" alt="Frankfurt"
+          onerror="this.src='https://picsum.photos/seed/ber3/800/450'">
         <div class="c-body">
           <div class="badge">Networking</div>
           <h4>Frankfurt: Banking, FX, and FIRPTA Planning</h4>
@@ -1129,7 +3031,8 @@
     <div class="grid cols-3">
       <div class="testimonial card">
         <div class="c-body">
-          <p class="t-quote">“Our Canadian purchase was seamless—our agent’s currency partner and FIRPTA guidance were clutch.”</p>
+          <p class="t-quote">“Our Canadian purchase was seamless—our agent’s currency partner and FIRPTA guidance were
+            clutch.”</p>
           <div class="t-name">— Client, Snowbird Buyer</div>
         </div>
       </div>
@@ -1141,7 +3044,8 @@
       </div>
       <div class="testimonial card">
         <div class="c-body">
-          <p class="t-quote">“The global directory matched us with a CIPS who knew bank options for non-resident borrowers.”</p>
+          <p class="t-quote">“The global directory matched us with a CIPS who knew bank options for non-resident
+            borrowers.”</p>
           <div class="t-name">— Client, LATAM Buyer</div>
         </div>
       </div>
@@ -1157,22 +3061,56 @@
     </div>
     <p class="mini">Tip: Link this to a GrowthZone smart list or WordPress directory page filtered by “Global/CIPS”.</p>
     <ul class="list" id="dirList">
-      <li><strong>Jane Realtor, CIPS</strong> — Languages: EN/FR — <a href="mailto:jane@broker.com">jane@broker.com</a></li>
-      <li><strong>Carlos Agent</strong> — Languages: EN/ES/PT — <a href="mailto:carlos@broker.com">carlos@broker.com</a></li>
+      <li><strong>Jane Realtor, CIPS</strong> — Languages: EN/FR — <a href="mailto:jane@broker.com">jane@broker.com</a>
+      </li>
+      <li><strong>Carlos Agent</strong> — Languages: EN/ES/PT — <a href="mailto:carlos@broker.com">carlos@broker.com</a>
+      </li>
       <li><strong>Mai Broker, CIPS</strong> — Languages: EN/JP — <a href="mailto:mai@broker.com">mai@broker.com</a></li>
     </ul>
   </section>
 
   <section id="allied" class="global2025">
     <h2 class="s-heading">Allied Professionals — Build Your Global Team</h2>
-    <p class="s-sub">FIRPTA/Tax CPAs, immigration attorneys, international lenders, currency/payments, title/closing, translation.</p>
+    <p class="s-sub">FIRPTA/Tax CPAs, immigration attorneys, international lenders, currency/payments, title/closing,
+      translation.</p>
     <div class="grid cols-3">
-      <div class="card"><div class="c-body"><h4>FIRPTA/Tax CPAs</h4><p class="mini">Example: <a href="https://firptagroup.com/" target="_blank">FIRPTA Group</a>, <a href="https://www.allure-tax.com/" target="_blank">Allure Accounting</a></p></div></div>
-      <div class="card"><div class="c-body"><h4>Immigration Attorneys</h4><p class="mini">Add local contacts; visas & consultations.</p></div></div>
-      <div class="card"><div class="c-body"><h4>International Lenders</h4><p class="mini">Programs for foreign buyers / non-resident borrowers.</p></div></div>
-      <div class="card"><div class="c-body"><h4>Currency & Payments</h4><p class="mini">A Place in the Sun Currency and others.</p></div></div>
-      <div class="card"><div class="c-body"><h4>Title/Closing</h4><p class="mini">Apostilles • Remote closings • Multilingual support.</p></div></div>
-      <div class="card"><div class="c-body"><h4>Translation/Interpretation</h4><p class="mini">Add vetted providers.</p></div></div>
+      <div class="card">
+        <div class="c-body">
+          <h4>FIRPTA/Tax CPAs</h4>
+          <p class="mini">Example: <a href="https://firptagroup.com/" target="_blank">FIRPTA Group</a>, <a
+              href="https://www.allure-tax.com/" target="_blank">Allure Accounting</a></p>
+        </div>
+      </div>
+      <div class="card">
+        <div class="c-body">
+          <h4>Immigration Attorneys</h4>
+          <p class="mini">Add local contacts; visas & consultations.</p>
+        </div>
+      </div>
+      <div class="card">
+        <div class="c-body">
+          <h4>International Lenders</h4>
+          <p class="mini">Programs for foreign buyers / non-resident borrowers.</p>
+        </div>
+      </div>
+      <div class="card">
+        <div class="c-body">
+          <h4>Currency & Payments</h4>
+          <p class="mini">A Place in the Sun Currency and others.</p>
+        </div>
+      </div>
+      <div class="card">
+        <div class="c-body">
+          <h4>Title/Closing</h4>
+          <p class="mini">Apostilles • Remote closings • Multilingual support.</p>
+        </div>
+      </div>
+      <div class="card">
+        <div class="c-body">
+          <h4>Translation/Interpretation</h4>
+          <p class="mini">Add vetted providers.</p>
+        </div>
+      </div>
     </div>
 
     <!-- UPDATED: Affiliate Lender Survey callout -->
@@ -1186,12 +3124,43 @@
     <h2 class="s-heading">Allied Professionals</h2>
     <p class="s-sub">Build your cross‑border team. These partners are invaluable for international transactions.</p>
     <div class="grid cols-3">
-      <div class="card"><div class="c-body"><h4>FIRPTA/Tax CPAs</h4><p class="mini">Example: <a href="https://firptagroup.com/" target="_blank">FIRPTA Group</a>, <a href="https://www.allure-tax.com/" target="_blank">Allure Accounting</a></p></div></div>
-      <div class="card"><div class="c-body"><h4>Immigration Attorneys</h4><p class="mini">Add local contacts, visas, and consultations.</p></div></div>
-      <div class="card"><div class="c-body"><h4>Currency & Payments</h4><p class="mini">Example: A Place in the Sun Currency.</p></div></div>
-      <div class="card"><div class="c-body"><h4>International Lenders</h4><p class="mini">List programs for non‑resident borrowers.</p></div></div>
-      <div class="card"><div class="c-body"><h4>Title/Closing</h4><p class="mini">Highlight those experienced with apostilles and remote closings.</p></div></div>
-      <div class="card"><div class="c-body"><h4>Translation/Interpretation</h4><p class="mini">Add vetted providers.</p></div></div>
+      <div class="card">
+        <div class="c-body">
+          <h4>FIRPTA/Tax CPAs</h4>
+          <p class="mini">Example: <a href="https://firptagroup.com/" target="_blank">FIRPTA Group</a>, <a
+              href="https://www.allure-tax.com/" target="_blank">Allure Accounting</a></p>
+        </div>
+      </div>
+      <div class="card">
+        <div class="c-body">
+          <h4>Immigration Attorneys</h4>
+          <p class="mini">Add local contacts, visas, and consultations.</p>
+        </div>
+      </div>
+      <div class="card">
+        <div class="c-body">
+          <h4>Currency & Payments</h4>
+          <p class="mini">Example: A Place in the Sun Currency.</p>
+        </div>
+      </div>
+      <div class="card">
+        <div class="c-body">
+          <h4>International Lenders</h4>
+          <p class="mini">List programs for non‑resident borrowers.</p>
+        </div>
+      </div>
+      <div class="card">
+        <div class="c-body">
+          <h4>Title/Closing</h4>
+          <p class="mini">Highlight those experienced with apostilles and remote closings.</p>
+        </div>
+      </div>
+      <div class="card">
+        <div class="c-body">
+          <h4>Translation/Interpretation</h4>
+          <p class="mini">Add vetted providers.</p>
+        </div>
+      </div>
     </div>
   </section>
 
@@ -1199,13 +3168,15 @@
     <h2 class="s-heading">Calendar of Events</h2>
     <p class="s-sub">CIPS courses, trade missions, cultural workshops, and more.</p>
     <!-- Replace src with GrowthZone calendar view filtered for Global -->
-    <iframe class="calendar-embed" src="https://bonitaspringsesterorealtorsfl.growthzoneapp.com/ap/Events/List"></iframe>
+    <iframe class="calendar-embed"
+      src="https://bonitaspringsesterorealtorsfl.growthzoneapp.com/ap/Events/List"></iframe>
   </section>
 
   <!-- NEW: Housing Programs -->
   <section id="housing" class="global2025">
     <h2 class="s-heading">Housing Programs</h2>
-    <p class="s-sub">Links to down payment assistance, local bank offerings with recourse, and county/state programs relevant to global clients.</p>
+    <p class="s-sub">Links to down payment assistance, local bank offerings with recourse, and county/state programs
+      relevant to global clients.</p>
     <ul class="list">
       <li><a href="#" target="_blank">Local Bank Programs (PDF)</a></li>
       <li><a href="#" target="_blank">Lee & Collier Assistance Overview (PDF)</a></li>
@@ -1218,93 +3189,132 @@
     <h2 class="s-heading">Community Highlights: Diverse Businesses & Culture</h2>
     <p class="s-sub">Spotlighting diverse local business owners and cultural organizations.</p>
     <div class="grid cols-3">
-      <div class="card"><img class="c-img" src="https://picsum.photos/seed/ch1/800/450" alt=""><div class="c-body"><h4>Business Feature #1</h4><p class="mini">Owner story, services, languages.</p></div></div>
-      <div class="card"><img class="c-img" src="https://picsum.photos/seed/ch2/800/450" alt=""><div class="c-body"><h4>Cultural Org #1</h4><p class="mini">Events, language classes, festivals.</p></div></div>
-      <div class="card"><img class="c-img" src="https://picsum.photos/seed/ch3/800/450" alt=""><div class="c-body"><h4>Business Feature #2</h4><p class="mini">Owner story, services, languages.</p></div></div>
+      <div class="card"><img class="c-img" src="https://picsum.photos/seed/ch1/800/450" alt="">
+        <div class="c-body">
+          <h4>Business Feature #1</h4>
+          <p class="mini">Owner story, services, languages.</p>
+        </div>
+      </div>
+      <div class="card"><img class="c-img" src="https://picsum.photos/seed/ch2/800/450" alt="">
+        <div class="c-body">
+          <h4>Cultural Org #1</h4>
+          <p class="mini">Events, language classes, festivals.</p>
+        </div>
+      </div>
+      <div class="card"><img class="c-img" src="https://picsum.photos/seed/ch3/800/450" alt="">
+        <div class="c-body">
+          <h4>Business Feature #2</h4>
+          <p class="mini">Owner story, services, languages.</p>
+        </div>
+      </div>
     </div>
   </section>
 
   <section id="data-policy" class="global2025">
     <h2 class="s-heading">U.S. Government Data & Policy</h2>
     <div class="grid cols-2">
-      <div class="card"><div class="c-body">
-        <h4>Data Sources</h4>
-        <ul class="list">
-          <li><a href="https://www.census.gov/" target="_blank">U.S. Census Bureau (ACS, migration)</a></li>
-          <li><a href="https://www.bea.gov/" target="_blank">Bureau of Economic Analysis (FDI)</a></li>
-          <li><a href="https://www.bls.gov/" target="_blank">Bureau of Labor Statistics</a></li>
-          <li><a href="https://travel.trade.gov/" target="_blank">National Travel & Tourism Office (I-94 arrivals)</a></li>
-          <li><a href="https://home.treasury.gov/policy-issues/currency-sanctions" target="_blank">Treasury (sanctions/FX references)</a></li>
-        </ul>
-      </div></div>
-      <div class="card"><div class="c-body">
-        <h4>Legal/Policy Topics</h4>
-        <ul class="list">
-          <li><a href="https://www.nar.realtor/global" target="_blank">NAR Global: Legal & Policy Briefs</a></li>
-          <li><a href="https://www.floridarealtors.org/law-ethics" target="_blank">Florida REALTORS® Legal & Ethics</a></li>
-          <li><a href="https://www.uscis.gov/" target="_blank">USCIS (immigration basics)</a></li>
-          <li><a href="https://www.irs.gov/individuals/international-taxpayers" target="_blank">IRS: International Taxpayers (FIRPTA)</a></li>
-          <li>Instructor spotlight: <strong>Russel Riggs</strong> (NABOR) — add class/resource link as available.</li>
-        </ul>
-      </div></div>
+      <div class="card">
+        <div class="c-body">
+          <h4>Data Sources</h4>
+          <ul class="list">
+            <li><a href="https://www.census.gov/" target="_blank">U.S. Census Bureau (ACS, migration)</a></li>
+            <li><a href="https://www.bea.gov/" target="_blank">Bureau of Economic Analysis (FDI)</a></li>
+            <li><a href="https://www.bls.gov/" target="_blank">Bureau of Labor Statistics</a></li>
+            <li><a href="https://travel.trade.gov/" target="_blank">National Travel & Tourism Office (I-94 arrivals)</a>
+            </li>
+            <li><a href="https://home.treasury.gov/policy-issues/currency-sanctions" target="_blank">Treasury
+                (sanctions/FX references)</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="card">
+        <div class="c-body">
+          <h4>Legal/Policy Topics</h4>
+          <ul class="list">
+            <li><a href="https://www.nar.realtor/global" target="_blank">NAR Global: Legal & Policy Briefs</a></li>
+            <li><a href="https://www.floridarealtors.org/law-ethics" target="_blank">Florida REALTORS® Legal &
+                Ethics</a></li>
+            <li><a href="https://www.uscis.gov/" target="_blank">USCIS (immigration basics)</a></li>
+            <li><a href="https://www.irs.gov/individuals/international-taxpayers" target="_blank">IRS: International
+                Taxpayers (FIRPTA)</a></li>
+            <li>Instructor spotlight: <strong>Russel Riggs</strong> (NABOR) — add class/resource link as available.</li>
+          </ul>
+        </div>
+      </div>
     </div>
   </section>
 
- <!-- NEW: Documents & PDFs (incl. Kris printout and info-sharing link) -->
- <section id="docs" class="global2025">
-  <h2 class="s-heading">Documents & PDFs</h2>
-  <p class="s-sub">Centralized handouts and references for your global work.</p>
-  <ul class="list">
-    <li><a href="#" target="_blank">Downloadable Printout from Kris (PDF)</a> <!-- add actual file path --></li>
-    <li><a href="#" target="_blank">Kris Link for Sharing Info (Form/Upload)</a> <!-- add actual link --></li>
-    <li><a href="#" target="_blank">What to Ask: Questions for Foreign Buyers/Sellers (PDF)</a></li>
-    <li><a href="#" target="_blank">US Gov Documents & Policy Overview (PDF)</a></li>
-  </ul>
-</section>
+  <!-- NEW: Documents & PDFs (incl. Kris printout and info-sharing link) -->
+  <section id="docs" class="global2025">
+    <h2 class="s-heading">Documents & PDFs</h2>
+    <p class="s-sub">Centralized handouts and references for your global work.</p>
+    <ul class="list">
+      <li><a href="#" target="_blank">Downloadable Printout from Kris (PDF)</a> <!-- add actual file path --></li>
+      <li><a href="#" target="_blank">Kris Link for Sharing Info (Form/Upload)</a> <!-- add actual link --></li>
+      <li><a href="#" target="_blank">What to Ask: Questions for Foreign Buyers/Sellers (PDF)</a></li>
+      <li><a href="#" target="_blank">US Gov Documents & Policy Overview (PDF)</a></li>
+    </ul>
+  </section>
 
-<!-- NEW: Partnerships -->
-<section id="partnerships" class="global2025">
-  <h2 class="s-heading">Partnerships</h2>
-  <p class="s-sub">Growing collaboration with third parties and international partners.</p>
-  <div class="grid cols-2">
-    <div class="card"><div class="c-body"><h4>Jamaica</h4><p class="mini">Outline of partnership goals, upcoming exchanges, and co-marketing opportunities.</p></div></div>
-    <div class="card"><div class="c-body"><h4>Third-Party Collaborations</h4><p class="mini">Consulates, chambers of commerce, and education partners.</p></div></div>
-  </div>
-</section>
+  <!-- NEW: Partnerships -->
+  <section id="partnerships" class="global2025">
+    <h2 class="s-heading">Partnerships</h2>
+    <p class="s-sub">Growing collaboration with third parties and international partners.</p>
+    <div class="grid cols-2">
+      <div class="card">
+        <div class="c-body">
+          <h4>Jamaica</h4>
+          <p class="mini">Outline of partnership goals, upcoming exchanges, and co-marketing opportunities.</p>
+        </div>
+      </div>
+      <div class="card">
+        <div class="c-body">
+          <h4>Third-Party Collaborations</h4>
+          <p class="mini">Consulates, chambers of commerce, and education partners.</p>
+        </div>
+      </div>
+    </div>
+  </section>
 
-<section id="contact" class="global2025">
-  <h2 class="s-heading">Contact BER Global</h2>
-  <div class="grid cols-2">
-    <div class="card"><div class="c-body">
-      <h4>General Inquiries</h4>
-      <p class="mini">Bonita Springs-Estero REALTORS®<br>25300 Bernwood Dr., Bonita Springs, FL</p>
-      <p><a class="btn-pill" href="mailto:info@bonitaesterorealtors.com">info@bonitaesterorealtors.com</a></p>
-    </div></div>
-    <div class="card"><div class="c-body">
-      <h4>Join the Council</h4>
-      <p class="mini">Help shape our global programming, travel, and education.</p>
-      <a class="btn-pill" href="https://bonitaspringsesterorealtorsfl.growthzoneapp.com/ap/Form/Fill/rJD9lS4P" target="_blank">Apply</a>
-    </div></div>
-  </div>
-</section>
+  <section id="contact" class="global2025">
+    <h2 class="s-heading">Contact BER Global</h2>
+    <div class="grid cols-2">
+      <div class="card">
+        <div class="c-body">
+          <h4>General Inquiries</h4>
+          <p class="mini">Bonita Springs-Estero REALTORS®<br>25300 Bernwood Dr., Bonita Springs, FL</p>
+          <p><a class="btn-pill" href="mailto:info@bonitaesterorealtors.com">info@bonitaesterorealtors.com</a></p>
+        </div>
+      </div>
+      <div class="card">
+        <div class="c-body">
+          <h4>Join the Council</h4>
+          <p class="mini">Help shape our global programming, travel, and education.</p>
+          <a class="btn-pill" href="https://bonitaspringsesterorealtorsfl.growthzoneapp.com/ap/Form/Fill/rJD9lS4P"
+            target="_blank">Apply</a>
+        </div>
+      </div>
+    </div>
+  </section>
   <!-- ==================== 2025 ADDITIONS END ==================== -->
 
   <!-- keep original scripts; append light helpers for 2025 anchors -->
   <script type="text/javascript">
     // smooth scroll for the 2025 subnav
-    document.querySelectorAll('.global2025-subnav a').forEach(a=>{
-      a.addEventListener('click', (e)=>{
+    document.querySelectorAll('.global2025-subnav a').forEach(a => {
+      a.addEventListener('click', (e) => {
         const href = a.getAttribute('href');
-        if(href && href.startsWith('#')){ e.preventDefault(); document.querySelector(href)?.scrollIntoView({ behavior:'smooth', block:'start' }); }
+        if (href && href.startsWith('#')) { e.preventDefault(); document.querySelector(href)?.scrollIntoView({ behavior: 'smooth', block: 'start' }); }
       });
     });
   </script>
 
   <!-- ORIGINAL long script block from the page (kept as‑is) -->
   <script type="text/javascript">
-  // …
-  // (Paste the entire original script from your page here unchanged — omitted in this canvas for brevity.)
-  // …
+    // …
+    // (Paste the entire original script from your page here unchanged — omitted in this canvas for brevity.)
+    // …
   </script>
 </body>
+
 </html>

@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="utf-8" />
-  <title>CCOR Name Change – Info Sessions & FAQ</title>
+  <title>CCOR Name Change – Info Sessions, Voting & FAQ</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <!-- Swiss-modern fonts -->
@@ -103,7 +103,7 @@
       grid-template-columns:minmax(0,2.6fr) minmax(0,1.2fr);
       gap:22px;
       align-items:end;
-      margin-bottom:28px;
+      margin-bottom:24px;
       border-bottom:1px solid #dfe3eb;
       padding-bottom:18px;
       position:relative;
@@ -179,6 +179,40 @@
       }
     }
 
+    /* Learn-before-you-vote band */
+    .learn-vote{
+      margin-bottom:28px;
+      padding:16px 18px 14px;
+      background:var(--canvas);
+      border-radius:20px;
+      border:1px solid #dfe3eb;
+    }
+    .learn-vote-grid{
+      display:grid;
+      grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+      gap:18px;
+      align-items:flex-start;
+    }
+    .learn-vote-block{
+      font-size:13px;
+      color:var(--ink-soft);
+    }
+    .learn-vote-label{
+      font-family:Montserrat,system-ui,Arial,sans-serif;
+      font-size:11px;
+      text-transform:uppercase;
+      letter-spacing:.2em;
+      color:var(--accent-dark);
+      margin-bottom:6px;
+    }
+    .learn-vote ul{
+      margin:0;
+      padding-left:18px;
+    }
+    .learn-vote li{
+      margin-bottom:4px;
+    }
+
     /* Layout */
     .layout{
       display:grid;
@@ -245,6 +279,13 @@
     }
     .event-meta span{
       display:block;
+    }
+
+    .event-meta-list{
+      font-size:13px;
+      color:var(--ink-soft);
+      margin:0 0 10px 0;
+      padding-left:18px;
     }
 
     .btn{
@@ -374,11 +415,11 @@
     }
     .faq-title{
       font-family:Montserrat,system-ui,Arial,sans-serif;
-      font-size:20px;
+      font-size:24px; /* increased from 20px */
       text-transform:uppercase;
     }
     .faq-sub{
-      font-size:12px;
+      font-size:14px; /* increased from 12px */
       color:var(--ink-soft);
       max-width:420px;
     }
@@ -417,7 +458,7 @@
       cursor:pointer;
     }
     .faq-q-text{
-      font-size:13px;
+      font-size:15px; /* increased from 13px */
       font-weight:600;
     }
     .faq-icon{
@@ -434,7 +475,7 @@
       max-height:0;
       overflow:hidden;
       transition:max-height .18s ease;
-      font-size:13px;
+      font-size:14px; /* increased from 13px */
       color:var(--ink-soft);
       padding:0 8px;
     }
@@ -451,12 +492,12 @@
     }
 
     .faq-side{
-      font-size:13px;
+      font-size:14px; /* increased from 13px */
       color:var(--ink-soft);
     }
     .faq-side h3{
       font-family:Montserrat,system-ui,Arial,sans-serif;
-      font-size:13px;
+      font-size:14px; /* increased from 13px */
       text-transform:uppercase;
       letter-spacing:.18em;
       margin:0 0 6px;
@@ -465,7 +506,7 @@
       margin:0 0 8px;
     }
     .faq-quote{
-      font-size:12px;
+      font-size:14px; /* increased from 12px */
       line-height:1.6;
       padding-left:10px;
       border-left:3px solid var(--accent-core);
@@ -485,17 +526,17 @@
         <header class="page-head">
           <div>
             <div class="page-tag">CCOR Name Change</div>
-            <h1>Member Info Sessions & FAQ</h1>
+            <h1>Member Info Sessions, Voting &amp; FAQ</h1>
             <p class="sub">
-              Join a live session to ask questions and hear directly from leadership about our proposed rebrand to
-              the Coconut Coast Organization of REALTORS® (CCOR). We will walk through the “why,” the benefits for you,
-              and how this honors our 60-year history while positioning us for the next 60.
+              Before you vote on the proposed rebrand to the Coconut Coast Organization of REALTORS® (CCOR), join a live
+              session to ask questions and hear directly from leadership. We will walk through the “why,” the benefits for you,
+              and how this honors our 60-year history while positioning us for the next 60—including a preview of the proposed logo.
             </p>
           </div>
           <div class="meta-block">
             <div class="meta-row">
               <span class="meta-label">Format</span>
-              <span class="meta-value">Zoom + In-Person Town Hall</span>
+              <span class="meta-value">Zoom Sessions + In-Person Voting Session</span>
             </div>
             <div class="meta-row">
               <span class="meta-label">Sessions</span>
@@ -508,10 +549,40 @@
           </div>
         </header>
 
+        <!-- Learn before you vote band -->
+        <section class="learn-vote" aria-label="Learn more before you vote">
+          <div class="learn-vote-grid">
+            <div class="learn-vote-block">
+              <div class="learn-vote-label">Learn More Before You Vote</div>
+              <ul>
+                <li>Join informational sessions with Q&amp;A and a full overview of the brand transition.</li>
+                <li>The more you know, the more confidently you can vote.</li>
+                <li>Your participation strengthens our future as a member-driven association.</li>
+                <li>Come and see the vision for a refreshed brand and proposed logo.</li>
+              </ul>
+            </div>
+            <div class="learn-vote-block">
+              <div class="learn-vote-label">Your Voice Shapes Our Direction</div>
+              <ul>
+                <li>Voting gives you a direct role in how we evolve as an association.</li>
+                <li>We encourage every member to understand the “why,” not just the “what,” behind the proposal.</li>
+                <li>Don’t vote based on comfort or habit—vote based on what moves our profession forward.</li>
+              </ul>
+            </div>
+            <div class="learn-vote-block">
+              <div class="learn-vote-label">Built from Member Input &amp; Strategic Vision</div>
+              <ul>
+                <li>This proposal isn’t sudden—it’s part of long-term strategic planning for where we’re headed.</li>
+                <li>The Board considered history, identity, market research, and member feedback before recommending CCOR.</li>
+                <li>The name is designed to reflect our shared future and the full region our members already serve.</li>
+              </ul>
+            </div>
+          </div>
+        </section>
+
         <!-- Events + quote -->
         <section class="layout" aria-label="Name change info session registration">
           <div class="events-column">
-            <!-- TODO: replace href="#" with actual Zoom registration links -->
             <article class="event-card">
               <div class="event-tag">Zoom Session</div>
               <h2 class="event-title">CCOR Name Change – Member Q&amp;A</h2>
@@ -519,7 +590,7 @@
                 <span><strong>Date:</strong> December 12</span>
                 <span><strong>Time:</strong> 10:00 AM (Zoom)</span>
               </div>
-              <a class="btn primary full" href="#" target="_blank" rel="noopener">
+              <a class="btn primary full" href="https://bonitaesterorealtors.zoom.us/meeting/register/Pmh8233XRCCjtq5ILQC8Pw" target="_blank" rel="noopener">
                 <i class="fa fa-video-camera" aria-hidden="true"></i> Register for December 12
               </a>
             </article>
@@ -531,21 +602,29 @@
                 <span><strong>Date:</strong> January 6</span>
                 <span><strong>Time:</strong> 12:00 PM (Zoom)</span>
               </div>
-              <a class="btn primary full" href="#" target="_blank" rel="noopener">
+              <a class="btn primary full" href="https://bonitaesterorealtors.zoom.us/meeting/register/oDlJkHIMSaO8NY47vonHVA" target="_blank" rel="noopener">
                 <i class="fa fa-video-camera" aria-hidden="true"></i> Register for January 6
               </a>
             </article>
 
             <article class="event-card event-card--inperson">
-              <div class="event-tag">In-Person Session</div>
-              <h2 class="event-title">CCOR Name Change – Town Hall at Spring Run</h2>
+              <div class="event-tag">In-Person Town Hall &amp; Vote</div>
+              <h2 class="event-title">Name Change Town Hall &amp; Vote</h2>
               <div class="event-meta">
-                <span><strong>Date:</strong> January 15</span>
-                <span><strong>Time:</strong> 10:30 AM</span>
+                <span><strong>Date:</strong> January 15, 2026</span>
+                <span><strong>Time:</strong> 10:30 AM – 12:00 PM (EST)</span>
                 <span><strong>Location:</strong> Spring Run</span>
               </div>
-              <a class="btn primary full" href="#" target="_blank" rel="noopener">
-                <i class="fa fa-calendar" aria-hidden="true"></i> Register for January 15
+              <ul class="event-meta-list">
+                <li>Learn more before you vote.</li>
+                <li>Understand why the board feels a name change is important.</li>
+                <li>See the vision for the future.</li>
+                <li>Be part of the vote that moves our profession forward.</li>
+                <li>Understand how the name came about.</li>
+                <li>Come see the vision for the new branding.</li>
+              </ul>
+              <a class="btn primary full" href="https://bonitaspringsesterorealtorsfl.growthzoneapp.com/ap/Events/Register/NaF6e66fYCaCm" target="_blank" rel="noopener">
+                <i class="fa fa-calendar" aria-hidden="true"></i> Register for Town Hall &amp; Vote
               </a>
             </article>
           </div>
@@ -572,6 +651,8 @@
                 <li>We are honoring our heritage while removing artificial barriers to membership and influence.</li>
                 <li>Every major, thriving association eventually expands beyond its original city boundaries—it is a sign of success, not failure.</li>
                 <li>This change benefits every member through stronger advocacy, broader networks, and enhanced regional influence.</li>
+                <li>The proposal is the result of long-term strategic planning—not an overnight idea.</li>
+                <li>The Board weighed history, identity, market research, and member feedback before recommending CCOR.</li>
               </ul>
             </div>
           </aside>
@@ -582,8 +663,8 @@
           <div class="faq-header">
             <div class="faq-title">FAQ: Why CCOR? Why now?</div>
             <div class="faq-sub">
-              These talking points are designed to help you understand the rationale behind the proposed name change and
-              confidently communicate it to colleagues and clients.
+              These talking points are designed to help you understand the rationale behind the proposed name change so you
+              can confidently communicate it to colleagues and clients—and cast an informed vote.
             </div>
           </div>
 
@@ -772,7 +853,7 @@
               </p>
               <p>
                 CCOR is designed to keep our association ahead of that curve—protecting your relevance, your advocacy, and
-                your opportunities for the long term.
+                your opportunities for the long term. Your informed vote is a key part of that strategy.
               </p>
             </aside>
           </div>

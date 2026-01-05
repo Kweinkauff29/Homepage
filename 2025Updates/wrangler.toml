@@ -1,0 +1,12 @@
+name = "ber-globe"
+main = "globeWorker.js"
+compatibility_date = "2024-01-01"
+
+# D1 Database binding
+# Replace <your-database-id> with the actual ID after running:
+# wrangler d1 create globe-pins
+
+[[d1_databases]]
+binding = "GLOBE"
+database_name = "globe-pins"
+database_id = "a0d242db-df70-4dec-8d4f-78e9304d2a27"

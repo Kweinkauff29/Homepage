@@ -2,199 +2,382 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>API Data Fetch</title>
+<title>GrowthZone Contact Search</title>
 <style>
-    #contactInfo {
-        display: flex;
-        flex-wrap: wrap;
+    body {
+        font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+        padding: 16px;
     }
-    .contact {
-        flex: 0 0 calc(33.333% - 20px);
-        margin: 10px;
-        border: 1px solid #ccc;
+
+    #searchArea {
+        margin-bottom: 20px;
         padding: 10px;
+        border: 1px solid #ddd;
+        border-radius: 6px;
     }
-    .contact img {
-        max-width: 100px;
+
+    #contactSearch {
+        padding: 6px 10px;
+        min-width: 260px;
+        font-size: 14px;
+        margin-left: 4px;
     }
-    img {
-        max-width: 100%;
+
+    #searchResults {
+        margin-top: 8px;
+        max-width: 600px;
+    }
+
+    #searchResults ul {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+        border: 1px solid #eee;
+        border-radius: 4px;
+        max-height: 300px;
+        overflow-y: auto;
+    }
+
+    #searchResults li {
+        padding: 6px 8px;
+        cursor: pointer;
+        font-size: 13px;
+        border-bottom: 1px solid #eee;
+    }
+
+    #searchResults li:last-child {
+        border-bottom: none;
+    }
+
+    #searchResults li:hover {
+        background: #f0f0f0;
+    }
+
+    .notes-fields {
+        margin-top: 8px;
+        font-size: 12px;
+        background: #f5f5f5;
+        padding: 6px;
+        border-radius: 4px;
+        white-space: pre-wrap;
+        max-width: 800px;
+        overflow-x: auto;
+    }
+
+    #statusLine {
+        margin-top: 8px;
+        font-size: 12px;
+        color: #555;
+    }
+
+    /* All names list */
+    #allNames {
+        margin-top: 24px;
+        max-height: 500px;
+        overflow-y: auto;
+        border: 1px solid #eee;
+        border-radius: 6px;
+        padding: 8px;
+        max-width: 800px;
+    }
+
+    #allNames h2 {
+        margin-top: 0;
+        font-size: 16px;
+    }
+
+    #allNames ul {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+    }
+
+    #allNames li {
+        padding: 4px 6px;
+        cursor: pointer;
+        font-size: 13px;
+        border-bottom: 1px solid #f0f0f0;
+    }
+
+    #allNames li:last-child {
+        border-bottom: none;
+    }
+
+    #allNames li:hover {
+        background: #f5f5f5;
     }
 </style>
 </head>
 <body>
-    <h1>API Data Fetch Example</h1>
+    <h1>GrowthZone Contact Search</h1>
 
-    <div id="contactInfo"></div> <!-- This is where the contact info will be displayed -->
+    <!-- Search Area -->
+    <div id="searchArea">
+        <div>
+            <label for="contactSearch">Search by Name:</label>
+            <input
+              type="text"
+              id="contactSearch"
+              placeholder="Start typing a name..."
+              autocomplete="off"
+              disabled
+            />
+        </div>
+        <div id="statusLine">Loading contacts…</div>
+        <div id="searchResults"></div>
+        <pre id="searchNotes" class="notes-fields"></pre>
+    </div>
+
+    <!-- All active contacts list -->
+    <div id="allNames">
+        <h2>All Active Individual Contacts</h2>
+        <div id="allNamesList"><small>Loading…</small></div>
+    </div>
 
     <script>
+    // ------------------------------------------------------------------------
+    // CONFIG
+    // ------------------------------------------------------------------------
+    const apiKey = 'cR1djHVMkndNjLbwXyhDyOV7dWPJ6TnufYtcdOHc'; // test only; don’t expose in production
+    const BASE_URL = 'https://bonitaspringsesterorealtorsfl.growthzoneapp.com';
+    const CONTACTS_BASE_URL = `${BASE_URL}/api/contacts`;
+    const PAGE_SIZE_FALLBACK = 100; // if we can’t infer from API
 
-// Replace 'your_subdomain' with the actual subdomain of your database.
-let apiEndpoint = 'https://bonitaspringsesterorealtorsfl.growthzoneapp.com/api/contacts?skip=0&take=1&$top=900000&orderBy=ContactId';
+    // OrgGeneral endpoint for a contact
+    // GET /api/contacts/OrgGeneral/{contactId}
+    function buildCategorySummaryUrl(contactId) {
+      return `${BASE_URL}/api/contacts/${encodeURIComponent(contactId)}`;
+    }
 
-let apiEndpoint2 = 'https://bonitaspringsesterorealtorsfl.growthzoneapp.com//api/memberships/all?skip=0&take=1&$top=900000&OrderBy=MembershipId';
+    const searchInput      = document.getElementById('contactSearch');
+    const searchResultsDiv = document.getElementById('searchResults');
+    const searchNotesPre   = document.getElementById('searchNotes');
+    const statusLine       = document.getElementById('statusLine');
+    const allNamesListDiv  = document.getElementById('allNamesList');
 
+    let allContacts = [];          // all active individual contacts
+    let searchDebounceHandle = null;
 
-// Use this for testing purposes only. Your API key should not be exposed like this.
-var apiKey = 'cR1djHVMkndNjLbwXyhDyOV7dWPJ6TnufYtcdOHc';
+    // ------------------------------------------------------------------------
+    // BOOTSTRAP
+    // ------------------------------------------------------------------------
+    document.addEventListener('DOMContentLoaded', async () => {
+      try {
+        // Fetch all contacts (all pages), then filter to Active individuals
+        const activeContacts = await fetchAllContactsActiveIndividuals();
+        allContacts = activeContacts;
 
-var contactInfoContainer = document.getElementById('contactInfo');
+        statusLine.textContent = `Loaded ${allContacts.length.toLocaleString()} active individual contacts. Click a name or type at least 3 letters to search.`;
+        searchInput.disabled = false;
 
-let contacts;
-let contacts2;
-let contacts4;
+        // Show all names in HTML
+        renderAllNames(allContacts);
 
-document.addEventListener('DOMContentLoaded', async function() {
-    await fetchContacts();
-    await fetchContacts2();
+        // Wire up search
+        setupSearch();
+      } catch (err) {
+        console.error('Error loading contacts:', err);
+        statusLine.textContent = 'Error loading contacts. See console for details.';
+        allNamesListDiv.innerHTML = '<small>Error loading contacts.</small>';
+      }
+    });
 
-});
+    // ------------------------------------------------------------------------
+    // PAGINATED CONTACT FETCH (ALL PAGES, THEN FILTER)
+    // ------------------------------------------------------------------------
+    async function fetchAllContactsActiveIndividuals() {
+      let all = [];
 
-           async function fetchContacts(page) {
-                fetch(apiEndpoint, { // Adjust the limit parameter here
-                    method: 'GET',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'Authorization': 'ApiKey ' + apiKey
-                    }
-                })
-                .then(async function(response) {
-                     return await response.json();
-                })
-                .then(async function(data) {
-                    console.log(data);
-                    contacts = data.Results;
-                    await displayContacts(contacts);
-                    return contacts;
-
-                     //await console.log(contacts);
-                    
-                    // Check if there are more pages to fetch
-                    if (data.Pagination && data.Pagination.TotalPages > page) {
-                        // Fetch next page
-                        fetchContacts();
-                    }
-                })
-                .catch(function(error) {
-                    console.error('Error fetching data: ', error);
-                });
-            }
-
-            async function fetchContacts2(page) {
-                fetch(apiEndpoint2, { // Adjust the limit parameter here
-                    method: 'GET',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'Authorization': 'ApiKey ' + apiKey
-                    }
-                })
-                .then(async function(response) {
-                     return await response.json();
-                })
-                .then(async function(data) {
-                    console.log(data);
-                    contacts2 = data.Results;
-                    contacts3 = data.Results.Type === "Individual MLS";
-                    console.log(contacts3);
-
-                    var filteredContacts3 = contacts2.filter(async function(contact2) {
-                        contacts4 = contacts2.Type === "Individual MLS";
-                        return contacts4;
-                    });
-
-                    console.log(contacts4);
-
-                    return contacts2.Type === "Individual MLS";
-
-                     //await console.log(contacts2);
-                    
-                    // Check if there are more pages to fetch
-                    if (data.Pagination && data.Pagination.TotalPages > page) {
-                        // Fetch next page
-                        fetchContacts2();
-                    }
-                })
-                .catch(function(error) {
-                    console.error('Error fetching data: ', error);
-                });
-            }
-
-
-
-
-
-
-        function displayContacts(contacts) {
-            // Filter the contacts array to include only contacts with SystemContactTypeId equal to 1
-            var filteredContacts = contacts.filter(function(contact) {
-                return contact.SystemContactTypeId === 1;
-            });
-
-            function displayContacts2(contacts2) {
-            // Filter the contacts array to include only contacts with SystemContactTypeId equal to 1
-            var filteredContacts = contacts2.filter(function(contact2) {
-                return contacts2.Type === "Primary REALTOR®";
-            });
-
-            console.log(contacts2);
+      // First page (skip 0) to discover total + page size
+      const firstUrl = `${CONTACTS_BASE_URL}?skip=0&orderBy=ContactId`;
+      const firstRes = await fetch(firstUrl, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'ApiKey ' + apiKey
         }
+      });
 
+      const firstData = await firstRes.json();
+      const firstResults = firstData.Results || [];
 
+      if (!firstResults.length) {
+        return [];
+      }
 
-            // Compare and find common elements based on 'id'
-                const commonContacts = contacts.filter(contacts =>
-                    contacts2.some(contacts2 => contacts.ContactId === contacts2.ContactId)
-                );
+      const totalAvailable = firstData.TotalRecordAvailable || firstResults.length;
+      const pageSize = firstResults.length || PAGE_SIZE_FALLBACK;
 
-                console.log('Common contacts:', commonContacts);
+      console.log('Contacts first page:', {
+        totalAvailable,
+        pageSize
+      });
 
+      all = all.concat(firstResults);
 
+      // Build list of remaining page requests
+      const remainingPromises = [];
+      for (let skip = pageSize; skip < totalAvailable; skip += pageSize) {
+        const url = `${CONTACTS_BASE_URL}?skip=${skip}&orderBy=ContactId`;
 
-            // Iterate over the filtered contacts array
-           filteredContacts.forEach(function(commonContacts) {
+        const p = fetch(url, {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': 'ApiKey ' + apiKey
+          }
+        })
+        .then(res => res.json())
+        .then(data => {
+          const resArr = data.Results || [];
+          console.log('Contacts page', { skip, count: resArr.length });
+          return resArr;
+        });
 
-                if (commonContacts.Status === "Active" && commonContacts.MembershipStatusTypeId === 2) {
-                    //console.log(contact);
+        remainingPromises.push(p);
+      }
 
-                    var contactDiv = document.createElement('div');
-                    contactDiv.classList.add('contact');
+      // Fetch all remaining pages in parallel
+      const remainingPages = await Promise.all(remainingPromises);
+      remainingPages.forEach(arr => { all = all.concat(arr); });
 
-                    var image = document.createElement('img');
-                    if (commonContacts.ImageUrl) {
-                        image.src = commonContacts.ImageUrl;
-                    } else {
-                        // Set a default image source if ImageURL is undefined
-                        image.src = 'https://www.bonitaesterorealtors.com/wp-content/uploads/2024/02/Platinum-1.png'; // Replace 'default-image-url.jpg' with your default image URL
-                    }
-                    contactDiv.appendChild(image);
+      console.log('Total contacts fetched (all statuses, all types):', all.length);
 
-                    var name = document.createElement('p');
-                    var phone = document.createElement('p');
-                    var cid = document.createElement('p');
-                    var link = document.createElement('a');
-                    link.href = `https://www.realtor.com/realestateagents/agent?nrdsid=${commonContacts.AccountNumber}&ref=nar`; // Set the href attribute
-                    link.textContent = commonContacts.Name;
-                    link.target = "_blank"; // Open link in a new tab
-                    name.appendChild(link); // Append the link to the <p> element
-                    phone.textContent = commonContacts.Phone;
-                    cid.textContent = commonContacts.SystemContactTypeId;
-                    contactDiv.appendChild(document.createElement('br')); // Append the line break element
-                    contactDiv.appendChild(name); // Append the name paragraph
-                    contactDiv.appendChild(phone); // Append the phone paragraph
-                    contactDiv.appendChild(cid); // Append the phone paragraph
+      // Filter here: Active only + individuals only
+      const filtered = all.filter(c =>
+        c.Status === 'Active' &&
+        c.SystemContactTypeId === 1  // individuals
+      );
 
+      console.log('Filtered active individual contacts:', filtered.length);
 
+      return filtered;
+    }
 
-                    var nrds = document.createElement('p');
-                    nrds.textContent = commonContacts.AccountNumber;
-                    contactDiv.appendChild(nrds);
+    // ------------------------------------------------------------------------
+    // CATEGORY SUMMARY (OrgGeneral endpoint)
+    // ------------------------------------------------------------------------
+    async function fetchCategorySummary(contactId) {
+      const url = buildCategorySummaryUrl(contactId);
 
-                    contactInfoContainer.appendChild(contactDiv);
-                }
-            });
+      const res = await fetch(url, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'ApiKey ' + apiKey   // 🔧 THIS WAS MISSING
         }
+      });
 
-    
+      if (!res.ok) {
+        const text = await res.text().catch(() => '');
+        console.error('Error fetching categorySummary:', res.status, text);
+        throw new Error('Failed to fetch categorySummary');
+      }
+
+      const data = await res.json();
+      console.log(`categorySummary for contact ${contactId}:`, data);
+      return data;
+    }
+
+    // ------------------------------------------------------------------------
+    // RENDER ALL NAMES
+    // ------------------------------------------------------------------------
+    function renderAllNames(contacts) {
+      if (!contacts.length) {
+        allNamesListDiv.innerHTML = '<small>No active individual contacts found.</small>';
+        return;
+      }
+
+      const ul = document.createElement('ul');
+
+      contacts.forEach(contact => {
+        const li = document.createElement('li');
+        const city = contact.City ? ` — ${contact.City}` : '';
+        li.textContent = `${contact.Name} (ID: ${contact.ContactId})${city}`;
+
+        // Clicking a name in the full list pulls categorySummary
+        li.addEventListener('click', async () => {
+          searchNotesPre.textContent =
+            `Loading category summary for ${contact.Name} (ID: ${contact.ContactId})…`;
+          try {
+            const cs = await fetchCategorySummary(contact.ContactId);
+            searchNotesPre.textContent = JSON.stringify(cs, null, 2);
+          } catch (err) {
+            searchNotesPre.textContent =
+              'Error loading category summary. See console for details.';
+            console.error(err);
+          }
+        });
+
+        ul.appendChild(li);
+      });
+
+      allNamesListDiv.innerHTML = '';
+      allNamesListDiv.appendChild(ul);
+    }
+
+    // ------------------------------------------------------------------------
+    // SEARCH
+    // ------------------------------------------------------------------------
+    function setupSearch() {
+      searchResultsDiv.innerHTML = '';
+      searchNotesPre.textContent = '';
+
+      searchInput.addEventListener('input', () => {
+        const term = searchInput.value.trim().toLowerCase();
+
+        clearTimeout(searchDebounceHandle);
+        searchDebounceHandle = setTimeout(() => {
+          if (term.length < 3) {
+            searchResultsDiv.innerHTML = '<small>Type at least 3 letters to search.</small>';
+            return;
+          }
+
+          const results = allContacts
+            .filter(c => c.Name && c.Name.toLowerCase().includes(term))
+            .slice(0, 25); // cap list
+
+          renderSearchResults(results);
+        }, 200);
+      });
+
+      // initial hint
+      searchResultsDiv.innerHTML = '<small>Type at least 3 letters to search.</small>';
+    }
+
+    function renderSearchResults(results) {
+      searchResultsDiv.innerHTML = '';
+
+      if (!results.length) {
+        searchResultsDiv.innerHTML = '<small>No matches found.</small>';
+        return;
+      }
+
+      const ul = document.createElement('ul');
+
+      results.forEach(contact => {
+        const li = document.createElement('li');
+        const city = contact.City ? ` — ${contact.City}` : '';
+        li.textContent = `${contact.Name} (ID: ${contact.ContactId})${city}`;
+
+        li.addEventListener('click', async () => {
+          searchNotesPre.textContent =
+            `Loading category summary for ${contact.Name} (ID: ${contact.ContactId})…`;
+          try {
+            const cs = await fetchCategorySummary(contact.ContactId);
+            searchNotesPre.textContent = JSON.stringify(cs, null, 2);
+          } catch (err) {
+            searchNotesPre.textContent =
+              'Error loading category summary. See console for details.';
+            console.error(err);
+          }
+        });
+
+        ul.appendChild(li);
+      });
+
+      searchResultsDiv.appendChild(ul);
+    }
     </script>
 </body>
 </html>

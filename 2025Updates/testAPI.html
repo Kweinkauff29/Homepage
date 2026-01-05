@@ -1,0 +1,1409 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>GrowthZone RealEstate GET — getchangessince</title>
+  <style>
+    body {
+      font-family: system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+      padding: 16px;
+    }
+
+    .card {
+      border: 1px solid #e6e6e6;
+      border-radius: 10px;
+      padding: 14px;
+      max-width: 960px;
+    }
+
+    label {
+      display: block;
+      font-size: 12px;
+      color: #555;
+      margin-top: 10px;
+    }
+
+    input {
+      width: 100%;
+      max-width: 520px;
+      padding: 8px 10px;
+      font-size: 14px;
+    }
+
+    button {
+      padding: 8px 12px;
+      font-size: 14px;
+      cursor: pointer;
+      margin-top: 12px;
+    }
+
+    pre {
+      margin-top: 12px;
+      padding: 10px;
+      background: #f6f6f6;
+      border-radius: 8px;
+      overflow: auto;
+      max-height: 60vh;
+    }
+
+    .row {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      align-items: end;
+    }
+
+    .pill {
+      font-size: 12px;
+      color: #444;
+      background: #f2f2f2;
+      padding: 4px 8px;
+      border-radius: 999px;
+      display: inline-block;
+    }
+
+    .muted {
+      color: #666;
+      font-size: 12px;
+    }
+  </style>
+</head>
+
+<body>
+  <h1>GrowthZone RealEstate GET</h1>
+
+  <div class="card">
+    <div class="muted">
+      Endpoint: <span class="pill">GET /api/realestate/contacts/getchangessince/{utcdatetime}</span>
+    </div>
+
+    <label for="baseUrl">Base URL</label>
+    <input id="baseUrl" value="https://bonitaspringsesterorealtorsfl.growthzoneapp.com" />
+
+    <label for="apiKey">ApiKey</label>
+    <input id="apiKey" value="PUT_YOUR_KEY_HERE" />
+
+    <div class="row">
+      <div>
+        <label for="utcDateTime">utcdatetime (UTC ISO, e.g. 2025-12-15T00:00:00Z)</label>
+        <input id="utcDateTime" />
+      </div>
+
+      <div>
+        <label for="options">options (optional)</label>
+        <input id="options" placeholder="leave blank if not needed" />
+      </div>
+    </div>
+
+    <div class="row">
+      <button id="btnFetch">Fetch changes</button>
+      <button id="btnLast24">Set to last 24 hours</button>
+      <div id="status" class="muted"></div>
+    </div>
+
+    <pre id="out">{}</pre>
+  </div>
+
+  <hr style="margin:24px 0; border:none; border-top:1px solid #eee;" />
+
+  <h2>Custom Fields</h2>
+  <div class="card">
+    <div class="muted">
+      Endpoint: <span class="pill">GET /api/customfields</span>
+    </div>
+
+    <label for="cfSearch">Filter by Name (client-side)</label>
+    <input id="cfSearch" placeholder="type to filter by Name, DisplayName, or GroupName…" />
+
+    <label style="display:flex;align-items:center;gap:8px;margin-top:10px;">
+      <input type="checkbox" id="cfHideArchived" checked />
+      Hide archived fields
+    </label>
+
+    <div class="row" style="margin-top:10px;">
+      <button id="btnFetchCustomFields">Fetch Custom Fields</button>
+      <div id="customFieldsStatus" class="muted"></div>
+    </div>
+
+    <pre id="customFieldsOut">{}</pre>
+  </div>
+
+  <hr style="margin:24px 0; border:none; border-top:1px solid #eee;" />
+
+  <h2>Integrations — Accounts</h2>
+  <div class="card">
+    <div class="muted">
+      Endpoint: <span class="pill">GET /api/integrations/accounts</span>
+    </div>
+
+    <label for="accountsFilter">Filter by Name (client-side)</label>
+    <input id="accountsFilter" placeholder="type to filter accounts…" />
+
+    <label style="display:flex;align-items:center;gap:8px;margin-top:10px;">
+      <input type="checkbox" id="accountsHideInactive" />
+      hideinactive=true (server-side)
+    </label>
+
+    <div class="row" style="margin-top:10px;">
+      <button id="btnFetchAccounts">Fetch Accounts</button>
+      <div id="accountsStatus" class="muted"></div>
+    </div>
+
+    <pre id="accountsOut">{}</pre>
+  </div>
+
+  <hr style="margin:24px 0; border:none; border-top:1px solid #eee;" />
+
+  <h2>Applications</h2>
+  <div class="card">
+    <div class="muted">
+      Endpoint: <span class="pill">GET /api/applications</span>
+    </div>
+
+    <label for="appsFilter">Filter by Name (client-side)</label>
+    <input id="appsFilter" placeholder="type to filter applications…" />
+
+    <div class="row" style="margin-top:10px;">
+      <button id="btnFetchApplications">Fetch Applications</button>
+      <div id="appsStatus" class="muted"></div>
+    </div>
+
+    <pre id="appsOut">{}</pre>
+  </div>
+
+  <hr style="margin:24px 0; border:none; border-top:1px solid #eee;" />
+
+  <h2>Calendar Items</h2>
+  <div class="card">
+    <div class="muted">
+      Endpoint: <span class="pill">GET /api/calendars/items</span>
+    </div>
+
+    <label for="calendarFilter">Filter by Name (client-side)</label>
+    <input id="calendarFilter" placeholder="type to filter calendar items…" />
+
+    <div class="row" style="margin-top:10px;">
+      <button id="btnFetchCalendar">Fetch Calendar Items</button>
+      <div id="calendarStatus" class="muted"></div>
+    </div>
+
+    <pre id="calendarOut">{}</pre>
+  </div>
+
+  <hr style="margin:24px 0; border:none; border-top:1px solid #eee;" />
+
+  <h2>Calendar Details</h2>
+  <div class="card">
+    <div class="muted">
+      Endpoint: <span class="pill">GET /api/calendars/{calendarid}</span>
+    </div>
+
+    <label for="calendarIdSelect">Select Calendar ID</label>
+    <select id="calendarIdSelect" style="width:100%; max-width:520px; padding:8px; font-size:14px; margin-top:5px;">
+      <!-- Options will be populated by JS or hardcoded here as requested -->
+      <option value="1843">B.E.R. Calendar (1843)</option>
+      <option value="1897">Class Registration (1897)</option>
+      <option value="2041">Professional Development Meetings (2041)</option>
+      <option value="2047">Committee Meetings (2047)</option>
+      <option value="6448">BEST Designation (6448)</option>
+      <option value="7057">Truck Rental Calendar (7057)</option>
+      <option value="9421">NMO (9421)</option>
+      <option value="9424">NMCOE (9424)</option>
+    </select>
+
+    <div class="row" style="margin-top:10px;">
+      <button id="btnFetchCalendarDetails">Fetch Details</button>
+      <div id="calendarDetailsStatus" class="muted"></div>
+    </div>
+
+    <pre id="calendarDetailsOut">{}</pre>
+  </div>
+
+  <hr style="margin:24px 0; border:none; border-top:1px solid #eee;" />
+
+  <h2>Calendar Lookup</h2>
+  <div class="card">
+    <div class="muted">
+      Endpoint: <span class="pill">GET /api/calendars/lookup</span>
+    </div>
+
+    <!-- Usually returns a simple list, maybe filterable. Adding textual filter just in case -->
+    <label for="calendarLookupFilter">Filter by Name (client-side)</label>
+    <input id="calendarLookupFilter" placeholder="type to filter calendars…" />
+
+    <div class="row" style="margin-top:10px;">
+      <button id="btnFetchCalendarLookup">Fetch Calendar Lookup</button>
+      <div id="calendarLookupStatus" class="muted"></div>
+    </div>
+
+    <pre id="calendarLookupOut">{}</pre>
+  </div>
+
+  <hr style="margin:24px 0; border:none; border-top:1px solid #eee;" />
+
+  <h2>Connection All</h2>
+  <div class="card">
+    <div class="muted">
+      Endpoint: <span class="pill">GET /api/connection/all</span>
+    </div>
+
+    <!-- Usually returns a long list, client side filter might be useful -->
+    <label for="connectionAllFilter">Filter (client-side)</label>
+    <input id="connectionAllFilter" placeholder="type to filter output..." />
+
+    <div class="row" style="margin-top:10px;">
+      <button id="btnFetchConnectionAll">Fetch Connection All</button>
+      <div id="connectionAllStatus" class="muted"></div>
+    </div>
+
+    <pre id="connectionAllOut">{}</pre>
+  </div>
+
+  <hr style="margin:24px 0; border:none; border-top:1px solid #eee;" />
+
+  <h2>ThirdParty Contacts</h2>
+  <div class="card">
+    <div class="muted">
+      Endpoint: <span class="pill">GET /api/thirdparty/contacts</span>
+    </div>
+
+    <label for="thirdPartyContactsFilter">Filter (client-side)</label>
+    <input id="thirdPartyContactsFilter" placeholder="type to filter output…" />
+
+    <div class="row" style="margin-top:10px;">
+      <button id="btnFetchThirdPartyContacts">Fetch Contacts</button>
+      <div id="thirdPartyContactsStatus" class="muted"></div>
+    </div>
+
+    <pre id="thirdPartyContactsOut">{}</pre>
+  </div>
+
+  <hr style="margin:24px 0; border:none; border-top:1px solid #eee;" />
+
+  <h2>MIC AccountContactInfo</h2>
+  <div class="card">
+    <div class="muted">
+      Endpoint: <span class="pill">GET /api/mic/accountcontactinfo</span>
+    </div>
+
+    <!-- Likely returns a single object or list -->
+    <label for="micInfoFilter">Filter (client-side)</label>
+    <input id="micInfoFilter" placeholder="type to filter output…" />
+
+    <div class="row" style="margin-top:10px;">
+      <button id="btnFetchMicInfo">Fetch Info</button>
+      <div id="micInfoStatus" class="muted"></div>
+    </div>
+
+    <pre id="micInfoOut">{}</pre>
+  </div>
+
+  <hr style="margin:24px 0; border:none; border-top:1px solid #eee;" />
+
+  <h2>Office MLS Active Contacts</h2>
+  <div class="card">
+    <div class="muted">
+      Fetches from RealEstate API and filters for: <span class="pill">MembershipType: "Office MLS" & MembershipStatus:
+        "Active"</span>
+    </div>
+
+    <label for="officeMlsFilter">Filter by Name (client-side)</label>
+    <input id="officeMlsFilter" placeholder="type to filter contacts…" />
+
+    <div class="row" style="margin-top:10px;">
+      <button id="btnFetchOfficeMls">Fetch Office MLS Active</button>
+      <button id="btnSyncToDb" style="background:#166534; color:white;">Sync to Database</button>
+      <button id="btnViewFromDb" style="background:#1e40af; color:white;">View from DB</button>
+      <button id="btnRunSync" style="background:#dc2626; color:white;">🔄 Run Sync Now</button>
+      <div id="officeMlsStatus" class="muted"></div>
+    </div>
+
+    <pre id="officeMlsOut">{}</pre>
+  </div>
+
+
+  <script>
+    const WORKER_BASE = "https://gz-realestate-proxy.bonitaspringsrealtors.workers.dev";
+
+    function getPageEls() {
+      const els = {
+        baseUrl: document.getElementById("baseUrl"),
+        apiKey: document.getElementById("apiKey"),
+        utc: document.getElementById("utcDateTime"),
+        options: document.getElementById("options"),
+        out: document.getElementById("out"),
+        status: document.getElementById("status"),
+        btnFetch: document.getElementById("btnFetch"),
+        btnLast24: document.getElementById("btnLast24"),
+
+        cfSearch: document.getElementById("cfSearch"),
+        cfHideArchived: document.getElementById("cfHideArchived"),
+        btnFetchCustomFields: document.getElementById("btnFetchCustomFields"),
+        customFieldsStatus: document.getElementById("customFieldsStatus"),
+        customFieldsOut: document.getElementById("customFieldsOut"),
+
+        accountsFilter: document.getElementById("accountsFilter"),
+        accountsHideInactive: document.getElementById("accountsHideInactive"),
+        btnFetchAccounts: document.getElementById("btnFetchAccounts"),
+        accountsStatus: document.getElementById("accountsStatus"),
+        accountsOut: document.getElementById("accountsOut"),
+
+        appsFilter: document.getElementById("appsFilter"),
+        btnFetchApplications: document.getElementById("btnFetchApplications"),
+        appsStatus: document.getElementById("appsStatus"),
+        appsOut: document.getElementById("appsOut"),
+
+        calendarFilter: document.getElementById("calendarFilter"),
+        btnFetchCalendar: document.getElementById("btnFetchCalendar"),
+        calendarStatus: document.getElementById("calendarStatus"),
+        calendarOut: document.getElementById("calendarOut"),
+
+        calendarIdSelect: document.getElementById("calendarIdSelect"),
+        btnFetchCalendarDetails: document.getElementById("btnFetchCalendarDetails"),
+        calendarDetailsStatus: document.getElementById("calendarDetailsStatus"),
+        calendarDetailsOut: document.getElementById("calendarDetailsOut"),
+
+        calendarLookupFilter: document.getElementById("calendarLookupFilter"),
+        btnFetchCalendarLookup: document.getElementById("btnFetchCalendarLookup"),
+        calendarLookupStatus: document.getElementById("calendarLookupStatus"),
+        calendarLookupOut: document.getElementById("calendarLookupOut"),
+
+        connectionAllFilter: document.getElementById("connectionAllFilter"),
+        btnFetchConnectionAll: document.getElementById("btnFetchConnectionAll"),
+        connectionAllStatus: document.getElementById("connectionAllStatus"),
+        connectionAllOut: document.getElementById("connectionAllOut"),
+
+        thirdPartyContactsFilter: document.getElementById("thirdPartyContactsFilter"),
+        btnFetchThirdPartyContacts: document.getElementById("btnFetchThirdPartyContacts"),
+        thirdPartyContactsStatus: document.getElementById("thirdPartyContactsStatus"),
+        thirdPartyContactsOut: document.getElementById("thirdPartyContactsOut"),
+
+        micInfoFilter: document.getElementById("micInfoFilter"),
+        btnFetchMicInfo: document.getElementById("btnFetchMicInfo"),
+        micInfoStatus: document.getElementById("micInfoStatus"),
+        micInfoOut: document.getElementById("micInfoOut"),
+
+        officeMlsFilter: document.getElementById("officeMlsFilter"),
+        btnFetchOfficeMls: document.getElementById("btnFetchOfficeMls"),
+        btnSyncToDb: document.getElementById("btnSyncToDb"),
+        btnViewFromDb: document.getElementById("btnViewFromDb"),
+        btnRunSync: document.getElementById("btnRunSync"),
+        officeMlsStatus: document.getElementById("officeMlsStatus"),
+        officeMlsOut: document.getElementById("officeMlsOut"),
+      };
+
+      const required = [
+        "utc", "options", "out", "status", "btnFetch", "btnLast24",
+        "btnFetchCustomFields", "customFieldsStatus", "customFieldsOut",
+        "btnFetchAccounts", "accountsStatus", "accountsOut",
+        "btnFetchApplications", "appsStatus", "appsOut",
+        "btnFetchCalendar", "calendarStatus", "calendarOut",
+        "btnFetchCalendarDetails", "calendarDetailsStatus", "calendarDetailsOut",
+        "btnFetchCalendarLookup", "calendarLookupStatus", "calendarLookupOut",
+        "btnFetchConnectionAll", "connectionAllStatus", "connectionAllOut",
+        "btnFetchThirdPartyContacts", "thirdPartyContactsStatus", "thirdPartyContactsOut",
+        "btnFetchMicInfo", "micInfoStatus", "micInfoOut",
+        "btnFetchOfficeMls", "officeMlsStatus", "officeMlsOut"
+      ];
+
+      const missing = required.filter((k) => !els[k]);
+      if (missing.length) throw new Error(`Missing element id(s): ${missing.join(", ")}`);
+
+      return els;
+    }
+
+    function setUtcToLastHours(hours) {
+      const ms = Math.max(0, Number(hours) || 0) * 60 * 60 * 1000;
+      return new Date(Date.now() - ms).toISOString().replace(/\.\d{3}Z$/, "Z");
+    }
+
+    async function fetchChanges() {
+      let els;
+      try { els = getPageEls(); } catch (err) { console.error(err); return; }
+
+      const utc = String(els.utc.value || "").trim();
+      const options = String(els.options.value || "").trim();
+
+      if (!utc) {
+        els.status.textContent = "Missing utcdatetime.";
+        return;
+      }
+
+      const url =
+        `${WORKER_BASE}/changes?since=${encodeURIComponent(utc)}` +
+        (options ? `&options=${encodeURIComponent(options)}` : "");
+
+      els.status.textContent = `GET ${url}`;
+      els.out.textContent = "Loading…";
+
+      try {
+        const res = await fetch(url, { method: "GET" });
+        const text = await res.text().catch(() => "");
+
+        let parsed = null;
+        try { parsed = text ? JSON.parse(text) : null; } catch { parsed = null; }
+
+        if (!res.ok) {
+          els.out.textContent = JSON.stringify(
+            { ok: false, status: res.status, body: parsed ?? text },
+            null,
+            2
+          );
+          els.status.textContent = `Request failed: ${res.status}`;
+          return;
+        }
+
+        els.out.textContent = parsed ? JSON.stringify(parsed, null, 2) : text;
+        els.status.textContent = `OK (${res.status})`;
+      } catch (err) {
+        els.out.textContent = JSON.stringify({ ok: false, error: String(err) }, null, 2);
+        els.status.textContent = "Network error (see output).";
+      }
+    }
+
+    globalThis.fetchChanges = fetchChanges;
+
+    async function fetchCustomFields() {
+      let els;
+      try { els = getPageEls(); } catch (err) { console.error(err); return; }
+
+      const url = `${WORKER_BASE}/customfields`;
+      els.customFieldsStatus.textContent = `GET ${url}`;
+      els.customFieldsOut.textContent = "Loading…";
+
+      els.btnFetchCustomFields.disabled = true;
+
+      try {
+        const res = await fetch(url, { method: "GET" });
+        const text = await res.text().catch(() => "");
+
+        let parsed = null;
+        try { parsed = text ? JSON.parse(text) : null; } catch { parsed = null; }
+
+        if (!res.ok) {
+          els.customFieldsOut.textContent = JSON.stringify(
+            { ok: false, status: res.status, body: parsed ?? text },
+            null,
+            2
+          );
+          els.customFieldsStatus.textContent = `Request failed: ${res.status}`;
+          return;
+        }
+
+        // Normalize possible shapes
+        let list = parsed;
+        if (parsed && Array.isArray(parsed.Results)) list = parsed.Results;
+        if (parsed && Array.isArray(parsed.results)) list = parsed.results;
+        if (parsed && Array.isArray(parsed.value)) list = parsed.value;
+
+        // Filter archived fields if checkbox is checked
+        const hideArchived = els.cfHideArchived?.checked ?? false;
+        if (hideArchived && Array.isArray(list)) {
+          list = list.filter((x) => !x.IsArchived);
+        }
+
+        // Optional client-side name filter
+        const term = String(els.cfSearch?.value || "").trim().toLowerCase();
+        if (term && Array.isArray(list)) {
+          list = list.filter((x) => {
+            const searchable = [
+              x.Name || "",
+              x.DisplayName || "",
+              x.GroupName || ""
+            ].join(" ").toLowerCase();
+            return searchable.includes(term);
+          });
+        }
+
+        els.customFieldsOut.textContent = JSON.stringify(list ?? parsed ?? text, null, 2);
+        els.customFieldsStatus.textContent = `OK (${res.status}) — ${Array.isArray(list) ? list.length : '?'} fields`;
+      } catch (err) {
+        els.customFieldsOut.textContent = JSON.stringify({ ok: false, error: String(err) }, null, 2);
+        els.customFieldsStatus.textContent = "Network error (see output).";
+      } finally {
+        els.btnFetchCustomFields.disabled = false;
+      }
+    }
+
+    globalThis.fetchCustomFields = fetchCustomFields;
+
+    async function fetchAccounts() {
+      let els;
+      try { els = getPageEls(); } catch (err) { console.error(err); return; }
+
+      const hideInactive = els.accountsHideInactive?.checked ?? false;
+      const params = new URLSearchParams();
+      if (hideInactive) params.set("hideinactive", "true");
+
+      const url = `${WORKER_BASE}/integrations/accounts` + (params.toString() ? `?${params}` : "");
+      els.accountsStatus.textContent = `GET ${url}`;
+      els.accountsOut.textContent = "Loading…";
+
+      els.btnFetchAccounts.disabled = true;
+
+      try {
+        const res = await fetch(url, { method: "GET" });
+        const text = await res.text().catch(() => "");
+
+        let parsed = null;
+        try { parsed = text ? JSON.parse(text) : null; } catch { parsed = null; }
+
+        if (!res.ok) {
+          els.accountsOut.textContent = JSON.stringify(
+            { ok: false, status: res.status, body: parsed ?? text },
+            null,
+            2
+          );
+          els.accountsStatus.textContent = `Request failed: ${res.status}`;
+          return;
+        }
+
+        // Normalize possible shapes
+        let list = parsed;
+        if (parsed && Array.isArray(parsed.Results)) list = parsed.Results;
+        if (parsed && Array.isArray(parsed.results)) list = parsed.results;
+        if (parsed && Array.isArray(parsed.value)) list = parsed.value;
+
+        // Optional client-side name filter
+        const term = String(els.accountsFilter?.value || "").trim().toLowerCase();
+        if (term && Array.isArray(list)) {
+          list = list.filter((x) => {
+            const searchable = [
+              x.Name || "",
+              x.DisplayName || "",
+              x.AccountName || ""
+            ].join(" ").toLowerCase();
+            return searchable.includes(term);
+          });
+        }
+
+        els.accountsOut.textContent = JSON.stringify(list ?? parsed ?? text, null, 2);
+        els.accountsStatus.textContent = `OK (${res.status}) — ${Array.isArray(list) ? list.length : '?'} accounts`;
+      } catch (err) {
+        els.accountsOut.textContent = JSON.stringify({ ok: false, error: String(err) }, null, 2);
+        els.accountsStatus.textContent = "Network error (see output).";
+      } finally {
+        els.btnFetchAccounts.disabled = false;
+      }
+    }
+
+    globalThis.fetchAccounts = fetchAccounts;
+
+    async function fetchApplications() {
+      let els;
+      try { els = getPageEls(); } catch (err) { console.error(err); return; }
+
+      const url = `${WORKER_BASE}/applications`;
+      els.appsStatus.textContent = `GET ${url}`;
+      els.appsOut.textContent = "Loading…";
+
+      els.btnFetchApplications.disabled = true;
+
+      try {
+        const res = await fetch(url, { method: "GET" });
+        const text = await res.text().catch(() => "");
+
+        let parsed = null;
+        try { parsed = text ? JSON.parse(text) : null; } catch { parsed = null; }
+
+        if (!res.ok) {
+          els.appsOut.textContent = JSON.stringify(
+            { ok: false, status: res.status, body: parsed ?? text },
+            null,
+            2
+          );
+          els.appsStatus.textContent = `Request failed: ${res.status}`;
+          return;
+        }
+
+        // Normalize possible shapes
+        let list = parsed;
+        if (parsed && Array.isArray(parsed.Results)) list = parsed.Results;
+        if (parsed && Array.isArray(parsed.results)) list = parsed.results;
+        if (parsed && Array.isArray(parsed.value)) list = parsed.value;
+
+        // Optional client-side name filter
+        const term = String(els.appsFilter?.value || "").trim().toLowerCase();
+        if (term && Array.isArray(list)) {
+          list = list.filter((x) => {
+            const searchable = [
+              x.Name || "",
+              x.ApplicationName || "",
+            ].join(" ").toLowerCase();
+            return searchable.includes(term);
+          });
+        }
+
+        els.appsOut.textContent = JSON.stringify(list ?? parsed ?? text, null, 2);
+        els.appsStatus.textContent = `OK (${res.status}) — ${Array.isArray(list) ? list.length : '?'} items`;
+      } catch (err) {
+        els.appsOut.textContent = JSON.stringify({ ok: false, error: String(err) }, null, 2);
+        els.appsStatus.textContent = "Network error (see output).";
+      } finally {
+        els.btnFetchApplications.disabled = false;
+      }
+    }
+
+    globalThis.fetchApplications = fetchApplications;
+
+
+    async function fetchCalendarItems() {
+      let els;
+      try { els = getPageEls(); } catch (err) { console.error(err); return; }
+
+      const url = `${WORKER_BASE}/calendars/items`;
+      els.calendarStatus.textContent = `GET ${url}`;
+      els.calendarOut.textContent = "Loading…";
+
+      els.btnFetchCalendar.disabled = true;
+
+      try {
+        const res = await fetch(url, { method: "GET" });
+        const text = await res.text().catch(() => "");
+
+        let parsed = null;
+        try { parsed = text ? JSON.parse(text) : null; } catch { parsed = null; }
+
+        if (!res.ok) {
+          els.calendarOut.textContent = JSON.stringify(
+            { ok: false, status: res.status, body: parsed ?? text },
+            null,
+            2
+          );
+          els.calendarStatus.textContent = `Request failed: ${res.status}`;
+          return;
+        }
+
+        let list = parsed;
+        if (parsed && Array.isArray(parsed.Results)) list = parsed.Results;
+        if (parsed && Array.isArray(parsed.results)) list = parsed.results;
+        if (parsed && Array.isArray(parsed.value)) list = parsed.value;
+
+        // Optional client-side name filter
+        const term = String(els.calendarFilter?.value || "").trim().toLowerCase();
+        if (term && Array.isArray(list)) {
+          list = list.filter((x) => {
+            const name = String(x.Name || x.Title || x.EventName || "").toLowerCase();
+            return name.includes(term);
+          });
+        }
+
+        els.calendarOut.textContent = JSON.stringify(list ?? parsed ?? text, null, 2);
+        els.calendarStatus.textContent = `OK (${res.status}) — ${Array.isArray(list) ? list.length : '?'} items`;
+
+      } catch (err) {
+        els.calendarOut.textContent = JSON.stringify({ ok: false, error: String(err) }, null, 2);
+        els.calendarStatus.textContent = "Network error (see output).";
+      } finally {
+        els.btnFetchCalendar.disabled = false;
+      }
+    }
+
+    globalThis.fetchCalendarItems = fetchCalendarItems;
+
+
+    async function fetchCalendarDetails() {
+      let els;
+      try { els = getPageEls(); } catch (err) { console.error(err); return; }
+
+      const id = els.calendarIdSelect.value;
+      if (!id) {
+        els.calendarDetailsStatus.textContent = "Please select a calendar ID.";
+        return;
+      }
+
+      const url = `${WORKER_BASE}/calendars/${id}`;
+      els.calendarDetailsStatus.textContent = `GET ${url}`;
+      els.calendarDetailsOut.textContent = "Loading…";
+
+      els.btnFetchCalendarDetails.disabled = true;
+
+      try {
+        const res = await fetch(url, { method: "GET" });
+        const text = await res.text().catch(() => "");
+
+        let parsed = null;
+        try { parsed = text ? JSON.parse(text) : null; } catch { parsed = null; }
+
+        if (!res.ok) {
+          els.calendarDetailsOut.textContent = JSON.stringify(
+            { ok: false, status: res.status, body: parsed ?? text },
+            null,
+            2
+          );
+          els.calendarDetailsStatus.textContent = `Request failed: ${res.status}`;
+          return;
+        }
+
+        els.calendarDetailsOut.textContent = JSON.stringify(parsed ?? text, null, 2);
+        els.calendarDetailsStatus.textContent = `OK (${res.status})`;
+
+      } catch (err) {
+        els.calendarDetailsOut.textContent = JSON.stringify({ ok: false, error: String(err) }, null, 2);
+        els.calendarDetailsStatus.textContent = "Network error (see output).";
+      } finally {
+        els.btnFetchCalendarDetails.disabled = false;
+      }
+    }
+
+    globalThis.fetchCalendarDetails = fetchCalendarDetails;
+
+
+    async function fetchCalendarLookup() {
+      let els;
+      try { els = getPageEls(); } catch (err) { console.error(err); return; }
+
+      const url = `${WORKER_BASE}/calendars/lookup`;
+      els.calendarLookupStatus.textContent = `GET ${url}`;
+      els.calendarLookupOut.textContent = "Loading…";
+
+      els.btnFetchCalendarLookup.disabled = true;
+
+      try {
+        const res = await fetch(url, { method: "GET" });
+        const text = await res.text().catch(() => "");
+
+        let parsed = null;
+        try { parsed = text ? JSON.parse(text) : null; } catch { parsed = null; }
+
+        if (!res.ok) {
+          els.calendarLookupOut.textContent = JSON.stringify(
+            { ok: false, status: res.status, body: parsed ?? text },
+            null,
+            2
+          );
+          els.calendarLookupStatus.textContent = `Request failed: ${res.status}`;
+          return;
+        }
+
+        let list = parsed;
+        if (parsed && Array.isArray(parsed.Results)) list = parsed.Results;
+        if (parsed && Array.isArray(parsed.results)) list = parsed.results;
+        if (parsed && Array.isArray(parsed.value)) list = parsed.value;
+
+        // Optional client-side name filter
+        const term = String(els.calendarLookupFilter?.value || "").trim().toLowerCase();
+        if (term && Array.isArray(list)) {
+          list = list.filter((x) => {
+            const name = String(x.Name || x.Title || x.CalendarName || "").toLowerCase();
+            return name.includes(term);
+          });
+        }
+
+        els.calendarLookupOut.textContent = JSON.stringify(list ?? parsed ?? text, null, 2);
+        els.calendarLookupStatus.textContent = `OK (${res.status}) — ${Array.isArray(list) ? list.length : '?'} items`;
+
+      } catch (err) {
+        els.calendarLookupOut.textContent = JSON.stringify({ ok: false, error: String(err) }, null, 2);
+        els.calendarLookupStatus.textContent = "Network error (see output).";
+      } finally {
+        els.btnFetchCalendarLookup.disabled = false;
+      }
+    }
+
+    globalThis.fetchCalendarLookup = fetchCalendarLookup;
+
+
+    async function fetchConnectionAll() {
+      let els;
+      try { els = getPageEls(); } catch (err) { console.error(err); return; }
+
+      const url = `${WORKER_BASE}/connection/all`;
+      els.connectionAllStatus.textContent = `GET ${url}`;
+      els.connectionAllOut.textContent = "Loading…";
+
+      els.btnFetchConnectionAll.disabled = true;
+
+      try {
+        const res = await fetch(url, { method: "GET" });
+        const text = await res.text().catch(() => "");
+
+        let parsed = null;
+        try { parsed = text ? JSON.parse(text) : null; } catch { parsed = null; }
+
+        if (!res.ok) {
+          els.connectionAllOut.textContent = JSON.stringify(
+            { ok: false, status: res.status, body: parsed ?? text },
+            null,
+            2
+          );
+          els.connectionAllStatus.textContent = `Request failed: ${res.status}`;
+          return;
+        }
+
+        let list = parsed;
+        if (parsed && Array.isArray(parsed.Results)) list = parsed.Results;
+        if (parsed && Array.isArray(parsed.results)) list = parsed.results;
+        if (parsed && Array.isArray(parsed.value)) list = parsed.value;
+
+        // Optional client-side filter
+        const term = String(els.connectionAllFilter?.value || "").trim().toLowerCase();
+        if (term && Array.isArray(list)) {
+          list = list.filter((x) => {
+            // Generic filter across values since schema unknown
+            return JSON.stringify(x).toLowerCase().includes(term);
+          });
+        }
+
+        els.connectionAllOut.textContent = JSON.stringify(list ?? parsed ?? text, null, 2);
+        els.connectionAllStatus.textContent = `OK (${res.status}) — ${Array.isArray(list) ? list.length : '?'} items`;
+
+      } catch (err) {
+        els.connectionAllOut.textContent = JSON.stringify({ ok: false, error: String(err) }, null, 2);
+        els.connectionAllStatus.textContent = "Network error (see output).";
+      } finally {
+        els.btnFetchConnectionAll.disabled = false;
+      }
+    }
+
+    globalThis.fetchConnectionAll = fetchConnectionAll;
+
+
+    async function fetchThirdPartyContacts() {
+      let els;
+      try { els = getPageEls(); } catch (err) { console.error(err); return; }
+
+      const url = `${WORKER_BASE}/thirdparty/contacts`;
+      els.thirdPartyContactsStatus.textContent = `GET ${url}`;
+      els.thirdPartyContactsOut.textContent = "Loading…";
+
+      els.btnFetchThirdPartyContacts.disabled = true;
+
+      try {
+        const res = await fetch(url, { method: "GET" });
+        const text = await res.text().catch(() => "");
+
+        let parsed = null;
+        try { parsed = text ? JSON.parse(text) : null; } catch { parsed = null; }
+
+        if (!res.ok) {
+          els.thirdPartyContactsOut.textContent = JSON.stringify(
+            { ok: false, status: res.status, body: parsed ?? text },
+            null,
+            2
+          );
+          els.thirdPartyContactsStatus.textContent = `Request failed: ${res.status}`;
+          return;
+        }
+
+        let list = parsed;
+        if (parsed && Array.isArray(parsed.Results)) list = parsed.Results;
+        if (parsed && Array.isArray(parsed.results)) list = parsed.results;
+        if (parsed && Array.isArray(parsed.value)) list = parsed.value;
+
+        // Optional client-side filter
+        const term = String(els.thirdPartyContactsFilter?.value || "").trim().toLowerCase();
+        if (term && Array.isArray(list)) {
+          list = list.filter((x) => {
+            return JSON.stringify(x).toLowerCase().includes(term);
+          });
+        }
+
+        els.thirdPartyContactsOut.textContent = JSON.stringify(list ?? parsed ?? text, null, 2);
+        els.thirdPartyContactsStatus.textContent = `OK (${res.status}) — ${Array.isArray(list) ? list.length : '?'} items`;
+
+      } catch (err) {
+        els.thirdPartyContactsOut.textContent = JSON.stringify({ ok: false, error: String(err) }, null, 2);
+        els.thirdPartyContactsStatus.textContent = "Network error (see output).";
+      } finally {
+        els.btnFetchThirdPartyContacts.disabled = false;
+      }
+    }
+
+    globalThis.fetchThirdPartyContacts = fetchThirdPartyContacts;
+
+
+    async function fetchMicInfo() {
+      let els;
+      try { els = getPageEls(); } catch (err) { console.error(err); return; }
+
+      const url = `${WORKER_BASE}/mic/accountcontactinfo`;
+      els.micInfoStatus.textContent = `GET ${url}`;
+      els.micInfoOut.textContent = "Loading…";
+
+      els.btnFetchMicInfo.disabled = true;
+
+      try {
+        const res = await fetch(url, { method: "GET" });
+        const text = await res.text().catch(() => "");
+
+        let parsed = null;
+        try { parsed = text ? JSON.parse(text) : null; } catch { parsed = null; }
+
+        if (!res.ok) {
+          els.micInfoOut.textContent = JSON.stringify(
+            { ok: false, status: res.status, body: parsed ?? text },
+            null,
+            2
+          );
+          els.micInfoStatus.textContent = `Request failed: ${res.status}`;
+          return;
+        }
+
+        let list = parsed;
+        if (parsed && Array.isArray(parsed.Results)) list = parsed.Results;
+        if (parsed && Array.isArray(parsed.results)) list = parsed.results;
+        if (parsed && Array.isArray(parsed.value)) list = parsed.value;
+
+        // Optional client-side filter
+        const term = String(els.micInfoFilter?.value || "").trim().toLowerCase();
+        if (term && Array.isArray(list)) {
+          list = list.filter((x) => {
+            return JSON.stringify(x).toLowerCase().includes(term);
+          });
+        }
+
+        els.micInfoOut.textContent = JSON.stringify(list ?? parsed ?? text, null, 2);
+        els.micInfoStatus.textContent = `OK (${res.status})`;
+
+        if (Array.isArray(list)) {
+          els.micInfoStatus.textContent += ` — ${list.length} items`;
+        }
+
+      } catch (err) {
+        els.micInfoOut.textContent = JSON.stringify({ ok: false, error: String(err) }, null, 2);
+        els.micInfoStatus.textContent = "Network error (see output).";
+      } finally {
+        els.btnFetchMicInfo.disabled = false;
+      }
+    }
+
+    globalThis.fetchMicInfo = fetchMicInfo;
+
+
+    function bootRealEstateGet() {
+      let els;
+      try { els = getPageEls(); } catch (err) { console.error(err); return; }
+
+      if (!String(els.utc.value || "").trim()) {
+        els.utc.value = setUtcToLastHours(1);
+      }
+
+      if (els.btnFetch.dataset.bound === "1") return;
+      els.btnFetch.dataset.bound = "1";
+
+      els.btnLast24.addEventListener("click", () => {
+        els.utc.value = setUtcToLastHours(24);
+      });
+
+      els.btnFetch.addEventListener("click", () => {
+        const fn = globalThis.fetchChanges;
+        if (typeof fn !== "function") {
+          els.status.textContent = "fetchChanges() is not available.";
+          console.error("fetchChanges is not a function:", fn);
+          return;
+        }
+        fn();
+      });
+    }
+
+    function bootCustomFieldsSection() {
+      let els;
+      try { els = getPageEls(); } catch (err) { console.error(err); return; }
+
+      if (els.btnFetchCustomFields.dataset.bound === "1") return;
+      els.btnFetchCustomFields.dataset.bound = "1";
+
+      els.btnFetchCustomFields.addEventListener("click", () => fetchCustomFields());
+
+      if (els.cfSearch) {
+        els.cfSearch.addEventListener("keydown", (e) => {
+          if (e.key === "Enter") fetchCustomFields();
+        });
+      }
+    }
+
+    function bootApplicationsSection() {
+      let els;
+      try { els = getPageEls(); } catch (err) { console.error(err); return; }
+
+      if (els.btnFetchApplications.dataset.bound === "1") return;
+      els.btnFetchApplications.dataset.bound = "1";
+
+      els.btnFetchApplications.addEventListener("click", () => fetchApplications());
+
+      if (els.appsFilter) {
+        els.appsFilter.addEventListener("keydown", (e) => {
+          if (e.key === "Enter") fetchApplications();
+        });
+      }
+    }
+
+
+
+    function bootCalendarSection() {
+      let els;
+      try { els = getPageEls(); } catch (err) { console.error(err); return; }
+
+      if (els.btnFetchCalendar.dataset.bound === "1") return;
+      els.btnFetchCalendar.dataset.bound = "1";
+
+      els.btnFetchCalendar.addEventListener("click", () => fetchCalendarItems());
+
+      if (els.calendarFilter) {
+        els.calendarFilter.addEventListener("keydown", (e) => {
+          if (e.key === "Enter") fetchCalendarItems();
+        });
+      }
+    }
+
+    function bootCalendarDetailsSection() {
+      let els;
+      try { els = getPageEls(); } catch (err) { console.error(err); return; }
+
+      if (els.btnFetchCalendarDetails.dataset.bound === "1") return;
+      els.btnFetchCalendarDetails.dataset.bound = "1";
+
+      els.btnFetchCalendarDetails.addEventListener("click", () => fetchCalendarDetails());
+    }
+
+    function bootCalendarLookupSection() {
+      let els;
+      try { els = getPageEls(); } catch (err) { console.error(err); return; }
+
+      if (els.btnFetchCalendarLookup.dataset.bound === "1") return;
+      els.btnFetchCalendarLookup.dataset.bound = "1";
+
+      els.btnFetchCalendarLookup.addEventListener("click", () => fetchCalendarLookup());
+
+      if (els.calendarLookupFilter) {
+        els.calendarLookupFilter.addEventListener("keydown", (e) => {
+          if (e.key === "Enter") fetchCalendarLookup();
+        });
+      }
+    }
+
+    function bootConnectionAllSection() {
+      let els;
+      try { els = getPageEls(); } catch (err) { console.error(err); return; }
+
+      if (els.btnFetchConnectionAll.dataset.bound === "1") return;
+      els.btnFetchConnectionAll.dataset.bound = "1";
+
+      els.btnFetchConnectionAll.addEventListener("click", () => fetchConnectionAll());
+
+      if (els.connectionAllFilter) {
+        els.connectionAllFilter.addEventListener("keydown", (e) => {
+          if (e.key === "Enter") fetchConnectionAll();
+        });
+      }
+    }
+
+    function bootThirdPartyContactsSection() {
+      let els;
+      try { els = getPageEls(); } catch (err) { console.error(err); return; }
+
+      if (els.btnFetchThirdPartyContacts.dataset.bound === "1") return;
+      els.btnFetchThirdPartyContacts.dataset.bound = "1";
+
+      els.btnFetchThirdPartyContacts.addEventListener("click", () => fetchThirdPartyContacts());
+
+      if (els.thirdPartyContactsFilter) {
+        els.thirdPartyContactsFilter.addEventListener("keydown", (e) => {
+          if (e.key === "Enter") fetchThirdPartyContacts();
+        });
+      }
+    }
+
+    function bootMicInfoSection() {
+      let els;
+      try { els = getPageEls(); } catch (err) { console.error(err); return; }
+
+      if (els.btnFetchMicInfo.dataset.bound === "1") return;
+      els.btnFetchMicInfo.dataset.bound = "1";
+
+      els.btnFetchMicInfo.addEventListener("click", () => fetchMicInfo());
+
+      if (els.micInfoFilter) {
+        els.micInfoFilter.addEventListener("keydown", (e) => {
+          if (e.key === "Enter") fetchMicInfo();
+        });
+      }
+    }
+
+    function bootAccountsSection() {
+      let els;
+      try { els = getPageEls(); } catch (err) { console.error(err); return; }
+
+      if (els.btnFetchAccounts.dataset.bound === "1") return;
+      els.btnFetchAccounts.dataset.bound = "1";
+
+      els.btnFetchAccounts.addEventListener("click", () => fetchAccounts());
+
+      if (els.accountsFilter) {
+        els.accountsFilter.addEventListener("keydown", (e) => {
+          if (e.key === "Enter") fetchAccounts();
+        });
+      }
+    }
+
+    async function fetchOfficeMls() {
+      let els;
+      try { els = getPageEls(); } catch (err) { console.error(err); return; }
+
+      // Use last 30 days to avoid timeout - adjust as needed
+      const ms30Days = 30 * 24 * 60 * 60 * 1000;
+      const since = new Date(Date.now() - ms30Days).toISOString().replace(/\.\d{3}Z$/, "Z");
+      const url = `${WORKER_BASE}/changes?since=${encodeURIComponent(since)}`;
+      els.officeMlsStatus.textContent = `Fetching all contacts and filtering for Office MLS Active...`;
+      els.officeMlsOut.textContent = "Loading…";
+
+      els.btnFetchOfficeMls.disabled = true;
+
+      try {
+        const res = await fetch(url, { method: "GET" });
+        const text = await res.text().catch(() => "");
+
+        let parsed = null;
+        try { parsed = text ? JSON.parse(text) : null; } catch { parsed = null; }
+
+        if (!res.ok) {
+          els.officeMlsOut.textContent = JSON.stringify(
+            { ok: false, status: res.status, body: parsed ?? text },
+            null,
+            2
+          );
+          els.officeMlsStatus.textContent = `Request failed: ${res.status}`;
+          return;
+        }
+
+        // Parse the response - it should be an array of contacts
+        let contacts = parsed;
+        if (parsed && Array.isArray(parsed.Results)) contacts = parsed.Results;
+        if (parsed && Array.isArray(parsed.results)) contacts = parsed.results;
+        if (parsed && Array.isArray(parsed.value)) contacts = parsed.value;
+
+        if (!Array.isArray(contacts)) {
+          els.officeMlsOut.textContent = JSON.stringify({ error: "Unexpected response format", data: parsed }, null, 2);
+          els.officeMlsStatus.textContent = "Unexpected response format";
+          return;
+        }
+
+        // Filter for contacts with MembershipType "Office MLS" AND MembershipStatus "Active"
+        const filtered = contacts.filter(contact => {
+          if (!contact.Memberships || !Array.isArray(contact.Memberships)) return false;
+          return contact.Memberships.some(m =>
+            m.MembershipType === "Office MLS" && m.MembershipStatus === "Active"
+          );
+        });
+
+        // Optional client-side name filter
+        let result = filtered;
+        const term = String(els.officeMlsFilter?.value || "").trim().toLowerCase();
+        if (term) {
+          result = filtered.filter(c => {
+            const searchable = [
+              c.Name || "",
+              c.FirstName || "",
+              c.LastName || "",
+              c.AccountNumber || ""
+            ].join(" ").toLowerCase();
+            return searchable.includes(term);
+          });
+        }
+
+        // Map to simplified output showing relevant info
+        const output = result.map(c => ({
+          ContactId: c.ContactId,
+          Name: c.Name,
+          Status: c.Status,
+          AccountNumber: c.AccountNumber,
+          MLSId: c.RealEstateEditionFields?.MLSId,
+          MLSOfficeId: c.RealEstateEditionFields?.MLSOfficeId,
+          OfficeMlsMembership: c.Memberships.find(m => m.MembershipType === "Office MLS" && m.MembershipStatus === "Active"),
+          PrimaryEmail: c.Emails?.find(e => e.IsPrimary)?.Email || c.Emails?.[0]?.Email,
+          PrimaryPhone: c.Phones?.find(p => p.IsPrimary)?.Number || c.Phones?.[0]?.Number
+        }));
+
+        els.officeMlsOut.textContent = JSON.stringify(output, null, 2);
+        els.officeMlsStatus.textContent = `OK — Found ${output.length} contacts with Office MLS Active (from ${contacts.length} total)`;
+
+      } catch (err) {
+        els.officeMlsOut.textContent = JSON.stringify({ ok: false, error: String(err) }, null, 2);
+        els.officeMlsStatus.textContent = "Network error (see output).";
+      } finally {
+        els.btnFetchOfficeMls.disabled = false;
+      }
+    }
+
+    globalThis.fetchOfficeMls = fetchOfficeMls;
+
+    function bootOfficeMlsSection() {
+      let els;
+      try { els = getPageEls(); } catch (err) { console.error(err); return; }
+
+      if (els.btnFetchOfficeMls.dataset.bound === "1") return;
+      els.btnFetchOfficeMls.dataset.bound = "1";
+
+      els.btnFetchOfficeMls.addEventListener("click", () => fetchOfficeMls());
+
+      if (els.officeMlsFilter) {
+        els.officeMlsFilter.addEventListener("keydown", (e) => {
+          if (e.key === "Enter") fetchOfficeMls();
+        });
+      }
+
+      // Sync button
+      if (els.btnSyncToDb) {
+        els.btnSyncToDb.addEventListener("click", () => syncOfficeMlsToDb());
+      }
+
+      // View from DB button
+      if (els.btnViewFromDb) {
+        els.btnViewFromDb.addEventListener("click", () => fetchFromDb());
+      }
+
+      // Run Sync Now button
+      if (els.btnRunSync) {
+        els.btnRunSync.addEventListener("click", () => runSyncNow());
+      }
+    }
+
+    const WRAPSHEET_BASE = "https://wrapsheet.bonitaspringsrealtors.workers.dev";
+
+    async function runSyncNow() {
+      let els;
+      try { els = getPageEls(); } catch (err) { console.error(err); return; }
+
+      els.officeMlsStatus.textContent = "🔄 Running full sync from GrowthZone... (this may take a minute)";
+      els.officeMlsOut.textContent = "Syncing...";
+      els.btnRunSync.disabled = true;
+
+      try {
+        const res = await fetch(`${WRAPSHEET_BASE}/api/offices/run-sync`, {
+          method: "POST"
+        });
+        const data = await res.json();
+
+        if (res.ok) {
+          els.officeMlsOut.textContent = JSON.stringify(data, null, 2);
+          els.officeMlsStatus.textContent = `✓ Sync complete! Inserted: ${data.inserted}, Updated: ${data.updated}, Addresses: ${data.addressCount}, Phones: ${data.phoneCount}`;
+        } else {
+          els.officeMlsOut.textContent = JSON.stringify(data, null, 2);
+          els.officeMlsStatus.textContent = `✗ Sync failed: ${data.error}`;
+        }
+      } catch (err) {
+        els.officeMlsOut.textContent = JSON.stringify({ error: String(err) }, null, 2);
+        els.officeMlsStatus.textContent = "Network error (see output).";
+      } finally {
+        els.btnRunSync.disabled = false;
+      }
+    }
+
+    globalThis.runSyncNow = runSyncNow;
+
+    async function fetchFromDb() {
+      let els;
+      try { els = getPageEls(); } catch (err) { console.error(err); return; }
+
+      els.officeMlsStatus.textContent = "Fetching from D1 database...";
+      els.officeMlsOut.textContent = "Loading…";
+      els.btnViewFromDb.disabled = true;
+
+      try {
+        const res = await fetch(`${WRAPSHEET_BASE}/api/offices`);
+        const data = await res.json();
+
+        if (!res.ok) {
+          els.officeMlsOut.textContent = JSON.stringify({ ok: false, error: data.error }, null, 2);
+          els.officeMlsStatus.textContent = `Request failed: ${res.status}`;
+          return;
+        }
+
+        els.officeMlsOut.textContent = JSON.stringify(data, null, 2);
+        els.officeMlsStatus.textContent = `✓ Loaded ${Array.isArray(data) ? data.length : '?'} offices from D1 database`;
+
+      } catch (err) {
+        els.officeMlsOut.textContent = JSON.stringify({ ok: false, error: String(err) }, null, 2);
+        els.officeMlsStatus.textContent = "Network error (see output).";
+      } finally {
+        els.btnViewFromDb.disabled = false;
+      }
+    }
+
+    globalThis.fetchFromDb = fetchFromDb;
+
+    // Store last fetched data for sync
+    let lastFetchedOfficeMls = [];
+
+    async function syncOfficeMlsToDb() {
+      let els;
+      try { els = getPageEls(); } catch (err) { console.error(err); return; }
+
+      // Get the data from the output
+      try {
+        const data = JSON.parse(els.officeMlsOut.textContent);
+        if (!Array.isArray(data) || data.length === 0) {
+          els.officeMlsStatus.textContent = "No data to sync. Fetch first!";
+          return;
+        }
+
+        els.officeMlsStatus.textContent = `Syncing ${data.length} offices to database...`;
+        els.btnSyncToDb.disabled = true;
+
+        // Transform to match API expected format
+        const contacts = data.map(c => ({
+          contact_id: c.ContactId,
+          name: c.Name,
+          nrds_id: c.AccountNumber,
+          mls_id: c.MLSId,
+          mls_office_id: c.MLSOfficeId,
+          primary_email: c.PrimaryEmail,
+          primary_phone: c.PrimaryPhone,
+          member_status: c.OfficeMlsMembership?.MembershipStatus || 'Active',
+          membership_start_date: c.OfficeMlsMembership?.StartDate,
+          membership_expiration_date: c.OfficeMlsMembership?.ExpirationDate
+        }));
+
+        const res = await fetch(`${WRAPSHEET_BASE}/api/offices/sync`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ contacts })
+        });
+
+        const result = await res.json();
+
+        if (res.ok) {
+          els.officeMlsStatus.textContent = `✓ Synced! Inserted: ${result.inserted}, Updated: ${result.updated}`;
+        } else {
+          els.officeMlsStatus.textContent = `✗ Sync failed: ${result.error || 'Unknown error'}`;
+        }
+
+      } catch (err) {
+        els.officeMlsStatus.textContent = `✗ Sync error: ${err.message}`;
+      } finally {
+        els.btnSyncToDb.disabled = false;
+      }
+    }
+
+    globalThis.syncOfficeMlsToDb = syncOfficeMlsToDb;
+
+    function startApp() {
+      const boot = () => {
+        bootRealEstateGet();
+        bootCustomFieldsSection();
+        bootAccountsSection();
+        bootApplicationsSection();
+        bootCalendarSection();
+        bootCalendarDetailsSection();
+        bootCalendarLookupSection();
+        bootConnectionAllSection();
+        bootThirdPartyContactsSection();
+        bootMicInfoSection();
+        bootOfficeMlsSection();
+      };
+
+      if (document.readyState === "loading") {
+        document.addEventListener("DOMContentLoaded", boot, { once: true });
+      } else {
+        boot();
+      }
+    }
+
+    startApp();
+  </script>
+</body>
+
+</html>

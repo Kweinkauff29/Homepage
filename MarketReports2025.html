@@ -1,158 +1,531 @@
 <!doctype html>
 <html lang="en">
+
 <head>
   <meta charset="utf-8" />
   <title>Bonita Springs-Estero REALTORS® — Market Reports</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <!-- Fonts -->
-  <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;600&family=Roboto:wght@300;400;500&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;600&family=Roboto:wght@300;400;500&display=swap"
+    rel="stylesheet" />
   <!-- Icons -->
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" />
 
   <style>
-    :root{
-      --brand-primary:#0a3a7a;     /* deep blue */
-      --brand-accent:#0ca7a4;      /* teal accent you already use */
-      --ink:#1e1e1e;
-      --ink-2:#4b4b4b;
-      --bg:#ffffff;
-      --card:#ffffff;
-      --muted:#f3f5f7;
-      --ring:rgba(12,167,164,.28);
-      --radius:18px;
-      --gap:20px;
-      --shadow:0 6px 22px rgba(0,0,0,.08);
+    :root {
+      --brand-primary: #0a3a7a;
+      /* deep blue */
+      --brand-accent: #0ca7a4;
+      /* teal accent you already use */
+      --ink: #1e1e1e;
+      --ink-2: #4b4b4b;
+      --bg: #ffffff;
+      --card: #ffffff;
+      --muted: #f3f5f7;
+      --ring: rgba(12, 167, 164, .28);
+      --radius: 18px;
+      --gap: 20px;
+      --shadow: 0 6px 22px rgba(0, 0, 0, .08);
     }
-    *{box-sizing:border-box}
-    html,body{margin:0;background:var(--bg);color:var(--ink);font-family:Roboto,system-ui,-apple-system,Segoe UI,Arial,sans-serif}
-    a{color:inherit;text-decoration:none}
-    a:focus-visible,button:focus-visible{outline:3px solid var(--brand-accent);outline-offset:2px}
+
+    * {
+      box-sizing: border-box
+    }
+
+    html,
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--ink);
+      font-family: Roboto, system-ui, -apple-system, Segoe UI, Arial, sans-serif
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none
+    }
+
+    a:focus-visible,
+    button:focus-visible {
+      outline: 3px solid var(--brand-accent);
+      outline-offset: 2px
+    }
 
     /* Page shell */
-    .wrap{max-width:1200px;margin:0 auto;padding:24px}
-    header.page-head{display:flex;flex-direction:column;gap:8px;margin-bottom:16px}
-    .kicker{font:600 12px/1 Oswald,Arial,sans-serif;letter-spacing:.12em;color:var(--brand-accent);text-transform:uppercase}
-    h1{font:600 36px/1.15 Oswald,Arial,sans-serif;margin:0;color:var(--brand-primary)}
-    .sub{color:var(--ink-2)}
+    .wrap {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 24px
+    }
+
+    header.page-head {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      margin-bottom: 16px
+    }
+
+    .kicker {
+      font: 600 12px/1 Oswald, Arial, sans-serif;
+      letter-spacing: .12em;
+      color: var(--brand-accent);
+      text-transform: uppercase
+    }
+
+    h1 {
+      font: 600 36px/1.15 Oswald, Arial, sans-serif;
+      margin: 0;
+      color: var(--brand-primary)
+    }
+
+    .sub {
+      color: var(--ink-2)
+    }
 
     /* Year tabs (sticky like a magazine nav strip) */
-    .year-tabs{
-      position:sticky;top:0;z-index:20;background:linear-gradient(var(--bg),var(--bg));
-      padding:12px 0;margin:8px 0 20px;display:flex;gap:8px;flex-wrap:wrap;
-      border-bottom:1px solid #e9eef2;
+    .year-tabs {
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      background: linear-gradient(var(--bg), var(--bg));
+      padding: 12px 0;
+      margin: 8px 0 20px;
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      border-bottom: 1px solid #e9eef2;
     }
-    .year-btn{
-      border:none;background:#e9eef2;color:#08325f;font:600 13px/1 Oswald,Arial,sans-serif;letter-spacing:.08em;
-      text-transform:uppercase;padding:10px 14px;border-radius:12px;cursor:pointer;transition:transform .08s ease;
+
+    .year-btn {
+      border: none;
+      background: #e9eef2;
+      color: #08325f;
+      font: 600 13px/1 Oswald, Arial, sans-serif;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      padding: 10px 14px;
+      border-radius: 12px;
+      cursor: pointer;
+      transition: transform .08s ease;
     }
-    .year-btn:hover{transform:translateY(-1px)}
-    .year-btn.active{background:var(--brand-primary);color:#fff}
+
+    .year-btn:hover {
+      transform: translateY(-1px)
+    }
+
+    .year-btn.active {
+      background: var(--brand-primary);
+      color: #fff
+    }
 
     .e-con {
-        padding: 0 !important;
+      padding: 0 !important;
     }
 
     /* Feature block (hero) */
-    .feature{
-      display:grid;grid-template-columns:1fr 1fr;gap:var(--gap);align-items:stretch;margin-bottom:28px;
+    .feature {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: var(--gap);
+      align-items: stretch;
+      margin-bottom: 28px;
     }
-    .feature-card{
-      position:relative;overflow:hidden;border-radius:var(--radius);box-shadow:var(--shadow);background:var(--card);
-      display:grid;grid-template-rows:minmax(240px,40vh) auto;
+
+    .feature-card {
+      position: relative;
+      overflow: hidden;
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      background: var(--card);
+      display: grid;
+      grid-template-rows: minmax(240px, 40vh) auto;
     }
-    .feature-media{position:relative;overflow:hidden}
-    .feature-media img{width:100%;height:100%;object-fit:cover;display:block}
-    .badge{
-      position:absolute;top:14px;left:14px;background:var(--brand-accent);color:#fff;font:700 12px/1 Oswald,Arial,sans-serif;
-      padding:8px 10px;border-radius:999px;letter-spacing:.08em;text-transform:uppercase
+
+    .feature-media {
+      position: relative;
+      overflow: hidden
     }
-    .feature-body{padding:18px}
-    .eyebrow{font:600 12px/1 Oswald,Arial,sans-serif;color:#6d7a86;letter-spacing:.1em;text-transform:uppercase}
-    .feature h2{font:600 28px/1.2 Oswald,Arial,sans-serif;margin:6px 0 8px}
-    .meta{color:#6d7a86;font-size:14px;margin-bottom:10px}
-    .chip-row{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
-    .chip{
-      border:1px solid #dbe5ec;background:#fff;padding:6px 10px;border-radius:999px;font:600 12px/1 Oswald,Arial,sans-serif;
-      letter-spacing:.08em;text-transform:uppercase;color:#0a355f
+
+    .feature-media img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block
     }
-    .cta-row{display:flex;gap:10px;margin-top:12px;flex-wrap:wrap}
-    .btn{
-      display:inline-flex;align-items:center;gap:8px;border-radius:999px;border:2px solid var(--brand-primary);
-      padding:10px 14px;font:600 13px/1 Oswald,Arial,sans-serif;letter-spacing:.08em;text-transform:uppercase;cursor:pointer
+
+    .badge {
+      position: absolute;
+      top: 14px;
+      left: 14px;
+      background: var(--brand-accent);
+      color: #fff;
+      font: 700 12px/1 Oswald, Arial, sans-serif;
+      padding: 8px 10px;
+      border-radius: 999px;
+      letter-spacing: .08em;
+      text-transform: uppercase
     }
-    .btn.primary{background:var(--brand-primary);color:#fff}
-    $1
-    .btn.tertiary{background:#fff;border:2px solid var(--brand-accent);color:var(--brand-accent)}
-    .btn:hover{filter:brightness(1.02)}
-    .btn i{font-size:14px}
+
+    .feature-body {
+      padding: 18px
+    }
+
+    .eyebrow {
+      font: 600 12px/1 Oswald, Arial, sans-serif;
+      color: #6d7a86;
+      letter-spacing: .1em;
+      text-transform: uppercase
+    }
+
+    .feature h2 {
+      font: 600 28px/1.2 Oswald, Arial, sans-serif;
+      margin: 6px 0 8px
+    }
+
+    .meta {
+      color: #6d7a86;
+      font-size: 14px;
+      margin-bottom: 10px
+    }
+
+    .chip-row {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-top: 12px
+    }
+
+    .chip {
+      border: 1px solid #dbe5ec;
+      background: #fff;
+      padding: 6px 10px;
+      border-radius: 999px;
+      font: 600 12px/1 Oswald, Arial, sans-serif;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      color: #0a355f
+    }
+
+    .cta-row {
+      display: flex;
+      gap: 10px;
+      margin-top: 12px;
+      flex-wrap: wrap
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      border-radius: 999px;
+      border: 2px solid var(--brand-primary);
+      padding: 10px 14px;
+      font: 600 13px/1 Oswald, Arial, sans-serif;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      cursor: pointer
+    }
+
+    .btn.primary {
+      background: var(--brand-primary);
+      color: #fff
+    }
+
+    $1 .btn.tertiary {
+      background: #fff;
+      border: 2px solid var(--brand-accent);
+      color: var(--brand-accent)
+    }
+
+    .btn:hover {
+      filter: brightness(1.02)
+    }
+
+    .btn i {
+      font-size: 14px
+    }
 
     /* NEW: Right-rail = vertical list of thumbnails linking out to YouTube */
-    .video-rail{display:grid;grid-template-rows:auto 1fr;height:auto;min-height:0;overflow:hidden;contain:size}
-    .video-rail .vhead{
-      padding:12px 14px;border-bottom:1px solid #e5edf4;background:#f9fbfd;
-      font:600 12px/1 Oswald,Arial,sans-serif;color:#0a355f;letter-spacing:.08em;text-transform:uppercase;
+    .video-rail {
+      display: grid;
+      grid-template-rows: auto 1fr;
+      height: auto;
+      min-height: 0;
+      overflow: hidden;
+      contain: size
     }
-    .video-list{flex:1;overflow:auto;padding:12px;display:flex;flex-direction:column;gap:10px;background:#f9fbfd; min-height:0;
-}
-    .vitem{
-      display:flex;gap:10px;align-items:center;border:1px solid #dbe5ec;border-radius:12px;padding:8px;background:#fff;
-      transition:transform .08s ease, box-shadow .2s ease;
+
+    .video-rail .vhead {
+      padding: 12px 14px;
+      border-bottom: 1px solid #e5edf4;
+      background: #f9fbfd;
+      font: 600 12px/1 Oswald, Arial, sans-serif;
+      color: #0a355f;
+      letter-spacing: .08em;
+      text-transform: uppercase;
     }
-    .vitem:hover{transform:translateY(-1px);box-shadow:0 8px 20px rgba(0,0,0,.08)}
-    .vthumb{flex:0 0 120px;height:68px;border-radius:8px;overflow:hidden;background:#dfe7ee}
-    .vthumb img{width:100%;height:100%;object-fit:cover;display:block}
-    .vtitle{font:600 12px/1.2 Oswald,Arial,sans-serif;color:#0a355f}
-    @media (max-width:1000px){.vthumb{flex-basis:100px;height:60px}}
+
+    .video-list {
+      flex: 1;
+      overflow: auto;
+      padding: 12px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      background: #f9fbfd;
+      min-height: 0;
+    }
+
+    .vitem {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+      border: 1px solid #dbe5ec;
+      border-radius: 12px;
+      padding: 8px;
+      background: #fff;
+      transition: transform .08s ease, box-shadow .2s ease;
+    }
+
+    .vitem:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 8px 20px rgba(0, 0, 0, .08)
+    }
+
+    .vthumb {
+      flex: 0 0 120px;
+      height: 68px;
+      border-radius: 8px;
+      overflow: hidden;
+      background: #dfe7ee
+    }
+
+    .vthumb img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block
+    }
+
+    .vtitle {
+      font: 600 12px/1.2 Oswald, Arial, sans-serif;
+      color: #0a355f
+    }
+
+    @media (max-width:1000px) {
+      .vthumb {
+        flex-basis: 100px;
+        height: 60px
+      }
+    }
 
     /* Grid of cards (magazine blocks) */
-    .grid{display:grid;gap:var(--gap);grid-template-columns:repeat(3,minmax(0,1fr))}
-    .card{
-      background:var(--card);border-radius:var(--radius);overflow:hidden;box-shadow:var(--shadow);display:flex;flex-direction:column;
-      transition:transform .08s ease, box-shadow .2s ease;
+    .grid {
+      display: grid;
+      gap: var(--gap);
+      grid-template-columns: repeat(3, minmax(0, 1fr))
     }
-    .card:hover{transform:translateY(-2px);box-shadow:0 10px 28px rgba(0,0,0,.12)}
-    .card .media{aspect-ratio:16/9;overflow:hidden;background:#dfe7ee}
-    .card img{width:100%;height:100%;object-fit:cover;display:block}
-    .card .body{padding:14px 16px}
-    .card h3{font:600 18px/1.25 Oswald,Arial,sans-serif;margin:2px 0 8px;color:#0a355f}
-    .card .meta{font-size:13px;margin-bottom:8px}
-    .pill-row{display:flex;gap:8px;flex-wrap:wrap}
-    .pill{background:#eef4f7;color:#0a355f;border-radius:999px;padding:6px 10px;font:600 11px/1 Oswald,Arial,sans-serif;letter-spacing:.06em}
-    .links{display:flex;gap:10px;padding:0 16px 16px}
-    .link-btn{display:inline-flex;gap:8px;align-items:center;border:1px solid #d8e4ec;border-radius:999px;padding:8px 12px;font:600 12px/1 Oswald,Arial,sans-serif;text-transform:uppercase}
-    .link-btn:hover{background:var(--muted)}
-    .load-more{display:block;margin:26px auto 10px}
-    .empty{padding:24px;border:1px dashed #cdd9e1;border-radius:14px;background:#f9fbfc;text-align:center;color:#607489}
+
+    .card {
+      background: var(--card);
+      border-radius: var(--radius);
+      overflow: hidden;
+      box-shadow: var(--shadow);
+      display: flex;
+      flex-direction: column;
+      transition: transform .08s ease, box-shadow .2s ease;
+    }
+
+    .card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 28px rgba(0, 0, 0, .12)
+    }
+
+    .card .media {
+      aspect-ratio: 16/9;
+      overflow: hidden;
+      background: #dfe7ee
+    }
+
+    .card img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block
+    }
+
+    .card .body {
+      padding: 14px 16px
+    }
+
+    .card h3 {
+      font: 600 18px/1.25 Oswald, Arial, sans-serif;
+      margin: 2px 0 8px;
+      color: #0a355f
+    }
+
+    .card .meta {
+      font-size: 13px;
+      margin-bottom: 8px
+    }
+
+    .pill-row {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap
+    }
+
+    .pill {
+      background: #eef4f7;
+      color: #0a355f;
+      border-radius: 999px;
+      padding: 6px 10px;
+      font: 600 11px/1 Oswald, Arial, sans-serif;
+      letter-spacing: .06em
+    }
+
+    .links {
+      display: flex;
+      gap: 10px;
+      padding: 0 16px 16px
+    }
+
+    .link-btn {
+      display: inline-flex;
+      gap: 8px;
+      align-items: center;
+      border: 1px solid #d8e4ec;
+      border-radius: 999px;
+      padding: 8px 12px;
+      font: 600 12px/1 Oswald, Arial, sans-serif;
+      text-transform: uppercase
+    }
+
+    .link-btn:hover {
+      background: var(--muted)
+    }
+
+    .load-more {
+      display: block;
+      margin: 26px auto 10px
+    }
+
+    .empty {
+      padding: 24px;
+      border: 1px dashed #cdd9e1;
+      border-radius: 14px;
+      background: #f9fbfc;
+      text-align: center;
+      color: #607489
+    }
 
     /* Document viewer (popup) */
-    .viewer{position:fixed;inset:0;z-index:1000;display:none}
-    .viewer.open{display:block}
-    .viewer__backdrop{position:absolute;inset:0;background:rgba(0,0,0,.55);backdrop-filter:saturate(.8) blur(2px)}
-    .viewer__dialog{position:relative;z-index:2;width:min(1120px,96vw);height:min(86vh,1000px);margin:6vh auto;background:#fff;border-radius:var(--radius);box-shadow:var(--shadow);display:flex;flex-direction:column;overflow:hidden}
-    .viewer__bar{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:10px 12px;border-bottom:1px solid #e5edf4;background:#f9fbfd}
-    .viewer__title{font:600 14px/1.2 Oswald,Arial,sans-serif;color:#0a355f}
-    .viewer__actions{display:flex;gap:8px;flex-wrap:wrap}
-    .viewer__frame{flex:1;background:#f0f3f6}
-    .viewer__frame iframe{width:100%;height:100%;border:0}
+    .viewer {
+      position: fixed;
+      inset: 0;
+      z-index: 1000;
+      display: none
+    }
 
-    @media (max-width:640px){
-      .viewer__dialog{margin:10px auto;height:92vh}
-      .viewer__title{font-size:13px}
+    .viewer.open {
+      display: block
+    }
+
+    .viewer__backdrop {
+      position: absolute;
+      inset: 0;
+      background: rgba(0, 0, 0, .55);
+      backdrop-filter: saturate(.8) blur(2px)
+    }
+
+    .viewer__dialog {
+      position: relative;
+      z-index: 2;
+      width: min(1120px, 96vw);
+      height: min(86vh, 1000px);
+      margin: 6vh auto;
+      background: #fff;
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      display: flex;
+      flex-direction: column;
+      overflow: hidden
+    }
+
+    .viewer__bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      padding: 10px 12px;
+      border-bottom: 1px solid #e5edf4;
+      background: #f9fbfd
+    }
+
+    .viewer__title {
+      font: 600 14px/1.2 Oswald, Arial, sans-serif;
+      color: #0a355f
+    }
+
+    .viewer__actions {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap
+    }
+
+    .viewer__frame {
+      flex: 1;
+      background: #f0f3f6
+    }
+
+    .viewer__frame iframe {
+      width: 100%;
+      height: 100%;
+      border: 0
+    }
+
+    @media (max-width:640px) {
+      .viewer__dialog {
+        margin: 10px auto;
+        height: 92vh
+      }
+
+      .viewer__title {
+        font-size: 13px
+      }
     }
 
     /* Responsive */
-    @media (max-width:1000px){
-      .feature{grid-template-columns:1fr}
-      .grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+    @media (max-width:1000px) {
+      .feature {
+        grid-template-columns: 1fr
+      }
+
+      .grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr))
+      }
     }
-    @media (max-width:640px){
-      .wrap{padding:16px}
-      h1{font-size:28px}
-      .grid{grid-template-columns:1fr}
-      .feature h2{font-size:22px}
+
+    @media (max-width:640px) {
+      .wrap {
+        padding: 16px
+      }
+
+      h1 {
+        font-size: 28px
+      }
+
+      .grid {
+        grid-template-columns: 1fr
+      }
+
+      .feature h2 {
+        font-size: 22px
+      }
     }
   </style>
 </head>
+
 <body>
   <div class="wrap">
     <header class="page-head" aria-label="Page header">
@@ -170,7 +543,8 @@
     <!-- Grid -->
     <section aria-label="All reports">
       <div id="grid" class="grid"></div>
-      <button id="loadMore" class="btn load-more secondary" style="display:none;"><i class="fa fa-plus"></i> Load more</button>
+      <button id="loadMore" class="btn load-more secondary" style="display:none;"><i class="fa fa-plus"></i> Load
+        more</button>
       <div id="empty" class="empty" style="display:none;">No reports for this year yet.</div>
     </section>
   </div>
@@ -179,163 +553,192 @@
     /* -------------------------------------------
        1) DATA: just paste the next month below
        ------------------------------------------- */
-    const DEFAULT_THUMB = "http://bonitaesterorealtors.com/wp-content/uploads/2025/11/Screenshot-2025-11-24-at-12.39.34-PM.png";
+    const DEFAULT_THUMB = "https://bonitaesterorealtors.com/wp-content/uploads/2025/12/Screenshot-2025-11-24-at-12.39.34-PM.png";
     const DEFAULT_THUMB_FR = "https://www.bonitaesterorealtors.com/wp-content/uploads/2024/09/Screenshot_3-9-2024_114456_www.bonitaesterorealtors.com_.jpeg";
 
     const REPORTS = [
       /* ===== 2025 ===== */
 
-      { year: 2025, month: "October",      fastStats: "https://bonitaesterorealtors.com/wp-content/uploads/2025/11/BER-FAST-STATS-6.pdf", frStats: "http://bonitaesterorealtors.com/wp-content/uploads/2025/11/October-FR-Report.pdf", indicators: "https://bonitaesterorealtors.com/wp-content/uploads/2025/11/Monthly-Indicator-Reports-October-2025-1.pdf", thumb: DEFAULT_THUMB },
+      {
+        year: 2025, month: "November",
+        fastStats: "https://bonitaesterorealtors.com/wp-content/uploads/2025/12/BER-FAST-STATS-8.pdf",
+        frStats: "https://bonitaesterorealtors.com/wp-content/uploads/2025/12/November-FR-Reports.pdf",
+        indicators: "https://bonitaesterorealtors.com/wp-content/uploads/2025/12/Monthly-Indicator-Reports-November-2025-1.pdf",
+        thumb: DEFAULT_THUMB
+      },
 
-      { year: 2025, month: "September",      fastStats: "https://bonitaesterorealtors.com/wp-content/uploads/2025/10/BER-FAST-STATS-September.pdf", frStats: "http://bonitaesterorealtors.com/wp-content/uploads/2025/11/Sept-FR-report.pdf", indicators: "https://bonitaesterorealtors.com/wp-content/uploads/2025/10/Monthly-Indicator-Reports-September-2025.pdf",thumb: DEFAULT_THUMB },
+      {
+        year: 2025, month: "October",
+        fastStats: "https://bonitaesterorealtors.com/wp-content/uploads/2025/11/BER-FAST-STATS-6.pdf",
+        frStats: "https://bonitaesterorealtors.com/wp-content/uploads/2025/11/October-FR-Report.pdf",
+        indicators: "https://bonitaesterorealtors.com/wp-content/uploads/2025/11/Monthly-Indicator-Reports-October-2025-1.pdf",
+        thumb: DEFAULT_THUMB
+      },
 
-      { year: 2025, month: "August",      fastStats: "https://bonitaesterorealtors.com/wp-content/uploads/2025/09/BER-FAST-STATS-5.pdf", frStats: null, indicators: "https://bonitaesterorealtors.com/wp-content/uploads/2025/09/Monthly-Indicator-Reports-August-2025-2.pdf", thumb: DEFAULT_THUMB },
-      { year: 2025, month: "July",      fastStats: "https://bonitaesterorealtors.com/wp-content/uploads/2025/08/BER-FAST-STATS-1.pdf", frStats: "https://bonitaesterorealtors.com/wp-content/uploads/2025/08/FR-Stats-July-2025.pdf", indicators: "https://bonitaesterorealtors.com/wp-content/uploads/2025/08/Monthly-Indicator-Reports-July-2025-2.pdf", thumb: DEFAULT_THUMB },
+      {
+        year: 2025, month: "September",
+        fastStats: "https://bonitaesterorealtors.com/wp-content/uploads/2025/10/BER-FAST-STATS-September.pdf",
+        frStats: "https://bonitaesterorealtors.com/wp-content/uploads/2025/11/Sept-FR-report.pdf",
+        indicators: "https://bonitaesterorealtors.com/wp-content/uploads/2025/10/Monthly-Indicator-Reports-September-2025.pdf",
+        thumb: DEFAULT_THUMB
+      },
 
-      { year: 2025, month: "June",      fastStats: "https://bonitaesterorealtors.com/wp-content/uploads/2025/08/BER-FAST-STATS.pdf",               frStats: null,                                            thumb: DEFAULT_THUMB },
-      { year: 2025, month: "May",       fastStats: null,                                                                                            frStats: "http://bonitaesterorealtors.com/wp-content/uploads/2025/11/May-FR-stats.pdf",      thumb: DEFAULT_THUMB },
-      { year: 2025, month: "April",     fastStats: "https://bonitaesterorealtors.com/wp-content/uploads/2025/05/AprFastStats.pdf",                 frStats: "https://bonitaesterorealtors.com/wp-content/uploads/2025/05/April-FR-Stats-25.pdf", thumb: DEFAULT_THUMB },
-      { year: 2025, month: "March",     fastStats: "https://bonitaesterorealtors.com/wp-content/uploads/2025/04/March-Fast-Stats.pdf",             frStats: "https://bonitaesterorealtors.com/wp-content/uploads/2025/04/March-FR-Reports.pdf",  thumb: DEFAULT_THUMB },
-      { year: 2025, month: "February",  fastStats: "https://bonitaesterorealtors.com/wp-content/uploads/2025/03/FebFastStats.pdf",                 frStats: "https://bonitaesterorealtors.com/wp-content/uploads/2025/03/Feb-2025-FR-MR.pdf",    thumb: DEFAULT_THUMB },
-      { year: 2025, month: "January",   fastStats: "https://bonitaesterorealtors.com/wp-content/uploads/2025/02/Jan-2025-MS.pdf",                  frStats: "https://bonitaesterorealtors.com/wp-content/uploads/2025/02/Jan-FR-Market-Stats.pdf", thumb: DEFAULT_THUMB },
+      { year: 2025, month: "August", fastStats: "https://bonitaesterorealtors.com/wp-content/uploads/2025/09/BER-FAST-STATS-5.pdf", frStats: null, indicators: "https://bonitaesterorealtors.com/wp-content/uploads/2025/09/Monthly-Indicator-Reports-August-2025-2.pdf", thumb: DEFAULT_THUMB },
+      { year: 2025, month: "July", fastStats: "https://bonitaesterorealtors.com/wp-content/uploads/2025/08/BER-FAST-STATS-1.pdf", frStats: "https://bonitaesterorealtors.com/wp-content/uploads/2025/08/FR-Stats-July-2025.pdf", indicators: "https://bonitaesterorealtors.com/wp-content/uploads/2025/08/Monthly-Indicator-Reports-July-2025-2.pdf", thumb: DEFAULT_THUMB },
+
+      { year: 2025, month: "June", fastStats: "https://bonitaesterorealtors.com/wp-content/uploads/2025/08/BER-FAST-STATS.pdf", frStats: null, thumb: DEFAULT_THUMB },
+      {
+        year: 2025, month: "May",
+        fastStats: null,
+        frStats: "https://bonitaesterorealtors.com/wp-content/uploads/2025/11/May-FR-stats.pdf",
+        thumb: DEFAULT_THUMB
+      },
+      { year: 2025, month: "April", fastStats: "https://bonitaesterorealtors.com/wp-content/uploads/2025/05/AprFastStats.pdf", frStats: "https://bonitaesterorealtors.com/wp-content/uploads/2025/05/April-FR-Stats-25.pdf", thumb: DEFAULT_THUMB },
+      { year: 2025, month: "March", fastStats: "https://bonitaesterorealtors.com/wp-content/uploads/2025/04/March-Fast-Stats.pdf", frStats: "https://bonitaesterorealtors.com/wp-content/uploads/2025/04/March-FR-Reports.pdf", thumb: DEFAULT_THUMB },
+      { year: 2025, month: "February", fastStats: "https://bonitaesterorealtors.com/wp-content/uploads/2025/03/FebFastStats.pdf", frStats: "https://bonitaesterorealtors.com/wp-content/uploads/2025/03/Feb-2025-FR-MR.pdf", thumb: DEFAULT_THUMB },
+      { year: 2025, month: "January", fastStats: "https://bonitaesterorealtors.com/wp-content/uploads/2025/02/Jan-2025-MS.pdf", frStats: "https://bonitaesterorealtors.com/wp-content/uploads/2025/02/Jan-FR-Market-Stats.pdf", thumb: DEFAULT_THUMB },
 
       /* ===== 2024 ===== */
-      { year: 2024, month: "December",  fastStats:"https://www.bonitaesterorealtors.com/wp-content/uploads/2025/01/December-2024-FASTSTATS.pdf", frStats:"https://www.bonitaesterorealtors.com/wp-content/uploads/2025/01/December-FR-STATS.pdf", thumb: DEFAULT_THUMB },
-      { year: 2024, month: "November",  fastStats:"https://www.bonitaesterorealtors.com/wp-content/uploads/2024/12/November-FAST-STATS.pdf",     frStats:"https://www.bonitaesterorealtors.com/wp-content/uploads/2024/12/November-FR-Report.pdf", thumb: DEFAULT_THUMB },
-      { year: 2024, month: "October",   fastStats:"https://www.bonitaesterorealtors.com/wp-content/uploads/2024/11/FAST-STATS-Oct-2024.pdf",     frStats:"https://www.bonitaesterorealtors.com/wp-content/uploads/2024/12/October-FR-Stats.pdf", thumb: DEFAULT_THUMB },
-      { year: 2024, month: "September", fastStats:"https://www.bonitaesterorealtors.com/wp-content/uploads/2024/10/BonitaSprings-Estero-7.pdf",   frStats:"https://www.bonitaesterorealtors.com/wp-content/uploads/2024/10/September-FR-Report.pdf", thumb: DEFAULT_THUMB },
-      { year: 2024, month: "August",    fastStats:"https://www.bonitaesterorealtors.com/wp-content/uploads/2024/09/BonitaSprings-Estero-6.pdf",   frStats:"https://www.bonitaesterorealtors.com/wp-content/uploads/2024/09/August-2024-FR-Stats.pdf", thumb: DEFAULT_THUMB },
-      { year: 2024, month: "July",      fastStats:"https://www.bonitaesterorealtors.com/wp-content/uploads/2024/08/July-Fasts-Stats.pdf",        frStats:"https://www.bonitaesterorealtors.com/wp-content/uploads/2024/08/July-2024-FR-Stats.pdf", thumb: DEFAULT_THUMB },
-      { year: 2024, month: "June",      fastStats:"https://www.bonitaesterorealtors.com/wp-content/uploads/2024/07/June-2024-Fast-Stats.pdf",    frStats:"http://bonitaesterorealtors.com/wp-content/uploads/2025/11/June-2025-FR-STATS-updated.pdf", thumb: DEFAULT_THUMB },
-      { year: 2024, month: "May",       fastStats:"https://www.bonitaesterorealtors.com/wp-content/uploads/2024/06/May-Fast-Stats-1.pdf",        frStats:"https://www.bonitaesterorealtors.com/wp-content/uploads/2024/06/May-FR-Stats.pdf", thumb: DEFAULT_THUMB },
-      { year: 2024, month: "April",     fastStats:"https://www.bonitaesterorealtors.com/wp-content/uploads/2024/06/April-Fast-Stats.pdf",         frStats:"https://www.bonitaesterorealtors.com/wp-content/uploads/2024/06/April-FR-Stats.pdf", thumb: DEFAULT_THUMB },
-      { year: 2024, month: "March",     fastStats:"https://www.bonitaesterorealtors.com/wp-content/uploads/2024/04/BonitaSprings-Estero-2.pdf",   frStats:"https://www.bonitaesterorealtors.com/wp-content/uploads/2024/04/April-2024.pdf", thumb: DEFAULT_THUMB },
-      { year: 2024, month: "February",  fastStats:"https://www.bonitaesterorealtors.com/wp-content/uploads/2024/03/BonitaSprings-Estero-1.pdf",   frStats:"https://www.bonitaesterorealtors.com/wp-content/uploads/2024/02/Jan-2024-FR-Stats.pdf", thumb: DEFAULT_THUMB },
-      { year: 2024, month: "January",   fastStats:"https://www.bonitaesterorealtors.com/wp-content/uploads/2024/02/Jan-2024-Fast-Stats.pdf",      frStats:"https://www.bonitaesterorealtors.com/wp-content/uploads/2024/02/Jan-2024-FR-Stats.pdf", thumb: DEFAULT_THUMB },
+      { year: 2024, month: "December", fastStats: "https://www.bonitaesterorealtors.com/wp-content/uploads/2025/01/December-2024-FASTSTATS.pdf", frStats: "https://www.bonitaesterorealtors.com/wp-content/uploads/2025/01/December-FR-STATS.pdf", thumb: DEFAULT_THUMB },
+      { year: 2024, month: "November", fastStats: "https://www.bonitaesterorealtors.com/wp-content/uploads/2024/12/November-FAST-STATS.pdf", frStats: "https://www.bonitaesterorealtors.com/wp-content/uploads/2024/12/November-FR-Report.pdf", thumb: DEFAULT_THUMB },
+      { year: 2024, month: "October", fastStats: "https://www.bonitaesterorealtors.com/wp-content/uploads/2024/11/FAST-STATS-Oct-2024.pdf", frStats: "https://www.bonitaesterorealtors.com/wp-content/uploads/2024/12/October-FR-Stats.pdf", thumb: DEFAULT_THUMB },
+      { year: 2024, month: "September", fastStats: "https://www.bonitaesterorealtors.com/wp-content/uploads/2024/10/BonitaSprings-Estero-7.pdf", frStats: "https://www.bonitaesterorealtors.com/wp-content/uploads/2024/10/September-FR-Report.pdf", thumb: DEFAULT_THUMB },
+      { year: 2024, month: "August", fastStats: "https://www.bonitaesterorealtors.com/wp-content/uploads/2024/09/BonitaSprings-Estero-6.pdf", frStats: "https://www.bonitaesterorealtors.com/wp-content/uploads/2024/09/August-2024-FR-Stats.pdf", thumb: DEFAULT_THUMB },
+      { year: 2024, month: "July", fastStats: "https://www.bonitaesterorealtors.com/wp-content/uploads/2024/08/July-Fasts-Stats.pdf", frStats: "https://www.bonitaesterorealtors.com/wp-content/uploads/2024/08/July-2024-FR-Stats.pdf", thumb: DEFAULT_THUMB },
+      { year: 2024, month: "June", fastStats: "https://www.bonitaesterorealtors.com/wp-content/uploads/2024/07/June-2024-Fast-Stats.pdf", frStats: "http://bonitaesterorealtors.com/wp-content/uploads/2025/11/June-2025-FR-STATS-updated.pdf", thumb: DEFAULT_THUMB },
+      { year: 2024, month: "May", fastStats: "https://www.bonitaesterorealtors.com/wp-content/uploads/2024/06/May-Fast-Stats-1.pdf", frStats: "https://www.bonitaesterorealtors.com/wp-content/uploads/2024/06/May-FR-Stats.pdf", thumb: DEFAULT_THUMB },
+      { year: 2024, month: "April", fastStats: "https://www.bonitaesterorealtors.com/wp-content/uploads/2024/06/April-Fast-Stats.pdf", frStats: "https://www.bonitaesterorealtors.com/wp-content/uploads/2024/06/April-FR-Stats.pdf", thumb: DEFAULT_THUMB },
+      { year: 2024, month: "March", fastStats: "https://www.bonitaesterorealtors.com/wp-content/uploads/2024/04/BonitaSprings-Estero-2.pdf", frStats: "https://www.bonitaesterorealtors.com/wp-content/uploads/2024/04/April-2024.pdf", thumb: DEFAULT_THUMB },
+      { year: 2024, month: "February", fastStats: "https://www.bonitaesterorealtors.com/wp-content/uploads/2024/03/BonitaSprings-Estero-1.pdf", frStats: "https://www.bonitaesterorealtors.com/wp-content/uploads/2024/02/Jan-2024-FR-Stats.pdf", thumb: DEFAULT_THUMB },
+      { year: 2024, month: "January", fastStats: "https://www.bonitaesterorealtors.com/wp-content/uploads/2024/02/Jan-2024-Fast-Stats.pdf", frStats: "https://www.bonitaesterorealtors.com/wp-content/uploads/2024/02/Jan-2024-FR-Stats.pdf", thumb: DEFAULT_THUMB },
 
       /* ===== 2023 ===== */
-      { year: 2023, month: "December",  fastStats:"https://www.bonitaesterorealtors.com/wp-content/uploads/2024/01/December-Fast-Stats.pdf",      frStats:"https://www.bonitaesterorealtors.com/wp-content/uploads/2024/01/Dec-2023-FR-Stats.pdf", thumb: DEFAULT_THUMB },
-      { year: 2023, month: "November",  fastStats:"https://www.bonitaesterorealtors.com/wp-content/uploads/2023/12/November-2023-Fast-Stats.pdf", frStats:"https://www.bonitaesterorealtors.com/wp-content/uploads/2023/12/November-2023-FR-Stats.pdf", thumb: DEFAULT_THUMB },
-      { year: 2023, month: "October",   fastStats:"https://www.bonitaesterorealtors.com/wp-content/uploads/2023/11/October-2023-Fast-Stats.pdf",  frStats:"https://www.bonitaesterorealtors.com/wp-content/uploads/2023/11/October-2023-FR-Report.pdf", thumb: DEFAULT_THUMB },
-      { year: 2023, month: "September", fastStats:"https://www.bonitaesterorealtors.com/wp-content/uploads/2023/10/September-2023-Fast-Stats.pdf", frStats:"https://www.bonitaesterorealtors.com/wp-content/uploads/2023/10/September-FR-Report.pdf", thumb: DEFAULT_THUMB },
-      { year: 2023, month: "August",    fastStats:"https://www.bonitaesterorealtors.com/wp-content/uploads/2023/09/August-BER-FAST-STATS.pdf",     frStats:"https://www.bonitaesterorealtors.com/wp-content/uploads/2023/09/August-FR-Report.pdf", thumb: DEFAULT_THUMB },
-      { year: 2023, month: "July",      fastStats:"https://www.bonitaesterorealtors.com/wp-content/uploads/2023/08/July-2023-Fast-Stats.pdf",     frStats:"https://www.bonitaesterorealtors.com/wp-content/uploads/2023/08/July-2023-FR-Report.pdf", thumb: DEFAULT_THUMB },
-      { year: 2023, month: "June",      fastStats:"https://www.bonitaesterorealtors.com/wp-content/uploads/2023/07/June-2023-Fast-Stats.pdf",     frStats:"https://www.bonitaesterorealtors.com/wp-content/uploads/2023/07/June-2023-FR-Stats.pdf", thumb: DEFAULT_THUMB },
-      { year: 2023, month: "May",       fastStats:"https://www.bonitaesterorealtors.com/wp-content/uploads/2023/06/May-2023-Fast-Stats.pdf",      frStats:"https://www.bonitaesterorealtors.com/wp-content/uploads/2023/06/May-2023-FR-Report.pdf", thumb: DEFAULT_THUMB },
-      { year: 2023, month: "April",     fastStats:"https://www.bonitaesterorealtors.com/wp-content/uploads/2023/05/April-2023-Fast-Stats.pdf",    frStats:"https://www.bonitaesterorealtors.com/wp-content/uploads/2023/05/April-2023-FR-Market-Stats.pdf", thumb: DEFAULT_THUMB },
-      { year: 2023, month: "March",     fastStats:"https://www.bonitaesterorealtors.com/wp-content/uploads/2023/04/March-2023-Fast-Stats.pdf",    frStats:"https://www.bonitaesterorealtors.com/wp-content/uploads/2023/04/March-2023-FR.pdf", thumb: DEFAULT_THUMB },
-      { year: 2023, month: "February",  fastStats:"https://www.bonitaesterorealtors.com/wp-content/uploads/2023/03/FEB-2023.pdf",                   frStats:"https://www.bonitaesterorealtors.com/wp-content/uploads/2023/03/February-2023-FR-Report.pdf", thumb: DEFAULT_THUMB },
-      { year: 2023, month: "January",   fastStats:"https://www.bonitaesterorealtors.com/wp-content/uploads/2023/02/January-Fast-Stats.pdf",        frStats:"https://www.bonitaesterorealtors.com/wp-content/uploads/2023/02/January-2023-FR-report.pdf", thumb: DEFAULT_THUMB },
+      { year: 2023, month: "December", fastStats: "https://www.bonitaesterorealtors.com/wp-content/uploads/2024/01/December-Fast-Stats.pdf", frStats: "https://www.bonitaesterorealtors.com/wp-content/uploads/2024/01/Dec-2023-FR-Stats.pdf", thumb: DEFAULT_THUMB },
+      { year: 2023, month: "November", fastStats: "https://www.bonitaesterorealtors.com/wp-content/uploads/2023/12/November-2023-Fast-Stats.pdf", frStats: "https://www.bonitaesterorealtors.com/wp-content/uploads/2023/12/November-2023-FR-Stats.pdf", thumb: DEFAULT_THUMB },
+      { year: 2023, month: "October", fastStats: "https://www.bonitaesterorealtors.com/wp-content/uploads/2023/11/October-2023-Fast-Stats.pdf", frStats: "https://www.bonitaesterorealtors.com/wp-content/uploads/2023/11/October-2023-FR-Report.pdf", thumb: DEFAULT_THUMB },
+      { year: 2023, month: "September", fastStats: "https://www.bonitaesterorealtors.com/wp-content/uploads/2023/10/September-2023-Fast-Stats.pdf", frStats: "https://www.bonitaesterorealtors.com/wp-content/uploads/2023/10/September-FR-Report.pdf", thumb: DEFAULT_THUMB },
+      { year: 2023, month: "August", fastStats: "https://www.bonitaesterorealtors.com/wp-content/uploads/2023/09/August-BER-FAST-STATS.pdf", frStats: "https://www.bonitaesterorealtors.com/wp-content/uploads/2023/09/August-FR-Report.pdf", thumb: DEFAULT_THUMB },
+      { year: 2023, month: "July", fastStats: "https://www.bonitaesterorealtors.com/wp-content/uploads/2023/08/July-2023-Fast-Stats.pdf", frStats: "https://www.bonitaesterorealtors.com/wp-content/uploads/2023/08/July-2023-FR-Report.pdf", thumb: DEFAULT_THUMB },
+      { year: 2023, month: "June", fastStats: "https://www.bonitaesterorealtors.com/wp-content/uploads/2023/07/June-2023-Fast-Stats.pdf", frStats: "https://www.bonitaesterorealtors.com/wp-content/uploads/2023/07/June-2023-FR-Stats.pdf", thumb: DEFAULT_THUMB },
+      { year: 2023, month: "May", fastStats: "https://www.bonitaesterorealtors.com/wp-content/uploads/2023/06/May-2023-Fast-Stats.pdf", frStats: "https://www.bonitaesterorealtors.com/wp-content/uploads/2023/06/May-2023-FR-Report.pdf", thumb: DEFAULT_THUMB },
+      { year: 2023, month: "April", fastStats: "https://www.bonitaesterorealtors.com/wp-content/uploads/2023/05/April-2023-Fast-Stats.pdf", frStats: "https://www.bonitaesterorealtors.com/wp-content/uploads/2023/05/April-2023-FR-Market-Stats.pdf", thumb: DEFAULT_THUMB },
+      { year: 2023, month: "March", fastStats: "https://www.bonitaesterorealtors.com/wp-content/uploads/2023/04/March-2023-Fast-Stats.pdf", frStats: "https://www.bonitaesterorealtors.com/wp-content/uploads/2023/04/March-2023-FR.pdf", thumb: DEFAULT_THUMB },
+      { year: 2023, month: "February", fastStats: "https://www.bonitaesterorealtors.com/wp-content/uploads/2023/03/FEB-2023.pdf", frStats: "https://www.bonitaesterorealtors.com/wp-content/uploads/2023/03/February-2023-FR-Report.pdf", thumb: DEFAULT_THUMB },
+      { year: 2023, month: "January", fastStats: "https://www.bonitaesterorealtors.com/wp-content/uploads/2023/02/January-Fast-Stats.pdf", frStats: "https://www.bonitaesterorealtors.com/wp-content/uploads/2023/02/January-2023-FR-report.pdf", thumb: DEFAULT_THUMB },
 
       /* ===== 2022 ===== */
-      { year: 2022, month: "December",  fastStats:"https://www.bonitaesterorealtors.com/wp-content/uploads/2023/01/December-2022-Fast-Stats.pdf", frStats:"https://www.bonitaesterorealtors.com/wp-content/uploads/2023/01/December-2022-FR-Stats.pdf", thumb: DEFAULT_THUMB },
-      { year: 2022, month: "November",  fastStats:"https://www.bonitaesterorealtors.com/wp-content/uploads/2022/12/November-Fast-Stats.pdf",       frStats:"https://www.bonitaesterorealtors.com/wp-content/uploads/2023/01/November-2022-FR-Report.pdf", thumb: DEFAULT_THUMB },
-      { year: 2022, month: "October",   fastStats:"https://www.bonitaesterorealtors.com/wp-content/uploads/2022/11/BonitaSprings-Estero.pdf",      frStats:"https://www.bonitaesterorealtors.com/wp-content/uploads/2022/11/October-Market-Stats-FR.pdf", thumb: DEFAULT_THUMB },
-      { year: 2022, month: "September", fastStats:"https://www.bonitaesterorealtors.com/wp-content/uploads/2022/10/September-Fast-Stats.pdf",      frStats:"https://www.bonitaesterorealtors.com/wp-content/uploads/2022/11/September-FR-Report.pdf", thumb: DEFAULT_THUMB },
-      { year: 2022, month: "August",    fastStats:"https://www.bonitaesterorealtors.com/wp-content/uploads/2022/09/August-MR-BonitaSprings-Estero.pdf", frStats:"https://www.bonitaesterorealtors.com/wp-content/uploads/2022/10/August-2022-FR-Report.pdf", thumb: DEFAULT_THUMB },
-      { year: 2022, month: "July",      fastStats:"https://www.bonitaesterorealtors.com/wp-content/uploads/2022/08/July-2022-Fast-Stats.pdf",      frStats:"https://www.bonitaesterorealtors.com/wp-content/uploads/2022/08/July-2022-FR-Stats.pdf", thumb: DEFAULT_THUMB },
-      { year: 2022, month: "June",      fastStats:"https://www.bonitaesterorealtors.com/wp-content/uploads/2022/07/June-2022-Fast-Stats.pdf",      frStats:"https://www.bonitaesterorealtors.com/wp-content/uploads/2022/07/June-2022-FR-Stats.pdf", thumb: DEFAULT_THUMB },
-      { year: 2022, month: "May",       fastStats:"https://www.bonitaesterorealtors.com/wp-content/uploads/2022/06/May-Fast-Stats.pdf",             frStats:null, thumb: DEFAULT_THUMB },
-      { year: 2022, month: "April",     fastStats:"https://www.bonitaesterorealtors.com/wp-content/uploads/2022/05/April-2022-Fast-Stats.pdf",     frStats:"https://www.bonitaesterorealtors.com/wp-content/uploads/2022/05/April-2022-FR-Report.pdf", thumb: DEFAULT_THUMB },
-      { year: 2022, month: "March",     fastStats:"https://www.bonitaesterorealtors.com/wp-content/uploads/2022/04/March-2022-Fast-Stats.pdf",     frStats:"https://www.bonitaesterorealtors.com/wp-content/uploads/2022/05/March-2022-FR-Stats.pdf", thumb: DEFAULT_THUMB },
-      { year: 2022, month: "February",  fastStats:"https://www.bonitaesterorealtors.com/wp-content/uploads/2022/03/BonitaSprings-Estero.pdf",      frStats:"https://www.bonitaesterorealtors.com/wp-content/uploads/2022/03/February-2022-FR-Stats.pdf", thumb: DEFAULT_THUMB },
-      { year: 2022, month: "January",   fastStats:"https://www.bonitaesterorealtors.com/wp-content/uploads/2022/02/BonitaSprings-Estero-2.pdf",    frStats:"https://www.bonitaesterorealtors.com/wp-content/uploads/2022/02/January-2022-Stats.pdf", thumb: DEFAULT_THUMB },
+      { year: 2022, month: "December", fastStats: "https://www.bonitaesterorealtors.com/wp-content/uploads/2023/01/December-2022-Fast-Stats.pdf", frStats: "https://www.bonitaesterorealtors.com/wp-content/uploads/2023/01/December-2022-FR-Stats.pdf", thumb: DEFAULT_THUMB },
+      { year: 2022, month: "November", fastStats: "https://www.bonitaesterorealtors.com/wp-content/uploads/2022/12/November-Fast-Stats.pdf", frStats: "https://www.bonitaesterorealtors.com/wp-content/uploads/2023/01/November-2022-FR-Report.pdf", thumb: DEFAULT_THUMB },
+      { year: 2022, month: "October", fastStats: "https://www.bonitaesterorealtors.com/wp-content/uploads/2022/11/BonitaSprings-Estero.pdf", frStats: "https://www.bonitaesterorealtors.com/wp-content/uploads/2022/11/October-Market-Stats-FR.pdf", thumb: DEFAULT_THUMB },
+      { year: 2022, month: "September", fastStats: "https://www.bonitaesterorealtors.com/wp-content/uploads/2022/10/September-Fast-Stats.pdf", frStats: "https://www.bonitaesterorealtors.com/wp-content/uploads/2022/11/September-FR-Report.pdf", thumb: DEFAULT_THUMB },
+      { year: 2022, month: "August", fastStats: "https://www.bonitaesterorealtors.com/wp-content/uploads/2022/09/August-MR-BonitaSprings-Estero.pdf", frStats: "https://www.bonitaesterorealtors.com/wp-content/uploads/2022/10/August-2022-FR-Report.pdf", thumb: DEFAULT_THUMB },
+      { year: 2022, month: "July", fastStats: "https://www.bonitaesterorealtors.com/wp-content/uploads/2022/08/July-2022-Fast-Stats.pdf", frStats: "https://www.bonitaesterorealtors.com/wp-content/uploads/2022/08/July-2022-FR-Stats.pdf", thumb: DEFAULT_THUMB },
+      { year: 2022, month: "June", fastStats: "https://www.bonitaesterorealtors.com/wp-content/uploads/2022/07/June-2022-Fast-Stats.pdf", frStats: "https://www.bonitaesterorealtors.com/wp-content/uploads/2022/07/June-2022-FR-Stats.pdf", thumb: DEFAULT_THUMB },
+      { year: 2022, month: "May", fastStats: "https://www.bonitaesterorealtors.com/wp-content/uploads/2022/06/May-Fast-Stats.pdf", frStats: null, thumb: DEFAULT_THUMB },
+      { year: 2022, month: "April", fastStats: "https://www.bonitaesterorealtors.com/wp-content/uploads/2022/05/April-2022-Fast-Stats.pdf", frStats: "https://www.bonitaesterorealtors.com/wp-content/uploads/2022/05/April-2022-FR-Report.pdf", thumb: DEFAULT_THUMB },
+      { year: 2022, month: "March", fastStats: "https://www.bonitaesterorealtors.com/wp-content/uploads/2022/04/March-2022-Fast-Stats.pdf", frStats: "https://www.bonitaesterorealtors.com/wp-content/uploads/2022/05/March-2022-FR-Stats.pdf", thumb: DEFAULT_THUMB },
+      { year: 2022, month: "February", fastStats: "https://www.bonitaesterorealtors.com/wp-content/uploads/2022/03/BonitaSprings-Estero.pdf", frStats: "https://www.bonitaesterorealtors.com/wp-content/uploads/2022/03/February-2022-FR-Stats.pdf", thumb: DEFAULT_THUMB },
+      { year: 2022, month: "January", fastStats: "https://www.bonitaesterorealtors.com/wp-content/uploads/2022/02/BonitaSprings-Estero-2.pdf", frStats: "https://www.bonitaesterorealtors.com/wp-content/uploads/2022/02/January-2022-Stats.pdf", thumb: DEFAULT_THUMB },
 
       /* ===== 2021 ===== */
-      { year: 2021, month: "December",  fastStats:"https://www.bonitaesterorealtors.com/wp-content/uploads/2022/01/December-2021-Fast-Stats-1.pdf", frStats:"https://www.bonitaesterorealtors.com/wp-content/uploads/2022/01/December-2021-FR-Report.pdf", thumb: DEFAULT_THUMB },
-      { year: 2021, month: "November",  fastStats:"https://www.bonitaesterorealtors.com/wp-content/uploads/2021/12/BonitaSprings-Estero-1.pdf",     frStats:"https://www.bonitaesterorealtors.com/wp-content/uploads/2021/12/Nov-2021.pdf", thumb: DEFAULT_THUMB },
-      { year: 2021, month: "October",   fastStats:"https://www.bonitaesterorealtors.com/wp-content/uploads/2021/12/October-2021.pdf",                frStats:"https://www.bonitaesterorealtors.com/wp-content/uploads/2021/11/October-21-stats.pdf", thumb: DEFAULT_THUMB },
-      { year: 2021, month: "September", fastStats:"https://www.bonitaesterorealtors.com/wp-content/uploads/2021/10/FastStats-September.pdf",         frStats:"https://www.bonitaesterorealtors.com/wp-content/uploads/2021/10/September-Florida-Realtors-Report.pdf", thumb: DEFAULT_THUMB },
-      { year: 2021, month: "August",    fastStats:"https://www.bonitaesterorealtors.com/wp-content/uploads/2021/09/Fast-Stats-August-2021.pdf",      frStats:"https://www.bonitaesterorealtors.com/wp-content/uploads/2021/09/August-FR.pdf", thumb: DEFAULT_THUMB },
-      { year: 2021, month: "July",      fastStats:"https://www.bonitaesterorealtors.com/wp-content/uploads/2021/09/July-Fast-Stats.pdf",            frStats:"https://www.bonitaesterorealtors.com/wp-content/uploads/2021/09/July-2021-FR-Stats.pdf", thumb: DEFAULT_THUMB },
-      { year: 2021, month: "June",      fastStats:"https://www.bonitaesterorealtors.com/wp-content/uploads/2021/08/June-2021-Fast-Stats.pdf",       frStats:"https://www.bonitaesterorealtors.com/wp-content/uploads/2021/08/June-2021-Florida-Realtors-Report.pdf", thumb: DEFAULT_THUMB },
-      { year: 2021, month: "May",       fastStats:"https://www.bonitaesterorealtors.com/wp-content/uploads/2021/06/May-21-Fast-Stats.pdf",          frStats:"https://www.bonitaesterorealtors.com/wp-content/uploads/2021/08/May-2021-FR.pdf", thumb: DEFAULT_THUMB },
-      { year: 2021, month: "April",     fastStats:"https://www.bonitaesterorealtors.com/wp-content/uploads/2021/05/April-2021-FastStats.pdf",       frStats:"https://www.bonitaesterorealtors.com/wp-content/uploads/2021/06/April-2021-Florida-Realtors-Stats.pdf", thumb: DEFAULT_THUMB },
-      { year: 2021, month: "March",     fastStats:"https://www.bonitaesterorealtors.com/wp-content/uploads/2021/04/March-2021-Fast-Stats.pdf",      frStats:"https://www.bonitaesterorealtors.com/wp-content/uploads/2021/05/Market-Report-March-2021.pdf", thumb: DEFAULT_THUMB },
-      { year: 2021, month: "February",  fastStats:"https://bonitaestero.stats.showingtime.com/docs/lmu/x/BonitaSprings-Estero?src=map",               frStats:"https://www.bonitaesterorealtors.com/wp-content/uploads/2021/04/February-2021-Florida-Realtors-Report.pdf", thumb: DEFAULT_THUMB },
-      { year: 2021, month: "January",   fastStats:"https://www.bonitaesterorealtors.com/wp-content/uploads/2021/02/BonitaSprings-Estero-Jan-2021.pdf", frStats:"https://www.bonitaesterorealtors.com/wp-content/uploads/2021/04/January-2021-Florida-.pdf", thumb: DEFAULT_THUMB },
+      { year: 2021, month: "December", fastStats: "https://www.bonitaesterorealtors.com/wp-content/uploads/2022/01/December-2021-Fast-Stats-1.pdf", frStats: "https://www.bonitaesterorealtors.com/wp-content/uploads/2022/01/December-2021-FR-Report.pdf", thumb: DEFAULT_THUMB },
+      { year: 2021, month: "November", fastStats: "https://www.bonitaesterorealtors.com/wp-content/uploads/2021/12/BonitaSprings-Estero-1.pdf", frStats: "https://www.bonitaesterorealtors.com/wp-content/uploads/2021/12/Nov-2021.pdf", thumb: DEFAULT_THUMB },
+      { year: 2021, month: "October", fastStats: "https://www.bonitaesterorealtors.com/wp-content/uploads/2021/12/October-2021.pdf", frStats: "https://www.bonitaesterorealtors.com/wp-content/uploads/2021/11/October-21-stats.pdf", thumb: DEFAULT_THUMB },
+      { year: 2021, month: "September", fastStats: "https://www.bonitaesterorealtors.com/wp-content/uploads/2021/10/FastStats-September.pdf", frStats: "https://www.bonitaesterorealtors.com/wp-content/uploads/2021/10/September-Florida-Realtors-Report.pdf", thumb: DEFAULT_THUMB },
+      { year: 2021, month: "August", fastStats: "https://www.bonitaesterorealtors.com/wp-content/uploads/2021/09/Fast-Stats-August-2021.pdf", frStats: "https://www.bonitaesterorealtors.com/wp-content/uploads/2021/09/August-FR.pdf", thumb: DEFAULT_THUMB },
+      { year: 2021, month: "July", fastStats: "https://www.bonitaesterorealtors.com/wp-content/uploads/2021/09/July-Fast-Stats.pdf", frStats: "https://www.bonitaesterorealtors.com/wp-content/uploads/2021/09/July-2021-FR-Stats.pdf", thumb: DEFAULT_THUMB },
+      { year: 2021, month: "June", fastStats: "https://www.bonitaesterorealtors.com/wp-content/uploads/2021/08/June-2021-Fast-Stats.pdf", frStats: "https://www.bonitaesterorealtors.com/wp-content/uploads/2021/08/June-2021-Florida-Realtors-Report.pdf", thumb: DEFAULT_THUMB },
+      { year: 2021, month: "May", fastStats: "https://www.bonitaesterorealtors.com/wp-content/uploads/2021/06/May-21-Fast-Stats.pdf", frStats: "https://www.bonitaesterorealtors.com/wp-content/uploads/2021/08/May-2021-FR.pdf", thumb: DEFAULT_THUMB },
+      { year: 2021, month: "April", fastStats: "https://www.bonitaesterorealtors.com/wp-content/uploads/2021/05/April-2021-FastStats.pdf", frStats: "https://www.bonitaesterorealtors.com/wp-content/uploads/2021/06/April-2021-Florida-Realtors-Stats.pdf", thumb: DEFAULT_THUMB },
+      { year: 2021, month: "March", fastStats: "https://www.bonitaesterorealtors.com/wp-content/uploads/2021/04/March-2021-Fast-Stats.pdf", frStats: "https://www.bonitaesterorealtors.com/wp-content/uploads/2021/05/Market-Report-March-2021.pdf", thumb: DEFAULT_THUMB },
+      { year: 2021, month: "February", fastStats: "https://bonitaestero.stats.showingtime.com/docs/lmu/x/BonitaSprings-Estero?src=map", frStats: "https://www.bonitaesterorealtors.com/wp-content/uploads/2021/04/February-2021-Florida-Realtors-Report.pdf", thumb: DEFAULT_THUMB },
+      { year: 2021, month: "January", fastStats: "https://www.bonitaesterorealtors.com/wp-content/uploads/2021/02/BonitaSprings-Estero-Jan-2021.pdf", frStats: "https://www.bonitaesterorealtors.com/wp-content/uploads/2021/04/January-2021-Florida-.pdf", thumb: DEFAULT_THUMB },
 
       /* ===== 2020 ===== */
-      { year: 2020, month: "December",  fastStats:"https://www.bonitaesterorealtors.com/wp-content/uploads/2021/01/BonitaSprings-Estero.pdf",        frStats:"https://www.bonitaesterorealtors.com/wp-content/uploads/2021/01/December-2020.pdf", thumb: DEFAULT_THUMB_FR },
-      { year: 2020, month: "November",  fastStats:"https://www.bonitaesterorealtors.com/wp-content/uploads/2020/12/November-2020.pdf",               frStats:"https://www.bonitaesterorealtors.com/wp-content/uploads/2020/12/Nov-2020.pdf", thumb: DEFAULT_THUMB_FR },
-      { year: 2020, month: "October",   fastStats:"https://www.bonitaesterorealtors.com/wp-content/uploads/2020/12/BonitaSprings-Estero.pdf",        frStats:null, thumb: DEFAULT_THUMB },
-      { year: 2020, month: "September", fastStats:"https://www.bonitaesterorealtors.com/wp-content/uploads/2020/10/Market-Data-Report_BEAR_2020-10-04-14-49-14.pdf", frStats:"https://www.bonitaesterorealtors.com/wp-content/uploads/2020/10/Florida-Realtors-September-Report-.pdf", thumb: DEFAULT_THUMB },
-      { year: 2020, month: "August",    fastStats:"https://www.bonitaesterorealtors.com/wp-content/uploads/2020/09/August-2020-FastStats.pdf",      frStats:"https://www.bonitaesterorealtors.com/wp-content/uploads/2020/09/FR-August-2020.pdf", thumb: DEFAULT_THUMB },
-      { year: 2020, month: "July",      fastStats:null,                                                                                               frStats:"https://www.bonitaesterorealtors.com/wp-content/uploads/2020/08/FR-July-2020-Market-Report.pdf", thumb: DEFAULT_THUMB },
-      { year: 2020, month: "June",      fastStats:"https://www.bonitaesterorealtors.com/wp-content/uploads/2020/07/Market-Report-June-2020-1.pdf",  frStats:null, thumb: DEFAULT_THUMB },
-      { year: 2020, month: "May",       fastStats:"https://www.bonitaesterorealtors.com/wp-content/uploads/2020/06/May-RPR-Report-.pdf",            frStats:"https://www.bonitaesterorealtors.com/wp-content/uploads/2020/07/FR-MAY-2020-Report.pdf", thumb: DEFAULT_THUMB },
-      { year: 2020, month: "April",     fastStats:"https://www.bonitaesterorealtors.com/wp-content/uploads/2020/05/Market-Data-Report_BEAR_2020-05-06-16-00-23.pdf", frStats:"https://www.bonitaesterorealtors.com/wp-content/uploads/2020/06/April-2020-Market-Report-FR.pdf", thumb: DEFAULT_THUMB },
-      { year: 2020, month: "March",     fastStats:"https://www.bonitaesterorealtors.com/wp-content/uploads/2020/04/Market-Data-Report_BEAR_2020-04-06-11-27-14.pdf", frStats:"https://www.bonitaesterorealtors.com/wp-content/uploads/2020/05/March-FR-Report.pdf", thumb: DEFAULT_THUMB },
-      { year: 2020, month: "February",  fastStats:"https://www.bonitaesterorealtors.com/wp-content/uploads/2020/03/Market-Data-Report_BEAR_2020-03-04-06-42-13-1.pdf", frStats:"https://www.bonitaesterorealtors.com/wp-content/uploads/2020/05/February-FR-Stats-.pdf", thumb: DEFAULT_THUMB },
-      { year: 2020, month: "January",   fastStats:"https://www.bonitaesterorealtors.com/wp-content/uploads/2020/02/Market-Data-Report_BEAR_2020-02-04-06-42-12.pdf", frStats:"https://www.bonitaesterorealtors.com/wp-content/uploads/2020/02/January-2020-Florida-Realtors-Market-Report.pdf", thumb: DEFAULT_THUMB },
+      { year: 2020, month: "December", fastStats: "https://www.bonitaesterorealtors.com/wp-content/uploads/2021/01/BonitaSprings-Estero.pdf", frStats: "https://www.bonitaesterorealtors.com/wp-content/uploads/2021/01/December-2020.pdf", thumb: DEFAULT_THUMB_FR },
+      { year: 2020, month: "November", fastStats: "https://www.bonitaesterorealtors.com/wp-content/uploads/2020/12/November-2020.pdf", frStats: "https://www.bonitaesterorealtors.com/wp-content/uploads/2020/12/Nov-2020.pdf", thumb: DEFAULT_THUMB_FR },
+      { year: 2020, month: "October", fastStats: "https://www.bonitaesterorealtors.com/wp-content/uploads/2020/12/BonitaSprings-Estero.pdf", frStats: null, thumb: DEFAULT_THUMB },
+      { year: 2020, month: "September", fastStats: "https://www.bonitaesterorealtors.com/wp-content/uploads/2020/10/Market-Data-Report_BEAR_2020-10-04-14-49-14.pdf", frStats: "https://www.bonitaesterorealtors.com/wp-content/uploads/2020/10/Florida-Realtors-September-Report-.pdf", thumb: DEFAULT_THUMB },
+      { year: 2020, month: "August", fastStats: "https://www.bonitaesterorealtors.com/wp-content/uploads/2020/09/August-2020-FastStats.pdf", frStats: "https://www.bonitaesterorealtors.com/wp-content/uploads/2020/09/FR-August-2020.pdf", thumb: DEFAULT_THUMB },
+      { year: 2020, month: "July", fastStats: null, frStats: "https://www.bonitaesterorealtors.com/wp-content/uploads/2020/08/FR-July-2020-Market-Report.pdf", thumb: DEFAULT_THUMB },
+      { year: 2020, month: "June", fastStats: "https://www.bonitaesterorealtors.com/wp-content/uploads/2020/07/Market-Report-June-2020-1.pdf", frStats: null, thumb: DEFAULT_THUMB },
+      { year: 2020, month: "May", fastStats: "https://www.bonitaesterorealtors.com/wp-content/uploads/2020/06/May-RPR-Report-.pdf", frStats: "https://www.bonitaesterorealtors.com/wp-content/uploads/2020/07/FR-MAY-2020-Report.pdf", thumb: DEFAULT_THUMB },
+      { year: 2020, month: "April", fastStats: "https://www.bonitaesterorealtors.com/wp-content/uploads/2020/05/Market-Data-Report_BEAR_2020-05-06-16-00-23.pdf", frStats: "https://www.bonitaesterorealtors.com/wp-content/uploads/2020/06/April-2020-Market-Report-FR.pdf", thumb: DEFAULT_THUMB },
+      { year: 2020, month: "March", fastStats: "https://www.bonitaesterorealtors.com/wp-content/uploads/2020/04/Market-Data-Report_BEAR_2020-04-06-11-27-14.pdf", frStats: "https://www.bonitaesterorealtors.com/wp-content/uploads/2020/05/March-FR-Report.pdf", thumb: DEFAULT_THUMB },
+      { year: 2020, month: "February", fastStats: "https://www.bonitaesterorealtors.com/wp-content/uploads/2020/03/Market-Data-Report_BEAR_2020-03-04-06-42-13-1.pdf", frStats: "https://www.bonitaesterorealtors.com/wp-content/uploads/2020/05/February-FR-Stats-.pdf", thumb: DEFAULT_THUMB },
+      { year: 2020, month: "January", fastStats: "https://www.bonitaesterorealtors.com/wp-content/uploads/2020/02/Market-Data-Report_BEAR_2020-02-04-06-42-12.pdf", frStats: "https://www.bonitaesterorealtors.com/wp-content/uploads/2020/02/January-2020-Florida-Realtors-Market-Report.pdf", thumb: DEFAULT_THUMB },
 
       /* ===== 2019 ===== */
-      { year: 2019, month: "December",  fastStats:"https://www.bonitaesterorealtors.com/wp-content/uploads/2020/01/Market-Data-Report_BEAR_2020-01-04-06-42-16.pdf", frStats:"https://www.bonitaesterorealtors.com/wp-content/uploads/2020/01/Binder1.pdf", thumb: DEFAULT_THUMB },
-      { year: 2019, month: "November",  fastStats:"https://www.bonitaesterorealtors.com/wp-content/uploads/2019/12/Market-Data-Report_BEAR_2019-12-04-06-42-20.pdf", frStats:"https://www.bonitaesterorealtors.com/wp-content/uploads/2019/12/NOV-FR.pdf", thumb: DEFAULT_THUMB },
-      { year: 2019, month: "October",   fastStats:"https://www.bonitaesterorealtors.com/wp-content/uploads/2019/11/Market-Data-Report_BEAR_2019-11-06-15-13-16.pdf", frStats:"https://www.bonitaesterorealtors.com/wp-content/uploads/2019/11/FR-OCT.pdf", thumb: DEFAULT_THUMB },
-      { year: 2019, month: "September", fastStats:"https://www.bonitaesterorealtors.com/wp-content/uploads/2019/10/Market-Data-Report_BEAR_2019-10-04-14-49-14.pdf", frStats:"https://www.bonitaesterorealtors.com/wp-content/uploads/2019/10/sept-fr.pdf", thumb: DEFAULT_THUMB },
-      { year: 2019, month: "August",    fastStats:"https://www.bonitaesterorealtors.com/wp-content/uploads/2019/09/August-rpr-report.pdf",        frStats:"https://www.bonitaesterorealtors.com/wp-content/uploads/2019/09/august-fr.pdf", thumb: DEFAULT_THUMB },
-      { year: 2019, month: "July",      fastStats:"https://www.bonitaesterorealtors.com/wp-content/uploads/2019/08/Market-Data-Report_BEAR_2019-08-06-09-53-41.pdf", frStats:"https://www.bonitaesterorealtors.com/wp-content/uploads/2019/08/Binder1.pdf", thumb: DEFAULT_THUMB },
-      { year: 2019, month: "June",      fastStats:"https://bonitasprings.wpengine.com/wp-content/uploads/2019/07/Market-Data-Report_BEAR_2019-07-06-07-35-23.pdf", frStats:"https://www.bonitaesterorealtors.com/wp-content/uploads/2019/07/Binder1temp.pdf", thumb: DEFAULT_THUMB },
-      { year: 2019, month: "May",       fastStats:"https://bonitasprings.wpengine.com/wp-content/uploads/2019/06/MAY-RPR.pdf",                    frStats:"https://bonitasprings.wpengine.com/wp-content/uploads/2019/06/fr-june.pdf", thumb: DEFAULT_THUMB },
-      { year: 2019, month: "April",     fastStats:"https://bonitasprings.wpengine.com/wp-content/uploads/2019/05/Market-Data-Report_BEAR_2019-05-07-12-39-16.pdf", frStats:"https://bonitasprings.wpengine.com/wp-content/uploads/2019/05/April-FR-Stats.pdf", thumb: DEFAULT_THUMB },
-      { year: 2019, month: "March",     fastStats:"https://bonitasprings.wpengine.com/wp-content/uploads/2019/04/Market-Data-Report_BEAR_2019-04-08-15-19-03.pdf", frStats:"https://bonitasprings.wpengine.com/wp-content/uploads/2019/04/fr-march.pdf", thumb: DEFAULT_THUMB },
-      { year: 2019, month: "February",  fastStats:"https://bonitasprings.wpengine.com/wp-content/uploads/2019/03/Market-Data-Report_BEAR_2019-03-04-15-33-23.pdf", frStats:"https://bonitasprings.wpengine.com/wp-content/uploads/2019/03/feb-19.pdf", thumb: DEFAULT_THUMB },
-      { year: 2019, month: "January",   fastStats:"https://bonitasprings.wpengine.com/wp-content/uploads/2019/02/Market-Data-Report_BEAR_2019-02-04-15-33-14.pdf", frStats:"https://bonitasprings.wpengine.com/wp-content/uploads/2019/02/jan-2019.pdf", thumb: DEFAULT_THUMB },
+      { year: 2019, month: "December", fastStats: "https://www.bonitaesterorealtors.com/wp-content/uploads/2020/01/Market-Data-Report_BEAR_2020-01-04-06-42-16.pdf", frStats: "https://www.bonitaesterorealtors.com/wp-content/uploads/2020/01/Binder1.pdf", thumb: DEFAULT_THUMB },
+      { year: 2019, month: "November", fastStats: "https://www.bonitaesterorealtors.com/wp-content/uploads/2019/12/Market-Data-Report_BEAR_2019-12-04-06-42-20.pdf", frStats: "https://www.bonitaesterorealtors.com/wp-content/uploads/2019/12/NOV-FR.pdf", thumb: DEFAULT_THUMB },
+      { year: 2019, month: "October", fastStats: "https://www.bonitaesterorealtors.com/wp-content/uploads/2019/11/Market-Data-Report_BEAR_2019-11-06-15-13-16.pdf", frStats: "https://www.bonitaesterorealtors.com/wp-content/uploads/2019/11/FR-OCT.pdf", thumb: DEFAULT_THUMB },
+      { year: 2019, month: "September", fastStats: "https://www.bonitaesterorealtors.com/wp-content/uploads/2019/10/Market-Data-Report_BEAR_2019-10-04-14-49-14.pdf", frStats: "https://www.bonitaesterorealtors.com/wp-content/uploads/2019/10/sept-fr.pdf", thumb: DEFAULT_THUMB },
+      { year: 2019, month: "August", fastStats: "https://www.bonitaesterorealtors.com/wp-content/uploads/2019/09/August-rpr-report.pdf", frStats: "https://www.bonitaesterorealtors.com/wp-content/uploads/2019/09/august-fr.pdf", thumb: DEFAULT_THUMB },
+      { year: 2019, month: "July", fastStats: "https://www.bonitaesterorealtors.com/wp-content/uploads/2019/08/Market-Data-Report_BEAR_2019-08-06-09-53-41.pdf", frStats: "https://www.bonitaesterorealtors.com/wp-content/uploads/2019/08/Binder1.pdf", thumb: DEFAULT_THUMB },
+      { year: 2019, month: "June", fastStats: "https://bonitasprings.wpengine.com/wp-content/uploads/2019/07/Market-Data-Report_BEAR_2019-07-06-07-35-23.pdf", frStats: "https://www.bonitaesterorealtors.com/wp-content/uploads/2019/07/Binder1temp.pdf", thumb: DEFAULT_THUMB },
+      { year: 2019, month: "May", fastStats: "https://bonitasprings.wpengine.com/wp-content/uploads/2019/06/MAY-RPR.pdf", frStats: "https://bonitasprings.wpengine.com/wp-content/uploads/2019/06/fr-june.pdf", thumb: DEFAULT_THUMB },
+      { year: 2019, month: "April", fastStats: "https://bonitasprings.wpengine.com/wp-content/uploads/2019/05/Market-Data-Report_BEAR_2019-05-07-12-39-16.pdf", frStats: "https://bonitasprings.wpengine.com/wp-content/uploads/2019/05/April-FR-Stats.pdf", thumb: DEFAULT_THUMB },
+      { year: 2019, month: "March", fastStats: "https://bonitasprings.wpengine.com/wp-content/uploads/2019/04/Market-Data-Report_BEAR_2019-04-08-15-19-03.pdf", frStats: "https://bonitasprings.wpengine.com/wp-content/uploads/2019/04/fr-march.pdf", thumb: DEFAULT_THUMB },
+      { year: 2019, month: "February", fastStats: "https://bonitasprings.wpengine.com/wp-content/uploads/2019/03/Market-Data-Report_BEAR_2019-03-04-15-33-23.pdf", frStats: "https://bonitasprings.wpengine.com/wp-content/uploads/2019/03/feb-19.pdf", thumb: DEFAULT_THUMB },
+      { year: 2019, month: "January", fastStats: "https://bonitasprings.wpengine.com/wp-content/uploads/2019/02/Market-Data-Report_BEAR_2019-02-04-15-33-14.pdf", frStats: "https://bonitasprings.wpengine.com/wp-content/uploads/2019/02/jan-2019.pdf", thumb: DEFAULT_THUMB },
 
       /* ===== 2018 ===== */
-      { year: 2018, month: "December",  fastStats:"https://bonitasprings.wpengine.com/wp-content/uploads/2019/01/Market-Data-Report_BEAR_2019-01-08-14-13-13.pdf", frStats:"https://bonitasprings.wpengine.com/wp-content/uploads/2019/01/DEC-FR.pdf", thumb: DEFAULT_THUMB },
-      { year: 2018, month: "November",  fastStats:"https://bonitasprings.wpengine.com/wp-content/uploads/2018/12/Market-Data-Report_BEAR_2018-12-05-17-07-17.pdf", frStats:"https://bonitasprings.wpengine.com/wp-content/uploads/2018/12/fr-november.pdf", thumb: DEFAULT_THUMB },
-      { year: 2018, month: "October",   fastStats:"https://bonitasprings.wpengine.com/wp-content/uploads/2018/11/Market-Data-Report_BEAR_2018-11-09-02-10-30.pdf", frStats:"https://bonitasprings.wpengine.com/wp-content/uploads/2018/11/Binder1.pdf", thumb: DEFAULT_THUMB },
-      { year: 2018, month: "September", fastStats:"https://bonitasprings.wpengine.com/wp-content/uploads/2018/10/BEARMarketOverview-August.pdf",    frStats:"https://bonitasprings.wpengine.com/wp-content/uploads/2018/10/Sept-FR.pdf", thumb: DEFAULT_THUMB },
-      { year: 2018, month: "August",    fastStats:"https://bonitasprings.wpengine.com/wp-content/uploads/2018/09/Market-Data-Report_BEAR_2018-09-07-15-29-15.pdf", frStats:"https://bonitasprings.wpengine.com/wp-content/uploads/2018/09/FR-August.pdf", thumb: DEFAULT_THUMB },
-      { year: 2018, month: "July",      fastStats:"https://bonitasprings.wpengine.com/wp-content/uploads/2018/08/rpr-date-august.pdf",             frStats:"https://bonitasprings.wpengine.com/wp-content/uploads/2018/08/florida-realtors-july.pdf", thumb: DEFAULT_THUMB },
-      { year: 2018, month: "June",      fastStats:"https://bonitasprings.wpengine.com/wp-content/uploads/2018/07/Market-Data-Report_BEAR_2018-07-09-04-47-13.pdf", frStats:"https://bonitasprings.wpengine.com/wp-content/uploads/2018/07/FR-JUNE-STATS.pdf", thumb: DEFAULT_THUMB },
-      { year: 2018, month: "May",       fastStats:"https://bonitasprings.wpengine.com/wp-content/uploads/2018/06/June-Market-Data.pdf",            frStats:"https://bonitasprings.wpengine.com/wp-content/uploads/2018/06/May-Market-numbers.pdf", thumb: DEFAULT_THUMB },
-      { year: 2018, month: "April",     fastStats:"https://bonitasprings.wpengine.com/wp-content/uploads/2018/05/Market-Data-Report_BEAR_2018-05-09-07-56-14.pdf", frStats:"https://bonitasprings.wpengine.com/wp-content/uploads/2018/05/May-FR-Market.pdf", thumb: DEFAULT_THUMB },
-      { year: 2018, month: "March",     fastStats:"https://bonitasprings.wpengine.com/wp-content/uploads/2018/04/Market-Data-Report_BEAR_2018-04-06-04-12-17.pdf", frStats:"https://bonitasprings.wpengine.com/wp-content/uploads/2018/04/march-fr-numbers.pdf", thumb: DEFAULT_THUMB },
-      { year: 2018, month: "February",  fastStats:"https://bonitasprings.wpengine.com/wp-content/uploads/2018/04/Market-Data-Report_BEAR_2018-03-07-06-01-18.pdf", frStats:"https://www.bonitaesterorealtors.com/wp-content/uploads/2018/03/Florida-Realtors-February-Report.pdf", thumb: DEFAULT_THUMB },
-      { year: 2018, month: "January",   fastStats:"http://wbnbonitarealt.wpengine.com/wp-content/uploads/2018/02/Market-Data-Report_BEAR_2018-02-07-16-43-43-1.pdf", frStats:"http://wbnbonitarealt.wpengine.com/wp-content/uploads/2018/02/january-2018.pdf", thumb: DEFAULT_THUMB },
+      { year: 2018, month: "December", fastStats: "https://bonitasprings.wpengine.com/wp-content/uploads/2019/01/Market-Data-Report_BEAR_2019-01-08-14-13-13.pdf", frStats: "https://bonitasprings.wpengine.com/wp-content/uploads/2019/01/DEC-FR.pdf", thumb: DEFAULT_THUMB },
+      { year: 2018, month: "November", fastStats: "https://bonitasprings.wpengine.com/wp-content/uploads/2018/12/Market-Data-Report_BEAR_2018-12-05-17-07-17.pdf", frStats: "https://bonitasprings.wpengine.com/wp-content/uploads/2018/12/fr-november.pdf", thumb: DEFAULT_THUMB },
+      { year: 2018, month: "October", fastStats: "https://bonitasprings.wpengine.com/wp-content/uploads/2018/11/Market-Data-Report_BEAR_2018-11-09-02-10-30.pdf", frStats: "https://bonitasprings.wpengine.com/wp-content/uploads/2018/11/Binder1.pdf", thumb: DEFAULT_THUMB },
+      { year: 2018, month: "September", fastStats: "https://bonitasprings.wpengine.com/wp-content/uploads/2018/10/BEARMarketOverview-August.pdf", frStats: "https://bonitasprings.wpengine.com/wp-content/uploads/2018/10/Sept-FR.pdf", thumb: DEFAULT_THUMB },
+      { year: 2018, month: "August", fastStats: "https://bonitasprings.wpengine.com/wp-content/uploads/2018/09/Market-Data-Report_BEAR_2018-09-07-15-29-15.pdf", frStats: "https://bonitasprings.wpengine.com/wp-content/uploads/2018/09/FR-August.pdf", thumb: DEFAULT_THUMB },
+      { year: 2018, month: "July", fastStats: "https://bonitasprings.wpengine.com/wp-content/uploads/2018/08/rpr-date-august.pdf", frStats: "https://bonitasprings.wpengine.com/wp-content/uploads/2018/08/florida-realtors-july.pdf", thumb: DEFAULT_THUMB },
+      { year: 2018, month: "June", fastStats: "https://bonitasprings.wpengine.com/wp-content/uploads/2018/07/Market-Data-Report_BEAR_2018-07-09-04-47-13.pdf", frStats: "https://bonitasprings.wpengine.com/wp-content/uploads/2018/07/FR-JUNE-STATS.pdf", thumb: DEFAULT_THUMB },
+      { year: 2018, month: "May", fastStats: "https://bonitasprings.wpengine.com/wp-content/uploads/2018/06/June-Market-Data.pdf", frStats: "https://bonitasprings.wpengine.com/wp-content/uploads/2018/06/May-Market-numbers.pdf", thumb: DEFAULT_THUMB },
+      { year: 2018, month: "April", fastStats: "https://bonitasprings.wpengine.com/wp-content/uploads/2018/05/Market-Data-Report_BEAR_2018-05-09-07-56-14.pdf", frStats: "https://bonitasprings.wpengine.com/wp-content/uploads/2018/05/May-FR-Market.pdf", thumb: DEFAULT_THUMB },
+      { year: 2018, month: "March", fastStats: "https://bonitasprings.wpengine.com/wp-content/uploads/2018/04/Market-Data-Report_BEAR_2018-04-06-04-12-17.pdf", frStats: "https://bonitasprings.wpengine.com/wp-content/uploads/2018/04/march-fr-numbers.pdf", thumb: DEFAULT_THUMB },
+      { year: 2018, month: "February", fastStats: "https://bonitasprings.wpengine.com/wp-content/uploads/2018/04/Market-Data-Report_BEAR_2018-03-07-06-01-18.pdf", frStats: "https://www.bonitaesterorealtors.com/wp-content/uploads/2018/03/Florida-Realtors-February-Report.pdf", thumb: DEFAULT_THUMB },
+      { year: 2018, month: "January", fastStats: "http://wbnbonitarealt.wpengine.com/wp-content/uploads/2018/02/Market-Data-Report_BEAR_2018-02-07-16-43-43-1.pdf", frStats: "http://wbnbonitarealt.wpengine.com/wp-content/uploads/2018/02/january-2018.pdf", thumb: DEFAULT_THUMB },
 
       /* ===== 2017 ===== */
-      { year: 2017, month: "December",  fastStats:"http://wbnbonitarealt.wpengine.com/wp-content/uploads/2018/01/RPR-December.pdf",                frStats:"http://wbnbonitarealt.wpengine.com/wp-content/uploads/2017/06/December-Market-Reportr.pdf", thumb: DEFAULT_THUMB },
-      { year: 2017, month: "November",  fastStats:"http://wbnbonitarealt.wpengine.com/wp-content/uploads/2017/12/Market-Data-Report_BEAR_2017-12-07-00-50-21-1.pdf", frStats:"http://wbnbonitarealt.wpengine.com/wp-content/uploads/2017/12/nov-fr.pdf", thumb: DEFAULT_THUMB },
-      { year: 2017, month: "October",   fastStats:"https://bonitasprings.wpengine.com/wp-content/uploads/2017/06/October-RPR-Report.pdf",          frStats:"http://wbnbonitarealt.wpengine.com/wp-content/uploads/2017/11/FR-October-2017.pdf", thumb: DEFAULT_THUMB },
-      { year: 2017, month: "September", fastStats:null,                                                                                               frStats:"http://wbnbonitarealt.wpengine.com/market-reports-2/fr-report-sept-2/", thumb: DEFAULT_THUMB },
-      { year: 2017, month: "August",    fastStats:null,                                                                                               frStats:"http://wbnbonitarealt.wpengine.com/wp-content/uploads/2017/12/august-17-3.pdf", thumb: DEFAULT_THUMB },
-      { year: 2017, month: "July",      fastStats:null,                                                                                               frStats:"http://wbnbonitarealt.wpengine.com/wp-content/uploads/2017/12/july-fr-1.pdf", thumb: DEFAULT_THUMB },
-      { year: 2017, month: "June",      fastStats:"https://bonitasprings.wpengine.com/wp-content/uploads/2017/06/june-2017-rpr.pdf",                frStats:null, thumb: DEFAULT_THUMB },
-      { year: 2017, month: "May",       fastStats:null,                                                                                               frStats:"http://wbnbonitarealt.wpengine.com/market-reports-2/may-fr-report/", thumb: DEFAULT_THUMB },
-      { year: 2017, month: "April",     fastStats:"https://bonitasprings.wpengine.com/wp-content/uploads/2017/06/Market-Data-April.pdf",            frStats:"https://bonitasprings.wpengine.com/wp-content/uploads/2017/06/april-report.pdf", thumb: DEFAULT_THUMB },
-      { year: 2017, month: "March",     fastStats:"http://wbnbonitarealt.wpengine.com/wp-content/uploads/2017/06/FR-March.pdf",                     frStats:"http://wbnbonitarealt.wpengine.com/wp-content/uploads/2017/06/March-FR-Report.pdf", thumb: DEFAULT_THUMB },
-      { year: 2017, month: "February",  fastStats:"http://wbnbonitarealt.wpengine.com/wp-content/uploads/2017/06/Association-Market-Data-Report_BEAR-2015-03-03-1.pdf", frStats:"http://wbnbonitarealt.wpengine.com/wp-content/uploads/2017/06/FR-Feb-Report.pdf", thumb: DEFAULT_THUMB },
-      { year: 2017, month: "January",   fastStats:"http://wbnbonitarealt.wpengine.com/wp-content/uploads/2017/06/Association-Market-Data-Report_BEAR-2016-02-07.pdf", frStats:"http://wbnbonitarealt.wpengine.com/wp-content/uploads/2017/06/FR-January-Report.pdf", thumb: DEFAULT_THUMB },
+      { year: 2017, month: "December", fastStats: "http://wbnbonitarealt.wpengine.com/wp-content/uploads/2018/01/RPR-December.pdf", frStats: "http://wbnbonitarealt.wpengine.com/wp-content/uploads/2017/06/December-Market-Reportr.pdf", thumb: DEFAULT_THUMB },
+      { year: 2017, month: "November", fastStats: "http://wbnbonitarealt.wpengine.com/wp-content/uploads/2017/12/Market-Data-Report_BEAR_2017-12-07-00-50-21-1.pdf", frStats: "http://wbnbonitarealt.wpengine.com/wp-content/uploads/2017/12/nov-fr.pdf", thumb: DEFAULT_THUMB },
+      { year: 2017, month: "October", fastStats: "https://bonitasprings.wpengine.com/wp-content/uploads/2017/06/October-RPR-Report.pdf", frStats: "http://wbnbonitarealt.wpengine.com/wp-content/uploads/2017/11/FR-October-2017.pdf", thumb: DEFAULT_THUMB },
+      { year: 2017, month: "September", fastStats: null, frStats: "http://wbnbonitarealt.wpengine.com/market-reports-2/fr-report-sept-2/", thumb: DEFAULT_THUMB },
+      { year: 2017, month: "August", fastStats: null, frStats: "http://wbnbonitarealt.wpengine.com/wp-content/uploads/2017/12/august-17-3.pdf", thumb: DEFAULT_THUMB },
+      { year: 2017, month: "July", fastStats: null, frStats: "http://wbnbonitarealt.wpengine.com/wp-content/uploads/2017/12/july-fr-1.pdf", thumb: DEFAULT_THUMB },
+      { year: 2017, month: "June", fastStats: "https://bonitasprings.wpengine.com/wp-content/uploads/2017/06/june-2017-rpr.pdf", frStats: null, thumb: DEFAULT_THUMB },
+      { year: 2017, month: "May", fastStats: null, frStats: "http://wbnbonitarealt.wpengine.com/market-reports-2/may-fr-report/", thumb: DEFAULT_THUMB },
+      { year: 2017, month: "April", fastStats: "https://bonitasprings.wpengine.com/wp-content/uploads/2017/06/Market-Data-April.pdf", frStats: "https://bonitasprings.wpengine.com/wp-content/uploads/2017/06/april-report.pdf", thumb: DEFAULT_THUMB },
+      { year: 2017, month: "March", fastStats: "http://wbnbonitarealt.wpengine.com/wp-content/uploads/2017/06/FR-March.pdf", frStats: "http://wbnbonitarealt.wpengine.com/wp-content/uploads/2017/06/March-FR-Report.pdf", thumb: DEFAULT_THUMB },
+      { year: 2017, month: "February", fastStats: "http://wbnbonitarealt.wpengine.com/wp-content/uploads/2017/06/Association-Market-Data-Report_BEAR-2015-03-03-1.pdf", frStats: "http://wbnbonitarealt.wpengine.com/wp-content/uploads/2017/06/FR-Feb-Report.pdf", thumb: DEFAULT_THUMB },
+      { year: 2017, month: "January", fastStats: "http://wbnbonitarealt.wpengine.com/wp-content/uploads/2017/06/Association-Market-Data-Report_BEAR-2016-02-07.pdf", frStats: "http://wbnbonitarealt.wpengine.com/wp-content/uploads/2017/06/FR-January-Report.pdf", thumb: DEFAULT_THUMB },
 
       /* ===== 2016 ===== */
-      { year: 2016, month: "December",  fastStats:"http://wbnbonitarealt.wpengine.com/wp-content/uploads/2017/06/RPR-Report-December.pdf",          frStats:"http://wbnbonitarealt.wpengine.com/wp-content/uploads/2017/06/December-FR-Report2.pdf", thumb: DEFAULT_THUMB },
-      { year: 2016, month: "November",  fastStats:"http://wbnbonitarealt.wpengine.com/wp-content/uploads/2017/06/Market-Data-Report_BEAR_2016-12-06-00-31-05.pdf", frStats:"http://wbnbonitarealt.wpengine.com/wp-content/uploads/2017/06/FR-November.pdf", thumb: DEFAULT_THUMB },
-      { year: 2016, month: "October",   fastStats:"http://wbnbonitarealt.wpengine.com/wp-content/uploads/2017/06/October-RPR-Report.pdf",           frStats:"http://wbnbonitarealt.wpengine.com/wp-content/uploads/2017/06/October-FR-Report.pdf", thumb: DEFAULT_THUMB },
-      { year: 2016, month: "September", fastStats:"http://wbnbonitarealt.wpengine.com/wp-content/uploads/2017/06/September-Monthly-Report.pdf",     frStats:"http://wbnbonitarealt.wpengine.com/wp-content/uploads/2017/06/Market-Data-Report_BEAR_2016-10-06-05-07-58.pdf", thumb: DEFAULT_THUMB },
-      { year: 2016, month: "August",    fastStats:"http://wbnbonitarealt.wpengine.com/wp-content/uploads/2017/06/Market-Data-Report_BEAR_2016-09-09-01-09-23.pdf", frStats:"http://wbnbonitarealt.wpengine.com/wp-content/uploads/2017/06/August-stats.pdf", thumb: DEFAULT_THUMB },
-      { year: 2016, month: "July",      fastStats:"http://wbnbonitarealt.wpengine.com/wp-content/uploads/2017/06/Market-Data-Report_BEAR_2016-08-08-01-04-26.pdf", frStats:"http://wbnbonitarealt.wpengine.com/wp-content/uploads/2017/06/July-FR-Reports.pdf", thumb: DEFAULT_THUMB },
-      { year: 2016, month: "June",      fastStats:"http://wbnbonitarealt.wpengine.com/wp-content/uploads/2017/06/Market-Data-Report_BEAR_2016-07-07-01-00-21.pdf", frStats:"http://wbnbonitarealt.wpengine.com/wp-content/uploads/2017/06/June-Market-report.pdf", thumb: DEFAULT_THUMB },
-      { year: 2016, month: "May",       fastStats:null,                                                                                               frStats:"http://wbnbonitarealt.wpengine.com/wp-content/uploads/2017/06/May-2016-FR.pdf", thumb: DEFAULT_THUMB },
-      { year: 2016, month: "April",     fastStats:"http://wbnbonitarealt.wpengine.com/wp-content/uploads/2017/06/rpr-april.pdf",                     frStats:"http://wbnbonitarealt.wpengine.com/wp-content/uploads/2017/06/April-2016-FR.pdf", thumb: DEFAULT_THUMB },
-      { year: 2016, month: "March",     fastStats:null,                                                                                               frStats:"http://wbnbonitarealt.wpengine.com/wp-content/uploads/2017/06/FR-March.pdf", thumb: DEFAULT_THUMB },
-      { year: 2016, month: "February",  fastStats:"http://wbnbonitarealt.wpengine.com/wp-content/uploads/2017/06/Association-Market-Data-Report_BEAR-2016-03-07.pdf", frStats:"http://wbnbonitarealt.wpengine.com/wp-content/uploads/2017/06/February-FR-Report.pdf", thumb: DEFAULT_THUMB },
-      { year: 2016, month: "January",   fastStats:"http://wbnbonitarealt.wpengine.com/wp-content/uploads/2017/06/Association-Market-Data-Report_BEAR-2016-02-07.pdf", frStats:"http://wbnbonitarealt.wpengine.com/wp-content/uploads/2017/12/January-2016-FAR-2.pdf", thumb: DEFAULT_THUMB },
+      { year: 2016, month: "December", fastStats: "http://wbnbonitarealt.wpengine.com/wp-content/uploads/2017/06/RPR-Report-December.pdf", frStats: "http://wbnbonitarealt.wpengine.com/wp-content/uploads/2017/06/December-FR-Report2.pdf", thumb: DEFAULT_THUMB },
+      { year: 2016, month: "November", fastStats: "http://wbnbonitarealt.wpengine.com/wp-content/uploads/2017/06/Market-Data-Report_BEAR_2016-12-06-00-31-05.pdf", frStats: "http://wbnbonitarealt.wpengine.com/wp-content/uploads/2017/06/FR-November.pdf", thumb: DEFAULT_THUMB },
+      { year: 2016, month: "October", fastStats: "http://wbnbonitarealt.wpengine.com/wp-content/uploads/2017/06/October-RPR-Report.pdf", frStats: "http://wbnbonitarealt.wpengine.com/wp-content/uploads/2017/06/October-FR-Report.pdf", thumb: DEFAULT_THUMB },
+      { year: 2016, month: "September", fastStats: "http://wbnbonitarealt.wpengine.com/wp-content/uploads/2017/06/September-Monthly-Report.pdf", frStats: "http://wbnbonitarealt.wpengine.com/wp-content/uploads/2017/06/Market-Data-Report_BEAR_2016-10-06-05-07-58.pdf", thumb: DEFAULT_THUMB },
+      { year: 2016, month: "August", fastStats: "http://wbnbonitarealt.wpengine.com/wp-content/uploads/2017/06/Market-Data-Report_BEAR_2016-09-09-01-09-23.pdf", frStats: "http://wbnbonitarealt.wpengine.com/wp-content/uploads/2017/06/August-stats.pdf", thumb: DEFAULT_THUMB },
+      { year: 2016, month: "July", fastStats: "http://wbnbonitarealt.wpengine.com/wp-content/uploads/2017/06/Market-Data-Report_BEAR_2016-08-08-01-04-26.pdf", frStats: "http://wbnbonitarealt.wpengine.com/wp-content/uploads/2017/06/July-FR-Reports.pdf", thumb: DEFAULT_THUMB },
+      { year: 2016, month: "June", fastStats: "http://wbnbonitarealt.wpengine.com/wp-content/uploads/2017/06/Market-Data-Report_BEAR_2016-07-07-01-00-21.pdf", frStats: "http://wbnbonitarealt.wpengine.com/wp-content/uploads/2017/06/June-Market-report.pdf", thumb: DEFAULT_THUMB },
+      { year: 2016, month: "May", fastStats: null, frStats: "http://wbnbonitarealt.wpengine.com/wp-content/uploads/2017/06/May-2016-FR.pdf", thumb: DEFAULT_THUMB },
+      { year: 2016, month: "April", fastStats: "http://wbnbonitarealt.wpengine.com/wp-content/uploads/2017/06/rpr-april.pdf", frStats: "http://wbnbonitarealt.wpengine.com/wp-content/uploads/2017/06/April-2016-FR.pdf", thumb: DEFAULT_THUMB },
+      { year: 2016, month: "March", fastStats: null, frStats: "http://wbnbonitarealt.wpengine.com/wp-content/uploads/2017/06/FR-March.pdf", thumb: DEFAULT_THUMB },
+      { year: 2016, month: "February", fastStats: "http://wbnbonitarealt.wpengine.com/wp-content/uploads/2017/06/Association-Market-Data-Report_BEAR-2016-03-07.pdf", frStats: "http://wbnbonitarealt.wpengine.com/wp-content/uploads/2017/06/February-FR-Report.pdf", thumb: DEFAULT_THUMB },
+      { year: 2016, month: "January", fastStats: "http://wbnbonitarealt.wpengine.com/wp-content/uploads/2017/06/Association-Market-Data-Report_BEAR-2016-02-07.pdf", frStats: "http://wbnbonitarealt.wpengine.com/wp-content/uploads/2017/12/January-2016-FAR-2.pdf", thumb: DEFAULT_THUMB },
 
       /* ===== 2015 (partial) ===== */
-      { year: 2015, month: "December",  fastStats:"http://wbnbonitarealt.wpengine.com/wp-content/uploads/2017/06/Association-Market-Data-Report_BEAR-2016-01-04-1.pdf", frStats:"http://wbnbonitarealt.wpengine.com/wp-content/uploads/2017/06/December-Florida-Realtor-Market-Report.pdf", thumb: DEFAULT_THUMB }
+      { year: 2015, month: "December", fastStats: "http://wbnbonitarealt.wpengine.com/wp-content/uploads/2017/06/Association-Market-Data-Report_BEAR-2016-01-04-1.pdf", frStats: "http://wbnbonitarealt.wpengine.com/wp-content/uploads/2017/06/December-Florida-Realtor-Market-Report.pdf", thumb: DEFAULT_THUMB }
     ];
 
     // ---- Curated video list made GLOBAL so the rail can see it ----
-window.VIDEOS = [
-{ title: "September 2025 Bonita + Estero Stats", url: "https://www.youtube.com/embed/q7uDBPnc7tM?si=NGW6StEfdtrkotv9" },
-{ title: "September 2025 Naples + Fort Myers Stats", url: "https://www.youtube.com/embed/29WK1p5wOGA?si=jjxF9C7i7mA8IK5D" },
+    window.VIDEOS = [
+      { title: "November 2025 Bonita + Estero Stats", url: "https://youtu.be/KJ1be4QE5Zw" },
+      { title: "November 2025 Naples + Fort Myers Stats", url: "https://youtu.be/q4_cLeCkgAU" },
+      { title: "October 2025 Bonita + Estero Stats", url: "https://www.youtube.com/embed/118p-lTwv18?si=mbXdXqLJV2TODR_E" },
+      { title: "October 2025 Naples + Fort Myers Stats", url: "https://www.youtube.com/embed/_9aR09YscSA?si=nR7Yy4SZR9QV2TLf" },
+      { title: "September 2025 Bonita + Estero Stats", url: "https://www.youtube.com/embed/q7uDBPnc7tM?si=NGW6StEfdtrkotv9" },
+      { title: "September 2025 Naples + Fort Myers Stats", url: "https://www.youtube.com/embed/29WK1p5wOGA?si=jjxF9C7i7mA8IK5D" },
 
-{ title: "August 2025 Bonita + Estero Stats", url: "https://www.youtube.com/embed/u5NAI5FphPA?si=iszq6WtfxQWLHo0y" },
-{ title: "August 2025 Naples + Fort Myers Stats", url: "https://www.youtube.com/embed/6HaxDhakCPw?si=k-miJ_y2_aRZEpa8" },
+      { title: "August 2025 Bonita + Estero Stats", url: "https://www.youtube.com/embed/u5NAI5FphPA?si=iszq6WtfxQWLHo0y" },
+      { title: "August 2025 Naples + Fort Myers Stats", url: "https://www.youtube.com/embed/6HaxDhakCPw?si=k-miJ_y2_aRZEpa8" },
 
       { title: "June 2025 Bonita + Estero Stats", url: "https://youtu.be/I5ppVYUFRz0" },
       { title: "June 2025 Naples + Fort Myers Stats", url: "https://youtu.be/48AaXmNtjFc" },
@@ -360,102 +763,102 @@ window.VIDEOS = [
     /* -------------------------------------------
        2) RENDERING LOGIC
        ------------------------------------------- */
-    const MONTH_ORDER = ["January","February","March","April","May","June","July","August","September","October","November","December"];
+    const MONTH_ORDER = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
     const $tabs = document.getElementById("yearTabs");
     const $grid = document.getElementById("grid");
     const $feature = document.getElementById("feature");
     const $loadMore = document.getElementById("loadMore");
     const $empty = document.getElementById("empty");
 
-    const grouped = REPORTS.reduce((acc,r)=>{
+    const grouped = REPORTS.reduce((acc, r) => {
       (acc[r.year] = acc[r.year] || []).push(r); return acc;
-    },{});
+    }, {});
 
-    Object.values(grouped).forEach(list=>{
-      list.sort((a,b)=>{
-        if(a.year!==b.year) return b.year-a.year;
-        return MONTH_ORDER.indexOf(b.month)-MONTH_ORDER.indexOf(a.month);
+    Object.values(grouped).forEach(list => {
+      list.sort((a, b) => {
+        if (a.year !== b.year) return b.year - a.year;
+        return MONTH_ORDER.indexOf(b.month) - MONTH_ORDER.indexOf(a.month);
       });
     });
 
-    const years = Object.keys(grouped).map(Number).sort((a,b)=>b-a);
+    const years = Object.keys(grouped).map(Number).sort((a, b) => b - a);
     let activeYear = years[0] || new Date().getFullYear();
     let page = 0, pageSize = 9; // after feature
 
     // Build tabs
-    years.forEach(y=>{
-      const btn=document.createElement("button");
-      btn.className="year-btn"+(y===activeYear?" active":"");
-      btn.textContent=y;
-      btn.setAttribute("aria-pressed", y===activeYear);
-      btn.addEventListener("click", ()=>switchYear(y));
+    years.forEach(y => {
+      const btn = document.createElement("button");
+      btn.className = "year-btn" + (y === activeYear ? " active" : "");
+      btn.textContent = y;
+      btn.setAttribute("aria-pressed", y === activeYear);
+      btn.addEventListener("click", () => switchYear(y));
       $tabs.appendChild(btn);
     });
 
     // Initial render
     render(activeYear);
 
-    function switchYear(y){
+    function switchYear(y) {
       activeYear = y;
-      [...$tabs.children].forEach(b=>{
-        const isActive = +b.textContent===y;
-        b.classList.toggle("active",isActive);
-        b.setAttribute("aria-pressed",isActive);
+      [...$tabs.children].forEach(b => {
+        const isActive = +b.textContent === y;
+        b.classList.toggle("active", isActive);
+        b.setAttribute("aria-pressed", isActive);
       });
       render(y);
-      window.scrollTo({top:0,behavior:"smooth"});
+      window.scrollTo({ top: 0, behavior: "smooth" });
     }
 
-    function render(y){
-      const list = grouped[y]||[];
-      $grid.innerHTML="";
-      page=0;
+    function render(y) {
+      const list = grouped[y] || [];
+      $grid.innerHTML = "";
+      page = 0;
 
       // Feature (latest overall if active year has none)
-      const latest = (grouped[years[0]]||[])[0] || null;
+      const latest = (grouped[years[0]] || [])[0] || null;
       const latestThisYear = list[0] || null;
       const feat = latestThisYear || latest;
 
-      if(feat){
-        $feature.hidden=false;
+      if (feat) {
+        $feature.hidden = false;
         $feature.innerHTML = featureTemplate(feat);
         setupVideoRail();
         syncVideoHeight();
         const _img = $feature.querySelector('.feature-media img');
-        if(_img){ if(_img.complete){ syncVideoHeight(); } else { _img.addEventListener('load', syncVideoHeight, { once:true }); } }
-      }else{
-        $feature.hidden=true;
-        $feature.innerHTML="";
+        if (_img) { if (_img.complete) { syncVideoHeight(); } else { _img.addEventListener('load', syncVideoHeight, { once: true }); } }
+      } else {
+        $feature.hidden = true;
+        $feature.innerHTML = "";
       }
 
       // Grid items (skip feature if it belongs to this year)
-      const startIndex = feat && feat.year===y ? 1 : 0;
+      const startIndex = feat && feat.year === y ? 1 : 0;
       const items = list.slice(startIndex);
-      if(items.length===0){
-        $empty.style.display="block";
-        $loadMore.style.display="none";
+      if (items.length === 0) {
+        $empty.style.display = "block";
+        $loadMore.style.display = "none";
         return;
-      }else{
-        $empty.style.display="none";
+      } else {
+        $empty.style.display = "none";
       }
 
       // First page
       appendPage(items);
       // Load more
-      $loadMore.onclick = ()=>appendPage(items);
-      $loadMore.style.display = items.length>pageSize ? "inline-flex":"none";
+      $loadMore.onclick = () => appendPage(items);
+      $loadMore.style.display = items.length > pageSize ? "inline-flex" : "none";
     }
 
-    function appendPage(items){
-      const slice = items.slice(page*pageSize,(page+1)*pageSize);
-      slice.forEach(r=>$grid.insertAdjacentHTML("beforeend", cardTemplate(r)));
+    function appendPage(items) {
+      const slice = items.slice(page * pageSize, (page + 1) * pageSize);
+      slice.forEach(r => $grid.insertAdjacentHTML("beforeend", cardTemplate(r)));
       page++;
-      if(page*pageSize >= items.length) $loadMore.style.display="none";
+      if (page * pageSize >= items.length) $loadMore.style.display = "none";
     }
 
-    function monthSlug(m){ return m.toLowerCase(); }
+    function monthSlug(m) { return m.toLowerCase(); }
 
-    function featureTemplate(r){
+    function featureTemplate(r) {
       const dateLabel = `${r.month} ${r.year}`;
       const hasFast = !!r.fastStats, hasFR = !!r.frStats, hasInd = !!r.indicators;
       const thumb = r.thumb || (hasFast ? DEFAULT_THUMB : DEFAULT_THUMB_FR);
@@ -471,20 +874,20 @@ window.VIDEOS = [
             <h2>${dateLabel} Market Reports</h2>
             <div class="meta"><i class="fa fa-calendar"></i> ${dateLabel}</div>
             <div class=\"chip-row\">
-              ${hasFast?`<span class=\"chip\">Fast Stats<\/span>`:""}
-              ${hasFR?`<span class=\"chip\">Florida Realtors®<\/span>`:""}
-              ${hasInd?`<span class=\"chip\">Monthly Indicators<\/span>`:""}
+              ${hasFast ? `<span class=\"chip\">Fast Stats<\/span>` : ""}
+              ${hasFR ? `<span class=\"chip\">Florida Realtors®<\/span>` : ""}
+              ${hasInd ? `<span class=\"chip\">Monthly Indicators<\/span>` : ""}
             <\/div>
             <div class=\"cta-row\">
-              ${hasFast?`<a class=\"btn primary\" href=\"${r.fastStats}\" target=\"_blank\" rel=\"noopener\">
+              ${hasFast ? `<a class=\"btn primary\" href=\"${r.fastStats}\" target=\"_blank\" rel=\"noopener\">
                 <i class=\"fa fa-file-pdf-o\" aria-hidden=\"true\"><\/i> Fast Stats
-              <\/a>`:""}
-              ${hasFR?`<a class=\"btn secondary\" href=\"${r.frStats}\" target=\"_blank\" rel=\"noopener\">
+              <\/a>`: ""}
+              ${hasFR ? `<a class=\"btn secondary\" href=\"${r.frStats}\" target=\"_blank\" rel=\"noopener\">
                 <i class=\"fa fa-bar-chart\" aria-hidden=\"true\"><\/i> Florida Realtors
-              <\/a>`:""}
-              ${hasInd?`<a class=\"btn tertiary\" href=\"${r.indicators}\" target=\"_blank\" rel=\"noopener\">
+              <\/a>`: ""}
+              ${hasInd ? `<a class=\"btn tertiary\" href=\"${r.indicators}\" target=\"_blank\" rel=\"noopener\">
                 <i class=\"fa fa-line-chart\" aria-hidden=\"true\"><\/i> Indicators
-              <\/a>`:""}
+              <\/a>`: ""}
             <\/div>
           </div>
         <\/article>
@@ -496,11 +899,11 @@ window.VIDEOS = [
     }
 
     // --- NEW: Right-rail = build a scrollable list of thumbnails that open on YouTube ---
-    function setupVideoRail(){
+    function setupVideoRail() {
       const rail = document.getElementById('videoRail');
-      if(!rail) return;
+      if (!rail) return;
       const listWrap = document.getElementById('videoList');
-      if(!listWrap) return;
+      if (!listWrap) return;
 
       const anchors = Array.from(document.querySelectorAll('a.video-link, a[href*="youtu.be/"], a[href*="youtube.com/watch"], a[href*="youtube.com/shorts/"], a[href*="youtube.com/embed/"]'))
         .filter(a => !rail.contains(a));
@@ -510,7 +913,7 @@ window.VIDEOS = [
 
       // Helper: push unique
       const pushVid = (id, title, href) => {
-        if(!id || seen.has(id)) return;
+        if (!id || seen.has(id)) return;
         seen.add(id);
         const url = href || `https://www.youtube.com/watch?v=${id}`;
         videos.push({ id, title: title || 'Video', url });
@@ -524,67 +927,67 @@ window.VIDEOS = [
         });
       }
       // Also collect any YouTube links already on the page
-      anchors.forEach(a=>{
-        const id = parseYouTubeId(a.getAttribute('href')||'');
-        if(!id) return;
+      anchors.forEach(a => {
+        const id = parseYouTubeId(a.getAttribute('href') || '');
+        if (!id) return;
         const title = a.dataset.title || a.getAttribute('data-title') || a.title || a.textContent.trim() || 'Video';
         pushVid(id, title, a.href);
       });
 
-      if(videos.length===0){
+      if (videos.length === 0) {
         listWrap.innerHTML = '<div class="empty">No videos detected yet. Add a YouTube link anywhere on this page (or paste entries into the <code>window.VIDEOS<\/code> manifest).<\/div>';
         return;
       }
 
-      const esc = s => String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+      const esc = s => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
 
       listWrap.innerHTML = videos.map(v => (
-        '<a class="vitem" role="listitem" target="_blank" rel="noopener" href="'+esc(v.url)+'" aria-label="'+esc(v.title)+'">'+
-          '<span class="vthumb"><img loading="lazy" src="https://i.ytimg.com/vi/'+esc(v.id)+'/hqdefault.jpg" alt="'+esc(v.title)+' thumbnail"><\/span>'+
-          '<span class="vtitle">'+esc(v.title)+'<\/span>'+
+        '<a class="vitem" role="listitem" target="_blank" rel="noopener" href="' + esc(v.url) + '" aria-label="' + esc(v.title) + '">' +
+        '<span class="vthumb"><img loading="lazy" src="https://i.ytimg.com/vi/' + esc(v.id) + '/hqdefault.jpg" alt="' + esc(v.title) + ' thumbnail"><\/span>' +
+        '<span class="vtitle">' + esc(v.title) + '<\/span>' +
         '<\/a>'
       )).join('');
     }
-    function syncVideoHeight(){
-      try{
+    function syncVideoHeight() {
+      try {
         const left = document.querySelector('#feature .feature-card:not(.video-rail)');
         const right = document.getElementById('videoRail');
-        if(!left || !right) return;
+        if (!left || !right) return;
         const h = left.getBoundingClientRect().height;
         right.style.maxHeight = h + 'px';
         const head = right.querySelector('.vhead');
         const list = right.querySelector('.video-list');
-        if(head && list){
+        if (head && list) {
           const headH = head.getBoundingClientRect().height;
           list.style.maxHeight = Math.max(0, h - headH) + 'px';
         }
-      }catch(e){}
+      } catch (e) { }
     }
 
-    window.addEventListener('resize', ()=>{ syncVideoHeight(); });
+    window.addEventListener('resize', () => { syncVideoHeight(); });
 
-    function parseYouTubeId(url){
-      try{
+    function parseYouTubeId(url) {
+      try {
         const u = new URL(url, location.href);
-        const host = u.hostname.replace(/^www\./,'');
-        if(host === 'youtu.be'){
+        const host = u.hostname.replace(/^www\./, '');
+        if (host === 'youtu.be') {
           const p = u.pathname.replace(/^\/+/, '').split('/')[0];
-          if(p) return p;
+          if (p) return p;
         }
-        if(host.endsWith('youtube.com')){
+        if (host.endsWith('youtube.com')) {
           const v = u.searchParams.get('v');
-          if(v) return v;
+          if (v) return v;
           const m1 = u.pathname.match(/\/shorts\/([^\/?#]+)/);
-          if(m1) return m1[1];
+          if (m1) return m1[1];
           const m2 = u.pathname.match(/\/embed\/([^\/?#]+)/);
-          if(m2) return m2[1];
+          if (m2) return m2[1];
         }
-      }catch(e){}
+      } catch (e) { }
       const m = String(url).match(/(?:v=|\/embed\/|youtu\.be\/|\/shorts\/)([A-Za-z0-9_-]{6,})/);
       return m ? m[1] : null;
     }
 
-    function cardTemplate(r){
+    function cardTemplate(r) {
       const dateLabel = `${r.month} ${r.year}`;
       const thumb = r.thumb || DEFAULT_THUMB;
       return `
@@ -601,20 +1004,20 @@ window.VIDEOS = [
             <div class="meta"><i class="fa fa-clock-o"></i> Fast Stats, Florida Realtors & Indicators</div>
           </div>
           <div class="links">
-            ${r.fastStats?`<a class="link-btn" href="${r.fastStats}" target="_blank" rel="noopener"><i class="fa fa-file-pdf-o"></i> Fast Stats</a>`:""}
-            ${r.frStats?`<a class="link-btn" href="${r.frStats}" target="_blank" rel="noopener"><i class="fa fa-bar-chart"></i> Florida Realtors</a>`:""}
-            ${r.indicators?`<a class="link-btn" href="${r.indicators}" target="_blank" rel="noopener"><i class="fa fa-line-chart"></i> Indicators</a>`:""}
+            ${r.fastStats ? `<a class="link-btn" href="${r.fastStats}" target="_blank" rel="noopener"><i class="fa fa-file-pdf-o"></i> Fast Stats</a>` : ""}
+            ${r.frStats ? `<a class="link-btn" href="${r.frStats}" target="_blank" rel="noopener"><i class="fa fa-bar-chart"></i> Florida Realtors</a>` : ""}
+            ${r.indicators ? `<a class="link-btn" href="${r.indicators}" target="_blank" rel="noopener"><i class="fa fa-line-chart"></i> Indicators</a>` : ""}
           </div>
         </article>
       `;
     }
 
     // ---- Lightweight in-page document viewer ----
-    (function(){
-      let $viewer,$frame,$title,$download,$open;
+    (function () {
+      let $viewer, $frame, $title, $download, $open;
 
-      function ensureViewer(){
-        if($viewer) return;
+      function ensureViewer() {
+        if ($viewer) return;
         $viewer = document.createElement('div');
         $viewer.className = 'viewer';
         $viewer.id = 'docViewer';
@@ -637,14 +1040,14 @@ window.VIDEOS = [
         $download = $viewer.querySelector('#docDownload');
         $open = $viewer.querySelector('#docOpen');
 
-        $viewer.addEventListener('click', (e)=>{
-          if(e.target.dataset.close) closeViewer();
+        $viewer.addEventListener('click', (e) => {
+          if (e.target.dataset.close) closeViewer();
         });
         $viewer.querySelector('#docClose').addEventListener('click', closeViewer);
-        document.addEventListener('keydown', (e)=>{ if(e.key==='Escape' && $viewer.classList.contains('open')) closeViewer(); });
+        document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && $viewer.classList.contains('open')) closeViewer(); });
       }
 
-      function openViewer(url,title){
+      function openViewer(url, title) {
         ensureViewer();
         $title.textContent = title || 'Document';
         $frame.src = url;
@@ -653,29 +1056,30 @@ window.VIDEOS = [
         $viewer.classList.add('open');
         document.body.style.overflow = 'hidden';
       }
-      function closeViewer(){
-        if(!$viewer) return;
+      function closeViewer() {
+        if (!$viewer) return;
         $viewer.classList.remove('open');
         $frame.src = '';
         document.body.style.overflow = '';
       }
 
       // Intercept clicks within feature/grid that point to PDFs and show modal preview
-      document.addEventListener('click', function(e){
+      document.addEventListener('click', function (e) {
         const a = e.target.closest('a');
-        if(!a) return;
+        if (!a) return;
         const scope = a.closest('#grid, #feature');
-        if(!scope) return;
+        if (!scope) return;
         const url = a.getAttribute('href');
-        if(!url) return;
+        if (!url) return;
         const isPdf = /\.pdf($|[?#])/i.test(url);
-        if(isPdf){
+        if (isPdf) {
           e.preventDefault();
           const label = a.getAttribute('aria-label') || a.textContent.trim() || 'Document';
-          openViewer(url,label);
+          openViewer(url, label);
         }
       }, true);
     })();
   </script>
 </body>
+
 </html>

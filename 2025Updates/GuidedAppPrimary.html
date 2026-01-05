@@ -1,0 +1,2991 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <title>Guided Membership Application — This or That (BER)</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap"
+    rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/heic2any@0.0.4/dist/heic2any.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/face-api.js@0.22.2/dist/face-api.min.js"></script>
+  <style>
+    :root {
+      /* Premium Light Palette */
+      --bg: #f8fafc;
+      /* Slate 50 */
+      --ink: #0f172a;
+      /* Slate 900 */
+      --muted: #64748b;
+      /* Slate 500 */
+      --border: #e2e8f0;
+      /* Slate 200 */
+      --soft: #f1f5f9;
+      /* Slate 100 */
+
+      --blue: #2563eb;
+      --blue-600: #1d4ed8;
+      --blue-soft: #eff6ff;
+      --danger: #ef4444;
+
+      --radius: 24px;
+      --radius-sm: 12px;
+
+      --font-sans: 'Outfit', sans-serif;
+
+      --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+      --shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+      --shadow-lg: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    /* NUCLEAR: Hide Parent WP Header/Footer */
+    header.ber-header,
+    .elementor-location-header,
+    #masthead,
+    .site-header,
+    footer.elementor-location-footer,
+    #colophon,
+    .site-footer {
+      display: none !important;
+    }
+
+    body,
+    #page,
+    .site-content,
+    .app-main,
+    .elementor-section,
+    .elementor-column {
+      background: transparent !important;
+      box-shadow: none !important;
+    }
+
+    html {
+      background: linear-gradient(to bottom, #60a5fa, #eff6ff) !important;
+      min-height: 100vh !important;
+      background-attachment: fixed !important;
+    }
+
+    body {
+      margin: 0;
+      font-family: var(--font-sans);
+      background: transparent;
+      color: var(--ink);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding-top: 40px;
+    }
+
+    /* Seagulls Refined */
+    .seagull-container {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: -1;
+      overflow: hidden;
+    }
+
+    .seagull {
+      position: absolute;
+      width: 80px;
+      height: 40px;
+      opacity: 0.9;
+      will-change: transform;
+    }
+
+    .seagull-body {
+      width: 100%;
+      height: 100%;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64' stroke='rgba(255,255,255,0.85)' stroke-width='3' fill='none' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M2 30 Q 16 10 32 30 Q 48 10 62 30' /%3E%3C/svg%3E");
+      background-size: contain;
+      background-repeat: no-repeat;
+    }
+
+    @keyframes flyAcross {
+      0% {
+        transform: translateX(-20vw) translateY(0);
+      }
+
+      20% {
+        transform: translateX(5vw) translateY(10px);
+      }
+
+      40% {
+        transform: translateX(30vw) translateY(-10px);
+      }
+
+      60% {
+        transform: translateX(60vw) translateY(15px);
+      }
+
+      80% {
+        transform: translateX(90vw) translateY(-5px);
+      }
+
+      100% {
+        transform: translateX(120vw) translateY(0);
+      }
+    }
+
+    @keyframes flapNew {
+
+      0%,
+      100% {
+        transform: scaleY(1);
+      }
+
+      50% {
+        transform: scaleY(0.7);
+      }
+    }
+
+    .wrap {
+      width: 100%;
+      max-width: 720px;
+      padding: 0 20px 60px;
+    }
+
+    .card {
+      border: 1px solid #fff;
+      border-radius: var(--radius);
+      padding: 40px;
+      background: rgba(255, 255, 255, 0.9);
+      backdrop-filter: blur(12px);
+      box-shadow: var(--shadow-lg);
+      transition: all 0.3s ease;
+    }
+
+    .header {
+      margin-bottom: 24px;
+      text-align: center;
+    }
+
+    .kicker {
+      font-size: 11px;
+      color: var(--muted);
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      font-weight: 700;
+      margin-bottom: 8px;
+    }
+
+    h1 {
+      margin: 0;
+      font-size: 24px;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      color: var(--ink);
+    }
+
+    .progress {
+      margin-top: 20px;
+      height: 6px;
+      border-radius: 99px;
+      background: var(--soft);
+      overflow: hidden;
+    }
+
+    .progress>div {
+      height: 100%;
+      width: 0%;
+      background: linear-gradient(90deg, var(--blue), #6366f1);
+      transition: width 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .stepTitle {
+      margin: 0 0 8px;
+      font-size: 20px;
+      font-weight: 700;
+      color: var(--ink);
+    }
+
+    .stepHelp {
+      margin: 0 0 24px;
+      color: var(--muted);
+      font-size: 15px;
+      line-height: 1.5;
+    }
+
+    .choices {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .choiceBtn {
+      text-align: left;
+      width: 100%;
+      border: 2px solid transparent;
+      background: #f8fafc;
+      border-radius: var(--radius-sm);
+      padding: 16px 20px;
+      cursor: pointer;
+      transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+      box-shadow: var(--shadow-sm);
+      position: relative;
+    }
+
+    .choiceBtn:hover {
+      background: #fff;
+      border-color: var(--blue);
+      box-shadow: var(--shadow);
+      transform: translateY(-2px);
+    }
+
+    .choiceBtn:active {
+      transform: translateY(0);
+    }
+
+    .choiceTop {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+    }
+
+    .choiceLabel {
+      font-weight: 700;
+      color: var(--ink);
+      font-size: 16px;
+    }
+
+    .choiceArrow {
+      color: var(--muted);
+      font-size: 14px;
+      transition: transform 0.2s;
+    }
+
+    .choiceBtn:hover .choiceArrow {
+      color: var(--blue);
+      transform: translateX(4px);
+    }
+
+    .choiceDesc {
+      margin-top: 4px;
+      color: var(--muted);
+      font-size: 14px;
+      line-height: 1.4;
+    }
+
+    .field {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      margin-top: 16px;
+    }
+
+    label {
+      font-size: 13px;
+      color: var(--ink);
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.02em;
+    }
+
+    input[type="text"],
+    input[type="email"] {
+      width: 100%;
+      padding: 12px 16px;
+      border-radius: var(--radius-sm);
+      border: 1px solid var(--border);
+      background: #fff;
+      font-family: var(--font-sans);
+      font-size: 16px;
+      outline: none;
+      transition: all 0.2s;
+      color: var(--ink);
+    }
+
+    input[type="text"]:focus,
+    input[type="email"]:focus {
+      border-color: var(--blue);
+      box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+    }
+
+    input[type="file"] {
+      width: 100%;
+      padding: 10px 0;
+      font-size: 14px;
+    }
+
+    .fileHint {
+      font-size: 13px;
+      color: var(--muted);
+    }
+
+    .actions {
+      display: flex;
+      gap: 12px;
+      align-items: center;
+      margin-top: 24px;
+      padding-top: 24px;
+      border-top: 1px solid var(--border);
+    }
+
+    .primaryBtn {
+      appearance: none;
+      border: none;
+      background: var(--blue);
+      color: #fff;
+      padding: 12px 24px;
+      border-radius: 99px;
+      font-weight: 700;
+      font-size: 15px;
+      font-family: var(--font-sans);
+      cursor: pointer;
+      transition: all 0.2s;
+      box-shadow: 0 4px 6px -1px rgba(37, 99, 235, 0.3);
+    }
+
+    .primaryBtn:hover {
+      background: var(--blue-600);
+      transform: translateY(-1px);
+      box-shadow: 0 10px 15px -3px rgba(37, 99, 235, 0.4);
+    }
+
+    .primaryBtn:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+      transform: none;
+      box-shadow: none;
+    }
+
+    .backWrap {
+      margin-top: 40px;
+      text-align: center;
+    }
+
+    .backBtn {
+      appearance: none;
+      background: transparent;
+      border: none;
+      color: var(--muted);
+      font-family: var(--font-sans);
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: color 0.2s;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .backBtn::before {
+      content: '←';
+      font-size: 16px;
+    }
+
+    .backBtn:hover {
+      color: var(--ink);
+    }
+
+    .error {
+      margin-top: 12px;
+      color: var(--danger);
+      font-size: 14px;
+      font-weight: 600;
+      background: #fef2f2;
+      padding: 10px 14px;
+      border-radius: 8px;
+    }
+
+    .panel {
+      margin-top: 16px;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      background: var(--soft);
+      padding: 20px;
+      font-size: 14px;
+      color: var(--ink);
+      line-height: 1.6;
+    }
+
+    .panel b {
+      display: block;
+      margin-bottom: 8px;
+      color: var(--ink);
+    }
+
+    .small {
+      margin-top: 12px;
+      font-size: 13px;
+      color: var(--muted);
+      line-height: 1.5;
+    }
+
+    .summaryGrid {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      margin-top: 16px;
+      background: #fff;
+      padding: 16px;
+      border-radius: var(--radius-sm);
+      border: 1px solid var(--border);
+    }
+
+    .row {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      padding-bottom: 12px;
+      border-bottom: 1px solid var(--soft);
+      font-size: 14px;
+    }
+
+    .row:last-child {
+      border-bottom: none;
+      padding-bottom: 0;
+    }
+
+    .row strong {
+      font-weight: 600;
+      color: var(--muted);
+    }
+
+    .row span {
+      color: var(--ink);
+      text-align: right;
+      max-width: 60%;
+      font-weight: 500;
+    }
+
+    .costList {
+      margin-top: 16px;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      padding: 16px;
+      background: #f8fafc;
+    }
+
+    .costLine {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 8px 0;
+      border-bottom: 1px dashed var(--border);
+      font-size: 14px;
+      color: var(--muted);
+    }
+
+    .costLine:last-child {
+      border-bottom: none;
+    }
+
+    .costLine span:last-child {
+      color: var(--ink);
+      font-family: monospace;
+      font-size: 15px;
+    }
+
+    .totalLine {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 16px 0 4px;
+      font-size: 16px;
+      font-weight: 800;
+      color: var(--ink);
+      margin-top: 4px;
+      border-top: 2px solid var(--border);
+    }
+
+    .charts {
+      margin-top: 20px;
+      display: grid;
+      gap: 20px;
+    }
+
+    .chartCard {
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      padding: 20px;
+      background: #fff;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .chartTitle {
+      font-weight: 700;
+      font-size: 15px;
+      margin-bottom: 4px;
+      color: var(--ink);
+    }
+
+    .chartNote {
+      margin: 0 0 16px;
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.4;
+    }
+
+    .chartWrap {
+      position: relative;
+      width: 100%;
+      height: 250px;
+    }
+
+    .chartWrap.tall {
+      height: 300px;
+    }
+
+    .legend {
+      margin-top: 16px;
+      display: flex;
+      gap: 16px;
+      flex-wrap: wrap;
+      font-size: 13px;
+      color: var(--muted);
+      justify-content: center;
+    }
+
+    .legendRow {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .swatch {
+      width: 12px;
+      height: 12px;
+      border-radius: 4px;
+      display: inline-block;
+    }
+
+    .swatch.local {
+      background: #2563eb;
+    }
+
+    .swatch.mls {
+      background: #6366f1;
+    }
+
+    .swatch.fr {
+      background: #22c55e;
+    }
+
+    .swatch.nar {
+      background: #f97316;
+    }
+
+    /* Office Search Dropdown */
+    .office-dropdown {
+      position: relative;
+    }
+
+    .office-search-input {
+      width: 100%;
+      padding: 14px 16px;
+      border: 2px solid var(--border);
+      border-radius: 12px;
+      font-size: 15px;
+      font-family: var(--font-sans);
+      color: var(--ink);
+      transition: all 0.2s;
+    }
+
+    .office-search-input:focus {
+      outline: none;
+      border-color: var(--blue);
+      box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.1);
+    }
+
+    .office-results {
+      position: absolute;
+      top: 100%;
+      left: 0;
+      right: 0;
+      margin-top: 8px;
+      background: white;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
+      max-height: 300px;
+      overflow-y: auto;
+      z-index: 50;
+      display: none;
+    }
+
+    .office-results.show {
+      display: block;
+    }
+
+    .office-result-item {
+      padding: 12px 16px;
+      cursor: pointer;
+      border-bottom: 1px solid var(--bg);
+      transition: background 0.1s;
+    }
+
+    .office-result-item:last-child {
+      border-bottom: none;
+    }
+
+    .office-result-item:hover,
+    .office-result-item.highlight {
+      background: #f1f5f9;
+    }
+
+    .office-name {
+      font-weight: 600;
+      color: var(--ink);
+      font-size: 15px;
+    }
+
+    .office-meta {
+      font-size: 13px;
+      color: var(--muted);
+      margin-top: 2px;
+      display: flex;
+      gap: 12px;
+    }
+
+    .office-pill {
+      background: #eff6ff;
+      color: var(--blue-600);
+      padding: 2px 8px;
+      border-radius: 4px;
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+    }
+
+    /* Payment Form Styles */
+    .payment-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+      margin-top: 12px;
+    }
+
+    .payment-full {
+      grid-column: 1 / -1;
+    }
+
+    .payment-input {
+      width: 100%;
+      padding: 12px 16px;
+      border: 2px solid var(--border);
+      border-radius: 8px;
+      font-size: 15px;
+      font-family: monospace;
+      /* Monospace for card numbers */
+      transition: all 0.2s;
+    }
+
+    .payment-input:focus {
+      outline: none;
+      border-color: var(--blue);
+      background: #fff;
+    }
+
+    .payment-input.invalid {
+      border-color: #ef4444;
+      background: #fef2f2;
+    }
+
+    .payment-input.valid {
+      border-color: #22c55e;
+      background: #f0fdf4;
+    }
+
+    .secure-badge {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 12px;
+      color: #166534;
+      background: #dcfce7;
+      padding: 4px 8px;
+      border-radius: 4px;
+      width: fit-content;
+      margin-bottom: 12px;
+      font-weight: 600;
+    }
+
+    .disclaimer-box {
+      margin-top: 20px;
+      padding: 16px;
+      background: #f8fafc;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      font-size: 13px;
+      color: var(--muted);
+      line-height: 1.5;
+    }
+
+    .terms-wrap {
+      margin-top: 24px;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      background: #fff;
+    }
+
+    .terms-scroll {
+      height: 200px;
+      overflow-y: auto;
+      padding: 16px;
+      border-bottom: 1px solid var(--border);
+      font-size: 13px;
+      color: var(--muted);
+      line-height: 1.6;
+    }
+
+    .terms-scroll p {
+      margin-bottom: 12px;
+    }
+
+    .terms-scroll::-webkit-scrollbar {
+      width: 8px;
+    }
+
+    .terms-scroll::-webkit-scrollbar-thumb {
+      background: var(--border);
+      border-radius: 4px;
+    }
+
+    .terms-confirm {
+      padding: 12px 16px;
+      background: #f8fafc;
+      border-bottom-left-radius: 8px;
+      border-bottom-right-radius: 8px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .terms-confirm input[type="checkbox"] {
+      width: 20px;
+      height: 20px;
+      cursor: pointer;
+    }
+
+    .terms-confirm label {
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--ink);
+      cursor: pointer;
+    }
+
+    .footerBar {
+      margin-top: 20px;
+      display: flex;
+      gap: 16px;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+    }
+
+    .resetLink {
+      color: var(--muted);
+      font-size: 13px;
+      cursor: pointer;
+      text-decoration: none;
+      font-weight: 500;
+      transition: color 0.2s;
+    }
+
+    .resetLink:hover {
+      color: var(--danger);
+    }
+
+    /* Loading Spinner */
+    .spinner {
+      display: inline-block;
+      width: 20px;
+      height: 20px;
+      border: 3px solid rgba(0, 0, 0, 0.1);
+      border-radius: 50%;
+      border-top-color: var(--primary);
+      animation: spin 1s ease-in-out infinite;
+      margin-right: 10px;
+      vertical-align: middle;
+    }
+
+    @keyframes spin {
+      to {
+        transform: rotate(360deg);
+      }
+    }
+  </style>
+  <!-- PDF.js for PDF rendering -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+  <!-- Tesseract.js for OCR -->
+  <script src="https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js"></script>
+</head>
+
+<body>
+  <div class="wrap">
+    <div class="card">
+      <div class="header">
+        <div class="kicker">Bonita Springs-Estero REALTORS®</div>
+        <h1>Guided Application (BETA)</h1>
+        <div class="progress" aria-hidden="true">
+          <div id="progressBar"></div>
+        </div>
+      </div>
+
+      <div id="app"></div>
+
+      <div class="backWrap">
+        <button id="backBtn" class="backBtn" type="button">Back</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Chart.js (for pie chart + proration timeline) -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      // -----------------------------
+      // Utilities
+      // -----------------------------
+      const MONTH_NAMES = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+      const app = document.getElementById('app');
+      const backBtn = document.getElementById('backBtn');
+      const progressBar = document.getElementById('progressBar');
+      const WORKER_BASE = "https://wrapsheet.bonitaspringsrealtors.workers.dev";
+      let cachedOffices = null; // Store fetched offices
+
+      async function fetchOffices() {
+        if (cachedOffices) return cachedOffices;
+        try {
+          const res = await fetch(`${WORKER_BASE}/api/offices`);
+          if (!res.ok) throw new Error("Failed to fetch offices");
+          const data = await res.json();
+          cachedOffices = data;
+          return data;
+        } catch (err) {
+          console.error("Office fetch error:", err);
+          return [];
+        }
+      }
+
+      function deepClone(obj) { return JSON.parse(JSON.stringify(obj)); }
+      function clampMonth(m) { return Math.min(12, Math.max(1, m | 0)); }
+      function money(n) { return '$' + (Number(n) || 0).toFixed(2); }
+      function safeNumber(n) { const x = Number(n); return Number.isFinite(x) ? x : 0; }
+
+      // Luhn Algorithm for Credit Card Validation
+      function checkLuhn(value) {
+        if (/[^0-9-\s]+/.test(value)) return false;
+        let nCheck = 0, nDigit = 0, bEven = false;
+        value = value.replace(/\D/g, "");
+        if (value.length < 13 || value.length > 19) return false;
+        for (let n = value.length - 1; n >= 0; n--) {
+          let cDigit = value.charAt(n),
+            nDigit = parseInt(cDigit, 10);
+          if (bEven) {
+            if ((nDigit *= 2) > 9) nDigit -= 9;
+          }
+          nCheck += nDigit;
+          bEven = !bEven;
+        }
+        return (nCheck % 10) == 0;
+      }
+
+      function el(tag, attrs = {}, children = []) {
+        const node = document.createElement(tag);
+        for (const [k, v] of Object.entries(attrs)) {
+          if (k === 'class') node.className = v;
+          else if (k === 'html') node.innerHTML = v;
+          else if (k === 'onClick') node.addEventListener('click', v);
+          else if (k === 'onInput') node.addEventListener('input', v);
+          else node.setAttribute(k, v);
+        }
+        const add = (c) => {
+          if (c == null) return;
+          if (Array.isArray(c)) c.forEach(add);
+          else if (typeof c === 'string') node.appendChild(document.createTextNode(c));
+          else node.appendChild(c);
+        };
+        add(children);
+        return node;
+      }
+
+      function setError(msg) {
+        const existing = document.getElementById('stepError');
+        if (existing) existing.remove();
+        if (!msg) return;
+        app.appendChild(el('div', { id: 'stepError', class: 'error' }, msg));
+      }
+
+      // -----------------------------
+      // State
+      // -----------------------------
+      const defaultState = () => ({
+        role: null, // 'agent' | 'broker'
+        berPrimary: null, // boolean
+        primaryBoardLocation: null, // 'florida' | 'outOfState'
+        needsMlsAccess: null, // boolean
+        isTransferring: null, // boolean
+        licensedOrMemberLast5: null, // boolean
+
+        // required data
+        stateLicenseNumber: '',
+        driversLicenseFileName: '',
+        goodStandingFileName: '',
+
+        firstName: '',
+        lastName: '',
+        email: '',
+        officeName: '',
+        officeAddress: '', // From D1 lookup
+        officeNrds: '',    // From D1 lookup
+
+        // computed flags
+        requiresLOGS: false,
+        requiresIndividualMls: false,
+        licenseVerified: false,
+        verificationDetails: null,
+        logsVerificationStatus: null, // 'pass' | 'review' | 'fail' | null
+        logsFileObject: null, // Store File object for verification
+        dlVerificationStatus: null, // 'pass' | 'review' | 'fail' | null
+        dlFileObject: null, // Store File object for DL verification
+        logsVerifyAttempts: 0, // Track retry attempts for LOGS
+        dlVerifyAttempts: 0, // Track retry attempts for DL
+        licenseAddressSame: false,
+
+        mailing: {
+          address1: '',
+          address2: '',
+          city: '',
+          state: 'FL',
+          zip: ''
+        },
+
+        // Payment Information
+        payment: {
+          cardNumber: '',
+          expMonth: '',
+          expYear: '',
+          cvc: '',
+          zip: '',
+          isValid: false
+        },
+        termsAccepted: false
+      });
+
+      let state = defaultState();
+      let currentStepId = 'intro';
+      const history = []; // stack of { stepId, snapshot }
+
+      // -----------------------------
+      // Dues logic (from your calculator)
+      // -----------------------------
+      function calculateLocalAssocDues(month) {
+        if (month >= 1 && month <= 3) return 165;
+        if (month >= 4 && month <= 6) return 123.75;
+        if (month >= 7 && month <= 9) return 82.5;
+        return 41.25;
+      }
+      function calculateLocalAssocDues2(month) {
+        if (month >= 1 && month <= 3) return 165;
+        if (month >= 4 && month <= 6) return 125;
+        if (month >= 7 && month <= 9) return 85;
+        return 45;
+      }
+      function calculateMlsIndividualDues(month) {
+        if (month >= 7) return 260 - (month - 7) * 20;
+        if (month === 6) return 40;
+        if (month === 5) return 60;
+        if (month === 4) return 80;
+        if (month === 3) return 100;
+        if (month === 2) return 120;
+        return 140;
+      }
+      function calculateMlsOfficeDues(month) {
+        if (month >= 7) return 1184 - (month - 7) * 139;
+        if (month === 6) return 489;
+        if (month === 5) return 628;
+        if (month === 4) return 767;
+        if (month === 3) return 906;
+        if (month === 2) return 1045;
+        return 1184;
+      }
+
+      function realtorComponents(month, membershipType, includeMls) {
+        const frAnnualDuesStart = 116;
+        let frAdvocacy = 30;
+        const narAnnualDuesStart = 150;
+        let narAdvocacyAssess = 45;
+
+        let localAssocDues = calculateLocalAssocDues(month);
+        const rpacAssessment = 20;
+        const bearHomeFoundation = 10;
+
+        let localAppFee = 50;
+        let frProcessingFee = 30;
+        let mlsIndividual = includeMls ? calculateMlsIndividualDues(month) : 0;
+
+        const frAnnualDuesDecrease = 9.665;
+        const narAnnualDuesDecrease = 12.5;
+
+        let frAnnualDues = frAnnualDuesStart - frAnnualDuesDecrease * (month - 1);
+        let narAnnualDues = narAnnualDuesStart - narAnnualDuesDecrease * (month - 1);
+
+        if (membershipType === 'secondary') {
+          frAnnualDues = 0;
+          frAdvocacy = 0;
+          narAnnualDues = 0;
+          narAdvocacyAssess = 0;
+          frProcessingFee = 0;
+        } else if (membershipType === 'secondaryOut') {
+          narAnnualDues = 0;
+          narAdvocacyAssess = 0;
+        } else if (membershipType === 'transferring') {
+          frAnnualDues = 0;
+          frAdvocacy = 0;
+          narAnnualDues = 0;
+          narAdvocacyAssess = 0;
+          frProcessingFee = 0;
+          localAppFee = 0;
+        }
+
+        const total = frAnnualDues + frAdvocacy + narAnnualDues + narAdvocacyAssess + localAssocDues + rpacAssessment + bearHomeFoundation + localAppFee + frProcessingFee + mlsIndividual;
+
+        const breakdown = [
+          { label: "Local Association Annual Dues", amount: localAssocDues, category: "Local" },
+          { label: "Local Application Fee", amount: localAppFee, category: "Local" },
+          { label: "RPAC Assessment", amount: rpacAssessment, category: "Local" },
+          { label: "BEAR Home Foundation", amount: bearHomeFoundation, category: "Local" },
+          { label: "MLS Individual", amount: mlsIndividual, category: "MLS" },
+          { label: "FR Annual Dues", amount: frAnnualDues, category: "FR" },
+          { label: "FR Advocacy", amount: frAdvocacy, category: "FR" },
+          { label: "FR Processing Fee", amount: frProcessingFee, category: "FR" },
+          { label: "NAR Annual Dues", amount: narAnnualDues, category: "NAR" },
+          { label: "NAR Advocacy Assess", amount: narAdvocacyAssess, category: "NAR" }
+        ];
+
+        const lines = breakdown.filter(x => x.amount > 0.001).map(x => ({ label: x.label, amount: x.amount }));
+
+        return { total, breakdown, lines, mlsOnly: mlsIndividual };
+      }
+
+      function brokerComponents(month, membershipType2, includeMls) {
+        const brokerDues = 270;
+        const frAnnualDuesStart = 116;
+        let frAdvocacy = 30;
+        const narAnnualDuesStart = 150;
+        let narAdvocacyAssess = 45;
+
+        let localAssocDues = calculateLocalAssocDues2(month);
+        const rpacAssessment = 20;
+        const bearHomeFoundation = 20;
+
+        let frProcessingFee = 30;
+        let mlsIndividual = includeMls ? calculateMlsIndividualDues(month) : 0;
+        let mlsOffice = includeMls ? calculateMlsOfficeDues(month) : 0;
+
+        const frAnnualDuesDecrease = 9.665;
+        const narAnnualDuesDecrease = 12.5;
+
+        let frAnnualDues = frAnnualDuesStart - frAnnualDuesDecrease * (month - 1);
+        let narAnnualDues = narAnnualDuesStart - narAnnualDuesDecrease * (month - 1);
+
+        if (membershipType2 === 'secondary2') {
+          frAnnualDues = 0;
+          frAdvocacy = 0;
+          narAnnualDues = 0;
+          narAdvocacyAssess = 0;
+          frProcessingFee = 0;
+        } else if (membershipType2 === 'secondaryOut2') {
+          frAnnualDues = 0;
+          frAdvocacy = 0;
+          narAnnualDues = 0;
+          narAdvocacyAssess = 0;
+          frProcessingFee = 0;
+          mlsIndividual = 0;
+          mlsOffice = 0;
+        } else if (membershipType2 === 'transferring2') {
+          narAnnualDues = 0;
+          narAdvocacyAssess = 0;
+        } else if (membershipType2 === 'SecondaryOutofStateWoMLS') {
+          narAnnualDues = 0;
+          narAdvocacyAssess = 0;
+          mlsIndividual = 0;
+          mlsOffice = 0;
+        }
+
+        const total = brokerDues + frAnnualDues + frAdvocacy + narAnnualDues + narAdvocacyAssess + localAssocDues + rpacAssessment + bearHomeFoundation + frProcessingFee + mlsIndividual + mlsOffice;
+
+        const breakdown = [
+          { label: "Local Dues", amount: brokerDues, category: "Local" },
+          { label: "Local Association Annual Dues", amount: localAssocDues, category: "Local" },
+          { label: "RPAC Assessment", amount: rpacAssessment, category: "Local" },
+          { label: "BEAR Home Foundation", amount: bearHomeFoundation, category: "Local" },
+          { label: "MLS Individual", amount: mlsIndividual, category: "MLS" },
+          { label: "MLS Office", amount: mlsOffice, category: "MLS" },
+          { label: "FR Annual Dues", amount: frAnnualDues, category: "FR" },
+          { label: "FR Advocacy", amount: frAdvocacy, category: "FR" },
+          { label: "FR Processing Fee", amount: frProcessingFee, category: "FR" },
+          { label: "NAR Annual Dues", amount: narAnnualDues, category: "NAR" },
+          { label: "NAR Advocacy Assess", amount: narAdvocacyAssess, category: "NAR" }
+        ];
+
+        const lines = breakdown.filter(x => x.amount > 0.001).map(x => ({ label: x.label, amount: x.amount }));
+
+        return { total, breakdown, lines, mlsOnly: (mlsIndividual + mlsOffice) };
+      }
+
+      function mapWizardStateToDuesInput() {
+        const month = clampMonth(new Date().getMonth() + 1);
+        if (state.role === 'agent') {
+          const membershipType =
+            state.berPrimary
+              ? (state.isTransferring ? 'transferring' : 'primary')
+              : (state.primaryBoardLocation === 'outOfState' ? 'secondaryOut' : 'secondary');
+
+          const includeMls = !!state.requiresIndividualMls;
+          return { kind: 'realtor', month, membershipType, includeMls };
+        }
+
+        // broker
+        const includeMls = !!state.needsMlsAccess;
+        let membershipType2 = 'primary2';
+        if (!state.berPrimary) {
+          if (state.primaryBoardLocation === 'outOfState') {
+            membershipType2 = includeMls ? 'transferring2' : 'SecondaryOutofStateWoMLS';
+          } else {
+            membershipType2 = includeMls ? 'secondary2' : 'secondaryOut2';
+          }
+        }
+        return { kind: 'broker', month, membershipType2, includeMls };
+      }
+
+      function computeExpectedCostBreakdown() {
+        const input = mapWizardStateToDuesInput();
+        if (input.kind === 'realtor') {
+          return realtorComponents(input.month, input.membershipType, input.includeMls);
+        }
+        return brokerComponents(input.month, input.membershipType2, input.includeMls);
+      }
+
+      function computeMonthlySeries() {
+        // For the chart: show membership portion, MLS portion, and total (with simple renewal assumptions for Primary REALTOR + MLS)
+        const series = { labels: MONTH_NAMES.map(m => m.slice(0, 3)), membershipData: [], mlsData: [], totalData: [] };
+        const input = mapWizardStateToDuesInput();
+
+        for (let m = 1; m <= 12; m++) {
+          let membershipPart = 0;
+          let mlsPart = 0;
+
+          if (input.kind === 'realtor') {
+            const mem = realtorComponents(m, input.membershipType, false);
+            membershipPart = mem.total;
+            mlsPart = input.includeMls ? calculateMlsIndividualDues(m) : 0;
+          } else {
+            const mem = brokerComponents(m, input.membershipType2, false);
+            membershipPart = mem.total;
+            mlsPart = input.includeMls ? (calculateMlsIndividualDues(m) + calculateMlsOfficeDues(m)) : 0;
+          }
+
+          let total = membershipPart + mlsPart;
+
+          // Renewal assumptions (same as your original chart, applied only to Primary REALTOR + MLS)
+          if (input.kind === 'realtor' && state.berPrimary && input.includeMls) {
+            if (m === 6) total += 240; // MLS renewal assumption
+            if (m === 12) total += 542; // membership renewal assumption
+          }
+
+          series.membershipData.push(membershipPart);
+          series.mlsData.push(mlsPart);
+          series.totalData.push(total);
+        }
+        return series;
+      }
+
+      // -----------------------------
+      // Chart rendering
+      // -----------------------------
+      let pieChart = null;
+      let prorationChart = null;
+
+      function getCategoryColor(category) {
+        if (category === 'FR') return '#22c55e';
+        if (category === 'NAR') return '#f97316';
+        if (category === 'MLS') return '#6366f1';
+        return '#2563eb';
+      }
+
+      function buildPieChart(breakdown) {
+        const canvas = document.getElementById('duesPieChart');
+        const fallback = document.getElementById('pieFallback');
+        if (!canvas) return;
+
+        if (!window.Chart) {
+          if (fallback) fallback.style.display = 'block';
+          return;
+        }
+
+        const filtered = (breakdown || []).filter(x => x.amount > 0.01);
+        if (!filtered.length) return;
+
+        const labels = filtered.map(x => x.label);
+        const data = filtered.map(x => x.amount);
+        const colors = filtered.map(x => getCategoryColor(x.category));
+
+        const cfg = {
+          type: 'doughnut',
+          data: {
+            labels,
+            datasets: [{
+              data,
+              backgroundColor: colors,
+              borderColor: '#ffffff',
+              borderWidth: 1,
+              hoverOffset: 10
+            }]
+          },
+          options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            cutout: '60%',
+            plugins: {
+              legend: { display: false },
+              tooltip: {
+                callbacks: {
+                  label: (ctx) => `${ctx.label}: ${money(ctx.parsed)}`
+                }
+              }
+            }
+          }
+        };
+
+        if (pieChart) {
+          pieChart.destroy();
+          pieChart = null;
+        }
+        pieChart = new Chart(canvas.getContext('2d'), cfg);
+      }
+
+      function buildProrationChart(series) {
+        const canvas = document.getElementById('prorationChart');
+        const fallback = document.getElementById('prorationFallback');
+        if (!canvas) return;
+
+        if (!window.Chart) {
+          if (fallback) fallback.style.display = 'block';
+          return;
+        }
+
+        const cfg = {
+          type: 'line',
+          data: {
+            labels: series.labels,
+            datasets: [
+              {
+                label: 'Membership dues (non-MLS portion)',
+                data: series.membershipData,
+                borderColor: '#2563eb',
+                backgroundColor: 'rgba(37,99,235,0.12)',
+                borderWidth: 2,
+                tension: 0.35,
+                pointRadius: 3,
+                fill: true
+              },
+              {
+                label: 'MLS dues',
+                data: series.mlsData,
+                borderColor: '#6366f1',
+                backgroundColor: 'rgba(99,102,241,0.12)',
+                borderWidth: 2,
+                tension: 0.35,
+                pointRadius: 3,
+                fill: true
+              },
+              {
+                label: 'Total (with renewal assumptions where applicable)',
+                data: series.totalData,
+                borderColor: '#22c55e',
+                backgroundColor: 'rgba(34,197,94,0)',
+                borderWidth: 2.5,
+                tension: 0.35,
+                pointRadius: 3.5,
+                fill: false
+              }
+            ]
+          },
+          options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            interaction: { mode: 'index', intersect: false },
+            plugins: {
+              legend: { display: true, labels: { boxWidth: 10, font: { size: 11 } } },
+              tooltip: {
+                callbacks: {
+                  label: (ctx) => `${ctx.dataset.label}: ${money(ctx.parsed.y)}`
+                }
+              }
+            },
+            scales: {
+              y: { beginAtZero: true, ticks: { font: { size: 10 } }, grid: { color: 'rgba(148,163,184,0.25)' } },
+              x: { ticks: { font: { size: 10 } }, grid: { display: false } }
+            }
+          }
+        };
+
+        if (prorationChart) {
+          prorationChart.destroy();
+          prorationChart = null;
+        }
+        prorationChart = new Chart(canvas.getContext('2d'), cfg);
+      }
+
+      // -----------------------------
+      // Step builders
+      // -----------------------------
+      function choice(label, desc, onPick) {
+        return el('button', {
+          type: 'button',
+          class: 'choiceBtn',
+          onClick: () => { setError(''); onPick(); goNext(); }
+        }, [
+          el('div', { class: 'choiceTop' }, [
+            el('div', { class: 'choiceLabel' }, label),
+            el('div', { class: 'choiceArrow' }, '›')
+          ]),
+          el('div', { class: 'choiceDesc' }, desc)
+        ]);
+      }
+
+      function oneFieldStep({ title, help, label, value, placeholder, type = 'text', onInput, validator }) {
+        const input = el('input', { type, value: value || '', placeholder });
+        input.addEventListener('input', () => { onInput(input.value); setError(''); });
+        input.addEventListener('keyup', (e) => { if (e.key === 'Enter') cont.click(); });
+
+        const cont = el('button', {
+          type: 'button', class: 'primaryBtn', onClick: () => {
+            const msg = validator ? validator() : '';
+            if (msg) { setError(msg); return; }
+            goNext();
+          }
+        }, 'Continue');
+
+        return el('div', {}, [
+          el('h2', { class: 'stepTitle' }, title),
+          el('p', { class: 'stepHelp' }, help),
+          el('div', { class: 'field' }, [
+            el('label', {}, label),
+            input
+          ]),
+          el('div', { class: 'actions' }, [cont])
+        ]);
+      }
+
+      function oneFileStep({ title, help, label, onPickFile, currentFileName, required, extraPanel }) {
+        const file = el('input', { type: 'file' });
+        const filename = el('div', { class: 'fileHint' }, currentFileName ? ('Selected: ' + currentFileName) : 'No file selected yet.');
+
+        file.addEventListener('change', () => {
+          const name = file.files && file.files[0] ? file.files[0].name : '';
+          onPickFile(name);
+          filename.textContent = name ? ('Selected: ' + name) : 'No file selected yet.';
+          setError('');
+        });
+
+        const cont = el('button', {
+          type: 'button', class: 'primaryBtn', onClick: () => {
+            if (required && !currentFileName && !(file.files && file.files[0])) {
+              setError('Please select a file to continue.');
+              return;
+            }
+            goNext();
+          }
+        }, 'Continue');
+
+        return el('div', {}, [
+          el('h2', { class: 'stepTitle' }, title),
+          el('p', { class: 'stepHelp' }, help),
+          extraPanel || null,
+          el('div', { class: 'field' }, [
+            el('label', {}, label),
+            file,
+            filename
+          ]),
+          el('div', { class: 'actions' }, [cont])
+        ]);
+      }
+
+      // -----------------------------
+      // Branching / navigation
+      // -----------------------------
+      function updateComputedFlags() {
+        // Letter of Good Standing required if transferring OR member/agent within last 5 years
+        state.requiresLOGS = !!(state.isTransferring || state.licensedOrMemberLast5);
+
+        // Primary Agent must have individual MLS
+        if (state.role === 'agent' && state.berPrimary === true) {
+          state.requiresIndividualMls = true;
+          state.needsMlsAccess = true;
+        } else {
+          state.requiresIndividualMls = !!state.needsMlsAccess;
+        }
+      }
+
+      function pushHistory() {
+        history.push({ stepId: currentStepId, snapshot: deepClone(state) });
+      }
+
+      function goNext() {
+        updateComputedFlags();
+        const next = nextStepId(currentStepId);
+        if (!next) return;
+
+        pushHistory();
+        currentStepId = next;
+        render();
+      }
+
+      function goBack() {
+        if (!history.length) return;
+        const prev = history.pop();
+        currentStepId = prev.stepId;
+        state = prev.snapshot;
+        updateComputedFlags();
+        render();
+      }
+
+      function resetAll() {
+        state = defaultState();
+        currentStepId = 'role';
+        history.length = 0;
+        render();
+      }
+
+      function nextStepId(stepId) {
+        // Ordered flow with branching:
+        // role -> berPrimary -> (if secondary) primaryBoardLocation -> (if not forced/optional) needsMls -> transfer -> (if not transfer) last5 -> (if requires LOGS) uploadLOGS -> license# -> uploadDL -> first -> last -> email -> office -> review
+        switch (stepId) {
+          case 'role': return 'berPrimary';
+          case 'berPrimary':
+            if (state.berPrimary === false) return 'primaryBoardLocation';
+            // primary agent skips MLS question (auto yes)
+            if (state.role === 'agent') return 'transfer';
+            return 'needsMls';
+          case 'primaryBoardLocation':
+            // secondary: MLS optional next
+            return 'needsMls';
+          case 'needsMls':
+            return 'transfer';
+          case 'transfer':
+            // If transferring, we need LOGS - but collect name first for verification
+            if (state.isTransferring) return 'firstName';
+            return 'last5';
+          case 'last5':
+            if (state.licensedOrMemberLast5) return 'firstName';
+            return 'firstName';
+          case 'firstName':
+            return 'lastName';
+          case 'lastName':
+            return 'mailing';
+          case 'mailing':
+            // After mailing, route to LOGS if required, otherwise to license
+            if (state.requiresLOGS || state.isTransferring || state.licensedOrMemberLast5) return 'uploadLOGS';
+            return 'licenseNumber';
+          case 'uploadLOGS':
+            return 'licenseNumber';
+          case 'licenseNumber':
+            return 'uploadDriversLicense';
+          case 'uploadDriversLicense':
+            return 'email';
+          case 'email':
+            return 'office';
+          case 'office':
+            return 'review';
+          default:
+            return null;
+        }
+      }
+
+      // -----------------------------
+      // Steps
+      // -----------------------------
+      function stepIntro() {
+        const thingsToKnow = [
+          "Your broker must have activated your license in DBPR before your application can be processed.",
+          "Please make sure all applications are completed and signed by your broker at the time of submission.",
+          "Completed applications can be submitted electronically to Membership@BERealtors.org, filled out on our website, or can be dropped off at the BER office.",
+          "Payment is due at the time of application. When joining, dues will be pro-rated based on the month you join. National, state, and local dues are billed on a calendar year (January-December). MLS dues are billed on a fiscal year (July-June). A one-time application fee is applied to new agents.",
+          "Please complete both an application for board and MLS. MLS logins cannot be shared, this is an MLS violation. If you have a personal assistant or transaction coordinator they will need an account.",
+          "You have no more than 2 weeks to join a board after activating your license with a brokerage.",
+          "New Member Orientation and Code of Ethics are required within 90 days of application for all new agents or agents transferring from a non-local board (Fort Myers or Naples).",
+          "Mandatory Matrix (MLS) is required within 60 days of application.",
+          "Fair Housing requirement within 30 days of application.",
+          "It is the responsibility of the broker to notify the board of any agents that change firms by submitting a RE-11 from the DBPR.",
+          "If you change to a brokerage that is not a member of BER board or MLS, you will have to pay to join the board they are a member of. Local dues and MLS fees are non-refundable/non-transferrable, although State and National dues do transfer.",
+          "To access Supra, you can sign up in the membership office or by phone. There is a one-time $50 activation fee charged by Supra and the monthly charge is $17.37 charged automatically on the 1st of every month.",
+          "We do not keep your credit card on file at BER for dues, MLS or any other charges. The only automatic payment is Supra. Please call the BER office for any updates to your account (email address, credit card, etc.)",
+          "If you need to make any changes to your information on file, please contact the BER office.",
+          "Dues and MLS invoices are sent out strictly by email. National, state and local board dues are due 12/31 and MLS is due 6/30, every year. Please check your spam folder if you do not see these email invoices. You can always login to your online portal to view any outstanding invoices. Late and reinstatement fees will be assessed after the due dates."
+        ];
+
+        const nextBtn = el('button', {
+          class: 'primaryBtn', onClick: () => {
+            history.push({ stepId: currentStepId, snapshot: deepClone(state) });
+            currentStepId = 'role';
+            render();
+          }
+        }, 'I Understand - Start Application');
+
+
+
+        const mapImg = el('img', {
+          src: 'https://bonitaesterorealtors.com/wp-content/uploads/2025/12/MLS-Map.png',
+          style: 'max-width:100%; border-radius:8px; display:block; margin: 16px auto;'
+        });
+
+        const list = el('ul', { style: 'padding-left:20px; text-align:left; font-size:14px; line-height:1.6; color:var(--ink);' },
+          thingsToKnow.map(t => el('li', { style: 'margin-bottom:8px;' }, t))
+        );
+
+        return el('div', { class: 'intro-step' }, [
+          el('h2', { class: 'stepTitle' }, 'Before You Start'),
+          el('p', { class: 'stepHelp' }, 'Please review these important details before starting your application.'),
+          el('div', { class: 'panel' }, [
+            el('b', {}, 'Top Things to Know When Signing Up:'),
+            list
+          ]),
+          el('div', { class: 'panel' }, [
+            el('b', {}, 'What Our MLS Area Covers:'),
+            mapImg
+          ]),
+          el('div', { class: 'actions', style: 'justify-content:center;' }, [nextBtn])
+        ]);
+      }
+
+      function stepRole() {
+        return el('div', {}, [
+          el('h2', { class: 'stepTitle' }, 'Which application path is this?'),
+          el('p', { class: 'stepHelp' }, 'Designated REALTOR® is a broker/office-level membership path (broker access).'),
+          el('div', { class: 'choices' }, [
+            choice('Agent / REALTOR®', 'Sales associates and REALTORS® applying for membership.', () => { state.role = 'agent'; }),
+            choice('Broker / Designated REALTOR®', 'Broker path (\"Designated REALTOR\" = broker access).', () => { state.role = 'broker'; })
+          ])
+        ]);
+      }
+
+      function stepBerPrimary() {
+        return el('div', {}, [
+          el('h2', { class: 'stepTitle' }, 'Will BER be your Primary Board?'),
+          el('p', { class: 'stepHelp' }, 'Primary means BER is where you pay your NAR and Florida REALTORS® dues. Secondary means you keep another board as your primary.'),
+          el('div', { class: 'choices' }, [
+            choice('Yes — Primary at BER', 'Primary REALTORS® must also subscribe to Individual MLS.', () => { state.berPrimary = true; }),
+            choice('No — Secondary at BER', 'You are primary at another board (Florida or out of state).', () => { state.berPrimary = false; })
+          ])
+        ]);
+      }
+
+      function stepPrimaryBoardLocation() {
+        return el('div', {}, [
+          el('h2', { class: 'stepTitle' }, 'Is your Primary Board in Florida or Out of State?'),
+          el('p', { class: 'stepHelp' }, 'This helps choose the correct secondary membership type.'),
+          el('div', { class: 'choices' }, [
+            choice('Florida', 'Your primary board is a Florida association.', () => { state.primaryBoardLocation = 'florida'; }),
+            choice('Out of State', 'Your primary board is outside of Florida.', () => { state.primaryBoardLocation = 'outOfState'; })
+          ])
+        ]);
+      }
+
+      function stepNeedsMls() {
+        // If primary agent, MLS is required and this step is skipped by branching,
+        // but keep it for other paths.
+        const isSecondaryAgent = (state.role === 'agent' && state.berPrimary === false);
+        const help = isSecondaryAgent
+          ? 'Secondary REALTORS® are not required to purchase Individual MLS — but you will not have MLS access unless you add it.'
+          : 'MLS access determines whether you will subscribe to MLS services with BER.';
+
+        return el('div', {}, [
+          el('h2', { class: 'stepTitle' }, 'Do you need MLS access?'),
+          el('p', { class: 'stepHelp' }, help),
+          el('div', { class: 'choices' }, [
+            choice('Yes — Add MLS access', state.role === 'broker' ? 'Includes office + individual MLS in the estimate.' : 'Adds Individual MLS in the estimate.', () => { state.needsMlsAccess = true; }),
+            choice('No — Not at this time', 'You can add MLS later if needed.', () => { state.needsMlsAccess = false; })
+          ])
+        ]);
+      }
+
+      function stepTransfer() {
+        return el('div', {}, [
+          el('h2', { class: 'stepTitle' }, 'Are you transferring from another Association / Board right now?'),
+          el('p', { class: 'stepHelp' }, 'Let us know if you are currently an active member elsewhere.'),
+
+          el('div', { class: 'choices' }, [
+            choice('Yes — I am transferring', 'I am an active member of another Realtor board or just ended my service with them.', () => {
+              state.isTransferring = true;
+              state.berPrimary = true; // transferring implies primary at BER
+            }),
+            choice('No — Not transferring', 'I am not currently a member of another Realtor board.', () => { state.isTransferring = false; })
+          ])
+        ]);
+      }
+
+      function stepLast5() {
+        return el('div', {}, [
+          el('h2', { class: 'stepTitle' }, 'Have you been an agent/REALTOR® member in Florida or another state within the last 5 years?'),
+          el('p', { class: 'stepHelp' }, 'This helps us understand your background.'),
+
+          el('div', { class: 'choices' }, [
+            choice('Yes', 'I have been licensed or a REALTOR® member in the last 5 years.', () => { state.licensedOrMemberLast5 = true; }),
+            choice('No', 'This is my first time or it has been more than 5 years.', () => { state.licensedOrMemberLast5 = false; })
+          ])
+        ]);
+      }
+
+      function stepUploadLOGS() {
+        const panel = el('div', { class: 'panel' }, [
+          el('b', {}, 'How to get a Letter of Good Standing'),
+          'Ask your previous association/board for a “Letter of Good Standing.” They will usually provide it as a PDF or email attachment. Upload it here once you receive it.'
+        ]);
+
+        const statusDiv = el('div', { style: 'margin-top:8px; font-size:14px; font-weight:600;' });
+        const fileInput = el('input', { type: 'file', accept: 'image/*,application/pdf' });
+        const filename = el('div', { class: 'fileHint' }, state.goodStandingFileName ? ('Selected: ' + state.goodStandingFileName) : 'No file selected yet.');
+        const verifyBtn = el('button', { type: 'button', class: 'primaryBtn', style: 'background:var(--ink); margin-top:8px; width:auto; display:inline-block;', disabled: true }, 'Verify Document');
+        const cont = el('button', { type: 'button', class: 'primaryBtn', disabled: true, onClick: () => { if (state.logsVerificationStatus === 'fail') { setError('Document verification failed. Please upload a valid Letter of Good Standing.'); return; } goNext(); } }, 'Continue');
+        fileInput.addEventListener('change', () => { const file = fileInput.files && fileInput.files[0]; if (file) { state.goodStandingFileName = file.name; state.logsFileObject = file; state.logsVerificationStatus = null; filename.textContent = 'Selected: ' + file.name; verifyBtn.disabled = false; statusDiv.textContent = ''; cont.disabled = true; setError(''); } });
+        verifyBtn.addEventListener('click', async () => {
+          if (!state.logsFileObject) {
+            setError('Please select a file first.');
+            return;
+          }
+
+          // Check file type
+          const file = state.logsFileObject;
+          const fileType = file.type;
+          const isImage = fileType.startsWith('image/');
+          const isPDF = fileType === 'application/pdf';
+
+          if (!isImage && !isPDF) {
+            setError('Please upload an image file (JPG, PNG) or PDF.');
+            return;
+          }
+
+          verifyBtn.disabled = true;
+          verifyBtn.textContent = 'Verifying...';
+          setError('');
+          statusDiv.innerHTML = '<div class="spinner"></div> Analyzing document...';
+          statusDiv.style.color = '#333';
+
+          try {
+            let imageData;
+
+            if (isPDF) {
+              // Convert PDF first page to image using PDF.js
+              statusDiv.innerHTML = '<div class="spinner"></div> Rendering PDF...';
+
+              const arrayBuffer = await file.arrayBuffer();
+              pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+              const pdf = await pdfjsLib.getDocument({ data: arrayBuffer }).promise;
+              const page = await pdf.getPage(1);
+
+              const scale = 2.0;
+              const viewport = page.getViewport({ scale });
+
+              const canvas = document.createElement('canvas');
+              const context = canvas.getContext('2d');
+              canvas.height = viewport.height;
+              canvas.width = viewport.width;
+
+              await page.render({ canvasContext: context, viewport }).promise;
+              imageData = canvas.toDataURL('image/png');
+            } else {
+              imageData = URL.createObjectURL(file);
+            }
+
+            statusDiv.innerHTML = '<div class="spinner"></div> Running OCR...';
+
+            const { data: { text } } = await Tesseract.recognize(imageData, 'eng', { logger: (m) => { if (m.status === 'recognizing text') { statusDiv.innerHTML = `<div class="spinner"></div> OCR Progress: ${Math.round(m.progress * 100)}%`; } } });
+            if (!isPDF) URL.revokeObjectURL(imageData);
+            const normalizedText = text.toUpperCase();
+            const appFirst = (state.firstName || '').trim().toUpperCase();
+            const appLast = (state.lastName || '').trim().toUpperCase();
+            const matchFirst = appFirst && normalizedText.includes(appFirst);
+            const matchLast = appLast && normalizedText.includes(appLast);
+            // RELAXED: Match first OR last name instead of both
+            const nameMatch = matchFirst || matchLast;
+            const hasCodeOfEthics = /CODE\s*OF\s*ETHICS/i.test(text);
+            const hasGoodStanding = /GOOD\s*STANDING/i.test(text);
+            if (!nameMatch) {
+              state.logsVerificationStatus = 'fail';
+              statusDiv.innerHTML = '';
+              const errorBox = el('div', { style: 'background:#fef2f2; border:1px solid #fecaca; padding:12px; border-radius:8px; margin-top:8px;' }, [el('div', { style: 'color:#ca0a0a; font-weight:700; margin-bottom:6px;' }, '✗ Verification Failed'), el('div', { style: 'font-size:13px; color:#991b1b;' }, `The document does not appear to contain your name (${state.firstName} ${state.lastName}).`), el('div', { style: 'font-size:13px; color:#991b1b; margin-top:4px;' }, 'Please upload a valid Letter of Good Standing with your name on it.')]);
+              statusDiv.appendChild(errorBox);
+              cont.disabled = true;
+            } else if (!hasCodeOfEthics && !hasGoodStanding) {
+              state.logsVerificationStatus = 'review';
+              statusDiv.innerHTML = '';
+              const warningBox = el('div', { style: 'background:#fffbeb; border:1px solid #fde68a; padding:12px; border-radius:8px; margin-top:8px;' }, [el('div', { style: 'color:#ca8a04; font-weight:700; margin-bottom:6px;' }, '⚠ Manual Review Required'), el('div', { style: 'font-size:13px; color:#92400e;' }, `Name found, but could not detect "Code of Ethics" or "Good Standing" mentions in the text.`), el('div', { style: 'font-size:13px; color:#92400e; margin-top:4px;' }, 'This document will require manual review by our staff. You may continue.')]);
+              statusDiv.appendChild(warningBox);
+              cont.disabled = false;
+            } else {
+              state.logsVerificationStatus = 'pass';
+              statusDiv.innerHTML = '';
+              const successBox = el('div', { style: 'background:#f0fdf4; border:1px solid #bbf7d0; padding:12px; border-radius:8px; margin-top:8px;' }, [el('div', { style: 'color:#15803d; font-weight:700; margin-bottom:6px;' }, '✓ Document Verified'), el('div', { style: 'font-size:13px; color:#166534; line-height:1.4;' }, [el('div', {}, `Name: ${state.firstName} ${state.lastName} ✓`), hasCodeOfEthics ? el('div', {}, 'Code of Ethics: Found ✓') : null, hasGoodStanding ? el('div', {}, 'Good Standing: Confirmed ✓') : null].filter(Boolean))]);
+              statusDiv.appendChild(successBox);
+              cont.disabled = false;
+            }
+          } catch (e) {
+            console.error('OCR Error:', e);
+            statusDiv.textContent = '✗ Error analyzing document. Please try again or upload a different image.';
+            statusDiv.style.color = 'var(--danger)';
+            state.logsVerificationStatus = null;
+          } finally {
+            verifyBtn.disabled = false;
+            verifyBtn.textContent = 'Re-verify Document';
+          }
+        });
+        return el('div', {}, [el('h2', { class: 'stepTitle' }, 'Upload your Letter of Good Standing'), el('p', { class: 'stepHelp' }, 'Required if you are transferring OR if you have been an agent/REALTOR® member in Florida or another state within the last 5 years.'), panel, el('div', { class: 'field' }, [el('label', {}, 'Letter of Good Standing (PDF or image)'), fileInput, filename, el('div', {}, [verifyBtn]), statusDiv]), el('div', { class: 'actions' }, [cont])]);
+      }
+
+      function stepLicenseNumber() {
+        const statusDiv = el('div', { style: 'margin-top:8px; font-size:14px; font-weight:600;' }, state.licenseVerified ? '✓ Verified' : '');
+        if (state.licenseVerified) statusDiv.style.color = 'var(--blue)';
+
+        // Continue button logic
+        const cont = el('button', {
+          type: 'button', class: 'primaryBtn', disabled: !state.licenseVerified, onClick: () => {
+            if (!state.licenseVerified) { setError('Please verify your license first.'); return; }
+            goNext();
+          }
+        }, 'Continue');
+
+        const verifyBtn = el('button', { type: 'button', class: 'primaryBtn', style: 'background:var(--ink); margin-top:8px; width:auto; display:inline-block;' }, 'Verify License');
+
+        const inputReq = el('input', {
+          type: 'text',
+          value: state.stateLicenseNumber || '',
+          placeholder: 'e.g. SL3645212',
+          onInput: (e) => {
+            state.stateLicenseNumber = e.target.value;
+            // Reset verification on change
+            state.licenseVerified = false;
+            state.verificationDetails = null;
+
+            statusDiv.textContent = '';
+            statusDiv.className = '';
+            verifyBtn.disabled = false;
+            verifyBtn.textContent = 'Verify License';
+            cont.disabled = true;
+          }
+        });
+
+        verifyBtn.addEventListener('click', async () => {
+          const val = state.stateLicenseNumber.trim();
+          if (val.length < 4) { setError('License number is too short.'); return; }
+
+          verifyBtn.disabled = true;
+          verifyBtn.textContent = 'Verifying...';
+          setError('');
+
+          // Show spinner
+          statusDiv.innerHTML = '<div class="spinner"></div> Verifying with DBPR...';
+          statusDiv.className = 'status-box';
+          statusDiv.style.background = '#f7f7f7';
+          statusDiv.style.color = '#333';
+
+          try {
+            const url = `${WORKER_BASE}/api/verify-license?number=${encodeURIComponent(val)}`;
+            let res;
+            try {
+              res = await fetch(url);
+            } catch (netErr) {
+              console.error('Network error:', netErr);
+              throw new Error('Could not connect to verification service.');
+            }
+
+            if (!res.ok) {
+              console.warn('DBPR API Error:', res.status);
+              throw new Error(`Service returned error: ${res.status}`);
+            }
+
+            const text = await res.text();
+            let data;
+            try {
+              data = JSON.parse(text);
+            } catch (e) {
+              console.warn('Backend returned non-JSON:', text);
+              throw new Error('Backend returned invalid response.');
+            }
+
+            if (data.valid) {
+              // --- NAME MATCHING CHECK ---
+              const dbprName = (data.details.name || '').toUpperCase();
+              const appFirst = (state.firstName || '').trim().toUpperCase();
+              const appLast = (state.lastName || '').trim().toUpperCase();
+
+              // Simple inclusion check: Does DBPR string contain first AND last name?
+              // "WEINKAUFF, KEVIN MICHEAL" contains "KEVIN" and "WEINKAUFF" -> PASS
+              // "Kev" in "Kevin" -> PASS (substring allowed per user request)
+              // "Michael Irons" vs "Kevin Weinkauff" -> FAIL
+
+              const matchFirst = appFirst && dbprName.includes(appFirst);
+              const matchLast = appLast && dbprName.includes(appLast);
+
+              if (!matchFirst || !matchLast) {
+                state.licenseVerified = false;
+                statusDiv.innerHTML = '';
+                const errorBox = el('div', { style: 'background:#fef2f2; border:1px solid #fecaca; padding:12px; border-radius:8px; margin-top:8px;' }, [
+                  el('div', { style: 'color:#ca0a0a; font-weight:700; margin-bottom:6px;' }, '✗ Name Mismatch'),
+                  el('div', { style: 'font-size:13px; color:#991b1b;' }, `The name on the application (${state.firstName} ${state.lastName}) does not match the name on the license (${data.details.name}).`),
+                  el('div', { style: 'font-size:13px; color:#991b1b; margin-top:4px;' }, 'Please ensure your application name matches your official DBPR license name.')
+                ]);
+                statusDiv.appendChild(errorBox);
+                cont.disabled = true;
+              } else {
+                // MATCH SUCCESS
+                state.licenseVerified = true;
+                state.verificationDetails = data.details;
+
+                // Render detailed success message
+                statusDiv.innerHTML = '';
+                const d = data.details || {};
+
+                const detailBox = el('div', { style: 'background:#f0fdf4; border:1px solid #bbf7d0; padding:12px; border-radius:8px; margin-top:8px; display:flex; flex-direction:column; gap:4px;' }, [
+                  el('div', { style: 'color:#15803d; font-weight:700; display:flex; align-items:center; gap:6px;' }, [
+                    el('span', {}, '✓'),
+                    'Verified Active on DBPR'
+                  ]),
+                  el('div', { style: 'font-size:13px; color:#166534; line-height:1.4;' }, [
+                    el('div', {}, [el('strong', {}, 'Name: '), d.name || '']),
+                    el('div', {}, [el('strong', {}, 'License: '), d.number_rank || '']),
+                    el('div', {}, [el('strong', {}, 'Status: '), d.status_expires || ''])
+                  ])
+                ]);
+
+                statusDiv.appendChild(detailBox);
+                statusDiv.style.color = 'var(--ink)';
+                cont.disabled = false;
+              }
+            } else {
+              state.licenseVerified = false;
+              statusDiv.textContent = `✗ Verification failed: ${data.message || 'Unknown error'}`;
+              statusDiv.style.color = 'var(--danger)';
+              cont.disabled = true;
+            }
+          } catch (e) {
+            console.error(e);
+            statusDiv.textContent = 'Error contacting verification service.';
+            statusDiv.style.color = 'var(--danger)';
+          } finally {
+            verifyBtn.disabled = false;
+            if (!state.licenseVerified) verifyBtn.textContent = 'Verify License';
+            else verifyBtn.textContent = 'Re-verify';
+          }
+        });
+
+        return el('div', {}, [
+          el('h2', { class: 'stepTitle' }, 'State License Verification'),
+          el('p', { class: 'stepHelp' }, 'Please enter and verify your Florida DBPR license number.'),
+          el('div', { class: 'field' }, [
+            el('label', {}, 'State License Number'),
+            inputReq,
+            el('div', {}, [verifyBtn]),
+            statusDiv
+          ]),
+          el('div', { class: 'actions' }, [cont])
+        ]);
+      }
+
+      function stepUploadDriversLicense() {
+        const statusDiv = el('div', { style: 'margin-top:8px; font-size:14px; font-weight:600;' });
+        const fileInput = el('input', { type: 'file', accept: 'image/*,application/pdf' });
+        const filename = el('div', { class: 'fileHint' }, state.driversLicenseFileName ? ('Selected: ' + state.driversLicenseFileName) : 'No file selected yet.');
+        const verifyBtn = el('button', { type: 'button', class: 'primaryBtn', style: 'background:var(--ink); margin-top:8px; width:auto; display:inline-block;', disabled: true }, 'Verify Document');
+        const cont = el('button', { type: 'button', class: 'primaryBtn', disabled: state.dlVerificationStatus !== 'pass' && state.dlVerificationStatus !== 'review', onClick: () => { goNext(); } }, 'Continue');
+
+        // Show manual review option if 3+ attempts
+        if (state.dlVerifyAttempts >= 3 && state.dlVerificationStatus !== 'pass') {
+          state.dlVerificationStatus = 'review';
+          cont.disabled = false;
+        }
+
+        fileInput.addEventListener('change', () => { const file = fileInput.files && fileInput.files[0]; if (file) { state.driversLicenseFileName = file.name; state.dlFileObject = file; filename.textContent = 'Selected: ' + file.name; verifyBtn.disabled = false; statusDiv.textContent = ''; if (state.dlVerificationStatus !== 'pass' && state.dlVerificationStatus !== 'review') cont.disabled = true; setError(''); } });
+
+        verifyBtn.addEventListener('click', async () => {
+          if (!state.dlFileObject) { setError('Please select a file first.'); return; }
+          const file = state.dlFileObject;
+          const fileType = file.type;
+          const isImage = fileType.startsWith('image/');
+          const isPDF = fileType === 'application/pdf';
+          if (!isImage && !isPDF) { setError('Please upload an image file (JPG, PNG) or PDF.'); return; }
+
+          state.dlVerifyAttempts++;
+          verifyBtn.disabled = true;
+          verifyBtn.textContent = 'Verifying...';
+          setError('');
+          statusDiv.innerHTML = '<div class="spinner"></div> Analyzing document...';
+          statusDiv.style.color = '#333';
+
+          try {
+            let imageData;
+            if (isPDF) {
+              statusDiv.innerHTML = '<div class="spinner"></div> Rendering PDF...';
+              const arrayBuffer = await file.arrayBuffer();
+              pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+              const pdf = await pdfjsLib.getDocument({ data: arrayBuffer }).promise;
+              const page = await pdf.getPage(1);
+              const scale = 2.0;
+              const viewport = page.getViewport({ scale });
+              const canvas = document.createElement('canvas');
+              const context = canvas.getContext('2d');
+              canvas.height = viewport.height;
+              canvas.width = viewport.width;
+              await page.render({ canvasContext: context, viewport }).promise;
+              imageData = canvas.toDataURL('image/png');
+            } else if (file.name.toLowerCase().endsWith('.heic') || file.type === 'image/heic') {
+              statusDiv.innerHTML = '<div class="spinner"></div> Converting HEIC image...';
+              try {
+                const blob = await heic2any({ blob: file, toType: "image/png" });
+                const finalBlob = Array.isArray(blob) ? blob[0] : blob;
+                imageData = URL.createObjectURL(finalBlob);
+              } catch (e) {
+                console.warn('HEIC conversion failed', e);
+                throw new Error('HEIC image could not be processed. Please use JPG or PNG.');
+              }
+            } else {
+              imageData = URL.createObjectURL(file);
+            }
+            // 1. Face Detection
+            const US_STATES = [
+              'ALABAMA', 'ALASKA', 'ARIZONA', 'ARKANSAS', 'CALIFORNIA', 'COLORADO', 'CONNECTICUT', 'DELAWARE', 'FLORIDA', 'GEORGIA', 'HAWAII', 'IDAHO', 'ILLINOIS', 'INDIANA', 'IOWA', 'KANSAS', 'KENTUCKY', 'LOUISIANA', 'MAINE', 'MARYLAND', 'MASSACHUSETTS', 'MICHIGAN', 'MINNESOTA', 'MISSISSIPPI', 'MISSOURI', 'MONTANA', 'NEBRASKA', 'NEVADA', 'NEW HAMPSHIRE', 'NEW JERSEY', 'NEW MEXICO', 'NEW YORK', 'NORTH CAROLINA', 'NORTH DAKOTA', 'OHIO', 'OKLAHOMA', 'OREGON', 'PENNSYLVANIA', 'RHODE ISLAND', 'SOUTH CAROLINA', 'SOUTH DAKOTA', 'TENNESSEE', 'TEXAS', 'UTAH', 'VERMONT', 'VIRGINIA', 'WASHINGTON', 'WEST VIRGINIA', 'WISCONSIN', 'WYOMING',
+              'DISTRICT OF COLUMBIA', 'AL', 'AK', 'AZ', 'AR', 'CA', 'CO', 'CT', 'DE', 'FL', 'GA', 'HI', 'ID', 'IL', 'IN', 'IA', 'KS', 'KY', 'LA', 'ME', 'MD', 'MA', 'MI', 'MN', 'MS', 'MO', 'MT', 'NE', 'NV', 'NH', 'NJ', 'NM', 'NY', 'NC', 'ND', 'OH', 'OK', 'OR', 'PA', 'RI', 'SC', 'SD', 'TN', 'TX', 'UT', 'VT', 'VA', 'WA', 'WV', 'WI', 'WY', 'DC'
+            ];
+
+            statusDiv.innerHTML = '<div class="spinner"></div> Turning the cogs...';
+            if (!document.getElementById('face-api-script')) {
+              // Ensure script loaded
+            }
+
+            try {
+              if (!faceapi.nets.tinyFaceDetector.params) {
+                await faceapi.nets.tinyFaceDetector.loadFromUri('https://raw.githubusercontent.com/justadudewhohacks/face-api.js/master/weights');
+              }
+
+              statusDiv.innerHTML = '<div class="spinner"></div> Envisioning a bright future...';
+              const imgEl = new Image();
+              imgEl.src = imageData;
+              await new Promise(r => imgEl.onload = r);
+
+              // 1. Face Detection
+              // Use scoreThreshold: 0.5 (lowered from 0.6)
+              const detections = await faceapi.detectAllFaces(imgEl, new faceapi.TinyFaceDetectorOptions({ scoreThreshold: 0.5 }));
+              if (detections.length === 0) {
+                throw new Error('No face detected. Please ensure your photo clearly shows your face.');
+              }
+              facesFound = detections.length;
+            } catch (e) {
+              console.error('Face detection scan error:', e);
+              if (e.message.includes('No face detected')) throw e;
+              throw new Error('Face check failed: ' + e.message);
+            }
+
+            statusDiv.innerHTML = '<div class="spinner"></div> Letting Captain Coco Review...';
+
+            // Helper function to rotate image
+            async function rotateImage(imgSrc, degrees) {
+              return new Promise((resolve) => {
+                const img = new Image();
+                img.onload = () => {
+                  const canvas = document.createElement('canvas');
+                  const ctx = canvas.getContext('2d');
+                  if (degrees === 90 || degrees === 270) {
+                    canvas.width = img.height;
+                    canvas.height = img.width;
+                  } else {
+                    canvas.width = img.width;
+                    canvas.height = img.height;
+                  }
+                  ctx.translate(canvas.width / 2, canvas.height / 2);
+                  ctx.rotate((degrees * Math.PI) / 180);
+                  ctx.drawImage(img, -img.width / 2, -img.height / 2);
+                  resolve(canvas.toDataURL('image/png'));
+                };
+                img.src = imgSrc;
+              });
+            }
+
+            // Advanced Image Pre-processing for OCR
+            async function preprocessImage(imgSrc) {
+              return new Promise((resolve) => {
+                const img = new Image();
+                img.onload = () => {
+                  const canvas = document.createElement('canvas');
+                  canvas.width = img.width;
+                  canvas.height = img.height;
+                  const ctx = canvas.getContext('2d');
+                  ctx.drawImage(img, 0, 0);
+
+                  const imgData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+                  const data = imgData.data;
+                  const width = canvas.width;
+                  const height = canvas.height;
+
+                  // Step 1: Convert to Grayscale
+                  const grayPixels = [];
+                  for (let i = 0; i < data.length; i += 4) {
+                    const gray = Math.round(0.299 * data[i] + 0.587 * data[i + 1] + 0.114 * data[i + 2]);
+                    grayPixels.push(gray);
+                    data[i] = gray;
+                    data[i + 1] = gray;
+                    data[i + 2] = gray;
+                  }
+
+                  // Step 2: Calculate Otsu's Threshold
+                  const histogram = new Array(256).fill(0);
+                  for (const g of grayPixels) histogram[g]++;
+
+                  const total = grayPixels.length;
+                  let sum = 0;
+                  for (let i = 0; i < 256; i++) sum += i * histogram[i];
+
+                  let sumB = 0, wB = 0, wF = 0;
+                  let maxVariance = 0, threshold = 128;
+
+                  for (let t = 0; t < 256; t++) {
+                    wB += histogram[t];
+                    if (wB === 0) continue;
+                    wF = total - wB;
+                    if (wF === 0) break;
+
+                    sumB += t * histogram[t];
+                    const mB = sumB / wB;
+                    const mF = (sum - sumB) / wF;
+                    const variance = wB * wF * (mB - mF) * (mB - mF);
+
+                    if (variance > maxVariance) {
+                      maxVariance = variance;
+                      threshold = t;
+                    }
+                  }
+
+                  console.log('Otsu threshold:', threshold);
+
+                  // Step 3: Apply Binary Threshold
+                  for (let i = 0; i < data.length; i += 4) {
+                    const val = data[i] > threshold ? 255 : 0;
+                    data[i] = val;
+                    data[i + 1] = val;
+                    data[i + 2] = val;
+                  }
+
+                  ctx.putImageData(imgData, 0, 0);
+
+                  // Step 4: Sharpening (Unsharp Mask approximation)
+                  // Create a slightly blurred version and subtract
+                  const tempCanvas = document.createElement('canvas');
+                  tempCanvas.width = width;
+                  tempCanvas.height = height;
+                  const tempCtx = tempCanvas.getContext('2d');
+                  tempCtx.filter = 'blur(1px)';
+                  tempCtx.drawImage(canvas, 0, 0);
+
+                  const blurData = tempCtx.getImageData(0, 0, width, height).data;
+                  const sharpData = ctx.getImageData(0, 0, width, height);
+                  const sd = sharpData.data;
+
+                  const amount = 0.5; // Sharpening amount
+                  for (let i = 0; i < sd.length; i += 4) {
+                    // Unsharp mask: original + amount * (original - blur)
+                    let newVal = sd[i] + amount * (sd[i] - blurData[i]);
+                    newVal = Math.min(255, Math.max(0, newVal));
+                    // Re-binarize after sharpening
+                    newVal = newVal > 128 ? 255 : 0;
+                    sd[i] = newVal;
+                    sd[i + 1] = newVal;
+                    sd[i + 2] = newVal;
+                  }
+
+                  ctx.putImageData(sharpData, 0, 0);
+                  resolve(canvas.toDataURL('image/png'));
+                };
+                img.src = imgSrc;
+              });
+            }
+
+
+            // Try rotations - stop early if match found
+            let nameMatch = false;
+            const rotations = [0, 90, 180, 270];
+
+            // FUZZY MATCHING: 50% letter match logic
+            function calculateMatchPercentage(name, word) {
+              if (!name || !word) return 0;
+              let matches = 0;
+              let wChars = word.split('');
+              for (const char of name) {
+                const idx = wChars.indexOf(char);
+                if (idx !== -1) {
+                  matches++;
+                  wChars.splice(idx, 1);
+                }
+              }
+              return matches / name.length;
+            }
+
+            function fuzzyMatch(name, text, threshold = 0.5) {
+              if (!name || name.length < 2) return false;
+              if (text.includes(name)) return true;
+
+              const words = text.split(/\s+/);
+              for (const word of words) {
+                // Only check words of similar length (+/- 3 chars)
+                if (Math.abs(word.length - name.length) > 3) continue;
+
+                if (calculateMatchPercentage(name, word) >= threshold) return true;
+              }
+              return false;
+            }
+
+            // Gemini Vision OCR Function - Via Worker (secure)
+            async function callGeminiOCR(imageInput) {
+              const WORKER_OCR_URL = 'https://gemini-ocr-worker.bonitaspringsrealtors.workers.dev/api/ocr';
+
+              try {
+                let base64Data, mimeType;
+
+                // Handle blob URLs - convert to base64
+                if (imageInput.startsWith('blob:')) {
+                  const response = await fetch(imageInput);
+                  const blob = await response.blob();
+                  mimeType = blob.type || 'image/png';
+
+                  // Convert blob to base64
+                  const reader = new FileReader();
+                  const dataUrl = await new Promise((resolve, reject) => {
+                    reader.onload = () => resolve(reader.result);
+                    reader.onerror = reject;
+                    reader.readAsDataURL(blob);
+                  });
+                  base64Data = dataUrl.replace(/^data:image\/\w+;base64,/, '');
+                } else if (imageInput.startsWith('data:')) {
+                  // Already a data URL
+                  base64Data = imageInput.replace(/^data:image\/\w+;base64,/, '');
+                  mimeType = imageInput.match(/^data:(image\/\w+);base64,/)?.[1] || 'image/png';
+                } else {
+                  console.warn('Unknown image format for Gemini OCR');
+                  return null;
+                }
+
+                const response = await fetch(WORKER_OCR_URL, {
+                  method: 'POST',
+                  headers: { 'Content-Type': 'application/json' },
+                  body: JSON.stringify({
+                    image: base64Data,
+                    mimeType: mimeType
+                  })
+                });
+
+                if (!response.ok) {
+                  const errorText = await response.text();
+                  console.warn('Gemini OCR failed:', response.status, errorText);
+                  return null;
+                }
+
+                const data = await response.json();
+                console.log('Gemini OCR Result:', data.text);
+                return data.text || null;
+              } catch (error) {
+                console.error('Gemini OCR error:', error);
+                return null;
+              }
+            }
+
+
+            const appFirst = (state.firstName || '').trim().toUpperCase();
+            const appLast = (state.lastName || '').trim().toUpperCase();
+
+            for (let i = 0; i < rotations.length && !nameMatch; i++) {
+              statusDiv.innerHTML = `<div class="spinner"></div> ${i === 0 ? 'Asking Captain Coco to read your license...' : 'Checking orientation ' + (i + 1) + '...'}`;
+              let rotatedImage = imageData;
+              if (rotations[i] !== 0) {
+                rotatedImage = await rotateImage(imageData, rotations[i]);
+              }
+
+              // Try Gemini Vision OCR first, fallback to Tesseract
+              let ocrText = await callGeminiOCR(rotatedImage);
+
+              if (!ocrText) {
+                console.log('Gemini OCR unavailable, using Tesseract fallback...');
+                const result = await Tesseract.recognize(rotatedImage, 'eng', {
+                  logger: () => { }
+                });
+                ocrText = result.data.text;
+              }
+
+              const normalizedText = ocrText.toUpperCase().replace(/[^A-Z0-9 ]/g, ' '); // Keep numbers for address
+              // split into words > 3 chars
+              const ocrWords = normalizedText.split(/\s+/).filter(w => w.length > 2);
+
+              console.log('OCR Text:', normalizedText);
+
+              // 2. Name & Address Verification
+              let passThreshold = 0.60; // Default if not checked
+              let addressPassed = true; // Default true if not checked (skipped)
+
+              // Address Verification (if checked)
+              if (state.licenseAddressSame) {
+                const addrText = ((state.mailing.address1 || '') + ' ' + (state.mailing.zip || '')).toUpperCase();
+                const addrWords = addrText.split(/\s+/).filter(w => w.length > 2);
+                let matchedCount = 0;
+                for (const w of addrWords) {
+                  if (fuzzyMatch(w, normalizedText, 0.85)) matchedCount++; // High threshold for address words
+                }
+                const addressScore = addrWords.length > 0 ? (matchedCount / addrWords.length) : 0;
+                console.log('Address Score:', addressScore);
+
+                // User Rule: "50% for the address if checked"
+                if (addressScore >= 0.50) {
+                  addressPassed = true;
+                  // User Rule: "Then 40% for the name if check"
+                  passThreshold = 0.40;
+                  console.log('Address passed (>50%). Lowering name threshold to 40%.');
+                } else {
+                  addressPassed = false;
+                  console.log('Address failed (<50%). Verification will fail.');
+                }
+              }
+
+              const matchFirst = fuzzyMatch(appFirst, normalizedText, passThreshold);
+              const matchLast = fuzzyMatch(appLast, normalizedText, passThreshold);
+              const matchState = US_STATES.some(s => normalizedText.includes(s));
+
+              if (matchFirst && matchLast && matchState && addressPassed) {
+                nameMatch = true;
+              }
+            }
+
+            // Only require face if we found one? No, usually mandatory. 
+            // User said "60% that there's a face". Assuming mandatory.
+            const faceDetected = (facesFound > 0);
+
+            if (nameMatch && faceDetected) {
+              state.dlVerificationStatus = 'pass';
+              statusDiv.innerHTML = '';
+              const successBox = el('div', { style: 'background:#f0fdf4; border:1px solid #bbf7d0; padding:12px; border-radius:8px; margin-top:8px;' }, [
+                el('div', { style: 'color:#15803d; font-weight:700; margin-bottom:6px;' }, '✓ Document Verified'),
+                el('div', { style: 'font-size:13px; color:#166534;' }, 'Your document has been successfully verified.')
+              ]);
+              statusDiv.appendChild(successBox);
+              cont.disabled = false;
+            } else {
+              // Check if max attempts reached
+              if (state.dlVerifyAttempts >= 3) {
+                state.dlVerificationStatus = 'review';
+                statusDiv.innerHTML = '';
+
+                const tryAgainBtn = el('button', {
+                  class: 'secondaryBtn', style: 'margin-top:8px; width:100%;', onClick: () => {
+                    state.dlVerifyAttempts = 0;
+                    verifyBtn.disabled = false;
+                    statusDiv.innerHTML = '';
+                    fileInput.value = '';
+                    filename.textContent = 'No file selected yet.';
+                    verifyBtn.textContent = 'Verify Document';
+                  }
+                }, 'Upload & Try Again');
+
+                const warningBox = el('div', { style: 'background:#fffbeb; border:1px solid #fde68a; padding:12px; border-radius:8px; margin-top:8px;' }, [
+                  el('div', { style: 'color:#ca8a04; font-weight:700; margin-bottom:6px;' }, '⚠ Manual Review Required'),
+                  el('div', { style: 'font-size:13px; color:#92400e;' }, 'We could not automatically verify your document after multiple attempts.'),
+                  el('div', { style: 'font-size:13px; color:#92400e; margin-top:4px;' }, 'Your application will be submitted for manual review. However, you can keep trying to get approved instantly by ensuring the photo is clear.'),
+                  el('div', { style: 'margin-top:8px;' }, [tryAgainBtn]),
+                  el('div', { style: 'font-size:13px; color:#92400e; margin-top:8px;' }, 'Or continue below to submit for manual review.')
+                ]);
+                statusDiv.appendChild(warningBox);
+                cont.disabled = false;
+              } else {
+                state.dlVerificationStatus = 'fail';
+                statusDiv.innerHTML = '';
+                const attemptsLeft = 3 - state.dlVerifyAttempts;
+                const errorBox = el('div', { style: 'background:#fef2f2; border:1px solid #fecaca; padding:12px; border-radius:8px; margin-top:8px;' }, [
+                  el('div', { style: 'color:#ca0a0a; font-weight:700; margin-bottom:6px;' }, '✗ Could Not Verify'),
+                  el('div', { style: 'font-size:13px; color:#991b1b;' }, 'Please upload a clearer photo. Make sure your name is clearly visible and legible.'),
+                  el('div', { style: 'font-size:13px; color:#991b1b; margin-top:4px;' }, 'Ensure there is no glare blocking the text.'),
+                  el('div', { style: 'font-size:13px; color:#991b1b; margin-top:4px; font-style:italic;' }, `${attemptsLeft} attempt${attemptsLeft !== 1 ? 's' : ''} remaining before manual review option.`)
+                ]);
+                statusDiv.appendChild(errorBox);
+                cont.disabled = true;
+                // verifyBtn is re-enabled in finally block
+              }
+            }
+
+          } catch (e) {
+            console.error('OCR Error:', e);
+            state.dlVerifyAttempts++;
+            if (state.dlVerifyAttempts >= 3) {
+              state.dlVerificationStatus = 'review';
+              statusDiv.innerHTML = '';
+              const warningBox = el('div', { style: 'background:#fffbeb; border:1px solid #fde68a; padding:12px; border-radius:8px; margin-top:8px;' }, [
+                el('div', { style: 'color:#ca8a04; font-weight:700; margin-bottom:6px;' }, '⚠ Manual Review Required'),
+                el('div', { style: 'font-size:13px; color:#92400e;' }, 'We encountered errors processing your document. It will be reviewed manually.'),
+                el('div', { style: 'font-size:13px; color:#92400e; margin-top:4px;' }, 'You may continue with your application.')
+              ]);
+              statusDiv.appendChild(warningBox);
+              cont.disabled = false;
+            } else {
+              statusDiv.textContent = '✗ Error analyzing document. Please try a different, clearer image.';
+              statusDiv.style.color = 'var(--danger)';
+            }
+          } finally {
+            verifyBtn.disabled = false;
+            verifyBtn.textContent = 'Re-verify Document';
+          }
+        });
+
+        const chk = el('input', { type: 'checkbox', style: 'margin-right:8px' });
+        chk.checked = state.licenseAddressSame;
+        chk.onchange = (e) => {
+          state.licenseAddressSame = e.target.checked;
+          if (state.dlFileObject) verifyBtn.disabled = false;
+          if (state.dlVerificationStatus === 'fail') statusDiv.innerHTML = '';
+        };
+
+        const addressSameCheck = el('div', { style: 'margin-top:10px; display:flex; align-items:center; font-size:14px; color:#555' }, [
+          chk,
+          document.createTextNode('The address on my drivers license is the same on my application')
+        ]);
+
+        return el('div', {}, [
+          el('h2', { class: 'stepTitle' }, 'Upload your Driver\'s License'),
+          el('p', { class: 'stepHelp' }, 'A copy of your driver\'s license is required for identity verification.'),
+          el('p', { class: 'stepHelp', style: 'font-style:italic; color:#666; margin-top:-8px;' }, 'This can take some time. Please be patient as we verify the license. This will help ensure a speedy setup process!'),
+          el('div', { class: 'field' }, [
+            el('label', {}, 'Driver\'s License (image or PDF)'),
+            fileInput,
+            filename,
+            addressSameCheck,
+            el('div', {}, [verifyBtn]),
+            statusDiv
+          ]),
+          el('div', { class: 'actions' }, [cont])
+        ]);
+      }
+
+      function stepFirstName() {
+        return oneFieldStep({
+          title: 'Your First Name',
+          help: 'Enter your legal first name as it appears on your license.',
+          label: 'First Name',
+          value: state.firstName,
+          placeholder: 'First name',
+          onInput: (v) => { state.firstName = v; state.licenseVerified = false; state.verificationDetails = null; },
+          validator: () => (!state.firstName.trim() ? 'Please enter your first name.' : '')
+        });
+      }
+      function stepLastName() {
+        return oneFieldStep({
+          title: 'Your Last Name',
+          help: 'Enter your legal last name as it appears on your license.',
+          label: 'Last Name',
+          value: state.lastName,
+          placeholder: 'Last name',
+          onInput: (v) => { state.lastName = v; state.licenseVerified = false; state.verificationDetails = null; },
+          validator: () => (!state.lastName.trim() ? 'Please enter your last name.' : '')
+        });
+      }
+      function stepEmail() {
+        return oneFieldStep({
+          title: 'Your Email Address',
+          help: 'This will be used for membership communication.',
+          label: 'Email',
+          value: state.email,
+          placeholder: 'you@example.com',
+          type: 'email',
+          onInput: (v) => { state.email = v; },
+          validator: () => {
+            const v = state.email.trim();
+            if (!v) return 'Please enter your email.';
+            if (!/^\S+@\S+\.\S+$/.test(v)) return 'Please enter a valid email address.';
+            return '';
+          }
+        });
+      }
+
+      function stepMailingAddress() {
+        const addr1 = el('input', { class: 'stepInput', style: 'width:100%;', placeholder: 'Address Line 1', value: state.mailing.address1 });
+        const addr2 = el('input', { class: 'stepInput', style: 'width:100%; margin-top:12px;', placeholder: 'Address Line 2 (Optional)', value: state.mailing.address2 });
+
+        const city = el('input', { class: 'stepInput', style: 'flex:2; min-width:120px;', placeholder: 'City', value: state.mailing.city });
+        const st = el('input', { class: 'stepInput', style: 'flex:0 0 60px; text-align:center;', placeholder: 'ST', value: state.mailing.state, maxLength: 2 });
+        const zip = el('input', { class: 'stepInput', style: 'flex:1; min-width:80px;', placeholder: 'Zip', value: state.mailing.zip });
+
+        const row = el('div', { style: 'display:flex; gap:12px; margin-top:12px;' }, [city, st, zip]);
+
+        const nextBtn = el('button', {
+          class: 'primaryBtn', onClick: () => {
+            if (!addr1.value.trim() || !city.value.trim() || !st.value.trim() || !zip.value.trim()) {
+              setError('Please fill in all required fields.');
+              return;
+            }
+            state.mailing.address1 = addr1.value.trim();
+            state.mailing.address2 = addr2.value.trim();
+            state.mailing.city = city.value.trim();
+            state.mailing.state = st.value.trim();
+            state.mailing.zip = zip.value.trim();
+            goNext();
+          }
+        }, 'Continue');
+
+        [addr1, addr2, city, st, zip].forEach(i => i.addEventListener('keyup', (e) => {
+          if (e.key === 'Enter') nextBtn.click();
+        }));
+
+        return el('div', {}, [
+          el('h2', { class: 'stepTitle' }, 'Mailing Address'),
+          el('p', { class: 'stepHelp' }, 'Where should we send official mail?'),
+          el('div', { class: 'field' }, [
+            el('label', {}, 'Street Address'),
+            addr1,
+            addr2
+          ]),
+          el('div', { class: 'field' }, [
+            el('label', {}, 'City, State, Zip'),
+            row
+          ]),
+          el('div', { class: 'actions' }, [nextBtn])
+        ]);
+      }
+      function stepOffice() {
+        // Fetch offices if not cached
+        fetchOffices();
+
+        const nextBtn = el('button', { class: 'primaryBtn', disabled: !state.officeName }, 'Continue');
+
+        // Search Input
+        const searchInput = el('input', {
+          class: 'office-search-input',
+          type: 'text',
+          placeholder: 'Start typing to find your office...',
+          value: state.officeName,
+          autocomplete: 'off'
+        });
+
+        const resultsContainer = el('div', { class: 'office-results' });
+        const dropdownWrapper = el('div', { class: 'office-dropdown' }, [
+          searchInput,
+          resultsContainer
+        ]);
+
+        function getOfficeDisplay(office) {
+          let address = office.address || [office.address_line1, office.address_city, office.address_state].filter(Boolean).join(', ');
+          let nrds = office.nrds_id || office.office_id || '';
+
+          // Heuristic: If address is empty AND nrds looks like an address (contains numbers and spaces)
+          if (!address && nrds && nrds.length > 8 && /\s/.test(nrds) && /\d/.test(nrds)) {
+            address = nrds;
+            nrds = 'N/A'; // We moved it to address
+          }
+
+          return {
+            name: office.name,
+            address: address || 'Address not available',
+            nrds: nrds || 'N/A'
+          };
+        }
+
+        function filterOffices(query) {
+          if (!query || query.length < 2) {
+            resultsContainer.innerHTML = '';
+            resultsContainer.classList.remove('show');
+            return;
+          }
+
+          if (!cachedOffices) {
+            resultsContainer.innerHTML = '<div class="office-result-item" style="cursor:default; color:var(--muted)">Loading offices...</div>';
+            resultsContainer.classList.add('show');
+            return;
+          }
+
+          const q = query.toLowerCase();
+          const matches = cachedOffices.filter(o =>
+            (o.name && o.name.toLowerCase().includes(q)) ||
+            (o.office_id && String(o.office_id).includes(q)) ||
+            (o.nrds_id && String(o.nrds_id).includes(q))
+          ).slice(0, 50); // Limit to 50 results
+
+          resultsContainer.innerHTML = '';
+
+          if (matches.length === 0) {
+            resultsContainer.innerHTML = '<div class="office-result-item" style="cursor:default; color:var(--muted)">No offices found matching "' + query + '"</div>';
+          } else {
+            matches.forEach(office => {
+              const disp = getOfficeDisplay(office);
+
+              const item = el('div', { class: 'office-result-item', onClick: () => selectOffice(office) }, [
+                el('div', { class: 'office-name' }, disp.name),
+                el('div', { class: 'office-meta' }, [
+                  el('span', {}, disp.address),
+                  el('span', { class: 'office-pill' }, `NRDS: ${disp.nrds}`)
+                ])
+              ]);
+              resultsContainer.appendChild(item);
+            });
+          }
+          resultsContainer.classList.add('show');
+        }
+
+        function selectOffice(office) {
+          const disp = getOfficeDisplay(office);
+          state.officeName = disp.name;
+          state.officeAddress = disp.address;
+          state.officeNrds = disp.nrds;
+
+          searchInput.value = disp.name;
+          resultsContainer.classList.remove('show');
+          nextBtn.disabled = false;
+        }
+
+        searchInput.addEventListener('input', (e) => {
+          state.officeName = ''; // Reset if typing
+          nextBtn.disabled = true;
+          filterOffices(e.target.value);
+        });
+
+        searchInput.addEventListener('keyup', (e) => {
+          if (e.key === 'Enter' && !nextBtn.disabled) {
+            nextBtn.click();
+          }
+        });
+
+        // Hide dropdown when clicking outside
+        document.addEventListener('click', (e) => {
+          if (!dropdownWrapper.contains(e.target)) {
+            resultsContainer.classList.remove('show');
+          }
+        });
+
+        nextBtn.onclick = () => {
+          if (state.officeName) {
+            history.push({ stepId: currentStepId, snapshot: deepClone(state) });
+            currentStepId = 'review';
+            render();
+          }
+        };
+
+        const content = [
+          el('h2', { class: 'stepTitle' }, 'Office / Brokerage Name'),
+          el('p', { class: 'stepHelp' }, 'Search and select the office/brokerage you are joining.'),
+
+          el('div', { class: 'field' }, [
+            el('label', {}, 'Search Office / Brokerage'),
+            dropdownWrapper,
+            el('div', { class: 'small' }, [
+              'Your Office needs to be an MLS member of BER in order for you to have MLS access here.',
+              el('br'),
+              el('span', { style: 'margin-top:4px; display:inline-block;' }, [
+                'If your office is interested in adding Office MLS, share this link: ',
+                el('a', {
+                  href: 'https://bonitaspringsesterorealtorsfl.growthzoneapp.com/ap/Membership/Application/MrDg3QLx',
+                  target: '_blank',
+                  style: 'color:var(--blue); text-decoration:underline;'
+                }, 'Office MLS Application')
+              ])
+            ])
+          ]),
+
+          el('div', { class: 'actions' }, [nextBtn])
+        ];
+
+        return el('div', {}, content);
+      }
+
+      function summaryRow(label, value) {
+        return el('div', { class: 'row' }, [
+          el('strong', {}, label),
+          el('span', {}, value || '—')
+        ]);
+      }
+
+      function validateAll() {
+        updateComputedFlags();
+        if (!state.role) return 'Missing role.';
+        if (state.berPrimary == null) return 'Missing primary/secondary selection.';
+        if (state.berPrimary === false && !state.primaryBoardLocation) return 'Missing primary board location.';
+        if (state.isTransferring == null) return 'Missing transferring selection.';
+        if (!state.isTransferring && state.licensedOrMemberLast5 == null) return 'Missing last-5-years selection.';
+        if (state.requiresLOGS && !state.goodStandingFileName) return 'Letter of Good Standing is required but not uploaded.';
+        if (!state.stateLicenseNumber.trim()) return 'State license number is required.';
+        if (!state.licenseVerified) return 'State license must be verified.';
+        if (!state.driversLicenseFileName) return 'Driver’s license upload is required.';
+        if (!state.firstName.trim()) return 'First name is required.';
+        if (!state.lastName.trim()) return 'Last name is required.';
+        if (!state.email.trim()) return 'Email is required.';
+        if (!/^\S+@\S+\.\S+$/.test(state.email.trim())) return 'Email looks invalid.';
+        if (!state.officeName.trim()) return 'Office/brokerage is required.';
+        return '';
+      }
+
+      function stepReview() {
+        const month = clampMonth(new Date().getMonth() + 1);
+        const monthName = MONTH_NAMES[month - 1];
+        updateComputedFlags();
+
+        const expected = computeExpectedCostBreakdown();
+
+        const requiredItems = [];
+        requiredItems.push('Driver’s License upload');
+        requiredItems.push('State license number');
+        if (state.requiresLOGS) requiredItems.push('Letter of Good Standing upload');
+
+        const summary = el('div', { class: 'panel' }, [
+          el('b', {}, 'Summary'),
+          el('div', { class: 'summaryGrid' }, [
+            summaryRow('Role', state.role === 'broker' ? 'Broker / Designated REALTOR' : 'Agent / REALTOR'),
+            summaryRow('BER Primary?', state.berPrimary ? 'Yes' : 'No'),
+            (state.berPrimary === false) ? summaryRow('Primary board location', state.primaryBoardLocation === 'outOfState' ? 'Out of State' : 'Florida') : null,
+            summaryRow('MLS access', state.requiresIndividualMls ? 'Yes (included)' : (state.needsMlsAccess === false ? 'No' : 'Yes')),
+            summaryRow('Transferring?', state.isTransferring ? 'Yes' : 'No'),
+            (!state.isTransferring) ? summaryRow('Agent/member in last 5 years?', state.licensedOrMemberLast5 ? 'Yes' : 'No') : null,
+            summaryRow('Letter of Good Standing', state.requiresLOGS ? (state.goodStandingFileName ? 'Uploaded' : 'Required — not uploaded') : 'Not required'),
+            summaryRow('Driver’s License', state.driversLicenseFileName ? 'Uploaded' : 'Required — not uploaded'),
+            summaryRow('State license #', state.stateLicenseNumber),
+            summaryRow('First name', state.firstName),
+            summaryRow('Last name', state.lastName),
+            summaryRow('Email', state.email),
+            summaryRow('Mailing Address', `${state.mailing.address1} ${state.mailing.address2 ? state.mailing.address2 + ' ' : ''}${state.mailing.city}, ${state.mailing.state} ${state.mailing.zip}`),
+            summaryRow('Office', state.officeName),
+            (state.officeAddress ? summaryRow('Office Address', state.officeAddress) : null),
+            (state.officeNrds ? summaryRow('Office NRDS', state.officeNrds) : null),
+          ].filter(Boolean)),
+          el('div', { class: 'small' }, `Estimate uses the current submission month: ${monthName}.`)
+        ]);
+
+        const reqPanel = el('div', { class: 'panel' }, [
+          el('b', {}, 'Required items for your path'),
+          el('ul', {}, requiredItems.map(x => el('li', {}, x)))
+        ]);
+
+        const costLines = expected.lines || [];
+        const costBox = el('div', { class: 'costList' }, [
+          ...costLines.map(l => el('div', { class: 'costLine' }, [el('div', {}, l.label), el('div', { style: 'font-weight:800;' }, money(l.amount))])),
+          el('div', { class: 'totalLine' }, [el('div', {}, 'Expected total (estimate)'), el('div', {}, money(expected.total))])
+        ]);
+
+        // --- SECURE PAYMENT FORM ---
+        const payCard = el('input', { class: 'payment-input payment-full', placeholder: 'Card Number', maxlength: 19, value: state.payment.cardNumber });
+        const payExp = el('input', { class: 'payment-input', placeholder: 'MM/YY', maxlength: 5, value: (state.payment.expMonth && state.payment.expYear) ? `${state.payment.expMonth}/${state.payment.expYear.toString().slice(-2)}` : '' });
+        const payCvc = el('input', { class: 'payment-input', placeholder: 'CVC', maxlength: 4, value: state.payment.cvc });
+        const payZip = el('input', { class: 'payment-input', placeholder: 'Billing Zip', maxlength: 10, value: state.payment.zip });
+        const payMsg = el('div', { class: 'error', style: 'margin-top:10px; display:none;' }, 'Please enter valid payment information.');
+
+        const paymentSection = el('div', { class: 'panel' }, [
+          el('b', {}, 'Secure Payment'),
+          el('div', { class: 'secure-badge' }, [el('span', {}, '🔒'), el('span', {}, 'Secure SSL Connection')]),
+          el('div', { class: 'payment-grid' }, [payCard, payExp, payCvc, payZip]),
+          payMsg,
+          el('div', { class: 'disclaimer-box' }, [
+            el('b', { style: 'display:block; margin-bottom:4px; color:var(--ink);' }, 'Payment Authorization'),
+            'Final dues are based upon selected choices. Upon review of the application this amount may changed based on corrections. Please note, the credit card will be charged within 24-48 business hours.'
+          ])
+        ]);
+
+        const termsText = [
+          "To ensure the security and integrity of our MLS platform, it is essential that all users’ devices remain capable of receiving the latest security updates. If a user’s hardware is no longer able to support these critical updates, we cannot guarantee continued access to the MLS system.",
+          "Additionally, please note that maintaining up-to-date hardware is the responsibility of each user. As such, no refunds will be issued if access is lost due to outdated or non-compliant devices. We recommend all members keep their equipment updated or upgrade hardware as needed to ensure continuous, secure access to our services.",
+          "Terms & Conditions: Applicant acknowledges that if the applicant or any real estate firm in which the applicant is a sole proprietor, general partner, or corporate officer is involved in any pending bankruptcy or insolvency proceedings or has been adjudged bankrupt in the past three (3) years, the Association may require, as a condition of membership, that the applicant pay cash in advance for Association and MLS fees for up to one (1) year from the date that membership is approved or from the date that the applicant is discharged from bankruptcy (whichever is later) or, in the event that bankruptcy proceedings are initiated subsequent to obtaining membership in the Board, that the member may be placed on a \"cash basis\" from the date that bankruptcy is initiated until one (1) year from the date that the member has been discharged from bankruptcy.",
+          "Applicant acknowledges that if accepted as a Member and he/she subsequently resigns or is expelled from membership in the Association with an ethics complaint or arbitration request pending, the Board of Directors may condition renewal of membership upon applicant's verification that he/she will submit to the pending ethics or arbitration proceeding and will abide by the decision of the Hearing Panel; or if applicant resigns or is expelled from membership without having complied with an award in arbitration, the Board of Directors may condition renewal of membership upon his/her payment of the award, plus any costs that have been established previously as due and payable in relation thereto, provided that the award and such costs have not, in the interim, been otherwise satisfied.",
+          "Applicant acknowledges that the association/board will maintain a membership file of information which may be shared with other boards/associations where applicant subsequently seeks membership. This file shall include: previous applications for membership; all final findings of Code of Ethics violations and violations of other membership duties within the past three (3) years; pending complaints alleging violations of the Code of Ethics or alleging violations of other membership duties; incomplete or pending disciplinary measures; pending arbitration requests; and information related to unpaid arbitration awards or unpaid financial obligations to the board/association or its MLS.",
+          "I hereby apply for REALTOR® membership in the BONITA SPRINGS – ESTERO REALTORS® INC. I understand that any fees paid in association with this application will be returned to me in the event I am not accepted to membership. In the event my application is approved, I agree as a condition to membership to complete the B.E.R. Orientation program within 90 days of the date on this application unless I can provide a letter of good standing from my primary board, and on my own initiative to thoroughly familiarize myself with the Code of Ethics of the NATIONAL ASSOCIATION OF REALTORS® , including the duty to arbitrate contractual and specific non-contractual disputes in accordance with Article 17 of the Code of Ethics and the Code of Ethics and Arbitration Manual of the Association, and the Constitution, Bylaws, and Rules and Regulations of the above named Association, the State Association and the National Association, and I further agree to complete satisfactorily a reasonable and nondiscriminatory written examination covering such Code, Constitutions, Bylaws, Rules and Regulations, and duty to arbitrate. I further agree that my act of paying dues shall evidence my initial and continuing commitment to abide by the aforementioned Code of Ethics, Constitutions, Bylaws, Rules and Regulations, and duty to arbitrate, all as from time to time amended. Finally, I consent and authorize the Association, through its Membership Committee or otherwise, to invite and receive information and comment about me from any Member or other person, and I agree that any information and comment furnished to the Association by any Member or other person in response to any such invitation shall be conclusively deemed to be privileged and not form the basis of any action by me for slander, libel, or defamation of character.",
+          "I opt in to text messages and emails from the association to notify me of important information related to my membership with BER or products and services. I acknowledge that photos are taken at social events and am authorizing the use of my photo for marketing purposes.",
+          "By providing your phone number, you consent to receive SMS or text messages related to our services and campaigns. Message and data rates may apply. You may opt-out at any time by replying “STOP” to any message.",
+          "PRIVACY POLICY: We do not sell or share your phone number without your explicit consent, except as necessary to fulfill your request or as required by law.",
+          "I hereby certify that the foregoing information furnished by me is true and correct, and I agree that failure to provide complete and accurate information as requested, or any misstatement of fact, may be grounds for revocation of my membership, if granted."
+        ];
+
+        const termsCheck = el('input', { type: 'checkbox', id: 'termsCheck', checked: state.termsAccepted });
+        const termsSection = el('div', { class: 'terms-wrap' }, [
+          el('div', { class: 'terms-scroll' }, termsText.map(t => el('p', {}, t))),
+          el('div', { class: 'terms-confirm' }, [
+            termsCheck,
+            el('label', { for: 'termsCheck' }, 'I have read & acknowledged this policy'),
+          ])
+        ]);
+
+        termsCheck.addEventListener('change', (e) => {
+          state.termsAccepted = e.target.checked;
+          checkSubmit();
+        });
+
+        const submitBtn = el('button', { type: 'button', class: 'primaryBtn' }, 'Submit Application');
+        const appValidationMsg = validateAll();
+
+        function validatePayment() {
+          const card = payCard.value.replace(/\D/g, '');
+          const exp = payExp.value.trim();
+          const cvc = payCvc.value.replace(/\D/g, '');
+          const zip = payZip.value.trim();
+
+          let valid = true;
+          // Card Luhn
+          if (!checkLuhn(card)) { payCard.classList.add('invalid'); payCard.classList.remove('valid'); valid = false; }
+          else { payCard.classList.remove('invalid'); payCard.classList.add('valid'); }
+
+          // Exp (simple check: MM/YY format and non-empty)
+          if (!/^\d{2}\/\d{2}$/.test(exp)) { payExp.classList.add('invalid'); payExp.classList.remove('valid'); valid = false; }
+          else {
+            const [mm, yy] = exp.split('/').map(s => parseInt(s, 10));
+            const now = new Date();
+            const curYear = now.getFullYear() % 100;
+            const curMonth = now.getMonth() + 1;
+            if (mm < 1 || mm > 12 || yy < curYear || (yy === curYear && mm < curMonth)) {
+              payExp.classList.add('invalid'); payExp.classList.remove('valid'); valid = false;
+            } else {
+              payExp.classList.remove('invalid'); payExp.classList.add('valid');
+            }
+          }
+
+          // CVC
+          if (cvc.length < 3) { payCvc.classList.add('invalid'); payCvc.classList.remove('valid'); valid = false; }
+          else { payCvc.classList.remove('invalid'); payCvc.classList.add('valid'); }
+
+          // Zip
+          if (zip.length < 5) { payZip.classList.add('invalid'); payZip.classList.remove('valid'); valid = false; }
+          else { payZip.classList.remove('invalid'); payZip.classList.add('valid'); }
+
+          state.payment.isValid = valid;
+          state.payment.cardNumber = card;
+          state.payment.expMonth = parseInt(exp.split('/')[0] || 0, 10);
+          state.payment.expYear = 2000 + parseInt(exp.split('/')[1] || 0, 10);
+          state.payment.cvc = cvc;
+          state.payment.zip = zip;
+
+          return valid;
+        }
+
+        function checkSubmit() {
+          const payValid = validatePayment();
+          if (appValidationMsg || !payValid || !state.termsAccepted) {
+            submitBtn.disabled = true;
+            // Only show app error if any
+            if (appValidationMsg) setError(appValidationMsg);
+          } else {
+            submitBtn.disabled = false;
+            setError('');
+          }
+        }
+
+        // Listeners for real-time validation
+        payExp.addEventListener('input', (e) => {
+          let v = e.target.value.replace(/\D/g, '');
+          if (v.length > 2) v = v.slice(0, 2) + '/' + v.slice(2, 4);
+          e.target.value = v;
+        });
+
+        [payCard, payExp, payCvc, payZip].forEach(i => i.addEventListener('blur', checkSubmit));
+        [payCard, payExp, payCvc, payZip].forEach(i => i.addEventListener('input', () => {
+          // Just enable/disable button on input, don't show red errors yet strictly? 
+          // Actually let's just run checkSubmit which updates state.
+          // But checkSubmit calls validatePayment which adds classes.
+          // Let's modify: validatePayment adds classes. 
+          // We can accept aggressive validation for now.
+          checkSubmit();
+        }));
+
+        // Initial check
+        checkSubmit();
+
+        submitBtn.addEventListener('click', () => {
+          const payload = {
+            submissionMonth: monthName,
+            ...deepClone(state),
+            duesEstimate: {
+              total: safeNumber(expected.total),
+              lines: (expected.lines || []).map(l => ({ label: l.label, amount: safeNumber(l.amount) })),
+              breakdown: (expected.breakdown || []).map(b => ({ label: b.label, amount: safeNumber(b.amount), category: b.category }))
+            }
+          };
+          console.log('[Guided Application] Submit payload:', payload);
+          alert('Application Submitted! This is a placeholder for the actual API call.');
+        });
+
+        const prorationNote = el('p', { class: 'chartNote', id: 'prorationNote' },
+          (state.role === 'agent' && state.berPrimary && state.requiresIndividualMls)
+            ? 'Assumptions: includes a June $240 MLS renewal and a December $542 membership renewal for Primary REALTOR® + MLS.'
+            : 'Timeline uses your selected path and the same proration formulas. Renewal assumptions may differ for secondary/broker paths.'
+        );
+
+        const charts = el('div', { class: 'charts' }, [
+          el('div', { class: 'chartCard' }, [
+            el('div', { class: 'chartTitle' }, 'Dues Breakdown (Estimate)'),
+            el('p', { class: 'chartNote' }, 'Local / MLS / FR / NAR based on your selections.'),
+            el('div', { id: 'pieFallback', class: 'chartFallback', style: 'display:none;' }, 'Chart.js failed to load. The estimate will still show above.'),
+            el('div', { class: 'chartWrap' }, [el('canvas', { id: 'duesPieChart' })]),
+            el('div', { class: 'legend' }, [
+              el('div', { class: 'legendRow' }, [el('span', { class: 'swatch local' }), el('span', {}, 'Local')]),
+              el('div', { class: 'legendRow' }, [el('span', { class: 'swatch mls' }), el('span', {}, 'MLS')]),
+              el('div', { class: 'legendRow' }, [el('span', { class: 'swatch fr' }), el('span', {}, 'FR')]),
+              el('div', { class: 'legendRow' }, [el('span', { class: 'swatch nar' }), el('span', {}, 'NAR')])
+            ])
+          ]),
+          el('div', { class: 'chartCard' }, [
+            el('div', { class: 'chartTitle' }, 'Proration Timeline'),
+            prorationNote,
+            el('div', { id: 'prorationFallback', class: 'chartFallback', style: 'display:none;' }, 'Chart.js failed to load. The estimate will still show above.'),
+            el('div', { class: 'chartWrap tall' }, [el('canvas', { id: 'prorationChart' })])
+          ])
+        ]);
+
+        const footer = el('div', { class: 'footerBar' }, [
+          el('div', { class: 'actions' }, [submitBtn]),
+          el('div', { class: 'resetLink', onClick: resetAll }, 'Start over')
+        ]);
+
+        const root = el('div', {}, [
+          el('h2', { class: 'stepTitle' }, 'Review & Estimate'),
+          el('p', { class: 'stepHelp' }, 'Review your selections. Use Back if you need to correct something.'),
+          appValidationMsg ? el('div', { class: 'error' }, appValidationMsg) : null,
+          summary,
+          reqPanel,
+          el('div', { class: 'panel' }, [
+            el('b', {}, 'Expected cost breakdown (estimate)'),
+            costBox
+          ]),
+          charts,
+          paymentSection,
+          termsSection,
+          footer
+        ]);
+
+        // Build charts after mount
+        setTimeout(() => {
+          try {
+            buildPieChart(expected.breakdown || []);
+            buildProrationChart(computeMonthlySeries());
+          } catch (e) {
+            console.warn('Chart render error:', e);
+          }
+        }, 0);
+
+        return root;
+      }
+
+      function getStep(stepId) {
+        updateComputedFlags();
+        switch (stepId) {
+          case 'role': return stepRole();
+          case 'berPrimary': return stepBerPrimary();
+          case 'primaryBoardLocation': return stepPrimaryBoardLocation();
+          case 'needsMls': return stepNeedsMls();
+          case 'transfer': return stepTransfer();
+          case 'last5': return stepLast5();
+          case 'uploadLOGS': return stepUploadLOGS();
+          case 'licenseNumber': return stepLicenseNumber();
+          case 'uploadDriversLicense': return stepUploadDriversLicense();
+          case 'firstName': return stepFirstName();
+          case 'lastName': return stepLastName();
+          case 'email': return stepEmail();
+          case 'mailing': return stepMailingAddress();
+          case 'office': return stepOffice();
+          case 'review': return stepReview();
+          case 'intro': return stepIntro();
+          default: return stepRole();
+        }
+      }
+
+      // A rough progress calculation (based on max possible steps)
+      function computeProgress() {
+        const stepsMax = 15;
+        const idx = (() => {
+          const order = ['intro', 'role', 'berPrimary', 'primaryBoardLocation', 'needsMls', 'transfer', 'last5', 'firstName', 'lastName', 'mailing', 'uploadLOGS', 'licenseNumber', 'uploadDriversLicense', 'email', 'office', 'review'];
+          return Math.max(0, order.indexOf(currentStepId));
+        })();
+        return Math.min(100, Math.round(((idx + 1) / stepsMax) * 100));
+      }
+
+      function render() {
+        window.scrollTo(0, 0); // Ensure top of page
+        app.innerHTML = '';
+        setError('');
+        app.appendChild(getStep(currentStepId));
+
+        // back button behavior
+        backBtn.disabled = history.length === 0;
+        backBtn.style.opacity = backBtn.disabled ? '0.6' : '1';
+
+        // progress bar
+        progressBar.style.width = computeProgress() + '%';
+
+        // If we're on a choice step, hide "Continue" logic (already handled)
+        // Back always visible, per your request.
+      }
+
+      // -----------------------------
+      // Smoke tests (no framework)
+      // -----------------------------
+      function runSmokeTests() {
+        function assert(cond, msg) { if (!cond) throw new Error('Test failed: ' + msg); }
+        assert(clampMonth(0) === 1, 'clampMonth lower bound');
+        assert(clampMonth(13) === 12, 'clampMonth upper bound');
+        assert(typeof calculateLocalAssocDues(1) === 'number', 'local dues numeric');
+
+        const comps = realtorComponents(1, 'primary', true);
+        assert(comps.total > 0, 'realtor primary total > 0');
+
+        const broker = brokerComponents(1, 'primary2', true);
+        assert(broker.total > 0, 'broker primary total > 0');
+
+        const s = computeMonthlySeries();
+        assert(s.labels.length === 12, 'proration labels 12');
+        assert(s.totalData.length === 12, 'proration total 12');
+      }
+      try { runSmokeTests(); } catch (e) { console.warn(e); }
+
+      // Seagulls
+      function spawnSeagulls() {
+        const container = document.createElement('div');
+        container.className = 'seagull-container';
+        document.body.prepend(container);
+
+        for (let i = 0; i < 10; i++) {
+          const wrapper = document.createElement('div');
+          wrapper.className = 'seagull';
+
+          const inner = document.createElement('div');
+          inner.className = 'seagull-body';
+          wrapper.appendChild(inner);
+
+          // Position
+          wrapper.style.top = (2 + Math.random() * 45) + '%';
+
+          // Size
+          const scale = 0.9 + Math.random() * 0.7; // Bigger: 0.9 to 1.6
+          wrapper.style.setProperty('--s', scale); // Set CSS variable for scale
+          wrapper.style.width = (80 * scale) + 'px';
+          wrapper.style.height = (40 * scale) + 'px';
+
+          // Animation Params
+          const duration = 25 + Math.random() * 20; // 25-45s
+          const delay = Math.random() * -50;
+
+          // Outer moves across
+          wrapper.style.animation = `flyAcross ${duration}s linear infinite`;
+          wrapper.style.animationDelay = `${delay}s`;
+
+          // Inner flaps
+          inner.style.animation = `flapNew ${0.4 + Math.random() * 0.4}s ease-in-out infinite alternate`;
+
+          container.appendChild(wrapper);
+        }
+      }
+      spawnSeagulls();
+
+      // -----------------------------
+      // Wire events + init
+      // -----------------------------
+      backBtn.addEventListener('click', () => { setError(''); goBack(); });
+
+      render();
+    });
+  </script>
+</body>
+
+</html>

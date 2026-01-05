@@ -1,0 +1,1890 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Join Bonita Springs-Estero REALTORS®</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <style>
+    :root {
+      --ink: #0f172a;
+      --muted: #6b7280;
+      --accent: #0ea5e9;
+      --accent-soft: #e0f2fe;
+      --border: #e5e7eb;
+      --bg: #f3f4f6;
+      --radius-lg: 18px;
+      --radius-md: 12px;
+      --shadow-soft: 0 18px 45px rgba(15, 23, 42, 0.12);
+
+      --ber-teal: #00a3aa;
+      --ber-teal-dark: #00828a;
+      --ber-blue-card: #008eef;
+      --text-main: #18212a;
+      --text-muted: #6c7a88;
+      --panel-bg: #ffffff;
+      --panel-border: #e2e8f0;
+      --panel-radius: 18px;
+
+      /* fix missing var */
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "SF Pro Text",
+        "Segoe UI", sans-serif;
+      background:
+        radial-gradient(circle at 0% 0%, rgba(59, 130, 246, 0.14), transparent 55%),
+        radial-gradient(circle at 100% 0%, rgba(56, 189, 248, 0.12), transparent 52%),
+        radial-gradient(circle at 100% 100%, rgba(248, 250, 252, 0.9), #f3f8fb);
+      color: var(--text-main);
+      scroll-behavior: smooth;
+    }
+
+    main {
+      max-width: 1100px;
+      margin: 2.5rem auto 4rem;
+      padding: 0 1.12rem;
+    }
+
+    @media (max-width: 600px) {
+      main {
+        margin: 1.8rem auto 3rem;
+        padding: 0 0.9rem;
+      }
+    }
+
+    h1,
+    h2,
+    h3 {
+      letter-spacing: 0.02em;
+    }
+
+    /* Shared section title styling */
+    .section-title {
+      font-size: 1.35rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: #0f172a;
+      margin: 0 0 1.25rem;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.6rem;
+    }
+
+    .section-title::after {
+      content: "";
+      display: inline-block;
+      width: 46px;
+      height: 3px;
+      border-radius: 999px;
+      background: linear-gradient(90deg, #0ea5e9, #22c55e);
+    }
+
+    h1 {
+      font-size: clamp(1.9rem, 4vw, 2.6rem);
+      margin-bottom: 0.5rem;
+    }
+
+    .page-intro {
+      margin-bottom: 2.5rem;
+      max-width: 660px;
+    }
+
+    .page-intro p {
+      color: var(--muted);
+      line-height: 1.6;
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      padding: 0.25rem 0.75rem;
+      border-radius: 999px;
+      background: #ecfeff;
+      color: #0369a1;
+      font-size: 0.8rem;
+      font-weight: 600;
+      text-transform: uppercase;
+    }
+
+    .badge-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 999px;
+      background: #22c55e;
+    }
+
+    section {
+      margin-bottom: 2.75rem;
+      background: var(--paper);
+      border-radius: var(--radius-lg);
+      padding: 1.75rem 1.6rem 1.9rem;
+      box-shadow: var(--shadow-soft);
+      border: 1px solid rgba(148, 163, 184, 0.18);
+    }
+
+    @media (max-width: 600px) {
+      section {
+        padding: 1.4rem 1.2rem 1.6rem;
+        border-radius: 14px;
+      }
+    }
+
+    @media (min-width: 900px) {
+      section {
+        padding: 2.1rem 2.3rem 2.3rem;
+      }
+    }
+
+    /* Fade-up animations */
+    @keyframes fade-up {
+      from {
+        opacity: 0;
+        transform: translateY(18px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @media (prefers-reduced-motion: no-preference) {
+      .anim-fade-up {
+        opacity: 0;
+        transform: translateY(18px);
+        animation: fade-up 650ms ease-out forwards;
+      }
+
+      .anim-delay-1 {
+        animation-delay: 0.08s;
+      }
+      .anim-delay-2 {
+        animation-delay: 0.16s;
+      }
+      .anim-delay-3 {
+        animation-delay: 0.24s;
+      }
+      .anim-delay-4 {
+        animation-delay: 0.32s;
+      }
+    }
+
+    /* Choose One / application cards */
+    .choose-grid {
+      display: grid;
+      gap: 1rem;
+      margin-top: 1.5rem;
+    }
+
+    @media (min-width: 720px) {
+      .choose-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+    }
+
+    .choose-card {
+      border-radius: var(--radius-md);
+      border: 1px solid var(--border);
+      padding: 1.1rem 1.1rem 1.2rem;
+      background: linear-gradient(135deg, #ffffff, #f9fafb);
+      display: flex;
+      flex-direction: column;
+      gap: 0.4rem;
+      transition: transform 140ms ease, box-shadow 140ms ease;
+    }
+
+    @media (prefers-reduced-motion: no-preference) and (min-width: 720px) {
+      .choose-card:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 18px 40px rgba(15, 23, 42, 0.12);
+      }
+    }
+
+    .choose-card h3 {
+      font-size: 1rem;
+      margin: 0;
+    }
+
+    .choose-card p {
+      margin: 0;
+      font-size: 0.9rem;
+      color: var(--muted);
+      line-height: 1.5;
+    }
+
+    .choose-card a.button-link {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      margin-top: 0.65rem;
+      padding: 0.5rem 0.9rem;
+      border-radius: 999px;
+      border: 1px solid rgba(59, 130, 246, 0.15);
+      background: #0ea5e9;
+      color: #ecfeff;
+      font-size: 0.9rem;
+      text-decoration: none;
+      font-weight: 600;
+      gap: 0.45rem;
+      transition: transform 120ms ease, box-shadow 120ms ease,
+        background 120ms ease;
+      box-shadow: 0 10px 25px rgba(37, 99, 235, 0.24);
+      text-align: center;
+      white-space: nowrap;
+    }
+
+    .choose-card a.button-link span.chevron {
+      font-size: 1rem;
+      transform: translateY(1px);
+    }
+
+    .choose-card a.button-link:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 16px 35px rgba(37, 99, 235, 0.32);
+      background: #0284c7;
+    }
+
+    .choose-card a.button-link:active {
+      transform: translateY(0);
+      box-shadow: 0 8px 18px rgba(37, 99, 235, 0.3);
+    }
+
+    .choose-tagline {
+      margin-top: 0.75rem;
+      font-size: 0.85rem;
+      color: var(--muted);
+    }
+
+    .choose-tagline a {
+      color: #0369a1;
+      text-decoration: underline;
+      text-decoration-thickness: 1px;
+      text-underline-offset: 3px;
+    }
+
+    /* Dues heading + layout */
+
+    .dues-heading {
+      font-size: 2.1rem;
+      font-weight: 800;
+      letter-spacing: 0.09em;
+      text-transform: uppercase;
+      text-align: center;
+      margin: 0 0 32px;
+      color: #e0f2fe;
+      position: relative;
+      z-index: 1;
+    }
+
+    .dues-heading::after {
+      content: "";
+      position: absolute;
+      left: 50%;
+      bottom: -10px;
+      transform: translateX(-50%);
+      width: 64px;
+      height: 3px;
+      border-radius: 999px;
+      background: linear-gradient(90deg, #e0f2fe, #a5f3fc);
+      opacity: 0.95;
+    }
+
+    #dues-area {
+      max-width: 1150px;
+      margin: 3rem auto 40px;
+      padding: 32px 16px 28px;
+      position: relative;
+      isolation: isolate;
+      border-radius: 28px;
+      overflow: hidden; /* keep gradient band contained on mobile */
+    }
+
+    #dues-area::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      height: 280px;
+      border-radius: 28px;
+      background:
+        radial-gradient(circle at 0% 0%, rgba(34, 211, 238, 0.45), transparent 55%),
+        radial-gradient(circle at 100% 0%, rgba(59, 130, 246, 0.45), transparent 55%),
+        linear-gradient(135deg, #0b1724, #042f43);
+      box-shadow: 0 30px 80px rgba(15, 23, 42, 0.55);
+      z-index: -2;
+    }
+
+    #dues-area::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      height: 280px;
+      border-radius: 28px;
+      background:
+        url("https://bonitaesterorealtors.com/wp-content/uploads/2025/12/Untitled-design-10-scaled-1.png")
+          center/cover no-repeat,
+        linear-gradient(120deg, rgba(148, 163, 184, 0.28) 1px, transparent 0),
+        linear-gradient(0deg, rgba(148, 163, 184, 0.22) 1px, transparent 0);
+      background-size:
+        cover,
+        40px 40px,
+        40px 40px;
+      mix-blend-mode: soft-light;
+      opacity: 0.6;
+      pointer-events: none;
+      z-index: -1;
+    }
+
+    .dues-layout {
+      display: grid;
+      grid-template-columns: 3fr 2fr;
+      gap: 22px;
+      position: relative;
+      z-index: 1;
+    }
+
+    @media (max-width: 900px) {
+      .dues-layout {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 700px) {
+      #dues-area {
+        padding: 24px 14px 24px;
+        margin-top: 2.5rem;
+        border-radius: 22px;
+      }
+
+      #dues-area::before,
+      #dues-area::after {
+        height: 250px;
+        border-radius: 22px;
+      }
+
+      .dues-heading {
+        font-size: 1.7rem;
+      }
+    }
+
+    .dues-card,
+    .fees-card {
+      background: var(--panel-bg);
+      border-radius: var(--panel-radius);
+      border: 1px solid var(--panel-border);
+      box-shadow: 0 16px 40px rgba(15, 23, 42, 0.08);
+      padding: 18px 22px 22px;
+      position: relative;
+      backdrop-filter: blur(6px);
+      margin-bottom: 12px;
+    }
+
+    @media (max-width: 600px) {
+      .dues-card,
+      .fees-card {
+        padding: 16px;
+        border-radius: 16px;
+      }
+    }
+
+    .role-header {
+      font-size: 1.05rem;
+      font-weight: 600;
+      color: var(--ber-teal);
+      margin-bottom: 12px;
+    }
+
+    .role-cards {
+      display: flex;
+      gap: 14px;
+      margin-bottom: 22px;
+    }
+
+    @media (max-width: 700px) {
+      .role-cards {
+        flex-direction: column;
+      }
+    }
+
+    .role-card {
+      flex: 1;
+      position: relative;
+      border: none;
+      border-radius: 14px;
+      background: linear-gradient(180deg, #00a9ff 0%, var(--ber-blue-card) 100%);
+      cursor: pointer;
+      height: 190px;
+      box-shadow: 0 14px 28px rgba(0, 142, 239, 0.4);
+      outline: none;
+      transition: transform 120ms ease, box-shadow 120ms ease, filter 120ms ease;
+    }
+
+    .role-card::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      border-radius: inherit;
+      background: linear-gradient(180deg, rgba(255, 255, 255, 0.22), transparent 36%);
+      pointer-events: none;
+    }
+
+    .role-card-label {
+      position: absolute;
+      bottom: 14px;
+      left: 50%;
+      transform: translateX(-50%);
+      font-size: 1.1rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      color: #ffffff;
+      letter-spacing: 0.04em;
+      text-shadow: 0 1px 3px rgba(15, 23, 42, 0.5);
+    }
+
+    .role-card-icon {
+      position: absolute;
+      top: 42%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      font-size: 2.4rem;
+      color: rgba(255, 255, 255, 0.96);
+      text-shadow: 0 4px 10px rgba(15, 23, 42, 0.6);
+      pointer-events: none;
+    }
+
+    .role-card.active {
+      transform: translateY(-2px);
+      box-shadow: 0 18px 32px rgba(0, 142, 239, 0.55);
+      filter: brightness(1.03);
+    }
+
+    .role-card:active {
+      transform: translateY(0);
+      box-shadow: 0 10px 20px rgba(0, 142, 239, 0.45);
+    }
+
+    /* Calculator panels */
+
+    .calc-panel {
+      margin-top: 4px;
+    }
+
+    .calc-panel h3 {
+      margin: 4px 0 12px;
+      font-size: 1.1rem;
+      color: var(--ber-teal);
+    }
+
+    .calc-panel label {
+      display: block;
+      font-size: 0.9rem;
+      color: var(--text-muted);
+      margin-bottom: 10px;
+    }
+
+    .calc-panel select {
+      display: block;
+      width: 100%;
+      margin-top: 4px;
+      border-radius: 4px;
+      border: 1px solid #cbd5e1;
+      padding: 6px 8px;
+      font-size: 0.9rem;
+      font-family: inherit;
+      background-color: #ffffff;
+    }
+
+    .calc-panel [id^="result"] {
+      margin-top: 12px;
+      padding: 18px 18px 10px;
+      border-radius: 10px;
+      border: 1px solid #d1d9e6;
+      background: #f8fafc;
+      font-size: 0.88rem;
+      text-align: left;
+      line-height: 1.6;
+      overflow-x: auto;
+    }
+
+    .calc-panel [id^="totalDues"] {
+      margin-top: 8px;
+      font-size: 0.95rem;
+      font-weight: 700;
+      color: var(--ber-teal-dark);
+      text-align: center;
+    }
+
+    .calc-panel hr {
+      border: none;
+      border-top: 1px solid #cbd5e1;
+      margin: 10px 0;
+    }
+
+    /* Pie chart */
+
+    #chartContainer {
+      margin-top: 16px;
+      padding: 14px 12px 10px;
+      border-radius: 12px;
+      border: 1px solid #e5e7eb;
+      background: #f8fafc;
+    }
+
+    #duesChartWrapper {
+      position: relative;
+      width: 100%;
+      height: 240px;
+    }
+
+    #duesChart {
+      width: 100%;
+      height: 100%;
+    }
+
+    #chartLegend {
+      margin-top: 10px;
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+      font-size: 0.82rem;
+      color: #4b5563;
+    }
+
+    .legend-row {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .legend-swatch {
+      width: 10px;
+      height: 10px;
+      border-radius: 999px;
+    }
+
+    .legend-swatch.local {
+      background: #0ea5e9;
+    }
+
+    .legend-swatch.fr {
+      background: #22c55e;
+    }
+
+    .legend-swatch.nar {
+      background: #f97316;
+    }
+
+    .legend-swatch.mls {
+      background: #6366f1;
+    }
+
+    /* Includes / Requirements box */
+
+    #infoArea {
+      margin-top: 18px;
+      padding-top: 12px;
+      border-top: 1px solid #e5e7eb;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+      font-size: 0.85rem;
+      color: var(--text-muted);
+    }
+
+    @media (max-width: 700px) {
+      #infoArea {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    #infoArea > div > div {
+      margin-top: 6px;
+    }
+
+    #infoArea ul {
+      margin: 6px 0 0 16px;
+      padding: 0;
+    }
+
+    /* Right-side recurring fees panel */
+
+    .fees-card-title {
+      font-size: 1.15rem;
+      font-weight: 700;
+      color: var(--ber-teal);
+      margin-bottom: 6px;
+    }
+
+    .fees-card p {
+      font-size: 0.9rem;
+      color: var(--text-muted);
+      margin: 4px 0;
+    }
+
+    .fees-box-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      margin-top: 14px;
+    }
+
+    @media (max-width: 600px) {
+      .fees-box-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .fee-box {
+      border-radius: 12px;
+      border: 1px solid #d1d9e6;
+      background: #ffffff;
+      padding: 10px 12px;
+      font-size: 0.88rem;
+    }
+
+    .fee-box-title {
+      font-size: 0.98rem;
+      font-weight: 700;
+      color: var(--ber-teal);
+      margin-bottom: 4px;
+    }
+
+    .fee-box p {
+      margin: 3px 0;
+    }
+
+    .help-panel {
+      margin-top: 14px;
+      border-radius: 12px;
+      border: 1px solid #d1d9e6;
+      background: #f8fafc;
+      padding: 10px 12px 12px;
+      font-size: 0.9rem;
+    }
+
+    .help-panel-title {
+      font-weight: 700;
+      color: var(--ber-teal);
+      margin-bottom: 4px;
+    }
+
+    .help-panel a {
+      color: var(--ber-teal-dark);
+      text-decoration: none;
+    }
+
+    .help-panel a:hover {
+      text-decoration: underline;
+    }
+
+    /* WHY BER */
+
+    #why-ber {
+      max-width: 1150px;
+      margin: 0 auto 40px;
+      padding: 0 16px 10px;
+      box-shadow: none;
+      border: none;
+      background: transparent;
+    }
+
+    #why-ber-title {
+      font-size: 2rem;
+      color: var(--ber-teal);
+      font-weight: 700;
+      margin: 26px 0 6px;
+    }
+
+    #why-ber-intro {
+      font-size: 0.92rem;
+      color: #4b5563;
+      margin-bottom: 18px;
+    }
+
+    #why-ber-intro strong {
+      font-weight: 700;
+    }
+
+    .why-grid {
+      display: grid;
+      gap: 14px;
+    }
+
+    @media (min-width: 900px) {
+      .why-grid {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+      }
+    }
+
+    .why-card {
+      background: #ffffff;
+      border-radius: 14px;
+      border: 1px solid #d1d9e6;
+      box-shadow: 0 10px 26px rgba(15, 23, 42, 0.06);
+      padding: 14px 16px 16px;
+      border-left: 4px solid var(--ber-teal);
+      font-size: 0.9rem;
+      transition: transform 140ms ease, box-shadow 140ms ease;
+    }
+
+    @media (prefers-reduced-motion: no-preference) and (min-width: 720px) {
+      .why-card:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 18px 40px rgba(15, 23, 42, 0.14);
+      }
+    }
+
+    .why-card h3 {
+      margin: 0 0 6px;
+      font-size: 1rem;
+      color: var(--ber-teal);
+    }
+
+    .why-card ul {
+      margin: 0;
+      padding-left: 16px;
+      color: #4b5563;
+    }
+
+    .why-card li + li {
+      margin-top: 4px;
+    }
+
+    .why-card a {
+      color: var(--ber-teal-dark);
+      text-decoration: none;
+    }
+
+    .why-card a:hover {
+      text-decoration: underline;
+    }
+
+    .why-card:nth-child(1) {
+      border-left-color: #06b6d4;
+      background: linear-gradient(135deg, #ecfeff 0, #ffffff 55%);
+    }
+    .why-card:nth-child(1) h3 {
+      color: #0e7490;
+    }
+
+    .why-card:nth-child(2) {
+      border-left-color: #3b82f6;
+      background: linear-gradient(135deg, #eff6ff 0, #ffffff 55%);
+    }
+    .why-card:nth-child(2) h3 {
+      color: #1d4ed8;
+    }
+
+    .why-card:nth-child(3) {
+      border-left-color: #f59e0b;
+      background: linear-gradient(135deg, #fffbeb 0, #ffffff 55%);
+    }
+    .why-card:nth-child(3) h3 {
+      color: #b45309;
+    }
+
+    .why-card:nth-child(4) {
+      border-left-color: #10b981;
+      background: linear-gradient(135deg, #ecfdf3 0, #ffffff 55%);
+    }
+    .why-card:nth-child(4) h3 {
+      color: #047857;
+    }
+
+    .why-card:nth-child(5) {
+      border-left-color: #ef4444;
+      background: linear-gradient(135deg, #fef2f2 0, #ffffff 55%);
+    }
+    .why-card:nth-child(5) h3 {
+      color: #b91c1c;
+    }
+
+    .why-card:nth-child(6) {
+      border-left-color: #6366f1;
+      background: linear-gradient(135deg, #eef2ff 0, #ffffff 55%);
+    }
+    .why-card:nth-child(6) h3 {
+      color: #4338ca;
+    }
+
+    #prorationContainer {
+      margin-top: 16px;
+      padding: 14px 12px 12px;
+      border-radius: 12px;
+      border: 1px solid #e5e7eb;
+      background: #f9fafb;
+    }
+
+    #prorationChartWrapper {
+      position: relative;
+      width: 100%;
+      height: 220px;
+    }
+
+    #prorationChart {
+      width: 100%;
+      height: 100%;
+    }
+
+    .proration-caption {
+      font-size: 0.82rem;
+      color: #6b7280;
+      margin-bottom: 8px;
+    }
+  </style>
+
+  <!-- Chart.js for the donut chart -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+  <main>
+    <!-- Intro -->
+    <section class="page-intro anim-fade-up">
+      <div class="badge">
+        <span class="badge-dot"></span>
+        Join Bonita Springs-Estero REALTORS®
+      </div>
+      <h1>Start Your Membership with Bonita Springs-Estero REALTORS®</h1>
+      <p>
+        Choose the path that matches your role &mdash; REALTOR®, Broker/Office, Affiliate,
+        or Reciprocal Listing &mdash; then estimate your dues with the calculator below.
+      </p>
+    </section>
+
+    <!-- Choose One / Application Paths -->
+    <section aria-labelledby="choose-one-heading" class="anim-fade-up anim-delay-1">
+      <h2 id="choose-one-heading" class="section-title">Choose One:</h2>
+      <div class="choose-grid">
+        <!-- REALTOR / Agent -->
+        <article class="choose-card">
+          <h3>Realtor/Agent Applications</h3>
+          <p>
+            New sales associates and REALTORS® starting primary or secondary membership with
+            Bonita Springs-Estero REALTORS®.
+          </p>
+          <a
+            class="button-link"
+            href="https://bonitaspringsesterorealtorsfl.growthzoneapp.com/ap/Membership/Application/DLb3lMr7"
+            target="_blank"
+            rel="noopener"
+          >
+            <span>New Sales Associate / REALTOR® Application</span>
+            <span class="chevron">↗</span>
+          </a>
+        </article>
+
+        <!-- Broker / Office -->
+        <article class="choose-card">
+          <h3>Broker / Office Applications</h3>
+          <p>
+            For Designated REALTORS® and offices establishing or transferring a BSER office.
+          </p>
+          <div style="display:flex;flex-wrap:wrap;gap:0.4rem;margin-top:0.45rem;">
+            <a
+              class="button-link"
+              href="https://bonitaspringsesterorealtorsfl.growthzoneapp.com/ap/Membership/Application/MrDg3QLx"
+              target="_blank"
+              rel="noopener"
+            >
+              <span>Office / Broker Application</span>
+              <span class="chevron">↗</span>
+            </a>
+            <a
+              class="button-link"
+              style="background:#111827;color:#e5e7eb;box-shadow:none;"
+              href="https://bonitaesterorealtors.com/wp-content/uploads/2024/08/2022-2023-MLS-Thomspon-Broker-Agent-Application.pdf"
+              target="_blank"
+              rel="noopener"
+            >
+              <span>Thompson Broker Application (PDF)</span>
+              <span class="chevron">📄</span>
+            </a>
+          </div>
+        </article>
+
+        <!-- Affiliate -->
+        <article class="choose-card">
+          <h3>Affiliate Applications</h3>
+          <p>
+            Lenders, inspectors, title, builders, and other industry partners wishing to connect
+            with BSER members as Affiliates.
+          </p>
+          <a
+            class="button-link"
+            href="https://bonitaspringsesterorealtorsfl.growthzoneapp.com/ap/Membership/Application/4pVedor8"
+            target="_blank"
+            rel="noopener"
+          >
+            <span>Affiliate Application</span>
+            <span class="chevron">↗</span>
+          </a>
+        </article>
+
+        <!-- Reciprocal / Not sure -->
+        <article class="choose-card">
+          <h3>Reciprocal Listings &amp; Not Sure?</h3>
+          <p>
+            For Florida agents in other associations with a listing in Lee or Collier Counties.
+            BSER will input and maintain your listing in Matrix for a per-listing fee.
+          </p>
+          <a
+            class="button-link"
+            href="https://bonitaesterorealtors.com/reciprocal-application-orientation/"
+            target="_blank"
+            rel="noopener"
+          >
+            <span>Reciprocal Listing Form ($200)</span>
+            <span class="chevron">↗</span>
+          </a>
+          <p class="choose-tagline">
+            Not sure which option fits? Explore
+            <a href="https://bonitaesterorealtors.com/join-bear/" target="_blank" rel="noopener">
+              additional membership options
+            </a>.
+          </p>
+        </article>
+      </div>
+    </section>
+
+    <!-- Dues Calculator -->
+    <section id="dues-area" class="anim-fade-up anim-delay-2">
+      <h2 class="dues-heading">Dues Calculator:</h2>
+
+      <div class="dues-layout">
+        <!-- LEFT: Calculator card -->
+        <div class="dues-card">
+          <div class="role-header">I am a...</div>
+          <div class="role-cards">
+            <button type="button" class="role-card active" data-target="calculator">
+              <span class="role-card-icon">👤</span>
+              <span class="role-card-label">Realtor</span>
+            </button>
+            <button type="button" class="role-card" data-target="calculator2">
+              <span class="role-card-icon">🏢</span>
+              <span class="role-card-label">Broker</span>
+            </button>
+            <button type="button" class="role-card" data-target="calculator3">
+              <span class="role-card-icon">🤝</span>
+              <span class="role-card-label">Affiliate</span>
+            </button>
+          </div>
+
+          <!-- Calculator Panels -->
+          <div id="calculator" class="calculators calc-panel" style="display:block;">
+            <h3>Realtor Dues Calculator</h3>
+            <label>
+              Month:
+              <select id="month" onchange="calculateDues()">
+                <option value="1">January</option>
+                <option value="2">February</option>
+                <option value="3">March</option>
+                <option value="4">April</option>
+                <option value="5">May</option>
+                <option value="6">June</option>
+                <option value="7">July</option>
+                <option value="8">August</option>
+                <option value="9">September</option>
+                <option value="10">October</option>
+                <option value="11">November</option>
+                <option value="12">December</option>
+              </select>
+            </label>
+            <label>
+              Membership Type:
+              <select id="membershipType" onchange="calculateDues(); showDescript();">
+                <option value="primary" data-description="Description for Primary Realtor.">Primary Realtor</option>
+                <option value="secondary" data-description="Description for Secondary Realtor.">Secondary Realtor</option>
+                <option value="secondaryOut" data-description="Description for Secondary Realtor out of State.">Secondary Realtor out of State</option>
+                <option value="transferring" data-description="Description for Transferring Agent.">Transferring Primary Realtor</option>
+              </select>
+            </label>
+            <div id="result"></div>
+            <div id="totalDues"></div>
+          </div>
+
+          <div id="calculator2" class="calculators calc-panel" style="display:none;">
+            <h3>Broker Dues Calculator</h3>
+            <label>
+              Month:
+              <select id="month2" onchange="calculateDues2()">
+                <option value="1">January</option>
+                <option value="2">February</option>
+                <option value="3">March</option>
+                <option value="4">April</option>
+                <option value="5">May</option>
+                <option value="6">June</option>
+                <option value="7">July</option>
+                <option value="8">August</option>
+                <option value="9">September</option>
+                <option value="10">October</option>
+                <option value="11">November</option>
+                <option value="12">December</option>
+              </select>
+            </label>
+            <label>
+              Membership Type:
+              <select id="membershipType2" onchange="calculateDues2(); showDescript2();">
+                <option value="primary2" data-description="Description for Primary Broker.">Primary Broker</option>
+                <option value="secondary2" data-description="Description for Secondary Broker with MLS.">Secondary Broker With MLS</option>
+                <option value="secondaryOut2" data-description="Description for Secondary Broker without MLS.">Secondary Broker Without MLS</option>
+                <option value="transferring2" data-description="Description for Secondary Broker out of state with MLS.">Secondary Broker Out of State With MLS</option>
+                <option value="SecondaryOutofStateWoMLS" data-description="Description for Secondary Broker out of state without MLS.">Secondary Broker Out of State Without MLS</option>
+              </select>
+            </label>
+            <div id="result2"></div>
+            <div id="totalDues2"></div>
+          </div>
+
+          <div id="calculator3" class="calculators calc-panel" style="display:none;">
+            <h3>Affiliate Dues Calculator</h3>
+            <label>
+              Month:
+              <select id="month3" onchange="calculateDues3()">
+                <option value="1">January</option>
+                <option value="2">February</option>
+                <option value="3">March</option>
+                <option value="4">April</option>
+                <option value="5">May</option>
+                <option value="6">June</option>
+                <option value="7">July</option>
+                <option value="8">August</option>
+                <option value="9">September</option>
+                <option value="10">October</option>
+                <option value="11">November</option>
+                <option value="12">December</option>
+              </select>
+            </label>
+            <label>
+              Membership Type:
+              <select id="membershipType3" onchange="calculateDues3(); showDescript3();">
+                <option value="primary" data-description="Description for Primary Affiliate.">Primary Affiliate</option>
+                <option value="secondary" data-description="Description for Associate Affiliate.">Associate Affiliate</option>
+              </select>
+            </label>
+            <div id="result3"></div>
+            <div id="totalDues3"></div>
+          </div>
+
+          <!-- Includes / Requirements -->
+          <div id="infoArea">
+            <div>
+              <strong>What's included:</strong>
+              <div id="includes"></div>
+            </div>
+            <div>
+              <strong>Requirements:</strong>
+              <div id="requirements"></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- RIGHT: Recurring fees + DONUT CHART -->
+        <div class="fees-card">
+          <div class="fees-card-title">Recurring Membership Fees:</div>
+          <p>
+            Membership dues are collected twice a year:
+            <strong>Dec 15</strong> (NAR, FR &amp; Local dues) and
+            <strong>Jul 1</strong> (MLS access). MLS Office dues follow the same schedule.
+          </p>
+
+          <div class="fees-box-grid">
+            <div class="fee-box">
+              <div class="fee-box-title">Primary</div>
+              <p><strong>In-State:</strong><br>Association: $542 (Dec 15) | MLS: $240 (Jul 1)</p>
+              <p><strong>Out-of-State:</strong><br>Not applicable</p>
+            </div>
+
+            <div class="fee-box">
+              <div class="fee-box-title">Secondary</div>
+              <p><strong>In-State:</strong> $175 (Dec 15)</p>
+              <p><strong>Out-of-State:</strong> $321 (Dec 15)</p>
+            </div>
+
+            <div class="fee-box">
+              <div class="fee-box-title">MLS Office</div>
+              <p><strong>Cost:</strong><br>$834 twice/year<br>$542 (Dec 15) | MLS: $240 (Jul 1)</p>
+            </div>
+
+            <div class="fee-box">
+              <div class="fee-box-title">Switch &amp; Save</div>
+              <p>Transfer Credit from RPCRA / NABOR:</p>
+              <p>$50 off Application Fee</p>
+            </div>
+          </div>
+
+          <div class="help-panel">
+            <div class="help-panel-title">Need Help?</div>
+            <p>Email: <a href="mailto:membership@berealtors.org">membership@berealtors.org</a></p>
+            <p>Phone: <a href="tel:+12399926771">(239) 992-6771</a></p>
+          </div>
+          <br>
+
+          <div class="fees-card-title">Dues Calculator Breakdown:</div>
+          <!-- Donut Chart -->
+          <div id="chartContainer">
+            <div id="duesChartWrapper">
+              <canvas id="duesChart"></canvas>
+            </div>
+            <div id="chartLegend"></div>
+          </div>
+
+          <div class="fees-card-title" style="margin-top:18px;">
+            Proration Timeline (Primary REALTOR® + MLS)
+          </div>
+          <div id="prorationContainer">
+            <div class="proration-caption">
+                Approximate dues owed when joining in each month. Blue = membership dues (association + FR + NAR + fees),
+                purple = MLS dues, green line = total cost including the June MLS renewal ($240) and December membership renewal ($542).
+              </div>
+              
+            <div id="prorationChartWrapper">
+              <canvas id="prorationChart"></canvas>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <script>
+        // --- Tab logic for the three calculators ---
+        (function () {
+          const buttons = document.querySelectorAll(".role-card");
+          const panels = document.querySelectorAll(".calc-panel");
+
+          function showCalc(targetId) {
+            panels.forEach((panel) => {
+              panel.style.display = panel.id === targetId ? "block" : "none";
+            });
+          }
+
+          buttons.forEach((btn) => {
+            btn.addEventListener("click", () => {
+              const target = btn.getAttribute("data-target");
+              buttons.forEach((b) => b.classList.toggle("active", b === btn));
+              showCalc(target);
+
+              if (target === "calculator") {
+                calculateDues();
+                showDescript();
+              } else if (target === "calculator2") {
+                calculateDues2();
+                showDescript2();
+              } else if (target === "calculator3") {
+                calculateDues3();
+                showDescript3();
+              }
+            });
+          });
+
+          // Initial state = Realtor
+          showCalc("calculator");
+        })();
+
+        // --- Donut chart logic (Chart.js) ---
+        let duesChart = null;
+        let prorationChart = null;
+
+        function updatePieChart(breakdown) {
+          const canvas = document.getElementById("duesChart");
+          if (!canvas) return;
+
+          const filtered = breakdown.filter((item) => item.amount > 0.01);
+          if (!filtered.length) {
+            if (duesChart) {
+              duesChart.destroy();
+              duesChart = null;
+            }
+            return;
+          }
+
+          const labels = filtered.map((item) => item.label);
+          const data = filtered.map((item) => item.amount);
+          const backgroundColors = filtered.map((item) => {
+            if (item.category === "FR") return "#22c55e";      // FR green
+            if (item.category === "NAR") return "#f97316";     // NAR orange
+            if (item.category === "MLS") return "#6366f1";     // MLS purple
+            return "#0ea5e9";                                  // Local teal
+          });
+
+          const config = {
+            type: "doughnut",
+            data: {
+              labels,
+              datasets: [
+                {
+                  data,
+                  backgroundColor: backgroundColors,
+                  borderColor: "#ffffff",
+                  borderWidth: 1,
+                  hoverOffset: 10
+                }
+              ]
+            },
+            options: {
+              responsive: true,
+              maintainAspectRatio: false,
+              cutout: "60%",
+              animation: {
+                animateRotate: true,
+                animateScale: true,
+                duration: 800
+              },
+              plugins: {
+                legend: { display: false },
+                tooltip: {
+                  callbacks: {
+                    label: function (context) {
+                      const label = context.label || "";
+                      const value = context.parsed || 0;
+                      return `${label}: $${value.toFixed(2)}`;
+                    }
+                  }
+                }
+              }
+            }
+          };
+
+          if (duesChart) {
+            duesChart.data.labels = labels;
+            duesChart.data.datasets[0].data = data;
+            duesChart.data.datasets[0].backgroundColor = backgroundColors;
+            duesChart.options.animation.duration = 800;
+            duesChart.update();
+          } else {
+            const ctx = canvas.getContext("2d");
+            duesChart = new Chart(ctx, config);
+          }
+
+          const legend = document.getElementById("chartLegend");
+          if (legend) {
+            legend.innerHTML = `
+              <div class="legend-row"><span class="legend-swatch local"></span> Local association, RPAC &amp; foundation</div>
+              <div class="legend-row"><span class="legend-swatch mls"></span> MLS dues</div>
+              <div class="legend-row"><span class="legend-swatch fr"></span> Florida REALTORS® (FR)</div>
+              <div class="legend-row"><span class="legend-swatch nar"></span> NAR dues</div>
+            `;
+          }
+        }
+
+// --- Proration line chart (Primary REALTOR® vs MLS + Total including renewals) ---
+function buildProrationChart() {
+  const canvas = document.getElementById("prorationChart");
+  if (!canvas) return;
+
+  const labels = [
+    "Jan", "Feb", "Mar", "Apr", "May", "Jun",
+    "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"
+  ];
+
+  const membershipData = [];
+  const mlsData = [];
+  const totalData = [];
+
+  for (let month = 1; month <= 12; month++) {
+    const membership = calculatePrimaryRealtorMembershipPortion(month);
+    const mls = calculateMlsIndividualDues(month);
+
+    membershipData.push(membership);
+    mlsData.push(mls);
+
+    // Base total = prorated membership + prorated MLS
+    let totalWithRenewals = membership + mls;
+
+    // Add MLS renewal in June (for July 1 MLS cycle)
+    if (month === 6) {
+      totalWithRenewals += 240; // MLS renewal
+    }
+
+    // Add membership renewal in December (Dec 15 cycle)
+    if (month === 12) {
+      totalWithRenewals += 542; // Membership renewal
+    }
+
+    totalData.push(totalWithRenewals);
+  }
+
+  const ctx = canvas.getContext("2d");
+
+  if (prorationChart) {
+    prorationChart.destroy();
+    prorationChart = null;
+  }
+
+  prorationChart = new Chart(ctx, {
+    type: "line",
+    data: {
+      labels,
+      datasets: [
+        {
+          label: "Membership dues (Association / FR / NAR / fees)",
+          data: membershipData,
+          borderColor: "#0ea5e9",
+          backgroundColor: "rgba(14, 165, 233, 0.16)",
+          borderWidth: 2,
+          tension: 0.35,
+          pointRadius: 3,
+          pointHoverRadius: 4,
+          fill: true
+        },
+        {
+          label: "MLS dues",
+          data: mlsData,
+          borderColor: "#6366f1",
+          backgroundColor: "rgba(99, 102, 241, 0.16)",
+          borderWidth: 2,
+          tension: 0.35,
+          pointRadius: 3,
+          pointHoverRadius: 4,
+          fill: true
+        },
+        {
+          label: "Total (including June MLS & Dec membership renewals)",
+          data: totalData,
+          borderColor: "#22c55e",                  // green line
+          backgroundColor: "rgba(34, 197, 94, 0)", // no fill
+          borderWidth: 2.5,
+          tension: 0.35,
+          pointRadius: 3.5,
+          pointHoverRadius: 5,
+          fill: false
+        }
+      ]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      layout: {
+        padding: { top: 8, right: 8, left: 8, bottom: 4 }
+      },
+      plugins: {
+        legend: {
+          display: true,
+          labels: {
+            boxWidth: 12,
+            font: { size: 11 }
+          }
+        },
+        tooltip: {
+          bodyFont: { size: 11 },
+          callbacks: {
+            // Use shorter labels in the tooltip so values don't get clipped
+            label: function (context) {
+              const idx = context.datasetIndex;
+              const value = context.parsed.y || 0;
+
+              if (idx === 0) {
+                return `Membership dues: $${value.toFixed(2)}`;
+              } else if (idx === 1) {
+                return `MLS dues: $${value.toFixed(2)}`;
+              } else if (idx === 2) {
+                return `Total (incl. renewals): $${value.toFixed(2)}`;
+              }
+              return `$${value.toFixed(2)}`;
+            }
+          }
+        }
+      },
+      interaction: {
+        mode: "index",
+        intersect: false
+      },
+      scales: {
+        y: {
+          beginAtZero: true,
+          ticks: { font: { size: 10 } },
+          grid: { color: "rgba(148, 163, 184, 0.25)" }
+        },
+        x: {
+          ticks: { font: { size: 10 } },
+          grid: { display: false }
+        }
+      }
+    }
+  });
+}
+
+
+
+
+
+        // --- Dues logic (original calculations) ---
+
+        let includes = document.getElementById('includes');
+        let requirements = document.getElementById('requirements');
+
+        function calculateDues() {
+          const selectedMonth = parseInt(document.getElementById('month').value);
+          const membershipType = document.getElementById('membershipType').value;
+
+          document.getElementById('calculator').style.display = "block";
+
+          const frAnnualDuesStart = 116;
+          let frAdvocacy = 30;
+          const narAnnualDuesStart = 150;
+          let narAdvocacyAssess = 45;
+          let localAssocDues = calculateLocalAssocDues(selectedMonth);
+          const rpacAssessment = 20;
+          const bearHomeFoundation = 10;
+          let localAppFee = 50;
+          let frProcessingFee = 30;
+          let mlsIndividual = calculateMlsIndividualDues(selectedMonth);
+
+          const frAnnualDuesDecrease = 9.665;
+          const narAnnualDuesDecrease = 12.5;
+
+          let frAnnualDues = frAnnualDuesStart - frAnnualDuesDecrease * (selectedMonth - 1);
+          let narAnnualDues = narAnnualDuesStart - narAnnualDuesDecrease * (selectedMonth - 1);
+
+          if (membershipType === 'secondary') {
+            frAnnualDues = 0;
+            frAdvocacy = 0;
+            narAnnualDues = 0;
+            narAdvocacyAssess = 0;
+            frProcessingFee = 0;
+          } else if (membershipType === 'secondaryOut') {
+            narAnnualDues = 0;
+            narAdvocacyAssess = 0;
+          } else if (membershipType === 'transferring') {
+            frAnnualDues = 0;
+            frAdvocacy = 0;
+            narAnnualDues = 0;
+            narAdvocacyAssess = 0;
+            frProcessingFee = 0;
+            localAppFee = 0;
+          }
+
+          const totalDues = frAnnualDues + frAdvocacy + narAnnualDues + narAdvocacyAssess + localAssocDues + rpacAssessment + bearHomeFoundation + localAppFee + frProcessingFee + mlsIndividual;
+
+          const resultElement = document.getElementById('result');
+          resultElement.innerHTML = `
+            <p>FR Annual Dues: $${frAnnualDues.toFixed(2)}</p>
+            <p>FR Advocacy: $${frAdvocacy.toFixed(2)}</p>
+            <p>NAR Annual Dues: $${narAnnualDues.toFixed(2)}</p>
+            <p>NAR Advocacy Assess: $${narAdvocacyAssess.toFixed(2)}</p>
+            <p>Local Association Annual Dues: $${localAssocDues.toFixed(2)}</p>
+            <p>RPAC Assessment: $${rpacAssessment.toFixed(2)}</p>
+            <p>BEAR Home Foundation: $${bearHomeFoundation.toFixed(2)}</p>
+            <p>Local Application Fee: $${localAppFee.toFixed(2)}</p>
+            <p>FR Processing Fee: $${frProcessingFee.toFixed(2)}</p>
+            <p>MLS Individual: $${mlsIndividual.toFixed(2)}</p>
+            <hr>
+          `;
+
+          const totalDuesElement = document.getElementById('totalDues');
+          totalDuesElement.innerHTML = `<p><strong>Total Dues: $${totalDues.toFixed(2)}</strong></p>`;
+
+          const breakdown = [
+            { label: "Local Association Annual Dues", amount: localAssocDues, category: "Local" },
+            { label: "Local Application Fee", amount: localAppFee, category: "Local" },
+            { label: "RPAC Assessment", amount: rpacAssessment, category: "Local" },
+            { label: "BEAR Home Foundation", amount: bearHomeFoundation, category: "Local" },
+            { label: "MLS Individual", amount: mlsIndividual, category: "MLS" },
+            { label: "FR Annual Dues", amount: frAnnualDues, category: "FR" },
+            { label: "FR Advocacy", amount: frAdvocacy, category: "FR" },
+            { label: "FR Processing Fee", amount: frProcessingFee, category: "FR" },
+            { label: "NAR Annual Dues", amount: narAnnualDues, category: "NAR" },
+            { label: "NAR Advocacy Assess", amount: narAdvocacyAssess, category: "NAR" }
+          ];
+          updatePieChart(breakdown);
+        }
+
+        // Broker Dues
+        function calculateDues2() {
+          const selectedMonth2 = parseInt(document.getElementById('month2').value);
+          const membershipType2 = document.getElementById('membershipType2').value;
+
+          document.getElementById("calculator").style.display = "none";
+          document.getElementById("calculator3").style.display = "none";
+
+          const brokerDues = 270;
+          const frAnnualDuesStart = 116;
+          let frAdvocacy = 30;
+          const narAnnualDuesStart = 150;
+          let narAdvocacyAssess = 45;
+          let localAssocDues = calculateLocalAssocDues2(selectedMonth2);
+          const rpacAssessment = 20;
+          const bearHomeFoundation = 20;
+          let frProcessingFee = 30;
+          let mlsIndividual = calculateMlsIndividualDues(selectedMonth2);
+          let mlsOffice = calculateMlsOfficeDues(selectedMonth2);
+
+          const frAnnualDuesDecrease = 9.665;
+          const narAnnualDuesDecrease = 12.5;
+
+          let frAnnualDues = frAnnualDuesStart - frAnnualDuesDecrease * (selectedMonth2 - 1);
+          let narAnnualDues = narAnnualDuesStart - narAnnualDuesDecrease * (selectedMonth2 - 1);
+
+          if (membershipType2 === 'secondary2') {
+            frAnnualDues = 0;
+            frAdvocacy = 0;
+            narAnnualDues = 0;
+            narAdvocacyAssess = 0;
+            frProcessingFee = 0;
+          } else if (membershipType2 === 'secondaryOut2') {
+            frAnnualDues = 0;
+            frAdvocacy = 0;
+            narAnnualDues = 0;
+            narAdvocacyAssess = 0;
+            frProcessingFee = 0;
+            mlsIndividual = 0;
+            mlsOffice = 0;
+          } else if (membershipType2 === 'transferring2') {
+            narAnnualDues = 0;
+            narAdvocacyAssess = 0;
+          } else if (membershipType2 === 'SecondaryOutofStateWoMLS') {
+            narAnnualDues = 0;
+            narAdvocacyAssess = 0;
+            mlsIndividual = 0;
+            mlsOffice = 0;
+          }
+
+          const totalDues = brokerDues + frAnnualDues + frAdvocacy + narAnnualDues + narAdvocacyAssess + localAssocDues + rpacAssessment + bearHomeFoundation + frProcessingFee + mlsIndividual + mlsOffice;
+
+          const resultElement2 = document.getElementById('result2');
+          resultElement2.innerHTML = `
+            <p>Local Dues: $${brokerDues.toFixed(2)}</p>
+            <p>FR Annual Dues: $${frAnnualDues.toFixed(2)}</p>
+            <p>FR Advocacy: $${frAdvocacy.toFixed(2)}</p>
+            <p>NAR Annual Dues: $${narAnnualDues.toFixed(2)}</p>
+            <p>NAR Advocacy Assess: $${narAdvocacyAssess.toFixed(2)}</p>
+            <p>Local Association Annual Dues: $${localAssocDues.toFixed(2)}</p>
+            <p>RPAC Assessment: $${rpacAssessment.toFixed(2)}</p>
+            <p>BEAR Home Foundation: $${bearHomeFoundation.toFixed(2)}</p>
+            <p>FR Processing Fee: $${frProcessingFee.toFixed(2)}</p>
+            <p>MLS Individual: $${mlsIndividual.toFixed(2)}</p>
+            <p>MLS Office: $${mlsOffice.toFixed(2)}</p>
+            <hr>
+          `;
+
+          const totalDuesElement2 = document.getElementById('totalDues2');
+          totalDuesElement2.innerHTML = `<p><strong>Total Dues: $${totalDues.toFixed(2)}</strong></p>`;
+
+          const breakdown = [
+            { label: "Local Dues", amount: brokerDues, category: "Local" },
+            { label: "Local Association Annual Dues", amount: localAssocDues, category: "Local" },
+            { label: "RPAC Assessment", amount: rpacAssessment, category: "Local" },
+            { label: "BEAR Home Foundation", amount: bearHomeFoundation, category: "Local" },
+            { label: "MLS Individual", amount: mlsIndividual, category: "MLS" },
+            { label: "MLS Office", amount: mlsOffice, category: "MLS" },
+            { label: "FR Annual Dues", amount: frAnnualDues, category: "FR" },
+            { label: "FR Advocacy", amount: frAdvocacy, category: "FR" },
+            { label: "FR Processing Fee", amount: frProcessingFee, category: "FR" },
+            { label: "NAR Annual Dues", amount: narAnnualDues, category: "NAR" },
+            { label: "NAR Advocacy Assess", amount: narAdvocacyAssess, category: "NAR" }
+          ];
+          updatePieChart(breakdown);
+        }
+
+        // Affiliate Dues
+        function calculateDues3() {
+          const selectedMonth3 = parseInt(document.getElementById('month3').value);
+          const membershipType3 = document.getElementById('membershipType3').value;
+
+          let Affiliate = 135;
+          let localAppFee = 50;
+          let Rpac = 20;
+          let Associate = 60;
+
+          const AffiliateDecrease = 11.25;
+          const AssociateDecrease = 5;
+
+          let totalDues;
+
+          let AffDues = Affiliate - AffiliateDecrease * (selectedMonth3 - 1);
+          let AffAssDues = Associate - AssociateDecrease * (selectedMonth3 - 1);
+
+          if (membershipType3 === 'primary') {
+            AffAssDues = 0;
+            totalDues = AffDues + Rpac + localAppFee;
+          } else if (membershipType3 === 'secondary') {
+            AffDues = 0;
+            localAppFee = 0;
+            totalDues = Rpac + AffAssDues;
+          }
+
+          const resultElement3 = document.getElementById('result3');
+          resultElement3.innerHTML = `
+            <p>Affiliate Dues: $${AffDues.toFixed(2)}</p>
+            <p>Affiliate Applicaton (One-Time): $${localAppFee.toFixed(2)}</p>
+            <p>RPAC Investment: $${Rpac.toFixed(2)}</p>
+            <p>Associate Affiliate Dues: $${AffAssDues.toFixed(2)}</p>
+            <hr>
+          `;
+
+          const totalDuesElement3 = document.getElementById('totalDues3');
+          totalDuesElement3.innerHTML = `<p><strong>Total Dues: $${totalDues.toFixed(2)}</strong></p>`;
+
+          const breakdown = [
+            { label: "Affiliate Dues", amount: AffDues, category: "Local" },
+            { label: "Affiliate Application (One-Time)", amount: localAppFee, category: "Local" },
+            { label: "RPAC Investment", amount: Rpac, category: "Local" },
+            { label: "Associate Affiliate Dues", amount: AffAssDues, category: "Local" }
+          ];
+          updatePieChart(breakdown);
+        }
+
+                // Membership-only portion for a Primary REALTOR® (excluding MLS)
+                function calculatePrimaryRealtorMembershipPortion(month) {
+          const frAnnualDuesStart = 116;
+          const frAdvocacy = 30;
+          const narAnnualDuesStart = 150;
+          const narAdvocacyAssess = 45;
+          const rpacAssessment = 20;
+          const bearHomeFoundation = 10;
+          const localAppFee = 50;
+          const frProcessingFee = 30;
+
+          const frAnnualDuesDecrease = 9.665;
+          const narAnnualDuesDecrease = 12.5;
+
+          const frAnnualDues = frAnnualDuesStart - frAnnualDuesDecrease * (month - 1);
+          const narAnnualDues = narAnnualDuesStart - narAnnualDuesDecrease * (month - 1);
+          const localAssocDues = calculateLocalAssocDues(month);
+
+          // Everything except MLS – mirrors the "primary Realtor" path in calculateDues()
+          return (
+            frAnnualDues +
+            frAdvocacy +
+            narAnnualDues +
+            narAdvocacyAssess +
+            localAssocDues +
+            rpacAssessment +
+            bearHomeFoundation +
+            localAppFee +
+            frProcessingFee
+          );
+        }
+
+
+
+        function calculateLocalAssocDues(selectedMonth) {
+          if (selectedMonth >= 1 && selectedMonth <= 3) {
+            return 165;
+          } else if (selectedMonth >= 4 && selectedMonth <= 6) {
+            return 123.75;
+          } else if (selectedMonth >= 7 && selectedMonth <= 9) {
+            return 82.5;
+          } else if (selectedMonth >= 10 && selectedMonth <= 12) {
+            return 41.25;
+          }
+        }
+
+        function calculateLocalAssocDues2(selectedMonth2) {
+          if (selectedMonth2 >= 1 && selectedMonth2 <= 3) {
+            return 165;
+          } else if (selectedMonth2 >= 4 && selectedMonth2 <= 6) {
+            return 125;
+          } else if (selectedMonth2 >= 7 && selectedMonth2 <= 9) {
+            return 85;
+          } else if (selectedMonth2 >= 10 && selectedMonth2 <= 12) {
+            return 45;
+          }
+        }
+
+        function calculateMlsIndividualDues(selectedMonth) {
+          if (selectedMonth >= 7) {
+            return 260 - (selectedMonth - 7) * 20;
+          } else if (selectedMonth === 6) {
+            return 40;
+          } else if (selectedMonth === 5) {
+            return 60;
+          } else if (selectedMonth === 4) {
+            return 80;
+          } else if (selectedMonth === 3) {
+            return 100;
+          } else if (selectedMonth === 2) {
+            return 120;
+          } else if (selectedMonth === 1) {
+            return 140;
+          }
+        }
+
+        function calculateMlsOfficeDues(selectedMonth2) {
+          if (selectedMonth2 >= 7) {
+            return 1184 - (selectedMonth2 - 7) * 139;
+          } else if (selectedMonth2 === 6) {
+            return 489;
+          } else if (selectedMonth2 === 5) {
+            return 628;
+          } else if (selectedMonth2 === 4) {
+            return 767;
+          } else if (selectedMonth2 === 3) {
+            return 906;
+          } else if (selectedMonth2 === 2) {
+            return 1045;
+          } else if (selectedMonth2 === 1) {
+            return 1184;
+          }
+        }
+
+        function showDescript() {
+          document.getElementById("calculator").style.display = "block";
+          const membershipType = document.getElementById('membershipType').value;
+
+          includes.innerHTML = '';
+          requirements.innerHTML = '';
+
+          if (membershipType === 'primary') {
+            includes.innerHTML = '<ul><li>Full Access to the Southwest Florida MLS</li><li>Access to Florida Realtor and NAR Services Including:<ul><li>Form Simplicity</li><li>MLS Advantage</li><li>NAR Realtor Benefits Program</li></ul><li>Full Access to Member Apps Including: <ul><li>Forewarn</li><li>Remine</li><li>Homesnap</li><li>MemberPlus</li><li>ShowingTime</li></ul><li>Full Time support staff</li><li>Access to Florida Realtors Tech Support and Legal Hotline</li><li>Additional Services: <ul><li>Testimonial Tree</li><li>My Undercover Agent</li><li>Offer Mangager</li></ul><ul>';
+            requirements.innerHTML = '<ul><li>Must have obtained a Florida Sales Associate License from the Department of Business and Professional Reqgulations</li><li>Must have not be a current member of an assoctiation (If so, Choose <strong>Transfering Primary Realtor</strong>)</li><li>Must complete all 3 New Member Class requirements within 90 days of joining the association</li></ul>';
+          } else if (membershipType === 'secondary') {
+            includes.innerHTML = '<ul><li>Full Access to the Southwest Florida MLS</li><li>Access to Florida Realtor and NAR Services Including:<ul><li>Form Simplicity</li><li>MLS Advantage</li><li>NAR Realtor Benefits Program</li></ul><li>Full Access to Member Apps Including: <ul><li>Forewarn</li><li>Remine</li><li>Homesnap</li><li>MemberPlus</li><li>ShowingTime</li></ul><li>Full Time support staff</li><li>Access to Florida Realtors Tech Support and Legal Hotline</li><li>Additional Services: <ul><li>Testimonial Tree</li><li>My Undercover Agent</li><li>Offer Mangager</li></ul><ul>';
+            requirements.innerHTML = '<ul><li>Must have obtained a Florida Sales Associate License from the Department of Business and Professional Reqgulations</li><li>Must have a Membership to another association in Florida.  If the association is outside of Florida, please select <strong>Secondary Realtor out of State</strong>.</li></ul>';
+          } else if (membershipType === 'secondaryOut') {
+            includes.innerHTML = '<ul><li>Full Access to the Southwest Florida MLS</li><li>Access to Florida Realtor and NAR Services Including:<ul><li>Form Simplicity</li><li>MLS Advantage</li><li>NAR Realtor Benefits Program</li></ul><li>Full Access to Member Apps Including: <ul><li>Forewarn</li><li>Remine</li><li>Homesnap</li><li>MemberPlus</li><li>ShowingTime</li></ul><li>Full Time support staff</li><li>Access to Florida Realtors Tech Support and Legal Hotline</li><li>Additional Services: <ul><li>Testimonial Tree</li><li>My Undercover Agent</li><li>Offer Mangager</li></ul><ul>';
+            requirements.innerHTML = '<ul><li>Must have obtained a Florida Sales Associate License from the Department of Business and Professional Reqgulations</li><li>Must not already be a member with another Association in Florida.  If you are already a member of another organization in Florda, please select <strong>Secondary Realtor</strong>.</li></ul>';
+          } else if (membershipType === 'transferring') {
+            includes.innerHTML = '<ul><li>Full Access to the Southwest Florida MLS</li><li>Access to Florida Realtor and NAR Services Including:<ul><li>Form Simplicity</li><li>MLS Advantage</li><li>NAR Realtor Benefits Program</li></ul><li>Full Access to Member Apps Including: <ul><li>Forewarn</li><li>Remine</li><li>Homesnap</li><li>MemberPlus</li><li>ShowingTime</li></ul><li>Full Time support staff</li><li>Access to Florida Realtors Tech Support and Legal Hotline</li><li>Additional Services: <ul><li>Testimonial Tree</li><li>My Undercover Agent</li><li>Offer Mangager</li></ul><ul>';
+            requirements.innerHTML = '<ul><li>Must have obtained a Florida Sales Associate License from the Department of Business and Professional Reqgulations</li><li>Must provide a letter of good standing from the current association you are transfering from.</li></ul>';
+          }
+        }
+
+        function showDescript2() {
+          document.getElementById("calculator").style.display = "none";
+
+          includes.innerHTML = '';
+          requirements.innerHTML = '';
+
+          const membershipType2 = document.getElementById('membershipType2').value;
+
+          if (membershipType2 === 'primary2') {
+            includes.innerHTML = '<ul><li>Full Access to the Southwest Florida MLS as an Office and Individual MLS Subscription</li><li>Access to Florida Realtor and NAR Services Including:<ul><li>Form Simplicity</li><li>MLS Advantage</li><li>NAR Realtor Benefits Program</li></ul><li>Full Access to Member Apps Including: <ul><li>Forewarn</li><li>Remine</li><li>Homesnap</li><li>MemberPlus</li><li>ShowingTime</li></ul><li>Full Time support staff</li><li>Access to Florida Realtors Tech Support and Legal Hotline</li><li>Additional Services: <ul><li>Testimonial Tree</li><li>My Undercover Agent</li><li>Offer Mangager</li></ul><ul>';
+            requirements.innerHTML = '<ul><li>Must have obtained a Florida Broker Associate License from the Department of Business and Professional Reqgulations</li><li>Must have not be a current member of an assoctiation (If so, Choose <strong>Transfering Primary Realtor</strong>)</li><li>Must have an active Real Estate Office on the DBPR</li></ul>';
+          } else if (membershipType2 === 'secondary2') {
+            includes.innerHTML = '<ul><li>Full Access to the Southwest Florida MLS as an Office and Individual MLS Subscription</li><li>Access to Florida Realtor and NAR Services Including:<ul><li>Form Simplicity</li><li>MLS Advantage</li><li>NAR Realtor Benefits Program</li></ul><li>Full Access to Member Apps Including: <ul><li>Forewarn</li><li>Remine</li><li>Homesnap</li><li>MemberPlus</li><li>ShowingTime</li></ul><li>Full Time support staff</li><li>Access to Florida Realtors Tech Support and Legal Hotline</li><li>Additional Services: <ul><li>Testimonial Tree</li><li>My Undercover Agent</li><li>Offer Mangager</li></ul><ul>';
+            requirements.innerHTML = '<ul><li>Must have obtained a Florida Broker Associate License from the Department of Business and Professional Reqgulations</li><li>Must be a current member of another assoctiation with the ability to provide a letter of good standing from your current assocaition (If no current assocation, Choose <strong>Primary Broker</strong>)</li><li>Must have an active Real Estate Office on the DBPR</li></ul>';
+          } else if (membershipType2 === 'secondaryOut2') {
+            includes.innerHTML = '<ul><li>No Access to the Southwest Florida MLS</li></ul>';
+            requirements.innerHTML = '<ul><li>Must have obtained a Florida Broker Associate License from the Department of Business and Professional Reqgulations</li><li>Must be a current member of another assoctiation with the ability to provide a letter of good standing from your current assocaition (If no current assocation, Choose <strong>Primary Broker</strong>)</li><li>Must have an active Real Estate Office on the DBPR</li></ul>';
+          } else if (membershipType2 === 'transferring2') {
+            includes.innerHTML = '<ul><li>Full Access to the Southwest Florida MLS as an Office and Individual MLS Subscription</li><li>Access to Florida Realtor and NAR Services Including:<ul><li>Form Simplicity</li><li>MLS Advantage</li><li>NAR Realtor Benefits Program</li></ul><li>Full Access to Member Apps Including: <ul><li>Forewarn</li><li>Remine</li><li>Homesnap</li><li>MemberPlus</li><li>ShowingTime</li></ul><li>Full Time support staff</li><li>Access to Florida Realtors Tech Support and Legal Hotline</li><li>Additional Services: <ul><li>Testimonial Tree</li><li>My Undercover Agent</li><li>Offer Mangager</li></ul><ul>';
+            requirements.innerHTML = '<ul><li>Must have obtained a Florida Broker Associate License from the Department of Business and Professional Reqgulations</li><li>Must be a current member of another assoctiation with the ability to provide a letter of good standing from your current assocaition (If no current assocation, Choose <strong>Primary Broker</strong>)</li><li>Must have an active Real Estate Office on the DBPR</li></ul>';
+          } else if (membershipType2 === 'SecondaryOutofStateWoMLS') {
+            includes.innerHTML = '<ul><li>No Access to the Southwest Florida MLS</li></ul>';
+            requirements.innerHTML = '<ul><li>Must have obtained a Florida Broker Associate License from the Department of Business and Professional Reqgulations</li><li>Must be a current member of another assoctiation with the ability to provide a letter of good standing from your current assocaition (If no current assocation, Choose <strong>Primary Broker</strong>)</li><li>Must have an active Real Estate Office on the DBPR</li></ul>';
+          }
+        }
+
+        function showDescript3() {
+          includes.innerHTML = '';
+          requirements.innerHTML = '';
+        }
+
+        // Init months + default calculations on load
+        (function initDues() {
+          const monthVal = new Date().getMonth() + 1;
+          document.getElementById('month').value = monthVal;
+          document.getElementById('month2').value = monthVal;
+          document.getElementById('month3').value = monthVal;
+
+          calculateDues();
+          showDescript();
+          buildProrationChart();  // <<< add this line
+        })();
+      </script>
+    </section>
+
+    <!-- WHY BER SECTION -->
+    <section id="why-ber" class="anim-fade-up anim-delay-3">
+      <h2 id="why-ber-title" class="section-title">Why Bonita Springs-Estero REALTORS®?</h2>
+
+      <p id="why-ber-intro">
+        Home to <strong>1,300+ REALTORS®</strong> since 1966, BER pairs big-board resources with a
+        small-board personal touch. Our mission: <em>support success beyond sales</em> for members,
+        clients &amp; community.
+      </p>
+
+      <div class="why-grid">
+        <div class="why-card">
+          <h3>Signature Member Perks</h3>
+          <ul>
+            <li><strong>FREE 16-ft Moving Truck + Cargo Van</strong> — book online, wow your buyers &amp; sellers.</li>
+            <li><strong>Media Room Studio</strong> — 4K cameras, podcast mics &amp; green-screen backdrops.</li>
+            <li><strong>Realtor Review Magazine</strong> — quarterly print with agent-focused articles.</li>
+            <li><strong>Shareable Market-Stats Videos &amp; Page</strong> — fresh Bonita-Estero infographics every month.</li>
+            <li>Complimentary coworking desks and meeting rooms.</li>
+          </ul>
+        </div>
+
+        <div class="why-card">
+          <h3>Technology &amp; MLS Power</h3>
+          <ul>
+            <li><strong>Realist (CoreLogic)</strong> — tax rolls, owners, liens &amp; heat-mapped comps inside Matrix.</li>
+            <li><strong>Matrix MLS + MLS-Touch</strong> sync for live data &amp; instant comparables anywhere.</li>
+            <li><strong>Cloud CMA | Agent 3000</strong> — pro CMAs, single-property sites, flyers &amp; drip campaigns.</li>
+            <li><strong>BrokerBay | ShowingTime</strong> — AI scheduling &amp; feedback dashboards.</li>
+            <li><strong>Domus Market Stats | RatePlug</strong> — local analytics &amp; live mortgage quotes.</li>
+            <li><strong>Form Simplicity / TransactionDesk e-sign, FOREWARN safety &amp; RentSpree screening</strong> — all free.</li>
+          </ul>
+        </div>
+
+        <div class="why-card">
+          <h3>Education &amp; Leadership</h3>
+          <ul>
+            <li>Full CE calendar:
+              <a href="https://members.bonitaesterorealtors.com/bercalendar" target="_blank" rel="noopener">
+                view upcoming classes ›
+              </a>
+            </li>
+            <li>
+              <a href="https://bonitaesterorealtors.com/ber-news-home/" target="_blank" rel="noopener">
+                BER News
+              </a> — articles &amp; how-to guides 24/7.
+            </li>
+            <li><strong>BEST Designation</strong> — six-module local-expert path + neighborhood walking tour.</li>
+            <li><strong>Leadership Academy</strong> — six-month cohort, Tallahassee day &amp; capstone project.</li>
+            <li>15+ committees open for volunteers (Gov’t Affairs, Global, YPN, Outreach).</li>
+          </ul>
+        </div>
+
+        <div class="why-card">
+          <h3>Global Reach &amp; Diversity</h3>
+          <ul>
+            <li><strong>NAR Platinum Global Achievement (2025)</strong> — 5 Years in a row. One of 11 nationwide.</li>
+            <li>Trade-mission stipends (Canada • Jamaica • Portugal in 2025).</li>
+            <li>Inbound referral desk + quarterly <strong>“Around the Globe”</strong> mastermind.</li>
+            <li>
+              <a href="https://bonitaesterorealtors.com/our-commitment-to-diversity/" target="_blank" rel="noopener">
+                Diversity &amp; Inclusion
+              </a> — BER pledge &amp; resources.
+            </li>
+            <li><strong>Sales Excellence Awards</strong> — Gold ($10M), Platinum ($20M) &amp; Diamond ($40M) tiers.</li>
+          </ul>
+        </div>
+
+        <div class="why-card">
+          <h3>Advocacy &amp; Member Support</h3>
+          <ul>
+            <li><strong>Legal Hotline:</strong> Florida REALTORS® free counsel at
+              <a href="tel:4074381409">407-438-1409</a>.
+            </li>
+            <li><strong>Tech Helpline:</strong> FR IT support at
+              <a href="tel:4075871450">407-587-1450</a>.
+            </li>
+            <li><strong>RPAC Triple Crown</strong> — 5 consecutive years exceeding fundraising &amp; participation goals.</li>
+            <li><strong>2025 Legislative Win:</strong> HB 913 (Greater Condo Transparency &amp; Buyer Protections) passed.</li>
+            <li><strong>GARD 2025:</strong> Our delegation lobbied in Tallahassee during Great American REALTOR® Days.</li>
+            <li><strong>Advocacy Legacy:</strong> Since 1966, championing private-property rights in SW FL.</li>
+          </ul>
+        </div>
+
+        <div class="why-card">
+          <h3>Community &amp; Networking</h3>
+          <ul>
+            <li><strong>Sips &amp; Tips:</strong> Monthly happy-hour roundtables sharing hot topics.</li>
+            <li><strong>July 4th Parade Float:</strong> Annual community showcase on Estero Blvd.</li>
+            <li><strong>Habitat Builds:</strong> Quarterly volunteer days making homes a reality.</li>
+            <li><strong>Installation Banquet:</strong> Gala induction &amp; Sales Excellence Awards celebration.</li>
+            <li><strong>Advisory Council:</strong> Meets first Tuesday monthly at 10 AM to steer BER’s strategy.</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+  </main>
+</body>
+</html>

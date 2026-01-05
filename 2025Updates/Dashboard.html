@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BER Tools (DO NOT SHARE) | Dashboard</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet">
+    <style>
+        :root {
+            /* Palette: Grey Background, White Cards */
+            --bg-main: #f1f5f9;
+            /* Slate 100 */
+            --text-main: #1e293b;
+            /* Slate 800 */
+            --text-soft: #64748b;
+            /* Slate 500 */
+
+            --card-bg: #ffffff;
+            --card-border: #e2e8f0;
+            /* Slate 200 */
+            --card-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
+            --card-hover-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+
+            --accent-blue: #0ea5e9;
+            --accent-purple: #a855f7;
+            --accent-pink: #ec4899;
+            --accent-orange: #f59e0b;
+            --accent-green: #22c55e;
+
+            --font-sans: 'Outfit', sans-serif;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: var(--font-sans);
+            color: var(--text-main);
+            min-height: 100vh;
+            background: var(--bg-main);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 2rem;
+        }
+
+        /* NUCLEAR OPTIONS: Force styles on the parent WP Site */
+        html {
+            background: #f1f5f9 !important;
+            /* Force Grey background on HTML */
+            min-height: 100vh !important;
+        }
+
+        /* Hide Parent Header & Footer elements */
+        /* Common WordPress and Elementor selectors */
+        header.ber-header,
+        .elementor-location-header,
+        #masthead,
+        .site-header,
+        footer.elementor-location-footer,
+        .site-footer,
+        #colophon {
+            display: none !important;
+        }
+
+        /* Make standard WP/Elementor containers transparent so our background shows */
+        body,
+        #page,
+        .site-content,
+        .app-main,
+        .elementor-section,
+        .elementor-column {
+            background: transparent !important;
+            box-shadow: none !important;
+        }
+
+        /* Headers */
+        header {
+            text-align: center;
+            margin-bottom: 3rem;
+            animation: fadeInDown 0.8s ease-out;
+            position: relative;
+            /* Ensure this header is visible while others are hidden */
+            display: block !important;
+            background: transparent !important;
+        }
+
+        h1 {
+            font-size: 3rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, var(--accent-blue) 0%, var(--accent-purple) 100%);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 0.5rem;
+            letter-spacing: -0.02em;
+        }
+
+        p.subtitle {
+            font-size: 1.2rem;
+            color: var(--text-soft);
+            font-weight: 400;
+        }
+
+        /* Grid */
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+            width: 100%;
+            max-width: 1200px;
+            padding: 0 1rem;
+            animation: fadeInUp 0.8s ease-out 0.2s backwards;
+        }
+
+        /* Card (White "Button") */
+        .tool-card {
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            border-radius: 20px;
+            padding: 2rem;
+            text-decoration: none;
+            color: var(--text-main);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+            box-shadow: var(--card-shadow);
+        }
+
+        .tool-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--card-hover-shadow);
+            border-color: var(--accent-blue);
+        }
+
+        .tool-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: linear-gradient(90deg, var(--accent-blue), var(--accent-purple));
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .tool-card:hover::before {
+            opacity: 1;
+        }
+
+        .icon-circle {
+            width: 70px;
+            height: 70px;
+            border-radius: 20px;
+            /* Squircle */
+            background: #f8fafc;
+            /* Very light grey */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 1.5rem;
+            font-size: 1.75rem;
+            transition: transform 0.3s, background 0.3s;
+            color: var(--text-soft);
+        }
+
+        .tool-card:hover .icon-circle {
+            transform: scale(1.1) rotate(5deg);
+        }
+
+        /* Specific Colors for Icons on Hover */
+        .tool-card:hover .icon-circle.icon-wrap {
+            background: #e0f2fe;
+            color: var(--accent-blue);
+        }
+
+        .tool-card:hover .icon-circle.icon-ideas {
+            background: #fef3c7;
+            color: var(--accent-orange);
+        }
+
+        .tool-card:hover .icon-circle.icon-promo {
+            background: #dcfce7;
+            color: var(--accent-green);
+        }
+
+        .tool-card:hover .icon-circle.icon-logs {
+            background: #fce7f3;
+            color: var(--accent-pink);
+        }
+
+        .tool-card:hover .icon-circle.icon-upload {
+            background: #f3e8ff;
+            color: var(--accent-purple);
+        }
+
+        .tool-card:hover .icon-circle.icon-multi {
+            background: #fed7aa;
+            color: var(--accent-orange);
+        }
+
+        .tool-card:hover .icon-circle.icon-single {
+            background: #bae6fd;
+            color: var(--accent-blue);
+        }
+
+        .tool-card h2 {
+            font-size: 1.35rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+
+        .tool-card p {
+            font-size: 0.95rem;
+            color: var(--text-soft);
+            line-height: 1.5;
+            margin-bottom: 1.5rem;
+        }
+
+        .launch-btn {
+            margin-top: auto;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            background: #f1f5f9;
+            padding: 8px 16px;
+            border-radius: 99px;
+            color: var(--text-main);
+            transition: all 0.2s;
+        }
+
+        .tool-card:hover .launch-btn {
+            background: var(--text-main);
+            color: #fff;
+        }
+
+        .launch-btn i {
+            transition: transform 0.2s;
+        }
+
+        .tool-card:hover .launch-btn i {
+            transform: translateX(4px);
+        }
+
+        /* Animations */
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @media (max-width: 640px) {
+            h1 {
+                font-size: 2rem;
+            }
+
+            .dashboard-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <header>
+        <h1>Bonita Board Tools</h1>
+        <p class="subtitle">Your central command center.</p>
+    </header>
+
+    <div class="dashboard-grid">
+        <!-- Wrap Sheet -->
+        <a href="https://bonitaesterorealtors.com/wrapsheet/" target="_blank" class="tool-card">
+            <div class="icon-circle icon-wrap">
+                <i class="fa-solid fa-list-check"></i>
+            </div>
+            <h2>The Wrap Sheet</h2>
+            <p>Daily task management, project tracking, and weekly goals for staff.</p>
+            <span class="launch-btn">Launch <i class="fa-solid fa-arrow-right"></i></span>
+        </a>
+
+        <!-- Board Ideas -->
+        <a href="https://bonitaesterorealtors.com/core-pillars-priority-vote/" target="_blank" class="tool-card">
+            <div class="icon-circle icon-ideas">
+                <i class="fa-solid fa-lightbulb"></i>
+            </div>
+            <h2>Board Ideas</h2>
+            <p>Submit and vote on strategic pillar ideas for upcoming projects.</p>
+            <span class="launch-btn">Launch <i class="fa-solid fa-arrow-right"></i></span>
+        </a>
+
+        <!-- Promo Calendar -->
+        <a href="https://bonitaesterorealtors.com/promo-calendar-internal/" target="_blank" class="tool-card">
+            <div class="icon-circle icon-promo">
+                <i class="fa-solid fa-calendar-days"></i>
+            </div>
+            <h2>Promo Calendar</h2>
+            <p>Internal calendar for tracking promotions and marketing events.</p>
+            <span class="launch-btn">Launch <i class="fa-solid fa-arrow-right"></i></span>
+        </a>
+
+        <!-- Logs Request -->
+        <a href="https://bonitaesterorealtors.com/logsrequest/" target="_blank" class="tool-card">
+            <div class="icon-circle icon-logs">
+                <i class="fa-solid fa-bug"></i>
+            </div>
+            <h2>Logs Request</h2>
+            <p>Submit bug reports, feature requests, or system issues.</p>
+            <span class="launch-btn">Launch <i class="fa-solid fa-arrow-right"></i></span>
+        </a>
+
+        <a href="./LOGSuploader.html" target="_blank" class="tool-card">
+            <div class="icon-circle icon-upload">
+                <i class="fa-solid fa-cloud-upload"></i>
+            </div>
+            <h2>Logs Uploader</h2>
+            <p>Upload log files directly for system analysis.</p>
+            <span class="launch-btn">Launch <i class="fa-solid fa-arrow-right"></i></span>
+        </a>
+
+        <!-- Multi-Week Email Planner -->
+        <a href="https://multi-week-email-planner-ui.pages.dev/" target="_blank" class="tool-card">
+            <div class="icon-circle icon-multi">
+                <i class="fa-solid fa-envelope-open-text"></i>
+            </div>
+            <h2>Multi-Week Planner</h2>
+            <p>Plan complex multi-week email campaigns and sequences.</p>
+            <span class="launch-btn">Launch <i class="fa-solid fa-arrow-right"></i></span>
+        </a>
+
+        <!-- Single Class Email Planner -->
+        <a href="https://multi-week-email-planner-ui.pages.dev/single-email" target="_blank" class="tool-card">
+            <div class="icon-circle icon-single">
+                <i class="fa-solid fa-paper-plane"></i>
+            </div>
+            <h2>Single Email Planner</h2>
+            <p>Draft and optimize single class or event email blasts.</p>
+            <span class="launch-btn">Launch <i class="fa-solid fa-arrow-right"></i></span>
+        </a>
+    </div>
+
+</body>
+
+</html>

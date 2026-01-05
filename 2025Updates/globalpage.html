@@ -1,0 +1,689 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>BER Member Origins – 3D Globe</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <!-- Globe.gl + Three.js from CDN -->
+  <script src="https://unpkg.com/three@0.160.0/build/three.min.js"></script>
+  <script src="https://unpkg.com/globe.gl@2.32.2/dist/globe.gl.min.js"></script>
+
+  <style>
+    :root {
+      --ink:#0b1220;
+      --paper:#05060a;
+      --accent:#e0002a;
+      --accent-soft:#12d0c9;
+      --muted:#9ca3af;
+      --panel-bg:rgba(15,23,42,0.92);
+      --radius:18px;
+      --shadow:0 20px 60px rgba(0,0,0,0.75);
+    }
+
+    * { box-sizing:border-box; }
+
+    html, body {
+      margin:0;
+      padding:0;
+      font-family:system-ui,-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+      background:#020617;
+      color:#e5e7eb;
+    }
+
+    #member-globe-wrapper {
+      width:100%;
+      padding:40px 0 60px;
+      background:#020617;
+    }
+
+    #globe-container {
+      position:relative;
+      width:100%;
+      min-height:600px;
+      height:min(900px, 80vh);
+      max-width:1400px;
+      margin:0 auto;
+      background:radial-gradient(circle at center, #020617 0, #020617 40%, #020617 100%);
+      border-radius:24px;
+      overflow:hidden;
+    }
+
+    #globeCanvas {
+      width:100%;
+      height:100%;
+    }
+
+    .globe-overlay {
+      position:absolute;
+      inset:0;
+      display:flex;
+      flex-direction:column;
+      justify-content:space-between;
+      pointer-events:none;
+      padding:16px 18px;
+    }
+
+    .globe-tag {
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      padding:4px 10px;
+      border-radius:999px;
+      background:rgba(0,0,0,0.7);
+      border:1px solid rgba(248,250,252,0.15);
+      font-size:11px;
+      letter-spacing:.22em;
+      text-transform:uppercase;
+      color:#e5e7eb;
+      pointer-events:auto;
+    }
+
+    .globe-tag::before {
+      content:"+";
+      font-weight:900;
+      color:var(--accent-soft);
+    }
+
+    .globe-title-block {
+      margin-top:10px;
+      pointer-events:auto;
+      max-width:380px;
+      background:linear-gradient(135deg,rgba(15,23,42,0.94),rgba(15,23,42,0.88));
+      border-radius:18px;
+      padding:14px 16px;
+      border:1px solid rgba(148,163,184,0.45);
+      box-shadow:0 14px 40px rgba(0,0,0,.8);
+      backdrop-filter:blur(14px);
+    }
+
+    .globe-title {
+      font-weight:800;
+      letter-spacing:.18em;
+      text-transform:uppercase;
+      font-size:13px;
+      margin:0 0 6px;
+      color:#f9fafb;
+    }
+
+    .globe-sub {
+      font-size:13px;
+      color:#cbd5f5;
+      margin:0;
+    }
+
+    .globe-legend {
+      align-self:flex-end;
+      display:flex;
+      flex-direction:column;
+      align-items:flex-end;
+      gap:6px;
+      pointer-events:auto;
+    }
+
+    .legend-pill {
+      display:flex;
+      align-items:center;
+      gap:8px;
+      padding:6px 10px;
+      border-radius:999px;
+      background:rgba(15,23,42,.94);
+      border:1px solid rgba(148,163,184,0.6);
+      font-size:11px;
+      text-transform:uppercase;
+      letter-spacing:.14em;
+    }
+
+    .legend-dot {
+      width:10px;
+      height:10px;
+      border-radius:999px;
+      background:var(--accent);
+      box-shadow:0 0 12px rgba(220,38,38,.9);
+    }
+
+    /* Bottom pin panel (inside globe container) */
+    .pin-panel {
+      position:absolute;
+      left:0;
+      right:0;
+      bottom:0;
+      padding:10px 12px 12px;
+      pointer-events:none;
+    }
+
+    .pin-panel-inner {
+      pointer-events:auto;
+      max-width:760px;
+      margin:0 auto;
+      background:var(--panel-bg);
+      border-radius:var(--radius);
+      border:1px solid rgba(148,163,184,0.55);
+      box-shadow:var(--shadow);
+      padding:10px 12px 10px;
+      backdrop-filter:blur(18px);
+    }
+
+    .pin-header {
+      display:flex;
+      flex-wrap:wrap;
+      align-items:center;
+      justify-content:space-between;
+      gap:8px;
+      margin-bottom:4px;
+    }
+
+    .pin-title {
+      font-size:11px;
+      text-transform:uppercase;
+      letter-spacing:.18em;
+      color:#e5e7eb;
+    }
+
+    .pin-sub {
+      font-size:11px;
+      color:#9ca3af;
+    }
+
+    .pin-form {
+      display:flex;
+      flex-wrap:wrap;
+      gap:8px;
+      align-items:flex-start;
+      margin-top:4px;
+    }
+
+    .field {
+      display:flex;
+      flex-direction:column;
+      gap:4px;
+      min-width:0;
+    }
+
+    .field label {
+      font-size:11px;
+      color:#e5e7eb;
+    }
+
+    .field input[type="text"] {
+      width:100%;
+      padding:7px 9px;
+      border-radius:999px;
+      border:1px solid rgba(148,163,184,0.7);
+      background:rgba(15,23,42,0.95);
+      color:#e5e7eb;
+      font-size:13px;
+      outline:none;
+    }
+
+    .field input[type="text"]::placeholder {
+      color:#6b7280;
+    }
+
+    .field input[type="text"]:focus {
+      border-color:var(--accent-soft);
+      box-shadow:0 0 0 1px rgba(56,189,248,0.35);
+    }
+
+    .btn {
+      appearance:none;
+      border:none;
+      border-radius:999px;
+      padding:8px 14px;
+      font-size:11px;
+      font-weight:700;
+      letter-spacing:.16em;
+      text-transform:uppercase;
+      cursor:pointer;
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      gap:6px;
+      background:#f9fafb;
+      color:#020617;
+      transition:transform .08s ease, box-shadow .12s ease, background .12s ease;
+      white-space:nowrap;
+    }
+
+    .btn-primary {
+      background:linear-gradient(135deg,var(--accent),var(--accent-soft));
+      color:#020617;
+      box-shadow:0 10px 24px rgba(0,0,0,0.6);
+    }
+
+    .btn-primary:hover {
+      transform:translateY(-1px);
+      box-shadow:0 16px 32px rgba(0,0,0,0.75);
+    }
+
+    .btn-ghost {
+      background:transparent;
+      color:#e5e7eb;
+      border:1px solid rgba(148,163,184,0.65);
+      box-shadow:none;
+    }
+
+    .btn-ghost:hover {
+      background:rgba(15,23,42,0.9);
+    }
+
+    .btn-row {
+      display:flex;
+      flex-wrap:wrap;
+      gap:8px;
+      align-items:center;
+    }
+
+    .status {
+      font-size:11px;
+      color:#9ca3af;
+      min-height:16px;
+      margin-top:4px;
+    }
+
+    .status-error {
+      color:#fecaca;
+    }
+
+    .status-success {
+      color:#a7f3d0;
+    }
+
+    .results-list {
+      max-height:140px;
+      overflow-y:auto;
+      margin-top:4px;
+      border-radius:12px;
+      border:1px solid rgba(31,41,55,0.95);
+      background:rgba(15,23,42,0.98);
+    }
+
+    .results-item {
+      padding:6px 8px;
+      font-size:12px;
+      cursor:pointer;
+      border-bottom:1px solid rgba(31,41,55,1);
+    }
+
+    .results-item:last-child {
+      border-bottom:none;
+    }
+
+    .results-item:hover {
+      background:rgba(15,23,42,1);
+    }
+
+    .pin-note {
+      font-size:10px;
+      color:#6b7280;
+      margin-top:4px;
+    }
+
+    @media (max-width:800px) {
+      .globe-title-block {
+        max-width:260px;
+      }
+      #globe-container {
+        border-radius:0;
+      }
+      .pin-panel-inner {
+        margin-inline:0;
+      }
+      .pin-form {
+        flex-direction:column;
+        align-items:stretch;
+      }
+      .btn-row {
+        justify-content:flex-start;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div id="member-globe-wrapper">
+    <div id="globe-container">
+      <div id="globeCanvas"></div>
+
+      <!-- Top overlay (title + legend) -->
+      <div class="globe-overlay">
+        <div>
+          <div class="globe-tag">
+            Bonita Springs–Estero REALTORS®
+          </div>
+          <div class="globe-title-block">
+            <h2 class="globe-title">Member Origins Globe</h2>
+            <p class="globe-sub">
+              Spin and zoom to see where members are from. Drop a pin once with your name and hometown.
+            </p>
+          </div>
+        </div>
+        <div class="globe-legend">
+          <div class="legend-pill">
+            <span class="legend-dot"></span>
+            <span>Member city</span>
+          </div>
+          <div class="legend-pill" style="opacity:.75;font-size:10px;">
+            Drag to rotate • Scroll to zoom • Right-drag to pan
+          </div>
+        </div>
+      </div>
+
+      <!-- Bottom pin form panel -->
+      <div class="pin-panel">
+        <div class="pin-panel-inner">
+          <div class="pin-header">
+            <div>
+              <div class="pin-title">Place your pin</div>
+              <div class="pin-sub">One pin per member name • Hover a pin to see city and name</div>
+            </div>
+          </div>
+
+          <div class="pin-form">
+            <div class="field" style="flex:1 1 160px;">
+              <label for="nameInput">Your name</label>
+              <input id="nameInput" type="text" placeholder="e.g., Jane Doe" autocomplete="off" />
+            </div>
+            <div class="field" style="flex:2 1 220px;">
+              <label for="cityInput">City / Area</label>
+              <input id="cityInput" type="text" placeholder="e.g., Bonita Springs, FL, USA" autocomplete="off" />
+            </div>
+            <div class="btn-row">
+              <button class="btn btn-primary" id="searchBtn">Search &amp; Place Pin</button>
+              <button class="btn btn-ghost" id="clearBtn" type="button">Clear</button>
+            </div>
+          </div>
+
+          <div id="searchStatus" class="status"></div>
+
+          <div id="resultsContainer" class="results-list" style="display:none;"></div>
+
+          <div class="pin-note">
+            Pins are stored on our server and shared across visitors. Each member name can place exactly one pin.
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+// 🔗 No trailing slash here
+const WORKER_BASE_URL = "https://ber-globe.bonitaspringsrealtors.workers.dev";
+
+
+    let pins = [];
+    let world;
+
+    // Generate distinct colors per pin index
+    function getColorForIndex(index) {
+      const hue = (index * 137.508) % 360; // golden-angle spacing
+      return `hsl(${hue}, 80%, 60%)`;
+    }
+
+    async function fetchAllPinsFromWorker() {
+      const resp = await fetch(`${WORKER_BASE_URL}/pins`, {
+        headers: { "Accept": "application/json" }
+      });
+      if (!resp.ok) throw new Error("Failed to load pins");
+      const data = await resp.json();
+      return Array.isArray(data) ? data : [];
+    }
+
+    async function addPinViaWorker(name, city, lat, lng) {
+      const resp = await fetch(`${WORKER_BASE_URL}/pins`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json", "Accept": "application/json" },
+        body: JSON.stringify({ name, city, lat, lng })
+      });
+
+      if (resp.status === 409) {
+        const data = await resp.json().catch(() => ({}));
+        const msg = data.message || "This name already has a pin.";
+        throw new Error(`NAME_EXISTS:${msg}`);
+      }
+
+      if (!resp.ok) {
+        throw new Error("Failed to save pin");
+      }
+
+      const data = await resp.json();
+      return Array.isArray(data.pins) ? data.pins : [];
+    }
+
+    function initGlobe() {
+      const container = document.getElementById("globeCanvas");
+
+      world = Globe()
+        (container)
+        .globeImageUrl("//unpkg.com/three-globe/example/img/earth-night.jpg")
+        .bumpImageUrl("//unpkg.com/three-globe/example/img/earth-topology.png")
+        .backgroundColor("#020617")
+        .showAtmosphere(true)
+        .atmosphereColor("#38bdf8")
+        .atmosphereAltitude(0.22)
+        .pointLat("lat")
+        .pointLng("lng")
+        .pointAltitude(0.03)
+        .pointColor(d => d.color || "#e0002a")
+        .pointLabel(d => {
+          const city = d.city || "Member City";
+          const name = d.name || "Member";
+          return `${city} – ${name}`;
+        });
+
+      // Center + slightly higher altitude so it's not clipped
+      world.pointOfView({ lat: 26.3398, lng: -81.7787, altitude: 2.6 });
+
+      // Adjust camera FOV to shrink the globe a bit (avoid edges)
+      const cam = world.camera();
+      cam.fov = 45;
+      cam.updateProjectionMatrix();
+
+      // Auto-rotation with gentle speed; users can still drag to override
+      const controls = world.controls();
+      if (controls) {
+        controls.autoRotate = true;
+        controls.autoRotateSpeed = 0.4; // slower = more subtle
+        controls.enableDamping = true;
+        controls.dampingFactor = 0.04;
+      }
+
+      refreshGlobePoints();
+    }
+
+    function refreshGlobePoints() {
+      if (!world) return;
+      world.pointsData(pins);
+    }
+
+    async function geocodeCity(query, memberName) {
+      const statusEl = document.getElementById("searchStatus");
+      const resultsContainer = document.getElementById("resultsContainer");
+      statusEl.className = "status";
+      statusEl.textContent = "Searching…";
+
+      resultsContainer.style.display = "none";
+      resultsContainer.innerHTML = "";
+
+      try {
+        const url = `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(query)}&limit=5&addressdetails=1`;
+        const resp = await fetch(url, { headers: { "Accept": "application/json" } });
+        if (!resp.ok) throw new Error("Geocoding failed");
+        const data = await resp.json();
+
+        if (!data || !data.length) {
+          statusEl.className = "status status-error";
+          statusEl.textContent = "No results found. Try being more specific with city, state, or country.";
+          return;
+        }
+
+        statusEl.className = "status status-success";
+        statusEl.textContent = "Select your location from the list below to place your pin.";
+
+        resultsContainer.style.display = "block";
+        resultsContainer.innerHTML = "";
+
+        data.forEach(item => {
+          const li = document.createElement("div");
+          li.className = "results-item";
+          li.textContent = item.display_name;
+          li.onclick = async () => {
+            const lat = parseFloat(item.lat);
+            const lng = parseFloat(item.lon);
+            const cityLabel = buildCityLabel(item);
+            await addPin(memberName, cityLabel, lat, lng);
+          };
+          resultsContainer.appendChild(li);
+        });
+      } catch (err) {
+        console.error(err);
+        statusEl.className = "status status-error";
+        statusEl.textContent = "Error contacting geocoding service. Please try again.";
+      }
+    }
+
+    function buildCityLabel(item) {
+      const addr = item.address || {};
+      const parts = [];
+      if (addr.city || addr.town || addr.village) {
+        parts.push(addr.city || addr.town || addr.village);
+      } else if (addr.hamlet || addr.municipality) {
+        parts.push(addr.hamlet || addr.municipality);
+      }
+      if (addr.state) parts.push(addr.state);
+      if (addr.country_code) parts.push(addr.country_code.toUpperCase());
+      if (!parts.length) return item.display_name;
+      return parts.join(", ");
+    }
+
+    async function addPin(name, city, lat, lng) {
+      const statusEl = document.getElementById("searchStatus");
+      const resultsContainer = document.getElementById("resultsContainer");
+
+      try {
+        statusEl.className = "status";
+        statusEl.textContent = "Saving your pin…";
+
+        const updatedPinsFromServer = await addPinViaWorker(name, city, lat, lng);
+
+        // Rebuild pins with colors
+        pins = updatedPinsFromServer.map((p, idx) => ({
+          ...p,
+          color: getColorForIndex(idx)
+        }));
+
+        refreshGlobePoints();
+
+        statusEl.className = "status status-success";
+        statusEl.textContent = `Pin placed for ${city} – ${name}.`;
+
+        resultsContainer.style.display = "none";
+        resultsContainer.innerHTML = "";
+        document.getElementById("cityInput").value = "";
+
+        if (world) {
+          world.pointOfView({ lat, lng, altitude: 2.0 }, 1500);
+        }
+      } catch (err) {
+        console.error(err);
+        statusEl.className = "status status-error";
+        if (String(err.message).startsWith("NAME_EXISTS")) {
+          const msg = err.message.split(":")[1] || "This name already has a pin.";
+          statusEl.textContent = msg.trim();
+        } else {
+          statusEl.textContent = "There was a problem saving your pin. Please try again.";
+        }
+      }
+    }
+
+    function clearFormAndResults() {
+      document.getElementById("cityInput").value = "";
+      const statusEl = document.getElementById("searchStatus");
+      statusEl.className = "status";
+      statusEl.textContent = "";
+      const resultsContainer = document.getElementById("resultsContainer");
+      resultsContainer.style.display = "none";
+      resultsContainer.innerHTML = "";
+    }
+
+    window.addEventListener("DOMContentLoaded", async () => {
+      // Initialize globe immediately
+      initGlobe();
+
+      const nameInput = document.getElementById("nameInput");
+      const cityInput = document.getElementById("cityInput");
+      const searchBtn = document.getElementById("searchBtn");
+      const clearBtn = document.getElementById("clearBtn");
+      const statusEl = document.getElementById("searchStatus");
+
+      // Load existing pins from Worker
+      try {
+        const serverPins = await fetchAllPinsFromWorker();
+        pins = serverPins.map((p, idx) => ({
+          ...p,
+          color: getColorForIndex(idx)
+        }));
+        refreshGlobePoints();
+      } catch (e) {
+        console.error(e);
+        statusEl.className = "status status-error";
+        statusEl.textContent = "Could not load existing pins (server error).";
+      }
+
+      function handleSearch() {
+        const name = nameInput.value.trim();
+        const cityQuery = cityInput.value.trim();
+
+        statusEl.className = "status";
+
+        if (!name) {
+          statusEl.className = "status status-error";
+          statusEl.textContent = "Please enter your name before placing a pin.";
+          return;
+        }
+
+        // Local check to give fast feedback; server enforces too
+        const existing = pins.find(
+          p => p.name && p.name.toLowerCase() === name.toLowerCase()
+        );
+        if (existing) {
+          statusEl.className = "status status-error";
+          statusEl.textContent = `It looks like "${existing.name}" already has a pin on the globe. Each name can only place one pin.`;
+          return;
+        }
+
+        if (!cityQuery) {
+          statusEl.className = "status status-error";
+          statusEl.textContent = "Please enter a city or area to search.";
+          return;
+        }
+
+        geocodeCity(cityQuery, name);
+      }
+
+      searchBtn.addEventListener("click", (e) => {
+        e.preventDefault();
+        handleSearch();
+      });
+
+      clearBtn.addEventListener("click", (e) => {
+        e.preventDefault();
+        clearFormAndResults();
+      });
+
+      cityInput.addEventListener("keydown", (e) => {
+        if (e.key === "Enter") {
+          e.preventDefault();
+          handleSearch();
+        }
+      });
+
+      nameInput.addEventListener("keydown", (e) => {
+        if (e.key === "Enter") {
+          e.preventDefault();
+          handleSearch();
+        }
+      });
+    });
+  </script>
+</body>
+</html>

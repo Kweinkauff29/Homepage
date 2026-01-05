@@ -1,0 +1,1516 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <title>BER – 2026 Class Promo Calendar</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <!-- Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@300;600&family=Oswald:wght@500;700&display=swap"
+    rel="stylesheet">
+  <!-- PapaParse for robust tab-delimited parsing -->
+  <script src="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js"></script>
+
+  <style>
+    :root {
+      --bg: #f7f5f2;
+      --ink: #2f3034;
+      --muted: #a2a0a4;
+      --accent: #8ea86b;
+      --accent-soft: #dde6cf;
+      --accent-strong: #5b7a33;
+      --ce-bg: #fff4f7;
+      --ce-border: #d6a0a6;
+      --katie: #f29aa6;
+      --kevin: #8db8ff;
+      --radius: 14px;
+      --shadow: 0 8px 20px rgba(0, 0, 0, .06);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html,
+    body {
+      margin: 0;
+      padding: 0;
+      min-height: 100%;
+      font-family: "Quicksand", system-ui, -apple-system, "Segoe UI", sans-serif;
+      background:
+        radial-gradient(circle at top left, rgba(255, 255, 255, .85), transparent 55%),
+        radial-gradient(circle at bottom right, rgba(214, 160, 166, .16), transparent 55%),
+        var(--bg);
+      color: var(--ink);
+    }
+
+    body {
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+    }
+
+    .shell {
+      width: 100%;
+      max-width: 1100px;
+      padding: 16px 12px 40px;
+      margin: 0 auto;
+    }
+
+    header.app-header {
+      margin-bottom: 14px;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      gap: 8px;
+      align-items: flex-end;
+    }
+
+    .app-title {
+      font-family: "Oswald", sans-serif;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+      font-size: 20px;
+    }
+
+    .app-subtitle {
+      font-size: 12px;
+      color: var(--muted);
+    }
+
+    .summary-bar {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      font-size: 12px;
+      align-items: center;
+      justify-content: flex-end;
+    }
+
+    .summary-pill {
+      padding: 4px 10px;
+      border-radius: 999px;
+      background: #fff;
+      box-shadow: var(--shadow);
+    }
+
+    .summary-pill strong {
+      font-weight: 700;
+    }
+
+    .summary-pill.katie strong {
+      color: var(--katie);
+    }
+
+    .summary-pill.kevin strong {
+      color: var(--kevin);
+    }
+
+    .panel {
+      background: #ffffff;
+      border-radius: var(--radius);
+      padding: 14px 14px 16px;
+      box-shadow: var(--shadow);
+      margin-bottom: 14px;
+    }
+
+    .panel h2 {
+      margin: 0 0 8px;
+      font-size: 15px;
+      text-transform: uppercase;
+      letter-spacing: .09em;
+      font-family: "Oswald", sans-serif;
+    }
+
+    /* Calendar header/legend */
+
+    .calendar-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 8px;
+      margin-bottom: 8px;
+      flex-wrap: wrap;
+    }
+
+    .month-nav-wrap {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    #monthLabel {
+      font-family: "Oswald", sans-serif;
+      font-size: 18px;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+    }
+
+    .month-nav-buttons {
+      display: flex;
+      gap: 4px;
+    }
+
+    .month-btn {
+      border: none;
+      border-radius: 999px;
+      padding: 4px 8px;
+      font-size: 11px;
+      cursor: pointer;
+      background: #f0f0f0;
+      color: var(--ink);
+    }
+
+    .month-btn:disabled {
+      opacity: 0.4;
+      cursor: default;
+    }
+
+    .calendar-legend {
+      font-size: 10px;
+      color: var(--muted);
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      align-items: center;
+      justify-content: flex-end;
+    }
+
+    .legend-swatch {
+      width: 10px;
+      height: 10px;
+      border-radius: 999px;
+      display: inline-block;
+      margin-right: 4px;
+    }
+
+    /* Calendar table */
+
+    table.calendar {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 12px;
+    }
+
+    table.calendar thead {
+      background: #fafafa;
+    }
+
+    table.calendar th {
+      padding: 6px 4px;
+      text-align: left;
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: .06em;
+      text-transform: uppercase;
+      color: var(--muted);
+      border-bottom: 1px solid #e0e0e0;
+    }
+
+    table.calendar td {
+      width: 14.285%;
+      vertical-align: top;
+      border: 1px solid #f0f0f0;
+      padding: 4px;
+      background: #fff;
+      position: relative;
+    }
+
+    td.out-of-month {
+      background: #fafafa;
+      color: #ccc;
+    }
+
+    td.weekend {
+      background: #f9f7f7;
+    }
+
+    table.calendar td.drop-target {
+      outline: 2px dashed var(--accent-strong);
+      outline-offset: -2px;
+      background: #f8fbf5;
+    }
+
+    .day-label {
+      font-size: 11px;
+      font-weight: 700;
+      margin-bottom: 2px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .day-label span {
+      font-size: 9px;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-left: 4px;
+    }
+
+    .tasks {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      margin-top: 2px;
+    }
+
+    .task-card {
+      border-radius: 10px;
+      border: 1px solid #e3e3e3;
+      padding: 4px 6px;
+      background: #fff;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, .03);
+      cursor: grab;
+    }
+
+    .task-card.ce {
+      background: var(--ce-bg);
+      border-color: var(--ce-border);
+    }
+
+    .task-card.done {
+      opacity: 0.55;
+    }
+
+    .task-card.assigned-katie {
+      border-left: 3px solid var(--katie);
+    }
+
+    .task-card.assigned-kevin {
+      border-left: 3px solid var(--kevin);
+    }
+
+    .task-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 4px;
+      margin-bottom: 2px;
+    }
+
+    .task-title {
+      font-weight: 600;
+      font-size: 11px;
+      line-height: 1.2;
+    }
+
+    .task-header-right {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .task-tag {
+      font-size: 9px;
+      text-transform: uppercase;
+      letter-spacing: .08em;
+      padding: 2px 5px;
+      border-radius: 999px;
+      background: #eee;
+      color: #555;
+      flex-shrink: 0;
+    }
+
+    .task-card.ce .task-tag {
+      background: var(--ce-border);
+      color: #fff;
+    }
+
+    .task-delete-btn {
+      border: none;
+      background: transparent;
+      color: #c44;
+      font-size: 12px;
+      cursor: pointer;
+      padding: 0 2px;
+    }
+
+    .task-delete-btn:hover {
+      color: #ff0000;
+    }
+
+    .task-meta {
+      font-size: 10px;
+      color: var(--muted);
+      margin-bottom: 3px;
+    }
+
+    .task-actions {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 4px;
+      font-size: 10px;
+    }
+
+    .task-actions label {
+      display: flex;
+      align-items: center;
+      gap: 3px;
+    }
+
+    .task-actions input[type="checkbox"] {
+      transform: scale(0.9);
+    }
+
+    .task-actions select {
+      font-size: 10px;
+      padding: 2px 4px;
+      border-radius: 999px;
+      border: 1px solid #ddd;
+      background: #fff;
+    }
+
+    .add-task-btn {
+      margin-top: 5px;
+      font-size: 10px;
+      border-radius: 999px;
+      border: 1px dashed #ddd;
+      background: #fafafa;
+      cursor: pointer;
+      padding: 2px 7px;
+      color: var(--muted);
+    }
+
+    .add-task-btn:hover {
+      background: #f0f0f0;
+      color: var(--ink);
+    }
+
+    /* Buttons */
+
+    .btn {
+      border: none;
+      border-radius: 999px;
+      padding: 7px 14px;
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: .04em;
+      text-transform: uppercase;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: var(--accent);
+      color: #fff;
+      box-shadow: var(--shadow);
+    }
+
+    .btn.secondary {
+      background: #f0f0f0;
+      color: var(--ink);
+    }
+
+    .btn.danger {
+      background: #fbe4e4;
+      color: #b00020;
+    }
+
+    .btn:active {
+      transform: translateY(1px);
+      box-shadow: 0 4px 10px rgba(0, 0, 0, .08);
+    }
+
+    /* Admin / log / spreadsheet */
+
+    .log-panel {
+      max-height: 220px;
+      overflow: auto;
+      border-top: 1px solid #eee;
+      padding-top: 6px;
+      margin-top: 4px;
+      margin-bottom: 10px;
+    }
+
+    .log-panel h3 {
+      margin: 0 0 6px;
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: .08em;
+      font-family: "Oswald", sans-serif;
+      color: var(--muted);
+    }
+
+    #logList {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+      font-size: 11px;
+    }
+
+    #logList li {
+      padding: 2px 0;
+      border-bottom: 1px dashed #f0f0f0;
+    }
+
+    .hint {
+      font-size: 11px;
+      color: var(--muted);
+      margin-top: 4px;
+      line-height: 1.4;
+    }
+
+    .lock-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 6px;
+      align-items: center;
+    }
+
+    .lock-row input[type="password"] {
+      flex: 1 1 160px;
+      padding: 6px 8px;
+      border-radius: 999px;
+      border: 1px solid #ccc;
+      font-size: 12px;
+    }
+
+    .spreadsheet-section.locked {
+      display: none;
+    }
+
+    .spreadsheet-section h3 {
+      margin: 10px 0 4px;
+      font-size: 13px;
+      text-transform: uppercase;
+      letter-spacing: .08em;
+      font-family: "Oswald", sans-serif;
+    }
+
+    textarea#rawInput {
+      width: 100%;
+      min-height: 180px;
+      border-radius: 10px;
+      border: 1px solid #ddd;
+      padding: 8px;
+      font-family: Menlo, Monaco, Consolas, monospace;
+      font-size: 11px;
+      resize: vertical;
+    }
+
+    .panel-controls {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 8px;
+      align-items: center;
+      justify-content: flex-start;
+    }
+
+    @media(max-width:600px) {
+      header.app-header {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+
+      .summary-bar {
+        justify-content: flex-start;
+      }
+
+      .calendar-header {
+        align-items: flex-start;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="shell">
+    <header class="app-header">
+      <div>
+        <div class="app-title">BER – 2026 Class Promo Calendar</div>
+        <div class="app-subtitle">
+          Mon–Fri promo reminders • 7-day + extra CE reminders • shared via Cloudflare
+        </div>
+      </div>
+      <div class="summary-bar">
+        <div class="summary-pill"><strong id="sumTotal">Total reminders: 0</strong></div>
+        <div class="summary-pill katie"><strong id="sumKatie">Katie: 0</strong></div>
+        <div class="summary-pill kevin"><strong id="sumKevin">Kevin: 0</strong></div>
+      </div>
+    </header>
+
+    <!-- CALENDAR PANEL (top) -->
+    <section class="panel" id="calendarPanel">
+      <h2>Promo Calendar</h2>
+      <div class="calendar-header">
+        <div class="month-nav-wrap">
+          <div id="monthLabel">January 2026</div>
+          <div class="month-nav-buttons">
+            <button type="button" class="month-btn" id="prevMonthBtn" aria-label="Previous month">‹ Prev</button>
+            <button type="button" class="month-btn" id="nextMonthBtn" aria-label="Next month">Next ›</button>
+          </div>
+        </div>
+        <div class="calendar-legend">
+          <span><span class="legend-swatch"
+              style="background:var(--ce-bg); border:1px solid var(--ce-border);"></span>Priority CE reminder</span>
+          <span><span class="legend-swatch" style="background:var(--katie);"></span>Katie</span>
+          <span><span class="legend-swatch" style="background:var(--kevin);"></span>Kevin</span>
+        </div>
+      </div>
+
+      <table class="calendar" aria-label="Promo calendar">
+        <thead>
+          <tr>
+            <th>Mon</th>
+            <th>Tue</th>
+            <th>Wed</th>
+            <th>Thu</th>
+            <th>Fri</th>
+            <th>Sat</th>
+            <th>Sun</th>
+          </tr>
+        </thead>
+        <tbody id="calendarBody">
+          <!-- Filled by JS -->
+        </tbody>
+      </table>
+    </section>
+
+    <!-- ADMIN / LOG / SPREADSHEET PANEL (bottom) -->
+    <section class="panel" id="adminPanel">
+      <h2>Activity Log &amp; Admin Tools</h2>
+
+      <div class="log-panel">
+        <h3>Shared Activity Log</h3>
+        <ul id="logList"></ul>
+      </div>
+
+      <!-- Sync to Wrap Sheet -->
+      <div style="border-top:1px solid #eee; margin:16px 0 16px; padding-top:16px;">
+        <h3
+          style="margin:0 0 8px; font-size:12px; text-transform:uppercase; font-family:'Oswald', sans-serif; color:var(--muted); letter-spacing:0.08em;">
+          Sync to Wrap Sheet</h3>
+        <p class="hint" style="margin-bottom:10px;">Send this month's classes to your Daily Tasks. Requires one-time
+          email verification.</p>
+        <div class="panel-controls">
+          <button class="btn" style="background:var(--kevin); color:#fff;" onclick="syncToWrapSheet('Kevin', 2)">Sync
+            Kevin</button>
+          <button class="btn" style="background:var(--katie); color:#fff;" onclick="syncToWrapSheet('Katie', 5)">Sync
+            Katie</button>
+        </div>
+      </div>
+
+      <!-- Locked by password -->
+      <div id="adminLock">
+        <p class="hint">
+          Admin password is required to generate a new calendar from the spreadsheet.
+          Katie / Kevin can still check off and reassign items without this.
+        </p>
+        <div class="lock-row">
+          <input type="password" id="adminPassword" placeholder="Admin password">
+          <button class="btn" id="unlockBtn" type="button">Unlock Spreadsheet Tools</button>
+        </div>
+      </div>
+
+      <div id="spreadsheetSection" class="spreadsheet-section locked">
+        <h3>Paste Spreadsheet (Admin Only)</h3>
+        <small>Format: Event Name &nbsp; | &nbsp; Event Description &nbsp; | &nbsp; Event Start Date (e.g.
+          1/20/2026)</small>
+        <textarea id="rawInput"
+          placeholder="Event Name[TAB]Event Description[TAB]Event Start Date&#10;CIPS- Global Real Estate: Local Markets (7CE)[TAB][TAB]1/20/2026&#10;…"></textarea>
+
+        <div class="panel-controls">
+          <button id="generateBtn" class="btn" type="button">
+            <span>Generate Calendar</span>
+          </button>
+          <button id="rebalanceBtn" class="btn secondary" type="button">
+            Rebalance Katie / Kevin
+          </button>
+          <button id="clearCalendarBtn" class="btn danger" type="button">
+            Clear Calendar
+          </button>
+        </div>
+        <div class="hint">
+          • Promo reminders are scheduled <strong>7 days before</strong> each class.<br>
+          • Priority CE classes with <strong>(2CE)</strong>, <strong>(3CE)</strong> or <strong>(4CE)</strong> also get a
+          <strong>14-day</strong> reminder.<br>
+          • Generator enforces <strong>at most one e-blast per day</strong> and <strong>never</strong> on
+          Saturday/Sunday.<br>
+          • Manual actions can’t place promos on weekends either.
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <script>
+    // ========= CONFIG =========
+    const API_BASE = "https://ber-promo-calendar.bonitaspringsrealtors.workers.dev"; // no trailing slash
+    const WRAP_API_BASE = "https://wrapsheet.bonitaspringsrealtors.workers.dev/api";
+    const STORAGE_KEY = "ber-promo-calendar-v1";
+    const ADMIN_FLAG_KEY = "berPromoAdminUnlocked";
+    const DEFAULT_YEAR = 2026;
+    const ADMIN_PASSWORD = "Everblade@1";
+
+    const MONTH_NAMES = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+
+    let tasks = [];        // full task objects
+    let currentMonth = null; // {year, month}
+    let activityLog = [];  // {timestamp, message}[]
+    let draggedTaskId = null;
+    let adminUnlocked = false;
+
+    // ========= UTILITIES =========
+
+    function parseUSDate(str) {
+      if (!str) return null;
+      const trimmed = String(str).trim();
+      const m = trimmed.match(/^(\d{1,2})[\/\-](\d{1,2})[\/\-](\d{4})$/);
+      if (!m) return null;
+      const month = parseInt(m[1], 10) - 1;
+      const day = parseInt(m[2], 10);
+      const year = parseInt(m[3], 10);
+      return new Date(year, month, day);
+    }
+
+    function parseISODate(str) {
+      if (!str) return null;
+      const parts = str.split("-");
+      if (parts.length !== 3) return null;
+      const y = parseInt(parts[0], 10);
+      const m = parseInt(parts[1], 10) - 1;
+      const d = parseInt(parts[2], 10);
+      return new Date(y, m, d);
+    }
+
+    function addDays(date, delta) {
+      const d = new Date(date.getFullYear(), date.getMonth(), date.getDate());
+      d.setDate(d.getDate() + delta);
+      return d;
+    }
+
+    function moveToWeekday(date) {
+      const d = new Date(date.getFullYear(), date.getMonth(), date.getDate());
+      const day = d.getDay(); // 0 Sun, 6 Sat
+      if (day === 0) {
+        d.setDate(d.getDate() - 2); // Sunday -> Friday
+      } else if (day === 6) {
+        d.setDate(d.getDate() - 1); // Saturday -> Friday
+      }
+      return d;
+    }
+
+    function toISODate(d) {
+      const y = d.getFullYear();
+      const m = String(d.getMonth() + 1).padStart(2, "0");
+      const day = String(d.getDate()).padStart(2, "0");
+      return `${y}-${m}-${day}`;
+    }
+
+    function formatDisplayDate(d) {
+      const m = MONTH_NAMES[d.getMonth()].slice(0, 3);
+      return `${m} ${d.getDate()}`;
+    }
+
+    function isWeekend(date) {
+      const dow = date.getDay();
+      return dow === 0 || dow === 6;
+    }
+
+    function updateSummary() {
+      const total = tasks.length;
+      const k = tasks.filter(t => t.assignedTo === "Katie").length;
+      const v = tasks.filter(t => t.assignedTo === "Kevin").length;
+      const sumTotal = document.getElementById("sumTotal");
+      const sumKatie = document.getElementById("sumKatie");
+      const sumKevin = document.getElementById("sumKevin");
+      if (sumTotal) sumTotal.textContent = `Total reminders: ${total}`;
+      if (sumKatie) sumKatie.textContent = `Katie: ${k}`;
+      if (sumKevin) sumKevin.textContent = `Kevin: ${v}`;
+    }
+
+    function updateLogUI() {
+      const list = document.getElementById("logList");
+      if (!list) return;
+      list.innerHTML = "";
+      const entries = activityLog.slice().reverse();
+      entries.forEach(entry => {
+        const li = document.createElement("li");
+        const ts = new Date(entry.timestamp).toLocaleString();
+        li.textContent = `[${ts}] ${entry.message}`;
+        list.appendChild(li);
+      });
+    }
+
+    function logActivity(message) {
+      const entry = { timestamp: new Date().toISOString(), message };
+      activityLog.push(entry);
+      if (activityLog.length > 300) {
+        activityLog = activityLog.slice(-300);
+      }
+      updateLogUI();
+      saveState(); // persist log + tasks
+    }
+
+    // ========= STATE SERIALIZATION =========
+
+    function serializeState() {
+      return {
+        currentMonth,
+        tasks: tasks.map(t => ({
+          ...t,
+          eventDate: toISODate(t.eventDate),
+          promoDate: toISODate(t.promoDate)
+        })),
+        activityLog
+      };
+    }
+
+    function hydrateState(state) {
+      if (!state) return;
+      currentMonth = state.currentMonth || null;
+      tasks = (state.tasks || []).map(t => ({
+        ...t,
+        eventDate: parseISODate(t.eventDate),
+        promoDate: parseISODate(t.promoDate)
+      }));
+      activityLog = state.activityLog || [];
+      updateLogUI();
+      updateSummary();
+      if (currentMonth) {
+        renderCalendar();
+      }
+    }
+
+    function saveStateLocal() {
+      try {
+        const serialized = serializeState();
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(serialized));
+      } catch (e) {
+        console.warn("Could not save to localStorage:", e);
+      }
+    }
+
+    function loadStateLocal() {
+      try {
+        const raw = localStorage.getItem(STORAGE_KEY);
+        if (!raw) return false;
+        const data = JSON.parse(raw);
+        hydrateState(data);
+        return true;
+      } catch (e) {
+        console.warn("Could not parse localStorage state", e);
+        return false;
+      }
+    }
+
+    async function saveStateToServer() {
+      if (!API_BASE) return;
+      try {
+        const payload = serializeState();
+        await fetch(API_BASE + "/calendar-state", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(payload)
+        });
+      } catch (e) {
+        console.warn("Server save failed", e);
+      }
+    }
+
+    async function loadStateFromServer() {
+      if (!API_BASE) return false;
+      try {
+        const res = await fetch(API_BASE + "/calendar-state", {
+          method: "GET"
+        });
+        if (!res.ok) return false;
+        const data = await res.json();
+        if (data) {
+          hydrateState(data);
+          return true;
+        }
+      } catch (e) {
+        console.warn("Server load failed", e);
+      }
+      return false;
+    }
+
+    async function saveState() {
+      saveStateLocal();
+      saveStateToServer(); // fire-and-forget
+    }
+
+    // ========= WRAP SHEET SYNC =========
+    async function syncToWrapSheet(name, userId) {
+      if (!currentMonth) return alert("Calendar not loaded.");
+
+      // Direct Sync (No Email Prompt)
+      // We trust the provided userId (2 or 5) and inject it as creator/assigner.
+
+      // 1. Filter tasks
+      const targetMonth = currentMonth.month; // 0-based
+
+      const targetYear = currentMonth.year;
+
+      // Filter: Assigned to User AND Event Date is in current displayed month
+      const candidates = tasks.filter(t => {
+        if (t.assignedTo !== name) return false;
+        if (!t.eventDate) return false;
+        // Compare year/month
+        if (t.eventDate.getFullYear() !== targetYear) return false;
+        if (t.eventDate.getMonth() !== targetMonth) return false;
+        return true;
+      });
+
+      if (candidates.length === 0) {
+        return alert(`No classes found for ${name} in ${MONTH_NAMES[targetMonth]}.`);
+      }
+
+      if (!confirm(`Found ${candidates.length} classes for ${name} in ${MONTH_NAMES[targetMonth]}.\n\nSync these to your Wrap Sheet Daily Tasks?`)) return;
+
+      // 3. Post to API
+      let successCount = 0;
+      const btn = event.target;
+      const originalText = btn.textContent;
+      btn.textContent = "Syncing...";
+      btn.disabled = true;
+
+      for (const task of candidates) {
+        try {
+          const payload = {
+            title: `Class: ${task.eventName}`,
+            notes: task.eventDescription || "",
+            task_date: toISODate(task.eventDate),
+            assigned_to_id: userId,
+            created_by_id: userId,
+            assigned_by_id: userId,
+            status: "pending"
+          };
+
+          const res = await fetch(WRAP_API_BASE + "/daily-tasks", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json"
+            },
+            body: JSON.stringify(payload)
+          });
+
+          if (res.ok) successCount++;
+          else {
+            console.error("Sync failed for", task.title, await res.text());
+          }
+
+        } catch (e) {
+          console.error("Sync error", e);
+        }
+      }
+
+      btn.textContent = originalText;
+      btn.disabled = false;
+
+      alert(`Synced ${successCount}/${candidates.length} tasks to Wrap Sheet.`);
+      logActivity(`${name} synced ${successCount} classes to Wrap Sheet.`);
+    }
+
+    // ========= ADMIN LOCK =========
+
+    function applyAdminLockState(unlocked) {
+      const section = document.getElementById("spreadsheetSection");
+      const lockDiv = document.getElementById("adminLock");
+      adminUnlocked = !!unlocked;
+      if (section && lockDiv) {
+        if (unlocked) {
+          section.classList.remove("locked");
+          lockDiv.style.display = "none";
+        } else {
+          section.classList.add("locked");
+          lockDiv.style.display = "block";
+        }
+      }
+      if (currentMonth) {
+        renderCalendar();
+      }
+    }
+
+    function initAdminLock() {
+      const unlocked = localStorage.getItem(ADMIN_FLAG_KEY) === "1";
+      applyAdminLockState(unlocked);
+
+      const unlockBtn = document.getElementById("unlockBtn");
+      if (!unlockBtn) return;
+
+      unlockBtn.addEventListener("click", () => {
+        const pwInput = document.getElementById("adminPassword");
+        const pw = pwInput ? (pwInput.value || "").trim() : "";
+        if (pw === ADMIN_PASSWORD) {
+          localStorage.setItem(ADMIN_FLAG_KEY, "1");
+          applyAdminLockState(true);
+          logActivity("Admin spreadsheet tools unlocked.");
+        } else {
+          alert("Incorrect password.");
+        }
+      });
+    }
+
+    // ========= PARSING & TASKS =========
+
+    function parseSpreadsheet(text) {
+      const parsed = Papa.parse(text.trim(), {
+        header: true,
+        skipEmptyLines: "greedy",
+        delimiter: "\t"
+      });
+
+      const rows = parsed.data || [];
+      const events = [];
+
+      rows.forEach(row => {
+        const name = (row["Event Name"] || "").trim();
+        const desc = (row["Event Description"] || "").trim();
+        const dateStr = (row["Event Start Date"] || "").trim();
+        const date = parseUSDate(dateStr);
+        if (!name || !date) return;
+        events.push({ name, description: desc, date });
+      });
+
+      return events;
+    }
+
+    // helper: find earliest available weekday (Mon–Fri) on or before preferred date
+    // that isn't already used in usedDates. Guarantees at most one eblast per day.
+    function findAvailablePromoDate(preferredDate, usedDates) {
+      let d = moveToWeekday(preferredDate);
+      for (let i = 0; i < 60; i++) { // safety limit
+        const dow = d.getDay();
+        if (dow >= 1 && dow <= 5) {
+          const iso = toISODate(d);
+          if (!usedDates.has(iso)) {
+            usedDates.add(iso);
+            return d;
+          }
+        }
+        d = addDays(d, -1);
+        d = moveToWeekday(d);
+      }
+      const fallback = moveToWeekday(preferredDate);
+      usedDates.add(toISODate(fallback));
+      return fallback;
+    }
+
+    // Build new tasks from events, respecting:
+    // • at most 1 promo per day (Mon–Fri)
+    // • never schedule on Sat/Sun
+    function buildTasksFromEvents(events) {
+      const newTasks = [];
+
+      // Dates already occupied by any existing promo
+      const usedDates = new Set(tasks.map(t => toISODate(t.promoDate)));
+
+      // Events already on calendar (by name + event date)
+      const existingEventKeys = new Set(
+        tasks.map(t => `${t.eventName}__${toISODate(t.eventDate)}`)
+      );
+
+      events.forEach(event => {
+        const eventKey = `${event.name}__${toISODate(event.date)}`;
+        if (existingEventKeys.has(eventKey)) {
+          return;
+        }
+
+        const ceMatch = event.name.match(/\((\d+)CE\)/i);
+        const ceCredits = ceMatch ? parseInt(ceMatch[1], 10) : null;
+        const isPriorityCE = ceCredits && ceCredits >= 2 && ceCredits <= 4;
+
+        const promoOffsets = [];
+        if (isPriorityCE) {
+          promoOffsets.push(-14);
+        }
+        promoOffsets.push(-7);
+
+        promoOffsets.forEach((offset, idx) => {
+          const preferred = addDays(event.date, offset);
+          const promoDate = findAvailablePromoDate(preferred, usedDates);
+
+          const id = `${toISODate(promoDate)}__${toISODate(event.date)}__${event.name.replace(/\s+/g, "_")}__${idx}`;
+          newTasks.push({
+            id,
+            eventName: event.name,
+            eventDescription: event.description,
+            eventDate: event.date,
+            promoDate,
+            isPriorityCE,
+            ceCredits,
+            assignedTo: null,
+            done: false
+          });
+        });
+      });
+
+      return newTasks;
+    }
+
+    // Auto-assign Katie/Kevin for *just these* new tasks
+    function autoAssignKatieKevinForNewTasks(newTasks) {
+      if (!newTasks || !newTasks.length) return;
+      const kExisting = tasks.filter(t => t.assignedTo === "Katie").length;
+      const vExisting = tasks.filter(t => t.assignedTo === "Kevin").length;
+      let toggle = kExisting <= vExisting ? 0 : 1; // 0 = Katie, 1 = Kevin
+
+      const sorted = [...newTasks].sort(
+        (a, b) => a.promoDate - b.promoDate || a.eventDate - b.eventDate
+      );
+
+      sorted.forEach(t => {
+        t.assignedTo = (toggle === 0 ? "Katie" : "Kevin");
+        toggle = 1 - toggle;
+      });
+    }
+
+    // Rebalance ALL tasks (used by "Rebalance" button)
+    function autoAssignKatieKevinAll() {
+      const sorted = [...tasks].sort(
+        (a, b) => a.promoDate - b.promoDate || a.eventDate - b.eventDate
+      );
+      let toggle = 0;
+      sorted.forEach(t => {
+        t.assignedTo = (toggle === 0 ? "Katie" : "Kevin");
+        toggle = 1 - toggle;
+      });
+    }
+
+    function determineMonthFromTasks(list) {
+      const src = (list && list.length) ? list : tasks;
+      if (!src.length) return null;
+      const sorted = [...src].sort((a, b) => a.promoDate - b.promoDate);
+      const first = sorted[0].promoDate;
+      return { year: first.getFullYear(), month: first.getMonth() };
+    }
+
+    function createNewTaskForDate(cellDate) {
+      if (isWeekend(cellDate)) {
+        alert("Promo reminders cannot be scheduled on Saturday or Sunday.");
+        return;
+      }
+
+      const promoDate = new Date(cellDate.getFullYear(), cellDate.getMonth(), cellDate.getDate());
+
+      const title = prompt("Title for new reminder (include (2CE)/(3CE)/(4CE) if applicable):");
+      if (!title) return;
+
+      let eventDateStr = prompt("Event date (MM/DD/YYYY). Leave blank to use the same as the promo date:");
+      let eventDate = null;
+      if (eventDateStr && eventDateStr.trim()) {
+        eventDate = parseUSDate(eventDateStr.trim());
+        if (!eventDate) {
+          alert("Could not parse date; using promo date as the event date.");
+          eventDate = new Date(promoDate);
+        }
+      } else {
+        eventDate = new Date(promoDate);
+      }
+
+      const ceMatch = title.match(/\((\d+)CE\)/i);
+      const ceCredits = ceMatch ? parseInt(ceMatch[1], 10) : null;
+      const isPriorityCE = ceCredits && ceCredits >= 2 && ceCredits <= 4;
+
+      const counts = {
+        Katie: tasks.filter(t => t.assignedTo === "Katie").length,
+        Kevin: tasks.filter(t => t.assignedTo === "Kevin").length
+      };
+      const assignedTo = counts.Katie <= counts.Kevin ? "Katie" : "Kevin";
+
+      const id = `manual_${Date.now()}_${Math.random().toString(36).slice(2)}`;
+      const task = {
+        id,
+        eventName: title,
+        eventDescription: "",
+        eventDate,
+        promoDate,
+        isPriorityCE,
+        ceCredits,
+        assignedTo,
+        done: false
+      };
+      tasks.push(task);
+      logActivity(`Added new reminder "${title}" on ${formatDisplayDate(promoDate)} (assigned to ${assignedTo}).`);
+      saveState();
+      renderCalendar();
+    }
+
+    // ========= CALENDAR RENDERING =========
+
+    function renderCalendar() {
+      const tbody = document.getElementById("calendarBody");
+      const label = document.getElementById("monthLabel");
+      if (!tbody || !label) return;
+      tbody.innerHTML = "";
+
+      if (!currentMonth) {
+        label.textContent = "No month loaded yet";
+        updateSummary();
+        return;
+      }
+
+      const year = currentMonth.year;
+      const month = currentMonth.month;
+
+      label.textContent = `${MONTH_NAMES[month]} ${year}`;
+
+      const prevBtn = document.getElementById("prevMonthBtn");
+      const nextBtn = document.getElementById("nextMonthBtn");
+      if (prevBtn) prevBtn.disabled = (year === DEFAULT_YEAR && month === 0);
+      if (nextBtn) nextBtn.disabled = (year === DEFAULT_YEAR && month === 11);
+
+      // Date range from Monday before 1st to Sunday after last
+      let start = new Date(year, month, 1);
+      while (start.getDay() !== 1) { // Monday
+        start.setDate(start.getDate() - 1);
+      }
+      let end = new Date(year, month + 1, 0); // last of month
+      while (end.getDay() !== 0) { // Sunday
+        end.setDate(end.getDate() + 1);
+      }
+
+      // Map promo dates to tasks (only those in this month)
+      const tasksByDate = {};
+      tasks.forEach(t => {
+        if (t.promoDate.getFullYear() !== year || t.promoDate.getMonth() !== month) return;
+        const key = toISODate(t.promoDate);
+        if (!tasksByDate[key]) tasksByDate[key] = [];
+        tasksByDate[key].push(t);
+      });
+
+      for (let d = new Date(start); d <= end;) {
+        const tr = document.createElement("tr");
+
+        for (let col = 0; col < 7; col++) {
+          const cellDate = new Date(d.getFullYear(), d.getMonth(), d.getDate());
+          const td = document.createElement("td");
+          const inMonth = (cellDate.getMonth() === month);
+          const dow = cellDate.getDay();
+          if (!inMonth) td.classList.add("out-of-month");
+          if (dow === 0 || dow === 6) td.classList.add("weekend");
+
+          const isoKey = toISODate(cellDate);
+          td.dataset.date = isoKey;
+
+          const labelDiv = document.createElement("div");
+          labelDiv.className = "day-label";
+          const weekdayShort = ["SUN", "MON", "TUE", "WED", "THU", "FRI", "SAT"][cellDate.getDay()];
+          const leftSpan = document.createElement("span");
+          leftSpan.textContent = cellDate.getDate();
+          const rightSpan = document.createElement("span");
+          rightSpan.textContent = weekdayShort;
+          labelDiv.appendChild(leftSpan);
+          labelDiv.appendChild(rightSpan);
+          td.appendChild(labelDiv);
+
+          const tasksDiv = document.createElement("div");
+          tasksDiv.className = "tasks";
+
+          const dayTasks = tasksByDate[isoKey] || [];
+          dayTasks.forEach(task => {
+            const card = document.createElement("div");
+            card.className = "task-card";
+            if (task.isPriorityCE) card.classList.add("ce");
+            if (task.done) card.classList.add("done");
+            if (task.assignedTo === "Katie") card.classList.add("assigned-katie");
+            if (task.assignedTo === "Kevin") card.classList.add("assigned-kevin");
+            card.dataset.taskId = task.id;
+            card.draggable = true;
+
+            const header = document.createElement("div");
+            header.className = "task-header";
+
+            const title = document.createElement("div");
+            title.className = "task-title";
+            title.textContent = task.eventName;
+            header.appendChild(title);
+
+            const headerRight = document.createElement("div");
+            headerRight.className = "task-header-right";
+
+            const tag = document.createElement("div");
+            tag.className = "task-tag";
+            tag.textContent = task.isPriorityCE ? "Priority CE" : "Promo";
+            headerRight.appendChild(tag);
+
+            if (adminUnlocked) {
+              const delBtn = document.createElement("button");
+              delBtn.type = "button";
+              delBtn.className = "task-delete-btn";
+              delBtn.textContent = "✕";
+              delBtn.dataset.taskId = task.id;
+              headerRight.appendChild(delBtn);
+            }
+
+            header.appendChild(headerRight);
+
+            const meta = document.createElement("div");
+            meta.className = "task-meta";
+            const ceLabel = task.ceCredits ? ` • ${task.ceCredits} CE` : "";
+            meta.textContent = `Class: ${formatDisplayDate(task.eventDate)}${ceLabel}`;
+
+            const actions = document.createElement("div");
+            actions.className = "task-actions";
+
+            const labelDone = document.createElement("label");
+            const cb = document.createElement("input");
+            cb.type = "checkbox";
+            cb.className = "task-done";
+            cb.checked = task.done;
+            labelDone.appendChild(cb);
+            labelDone.appendChild(document.createTextNode("Done"));
+            actions.appendChild(labelDone);
+
+            const select = document.createElement("select");
+            select.className = "task-assignee";
+            ["", "Katie", "Kevin"].forEach(name => {
+              const opt = document.createElement("option");
+              opt.value = name;
+              opt.textContent = name || "Unassigned";
+              if (task.assignedTo === name) opt.selected = true;
+              select.appendChild(opt);
+            });
+            actions.appendChild(select);
+
+            card.appendChild(header);
+            card.appendChild(meta);
+            card.appendChild(actions);
+
+            tasksDiv.appendChild(card);
+          });
+
+          td.appendChild(tasksDiv);
+
+          // Only allow manual promos on weekdays
+          if (dow >= 1 && dow <= 5) {
+            const addBtn = document.createElement("button");
+            addBtn.type = "button";
+            addBtn.className = "add-task-btn";
+            addBtn.textContent = "+ Reminder";
+            addBtn.dataset.date = isoKey;
+            td.appendChild(addBtn);
+          }
+
+          tr.appendChild(td);
+          d.setDate(d.getDate() + 1);
+        }
+        tbody.appendChild(tr);
+      }
+
+      attachTaskHandlers();
+      attachDragDropHandlers();
+      updateSummary();
+    }
+
+    function attachTaskHandlers() {
+      document.querySelectorAll(".task-done").forEach(cb => {
+        cb.addEventListener("change", e => {
+          const card = e.target.closest(".task-card");
+          const id = card.dataset.taskId;
+          const task = tasks.find(t => t.id === id);
+          if (!task) return;
+
+          task.done = e.target.checked;
+          card.classList.toggle("done", task.done);
+          logActivity(`${task.done ? "Completed" : "Reopened"} reminder for "${task.eventName}" on ${formatDisplayDate(task.promoDate)} (assigned to ${task.assignedTo || "Unassigned"}).`);
+        });
+      });
+
+      document.querySelectorAll(".task-assignee").forEach(sel => {
+        sel.addEventListener("change", e => {
+          const card = e.target.closest(".task-card");
+          const id = card.dataset.taskId;
+          const task = tasks.find(t => t.id === id);
+          if (!task) return;
+
+          const prev = task.assignedTo || "Unassigned";
+          task.assignedTo = sel.value || null;
+
+          card.classList.remove("assigned-katie", "assigned-kevin");
+          if (task.assignedTo === "Katie") card.classList.add("assigned-katie");
+          if (task.assignedTo === "Kevin") card.classList.add("assigned-kevin");
+
+          logActivity(`Reassigned reminder for "${task.eventName}" on ${formatDisplayDate(task.promoDate)} from ${prev} to ${task.assignedTo || "Unassigned"}.`);
+          updateSummary();
+        });
+      });
+
+      if (adminUnlocked) {
+        document.querySelectorAll(".task-delete-btn").forEach(btn => {
+          btn.addEventListener("click", () => {
+            const id = btn.dataset.taskId;
+            const idx = tasks.findIndex(t => t.id === id);
+            if (idx === -1) return;
+            const task = tasks[idx];
+            if (!confirm(`Delete reminder "${task.eventName}" on ${formatDisplayDate(task.promoDate)}?`)) return;
+            tasks.splice(idx, 1);
+            logActivity(`Deleted reminder for "${task.eventName}" on ${formatDisplayDate(task.promoDate)}.`);
+            saveState();
+            renderCalendar();
+          });
+        });
+      }
+
+      document.querySelectorAll(".add-task-btn").forEach(btn => {
+        btn.addEventListener("click", () => {
+          const iso = btn.dataset.date;
+          const d = parseISODate(iso);
+          if (!d) return;
+          createNewTaskForDate(d);
+        });
+      });
+    }
+
+    function attachDragDropHandlers() {
+      document.querySelectorAll(".task-card").forEach(card => {
+        card.addEventListener("dragstart", e => {
+          draggedTaskId = card.dataset.taskId;
+          e.dataTransfer.effectAllowed = "move";
+        });
+      });
+
+      document.querySelectorAll("#calendarBody td[data-date]").forEach(td => {
+        td.addEventListener("dragover", e => {
+          e.preventDefault();
+          e.dataTransfer.dropEffect = "move";
+          td.classList.add("drop-target");
+        });
+        td.addEventListener("dragleave", () => {
+          td.classList.remove("drop-target");
+        });
+        td.addEventListener("drop", e => {
+          e.preventDefault();
+          td.classList.remove("drop-target");
+          if (!draggedTaskId) return;
+          const task = tasks.find(t => t.id === draggedTaskId);
+          if (!task) return;
+
+          const iso = td.dataset.date;
+          const newDate = parseISODate(iso);
+          if (!newDate) return;
+
+          if (isWeekend(newDate)) {
+            alert("Promo reminders cannot be scheduled on Saturday or Sunday.");
+            return;
+          }
+
+          const oldDate = task.promoDate;
+          task.promoDate = newDate;
+          logActivity(`Moved reminder "${task.eventName}" from ${formatDisplayDate(oldDate)} to ${formatDisplayDate(newDate)} (assigned to ${task.assignedTo || "Unassigned"}).`);
+          saveState();
+          renderCalendar();
+        });
+      });
+    }
+
+    function changeMonth(delta) {
+      if (!currentMonth) {
+        currentMonth = { year: DEFAULT_YEAR, month: 0 };
+      }
+      let y = currentMonth.year;
+      let m = currentMonth.month + delta;
+
+      if (m < 0) { m = 0; }
+      if (m > 11) { m = 11; }
+
+      currentMonth = { year: y, month: m };
+      renderCalendar();
+      saveState();
+    }
+
+    // ========= INIT =========
+
+    async function initPromoCalendar() {
+      if (!document.getElementById("calendarPanel")) return;
+
+      initAdminLock();
+
+      let hasServerState = await loadStateFromServer();
+      if (!hasServerState) {
+        loadStateLocal();
+      }
+
+      if (!currentMonth) {
+        currentMonth = { year: DEFAULT_YEAR, month: 0 };
+      }
+      renderCalendar();
+      updateSummary();
+
+      const prevBtn = document.getElementById("prevMonthBtn");
+      const nextBtn = document.getElementById("nextMonthBtn");
+      if (prevBtn) prevBtn.addEventListener("click", () => changeMonth(-1));
+      if (nextBtn) nextBtn.addEventListener("click", () => changeMonth(1));
+
+      const generateBtn = document.getElementById("generateBtn");
+      if (generateBtn) {
+        generateBtn.addEventListener("click", () => {
+          const rawEl = document.getElementById("rawInput");
+          const raw = rawEl ? (rawEl.value || "") : "";
+          if (!raw.trim()) {
+            alert("Paste spreadsheet rows first.");
+            return;
+          }
+
+          const events = parseSpreadsheet(raw);
+          if (!events.length) {
+            alert("Could not find any events. Make sure your header row is: Event Name, Event Description, Event Start Date.");
+            return;
+          }
+
+          const newTasks = buildTasksFromEvents(events);
+          if (!newTasks.length) {
+            alert("No new promo reminders were added (these classes may already exist on the calendar).");
+            return;
+          }
+
+          autoAssignKatieKevinForNewTasks(newTasks);
+          tasks = tasks.concat(newTasks);
+
+          if (!currentMonth) {
+            currentMonth = determineMonthFromTasks(tasks) || { year: DEFAULT_YEAR, month: 0 };
+          }
+
+          saveState();
+          renderCalendar();
+          updateSummary();
+          logActivity(`Added ${newTasks.length} promo reminders from spreadsheet. Now tracking ${tasks.length} total reminders.`);
+        });
+      }
+
+      const rebalanceBtn = document.getElementById("rebalanceBtn");
+      if (rebalanceBtn) {
+        rebalanceBtn.addEventListener("click", () => {
+          if (!tasks.length) {
+            alert("Generate or load a calendar first.");
+            return;
+          }
+          autoAssignKatieKevinAll();
+          renderCalendar();
+          saveState();
+          logActivity("Rebalanced workload between Katie and Kevin.");
+        });
+      }
+
+      const clearBtn = document.getElementById("clearCalendarBtn");
+      if (clearBtn) {
+        clearBtn.addEventListener("click", () => {
+          if (!adminUnlocked) {
+            alert("Unlock admin tools first.");
+            return;
+          }
+          if (!tasks.length) {
+            alert("Calendar is already empty.");
+            return;
+          }
+          if (!confirm("Clear ALL promo reminders from the calendar? This cannot be undone.")) return;
+          tasks = [];
+          saveState();
+          renderCalendar();
+          updateSummary();
+          logActivity("Admin cleared all promo reminders from the calendar.");
+        });
+      }
+    }
+
+    // Script is at bottom, DOM is ready
+    initPromoCalendar();
+  </script>
+</body>
+
+</html>

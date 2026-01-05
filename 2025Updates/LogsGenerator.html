@@ -1,0 +1,778 @@
+<div id="logs-letter-root">
+    <style>
+      :root {
+        --ink: #101114;
+        --muted: #6a6f7b;
+        --border: #d7d9df;
+        --paper: #ffffff;
+      }
+  
+      body {
+        background: #f3f4f8;
+      }
+  
+      #logs-letter-root {
+        display: flex;
+        justify-content: center;
+        padding: 1.5rem;
+        font-family: "Georgia", "Times New Roman", serif;
+        color: var(--ink);
+      }
+  
+      #logs-letter-root .shell {
+        width: 100%;
+        max-width: 900px;
+      }
+  
+      #logs-letter-root .panel {
+        background: var(--paper);
+        border-radius: 12px;
+        padding: 16px 20px 20px;
+        margin-bottom: 1rem;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+        font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      }
+  
+      #logs-letter-root .panel h1 {
+        font-size: 1.25rem;
+        margin: 0 0 0.5rem;
+      }
+  
+      #logs-letter-root .panel p {
+        font-size: 0.9rem;
+        margin: 0 0 0.5rem;
+        color: var(--muted);
+      }
+  
+      #logs-letter-root form {
+        margin-top: 0.5rem;
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+        gap: 0.75rem 1rem;
+      }
+  
+      #logs-letter-root .full-row {
+        grid-column: 1 / -1;
+      }
+  
+      #logs-letter-root label {
+        font-size: 0.85rem;
+        display: flex;
+        flex-direction: column;
+        gap: 0.3rem;
+      }
+  
+      #logs-letter-root input[type="text"],
+      #logs-letter-root input[type="date"],
+      #logs-letter-root textarea,
+      #logs-letter-root select {
+        padding: 0.35rem 0.55rem;
+        border-radius: 6px;
+        border: 1px solid #c2c5cf;
+        font-size: 0.9rem;
+        font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+        box-sizing: border-box;
+      }
+  
+      #logs-letter-root textarea {
+        min-height: 70px;
+        resize: vertical;
+      }
+  
+      #logs-letter-root .check-group,
+      #logs-letter-root .radio-group {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.4rem 1rem;
+        font-size: 0.85rem;
+      }
+  
+      #logs-letter-root .check-group label,
+      #logs-letter-root .radio-group label {
+        flex-direction: row;
+        align-items: center;
+        gap: 0.25rem;
+        font-weight: 400;
+      }
+  
+      #logs-letter-root .required {
+        color: #e0002a;
+      }
+  
+      #logs-letter-root .submit-row {
+        grid-column: 1 / -1;
+        display: flex;
+        justify-content: flex-end;
+        margin-top: 0.25rem;
+      }
+  
+      #logs-letter-root .submit-row button {
+        padding: 0.5rem 1.4rem;
+        border-radius: 999px;
+        border: none;
+        background: #e0002a;
+        color: #fff;
+        font-size: 0.9rem;
+        font-weight: 600;
+        cursor: pointer;
+      }
+  
+      #logs-letter-root .submit-row button:disabled {
+        opacity: 0.6;
+        cursor: default;
+      }
+  
+      #logs-letter-root .status {
+        margin-top: 0.5rem;
+        font-size: 0.85rem;
+        min-height: 1.3em;
+        color: var(--muted);
+      }
+  
+      #logs-letter-root .status.ok {
+        color: #1b5e20;
+      }
+  
+      #logs-letter-root .status.err {
+        color: #b3261e;
+      }
+  
+      /* Letter layout */
+  
+      #logs-letter-root .letter {
+        background: var(--paper);
+        border-radius: 12px;
+        padding: 40px 48px;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+        position: relative;
+      }
+  
+      #logs-letter-root .letter-header {
+        display: flex;
+        flex-direction: row-reverse;  /* logo on right */
+        justify-content: space-between;
+        align-items: flex-start;
+        gap: 1.5rem;
+        margin-bottom: 1.5rem;
+      }
+  
+      #logs-letter-root .letter-logo {
+        width: 180px;
+        height: auto;
+        object-fit: contain;
+      }
+  
+      #logs-letter-root .letter-assoc {
+        font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+        font-size: 0.9rem;
+        line-height: 1.35;
+      }
+  
+      #logs-letter-root .letter-assoc-name {
+        font-weight: 700;
+        font-size: 1rem;
+      }
+  
+      #logs-letter-root .divider {
+        height: 1px;
+        background: var(--border);
+        margin: 0.75rem 0 1.25rem;
+      }
+  
+      #logs-letter-root .block-address {
+        font-size: 0.95rem;
+        line-height: 1.45;
+        margin-bottom: 1.5rem;
+        white-space: pre-line;
+      }
+  
+      #logs-letter-root .letter-body {
+        font-size: 1rem;
+        line-height: 1.6;
+      }
+  
+      #logs-letter-root .letter-body p {
+        margin: 0 0 0.9rem;
+      }
+  
+      #logs-letter-root .letter-body p:last-child {
+        margin-bottom: 0;
+      }
+  
+      #logs-letter-root .signature {
+        margin-top: 2.25rem;
+      }
+  
+      #logs-letter-root .print-controls {
+        text-align: right;
+        margin-top: 0.75rem;
+        font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      }
+  
+      #logs-letter-root .print-btn,
+      #logs-letter-root .download-btn {
+        padding: 0.4rem 1.1rem;
+        border-radius: 999px;
+        border: none;
+        background: #1b5e20;
+        color: #fff;
+        font-size: 0.9rem;
+        cursor: pointer;
+        margin-left: 0.5rem;
+      }
+
+      #logs-letter-root .field-note {
+        font-size: 0.8rem;
+        color: var(--muted);
+        font-weight: 400;
+        }
+  
+      #logs-letter-root .download-btn {
+        background: #004f9e;
+      }
+  
+      /* PRINT – show only the letter */
+      @media print {
+        body * {
+          display: none !important;
+        }
+        #logs-letter-root,
+        #logs-letter-root * {
+          display: block !important;
+        }
+        #logs-letter-root .panel,
+        #logs-letter-root .print-controls {
+          display: none !important;
+        }
+        #logs-letter-root {
+          padding: 0 !important;
+        }
+        #logs-letter-root .shell {
+          max-width: 100% !important;
+        }
+        #logs-letter-root .letter {
+          box-shadow: none !important;
+          border-radius: 0 !important;
+          margin: 0 !important;
+          padding: 48px 72px !important;
+        }
+      }
+  
+      @media (max-width: 700px) {
+        #logs-letter-root form {
+          grid-template-columns: 1fr;
+        }
+      }
+    </style>
+  
+    <div class="shell">
+      <!-- Request form -->
+      <div class="panel">
+        <h1>Letter of Good Standing Request</h1>
+        <p>
+          Please complete this form so we may proceed with a change to your membership
+          status or processing of your letter. Fields marked with
+          <span class="required">*</span> are required.
+        </p>
+  
+        <form id="logsRequestForm">
+          <label class="full-row">
+            First Name <span class="required">*</span>
+            <input type="text" id="firstName" required />
+          </label>
+  
+          <label class="full-row">
+            Last Name <span class="required">*</span>
+            <input type="text" id="lastName" required />
+          </label>
+  
+          <label class="full-row">
+            Organization
+            <input type="text" id="organization" />
+          </label>
+  
+          <label class="full-row">
+            NRDS ID (optional, helps us find your record faster)
+            <input type="text" id="nrdsId" />
+          </label>
+  
+          <div class="full-row">
+            <label>
+              Which membership would you like to drop? <span class="required">*</span>
+            </label>
+            <div class="check-group" id="dropMembershipGroup">
+              <label><input type="checkbox" value="Primary Realtor board" /> Primary Realtor board</label>
+              <label><input type="checkbox" value="Secondary Realtor board" /> Secondary Realtor board</label>
+              <label><input type="checkbox" value="Individual MLS" /> Individual MLS</label>
+              <label><input type="checkbox" value="Office MLS (brokers)" /> Office MLS (brokers)</label>
+              <label><input type="checkbox" value="Out of State board" /> Out of State board</label>
+              <label><input type="checkbox" value="None" /> None</label>
+            </div>
+          </div>
+  
+          <label class="full-row">
+            When should we drop your membership? <span class="required">*</span>
+            <input type="text" id="dropWhen" placeholder='e.g. "Immediately" or MM/DD/YYYY' />
+          </label>
+  
+          <label class="full-row">
+            If you are moving to another association, what could we have done better to make you want to stay?
+            <span class="field-note">
+              Please share what prompted your decision to make the switch (services, products, communication, fees, training, location, broker preference, etc.).
+            </span>
+            <textarea id="leavingFeedback" placeholder="Tell us what made you switch and what we could improve."></textarea>
+          </label>
+          
+          <div class="full-row">
+            <label>
+              What is causing your change of membership? <span class="required">*</span>
+            </label>
+            <div class="check-group" id="changeReasonGroup">
+              <label><input type="checkbox" value="New broker is not a BER Member" /> New broker is not a BER Member</label>
+              <label><input type="checkbox" value="Want to move to a new board" /> Want to move to a new board</label>
+              <label><input type="checkbox" value="Moving license to referral" /> Moving license to referral</label>
+              <label><input type="checkbox" value="Leaving the business" /> Leaving the business</label>
+              <label><input type="checkbox" value="Moving out of the area" /> Moving out of the area</label>
+              <label><input type="checkbox" value="Other" /> Other</label>
+              <label><input type="checkbox" value="Not leaving - adding a secondary service" /> Not leaving - adding a secondary service</label>
+            </div>
+          </div>
+          
+          <label class="full-row">
+            If other, why?
+            <textarea id="otherWhy"></textarea>
+          </label>
+  
+          <label class="full-row">
+            If changing brokers or boards, who is your new contact?
+            <input type="text" id="newContact" />
+          </label>
+  
+          <div class="full-row">
+            <label>
+              Is your NEW broker interested in secondary membership? <span class="required">*</span>
+            </label>
+            <div class="radio-group" id="newBrokerInterestedGroup">
+              <label><input type="radio" name="newBrokerInterested" value="Yes" /> Yes</label>
+              <label><input type="radio" name="newBrokerInterested" value="No" /> No</label>
+              <label><input type="radio" name="newBrokerInterested" value="I didn't ask" /> I didn't ask</label>
+              <label><input type="radio" name="newBrokerInterested" value="N/A" /> N/A</label>
+            </div>
+          </div>
+  
+          <div class="full-row">
+            <label>
+              Do you need a letter of good standing? <span class="required">*</span>
+            </label>
+            <div class="radio-group" id="needsLetterGroup">
+              <label><input type="radio" name="needsLetter" value="Yes" /> Yes</label>
+              <label><input type="radio" name="needsLetter" value="No" /> No</label>
+            </div>
+          </div>
+  
+          <div class="full-row">
+            <label>
+              Do you want to cancel your Supra eKey? <span class="required">*</span>
+            </label>
+            <div class="radio-group" id="cancelSupraGroup">
+              <label><input type="radio" name="cancelSupra" value="Yes" /> Yes</label>
+              <label><input type="radio" name="cancelSupra" value="No" /> No</label>
+            </div>
+          </div>
+  
+          <div class="full-row">
+            <label>
+              Do you have listings that need to be transferred? <span class="required">*</span>
+            </label>
+            <div class="radio-group" id="hasListingsGroup">
+              <label><input type="radio" name="hasListings" value="Yes" /> Yes</label>
+              <label><input type="radio" name="hasListings" value="No" /> No</label>
+            </div>
+          </div>
+  
+          <div class="submit-row">
+            <button type="submit" id="submitBtn">Submit request</button>
+          </div>
+        </form>
+  
+        <div id="status" class="status"></div>
+        <p style="font-size:0.8rem; margin-top:0.25rem; color:var(--muted);">
+          Upon successful match, your Letter of Good Standing will appear below with a print/download option.
+          If we cannot auto-match your record, your request is still sent to our staff for follow-up.
+        </p>
+      </div>
+  
+      <!-- Letter -->
+      <div id="letter" class="letter" style="display:none;">
+        <div class="letter-header">
+          <img
+            class="letter-logo"
+            src="https://bonitaesterorealtors.com/wp-content/uploads/2025/12/Ber-logo-2026-scaled.png"
+            alt="Bonita Springs–Estero REALTORS® logo"
+          />
+          <div class="letter-assoc">
+            <div class="letter-assoc-name">Bonita Springs–Estero REALTORS®</div>
+            <div>25300 Bernwood Drive #1</div>
+            <div>Bonita Springs, FL 34135-7881</div>
+            <div>(239) 992-6771</div>
+          </div>
+        </div>
+  
+        <div class="divider"></div>
+  
+        <div id="addressBlock" class="block-address"></div>
+  
+        <div class="letter-body">
+          <p id="dearLine"></p>
+          <p id="line1"></p>
+          <p id="line2"></p>
+          <p id="line3"></p>
+          <p id="line4"></p>
+          <p>If you have any questions regarding this matter, please feel free to contact us.</p>
+          <p>Sincerely,</p>
+          <p class="signature">
+            Bonita Springs–Estero REALTORS®
+          </p>
+        </div>
+      </div>
+  
+      <div class="print-controls" style="display:none;">
+        <button class="download-btn" type="button" id="downloadBtn">Download PDF</button>
+      </div>
+      
+    </div>
+  
+    <!-- html2canvas + jsPDF for PDF download -->
+    <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/jspdf@2.5.1/dist/jspdf.umd.min.js"></script>
+  
+    <script>
+      const API_BASE = "https://ber-logs-api.bonitaspringsrealtors.workers.dev";
+
+      const printControls = document.querySelector(".print-controls");
+  
+      const formEl = document.getElementById("logsRequestForm");
+      const submitBtn = document.getElementById("submitBtn");
+      const statusEl = document.getElementById("status");
+      const letterEl = document.getElementById("letter");
+  
+      const addressBlockEl = document.getElementById("addressBlock");
+      const dearLineEl = document.getElementById("dearLine");
+      const line1El = document.getElementById("line1");
+      const line2El = document.getElementById("line2");
+      const line3El = document.getElementById("line3");
+      const line4El = document.getElementById("line4");
+  
+      const downloadBtn = document.getElementById("downloadBtn");
+      let currentMemberName = null;
+  
+      function setStatus(msg, type = "") {
+        statusEl.textContent = msg;
+        statusEl.className = "status " + (type || "");
+      }
+  
+      function getFirstName(fullName) {
+        if (!fullName) return "Member";
+        if (fullName.includes(",")) {
+          const parts = fullName.split(",");
+          const rest = (parts[1] || "").trim();
+          return rest || fullName.trim();
+        }
+        return fullName.trim().split(/\s+/)[0];
+      }
+  
+      // Excel serial date -> mm/dd/yyyy
+      function excelSerialToMDY(serial) {
+        const n = Math.floor(Number(serial));
+        if (!isFinite(n)) return null;
+        const base = new Date(Date.UTC(1899, 11, 30));
+        const ms = base.getTime() + n * 24 * 60 * 60 * 1000;
+        const d = new Date(ms);
+        const m = d.getMonth() + 1;
+        const day = d.getDate();
+        const year = d.getFullYear();
+        return `${m}/${day}/${year}`;
+      }
+  
+      function formatAsMDY(value) {
+        if (value === null || value === undefined || value === "") return null;
+  
+        if (value instanceof Date) {
+          const d = value;
+          const m = d.getMonth() + 1;
+          const day = d.getDate();
+          const year = d.getFullYear();
+          return `${m}/${day}/${year}`;
+        }
+  
+        if (typeof value === "number") {
+          return excelSerialToMDY(value) || null;
+        }
+  
+        const str = String(value).trim();
+        if (!str) return null;
+  
+        if (/^\d+(\.\d+)?$/.test(str)) {
+          return excelSerialToMDY(parseFloat(str)) || null;
+        }
+  
+        const d = new Date(str);
+        if (!isNaN(d.getTime())) {
+          const m = d.getMonth() + 1;
+          const day = d.getDate();
+          const year = d.getFullYear();
+          return `${m}/${day}/${year}`;
+        }
+  
+        return str;
+      }
+  
+      function buildLetter(member) {
+        const fullName = member.full_name || "Member";
+        const officeName = member.office_name || "";
+        const addr1 = member.primary_address1 || "";
+        const addr2 = member.primary_address2 || "";
+        const nrds = member.nrds_id || "";
+  
+        currentMemberName = fullName;
+        const firstName = getFirstName(fullName);
+  
+        const lines = [];
+        lines.push(fullName);
+        if (officeName) lines.push(officeName);
+        if (addr1) lines.push(addr1);
+        if (addr2) lines.push(addr2);
+        if (nrds) lines.push(`NRDS # ${nrds}`);
+        lines.push("25300 Bernwood Drive #1");
+        lines.push("Bonita Springs, FL 34135-7881");
+        lines.push("239-992-6771");
+        addressBlockEl.textContent = lines.join("\n");
+  
+        const memberships = (member.memberships || "").toString();
+        const isPrimary =
+          /primary realtor/i.test(memberships) || /primary member/i.test(memberships);
+        const memberPhrase = isPrimary
+          ? "a Primary member of Bonita Springs-Estero REALTORS"
+          : "a member of Bonita Springs-Estero REALTORS";
+  
+        const now = new Date();
+        const duesDate = formatAsMDY(now);
+  
+        const coeRaw = member.coe_latest_date || null;
+        const coeFormatted = formatAsMDY(coeRaw);
+  
+        const fhRaw =
+          member.fair_housing_latest_date ||
+          member.fair_housing_latest ||
+          member.fairHousingLatestDate ||
+          null;
+        const fhFormatted = formatAsMDY(fhRaw);
+  
+        dearLineEl.textContent = `Dear ${firstName},`;
+        line1El.textContent =
+          `This letter verifies that you are ${memberPhrase} and in good ` +
+          `standing with us.`;
+  
+        if (duesDate) {
+          line2El.innerHTML = `Dues as of <strong>${duesDate}</strong> have been paid in full.`;
+        } else {
+          line2El.textContent = `Dues have been paid in full.`;
+        }
+  
+        if (coeFormatted) {
+          line3El.innerHTML =
+            `Your most recent Code of Ethics completion date was ` +
+            `<strong>${coeFormatted}</strong>.`;
+        } else {
+          line3El.textContent =
+            `Your most recent Code of Ethics completion date record is unavailable.`;
+        }
+  
+        if (fhFormatted) {
+          line4El.innerHTML =
+            `Your most recent Fair Housing completion date was ` +
+            `<strong>${fhFormatted}</strong>.`;
+        } else {
+          line4El.textContent =
+            `Your most recent Fair Housing completion date record is unavailable.`;
+        }
+  
+        letterEl.style.display = "block";
+      }
+  
+      function getCheckedValues(containerId) {
+        const container = document.getElementById(containerId);
+        return Array.from(container.querySelectorAll("input[type='checkbox']:checked")).map(
+          (el) => el.value
+        );
+      }
+  
+      function getRadioValue(groupName) {
+        const el = document.querySelector(`input[name="${groupName}"]:checked`);
+        return el ? el.value : null;
+      }
+  
+      formEl.addEventListener("submit", async (e) => {
+        e.preventDefault();
+        letterEl.style.display = "none";
+
+        if (printControls) {
+                printControls.style.display = "none";
+            }
+  
+        const firstName = document.getElementById("firstName").value.trim();
+        const lastName = document.getElementById("lastName").value.trim();
+        const organization = document.getElementById("organization").value.trim();
+        const nrdsId = document.getElementById("nrdsId").value.trim();
+        const dropMemberships = getCheckedValues("dropMembershipGroup");
+        const dropWhen = document.getElementById("dropWhen").value.trim();
+        const leavingFeedback = document.getElementById("leavingFeedback").value.trim();
+        const otherWhy = document.getElementById("otherWhy").value.trim();
+        const changeReasons = getCheckedValues("changeReasonGroup");
+        const newContact = document.getElementById("newContact").value.trim();
+        const newBrokerInterested = getRadioValue("newBrokerInterested");
+        const needsLetter = getRadioValue("needsLetter");
+        const cancelSupra = getRadioValue("cancelSupra");
+        const hasListings = getRadioValue("hasListings");
+  
+        if (!firstName || !lastName) {
+          setStatus("First and last name are required.", "err");
+          return;
+        }
+        if (!dropMemberships.length) {
+          setStatus("Please select at least one membership to drop.", "err");
+          return;
+        }
+        if (!dropWhen) {
+          setStatus("Please tell us when to drop your membership.", "err");
+          return;
+        }
+        if (!changeReasons.length) {
+          setStatus("Please select at least one reason for your change.", "err");
+          return;
+        }
+        if (!newBrokerInterested || !needsLetter || !cancelSupra || !hasListings) {
+          setStatus("Please complete all required questions.", "err");
+          return;
+        }
+  
+        submitBtn.disabled = true;
+        setStatus("Submitting your request...", "");
+  
+        try {
+          const res = await fetch(`${API_BASE}/api/logs-request`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              firstName,
+              lastName,
+              organization,
+              nrdsId,
+              dropMemberships,
+              dropWhen,
+              leavingFeedback,
+              otherWhy,
+              changeReasons,
+              newContact,
+              newBrokerInterested,
+              needsLetter,
+              cancelSupra,
+              hasListings,
+            }),
+          });
+  
+          const data = await res.json().catch(() => ({}));
+  
+          if (!res.ok) {
+            throw new Error(data.error || `Request failed with status ${res.status}`);
+          }
+  
+          if (!data.success) {
+            // Request still emailed to staff; just no auto-letter
+            const msg =
+              data.message ||
+              "We submitted your request, but could not automatically locate your member record. Please verify your NRDS or name as it appears in MLS. If you still have trouble, contact support@berealtors.org.";
+            setStatus(msg, "err");
+            return;
+          }
+  
+            // Success: show letter
+            buildLetter(data.member);
+            if (printControls) {
+            printControls.style.display = "block";
+            }
+            setStatus(
+            "Request submitted. Your Letter of Good Standing is shown below.",
+            "ok"
+            );
+        } catch (err) {
+          console.error(err);
+          setStatus(
+            "There was a problem submitting your request. If this continues, please email support@berealtors.org.",
+            "err"
+          );
+        } finally {
+          submitBtn.disabled = false;
+        }
+      });
+  
+      // Download PDF
+      downloadBtn.addEventListener("click", async () => {
+        if (!letterEl || letterEl.style.display === "none") {
+          alert("Generate a letter first.");
+          return;
+        }
+        if (!window.jspdf || !window.jspdf.jsPDF) {
+          alert("PDF library not loaded.");
+          return;
+        }
+        if (typeof html2canvas === "undefined") {
+          alert("html2canvas library not loaded.");
+          return;
+        }
+  
+        const { jsPDF } = window.jspdf;
+  
+        try {
+          const canvas = await html2canvas(letterEl, {
+            scale: 2,
+            backgroundColor: "#ffffff",
+          });
+  
+          const imgData = canvas.toDataURL("image/png");
+          const pdf = new jsPDF("p", "pt", "letter");
+  
+          const pageWidth = pdf.internal.pageSize.getWidth();
+          const pageHeight = pdf.internal.pageSize.getHeight();
+  
+          const marginX = 40;
+          const marginY = 40;
+          let imgWidth = pageWidth - marginX * 2;
+          let imgHeight = (canvas.height * imgWidth) / canvas.width;
+  
+          if (imgHeight > pageHeight - marginY * 2) {
+            const scale = (pageHeight - marginY * 2) / imgHeight;
+            imgWidth *= scale;
+            imgHeight *= scale;
+          }
+  
+          const x = (pageWidth - imgWidth) / 2;
+          const y = marginY;
+  
+          pdf.addImage(imgData, "PNG", x, y, imgWidth, imgHeight);
+  
+          let safeName = (currentMemberName || "Letter")
+            .replace(/[/\\?%*:|"<>]/g, "")
+            .trim();
+          if (!safeName) safeName = "Letter";
+  
+          const filename = `${safeName} LOGS.pdf`;
+          pdf.save(filename);
+        } catch (err) {
+          console.error(err);
+          alert("Could not generate PDF. Please try again.");
+        }
+      });
+    </script>
+  </div>
+  
