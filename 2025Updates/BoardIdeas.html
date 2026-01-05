@@ -815,7 +815,7 @@
 
                     // Collect completed staff items for the Completed section
                     const completedStaffItems = rawTasks.filter(t =>
-                        t.status === 'completed' || t.progress_percent >= 100 || (t.progress_notes && /complete/i.test(t.progress_notes))
+                        t.status === 'completed' || Number(t.progress_percent) >= 100 || (t.progress_notes && /complete/i.test(t.progress_notes))
                     );
                     // Add staff name to each for display
                     completedStaffItems.forEach(t => { t.staffName = displayName; t.source = 'staff'; });
@@ -824,7 +824,7 @@
                     // Logic from WrapSheet: Active + Top 3 Suggested (exclude completed)
                     const byPillar = { elevate: [], engage: [], evolve: [], excite: [] };
                     rawTasks.forEach(t => {
-                        const isComplete = t.status === 'completed' || t.progress_percent >= 100 || (t.progress_notes && /complete/i.test(t.progress_notes));
+                        const isComplete = t.status === 'completed' || Number(t.progress_percent) >= 100 || (t.progress_notes && /complete/i.test(t.progress_notes));
                         if (isComplete) return; // Skip completed, they go to dedicated section
                         t.pillar = (t.pillar || "").toLowerCase();
                         if (byPillar[t.pillar]) byPillar[t.pillar].push(t);
@@ -1017,7 +1017,7 @@
         function renderLists() {
             // Separate completed items for dedicated section
             const completedItems = suggestions.filter(s =>
-                s.status === 'completed' || s.progress_percent >= 100 || (s.progress_notes && /complete/i.test(s.progress_notes))
+                s.status === 'completed' || Number(s.progress_percent) >= 100 || (s.progress_notes && /complete/i.test(s.progress_notes))
             );
             // Store for merging with staff completed items later
             window.completedSuggestions = completedItems;
@@ -1032,7 +1032,7 @@
                 // Filter out completed items - they go to dedicated section
                 const items = suggestions.filter(s => {
                     if (s.pillar !== pillar) return false;
-                    const isComplete = s.status === 'completed' || s.progress_percent >= 100 || (s.progress_notes && /complete/i.test(s.progress_notes));
+                    const isComplete = s.status === 'completed' || Number(s.progress_percent) >= 100 || (s.progress_notes && /complete/i.test(s.progress_notes));
                     return !isComplete;
                 }).sort((a, b) => {
                     return (b.vote_count - a.vote_count) || (new Date(b.created_at) - new Date(a.created_at));
