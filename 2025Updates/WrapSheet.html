@@ -2358,6 +2358,11 @@
                 <input id="pillar-task-eta" type="date" />
               </label>
             </div>
+
+            <label>
+              Staff Update / Notes
+              <textarea id="pillar-task-notes" rows="2" placeholder="Share a progress update..."></textarea>
+            </label>
           </div>
 
           <div class="modal-footer">
@@ -3409,7 +3414,8 @@
 
         // 2. API Tasks (Promoted/Active)
         // Filter by pillar. Show all active + suggested that were returned.
-        const apiTasks = state.promotedSuggestions ? state.promotedSuggestions.filter(s => s.pillar === pKey) : [];
+        // Use lowercase comparison to handle DB case mismatches
+        const apiTasks = state.promotedSuggestions ? state.promotedSuggestions.filter(s => (s.pillar || "").toLowerCase() === pKey) : [];
 
         // Combine (Legacy first so they sit at top until deleted/migrated, or bottom? Let's put API first as they are "real")
         // User asked for "Erica's pillars", which are likely API grounded now.
@@ -3523,6 +3529,21 @@
       }).finally(hideActionLoader);
     }
 
+    function populatePillarAssignedToSelect() {
+      const select = document.getElementById("pillar-task-assigned-to");
+      if (!select) return;
+      // Only repopulate if empty or needed, but straightforward to just wipe
+      select.innerHTML = "";
+      if (state.users && state.users.length) {
+        state.users.forEach(u => {
+          const opt = document.createElement("option");
+          opt.value = u.id;
+          opt.textContent = u.name;
+          select.appendChild(opt);
+        });
+      }
+    }
+
     function openPillarModal(pillarKey, task = null) {
       if (!state.currentUser) {
         showToast("Pick your user first", true);
@@ -3552,6 +3573,7 @@
         benchEl.value = task.description || task.benchmark || "";
         percentEl.value = clampPercent(task.progress_percent !== undefined ? task.progress_percent : task.percent);
         etaEl.value = task.eta_date || task.eta || "";
+        document.getElementById("pillar-task-notes").value = task.progress_notes || "";
 
         document.getElementById("pillar-modal-title").textContent = "Edit Pillar Task";
         // Show status if available
@@ -3565,6 +3587,7 @@
         benchEl.value = "";
         percentEl.value = "0";
         etaEl.value = "";
+        document.getElementById("pillar-task-notes").value = "";
 
         document.getElementById("pillar-modal-title").textContent = "New Pillar Task";
         document.getElementById("pillar-modal-meta").textContent = pillarDisplayName(pillarKey);
@@ -3593,10 +3616,11 @@
       const pillarKey = document.getElementById("pillar-key").value;
 
       const title = document.getElementById("pillar-task-title").value.trim();
-      const assignedToId = parseInt(document.getElementById("pillar-task-assigned-to").value, 10);
+      const assignedToId = document.getElementById("pillar-task-assigned-to").value; // Keep as string or int
       const benchmark = document.getElementById("pillar-task-benchmark").value.trim();
       const percent = clampPercent(document.getElementById("pillar-task-percent").value);
       const eta = document.getElementById("pillar-task-eta").value;
+      const notes = document.getElementById("pillar-task-notes").value.trim();
 
       if (!title) {
         showToast("Task title is required", true);
@@ -3611,13 +3635,14 @@
         title: title || "",
         description: benchmark || "",
         category: "General", // Ensure field exists for DB binding
-        pillar: pillarKey || "",
+        pillar: (pillarKey || "").toLowerCase(),
         status: 'active',
+        source: 'staff', // Mark as staff-created (shows in Staff Core Pillars, not Board Ideas)
         assigned_to_id: assignedToId || null,
         created_by_id: (state.currentUser && state.currentUser.id) ? state.currentUser.id : null,
         progress_percent: percent || 0,
         eta_date: eta || null,
-        progress_notes: "" // Ensure field exists
+        progress_notes: notes || ""
       };
 
       try {
@@ -4063,7 +4088,8 @@
       try {
         // Fetch ALL suggestions (team view) instead of just mine. 
         // passing userId ensures 'vote_count' or 'liked_by_me' logic works if backend supports it.
-        const res = await apiGet(`/pillar-suggestions?status=all&limit=200&userId=${state.currentUser.id}`);
+        // Reverted to fetching ONLY assigned to me, per user request "Each user should see only THEIR assigned item"
+        const res = await apiGet(`/pillar-suggestions?assignedTo=${state.currentUser.id}&limit=100&status=all`);
 
         if (Array.isArray(res)) {
           state.promotedSuggestions = res;

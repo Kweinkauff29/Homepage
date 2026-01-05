@@ -713,16 +713,24 @@
             if (!currentUser) return;
 
             try {
-                // Get all active assignments
-                const res = await fetch(`${API_BASE}/pillar-suggestions?status=all&userId=${currentUser.id}`);
+                // Get all user suggestions (EXCLUDE staff-created items)
+                const res = await fetch(`${API_BASE}/pillar-suggestions?status=all&source=suggestion&userId=${currentUser.id}`);
                 suggestions = await res.json();
                 console.log("Loaded suggestions:", suggestions); // Debug for finding vote dates
 
-                // Calculate active votes just for internal tracking or debugging, 
-                // but display STATIC limit because we can't track monthly resets accurately without backend timestamps.
-                if (document.getElementById("likes-count")) {
-                    document.getElementById("likes-count").textContent = "5 / month";
-                    document.getElementById("likes-count").title = "You get 5 votes every month. If you hit the limit, wait for the 1st of the month.";
+                // Fetch user's vote count for this month
+                try {
+                    const voteRes = await fetch(`${API_BASE}/user-votes?userId=${currentUser.id}`);
+                    const voteData = await voteRes.json();
+                    if (document.getElementById("likes-count")) {
+                        document.getElementById("likes-count").textContent = `${voteData.remaining} left`;
+                        document.getElementById("likes-count").title = `You've used ${voteData.used} of 5 votes this month. Resets on the 1st.`;
+                    }
+                } catch (e) {
+                    console.error("Failed to fetch vote count", e);
+                    if (document.getElementById("likes-count")) {
+                        document.getElementById("likes-count").textContent = "5 / month";
+                    }
                 }
 
                 renderLists();
@@ -786,7 +794,7 @@
 
                 // Fetch data
                 try {
-                    const res = await fetch(`${API_BASE}/pillar-suggestions?assignedTo=${staff.id}&limit=100&status=all`);
+                    const res = await fetch(`${API_BASE}/pillar-suggestions?assignedTo=${staff.id}&source=staff&limit=100&status=all`);
                     const rawTasks = await res.json();
 
                     // Logic from WrapSheet: Active + Top 3 Suggested
@@ -1211,7 +1219,6 @@
                 alert("Error deleting idea");
             }
         }
-
         init();
     </script>
 </body>

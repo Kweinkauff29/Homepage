@@ -2060,6 +2060,23 @@ export default {
                     return json({ success: true });
                 }
             }
+
+            // ===== USER VOTE COUNT =====
+            if (pathname === "/api/user-votes" && request.method === "GET") {
+                const userId = searchParams.get("userId");
+                if (!userId) return json({ error: "userId required" }, 400);
+
+                const now = new Date();
+                const voteMonth = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}`;
+
+                const countRes = await env.WRAP_DB.prepare("SELECT COUNT(*) as count FROM task_votes WHERE user_id = ? AND vote_month = ?")
+                    .bind(userId, voteMonth).first();
+
+                const used = countRes ? countRes.count : 0;
+                const remaining = Math.max(0, 5 - used);
+
+                return json({ used, remaining, limit: 5, month: voteMonth });
+            }
             // ===== LICENSE VERIFICATION =====
             if (pathname === "/api/verify-license" && request.method === "GET") {
                 const license = searchParams.get("number");
@@ -2284,6 +2301,7 @@ async function listPillarSuggestions(env, params) {
     const top = params.get("top"); // if present, sort by votes desc limit X
     const status = params.get("status") || "active"; // or 'suggested', or 'all'
     const userId = params.get("userId"); // to check liked_by_me
+    const source = params.get("source"); // 'staff' = staff-created, 'suggestion' = user suggestions, null = all
 
     let query = `
       SELECT ps.*, 
@@ -2299,6 +2317,15 @@ async function listPillarSuggestions(env, params) {
         query += ` AND ps.assigned_to_id = ?`;
         args.push(assignedTo);
     }
+
+    // Filter by source (staff vs user suggestions)
+    if (source === 'staff') {
+        query += ` AND ps.source = 'staff'`;
+    } else if (source === 'suggestion') {
+        // Exclude staff-created items (show only user suggestions)
+        query += ` AND (ps.source IS NULL OR ps.source != 'staff')`;
+    }
+    // If source is not specified, return all
 
     if (status !== 'all') {
         if (status === 'active_or_completed') {
@@ -2346,24 +2373,30 @@ async function listPillarSuggestions(env, params) {
 
 async function createPillarSuggestion(request, env) {
     const body = await getBody(request);
-    // body: { title, description, pillar, category, created_by_id }
+    // body: { title, description, pillar, category, created_by_id, assigned_to_id }
 
-    // Map category to staff ID
-    const STAFF_MAP = {
-        "Technology": 2, "Website": 2, "Marketing": 2,
-        "MLS": 3,
-        "Education": 5, "Events": 5,
-        "Membership": 4,
-        "Compliance": 1, "Professional Standards": 1, "Community Outreach": 1
-    };
+    // Use frontend-provided assigned_to_id if present, else derive from category
+    let assigned_to_id = body.assigned_to_id || null;
 
-    const assigned_to_id = STAFF_MAP[body.category] || null;
+    // If not explicitly provided, fall back to category mapping
+    if (!assigned_to_id && body.category) {
+        const STAFF_MAP = {
+            "Technology": 2, "Website": 2, "Marketing": 2,
+            "MLS": 3,
+            "Education": 5, "Events": 5,
+            "Membership": 4,
+            "Compliance": 1, "Professional Standards": 1, "Community Outreach": 1
+        };
+        assigned_to_id = STAFF_MAP[body.category] || null;
+    }
     const now = new Date().toISOString();
+    const source = body.source || null; // 'staff' for WrapSheet, null for BoardIdeas
+    const status = body.status || 'suggested'; // staff pillars use 'active', suggestions use 'suggested'
 
     const res = await env.WRAP_DB.prepare(`
       INSERT INTO pillar_suggestions 
-      (title, description, pillar, category, assigned_to_id, created_by_id, status, created_at)
-      VALUES (?, ?, ?, ?, ?, ?, 'suggested', ?)
+      (title, description, pillar, category, assigned_to_id, created_by_id, status, source, created_at)
+      VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
       RETURNING id
     `).bind(
         body.title,
@@ -2372,6 +2405,8 @@ async function createPillarSuggestion(request, env) {
         body.category,
         assigned_to_id,
         body.created_by_id,
+        status,
+        source,
         now
     ).first();
 
@@ -2380,12 +2415,36 @@ async function createPillarSuggestion(request, env) {
 
 async function updatePillarSuggestion(request, env, id) {
     const body = await getBody(request);
-    // can update status, progress_notes
+    // can update status, progress_notes, title, description, pillar, assigned_to_id, progress_percent, eta_date
 
     let query = "UPDATE pillar_suggestions SET ";
     const args = [];
     const sets = [];
 
+    if (body.title !== undefined) {
+        sets.push("title = ?");
+        args.push(body.title);
+    }
+    if (body.description !== undefined) {
+        sets.push("description = ?");
+        args.push(body.description);
+    }
+    if (body.pillar !== undefined) {
+        sets.push("pillar = ?");
+        args.push(body.pillar);
+    }
+    if (body.assigned_to_id !== undefined) {
+        sets.push("assigned_to_id = ?");
+        args.push(body.assigned_to_id);
+    }
+    if (body.progress_percent !== undefined) {
+        sets.push("progress_percent = ?");
+        args.push(body.progress_percent);
+    }
+    if (body.eta_date !== undefined) {
+        sets.push("eta_date = ?");
+        args.push(body.eta_date);
+    }
     if (body.status !== undefined) {
         sets.push("status = ?");
         args.push(body.status);
