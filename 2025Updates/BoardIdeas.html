@@ -775,6 +775,9 @@
 
             container.innerHTML = ""; // Clear loading
 
+            // Reset completed staff items array at start (before any async operations)
+            window.completedStaffItems = [];
+
             // Helper for empty columns
             const emptyCol = (p) => `
                 <div class="pillar-col-small ${p}" style="background:#fff; border:1px solid var(--border); border-radius:8px; border-top:3px solid var(--${p}); display:flex; flex-direction:column; box-shadow:0 1px 3px rgba(0,0,0,0.05);">
@@ -821,6 +824,7 @@
                     // Add staff name to each for display
                     completedStaffItems.forEach(t => { t.staffName = displayName; t.source = 'staff'; });
                     window.completedStaffItems = (window.completedStaffItems || []).concat(completedStaffItems);
+                    console.log(`After ${displayName}: window.completedStaffItems now has:`, window.completedStaffItems.length, "items");
 
                     // Logic from WrapSheet: Active + Top 3 Suggested (exclude completed)
                     const byPillar = { elevate: [], engage: [], evolve: [], excite: [] };
@@ -970,8 +974,17 @@
             // After all staff loaded, merge completed items and re-render the section
             console.log("Staff pillars load complete. completedSuggestions:", window.completedSuggestions);
             console.log("Staff pillars load complete. completedStaffItems:", window.completedStaffItems);
-            const allCompletedItems = (window.completedSuggestions || []).concat(window.completedStaffItems || []);
-            console.log("All completed items (merged):", allCompletedItems);
+
+            // Merge and deduplicate by ID (an item might appear in both arrays if source=NULL)
+            const allItems = (window.completedSuggestions || []).concat(window.completedStaffItems || []);
+            const seenIds = new Set();
+            const allCompletedItems = allItems.filter(item => {
+                if (seenIds.has(item.id)) return false;
+                seenIds.add(item.id);
+                return true;
+            });
+
+            console.log("All completed items (merged, deduplicated):", allCompletedItems);
             renderCompletedSection(allCompletedItems);
         }
 
@@ -1025,8 +1038,7 @@
             );
             // Store for merging with staff completed items later
             window.completedSuggestions = completedItems;
-            // Reset staff completed items (will be populated by loadStaffPillars)
-            window.completedStaffItems = [];
+            // Note: window.completedStaffItems is reset in loadStaffPillars to avoid race condition
             renderCompletedSection(completedItems);
 
             ['elevate', 'engage', 'evolve', 'excite'].forEach(pillar => {
