@@ -817,6 +817,7 @@
                     const completedStaffItems = rawTasks.filter(t =>
                         t.status === 'completed' || Number(t.progress_percent) >= 100 || (t.progress_notes && /complete/i.test(t.progress_notes))
                     );
+                    console.log(`Staff ${displayName} - raw tasks:`, rawTasks.length, "completed found:", completedStaffItems.length, completedStaffItems);
                     // Add staff name to each for display
                     completedStaffItems.forEach(t => { t.staffName = displayName; t.source = 'staff'; });
                     window.completedStaffItems = (window.completedStaffItems || []).concat(completedStaffItems);
@@ -967,7 +968,10 @@
             }
 
             // After all staff loaded, merge completed items and re-render the section
+            console.log("Staff pillars load complete. completedSuggestions:", window.completedSuggestions);
+            console.log("Staff pillars load complete. completedStaffItems:", window.completedStaffItems);
             const allCompletedItems = (window.completedSuggestions || []).concat(window.completedStaffItems || []);
+            console.log("All completed items (merged):", allCompletedItems);
             renderCompletedSection(allCompletedItems);
         }
 
