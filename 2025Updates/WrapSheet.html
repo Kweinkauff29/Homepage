@@ -4061,39 +4061,12 @@
     async function loadPromotedSuggestions() {
       if (!state.currentUser) return;
       try {
-        const res = await apiGet(`/pillar-suggestions?assignedTo=${state.currentUser.id}&limit=100&status=all`);
+        // Fetch ALL suggestions (team view) instead of just mine. 
+        // passing userId ensures 'vote_count' or 'liked_by_me' logic works if backend supports it.
+        const res = await apiGet(`/pillar-suggestions?status=all&limit=200&userId=${state.currentUser.id}`);
 
         if (Array.isArray(res)) {
-          // Logic: Show ALL 'active' tasks (working on them).
-          // Show 'suggested' ONLY if they are in the Top 3 vote-getters for their pillar.
-
-          const byPillar = { elevate: [], engage: [], evolve: [], excite: [] };
-          res.forEach(t => {
-            t.pillar = (t.pillar || "").toLowerCase();
-            const p = t.pillar;
-            if (byPillar[p]) byPillar[p].push(t);
-          });
-
-          let finalSet = [];
-
-          Object.keys(byPillar).forEach(key => {
-            const tasks = byPillar[key];
-
-            // Get Active ones
-            const active = tasks.filter(t => t.status === 'active');
-
-            // Get Suggested ones, sort by votes desc
-            const suggested = tasks.filter(t => t.status === 'suggested');
-            suggested.sort((a, b) => b.vote_count - a.vote_count);
-
-            // Take top 3 suggested
-            const top3Suggested = suggested.slice(0, 3);
-
-            // Combine
-            finalSet = finalSet.concat(active, top3Suggested);
-          });
-
-          state.promotedSuggestions = finalSet;
+          state.promotedSuggestions = res;
         } else {
           state.promotedSuggestions = [];
         }
