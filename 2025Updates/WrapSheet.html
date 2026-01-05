@@ -1703,6 +1703,10 @@
     }
 
     /* ===== Core Pillars (Elevate / Engage / Evolve / Excite) ===== */
+    .draggable-section {
+      margin-bottom: 15px;
+    }
+
     .pillars-section {
       margin-top: 14px;
       padding-top: 10px;
@@ -2193,6 +2197,31 @@
           </div>
         </section>
 
+        <!-- Task Backlog Section -->
+        <section class="panel draggable-section" id="section-backlog" draggable="true">
+          <div class="panel-header">
+            <span class="section-drag-handle" title="Drag to reorder">⋮⋮</span>
+            <div class="panel-title">Task Backlog</div>
+            <div class="header-hint" style="font-size:11px;color:var(--ink-soft);margin-left:auto;">
+              Drag here to park tasks · Drag to calendar to schedule
+            </div>
+          </div>
+          <div class="backlog-container" id="backlog-container"
+            style="padding:10px;min-height:80px;background:rgba(0,0,0,0.03);border-radius:6px;margin:10px;">
+            <div id="backlog-list" style="display:grid;grid-template-columns:repeat(3, 1fr);gap:8px;"></div>
+            <div id="backlog-empty"
+              style="font-size:11px;color:var(--ink-soft);text-align:center;padding:10px;width:100%;grid-column:1/-1;display:none;">
+              No parked tasks.
+            </div>
+          </div>
+          <div class="add-backlog-form" style="padding:0 10px 10px;display:flex;gap:6px;">
+            <input type="text" id="new-backlog-input" placeholder="Add to backlog..."
+              style="flex:1;font-size:11px;padding:5px;border-radius:4px;border:1px solid var(--panel-border);background:var(--panel);">
+            <button id="add-backlog-btn"
+              style="border:none;background:var(--accent);color:#fff;border-radius:4px;padding:5px 10px;font-size:11px;cursor:pointer;">Add</button>
+          </div>
+        </section>
+
         <!-- Goals Section -->
         <section class="panel draggable-section" id="section-goals" draggable="true">
           <div class="panel-header">
@@ -2431,12 +2460,15 @@
       "Team Work"
     ];
 
+    const BACKLOG_DATE = "1900-01-01";
+
     const state = {
       users: [],
       currentUser: null,
       promotedSuggestions: [],
       currentMonthDate: new Date(),
       dailyTasks: [],
+      backlogTasks: [], // NEW
       monthlyGoals: [],
       annualGoals: [],
       monthlyOwnerFilter: "all",
@@ -2618,6 +2650,7 @@
     };
 
     function onTaskDragStart(e) {
+      e.stopPropagation(); // Prevent section drag
       const pill = e.currentTarget;
       const taskId = pill.dataset.taskId;
       const fromDate = pill.dataset.date;
@@ -2666,30 +2699,74 @@
       cell.classList.remove("drop-target");
 
       const newDateKey = cell.dataset.dateKey;
-      if (!newDateKey || dragState.fromDate === newDateKey) return;
+      if (!newDateKey) return;
+
+      // If same date, ignore
+      if (state.dailyTasks.find(t => String(t.id) === String(dragState.taskId))?.task_date === newDateKey) return;
 
       moveTaskToDate(dragState.taskId, newDateKey);
     }
 
     async function moveTaskToDate(taskId, newDateKey) {
-      const task = state.dailyTasks.find(t => String(t.id) === String(taskId));
+      // Search in both lists
+      let task = state.dailyTasks.find(t => String(t.id) === String(taskId));
+      const sourceList = task ? "daily" : "backlog";
+
+      if (!task) {
+        task = state.backlogTasks.find(t => String(t.id) === String(taskId));
+      }
+
       if (!task) return;
 
       const oldDate = task.task_date;
       if (oldDate === newDateKey) return;
 
-      // Optimistic UI update
+      // Optimistic Update
       task.task_date = newDateKey;
+
+      if (newDateKey === BACKLOG_DATE) {
+        // Moved TO Backlog
+        // Remove from dailyTasks if there
+        state.dailyTasks = state.dailyTasks.filter(t => t.id !== task.id);
+        // Add to backlogTasks if not there
+        if (!state.backlogTasks.find(t => t.id === task.id)) {
+          state.backlogTasks.push(task);
+        }
+      } else {
+        // Moved TO Calendar
+        // Remove from backlogTasks if there
+        state.backlogTasks = state.backlogTasks.filter(t => t.id !== task.id);
+        // Add to dailyTasks if not there (and if it matches visible range, but for now just add it)
+        if (!state.dailyTasks.find(t => t.id === task.id)) {
+          state.dailyTasks.push(task);
+        }
+      }
+
       renderCalendar();
+      if (typeof renderBacklog === "function") renderBacklog();
 
       try {
         await apiSend("/daily-tasks/" + taskId, "PATCH", { task_date: newDateKey });
-        showToast("Task moved");
+        if (newDateKey === BACKLOG_DATE) {
+          showToast("Moved to Backlog");
+        } else {
+          showToast("Scheduled for " + newDateKey);
+        }
+        // Reload to be safe and sync sorting/etc
+        // await Promise.all([loadDailyTasks(), loadBacklogTasks()]); 
       } catch (err) {
         console.error(err);
-        // Revert if API fails
+        // Revert
         task.task_date = oldDate;
+        if (sourceList === "daily") {
+          if (!state.dailyTasks.find(t => t.id === task.id)) state.dailyTasks.push(task);
+          state.backlogTasks = state.backlogTasks.filter(t => t.id !== task.id);
+        } else {
+          if (!state.backlogTasks.find(t => t.id === task.id)) state.backlogTasks.push(task);
+          state.dailyTasks = state.dailyTasks.filter(t => t.id !== task.id);
+        }
         renderCalendar();
+        if (typeof renderBacklog === "function") renderBacklog();
         showToast("Error moving task", true);
       }
     }
@@ -3220,9 +3297,16 @@
       restoreUserFromStorage();
       if (state.currentUser) {
         document.getElementById("user-overlay").classList.add("hidden");
+        document.getElementById("user-overlay").classList.add("hidden");
         await refreshAllData();
+        initBacklogUI(); // Initialize backlog event listeners
       }
     });
+
+    async function refreshAllData() {
+      await refreshCalendarAndMonthlyGoals();
+      // Any other global refresh
+    }
 
     function pillarsStorageKey(userId) {
       return `wrapsheet-pillars-v1:${userId}`;
@@ -4008,10 +4092,163 @@
       }
     }
 
+
+
+    // ===== BACKLOG LOGIC =====
+    async function loadBacklogTasks() {
+      try {
+        let targetId = state.calendarOwnerId;
+        // If no filter selected (My Tasks), default to current user
+        if (!targetId && state.currentUser) {
+          targetId = state.currentUser.id;
+        }
+
+        let path = "/daily-tasks?month=1900-01"; // Backlog Month
+
+        if (targetId) {
+          path += "&assignedToId=" + encodeURIComponent(targetId);
+        } else {
+          // If we really don't have a user (not logged in?), maybe we fetch nothing? 
+          // Or fetch all (unsafe). Let's assume fetch all is fallback but we prefer isolation.
+          // The user requested strict isolation.
+          if (state.currentUser) {
+            path += "&assignedToId=" + encodeURIComponent(state.currentUser.id);
+          }
+        }
+
+        const tasks = await apiGet(path);
+        // Dedupe
+        const merged = [];
+        const seen = new Set();
+        tasks.forEach(t => {
+          if (!seen.has(t.id)) { seen.add(t.id); merged.push(t); }
+        });
+
+        state.backlogTasks = merged;
+        renderBacklog();
+      } catch (err) {
+        console.warn("Error loading backlog", err);
+        state.backlogTasks = [];
+        renderBacklog();
+      }
+    }
+
+    function renderBacklog() {
+      const container = document.getElementById("backlog-list");
+      const empty = document.getElementById("backlog-empty");
+      if (!container) return;
+      container.innerHTML = "";
+
+      if (!state.backlogTasks || state.backlogTasks.length === 0) {
+        if (empty) empty.style.display = "block";
+        return;
+      }
+      if (empty) empty.style.display = "none";
+
+      state.backlogTasks.forEach(task => {
+        const pill = buildTaskPill(task);
+        container.appendChild(pill);
+      });
+    }
+
+    async function checkAndMigrateOverdueTasks() {
+      if (state.hasCheckedOverdue) return;
+      state.hasCheckedOverdue = true;
+
+      const today = new Date();
+      const todayKey = dateKey(today.getFullYear(), today.getMonth(), today.getDate());
+
+      const overdue = state.dailyTasks.filter(t => {
+        return t.task_date < todayKey && t.task_date !== BACKLOG_DATE &&
+          t.status !== 'done' && t.status !== 'could_not_complete';
+      });
+
+      if (overdue.length === 0) return;
+
+      showActionLoader({ main: "Organizing...", sub: `Moving ${overdue.length} overdue tasks to backlog` });
+
+      try {
+        await Promise.all(overdue.map(t =>
+          apiSend(`/daily-tasks/${t.id}`, "PATCH", { task_date: BACKLOG_DATE })
+        ));
+
+        showToast(`Moved ${overdue.length} tasks to backlog`);
+        await Promise.all([loadDailyTasks(), loadBacklogTasks()]);
+      } catch (err) {
+        console.error("Migration failed", err);
+      } finally {
+        hideActionLoader();
+      }
+    }
+
+    function initBacklogUI() {
+      const section = document.getElementById("section-backlog");
+      const container = document.getElementById("backlog-container");
+      const addBtn = document.getElementById("add-backlog-btn");
+      const input = document.getElementById("new-backlog-input");
+
+      if (container) {
+        container.addEventListener("dragover", onDayDragOver);
+        container.addEventListener("dragenter", onDayDragEnter);
+        container.addEventListener("dragleave", onDayDragLeave);
+        container.addEventListener("drop", onBacklogDrop);
+      }
+
+      if (addBtn && input) {
+        const handler = async () => {
+          const val = input.value.trim();
+          if (!val) return;
+          if (!state.currentUser) {
+            showToast("Who are you?", true);
+            return;
+          }
+
+          try {
+            await apiSend("/daily-tasks", "POST", {
+              title: val,
+              task_date: BACKLOG_DATE,
+              assigned_to_id: state.currentUser.id,
+              created_by_id: state.currentUser.id,
+              assigned_by_id: state.currentUser.id,
+              status: "pending"
+            });
+            input.value = "";
+            showToast("Added to backlog");
+            await loadBacklogTasks();
+          } catch (e) {
+            console.error(e);
+            showToast("Error adding to backlog", true);
+          }
+        };
+
+        addBtn.addEventListener("click", handler);
+        input.addEventListener("keydown", (e) => {
+          if (e.key === "Enter") handler();
+        });
+      }
+    }
+
+    function onBacklogDrop(e) {
+      if (!dragState.taskId) return;
+      e.preventDefault();
+      const el = document.getElementById("backlog-container");
+      if (el) el.classList.remove("drop-target");
+
+      const inBacklog = state.backlogTasks.find(t => String(t.id) === String(dragState.taskId));
+      if (inBacklog) return;
+
+      moveTaskToDate(dragState.taskId, BACKLOG_DATE);
+    }
+
     async function refreshCalendarAndMonthlyGoals() {
       updateMonthLabel();
       setMonthInputsFromState();
-      await Promise.all([loadDailyTasks(), loadMonthlyGoals()]);
+      await Promise.all([
+        loadDailyTasks(),
+        loadMonthlyGoals(),
+        loadBacklogTasks() // NEW
+      ]);
+      await checkAndMigrateOverdueTasks(); // Auto-migrate overdue
     }
 
     function updateMonthLabel() {
@@ -4135,88 +4372,7 @@
       list.className = "tasks-list";
       const tasks = tasksByDate[key] || [];
       tasks.forEach(task => {
-        const pill = document.createElement("div");
-        pill.className = "task-pill";
-
-        // DRAGGABLE
-        pill.draggable = true;
-        pill.dataset.taskId = task.id;
-        pill.dataset.date = task.task_date;
-        pill.addEventListener("dragstart", onTaskDragStart);
-        pill.addEventListener("dragend", onTaskDragEnd);
-
-        const statusVal = task.status || "pending";
-
-        const dot = document.createElement("div");
-        dot.className = "task-status-dot";
-        dot.classList.add("task-status-" + statusVal);
-        pill.appendChild(dot);
-
-        if (statusVal === "done") {
-          pill.classList.add("completed");
-        } else if (statusVal === "could_not_complete") {
-          pill.classList.add("blocked");
-        }
-
-        const title = document.createElement("div");
-        title.className = "task-title";
-        title.textContent = task.title;
-        pill.appendChild(title);
-
-        const assignee = document.createElement("div");
-        assignee.className = "task-assignee";
-
-        // Multi-assignee label: "Name" or "Name +2"
-        let assigneeLabel = "";
-        if (Array.isArray(task.assignees) && task.assignees.length) {
-          const names = task.assignees.map(a => a.name).filter(Boolean);
-          if (names.length === 1) {
-            assigneeLabel = names[0];
-          } else if (names.length > 1) {
-            assigneeLabel = names[0] + " +" + (names.length - 1);
-          }
-        } else {
-          const assignedUser = state.users.find(u => u.id === task.assigned_to_id);
-          assigneeLabel = assignedUser ? assignedUser.name : "";
-        }
-        assignee.textContent = assigneeLabel;
-        pill.appendChild(assignee);
-
-        // NEW: quick actions: checkbox + "Could not complete"
-        const quick = document.createElement("div");
-        quick.className = "task-quick-actions";
-
-        const quickDone = document.createElement("input");
-        quickDone.type = "checkbox";
-        quickDone.title = "Mark complete";
-        quickDone.checked = statusVal === "done";
-        quickDone.addEventListener("click", async (e) => {
-          e.stopPropagation();
-          const newStatus = quickDone.checked ? "done" : "pending";
-          await quickUpdateTaskStatus(task, newStatus);
-        });
-
-        const quickBlocked = document.createElement("button");
-        quickBlocked.type = "button";
-        quickBlocked.textContent = "X";
-        quickBlocked.title = "Could not complete";
-        if (statusVal === "could_not_complete") {
-          quickBlocked.classList.add("active");
-        }
-        quickBlocked.addEventListener("click", async (e) => {
-          e.stopPropagation();
-          await quickUpdateTaskStatus(task, "could_not_complete");
-        });
-
-        quick.appendChild(quickDone);
-        quick.appendChild(quickBlocked);
-        pill.appendChild(quick);
-
-        pill.addEventListener("click", (e) => {
-          e.stopPropagation();
-          openTaskModalForExistingTask(task);
-        });
-
+        const pill = buildTaskPill(task);
         list.appendChild(pill);
       });
 
@@ -4300,6 +4456,98 @@
       }
 
       updateStatusChart();
+    }
+
+    function buildTaskPill(task) {
+      const pill = document.createElement("div");
+      pill.className = "task-pill";
+      // Identify backlog items specifically or just generic
+      if (task.task_date === BACKLOG_DATE) {
+        pill.classList.add("backlog-pill");
+        // Removed explicit width 100% to let grid handle it
+      }
+
+      // DRAGGABLE
+      pill.draggable = true;
+      pill.dataset.taskId = task.id;
+      pill.dataset.date = task.task_date;
+      pill.addEventListener("dragstart", onTaskDragStart);
+      pill.addEventListener("dragend", onTaskDragEnd);
+
+      const statusVal = task.status || "pending";
+
+      const dot = document.createElement("div");
+      dot.className = "task-status-dot";
+      dot.classList.add("task-status-" + statusVal);
+      pill.appendChild(dot);
+
+      if (statusVal === "done") {
+        pill.classList.add("completed");
+      } else if (statusVal === "could_not_complete") {
+        pill.classList.add("blocked");
+      }
+
+      const title = document.createElement("div");
+      title.className = "task-title";
+      title.textContent = task.title;
+      pill.appendChild(title);
+
+      const assignee = document.createElement("div");
+      assignee.className = "task-assignee";
+
+      // Multi-assignee label: "Name" or "Name +2"
+      let assigneeLabel = "";
+      if (Array.isArray(task.assignees) && task.assignees.length) {
+        const names = task.assignees.map(a => a.name).filter(Boolean);
+        if (names.length === 1) {
+          assigneeLabel = names[0];
+        } else if (names.length > 1) {
+          assigneeLabel = names[0] + " +" + (names.length - 1);
+        }
+      } else {
+        const assignedUser = state.users.find(u => u.id === task.assigned_to_id);
+        assigneeLabel = assignedUser ? assignedUser.name : "";
+      }
+      assignee.textContent = assigneeLabel;
+      pill.appendChild(assignee);
+
+      // Quick actions
+      const quick = document.createElement("div");
+      quick.className = "task-quick-actions";
+
+      const quickDone = document.createElement("input");
+      quickDone.type = "checkbox";
+      quickDone.title = "Mark complete";
+      quickDone.checked = statusVal === "done";
+      quickDone.addEventListener("click", async (e) => {
+        e.stopPropagation();
+        const newStatus = quickDone.checked ? "done" : "pending";
+        // If in backlog, updating status keeps it in backlog unless it's marked done (maybe we move done items to today? No, stays in backlog)
+        await quickUpdateTaskStatus(task, newStatus);
+      });
+
+      const quickBlocked = document.createElement("button");
+      quickBlocked.type = "button";
+      quickBlocked.textContent = "X";
+      quickBlocked.title = "Could not complete";
+      if (statusVal === "could_not_complete") {
+        quickBlocked.classList.add("active");
+      }
+      quickBlocked.addEventListener("click", async (e) => {
+        e.stopPropagation();
+        await quickUpdateTaskStatus(task, "could_not_complete");
+      });
+
+      quick.appendChild(quickDone);
+      quick.appendChild(quickBlocked);
+      pill.appendChild(quick);
+
+      pill.addEventListener("click", (e) => {
+        e.stopPropagation();
+        openTaskModalForExistingTask(task);
+      });
+
+      return pill;
     }
 
     function updateStatusChart() {
@@ -5401,7 +5649,10 @@
         state.weeklyTasks = data.tasks || [];
         renderWeeklyTasks();
       } catch (err) {
-        console.error("Error loading weekly tasks:", err);
+        // Silently fail for 404 or other errors to avoid disturbing user
+        // console.warn("Error loading weekly tasks:", err); 
+        state.weeklyTasks = [];
+        renderWeeklyTasks();
       }
     }
 
@@ -5575,7 +5826,15 @@
 
       sections.forEach(section => {
         // Drag start
+        // Drag start
+        // Drag start
         section.addEventListener("dragstart", (e) => {
+          // If dragging from an interactive element, blocking section drag
+          if (e.target.closest('.task-pill') || e.target.closest('input') || e.target.closest('button') || e.target.closest('.weekly-task-item') || e.target.closest('.goal-card')) {
+            return;
+          }
+          // Note: We removed the strict handle check so user can drag by header/body if empty.
+
           draggedSection = section;
           section.classList.add("dragging");
           e.dataTransfer.effectAllowed = "move";
