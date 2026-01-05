@@ -813,9 +813,19 @@
                     const res = await fetch(`${API_BASE}/pillar-suggestions?assignedTo=${staff.id}&source=staff&limit=100&status=all`);
                     const rawTasks = await res.json();
 
-                    // Logic from WrapSheet: Active + Top 3 Suggested
+                    // Collect completed staff items for the Completed section
+                    const completedStaffItems = rawTasks.filter(t =>
+                        t.status === 'completed' || t.progress_percent >= 100 || (t.progress_notes && /complete/i.test(t.progress_notes))
+                    );
+                    // Add staff name to each for display
+                    completedStaffItems.forEach(t => { t.staffName = displayName; t.source = 'staff'; });
+                    window.completedStaffItems = (window.completedStaffItems || []).concat(completedStaffItems);
+
+                    // Logic from WrapSheet: Active + Top 3 Suggested (exclude completed)
                     const byPillar = { elevate: [], engage: [], evolve: [], excite: [] };
                     rawTasks.forEach(t => {
+                        const isComplete = t.status === 'completed' || t.progress_percent >= 100 || (t.progress_notes && /complete/i.test(t.progress_notes));
+                        if (isComplete) return; // Skip completed, they go to dedicated section
                         t.pillar = (t.pillar || "").toLowerCase();
                         if (byPillar[t.pillar]) byPillar[t.pillar].push(t);
                     });
@@ -955,6 +965,10 @@
                     row.innerHTML = `<div style="color:red; padding:10px;">Failed to load data for ${staff.name}</div>`;
                 }
             }
+
+            // After all staff loaded, merge completed items and re-render the section
+            const allCompletedItems = (window.completedSuggestions || []).concat(window.completedStaffItems || []);
+            renderCompletedSection(allCompletedItems);
         }
 
         function renderCompletedSection(completedItems) {
@@ -981,13 +995,16 @@
                     position: relative;
                 `;
 
+                const staffBadge = item.source === 'staff' && item.staffName ? `<span style="background:#e0f2fe; color:#0284c7; padding:2px 8px; border-radius:4px; font-size:0.65rem; font-weight:600;">by ${item.staffName}</span>` : '';
+
                 card.innerHTML = `
                     <div style="display:flex; align-items:center; gap:8px; margin-bottom:8px;">
                         <i class="fa-solid fa-check-circle" style="color:#059669; font-size:1.2rem;"></i>
                         <span style="font-weight:700; color:#166534;">${item.title}</span>
                     </div>
-                    <div style="display:flex; align-items:center; gap:10px; font-size:0.8rem; color:#16a34a;">
+                    <div style="display:flex; align-items:center; gap:10px; font-size:0.8rem; color:#16a34a; flex-wrap:wrap;">
                         <span style="background:${pillarColor}22; color:${pillarColor}; padding:2px 8px; border-radius:4px; font-weight:600; text-transform:uppercase; font-size:0.65rem;">${item.pillar}</span>
+                        ${staffBadge}
                         <span>Completed ${completedDate}</span>
                     </div>
                     ${item.progress_notes ? `<div style="margin-top:10px; font-size:0.85rem; color:#15803d; font-style:italic;">"${item.progress_notes}"</div>` : ''}
@@ -1002,6 +1019,10 @@
             const completedItems = suggestions.filter(s =>
                 s.status === 'completed' || s.progress_percent >= 100 || (s.progress_notes && /complete/i.test(s.progress_notes))
             );
+            // Store for merging with staff completed items later
+            window.completedSuggestions = completedItems;
+            // Reset staff completed items (will be populated by loadStaffPillars)
+            window.completedStaffItems = [];
             renderCompletedSection(completedItems);
 
             ['elevate', 'engage', 'evolve', 'excite'].forEach(pillar => {
