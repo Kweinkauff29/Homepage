@@ -3356,7 +3356,7 @@
 
     function computePillarPercent(tasks) {
       if (!Array.isArray(tasks) || !tasks.length) return 0;
-      const vals = tasks.map(t => clampPercent(t.percent ?? 0));
+      const vals = tasks.map(t => clampPercent(t.progress_percent !== undefined ? t.progress_percent : (t.percent ?? 0)));
       const avg = vals.reduce((a, b) => a + b, 0) / vals.length;
       return Math.round(avg);
     }
@@ -3373,7 +3373,7 @@
 
       const subtitle = document.getElementById("pillars-subtitle");
       subtitle.textContent = state.currentUser
-        ? `Saved for ${state.currentUser.name} (unique per user)`
+        ? `Synced for ${state.currentUser.name}`
         : "Pick a user to edit your pillars";
 
       grid.innerHTML = "";
@@ -3404,28 +3404,58 @@
         const box = document.createElement("div");
         box.className = "pillar-box";
 
-        const tasks = (state.pillars && state.pillars[pKey]) ? state.pillars[pKey] : [];
-        if (!tasks.length) {
+        // 1. Legacy Tasks (Local Storage)
+        const legacy = (state.pillars && state.pillars[pKey]) ? state.pillars[pKey] : [];
+
+        // 2. API Tasks (Promoted/Active)
+        // Filter by pillar. Show all active + suggested that were returned.
+        const apiTasks = state.promotedSuggestions ? state.promotedSuggestions.filter(s => s.pillar === pKey) : [];
+
+        // Combine (Legacy first so they sit at top until deleted/migrated, or bottom? Let's put API first as they are "real")
+        // User asked for "Erica's pillars", which are likely API grounded now.
+        const allTasks = [...apiTasks, ...legacy];
+
+        if (!allTasks.length) {
           const empty = document.createElement("div");
           empty.className = "pillar-empty";
           empty.textContent = "No tasks yet.\nClick + Add to create one.";
           box.appendChild(empty);
         } else {
-          tasks.forEach(t => {
+          allTasks.forEach(t => {
             const row = document.createElement("div");
             row.className = "pillar-task-row";
+            if (t.status === 'suggested') row.classList.add("promo"); // visual distinction
 
             const title = document.createElement("div");
             title.className = "pillar-task-title";
             title.textContent = t.title || "(Untitled)";
 
-            const assignedUser = state.users.find(u => String(u.id) === String(t.assigned_to_id));
+            // Determine fields
+            const assignedId = t.assigned_to_id;
+            const assignedUser = state.users.find(u => String(u.id) === String(assignedId));
+
+            const isApi = !!t.status;
+            const voteTxt = t.vote_count ? ` · Votes: ${t.vote_count}` : "";
+            const statusTxt = t.status ? ` · ${t.status.toUpperCase()}` : "";
+
+            const pct = clampPercent(t.progress_percent !== undefined ? t.progress_percent : (t.percent || 0));
+            const eta = t.eta_date || t.eta || "—";
+            const bench = t.description || t.benchmark || "—";
+
+            // Meta Line
             const meta = document.createElement("div");
             meta.className = "pillar-task-meta";
-            meta.innerHTML =
-              `Assigned to: <b>${assignedUser ? assignedUser.name : "—"}</b><br>` +
-              `Benchmark: ${t.benchmark ? t.benchmark : "—"}<br>` +
-              `Percent: ${clampPercent(t.percent)}% · ETA: ${t.eta ? t.eta : "—"}`;
+
+            if (isApi) {
+              // API Style: Status, Votes, Progress
+              meta.innerHTML = `Assigned: <b>${assignedUser ? assignedUser.name : "—"}</b>${statusTxt}${voteTxt}<br>` +
+                `Progress: ${pct}% · ETA: ${eta}`;
+            } else {
+              // Legacy Style
+              meta.innerHTML = `Assigned: <b>${assignedUser ? assignedUser.name : "—"}</b><br>` +
+                `Benchmark: ${bench}<br>` +
+                `Percent: ${pct}% · ETA: ${eta}`;
+            }
 
             row.appendChild(title);
             row.appendChild(meta);
@@ -3436,55 +3466,12 @@
         }
 
         const circleWrap = document.createElement("div");
-
-        // --- PROMOTED SUGGESTIONS SECTION ---
-        const promoted = state.promotedSuggestions.filter(s => s.pillar === pKey && s.status !== 'completed');
-        // Only show if active or if it's suggested and has votes (e.g. top 3). 
-        // Logic: if status is 'active' -> show. If 'suggested', show if in top X (already filtered by API limit/sort).
-        // Let's show all that came back from API except completed (unless we want history).
-        // Prompt says: "From there, the staff can mark complete, moving it on the BOD/council page... and bumping the active task."
-        // So we show suggested/active here.
-
-        if (promoted.length > 0) {
-          const promoHeader = document.createElement("div");
-          promoHeader.className = "pillar-promo-header";
-          promoHeader.innerHTML = `<i class="fa-solid fa-lightbulb"></i> Board Ideas (${promoted.length})`;
-          promoHeader.style.cssText = "font-size:12px; font-weight:700; color:var(--accent); margin: 8px 0 4px; padding-top:8px; border-top:1px dashed var(--border);";
-          box.appendChild(promoHeader);
-
-          promoted.forEach(pt => {
-            const row = document.createElement("div");
-            row.className = "pillar-task-row promo";
-            row.style.borderLeft = "3px solid var(--accent)";
-
-            const title = document.createElement("div");
-            title.className = "pillar-task-title";
-            title.textContent = pt.title;
-            title.style.fontWeight = "600";
-
-            const meta = document.createElement("div");
-            meta.className = "pillar-task-meta";
-            meta.innerHTML = `Votes: <b>${pt.vote_count}</b> · Status: ${pt.status.toUpperCase()}`;
-
-            row.appendChild(title);
-            row.appendChild(meta);
-
-            row.addEventListener("click", () => editPromotedTask(pt));
-            box.appendChild(row);
-          });
-        }
-
-        // --- END PROMOTED SECTION ---
-
-        const circleWrapClone = document.createElement("div"); // Placeholder if needed or continue original code
-        // Restore original circle logic
-
         circleWrap.className = "pillar-circle-wrap";
 
         const circle = document.createElement("div");
         circle.className = "pillar-circle";
 
-        const pct = computePillarPercent(tasks);
+        const pct = computePillarPercent(allTasks);
         circle.innerHTML = `<div><strong>${pct}%</strong><span>Percentage of goal<br>complete</span></div>`;
 
         circleWrap.appendChild(circle);
@@ -3560,12 +3547,16 @@
         idEl.value = task.id;
         titleEl.value = task.title || "";
         assignedEl.value = String(task.assigned_to_id || state.currentUser.id);
-        benchEl.value = task.benchmark || "";
-        percentEl.value = clampPercent(task.percent ?? 0);
-        etaEl.value = task.eta || "";
+
+        // Unified field mapping (API uses description/progress_percent/eta_date)
+        benchEl.value = task.description || task.benchmark || "";
+        percentEl.value = clampPercent(task.progress_percent !== undefined ? task.progress_percent : task.percent);
+        etaEl.value = task.eta_date || task.eta || "";
 
         document.getElementById("pillar-modal-title").textContent = "Edit Pillar Task";
-        document.getElementById("pillar-modal-meta").textContent = `${pillarDisplayName(pillarKey)} • ${task.id}`;
+        // Show status if available
+        const statusTxt = task.status ? ` · ${task.status.toUpperCase()}` : "";
+        document.getElementById("pillar-modal-meta").textContent = `${pillarDisplayName(pillarKey)} • ${task.id}${statusTxt}`;
         deleteBtn.style.display = "inline-flex";
       } else {
         idEl.value = "";
@@ -3617,13 +3608,16 @@
       }
 
       const payload = {
-        title: title,
-        assigned_to_id: assignedToId,
-        description: benchmark, // Mapping benchmark to description
-        progress_percent: percent,
-        eta_date: eta,
-        pillar: pillarKey,
-        status: 'active' // Default to active for manually added tasks
+        title: title || "",
+        description: benchmark || "",
+        category: "General", // Ensure field exists for DB binding
+        pillar: pillarKey || "",
+        status: 'active',
+        assigned_to_id: assignedToId || null,
+        created_by_id: (state.currentUser && state.currentUser.id) ? state.currentUser.id : null,
+        progress_percent: percent || 0,
+        eta_date: eta || null,
+        progress_notes: "" // Ensure field exists
       };
 
       try {
@@ -3647,21 +3641,33 @@
       }
     }
 
-    function deletePillarTaskFromModal() {
+    async function deletePillarTaskFromModal() {
       const id = document.getElementById("pillar-task-id").value;
       const pillarKey = document.getElementById("pillar-key").value;
       if (!id) return;
 
       if (!confirm("Delete this pillar task?")) return;
 
-      const tasks = getPillarTasks(pillarKey);
-      const next = tasks.filter(t => String(t.id) !== String(id));
-      state.pillars[pillarKey] = next;
+      try {
+        if (id.startsWith("pt_")) {
+          // Legacy local delete
+          const tasks = getPillarTasks(pillarKey);
+          const next = tasks.filter(t => String(t.id) !== String(id));
+          state.pillars[pillarKey] = next;
+          savePillarsForCurrentUser();
+          renderPillars();
+        } else {
+          // API Delete
+          await fetch(`${API_BASE}/pillar-suggestions/${id}`, { method: "DELETE" });
+          await refreshAllData();
+        }
 
-      savePillarsForCurrentUser();
-      renderPillars();
-      closePillarModal();
-      showToast("Pillar task deleted");
+        closePillarModal();
+        showToast("Pillar task deleted");
+      } catch (e) {
+        console.error(e);
+        showToast("Error deleting task", true);
+      }
     }
 
 
