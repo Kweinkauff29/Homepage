@@ -746,38 +746,40 @@
                 }
             }
 
-            const staffList = [];
-            STAFF_NAMES.forEach(name => {
-                const u = window.allUsersCache.find(user => user.name.toLowerCase().includes(name.toLowerCase()));
-                if (u) staffList.push(u);
-            });
-
-            if (staffList.length === 0) {
-                container.innerHTML = "No staff found.";
-                return;
-            }
-
             container.innerHTML = ""; // Clear loading
 
-            for (const staff of staffList) {
-                // Render placeholder row
-                const rowId = `staff-row-${staff.id}`;
+            // Helper for empty columns
+            const emptyCol = (p) => `
+                <div class="pillar-col-small ${p}" style="background:#fff; border:1px solid var(--border); border-radius:8px; border-top:3px solid var(--${p}); display:flex; flex-direction:column; box-shadow:0 1px 3px rgba(0,0,0,0.05);">
+                    <div style="padding:8px 12px; font-weight:700; text-transform:uppercase; font-size:0.75rem; letter-spacing:0.05em; color:var(--${p}); border-bottom:1px solid #f1f5f9;">${p}</div>
+                    <div style="padding:10px; color:var(--text-soft); font-size:0.75rem; font-style:italic;">No focus items.</div>
+                </div>`;
+
+            for (const name of STAFF_NAMES) {
+                const staff = window.allUsersCache ? window.allUsersCache.find(user => user.name.toLowerCase().includes(name.toLowerCase())) : null;
+                const displayName = staff ? staff.name : name;
+
                 const row = document.createElement("div");
-                row.id = rowId;
                 row.innerHTML = `
                    <div style="margin-bottom:15px; display:flex; align-items:center; gap:10px;">
-                      <div style="font-weight:700; font-size:1.1rem; color:var(--text);">${staff.name}</div>
+                      <div style="font-weight:700; font-size:1.1rem; color:var(--text);">${displayName}</div>
+                      ${!staff ? '<span style="font-size:0.7rem; color:var(--text-soft); background:#f1f5f9; padding:2px 6px; border-radius:4px;">(Not Linked)</span>' : ''}
                       <div style="height:1px; flex:1; background:var(--border);"></div>
                    </div>
                    <div class="pillar-grid-small">
-                      <!-- Loading cols -->
+                      ${!staff ?
+                        emptyCol('elevate') + emptyCol('engage') + emptyCol('evolve') + emptyCol('excite')
+                        : `
                       <div class="pillar-col-small elevate" style="background:#fff; border:1px solid var(--border); border-radius:8px; padding:10px; border-top:3px solid var(--elevate); min-height:100px;">Loading...</div>
                       <div class="pillar-col-small engage" style="background:#fff; border:1px solid var(--border); border-radius:8px; padding:10px; border-top:3px solid var(--engage); min-height:100px;">Loading...</div>
                       <div class="pillar-col-small evolve" style="background:#fff; border:1px solid var(--border); border-radius:8px; padding:10px; border-top:3px solid var(--evolve); min-height:100px;">Loading...</div>
                       <div class="pillar-col-small excite" style="background:#fff; border:1px solid var(--border); border-radius:8px; padding:10px; border-top:3px solid var(--excite); min-height:100px;">Loading...</div>
+                      `}
                    </div>
                 `;
                 container.appendChild(row);
+
+                if (!staff) continue;
 
                 // Fetch data
                 try {
