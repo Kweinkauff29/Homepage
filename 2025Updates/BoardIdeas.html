@@ -79,11 +79,14 @@
             grid-template-rows: auto 1fr;
             /* Fix for blank space */
             gap: 1.5rem;
-            height: 100vh;
+            min-height: 100vh;
+            /* Allow grow */
+            height: auto;
             box-sizing: border-box;
-            /* Fill screen but allow scroll */
-            overflow: hidden;
-            /* Columns scroll independently */
+            overflow-y: auto;
+            /* Allow scrolling */
+            padding-bottom: 40px;
+            /* Space for bottom content */
         }
 
         @media (max-width: 1024px) {
