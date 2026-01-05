@@ -3743,6 +3743,17 @@
       document.getElementById("task-save-btn").addEventListener("click", onTaskSave);
       document.getElementById("task-delete-btn").addEventListener("click", onTaskDelete);
 
+      // Enter key to save task in modal
+      const taskModal = document.getElementById("task-modal");
+      taskModal.addEventListener("keydown", (e) => {
+        if (e.key === "Enter" && !e.shiftKey) {
+          // Don't trigger on textarea (allow Enter for new lines there)
+          if (e.target.tagName === "TEXTAREA") return;
+          e.preventDefault();
+          document.getElementById("task-save-btn").click();
+        }
+      });
+
       // Pillar modal controls
       document.getElementById("pillar-modal-close").addEventListener("click", closePillarModal);
       document.getElementById("pillar-modal-cancel").addEventListener("click", closePillarModal);
