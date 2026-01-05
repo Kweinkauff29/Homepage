@@ -2458,12 +2458,27 @@ async function updatePillarSuggestion(request, env, id) {
         args.push(new Date().toISOString());
     }
 
+    // Auto-mark as completed if progress hits 100%
+    if (body.progress_percent !== undefined && body.progress_percent >= 100 && body.status !== 'completed') {
+        sets.push("status = ?");
+        args.push('completed');
+        sets.push("completed_at = ?");
+        args.push(new Date().toISOString());
+    }
+
     if (sets.length === 0) return json({ success: true }); // no op
 
     query += sets.join(", ") + " WHERE id = ?";
     args.push(id);
 
     await env.WRAP_DB.prepare(query).bind(...args).run();
+
+    // Refund votes (delete all votes for this task) when completed
+    const isCompleted = body.status === 'completed' || (body.progress_percent !== undefined && body.progress_percent >= 100);
+    if (isCompleted) {
+        await env.WRAP_DB.prepare("DELETE FROM task_votes WHERE task_id = ?").bind(id).run();
+    }
+
     return json({ success: true });
 }
 

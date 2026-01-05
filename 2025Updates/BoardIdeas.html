@@ -499,6 +499,22 @@
                 <div style="text-align:center; color:var(--text-soft); padding: 40px;">Loading staff pillars...</div>
             </div>
         </div>
+
+        <!-- COMPLETED SECTION -->
+        <div id="completed-section"
+            style="grid-column: 1 / -1; margin-top: 40px; border-top: 2px solid var(--border); padding-top: 30px;">
+            <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom: 20px;">
+                <h2 style="font-size:1.5rem; font-weight: 700; color: #059669; margin:0;">
+                    <i class="fa-solid fa-check-circle"></i> Completed!
+                </h2>
+                <span style="font-size:0.9rem; color:var(--text-soft);">Ideas we've finished (votes refunded!)</span>
+            </div>
+            <div id="completed-container"
+                style="display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 16px;">
+                <div style="text-align:center; color:var(--text-soft); padding: 40px; grid-column: 1 / -1;">No completed
+                    items yet.</div>
+            </div>
+        </div>
     </main>
 
     <!-- Login Modal -->
@@ -941,22 +957,65 @@
             }
         }
 
+        function renderCompletedSection(completedItems) {
+            const container = document.getElementById("completed-container");
+            if (!container) return;
+
+            if (completedItems.length === 0) {
+                container.innerHTML = `<div style="text-align:center; color:var(--text-soft); padding: 40px; grid-column: 1 / -1;">No completed items yet.</div>`;
+                return;
+            }
+
+            container.innerHTML = "";
+            completedItems.forEach(item => {
+                const pillarColors = { elevate: '#f59e0b', engage: '#22c55e', evolve: '#3b82f6', excite: '#ec4899' };
+                const pillarColor = pillarColors[item.pillar] || '#6b7280';
+                const completedDate = item.completed_at ? new Date(item.completed_at).toLocaleDateString() : 'Recently';
+
+                const card = document.createElement("div");
+                card.style.cssText = `
+                    background: linear-gradient(135deg, #f0fdf4, #dcfce7);
+                    border: 1px solid #86efac;
+                    border-radius: 12px;
+                    padding: 16px;
+                    position: relative;
+                `;
+
+                card.innerHTML = `
+                    <div style="display:flex; align-items:center; gap:8px; margin-bottom:8px;">
+                        <i class="fa-solid fa-check-circle" style="color:#059669; font-size:1.2rem;"></i>
+                        <span style="font-weight:700; color:#166534;">${item.title}</span>
+                    </div>
+                    <div style="display:flex; align-items:center; gap:10px; font-size:0.8rem; color:#16a34a;">
+                        <span style="background:${pillarColor}22; color:${pillarColor}; padding:2px 8px; border-radius:4px; font-weight:600; text-transform:uppercase; font-size:0.65rem;">${item.pillar}</span>
+                        <span>Completed ${completedDate}</span>
+                    </div>
+                    ${item.progress_notes ? `<div style="margin-top:10px; font-size:0.85rem; color:#15803d; font-style:italic;">"${item.progress_notes}"</div>` : ''}
+                `;
+
+                container.appendChild(card);
+            });
+        }
+
         function renderLists() {
+            // Separate completed items for dedicated section
+            const completedItems = suggestions.filter(s =>
+                s.status === 'completed' || s.progress_percent >= 100 || (s.progress_notes && /complete/i.test(s.progress_notes))
+            );
+            renderCompletedSection(completedItems);
+
             ['elevate', 'engage', 'evolve', 'excite'].forEach(pillar => {
                 const list = document.getElementById(`list-${pillar}`);
                 list.innerHTML = "";
 
-                const items = suggestions.filter(s => s.pillar === pillar)
-                    .sort((a, b) => {
-                        // Check completion status (DB or Notes)
-                        const aComplete = a.status === 'completed' || (a.progress_notes && /complete/i.test(a.progress_notes));
-                        const bComplete = b.status === 'completed' || (b.progress_notes && /complete/i.test(b.progress_notes));
-
-                        if (aComplete && !bComplete) return 1; // a goes bottom
-                        if (!aComplete && bComplete) return -1; // b goes bottom
-
-                        return (b.vote_count - a.vote_count) || (new Date(b.created_at) - new Date(a.created_at));
-                    });
+                // Filter out completed items - they go to dedicated section
+                const items = suggestions.filter(s => {
+                    if (s.pillar !== pillar) return false;
+                    const isComplete = s.status === 'completed' || s.progress_percent >= 100 || (s.progress_notes && /complete/i.test(s.progress_notes));
+                    return !isComplete;
+                }).sort((a, b) => {
+                    return (b.vote_count - a.vote_count) || (new Date(b.created_at) - new Date(a.created_at));
+                });
 
                 // Calculate Top 2 threshold logic
                 // Rank only applies to NON-COMPLETED items sorted by votes
