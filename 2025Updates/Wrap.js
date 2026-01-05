@@ -2320,10 +2320,13 @@ async function listPillarSuggestions(env, params) {
 
     // Filter by source (staff vs user suggestions)
     if (source === 'staff') {
-        query += ` AND ps.source = 'staff'`;
+        // Include items with source='staff' OR source=NULL (old items before field was added)
+        // The assignedTo filter will further limit to specific staff member
+        query += ` AND (ps.source = 'staff' OR ps.source IS NULL)`;
     } else if (source === 'suggestion') {
-        // Exclude staff-created items (show only user suggestions)
-        query += ` AND (ps.source IS NULL OR ps.source != 'staff')`;
+        // User suggestions: explicit 'suggestion' source OR NULL source items that weren't created by staff
+        // Exclude items explicitly marked as staff-created
+        query += ` AND (ps.source = 'suggestion' OR ps.source IS NULL)`;
     }
     // If source is not specified, return all
 
