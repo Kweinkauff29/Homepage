@@ -3597,7 +3597,7 @@
       return "pt_" + Math.random().toString(16).slice(2) + Date.now().toString(16);
     }
 
-    function savePillarTaskFromModal() {
+    async function savePillarTaskFromModal() {
       const id = document.getElementById("pillar-task-id").value;
       const pillarKey = document.getElementById("pillar-key").value;
 
@@ -3616,28 +3616,35 @@
         return;
       }
 
-      const tasks = getPillarTasks(pillarKey);
+      const payload = {
+        title: title,
+        assigned_to_id: assignedToId,
+        description: benchmark, // Mapping benchmark to description
+        progress_percent: percent,
+        eta_date: eta,
+        pillar: pillarKey,
+        status: 'active' // Default to active for manually added tasks
+      };
 
-      if (id) {
-        const idx = tasks.findIndex(t => String(t.id) === String(id));
-        if (idx >= 0) {
-          tasks[idx] = { ...tasks[idx], title, assigned_to_id: assignedToId, benchmark, percent, eta };
+      try {
+        if (id && !id.startsWith("pt_")) {
+          // Edit API Item
+          await apiSend(`/pillar-suggestions/${id}`, "PATCH", payload);
+        } else {
+          // Create New (or ignore legacy ID if we can't migrate easily, assume create new)
+          // If it was a legacy item (pt_), we create a new DB item. 
+          // Realistically we should delete the local one too, but let's just create new for now.
+          payload.created_by_id = state.currentUser.id;
+          await apiSend("/pillar-suggestions", "POST", payload);
         }
-      } else {
-        tasks.push({
-          id: genPillarTaskId(),
-          title,
-          assigned_to_id: assignedToId,
-          benchmark,
-          percent,
-          eta
-        });
-      }
 
-      savePillarsForCurrentUser();
-      renderPillars();
-      closePillarModal();
-      showToast("Pillar task saved");
+        await refreshAllData(); // Reloads promoted suggestions
+        closePillarModal();
+        showToast("Pillar task saved to DB");
+      } catch (e) {
+        console.error(e);
+        showToast("Error saving task", true);
+      }
     }
 
     function deletePillarTaskFromModal() {
