@@ -1903,6 +1903,28 @@
       font-size: 12px;
       line-height: 1.2;
     }
+
+    .pillar-task-row {
+      background: rgba(255, 255, 255, 0.5);
+      border-radius: 6px;
+      padding: 8px;
+      margin-bottom: 6px;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+
+    .pillar-task-row:hover {
+      background: rgba(255, 255, 255, 0.8);
+    }
+
+    .pillar-task-row.promo {
+      background: #f0f9ff;
+      border-left: 3px solid var(--accent);
+    }
+
+    .pillar-task-row.promo:hover {
+      background: #e0f2fe;
+    }
   </style>
   <!-- Fireworks Library -->
   <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
@@ -2314,6 +2336,61 @@
             <div style="display:flex;gap:6px;align-items:center;">
               <button class="button-danger" id="pillar-task-delete" style="display:none;">Delete</button>
               <button class="button-primary" id="pillar-task-save">Save</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Suggestion Modal (Board Ideas) -->
+      <div id="suggestion-modal" class="modal hidden">
+        <div class="modal-panel">
+          <div class="modal-header">
+            <div>
+              <div class="modal-title">Update Board Idea</div>
+              <div id="suggestion-modal-title"
+                style="font-size:12px;color:var(--ink-soft);max-width:300px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">
+              </div>
+            </div>
+            <button class="modal-close" id="suggestion-modal-close">&times;</button>
+          </div>
+
+          <div class="modal-body">
+            <input type="hidden" id="suggestion-id" />
+
+            <label>
+              Progress Percentage
+              <div style="display:flex;align-items:center;gap:10px;">
+                <input type="range" id="suggestion-percent" min="0" max="100" step="5" style="flex:1"
+                  oninput="document.getElementById('suggestion-percent-val').textContent = this.value + '%'">
+                <span id="suggestion-percent-val"
+                  style="font-weight:600;width:40px;text-align:right;font-size:12px;">0%</span>
+              </div>
+            </label>
+
+            <label>
+              Progress Notes (Visible to Board)
+              <textarea id="suggestion-notes" placeholder="Update the board on status..."></textarea>
+            </label>
+
+            <label>
+              Status
+              <select id="suggestion-status">
+                <option value="suggested">Suggested (Pending)</option>
+                <option value="active">Active (In Progress)</option>
+                <option value="completed">Completed</option>
+              </select>
+            </label>
+
+            <label>
+              Estimated Completion
+              <input type="date" id="suggestion-eta" />
+            </label>
+          </div>
+
+          <div class="modal-footer">
+            <button class="button-secondary" id="suggestion-modal-cancel">Cancel</button>
+            <div style="display:flex;gap:6px;align-items:center;">
+              <button class="button-primary" id="suggestion-save-btn">Update Idea</button>
             </div>
           </div>
         </div>
@@ -3763,6 +3840,17 @@
       // Joint Projects
       document.getElementById("add-project-btn").addEventListener("click", createNewProject);
 
+      // Suggestion Modal (Board Ideas)
+      // Suggestion Modal (Board Ideas)
+      document.getElementById("suggestion-modal-close")?.addEventListener("click", () => {
+        document.getElementById("suggestion-modal").classList.add("hidden");
+      });
+      document.getElementById("suggestion-modal-cancel")?.addEventListener("click", () => {
+        document.getElementById("suggestion-modal").classList.add("hidden");
+      });
+      document.getElementById("suggestion-save-btn")?.addEventListener("click", saveSuggestionFromModal);
+
+
       // Weekly Tasks (BETA)
       document.getElementById("add-weekly-task-btn").addEventListener("click", () => {
         const input = document.getElementById("new-weekly-task-input");
@@ -3786,6 +3874,80 @@
         await loadWeeklyTasks();
       });
 
+    }
+
+    // --- Suggestion Modal Logic ---
+
+    function editPromotedTask(task) {
+      if (!task) return;
+
+      const modal = document.getElementById("suggestion-modal");
+      document.getElementById("suggestion-modal-title").textContent = task.title;
+      document.getElementById("suggestion-id").value = task.id;
+      document.getElementById("suggestion-status").value = task.status;
+
+      // Parse metadata from notes if present
+      // Format: "Real notes... [PROGRESS: 50] [ETA: 2026-01-30]"
+      let notes = task.progress_notes || "";
+      let percent = 0;
+      let eta = "";
+
+      const progMatch = notes.match(/\[PROGRESS:\s*(\d+)\]/);
+      if (progMatch) {
+        percent = parseInt(progMatch[1], 10);
+        notes = notes.replace(progMatch[0], "").trim();
+      }
+
+      const etaMatch = notes.match(/\[ETA:\s*([^\]]+)\]/);
+      if (etaMatch) {
+        eta = etaMatch[1];
+        notes = notes.replace(etaMatch[0], "").trim();
+      }
+
+      // If we have real DB fields eventually, check them too
+      if (task.progress_percent) percent = task.progress_percent;
+      if (task.eta_date) eta = task.eta_date;
+
+      document.getElementById("suggestion-notes").value = notes;
+      document.getElementById("suggestion-percent").value = percent;
+      document.getElementById("suggestion-percent-val").textContent = percent + "%";
+      document.getElementById("suggestion-eta").value = eta;
+
+      modal.classList.remove("hidden");
+    }
+
+    async function saveSuggestionFromModal() {
+      const id = document.getElementById("suggestion-id").value;
+      const rawNotes = document.getElementById("suggestion-notes").value.trim();
+      const percent = document.getElementById("suggestion-percent").value;
+      const eta = document.getElementById("suggestion-eta").value;
+      const status = document.getElementById("suggestion-status").value;
+
+      let finalNotes = rawNotes;
+      // Append metadata tags
+      if (percent > 0) finalNotes += ` [PROGRESS: ${percent}]`;
+      if (eta) finalNotes += ` [ETA: ${eta}]`;
+
+      showActionLoader();
+      try {
+        // Send both the compound notes AND the direct fields (future proofing)
+        await apiSend(`/pillar-suggestions/${id}`, "PATCH", {
+          progress_notes: finalNotes,
+          progress_percent: parseInt(percent, 10), // Send just in case backend supports it
+          eta_date: eta, // Send just in case
+          status: status,
+          assigned_to_id: state.currentUser?.id // Auto-assign to me if editing
+        });
+
+        showToast("Board Idea updated");
+        document.getElementById("suggestion-modal").classList.add("hidden");
+        refreshAllData();
+      } catch (err) {
+        console.error(err);
+        showToast("Error updating idea", true);
+      } finally {
+        hideActionLoader();
+      }
     }
 
     // ===== DATA REFRESH =====

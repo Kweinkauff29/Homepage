@@ -38,19 +38,7 @@
             padding: 0;
         }
 
-        /* Header */
-        #board-portal-header {
-            background: rgba(255, 255, 255, 0.8);
-            backdrop-filter: blur(12px);
-            border-bottom: 1px solid var(--border);
-            position: sticky;
-            top: 0;
-            z-index: 50;
-            padding: 1rem 2rem;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
+
 
         .brand {
             font-size: 1.25rem;
@@ -88,8 +76,11 @@
             margin: 0 auto;
             display: grid;
             grid-template-columns: repeat(4, 1fr);
+            grid-template-rows: auto 1fr;
+            /* Fix for blank space */
             gap: 1.5rem;
-            height: calc(100vh - 80px);
+            height: 100vh;
+            box-sizing: border-box;
             /* Fill screen but allow scroll */
             overflow: hidden;
             /* Columns scroll independently */
@@ -219,7 +210,7 @@
             justify-content: space-between;
             align-items: center;
             border-top: 1px solid var(--border);
-            paddingTop: 0.75rem;
+            padding-top: 0.75rem;
             margin-top: 0.5rem;
         }
 
@@ -274,6 +265,74 @@
             color: #2563eb;
             text-decoration: line-through;
             opacity: 0.7;
+        }
+
+        /* Progress bar */
+        .progress-container {
+            margin: 12px 0;
+            background: #f1f5f9;
+            border-radius: 6px;
+            overflow: hidden;
+            height: 8px;
+        }
+
+        .progress-bar {
+            height: 100%;
+            border-radius: 6px;
+            transition: width 0.3s ease;
+        }
+
+        .progress-bar.elevate {
+            background: linear-gradient(90deg, var(--elevate), #fbbf24);
+        }
+
+        .progress-bar.engage {
+            background: linear-gradient(90deg, var(--engage), #60a5fa);
+        }
+
+        .progress-bar.evolve {
+            background: linear-gradient(90deg, var(--evolve), #34d399);
+        }
+
+        .progress-bar.excite {
+            background: linear-gradient(90deg, var(--excite), #f472b6);
+        }
+
+        .progress-label {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.75rem;
+            color: var(--text-soft);
+            margin-bottom: 4px;
+        }
+
+        .progress-percent {
+            font-weight: 700;
+            color: var(--text);
+        }
+
+        .assigned-staff {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            background: #e0f2fe;
+            color: #0284c7;
+            padding: 2px 8px;
+            border-radius: 12px;
+            font-size: 0.7rem;
+            font-weight: 600;
+            margin-left: 6px;
+        }
+
+        .eta-badge {
+            display: inline-block;
+            background: #fef3c7;
+            color: #b45309;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 0.65rem;
+            font-weight: 600;
+            margin-left: 6px;
         }
 
         /* Modals */
@@ -342,22 +401,36 @@
 
 <body>
 
-    <header id="board-portal-header">
-        <div class="brand"><i class="fa-solid fa-lightbulb"></i> BER <span>Board Ideas</span></div>
-        <div class="user-profile">
-            <span class="likes-remaining" id="likes-count">5 likes left</span>
-            <span id="user-name">Guest</span>
-            <button onclick="logout()"
-                style="font-size:0.8rem;background:none;border:none;text-decoration:underline;cursor:pointer;">Switch</button>
-        </div>
-    </header>
+
 
     <main>
         <div class="instructions"
-            style="grid-column: 1 / -1; background: #fff; padding: 1rem 1.5rem; border-radius: 12px; margin-bottom: 0.5rem; font-size: 0.9rem; color: var(--text-soft); border: 1px solid var(--border); box-shadow: 0 2px 5px rgba(0,0,0,0.02);">
-            <i class="fa-solid fa-circle-info" style="color:var(--accent); margin-right:8px;"></i>
-            <b>How it works:</b> Submit ideas to the pillars and vote for your favorites. You have <b>5 likes/month</b>
-            (renewing on the 1st). Top-voted ideas are promoted to staff for execution.
+            style="grid-column: 1 / -1; background: #fff; padding: 1rem 1.5rem; border-radius: 12px; margin-bottom: 0.5rem; font-size: 0.9rem; color: var(--text-soft); border: 1px solid var(--border); box-shadow: 0 2px 5px rgba(0,0,0,0.02); display: flex; flex-direction: column; gap: 8px;">
+            <div
+                style="display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid #f1f5f9; padding-bottom:8px;">
+                <div style="font-weight:600; color:var(--text); font-size:1rem;">
+                    <i class="fa-solid fa-lightbulb" style="color:var(--accent); margin-right:8px;"></i> Board Ideas
+                </div>
+                <div style="display:flex; align-items:center; gap:12px; font-size:0.85rem;">
+                    <span class="likes-remaining" id="likes-count"
+                        style="background:#fee2e2; color:#b91c1c; padding:2px 8px; border-radius:12px; font-weight:600;">5
+                        left</span>
+                    <span id="user-name" style="font-weight:600; color:var(--text);">Guest</span>
+                    <button onclick="logout()"
+                        style="background:none; border:none; text-decoration:underline; cursor:pointer; color:var(--text-soft);">Switch</button>
+                </div>
+            </div>
+            <div style="line-height:1.5;">
+                <p style="margin:0 0 4px 0;"><b>How it works:</b> Use this board to submit new ideas to the 4 key
+                    pillars or vote on existing ones. Ideas with the most support are promoted to the Board of Directors
+                    for review.</p>
+                <div style="font-size:0.8rem; color:var(--text-soft); opacity:0.9;">
+                    <i class="fa-regular fa-clock"></i> <b>Monthly Limit:</b> You get <b>5 votes</b> every month (resets
+                    on the 1st).
+                    <i>Note: The 'Left' count below tracks active votes. If you voted last month, you may have fresh
+                        votes available even if this counter is low.</i>
+                </div>
+            </div>
         </div>
 
         <!-- Pillars -->
@@ -570,7 +643,9 @@
             currentUser = user;
             localStorage.setItem("wrapsheet_user_id", user.id);
             document.getElementById("login-modal").classList.remove("show");
-            document.getElementById("user-name").textContent = currentUser.name;
+            if (document.getElementById("user-name")) {
+                document.getElementById("user-name").textContent = currentUser.name;
+            }
             loadSuggestions();
         }
 
@@ -605,6 +680,7 @@
                 // Get all active assignments
                 const res = await fetch(`${API_BASE}/pillar-suggestions?status=all&userId=${currentUser.id}`);
                 suggestions = await res.json();
+                console.log("Loaded suggestions:", suggestions); // Debug for finding vote dates
 
                 // Count my votes for this month
                 const now = new Date();
@@ -613,9 +689,15 @@
                 // I have to iterate? Or API toggle tells me limit reached.
                 // Let's assume 5 for UI. The API enforces it.
                 // We could count how many 'liked_by_me' are in the list, but that assumes I voted on tasks only in the list.
-                // Close enough for now.
+                // Close enough for now. 
+                // Note: This counts ACTIVE votes. It does not reset monthly because we don't have vote timestamp from API.
+                // We will display it as "Active Votes" or similar to avoid confusion about the monthly reset.
                 const myVotes = suggestions.filter(s => s.liked_by_me).length;
-                document.getElementById("likes-count").textContent = `${5 - myVotes} likes left`;
+                if (document.getElementById("likes-count")) {
+                    // Update text to be less specific about "monthly allowance" if it's counting active votes
+                    document.getElementById("likes-count").textContent = `${5 - myVotes} active votes`;
+                    document.getElementById("likes-count").title = "Votes currently active on items. You get 5 new votes each month.";
+                }
 
                 renderLists();
             } catch (e) {
@@ -719,9 +801,67 @@
                         statusBadge = `<span class="status-badge status ${displayClass}">${displayStatus}${displayDate}</span>`;
                     }
 
+                    // === Progress Bar Logic ===
+                    let progressHtml = "";
+                    // Check if we have a percent field, or parse from notes/title
+                    // Parse metadata from notes (primary source since no backend schema change)
+                    let notes = item.progress_notes || "";
+                    let parsedPercent = 0;
+                    let parsedEta = "";
+
+                    const progMatch = notes.match(/\[PROGRESS:\s*(\d+)\]/);
+                    if (progMatch) {
+                        parsedPercent = parseInt(progMatch[1], 10);
+                        notes = notes.replace(progMatch[0], "").trim();
+                    } else if (item.progress_percent) {
+                        parsedPercent = item.progress_percent;
+                    }
+
+                    const showProgress = (displayStatus === "Active" || parsedPercent > 0) && displayStatus !== "Completed";
+
+                    if (showProgress) {
+                        const pct = parsedPercent || 0;
+                        progressHtml = `
+                            <div class="progress-container" title="${pct}% Complete">
+                                <div class="progress-bar ${pillar}" style="width: ${pct}%"></div>
+                            </div>
+                            <div class="progress-label">
+                                <span>Progress</span>
+                                <span class="progress-percent">${pct}%</span>
+                            </div>
+                        `;
+                    }
+
+                    // === Metadata (Assigned To / ETA) ===
+                    let metaBadges = "";
+
+                    // Assigned Staff
+                    if (item.assigned_to_name) {
+                        metaBadges += `<span class="assigned-staff"><i class="fa-solid fa-user-check"></i> ${item.assigned_to_name}</span>`;
+                    }
+
+                    // ETA
+                    const etaMatch = notes.match(/\[ETA:\s*([^\]]+)\]/);
+                    if (etaMatch) {
+                        parsedEta = etaMatch[1];
+                        notes = notes.replace(etaMatch[0], "").trim();
+                    } else if (item.eta_date) {
+                        parsedEta = item.eta_date;
+                    }
+
+                    if (parsedEta) {
+                        // Try to format if it looks like a date
+                        let etaDisplay = parsedEta;
+                        const d = new Date(parsedEta);
+                        if (!isNaN(d.getTime())) {
+                            etaDisplay = d.toLocaleDateString(undefined, { month: 'numeric', day: 'numeric' });
+                        }
+                        metaBadges += `<span class="eta-badge"><i class="fa-regular fa-clock"></i> ETA ${etaDisplay}</span>`;
+                    }
+
                     // === Staff Notes ===
                     let staffNotesHtml = "";
-                    if (item.progress_notes) {
+                    if (notes) { // Use cleaned notes
                         staffNotesHtml = `
                             <div style="background:#f1f5f9; padding:10px; border-radius:8px; margin-bottom:12px; font-size:0.85rem; border-left:3px solid var(--accent);">
                                 <div style="font-weight:700; font-size:0.7rem; color:var(--text-soft); margin-bottom:4px; letter-spacing:0.05em;">STAFF UPDATE</div>
@@ -739,10 +879,14 @@
                     card.innerHTML = `
             <div class="idea-meta">
               <span>${item.category}</span>
-              ${statusBadge}
+              <div style="display:flex;align-items:center;">
+                  ${statusBadge}
+                  ${metaBadges}
+              </div>
             </div>
             <div class="idea-title">${item.title}</div>
             <div class="idea-desc">${item.description}</div>
+            ${progressHtml}
             ${staffNotesHtml}
             <div class="idea-controls">
                <span style="font-size:0.75rem;color:#94a3b8;">by ${item.created_by_name || 'Unknown'}</span>
