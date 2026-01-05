@@ -2017,6 +2017,7 @@
           Repeat
           <select id="task-repeat-type">
             <option value="none">Do not repeat</option>
+            <option value="daily">Daily (Mon–Fri)</option>
             <option value="weekly">Weekly (same weekday)</option>
             <option value="monthly_date">Monthly – same date (1st, 14th…)</option>
             <option value="monthly_weekday">Monthly – same weekday pattern (1st Monday)</option>
@@ -2892,7 +2893,19 @@
       const results = [];
       const maxOccurrences = 120; // safety cap so you don't accidentally spam the year
 
-      if (repeatType === "weekly") {
+      if (repeatType === "daily") {
+        // Daily (Mon-Fri): create task for each weekday between base and end
+        let current = new Date(base);
+        while (true) {
+          current = addDays(current, 1);
+          if (current > seriesEnd || results.length >= maxOccurrences) break;
+          const dayOfWeek = current.getDay();
+          // Only include weekdays (1=Mon, 2=Tue, 3=Wed, 4=Thu, 5=Fri)
+          if (dayOfWeek >= 1 && dayOfWeek <= 5 && current >= seriesStart) {
+            results.push(formatDateKeyFromDate(current));
+          }
+        }
+      } else if (repeatType === "weekly") {
         let current = new Date(base);
         while (true) {
           current = addDays(current, 7);
