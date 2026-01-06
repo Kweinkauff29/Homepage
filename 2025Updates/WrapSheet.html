@@ -2019,6 +2019,13 @@
       animation: slideInRight 0.3s ease-out;
     }
 
+    /* Overdue reminder style */
+    .reminder-banner.overdue {
+      background: linear-gradient(135deg, #fee2e2, #fecaca);
+      border: 2px solid #ef4444;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2), 0 4px 8px rgba(239, 68, 68, 0.3);
+    }
+
     .reminder-banner.hidden {
       display: none;
     }
@@ -6459,15 +6466,16 @@
       const snoozedKey = `snoozed-reminders-${todayStr}`;
       const snoozed = JSON.parse(sessionStorage.getItem(snoozedKey) || "[]");
 
-      // Collect all tasks within 30 minutes that haven't been dismissed
+      // Collect all tasks within 30 minutes OR overdue that haven't been dismissed
       const upcomingTasks = [];
       for (const task of myTodayTasks) {
         const [h, m] = task.task_time.split(":").map(Number);
         const taskMinutes = h * 60 + m;
         const minutesUntil = taskMinutes - currentMinutes;
 
-        // Show if within 30 minutes, not yet passed, not dismissed, and not snoozed
-        if (minutesUntil > 0 && minutesUntil <= 30 && !dismissed.includes(task.id) && !snoozed.includes(task.id)) {
+        // Show if within 30 minutes upcoming, OR overdue (negative), not dismissed, and not snoozed
+        // Cap overdue display at 120 minutes (2 hours) to avoid showing ancient reminders
+        if (minutesUntil <= 30 && minutesUntil >= -120 && !dismissed.includes(task.id) && !snoozed.includes(task.id)) {
           upcomingTasks.push({ task, minutesUntil });
         }
       }
@@ -6496,13 +6504,31 @@
       upcomingTasks.forEach(({ task, minutesUntil }) => {
         const banner = document.createElement("div");
         banner.className = "reminder-banner";
+        if (minutesUntil <= 0) {
+          banner.classList.add("overdue"); // Add overdue styling
+        }
         banner.dataset.taskId = task.id;
+
+        // Determine the time message
+        let timeMessage;
+        let icon = "🔔";
+        if (minutesUntil > 0) {
+          timeMessage = `starts in ${minutesUntil} minute${minutesUntil !== 1 ? "s" : ""}`;
+        } else if (minutesUntil === 0) {
+          timeMessage = `starting NOW!`;
+          icon = "⏰";
+        } else {
+          const lateMinutes = Math.abs(minutesUntil);
+          timeMessage = `${lateMinutes} minute${lateMinutes !== 1 ? "s" : ""} LATE!`;
+          icon = "⚠️";
+        }
+
         banner.innerHTML = `
           <div class="reminder-content">
-            <span class="reminder-icon">🔔</span>
+            <span class="reminder-icon">${icon}</span>
             <div class="reminder-text">
               <div class="reminder-title">${escapeHtml(task.title)}</div>
-              <div class="reminder-time">starts in ${minutesUntil} minute${minutesUntil !== 1 ? "s" : ""}</div>
+              <div class="reminder-time">${timeMessage}</div>
             </div>
             <div class="reminder-buttons">
               <button class="reminder-snooze" data-task-id="${task.id}">Snooze</button>
