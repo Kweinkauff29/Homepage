@@ -323,6 +323,7 @@ async function createDailyTask(request, env) {
         title,
         notes,
         task_date,
+        task_time, // optional "HH:MM" format for scheduled time reminders
         created_by_id,
         assigned_to_id,
         assigned_by_id,
@@ -391,12 +392,13 @@ async function createDailyTask(request, env) {
         title,          // 1
         notes,          // 2
         task_date,      // 3
-        created_by_id,  // 4
-        assigned_to_id, // 5
-        assigned_by_id, // 6
-        now,            // 7 assigned_at
-        now,            // 8 created_at
-        now,            // 9 updated_at
+        task_time || null, // 4 - optional scheduled time
+        created_by_id,  // 5
+        assigned_to_id, // 6
+        assigned_by_id, // 7
+        now,            // 8 assigned_at
+        now,            // 9 created_at
+        now,            // 10 updated_at
     ];
 
     // HARD GUARD: if anything is still undefined, we bail before D1
@@ -410,11 +412,11 @@ async function createDailyTask(request, env) {
 
     const stmt = env.WRAP_DB.prepare(`
     INSERT INTO daily_tasks
-      (title, notes, task_date,
+      (title, notes, task_date, task_time,
        created_by_id, assigned_to_id, assigned_by_id,
        assigned_at, status, completion_notified,
        created_at, updated_at)
-    VALUES (?, ?, ?, ?, ?, ?, ?, 'pending', 0, ?, ?)
+    VALUES (?, ?, ?, ?, ?, ?, ?, ?, 'pending', 0, ?, ?)
   `);
 
     const info = await stmt.bind(...values).run();
@@ -455,6 +457,7 @@ async function updateDailyTask(request, env, id, ctx) {
     const title = body.title ?? existing.title;
     const notes = body.notes ?? existing.notes;
     const task_date = body.task_date ?? existing.task_date;
+    const task_time = body.task_time !== undefined ? body.task_time : existing.task_time; // Allow null to clear time
 
     let assigned_to_id = body.assigned_to_id ?? existing.assigned_to_id;
     assigned_to_id = Number(assigned_to_id);
@@ -477,7 +480,7 @@ async function updateDailyTask(request, env, id, ctx) {
     await env.WRAP_DB
         .prepare(`
       UPDATE daily_tasks
-      SET title = ?, notes = ?, task_date = ?, assigned_to_id = ?, status = ?,
+      SET title = ?, notes = ?, task_date = ?, task_time = ?, assigned_to_id = ?, status = ?,
           completed_at = ?, completion_notified = ?, updated_at = ?
       WHERE id = ?
     `)
@@ -485,6 +488,7 @@ async function updateDailyTask(request, env, id, ctx) {
             title,
             notes,
             task_date,
+            task_time,
             assigned_to_id,
             status,
             completed_at,

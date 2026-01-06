@@ -1997,6 +1997,96 @@
         transform: translateY(-10px);
       }
     }
+
+    /* Task Reminder Banner */
+    .reminder-banner {
+      position: fixed;
+      top: 80px;
+      right: 16px;
+      z-index: 9999;
+      max-width: 360px;
+      background: linear-gradient(135deg, #fef3c7, #fde68a);
+      border: 2px solid #f59e0b;
+      border-radius: 12px;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2), 0 4px 8px rgba(245, 158, 11, 0.3);
+      animation: slideInRight 0.3s ease-out;
+    }
+
+    .reminder-banner.hidden {
+      display: none;
+    }
+
+    @keyframes slideInRight {
+      from {
+        transform: translateX(100%);
+        opacity: 0;
+      }
+
+      to {
+        transform: translateX(0);
+        opacity: 1;
+      }
+    }
+
+    .reminder-content {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 12px 16px;
+    }
+
+    .reminder-icon {
+      font-size: 28px;
+      animation: shake 0.5s ease-in-out infinite;
+    }
+
+    @keyframes shake {
+
+      0%,
+      100% {
+        transform: rotate(0deg);
+      }
+
+      25% {
+        transform: rotate(-10deg);
+      }
+
+      75% {
+        transform: rotate(10deg);
+      }
+    }
+
+    .reminder-text {
+      flex: 1;
+    }
+
+    .reminder-title {
+      font-weight: 700;
+      font-size: 14px;
+      color: #92400e;
+      margin-bottom: 2px;
+    }
+
+    .reminder-time {
+      font-size: 12px;
+      color: #b45309;
+    }
+
+    .reminder-dismiss {
+      background: #f59e0b;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      padding: 8px 14px;
+      font-size: 12px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+
+    .reminder-dismiss:hover {
+      background: #d97706;
+    }
   </style>
 </head>
 
@@ -2036,6 +2126,12 @@
         <label>
           Notes
           <textarea id="task-notes-input" placeholder="Optional details…"></textarea>
+        </label>
+
+        <label>
+          Scheduled Time <span style="font-weight:normal;color:#9ca3af;">(optional)</span>
+          <input id="task-time-input" type="time" style="width:150px;" />
+          <div class="field-hint">Set a time to get a reminder 30 minutes before.</div>
         </label>
 
         <!-- Repeat controls – simplified -->
@@ -2101,6 +2197,17 @@
     </div>
   </div>
 
+  <!-- Task Reminder Banner -->
+  <div id="reminder-banner" class="reminder-banner hidden">
+    <div class="reminder-content">
+      <span class="reminder-icon">🔔</span>
+      <div class="reminder-text">
+        <div class="reminder-title" id="reminder-title">Task Reminder</div>
+        <div class="reminder-time" id="reminder-time">starts in 30 minutes</div>
+      </div>
+      <button class="reminder-dismiss" id="reminder-dismiss">Dismiss</button>
+    </div>
+  </div>
 
   <div class="toast" id="toast"></div>
 
@@ -4637,6 +4744,7 @@
       document.getElementById("task-title-input").value = "";
       document.getElementById("task-notes-input").value = "";
       document.getElementById("task-status-input").value = "pending";
+      document.getElementById("task-time-input").value = ""; // clear scheduled time
       document.getElementById("task-modal-title").textContent = "New Task";
       document.getElementById("task-modal-date").textContent = dateStr;
       document.getElementById("task-delete-btn").style.display = "none";
@@ -4678,6 +4786,7 @@
       document.getElementById("task-title-input").value = task.title || "";
       document.getElementById("task-notes-input").value = task.notes || "";
       document.getElementById("task-status-input").value = task.status || "pending";
+      document.getElementById("task-time-input").value = task.task_time || ""; // scheduled time
       document.getElementById("task-modal-title").textContent = "Edit Task";
       document.getElementById("task-modal-date").textContent = task.task_date || "";
       const taskAssignedTo = document.getElementById("task-assigned-to");
@@ -4729,6 +4838,7 @@
       const title = document.getElementById("task-title-input").value.trim();
       const notes = document.getElementById("task-notes-input").value.trim();
       const status = document.getElementById("task-status-input").value;
+      const taskTime = document.getElementById("task-time-input").value || null; // "HH:MM" or null
       const assignedToId = parseInt(document.getElementById("task-assigned-to").value, 10);
       const dateStr = document.getElementById("task-modal").dataset.date;
 
@@ -4771,6 +4881,7 @@
         title,
         notes,
         status,
+        task_time: taskTime, // scheduled time for reminders
         assigned_to_id: assignedToId,
         assignee_ids: assigneeIds
       };
@@ -6288,7 +6399,153 @@
     document.addEventListener("DOMContentLoaded", () => {
       initDraggableSections();
       initInstructionsHide();
+      initTaskReminders(); // Start reminder check loop
     });
+
+    // ===== TASK REMINDERS SYSTEM =====
+    let reminderChimeInterval = null;
+    let audioContext = null;
+
+    function initTaskReminders() {
+      // Dismiss button handler
+      const dismissBtn = document.getElementById("reminder-dismiss");
+      if (dismissBtn) {
+        dismissBtn.addEventListener("click", dismissReminder);
+      }
+
+      // Check for reminders every 60 seconds
+      checkUpcomingReminders();
+      setInterval(checkUpcomingReminders, 60000);
+    }
+
+    function checkUpcomingReminders() {
+      if (!state.currentUser) return;
+
+      // Check if chimes are enabled (defaults to true if not set)
+      const chimesEnabled = localStorage.getItem("wrapsheet-reminder-chimes") !== "false";
+
+      const now = new Date();
+      const todayStr = now.toISOString().split("T")[0];
+      const currentMinutes = now.getHours() * 60 + now.getMinutes();
+
+      // Find tasks for current user with task_time set today
+      const myTodayTasks = state.dailyTasks.filter(t =>
+        t.task_date === todayStr &&
+        t.task_time &&
+        t.status !== "done" &&
+        t.status !== "could_not_complete" &&
+        (t.assigned_to_id === state.currentUser.id ||
+          (t.assignees && t.assignees.some(a => a.id === state.currentUser.id)))
+      );
+
+      // Check dismissed reminders in sessionStorage
+      const dismissed = JSON.parse(sessionStorage.getItem("dismissed-reminders") || "[]");
+
+      // Find tasks within 30 minutes that haven't been dismissed
+      for (const task of myTodayTasks) {
+        const [h, m] = task.task_time.split(":").map(Number);
+        const taskMinutes = h * 60 + m;
+        const minutesUntil = taskMinutes - currentMinutes;
+
+        // Show banner if within 30 minutes and not yet passed
+        if (minutesUntil > 0 && minutesUntil <= 30 && !dismissed.includes(task.id)) {
+          showReminderBanner(task, minutesUntil, chimesEnabled);
+          return; // Only show one reminder at a time
+        }
+      }
+
+      // If no reminders to show, hide banner
+      hideReminderBanner();
+    }
+
+    function showReminderBanner(task, minutesUntil, chimesEnabled) {
+      const banner = document.getElementById("reminder-banner");
+      const titleEl = document.getElementById("reminder-title");
+      const timeEl = document.getElementById("reminder-time");
+
+      if (!banner) return;
+
+      // Store current task id for dismiss
+      banner.dataset.taskId = task.id;
+
+      titleEl.textContent = task.title;
+      timeEl.textContent = `starts in ${minutesUntil} minute${minutesUntil !== 1 ? "s" : ""}`;
+
+      // Show banner
+      banner.classList.remove("hidden");
+
+      // Play chime if enabled and not already playing
+      if (chimesEnabled && !reminderChimeInterval) {
+        playReminderChime();
+        // Repeat chime every 5 minutes
+        reminderChimeInterval = setInterval(playReminderChime, 5 * 60 * 1000);
+      }
+    }
+
+    function hideReminderBanner() {
+      const banner = document.getElementById("reminder-banner");
+      if (banner) {
+        banner.classList.add("hidden");
+      }
+      // Stop chime interval
+      if (reminderChimeInterval) {
+        clearInterval(reminderChimeInterval);
+        reminderChimeInterval = null;
+      }
+    }
+
+    function dismissReminder() {
+      const banner = document.getElementById("reminder-banner");
+      if (!banner) return;
+
+      const taskId = banner.dataset.taskId;
+      if (taskId) {
+        // Add to dismissed list in sessionStorage
+        const dismissed = JSON.parse(sessionStorage.getItem("dismissed-reminders") || "[]");
+        dismissed.push(parseInt(taskId, 10));
+        sessionStorage.setItem("dismissed-reminders", JSON.stringify(dismissed));
+      }
+
+      hideReminderBanner();
+    }
+
+    function playReminderChime() {
+      try {
+        // Create audio context if not exists
+        if (!audioContext) {
+          audioContext = new (window.AudioContext || window.webkitAudioContext)();
+        }
+
+        // Simple pleasant chime using oscillators
+        const now = audioContext.currentTime;
+
+        // Play two notes for a pleasant notification sound
+        [523.25, 659.25].forEach((freq, i) => {
+          const osc = audioContext.createOscillator();
+          const gain = audioContext.createGain();
+
+          osc.type = "sine";
+          osc.frequency.value = freq;
+
+          gain.gain.setValueAtTime(0, now + i * 0.15);
+          gain.gain.linearRampToValueAtTime(0.3, now + i * 0.15 + 0.05);
+          gain.gain.exponentialRampToValueAtTime(0.01, now + i * 0.15 + 0.5);
+
+          osc.connect(gain);
+          gain.connect(audioContext.destination);
+
+          osc.start(now + i * 0.15);
+          osc.stop(now + i * 0.15 + 0.5);
+        });
+      } catch (e) {
+        console.warn("Could not play reminder chime:", e);
+      }
+    }
+
+    // Toggle reminder chimes (for user preference)
+    function toggleReminderChimes(enabled) {
+      localStorage.setItem("wrapsheet-reminder-chimes", enabled ? "true" : "false");
+    }
   </script>
 </body>
 
