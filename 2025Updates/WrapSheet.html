@@ -2072,12 +2072,33 @@
       color: #b45309;
     }
 
+    .reminder-buttons {
+      display: flex;
+      gap: 6px;
+    }
+
+    .reminder-snooze {
+      background: rgba(146, 64, 14, 0.2);
+      color: #92400e;
+      border: 1px solid #92400e;
+      border-radius: 6px;
+      padding: 8px 12px;
+      font-size: 12px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+
+    .reminder-snooze:hover {
+      background: rgba(146, 64, 14, 0.3);
+    }
+
     .reminder-dismiss {
       background: #f59e0b;
       color: white;
       border: none;
       border-radius: 6px;
-      padding: 8px 14px;
+      padding: 8px 12px;
       font-size: 12px;
       font-weight: 600;
       cursor: pointer;
@@ -2205,7 +2226,10 @@
         <div class="reminder-title" id="reminder-title">Task Reminder</div>
         <div class="reminder-time" id="reminder-time">starts in 30 minutes</div>
       </div>
-      <button class="reminder-dismiss" id="reminder-dismiss">Dismiss</button>
+      <div class="reminder-buttons">
+        <button class="reminder-snooze" id="reminder-snooze">Snooze</button>
+        <button class="reminder-dismiss" id="reminder-dismiss">Dismiss</button>
+      </div>
     </div>
   </div>
 
@@ -6413,6 +6437,12 @@
         dismissBtn.addEventListener("click", dismissReminder);
       }
 
+      // Snooze button - just hides temporarily (will reappear on next check cycle)
+      const snoozeBtn = document.getElementById("reminder-snooze");
+      if (snoozeBtn) {
+        snoozeBtn.addEventListener("click", snoozeReminder);
+      }
+
       // Check for reminders every 60 seconds
       checkUpcomingReminders();
       setInterval(checkUpcomingReminders, 60000);
@@ -6506,6 +6536,12 @@
         sessionStorage.setItem("dismissed-reminders", JSON.stringify(dismissed));
       }
 
+      hideReminderBanner();
+    }
+
+    function snoozeReminder() {
+      // Just hide the banner temporarily - it will reappear on the next check cycle
+      // This keeps reminding until the task time or they click Dismiss
       hideReminderBanner();
     }
 
