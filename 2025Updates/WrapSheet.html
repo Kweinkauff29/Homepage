@@ -1998,13 +1998,20 @@
       }
     }
 
-    /* Task Reminder Banner */
-    .reminder-banner {
+    /* Task Reminder Container - fixed position, stacks children vertically */
+    .reminder-container {
       position: fixed;
       top: 80px;
       right: 16px;
       z-index: 9999;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
       max-width: 360px;
+    }
+
+    /* Individual reminder banner */
+    .reminder-banner {
       background: linear-gradient(135deg, #fef3c7, #fde68a);
       border: 2px solid #f59e0b;
       border-radius: 12px;
@@ -2218,20 +2225,8 @@
     </div>
   </div>
 
-  <!-- Task Reminder Banner -->
-  <div id="reminder-banner" class="reminder-banner hidden">
-    <div class="reminder-content">
-      <span class="reminder-icon">🔔</span>
-      <div class="reminder-text">
-        <div class="reminder-title" id="reminder-title">Task Reminder</div>
-        <div class="reminder-time" id="reminder-time">starts in 30 minutes</div>
-      </div>
-      <div class="reminder-buttons">
-        <button class="reminder-snooze" id="reminder-snooze">Snooze</button>
-        <button class="reminder-dismiss" id="reminder-dismiss">Dismiss</button>
-      </div>
-    </div>
-  </div>
+  <!-- Task Reminder Container (holds multiple stacked reminders) -->
+  <div id="reminder-container" class="reminder-container"></div>
 
   <div class="toast" id="toast"></div>
 
@@ -6431,18 +6426,7 @@
     let audioContext = null;
 
     function initTaskReminders() {
-      // Dismiss button handler
-      const dismissBtn = document.getElementById("reminder-dismiss");
-      if (dismissBtn) {
-        dismissBtn.addEventListener("click", dismissReminder);
-      }
-
-      // Snooze button - just hides temporarily (will reappear on next check cycle)
-      const snoozeBtn = document.getElementById("reminder-snooze");
-      if (snoozeBtn) {
-        snoozeBtn.addEventListener("click", snoozeReminder);
-      }
-
+      // Event listeners are attached dynamically in renderReminders()
       // Check for reminders every 60 seconds
       checkUpcomingReminders();
       setInterval(checkUpcomingReminders, 60000);
@@ -6471,39 +6455,71 @@
       // Check dismissed reminders in localStorage (keyed by date so they reset each day)
       const dismissedKey = `dismissed-reminders-${todayStr}`;
       const dismissed = JSON.parse(localStorage.getItem(dismissedKey) || "[]");
+      // Snoozed reminders (temporary hide until next cycle)
+      const snoozedKey = `snoozed-reminders-${todayStr}`;
+      const snoozed = JSON.parse(sessionStorage.getItem(snoozedKey) || "[]");
 
-      // Find tasks within 30 minutes that haven't been dismissed
+      // Collect all tasks within 30 minutes that haven't been dismissed
+      const upcomingTasks = [];
       for (const task of myTodayTasks) {
         const [h, m] = task.task_time.split(":").map(Number);
         const taskMinutes = h * 60 + m;
         const minutesUntil = taskMinutes - currentMinutes;
 
-        // Show banner if within 30 minutes and not yet passed
-        if (minutesUntil > 0 && minutesUntil <= 30 && !dismissed.includes(task.id)) {
-          showReminderBanner(task, minutesUntil, chimesEnabled);
-          return; // Only show one reminder at a time
+        // Show if within 30 minutes, not yet passed, not dismissed, and not snoozed
+        if (minutesUntil > 0 && minutesUntil <= 30 && !dismissed.includes(task.id) && !snoozed.includes(task.id)) {
+          upcomingTasks.push({ task, minutesUntil });
         }
       }
 
-      // If no reminders to show, hide banner
-      hideReminderBanner();
+      // Render all reminders
+      renderReminders(upcomingTasks, chimesEnabled);
     }
 
-    function showReminderBanner(task, minutesUntil, chimesEnabled) {
-      const banner = document.getElementById("reminder-banner");
-      const titleEl = document.getElementById("reminder-title");
-      const timeEl = document.getElementById("reminder-time");
+    function renderReminders(upcomingTasks, chimesEnabled) {
+      const container = document.getElementById("reminder-container");
+      if (!container) return;
 
-      if (!banner) return;
+      // Clear existing reminders
+      container.innerHTML = "";
 
-      // Store current task id for dismiss
-      banner.dataset.taskId = task.id;
+      if (upcomingTasks.length === 0) {
+        // Stop chime if no reminders
+        if (reminderChimeInterval) {
+          clearInterval(reminderChimeInterval);
+          reminderChimeInterval = null;
+        }
+        return;
+      }
 
-      titleEl.textContent = task.title;
-      timeEl.textContent = `starts in ${minutesUntil} minute${minutesUntil !== 1 ? "s" : ""}`;
+      // Create a banner for each upcoming task
+      upcomingTasks.forEach(({ task, minutesUntil }) => {
+        const banner = document.createElement("div");
+        banner.className = "reminder-banner";
+        banner.dataset.taskId = task.id;
+        banner.innerHTML = `
+          <div class="reminder-content">
+            <span class="reminder-icon">🔔</span>
+            <div class="reminder-text">
+              <div class="reminder-title">${escapeHtml(task.title)}</div>
+              <div class="reminder-time">starts in ${minutesUntil} minute${minutesUntil !== 1 ? "s" : ""}</div>
+            </div>
+            <div class="reminder-buttons">
+              <button class="reminder-snooze" data-task-id="${task.id}">Snooze</button>
+              <button class="reminder-dismiss" data-task-id="${task.id}">Dismiss</button>
+            </div>
+          </div>
+        `;
+        container.appendChild(banner);
+      });
 
-      // Show banner
-      banner.classList.remove("hidden");
+      // Attach event listeners
+      container.querySelectorAll(".reminder-snooze").forEach(btn => {
+        btn.addEventListener("click", (e) => snoozeReminder(e.target.dataset.taskId));
+      });
+      container.querySelectorAll(".reminder-dismiss").forEach(btn => {
+        btn.addEventListener("click", (e) => dismissReminder(e.target.dataset.taskId));
+      });
 
       // Play chime if enabled and not already playing
       if (chimesEnabled && !reminderChimeInterval) {
@@ -6513,39 +6529,46 @@
       }
     }
 
-    function hideReminderBanner() {
-      const banner = document.getElementById("reminder-banner");
-      if (banner) {
-        banner.classList.add("hidden");
-      }
-      // Stop chime interval
-      if (reminderChimeInterval) {
-        clearInterval(reminderChimeInterval);
-        reminderChimeInterval = null;
-      }
+    // Helper to escape HTML
+    function escapeHtml(str) {
+      const div = document.createElement("div");
+      div.textContent = str;
+      return div.innerHTML;
     }
 
-    function dismissReminder() {
-      const banner = document.getElementById("reminder-banner");
-      if (!banner) return;
+    function dismissReminder(taskId) {
+      if (!taskId) return;
 
-      const taskId = banner.dataset.taskId;
-      if (taskId) {
-        // Add to dismissed list in localStorage (keyed by today's date)
-        const todayStr = new Date().toISOString().split("T")[0];
-        const dismissedKey = `dismissed-reminders-${todayStr}`;
-        const dismissed = JSON.parse(localStorage.getItem(dismissedKey) || "[]");
-        dismissed.push(parseInt(taskId, 10));
-        localStorage.setItem(dismissedKey, JSON.stringify(dismissed));
-      }
+      // Add to dismissed list in localStorage (keyed by today's date)
+      const todayStr = new Date().toISOString().split("T")[0];
+      const dismissedKey = `dismissed-reminders-${todayStr}`;
+      const dismissed = JSON.parse(localStorage.getItem(dismissedKey) || "[]");
+      dismissed.push(parseInt(taskId, 10));
+      localStorage.setItem(dismissedKey, JSON.stringify(dismissed));
 
-      hideReminderBanner();
+      // Re-render to remove this banner
+      checkUpcomingReminders();
     }
 
-    function snoozeReminder() {
-      // Just hide the banner temporarily - it will reappear on the next check cycle
-      // This keeps reminding until the task time or they click Dismiss
-      hideReminderBanner();
+    function snoozeReminder(taskId) {
+      if (!taskId) return;
+
+      // Add to snoozed list in sessionStorage (temporary until next check cycle)
+      const todayStr = new Date().toISOString().split("T")[0];
+      const snoozedKey = `snoozed-reminders-${todayStr}`;
+      const snoozed = JSON.parse(sessionStorage.getItem(snoozedKey) || "[]");
+      snoozed.push(parseInt(taskId, 10));
+      sessionStorage.setItem(snoozedKey, JSON.stringify(snoozed));
+
+      // Clear snooze after 60 seconds (next check cycle)
+      setTimeout(() => {
+        const current = JSON.parse(sessionStorage.getItem(snoozedKey) || "[]");
+        const filtered = current.filter(id => id !== parseInt(taskId, 10));
+        sessionStorage.setItem(snoozedKey, JSON.stringify(filtered));
+      }, 60000);
+
+      // Re-render to remove this banner temporarily
+      checkUpcomingReminders();
     }
 
     function playReminderChime() {
