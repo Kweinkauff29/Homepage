@@ -6468,8 +6468,9 @@
           (t.assignees && t.assignees.some(a => a.id === state.currentUser.id)))
       );
 
-      // Check dismissed reminders in sessionStorage
-      const dismissed = JSON.parse(sessionStorage.getItem("dismissed-reminders") || "[]");
+      // Check dismissed reminders in localStorage (keyed by date so they reset each day)
+      const dismissedKey = `dismissed-reminders-${todayStr}`;
+      const dismissed = JSON.parse(localStorage.getItem(dismissedKey) || "[]");
 
       // Find tasks within 30 minutes that haven't been dismissed
       for (const task of myTodayTasks) {
@@ -6530,10 +6531,12 @@
 
       const taskId = banner.dataset.taskId;
       if (taskId) {
-        // Add to dismissed list in sessionStorage
-        const dismissed = JSON.parse(sessionStorage.getItem("dismissed-reminders") || "[]");
+        // Add to dismissed list in localStorage (keyed by today's date)
+        const todayStr = new Date().toISOString().split("T")[0];
+        const dismissedKey = `dismissed-reminders-${todayStr}`;
+        const dismissed = JSON.parse(localStorage.getItem(dismissedKey) || "[]");
         dismissed.push(parseInt(taskId, 10));
-        sessionStorage.setItem("dismissed-reminders", JSON.stringify(dismissed));
+        localStorage.setItem(dismissedKey, JSON.stringify(dismissed));
       }
 
       hideReminderBanner();
