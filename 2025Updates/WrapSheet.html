@@ -6547,11 +6547,31 @@
         btn.addEventListener("click", (e) => dismissReminder(e.target.dataset.taskId));
       });
 
-      // Play chime if enabled and not already playing
-      if (chimesEnabled && !reminderChimeInterval) {
-        playReminderChime();
-        // Repeat chime every 5 minutes
-        reminderChimeInterval = setInterval(playReminderChime, 5 * 60 * 1000);
+      // Determine chime interval based on most urgent task
+      // Under 2 min: every 10 seconds | Under 5 min: every 30 seconds | Otherwise: every 5 minutes
+      const mostUrgent = Math.min(...upcomingTasks.map(t => t.minutesUntil));
+      let chimeIntervalMs;
+      if (mostUrgent <= 2) {
+        chimeIntervalMs = 10 * 1000; // 10 seconds
+      } else if (mostUrgent <= 5) {
+        chimeIntervalMs = 30 * 1000; // 30 seconds
+      } else {
+        chimeIntervalMs = 5 * 60 * 1000; // 5 minutes
+      }
+
+      // Play chime if enabled, and restart interval if urgency level changed
+      if (chimesEnabled) {
+        // Clear old interval if urgency changed
+        if (reminderChimeInterval && window.currentChimeIntervalMs !== chimeIntervalMs) {
+          clearInterval(reminderChimeInterval);
+          reminderChimeInterval = null;
+        }
+
+        if (!reminderChimeInterval) {
+          playReminderChime();
+          reminderChimeInterval = setInterval(playReminderChime, chimeIntervalMs);
+          window.currentChimeIntervalMs = chimeIntervalMs;
+        }
       }
     }
 
