@@ -168,6 +168,37 @@ async function replaceTaskAssignees(env, taskId, assigneeIds, primaryAssignedToI
     }
 }
 
+async function replaceProjectStepAssignees(env, stepId, assigneeIds, primaryAssignedToId) {
+    let cleanIds = [];
+    if (Array.isArray(assigneeIds)) {
+        cleanIds = assigneeIds
+            .map((v) => Number(v))
+            .filter((v) => Number.isInteger(v) && v > 0);
+    }
+
+    // Always include primary
+    const primary = Number(primaryAssignedToId);
+    if (Number.isInteger(primary) && primary > 0 && !cleanIds.includes(primary)) {
+        cleanIds.push(primary);
+    }
+
+    // Clear existing
+    await env.WRAP_DB
+        .prepare(`DELETE FROM project_step_assignees WHERE step_id = ?`)
+        .bind(stepId)
+        .run();
+
+    if (!cleanIds.length) return;
+
+    const stmt = env.WRAP_DB.prepare(
+        `INSERT INTO project_step_assignees (step_id, user_id) VALUES (?, ?)`
+    );
+
+    for (const uid of cleanIds) {
+        await stmt.bind(stepId, uid).run();
+    }
+}
+
 /* ---------- DAILY TASKS ---------- */
 
 async function listDailyTasks(env, searchParams) {
@@ -1284,23 +1315,83 @@ async function listProjects(env) {
         `)
         .all();
 
-    // Calculate progress for each project
-    for (const project of results) {
-        const stepsRes = await env.WRAP_DB
+    // Eagerly load steps for all projects
+    if (results.length > 0) {
+        const projectIds = results.map(p => p.id);
+        const placeholders = projectIds.map(() => "?").join(", ");
+
+        // Fetch ALL steps for these projects
+        const allStepsRes = await env.WRAP_DB
             .prepare(`
-                SELECT COUNT(*) as total, 
-                       SUM(CASE WHEN status = 'done' THEN 1 ELSE 0 END) as done
-                FROM project_steps WHERE project_id = ?
+                SELECT 
+                    s.*, 
+                    u.name AS assigned_to_name, 
+                    u.email AS assigned_to_email
+                FROM project_steps s
+                LEFT JOIN users u ON s.assigned_to_id = u.id
+                WHERE s.project_id IN (${placeholders})
+                ORDER BY s.project_id, s.step_order, s.id
             `)
-            .bind(project.id)
+            .bind(...projectIds)
             .all();
 
-        const stats = stepsRes.results[0] || { total: 0, done: 0 };
-        project.total_steps = Number(stats.total) || 0;
-        project.completed_steps = Number(stats.done) || 0;
-        project.progress_percent = project.total_steps > 0
-            ? Math.round((project.completed_steps / project.total_steps) * 100)
-            : 0;
+        const allSteps = allStepsRes.results;
+
+        // Group steps by project
+        const stepsMap = new Map(); // projectId -> [steps]
+        for (const s of allSteps) {
+            if (!stepsMap.has(s.project_id)) stepsMap.set(s.project_id, []);
+            stepsMap.get(s.project_id).push(s);
+        }
+
+        // Fetch ALL step assignees for these steps (if any)
+        // Optimization: only fetch if there are steps
+        if (allSteps.length > 0) {
+            const stepIds = allSteps.map(s => s.id);
+            // Chunking might be needed if too many steps, but assume manageable for now or chunk 100?
+            // SQLite limit is usually high enough for hundreds of steps. 
+            // If joint projects grow huge, this needs pagination.
+
+            const stepPlaceholders = stepIds.map(() => "?").join(", ");
+            const assigneesRes = await env.WRAP_DB
+                .prepare(`
+                    SELECT psa.step_id, u.id, u.name, u.email
+                    FROM project_step_assignees psa
+                    JOIN users u ON psa.user_id = u.id
+                    WHERE psa.step_id IN (${stepPlaceholders})
+                `)
+                .bind(...stepIds)
+                .all();
+
+            const assigneesMap = new Map(); // stepId -> [users]
+            for (const row of assigneesRes.results) {
+                if (!assigneesMap.has(row.step_id)) assigneesMap.set(row.step_id, []);
+                assigneesMap.get(row.step_id).push(row);
+            }
+
+            // Hydrate steps with assignees
+            for (const s of allSteps) {
+                s.assignees = assigneesMap.get(s.id) || [];
+                // Fallback to primary if empty
+                if (s.assignees.length === 0 && s.assigned_to_id) {
+                    s.assignees.push({
+                        id: s.assigned_to_id,
+                        name: s.assigned_to_name,
+                        email: s.assigned_to_email
+                    });
+                }
+            }
+        }
+
+        // Attach steps to projects & calc stats
+        for (const project of results) {
+            project.steps = stepsMap.get(project.id) || [];
+            project.total_steps = project.steps.length;
+            project.completed_steps = project.steps.filter(s => s.status === 'done').length;
+            project.progress_percent = project.total_steps > 0
+                ? Math.round((project.completed_steps / project.total_steps) * 100)
+                : 0;
+        }
     }
 
     return json(results);
@@ -1425,11 +1516,82 @@ async function deleteProject(env, id) {
     return new Response(null, { status: 204, headers: CORS_HEADERS });
 }
 
+async function duplicateProject(request, env, id) {
+    // 1. Get original project
+    const pRes = await env.WRAP_DB
+        .prepare(`SELECT * FROM projects WHERE id = ?`)
+        .bind(id)
+        .all();
+
+    if (!pRes.results.length) {
+        return json({ error: "Project not found" }, 404);
+    }
+    const origin = pRes.results[0];
+
+    // 2. Get original steps
+    const sRes = await env.WRAP_DB
+        .prepare(`SELECT * FROM project_steps WHERE project_id = ? ORDER BY step_order, id`)
+        .bind(id)
+        .all();
+    const originSteps = sRes.results;
+
+    const body = await getBody(request);
+    const now = new Date().toISOString();
+
+    // 3. Create new project
+    const newTitle = body.title || `${origin.title} (Copy)`;
+
+    const info = await env.WRAP_DB
+        .prepare(`
+            INSERT INTO projects (title, description, created_by_id, status, created_at, updated_at, waiting_on, blocking_task)
+            VALUES (?, ?, ?, 'active', ?, ?, '', '')
+        `)
+        .bind(newTitle, origin.description, origin.created_by_id, now, now)
+        .run();
+
+    const newProjectId = info.meta?.last_row_id;
+    if (!newProjectId) {
+        return json({ error: "Failed to create duplicate project" }, 500);
+    }
+
+    // 4. Duplicate steps & assignees
+    for (const s of originSteps) {
+        const stepInfo = await env.WRAP_DB.prepare(`
+            INSERT INTO project_steps 
+                (project_id, step_order, title, description, assigned_to_id, status, created_at, updated_at)
+            VALUES (?, ?, ?, ?, ?, 'pending', ?, ?)
+        `)
+            .bind(newProjectId, s.step_order, s.title, s.description, s.assigned_to_id, now, now)
+            .run();
+
+        const newStepId = stepInfo.meta?.last_row_id;
+        if (newStepId) {
+            // Copy assignees from project_step_assignees
+            await env.WRAP_DB.prepare(`
+                INSERT INTO project_step_assignees (step_id, user_id, created_at)
+                SELECT ?, user_id, ?
+                FROM project_step_assignees
+                WHERE step_id = ?
+            `)
+                .bind(newStepId, now, s.id)
+                .run();
+        }
+    }
+
+    // 5. Return new project
+    const { results } = await env.WRAP_DB
+        .prepare(`SELECT * FROM projects WHERE id = ?`)
+        .bind(newProjectId)
+        .all();
+
+    return json(results[0], 201);
+}
+
 /* ---------- PROJECT STEPS ---------- */
 
 async function createProjectStep(request, env, projectId) {
     const body = await getBody(request);
-    const { title, description = "", assigned_to_id = null, step_order = 999 } = body;
+    const { title, description = "", assigned_to_id = null, step_order = 999, assignee_ids = [] } = body;
 
     if (!title) {
         return json({ error: "title is required" }, 400);
@@ -1461,6 +1623,10 @@ async function createProjectStep(request, env, projectId) {
         return json({ error: "Could not determine inserted id" }, 500);
     }
 
+    // Update step assignees
+    await replaceProjectStepAssignees(env, insertedId, assignee_ids, assigned_to_id);
+
+    // Fetch fresh with all data
     const { results } = await env.WRAP_DB
         .prepare(`
             SELECT s.*, u.name AS assigned_to_name
@@ -1471,11 +1637,16 @@ async function createProjectStep(request, env, projectId) {
         .bind(insertedId)
         .all();
 
+    // Manually attach assignees for response transparency
+    // (Or simpler, just return what we have, but cleaner to verify)
+    // ... skipping detail re-fetch for brevity, `replace` ensures it's saved.
+
     return json(results[0], 201);
 }
 
 async function updateProjectStep(request, env, stepId) {
     const body = await getBody(request);
+    const assignee_ids = body.assignee_ids; // optional array
 
     const existingRes = await env.WRAP_DB
         .prepare(`SELECT * FROM project_steps WHERE id = ?`)
@@ -1510,6 +1681,11 @@ async function updateProjectStep(request, env, stepId) {
         `)
         .bind(title, description, assigned_to_id, status, step_order, completed_at, now, stepId)
         .run();
+
+    // Update assignees if provided
+    if (assignee_ids !== undefined) {
+        await replaceProjectStepAssignees(env, stepId, assignee_ids, assigned_to_id);
+    }
 
     const { results } = await env.WRAP_DB
         .prepare(`
@@ -2004,6 +2180,11 @@ export default {
 
                 if (request.method === "DELETE") {
                     return await deleteProject(env, projectId);
+                }
+
+                // POST /api/projects/:id/duplicate
+                if (resource === "duplicate" && request.method === "POST") {
+                    return await duplicateProject(request, env, projectId);
                 }
 
                 // POST /api/projects/:id/steps

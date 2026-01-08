@@ -2122,6 +2122,29 @@
     .reminder-dismiss:hover {
       background: #d97706;
     }
+
+    /* Checkbox list for assignees */
+    .checkbox-list {
+      border: 1px solid #d1d5db;
+      border-radius: 6px;
+      padding: 8px;
+      max-height: 120px;
+      overflow-y: auto;
+      background: #fff;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .checkbox-list label {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 13px;
+      cursor: pointer;
+      margin: 0;
+      font-weight: normal;
+    }
   </style>
 </head>
 
@@ -2205,9 +2228,9 @@
 
         <label>
           Additional Assignees
-          <select id="task-assignees" multiple size="4"></select>
+          <div id="task-assignees-container" class="checkbox-list"></div>
           <div class="field-hint">
-            Optional. Use Ctrl/Cmd-click to select more than one.
+            Check multiple people to share this task.
           </div>
         </label>
 
@@ -2228,6 +2251,32 @@
           <button class="button-danger" id="task-delete-btn" style="display:none;">Delete</button>
           <button class="button-primary" id="task-save-btn">Save Task</button>
         </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Project Step Edit Modal -->
+  <div id="project-step-modal" class="modal hidden">
+    <div class="modal-panel">
+      <div class="modal-header">
+        <div class="modal-title">Edit Project Step</div>
+        <button class="modal-close" id="project-step-modal-close">&times;</button>
+      </div>
+      <div class="modal-body">
+        <input type="hidden" id="edit-project-step-id">
+        <label>
+          Title
+          <input id="edit-project-step-title-input" placeholder="Step title..." />
+        </label>
+        <label>
+          Assign To
+          <div id="edit-project-step-assignees-container" class="checkbox-list"></div>
+          <div class="field-hint">Select all people responsible for this step.</div>
+        </label>
+      </div>
+      <div class="modal-footer">
+        <button class="button-secondary" id="project-step-modal-cancel">Cancel</button>
+        <button class="button-primary" id="project-step-save-btn">Save Changes</button>
       </div>
     </div>
   </div>
@@ -4075,6 +4124,12 @@
       document.getElementById("task-save-btn").addEventListener("click", onTaskSave);
       document.getElementById("task-delete-btn").addEventListener("click", onTaskDelete);
 
+      // Project Step Modal listeners
+      document.getElementById("project-step-modal-close").addEventListener("click", () => document.getElementById("project-step-modal").classList.add("hidden"));
+      document.getElementById("project-step-modal-cancel").addEventListener("click", () => document.getElementById("project-step-modal").classList.add("hidden"));
+      document.getElementById("project-step-save-btn").addEventListener("click", saveProjectStepFromModal);
+
+
       // Enter key to save task in modal
       const taskModal = document.getElementById("task-modal");
       taskModal.addEventListener("keydown", (e) => {
@@ -4782,11 +4837,18 @@
         taskAssignedTo.value = String(defaultAssigneeId);
       }
 
-      // NEW: clear multi-assignee selection
-      const taskAssignees = document.getElementById("task-assignees");
-      if (taskAssignees) {
-        Array.from(taskAssignees.options).forEach(opt => {
-          opt.selected = false;
+      // NEW: Clear multi-assignee checkboxes
+      const container = document.getElementById("task-assignees-container");
+      if (container) {
+        container.innerHTML = "";
+        (state.users || []).forEach(u => {
+          const lbl = document.createElement("label");
+          const cb = document.createElement("input");
+          cb.type = "checkbox";
+          cb.value = u.id;
+          lbl.appendChild(cb);
+          lbl.appendChild(document.createTextNode(u.name));
+          container.appendChild(lbl);
         });
       }
 
@@ -4818,11 +4880,11 @@
       const taskAssignedTo = document.getElementById("task-assigned-to");
       taskAssignedTo.value = String(task.assigned_to_id);
 
-      // NEW: preselect multi-assignees
-      const taskAssignees = document.getElementById("task-assignees");
-      if (taskAssignees) {
-        // Expecting task.assignees from API as [{id, name}, ...].
-        // Fallback to just primary assignee if none present.
+      // NEW: preselect multi-assignees checkboxes
+      const container = document.getElementById("task-assignees-container");
+      if (container) {
+        container.innerHTML = "";
+
         let selectedIds = [];
         if (Array.isArray(task.assignees) && task.assignees.length) {
           selectedIds = task.assignees.map(a => String(a.id));
@@ -4830,8 +4892,17 @@
           selectedIds = [String(task.assigned_to_id)];
         }
 
-        Array.from(taskAssignees.options).forEach(opt => {
-          opt.selected = selectedIds.includes(opt.value);
+        (state.users || []).forEach(u => {
+          const lbl = document.createElement("label");
+          const cb = document.createElement("input");
+          cb.type = "checkbox";
+          cb.value = u.id;
+          if (selectedIds.includes(String(u.id))) {
+            cb.checked = true;
+          }
+          lbl.appendChild(cb);
+          lbl.appendChild(document.createTextNode(u.name));
+          container.appendChild(lbl);
         });
       }
 
@@ -4890,13 +4961,14 @@
       }
 
       // NEW: collect multi-assignees
-      const assigneesSelect = document.getElementById("task-assignees");
+      const container = document.getElementById("task-assignees-container");
       let assigneeIds = [];
-      if (assigneesSelect) {
-        assigneeIds = Array.from(assigneesSelect.selectedOptions)
-          .map(opt => parseInt(opt.value, 10))
-          .filter(id => !Number.isNaN(id));
+      if (container) {
+        const checked = container.querySelectorAll("input[type='checkbox']:checked");
+        assigneeIds = Array.from(checked).map(cb => parseInt(cb.value, 10));
       }
+
+      console.log("Saving task with status:", status); // Debug log for auto-complete issue
 
       // Always ensure primary assignee is included
       if (assignedToId && !assigneeIds.includes(assignedToId)) {
@@ -5535,6 +5607,39 @@
       };
       title.appendChild(editBtn);
 
+      // Duplicate Button
+      const copyBtn = document.createElement("button");
+      copyBtn.textContent = "❐";
+      copyBtn.title = "Duplicate Project (and reset steps)";
+      copyBtn.style.background = "none";
+      copyBtn.style.border = "none";
+      copyBtn.style.cursor = "pointer";
+      copyBtn.style.fontSize = "12px";
+      copyBtn.style.marginLeft = "4px";
+      copyBtn.style.opacity = "0.5";
+      copyBtn.onclick = (e) => {
+        e.stopPropagation();
+        duplicateProject(project);
+      };
+      title.appendChild(copyBtn);
+
+      // Delete Project Button
+      const deleteProjBtn = document.createElement("button");
+      deleteProjBtn.textContent = "🗑";
+      deleteProjBtn.title = "Delete Entire Project";
+      deleteProjBtn.style.background = "none";
+      deleteProjBtn.style.border = "none";
+      deleteProjBtn.style.cursor = "pointer";
+      deleteProjBtn.style.fontSize = "12px";
+      deleteProjBtn.style.marginLeft = "4px";
+      deleteProjBtn.style.opacity = "0.5";
+      deleteProjBtn.style.color = "var(--danger)";
+      deleteProjBtn.onclick = (e) => {
+        e.stopPropagation();
+        deleteProject(project);
+      };
+      title.appendChild(deleteProjBtn);
+
       const progressLabel = document.createElement("div");
       progressLabel.className = "project-progress-label";
       progressLabel.textContent = `${project.progress_percent || 0}%`;
@@ -5563,26 +5668,24 @@
       // Expandable steps toggle
       const toggle = document.createElement("div");
       toggle.className = "goal-subtasks-toggle";
-      toggle.innerHTML = "▸ View Steps";
+      // Auto-expanded by default now
+      toggle.innerHTML = "▾ Hide Steps";
       toggle.style.marginTop = "6px";
-      toggle.addEventListener("click", async () => {
-        if (card.dataset.loaded === "true") {
-          const stepsDiv = card.querySelector(".project-steps");
-          if (stepsDiv) {
-            stepsDiv.style.display = stepsDiv.style.display === "none" ? "block" : "none";
-            toggle.innerHTML = stepsDiv.style.display === "none" ? "▸ View Steps" : "▾ Hide Steps";
-          }
-        } else {
-          toggle.innerHTML = "▾ Loading...";
-          try {
-            const fullProject = await apiGet(`/projects/${project.id}`);
-            card.dataset.loaded = "true";
-            renderProjectSteps(card, fullProject);
-            toggle.innerHTML = `▾ Hide Steps (${fullProject.steps?.length || 0})`;
-          } catch (err) {
-            console.error(err);
-            toggle.innerHTML = "▸ View Steps (error)";
-          }
+
+      // Render steps immediately if available
+      const stepsDiv = document.createElement("div");
+      stepsDiv.className = "project-steps";
+      // Start visible
+      stepsDiv.style.display = "block";
+      card.appendChild(stepsDiv);
+      renderProjectSteps(card, project);
+
+      toggle.addEventListener("click", () => {
+        const sDiv = card.querySelector(".project-steps");
+        if (sDiv) {
+          const isHidden = sDiv.style.display === "none";
+          sDiv.style.display = isHidden ? "block" : "none";
+          toggle.innerHTML = isHidden ? "▾ Hide Steps" : "▸ View Steps";
         }
       });
       card.appendChild(toggle);
@@ -5591,19 +5694,38 @@
     }
 
     function renderProjectSteps(cardElement, project) {
+      // Find existing or create new steps container
       let stepsDiv = cardElement.querySelector(".project-steps");
-      if (stepsDiv) stepsDiv.remove();
-
-      stepsDiv = document.createElement("div");
-      stepsDiv.className = "project-steps";
+      if (!stepsDiv) {
+        stepsDiv = document.createElement("div");
+        stepsDiv.className = "project-steps";
+        cardElement.appendChild(stepsDiv);
+      } else {
+        stepsDiv.innerHTML = "";
+      }
 
       const currentUserId = state.currentUser?.id;
+      const currentUserName = (state.currentUser?.name || "").toLowerCase();
+
+      // Permission check: Kevin or Meighan or Project Owner
+      const isSuperUser = currentUserName.includes("kevin") || currentUserName.includes("meighan");
+      const isProjectOwner = project.created_by_id === currentUserId;
 
       (project.steps || []).forEach(step => {
         const row = document.createElement("div");
         row.className = "project-step";
         if (step.status === "done") row.classList.add("done");
-        if (step.assigned_to_id === currentUserId && step.status !== "done") {
+
+        // Check if user is ONE OF the assignees
+        const assignees = step.assignees || [];
+        // Fallback for older API responses
+        if (assignees.length === 0 && step.assigned_to_id) {
+          assignees.push({ id: step.assigned_to_id, name: step.assigned_to_name });
+        }
+
+        const isAssigned = assignees.some(a => a.id === currentUserId);
+
+        if (isAssigned && step.status !== "done") {
           row.classList.add("current-assignee");
         }
 
@@ -5613,7 +5735,7 @@
         if (step.status === "done") {
           icon.textContent = "✓";
           icon.style.color = "var(--success)";
-        } else if (step.assigned_to_id === currentUserId) {
+        } else if (isAssigned) {
           icon.textContent = "●";
           icon.style.color = "var(--accent)";
         } else {
@@ -5627,58 +5749,138 @@
         titleSpan.textContent = step.title;
         row.appendChild(titleSpan);
 
-        // Assignee
-        const assignee = document.createElement("span");
-        assignee.className = "step-assignee";
-        assignee.textContent = step.assigned_to_name || "Unassigned";
-        row.appendChild(assignee);
+        // Assignees Display
+        const assigneeSpan = document.createElement("span");
+        assigneeSpan.className = "step-assignee";
+        if (assignees.length > 0) {
+          assigneeSpan.textContent = assignees.map(a => a.name.split(" ")[0]).join(", ");
+        } else {
+          assigneeSpan.textContent = "Unassigned";
+        }
+        row.appendChild(assigneeSpan);
 
-        // Action button for current assignee
-        if (step.assigned_to_id === currentUserId && step.status !== "done") {
+        // Action buttons
+        const actionsDiv = document.createElement("div");
+        actionsDiv.style.display = "flex";
+        actionsDiv.style.gap = "4px";
+        actionsDiv.style.marginLeft = "auto";
+
+        // Complete Button (if assigned or super/owner)
+        if ((isAssigned || isSuperUser || isProjectOwner) && step.status !== "done") {
           const actionBtn = document.createElement("button");
           actionBtn.className = "step-action-btn";
-          actionBtn.textContent = "Complete";
+          actionBtn.textContent = "✓";
+          actionBtn.title = "Mark Complete";
           actionBtn.addEventListener("click", async (e) => {
             e.stopPropagation();
             await markStepComplete(step.id, project.id);
           });
-          row.appendChild(actionBtn);
+          actionsDiv.appendChild(actionBtn);
         }
 
+        // Delete/Edit Button (SuperUser or Owner)
+        if (isSuperUser || isProjectOwner) {
+          const editBtn = document.createElement("button");
+          editBtn.textContent = "✎";
+          editBtn.style.color = "var(--accent)";
+          editBtn.style.background = "none";
+          editBtn.style.border = "none";
+          editBtn.style.cursor = "pointer";
+          editBtn.style.fontSize = "14px";
+          editBtn.title = "Edit Step Title";
+          editBtn.onclick = async (e) => {
+            e.stopPropagation();
+            await editProjectStep(step, project.id);
+          };
+          actionsDiv.appendChild(editBtn);
+
+          const delBtn = document.createElement("button");
+          delBtn.textContent = "×";
+          delBtn.style.color = "var(--danger)";
+          delBtn.style.background = "none";
+          delBtn.style.border = "none";
+          delBtn.style.cursor = "pointer";
+          delBtn.style.fontSize = "14px";
+          delBtn.title = "Delete Step";
+          delBtn.onclick = async (e) => {
+            e.stopPropagation();
+            if (confirm("Delete this step?")) {
+              await deleteProjectStep(step.id);
+            }
+          };
+          actionsDiv.appendChild(delBtn);
+        }
+
+        row.appendChild(actionsDiv);
         stepsDiv.appendChild(row);
       });
 
-      // Add step form
+      // Add step form (Multi-assign)
       const addForm = document.createElement("div");
       addForm.className = "add-step-form";
+      addForm.style.flexDirection = "column";
+      addForm.style.alignItems = "stretch";
+
+      const topRow = document.createElement("div");
+      topRow.style.display = "flex";
+      topRow.style.gap = "6px";
 
       const stepInput = document.createElement("input");
       stepInput.type = "text";
       stepInput.placeholder = "New step...";
+      stepInput.style.flex = "1";
 
-      const assigneeSelect = document.createElement("select");
-      assigneeSelect.innerHTML = '<option value="">Assignee...</option>';
+      const toggleAssigneesBtn = document.createElement("button");
+      toggleAssigneesBtn.textContent = "Engage Team";
+      toggleAssigneesBtn.className = "button-secondary";
+      toggleAssigneesBtn.style.fontSize = "11px";
+      toggleAssigneesBtn.style.padding = "4px 8px";
+
+      const assigneesContainer = document.createElement("div");
+      assigneesContainer.className = "checkbox-list";
+      assigneesContainer.style.display = "none"; // hidden by default
+      assigneesContainer.style.marginTop = "6px";
+
+      // Populate checkboxes
       (state.users || []).forEach(u => {
-        const opt = document.createElement("option");
-        opt.value = u.id;
-        opt.textContent = u.name;
-        assigneeSelect.appendChild(opt);
+        const lbl = document.createElement("label");
+        const cb = document.createElement("input");
+        cb.type = "checkbox";
+        cb.value = u.id;
+        lbl.appendChild(cb);
+        lbl.appendChild(document.createTextNode(u.name));
+        assigneesContainer.appendChild(lbl);
       });
 
+      toggleAssigneesBtn.onclick = () => {
+        assigneesContainer.style.display = assigneesContainer.style.display === "none" ? "flex" : "none";
+      };
+
       const addBtn = document.createElement("button");
-      addBtn.textContent = "+";
+      addBtn.textContent = "+ Add";
+      addBtn.className = "button-primary";
+      addBtn.style.fontSize = "11px";
       addBtn.addEventListener("click", async () => {
         const title = stepInput.value.trim();
-        const assigneeId = assigneeSelect.value ? parseInt(assigneeSelect.value, 10) : null;
+        // Collect checked ids
+        const checked = assigneesContainer.querySelectorAll("input:checked");
+        const assigneeIds = Array.from(checked).map(c => parseInt(c.value));
+        const primaryId = assigneeIds.length > 0 ? assigneeIds[0] : null;
+
         if (!title) return;
 
         try {
           await apiSend(`/projects/${project.id}/steps`, "POST", {
             title,
-            assigned_to_id: assigneeId,
+            assigned_to_id: primaryId, // backward compat
+            assignee_ids: assigneeIds,
             step_order: (project.steps?.length || 0) + 1
           });
           stepInput.value = "";
+          // clear checks
+          checked.forEach(c => c.checked = false);
+          assigneesContainer.style.display = "none";
+
           await loadProjects();
           showToast("Step added!");
         } catch (err) {
@@ -5687,12 +5889,90 @@
         }
       });
 
-      addForm.appendChild(stepInput);
-      addForm.appendChild(assigneeSelect);
-      addForm.appendChild(addBtn);
-      stepsDiv.appendChild(addForm);
+      topRow.appendChild(stepInput);
+      topRow.appendChild(toggleAssigneesBtn);
+      topRow.appendChild(addBtn);
 
-      cardElement.appendChild(stepsDiv);
+      addForm.appendChild(topRow);
+      addForm.appendChild(assigneesContainer);
+      stepsDiv.appendChild(addForm);
+    }
+
+    async function deleteProjectStep(stepId) {
+      try {
+        await apiSend(`/project-steps/${stepId}`, "DELETE");
+        await loadProjects();
+        showToast("Step deleted");
+      } catch (err) {
+        console.error(err);
+        showToast("Error deleting step", true);
+      }
+    }
+
+    async function editProjectStep(step, projectId) {
+      const modal = document.getElementById("project-step-modal");
+      document.getElementById("edit-project-step-id").value = step.id;
+      document.getElementById("edit-project-step-title-input").value = step.title;
+
+      const container = document.getElementById("edit-project-step-assignees-container");
+      container.innerHTML = "";
+
+      const selectedIds = (step.assignees || []).map(a => String(a.id));
+      if (selectedIds.length === 0 && step.assigned_to_id) {
+        selectedIds.push(String(step.assigned_to_id));
+      }
+
+      (state.users || []).forEach(u => {
+        const lbl = document.createElement("label");
+        const cb = document.createElement("input");
+        cb.type = "checkbox";
+        cb.value = u.id;
+        if (selectedIds.includes(String(u.id))) cb.checked = true;
+        lbl.appendChild(cb);
+        lbl.appendChild(document.createTextNode(u.name));
+        container.appendChild(lbl);
+      });
+
+      modal.classList.remove("hidden");
+    }
+
+    async function saveProjectStepFromModal() {
+      const stepId = document.getElementById("edit-project-step-id").value;
+      const title = document.getElementById("edit-project-step-title-input").value.trim();
+      const checkboxes = document.querySelectorAll("#edit-project-step-assignees-container input:checked");
+      const assigneeIds = Array.from(checkboxes).map(cb => parseInt(cb.value, 10));
+
+      if (!title) {
+        showToast("Title is required", true);
+        return;
+      }
+
+      try {
+        await apiSend(`/project-steps/${stepId}`, "PATCH", {
+          title: title,
+          assignee_ids: assigneeIds,
+          assigned_to_id: assigneeIds[0] || null
+        });
+        document.getElementById("project-step-modal").classList.add("hidden");
+        await loadProjects();
+        showToast("Step updated");
+      } catch (err) {
+        console.error(err);
+        showToast("Error updating step", true);
+      }
+    }
+
+    async function deleteProject(project) {
+      if (!confirm(`Are you SURE you want to delete the entire project "${project.title}"? This cannot be undone.`)) return;
+
+      try {
+        await apiSend(`/projects/${project.id}`, "DELETE");
+        await loadProjects();
+        showToast("Project deleted");
+      } catch (err) {
+        console.error(err);
+        showToast("Error deleting project", true);
+      }
     }
 
     async function markStepComplete(stepId, projectId) {
@@ -5745,6 +6025,22 @@
       } catch (err) {
         console.error(err);
         showToast("Error updating details", true);
+      }
+    }
+
+
+    async function duplicateProject(project) {
+      const customTitle = prompt(`Duplicate "${project.title}"? Adjust title if needed:`, `${project.title} (Copy)`);
+      if (customTitle === null) return;
+
+      try {
+        showToast("Duplicating...");
+        await apiSend(`/projects/${project.id}/duplicate`, "POST", { title: customTitle.trim() });
+        await loadProjects();
+        showToast("Project duplicated!");
+      } catch (err) {
+        console.error(err);
+        showToast("Error duplicating project", true);
       }
     }
 
