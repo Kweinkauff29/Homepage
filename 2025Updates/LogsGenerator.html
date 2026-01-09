@@ -706,6 +706,7 @@
         }
 
         // Check for "no logs" tag
+        // Handles multiple comma-separated tags (e.g. "DO NOT TEXT,no logs")
         const tags = (data.member.tags || "").toLowerCase();
         if (tags.includes("no logs")) {
           setStatus("Logs cannot be generated. Please contact support@BERealtors.org.", "err");
