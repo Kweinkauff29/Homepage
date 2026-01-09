@@ -80,6 +80,45 @@
             overflow: hidden;
         }
 
+        .hero-inner {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 24px;
+            align-items: center;
+        }
+
+        .hero-text {
+            position: relative;
+            z-index: 1;
+        }
+
+        .hero-image {
+            position: relative;
+            z-index: 1;
+        }
+
+        .hero-image img {
+            width: 100%;
+            max-width: 480px;
+            height: auto;
+            border-radius: var(--radius);
+            box-shadow: var(--shadow-lg);
+        }
+
+        @media (max-width: 800px) {
+            .hero-inner {
+                grid-template-columns: 1fr;
+            }
+
+            .hero-image {
+                order: -1;
+            }
+
+            .hero-image img {
+                max-width: 100%;
+            }
+        }
+
         .hero::before {
             content: "";
             position: absolute;
@@ -93,17 +132,6 @@
             pointer-events: none;
             border-radius: 999px;
             transform: rotate(-8deg);
-        }
-
-        .hero::after {
-            content: "🌍 + 🌎";
-            position: absolute;
-            top: 22px;
-            left: 18px;
-            font-size: 26px;
-            letter-spacing: .4em;
-            opacity: .16;
-            pointer-events: none;
         }
 
         .kicker {
@@ -133,7 +161,7 @@
             z-index: 1;
             font-family: Montserrat, system-ui, Arial, sans-serif;
             font-weight: 900;
-            font-size: clamp(32px, 5vw, 52px);
+            font-size: clamp(28px, 4.5vw, 48px);
             letter-spacing: -.01em;
             margin: .35rem 0 .65rem;
             line-height: 1.1;
@@ -145,7 +173,7 @@
             color: var(--ink-soft);
             max-width: 72ch;
             margin: 0 0 16px;
-            font-size: 1.05rem;
+            font-size: 1rem;
         }
 
         /* CLASSES GRID */
@@ -346,6 +374,102 @@
             font-weight: 600;
         }
 
+        .info-card ul {
+            margin: 8px 0;
+            padding-left: 18px;
+            font-size: 14px;
+            color: var(--ink-soft);
+        }
+
+        .info-card ul li {
+            margin: 4px 0;
+        }
+
+        /* PATHWAY SECTION */
+        .pathway-section {
+            margin: 36px 0 24px;
+            padding: 24px;
+            background: linear-gradient(135deg, rgba(8, 50, 95, 0.04), rgba(14, 165, 160, 0.06));
+            border-radius: var(--radius);
+            border: 1px solid var(--line);
+        }
+
+        .pathway-section h2 {
+            font-family: Montserrat, system-ui, Arial, sans-serif;
+            font-weight: 800;
+            font-size: 22px;
+            margin: 0 0 16px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .pathway-section h2::before {
+            content: "";
+            display: inline-block;
+            width: 28px;
+            height: 3px;
+            background: linear-gradient(90deg, var(--accent), var(--teal), var(--gold));
+            border-radius: 999px;
+        }
+
+        .pathway-steps {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 16px;
+            margin-top: 16px;
+        }
+
+        .pathway-step {
+            background: #fff;
+            border-radius: 14px;
+            padding: 16px;
+            border: 1px solid var(--line);
+            position: relative;
+        }
+
+        .step-number {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--accent), var(--teal));
+            color: #fff;
+            font-family: Montserrat, system-ui, Arial, sans-serif;
+            font-weight: 800;
+            font-size: 14px;
+            margin-bottom: 10px;
+        }
+
+        .pathway-step h3 {
+            font-family: Montserrat, system-ui, Arial, sans-serif;
+            font-weight: 700;
+            font-size: 14px;
+            margin: 0 0 6px;
+            color: var(--ink);
+        }
+
+        .pathway-step p {
+            font-size: 13px;
+            color: var(--ink-soft);
+            margin: 0;
+        }
+
+        .pathway-note {
+            margin-top: 16px;
+            padding: 12px 16px;
+            background: rgba(200, 162, 74, 0.12);
+            border-radius: 12px;
+            font-size: 13px;
+            color: var(--ink-soft);
+        }
+
+        .pathway-note strong {
+            color: var(--ink);
+        }
+
         /* CALLOUT */
         .callout {
             border: 2px solid var(--ink);
@@ -480,17 +604,27 @@
         <!-- HERO -->
         <header class="hero">
             <div class="wrap">
-                <div class="kicker reveal reveal-right">
-                    CIPS Global Series • January 2026
+                <div class="hero-inner">
+                    <div class="hero-text">
+                        <div class="kicker reveal reveal-right">
+                            CIPS Global Series • January 2026
+                        </div>
+                        <h1 class="title reveal">
+                            CIPS Global Real Estate Classes
+                        </h1>
+                        <p class="sub reveal" style="--d:100ms">
+                            Earn your Certified International Property Specialist (CIPS) designation with two
+                            back-to-back
+                            classes offering 14 hours of continuing education credit. Master the skills for global real
+                            estate
+                            transactions in our local Southwest Florida market.
+                        </p>
+                    </div>
+                    <div class="hero-image reveal" style="--d:150ms">
+                        <img src="https://bonitaesterorealtors.com/wp-content/uploads/2026/01/Untitled-design3.png"
+                            alt="CIPS Global Real Estate Classes - January 20-21, 2026" />
+                    </div>
                 </div>
-                <h1 class="title reveal">
-                    CIPS Global Real Estate Classes
-                </h1>
-                <p class="sub reveal" style="--d:100ms">
-                    Earn your Certified International Property Specialist (CIPS) designation with two back-to-back
-                    classes offering 14 hours of continuing education credit. Master the skills for global real estate
-                    transactions in our local Southwest Florida market.
-                </p>
             </div>
         </header>
 
@@ -576,15 +710,117 @@
 
             </section>
 
-            <!-- INFO SECTION -->
+            <!-- BENEFITS SECTION -->
             <section class="info-section reveal" style="--d:280ms">
+                <h2>Why Get CIPS Certified?</h2>
+                <p style="color: var(--ink-soft); margin: 0 0 12px; max-width: 68ch;">
+                    The Certified International Property Specialist (CIPS) designation is the gold standard for real
+                    estate professionals who want to serve international clients at the highest level.
+                </p>
+
+                <div class="info-grid">
+                    <div class="info-card">
+                        <h3><i class="fa fa-money" aria-hidden="true"></i> Higher Earning Potential</h3>
+                        <p>International transactions often involve higher price points and unique opportunities. CIPS
+                            designees are positioned to capture this lucrative market segment.</p>
+                    </div>
+
+                    <div class="info-card">
+                        <h3><i class="fa fa-globe" aria-hidden="true"></i> Global Referral Network</h3>
+                        <p>Access NAR's worldwide network of CIPS designees for cross-border referrals. Connect with
+                            professionals in 70+ countries to grow your business.</p>
+                    </div>
+
+                    <div class="info-card">
+                        <h3><i class="fa fa-users" aria-hidden="true"></i> Serve Diverse Clients</h3>
+                        <p>Southwest Florida attracts buyers from around the world. Gain the cultural competency and
+                            transaction skills to serve clients from any country.</p>
+                    </div>
+
+                    <div class="info-card">
+                        <h3><i class="fa fa-star" aria-hidden="true"></i> Stand Out from Competition</h3>
+                        <p>Differentiate yourself with a recognized credential. The CIPS designation signals expertise
+                            and commitment to international real estate excellence.</p>
+                    </div>
+
+                    <div class="info-card">
+                        <h3><i class="fa fa-book" aria-hidden="true"></i> In-Depth Knowledge</h3>
+                        <ul>
+                            <li>Currency and exchange rate issues</li>
+                            <li>Cross-border tax implications (FIRPTA)</li>
+                            <li>Financing options for foreign nationals</li>
+                            <li>Visa and immigration considerations</li>
+                            <li>Cultural business practices</li>
+                        </ul>
+                    </div>
+
+                    <div class="info-card">
+                        <h3><i class="fa fa-check-circle" aria-hidden="true"></i> CE Credit</h3>
+                        <p>All CIPS courses count toward your Florida CE requirements. Earn 7 hours per course — that's
+                            14 CE hours for this two-day program!</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- PATHWAY TO DESIGNATION -->
+            <section class="pathway-section reveal" style="--d:320ms">
+                <h2>Your Path to the CIPS Designation</h2>
+                <p style="color: var(--ink-soft); margin: 0 0 8px;">
+                    Complete 5 required courses and apply to earn your CIPS designation. These two classes count as 2 of
+                    your 5 required courses!
+                </p>
+
+                <div class="pathway-steps">
+                    <div class="pathway-step">
+                        <div class="step-number">1</div>
+                        <h3>Global Real Estate: Local Markets</h3>
+                        <p>Offered January 20, 2026 at BER. <strong style="color: var(--teal);">Register now!</strong>
+                        </p>
+                    </div>
+
+                    <div class="pathway-step">
+                        <div class="step-number">2</div>
+                        <h3>Global Real Estate: Transaction Tools</h3>
+                        <p>Offered January 21, 2026 at BER. <strong style="color: var(--teal);">Register now!</strong>
+                        </p>
+                    </div>
+
+                    <div class="pathway-step">
+                        <div class="step-number">3</div>
+                        <h3>The Americas</h3>
+                        <p>Regional market dynamics for North, Central, and South America.</p>
+                    </div>
+
+                    <div class="pathway-step">
+                        <div class="step-number">4</div>
+                        <h3>Asia/Pacific or Europe</h3>
+                        <p>Choose one region based on your target markets.</p>
+                    </div>
+
+                    <div class="pathway-step">
+                        <div class="step-number">5</div>
+                        <h3>Apply for Designation</h3>
+                        <p>Submit your application and pay one-time application fee to NAR.</p>
+                    </div>
+                </div>
+
+                <div class="pathway-note">
+                    <strong>Tip:</strong> Courses can be taken in any order. After completing all 5 courses, you'll also
+                    need to document international transaction experience or complete elective courses.
+                    <a href="https://cips.realtor/designations-and-certifications/cips-designation/become-a-cips-designee"
+                        target="_blank" rel="noopener">Learn more at cips.realtor →</a>
+                </div>
+            </section>
+
+            <!-- INFO SECTION -->
+            <section class="info-section reveal" style="--d:360ms">
                 <h2>What You'll Get</h2>
 
                 <div class="info-grid">
                     <div class="info-card">
-                        <h3><i class="fa fa-certificate" aria-hidden="true"></i> CIPS Designation</h3>
-                        <p>These courses count toward your Certified International Property Specialist (CIPS)
-                            designation — the gold standard for global real estate professionals.</p>
+                        <h3><i class="fa fa-certificate" aria-hidden="true"></i> CIPS Designation Progress</h3>
+                        <p>These two courses count toward your 5 required CIPS courses — that's 40% of your designation
+                            complete!</p>
                     </div>
 
                     <div class="info-card">
@@ -594,7 +830,7 @@
                     </div>
 
                     <div class="info-card">
-                        <h3><i class="fa fa-globe" aria-hidden="true"></i> Global Network</h3>
+                        <h3><i class="fa fa-handshake-o" aria-hidden="true"></i> Networking</h3>
                         <p>Connect with like-minded professionals and expand your international referral network right
                             here in Southwest Florida.</p>
                     </div>
@@ -602,11 +838,11 @@
             </section>
 
             <!-- CALLOUT -->
-            <div class="callout reveal" style="--d:320ms">
+            <div class="callout reveal" style="--d:400ms">
                 <div class="callout-text">
-                    <strong>Questions?</strong> Contact BER Education at
-                    <a href="mailto:education@bonitaesterorealtors.com">education@bonitaesterorealtors.com</a>
-                    or call <a href="tel:+12399929900">(239) 992-9900</a>.
+                    <strong>Questions?</strong> Contact BER Events at
+                    <a href="mailto:events@berealtors.org">events@berealtors.org</a>
+                    or call <a href="tel:+12399926771">(239) 992-6771</a>.
                 </div>
                 <a href="https://members.bonitaesterorealtors.com/bercalendar" target="_blank" rel="noopener"
                     class="btn btn-primary">
