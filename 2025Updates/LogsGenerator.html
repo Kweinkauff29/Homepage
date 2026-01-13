@@ -705,19 +705,20 @@
           return;
         }
 
-        // Check for "no logs" tag
+        // Check for "no logs" tag (or variations like "No LOGS", "NO logs", etc.)
         // Handles multiple comma-separated tags (e.g. "DO NOT TEXT,no logs")
-        const tags = (data.member.tags || "").toLowerCase();
-        if (tags.includes("no logs")) {
-          setStatus("Logs cannot be generated. Please contact support@BERealtors.org.", "err");
+        const tags = (data.member.tags || data.member.tag || "").toLowerCase();
+        if (tags.includes("no logs") || tags.includes("nologs") || tags.includes("no-logs")) {
+          setStatus("LOGS cannot be generated. Please contact support@BERealtors.org for assistance.", "err");
           return;
         }
 
-        // Check for unpaid contact balance
-        const balance = parseFloat(data.member.contactBalance || 0);
+        // Check for unpaid contact balance (handle both camelCase and snake_case field names)
+        const rawBalance = data.member.contact_balance || data.member.contactBalance || 0;
+        const balance = parseFloat(String(rawBalance).replace(/[$,]/g, '')) || 0;
         if (balance > 0) {
           const formattedBalance = new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(balance);
-          setStatus(`LOGS cannot be generated since the user holds an unpaid balance of ${formattedBalance}.`, "err");
+          setStatus(`LOGS cannot be generated since you hold an unpaid balance of ${formattedBalance}. Please resolve your balance before requesting a Letter of Good Standing.`, "err");
           return;
         }
 
