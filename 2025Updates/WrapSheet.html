@@ -3392,7 +3392,12 @@
           throw new Error(method + " " + path + " failed: " + text);
         }
 
-        const data = await res.json();
+        // Handle empty responses (common for DELETE with 204 No Content)
+        const text = await res.text();
+        if (!text || text.trim() === "") {
+          return null;
+        }
+        const data = JSON.parse(text);
         return data;
       } finally {
         hideActionLoader();
