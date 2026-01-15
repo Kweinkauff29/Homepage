@@ -3917,21 +3917,6 @@
       } catch (e) {
         console.error(e);
         showToast("Error deleting task", true);
-      }
-    }
-
-
-
-    async function loadUsers() {
-      const users = await apiGet("/users");
-      state.users = users;
-      populateUserSelects();
-    }
-
-    function populateUserSelects() {
-      const userSelect = document.getElementById("user-select");
-      userSelect.innerHTML = '<option value="">Select your name…</option>';
-      state.users.forEach(u => {
         const opt = document.createElement("option");
         opt.value = u.id;
         opt.textContent = u.name;
