@@ -2138,12 +2138,19 @@
 
     .checkbox-list label {
       display: flex;
+      flex-direction: row;
       align-items: center;
       gap: 8px;
       font-size: 13px;
       cursor: pointer;
       margin: 0;
       font-weight: normal;
+      white-space: nowrap;
+    }
+
+    .checkbox-list label input[type="checkbox"] {
+      margin: 0;
+      flex-shrink: 0;
     }
   </style>
 </head>
@@ -3474,6 +3481,36 @@
     }
 
 
+    // ===== LIVE SYNC =====
+    const LIVE_SYNC_INTERVAL_MS = 30000; // 30 seconds
+    let liveSyncIntervalId = null;
+    function startLiveSync() {
+      if (liveSyncIntervalId) return; // Already running
+      console.log("[LiveSync] Starting with interval:", LIVE_SYNC_INTERVAL_MS, "ms");
+      liveSyncIntervalId = setInterval(() => {
+        if (document.visibilityState === "visible") {
+          console.log("[LiveSync] Refreshing data...");
+          refreshAllData(true); // silent=true to avoid toasts
+        }
+      }, LIVE_SYNC_INTERVAL_MS);
+      // Also refresh immediately when tab becomes visible after being hidden
+      document.addEventListener("visibilitychange", onVisibilityChange);
+    }
+    function onVisibilityChange() {
+      if (document.visibilityState === "visible" && liveSyncIntervalId) {
+        console.log("[LiveSync] Tab visible again, refreshing...");
+        refreshAllData(true);
+      }
+    }
+    function stopLiveSync() {
+      if (liveSyncIntervalId) {
+        clearInterval(liveSyncIntervalId);
+        liveSyncIntervalId = null;
+        document.removeEventListener("visibilitychange", onVisibilityChange);
+        console.log("[LiveSync] Stopped");
+      }
+    }
+
     // ===== INITIAL LOAD =====
     document.addEventListener("DOMContentLoaded", async () => {
       attachEventHandlers();
@@ -3492,10 +3529,11 @@
         document.getElementById("user-overlay").classList.add("hidden");
         await refreshAllData();
         initBacklogUI(); // Initialize backlog event listeners
+        startLiveSync(); // Start live sync after successful login
       }
     });
 
-    async function refreshAllData() {
+    async function refreshAllData(silent = false) {
       await refreshCalendarAndMonthlyGoals();
       // Any other global refresh
     }
@@ -3885,7 +3923,7 @@
 
 
     async function loadUsers() {
-      const users = await apiGet("/users?role=staff");
+      const users = await apiGet("/users");
       state.users = users;
       populateUserSelects();
     }
@@ -4013,9 +4051,11 @@
         setCurrentUser(user);
         document.getElementById("user-overlay").classList.add("hidden");
         await refreshAllData();
+        startLiveSync(); // Start live sync after user login
       });
 
       document.getElementById("switch-user-btn").addEventListener("click", () => {
+        stopLiveSync(); // Stop live sync when switching users
         document.getElementById("user-overlay").classList.remove("hidden");
       });
 
@@ -4266,7 +4306,7 @@
     }
 
     // ===== DATA REFRESH =====
-    async function refreshAllData() {
+    async function refreshAllData(silent = false) {
       await refreshCalendarAndMonthlyGoals();
       await loadAnnualGoals();
       await loadProjects();
