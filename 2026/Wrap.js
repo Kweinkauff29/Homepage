@@ -2074,6 +2074,16 @@ export default {
                 }
             }
 
+            // ===== USER PREFS =====
+            if (pathname === "/api/user-prefs") {
+                if (request.method === "GET") {
+                    return await getUserPrefs(request, env);
+                }
+                if (request.method === "POST") {
+                    return await updateUserPrefs(request, env);
+                }
+            }
+
             // ===== MONTHLY GOALS =====
             if (pathname === "/api/monthly-goals" && request.method === "GET") {
                 return await listMonthlyGoals(env, searchParams);
@@ -3066,3 +3076,49 @@ async function syncOfficeMlsFromGrowthZone(env) {
     return { inserted, updated, addressCount, phoneCount };
 }
 
+
+async function getUserPrefs(request, env) {
+    const url = new URL(request.url);
+    const userIdRaw = url.searchParams.get("userId");
+
+    if (!userIdRaw) return json({});
+
+    const userId = Number(userIdRaw);
+    if (!Number.isInteger(userId)) return json({});
+
+    const row = await env.WRAP_DB
+        .prepare("SELECT prefs_json FROM user_prefs WHERE user_id = ?")
+        .bind(userId)
+        .first();
+
+    if (!row || !row.prefs_json) return json({});
+
+    try {
+        return json(JSON.parse(row.prefs_json));
+    } catch {
+        return json({});
+    }
+}
+
+async function updateUserPrefs(request, env) {
+    const body = await getBody(request);
+    const { userId, prefs } = body;
+
+    if (!userId || !prefs) return json({ error: "Missing userId or prefs" }, 400);
+
+    const nUserId = Number(userId);
+    if (!Number.isInteger(nUserId)) return json({ error: "Invalid userId" }, 400);
+
+    const now = new Date().toISOString();
+    const jsonStr = JSON.stringify(prefs);
+
+    await env.WRAP_DB.prepare(`
+        INSERT INTO user_prefs (user_id, prefs_json, updated_at) 
+        VALUES (?, ?, ?)
+        ON CONFLICT(user_id) DO UPDATE SET 
+            prefs_json = excluded.prefs_json, 
+            updated_at = excluded.updated_at
+    `).bind(nUserId, jsonStr, now).run();
+
+    return json({ success: true });
+}

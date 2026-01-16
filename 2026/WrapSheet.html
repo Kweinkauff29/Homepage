@@ -2711,42 +2711,46 @@
       return customNames[key] || originalCategory;
     }
 
-    // Save custom category name to user preferences (localStorage)
-    function saveCustomCategoryName(goalType, originalCategory, customName) {
+    // Save custom category name to database
+    async function saveCustomCategoryName(goalType, originalCategory, customName) {
       if (!state.activeUser) return;
 
-      const prefsKey = `user-prefs-${state.activeUser.id}`;
       const prefs = state.userPrefs || {};
-      prefs.customCategoryNames = prefs.customCategoryNames || {};
+      const newCustomNames = { ...(prefs.customCategoryNames || {}) };
 
       const key = `${goalType}-${originalCategory}`;
 
       // If custom name is same as original or empty, remove the override
       if (!customName || customName === originalCategory) {
-        delete prefs.customCategoryNames[key];
+        delete newCustomNames[key];
       } else {
-        prefs.customCategoryNames[key] = customName;
+        newCustomNames[key] = customName;
       }
 
-      state.userPrefs = prefs;
+      const newPrefs = { ...prefs, customCategoryNames: newCustomNames };
+      state.userPrefs = newPrefs; // Optimistic update
 
       try {
-        localStorage.setItem(prefsKey, JSON.stringify(prefs));
+        await apiSend("/user-prefs", "POST", {
+          userId: state.activeUser.id,
+          prefs: newPrefs
+        });
       } catch (err) {
-        console.error("Error saving category name:", err);
+        console.error("Error saving user prefs:", err);
+        showToast("Error saving header", true);
       }
     }
 
     async function loadUserPrefsForActiveUser() {
       if (!state.activeUser) {
-        console.error("No active user found");
+        state.userPrefs = {};
         return;
       }
 
-      const prefsKey = `user-prefs-${state.activeUser.id}`;
       try {
-        const prefs = localStorage.getItem(prefsKey);
-        state.userPrefs = prefs ? JSON.parse(prefs) : {}; // default to empty object if no prefs
+        // Load from DB
+        const res = await apiSend(`/user-prefs?userId=${state.activeUser.id}`);
+        state.userPrefs = res || {};
       } catch (err) {
         console.error("Error loading user preferences:", err);
         state.userPrefs = {}; // fallback
@@ -5478,26 +5482,39 @@
       // Toggle to expand/collapse
       const toggle = document.createElement("div");
       toggle.className = "goal-subtasks-toggle";
-      toggle.innerHTML = "▸ Subtasks";
-      toggle.addEventListener("click", async () => {
+      toggle.innerHTML = "▾ Loading..."; // Initial state
+
+      toggle.addEventListener("click", () => {
+        // Toggle visibility if loaded
         if (section.dataset.loaded === "true") {
-          // Toggle visibility
           const list = section.querySelector(".subtasks-list");
           if (list) {
-            list.style.display = list.style.display === "none" ? "block" : "none";
-            toggle.innerHTML = list.style.display === "none" ? "▸ Subtasks" : "▾ Subtasks";
+            const isHidden = list.style.display === "none";
+            list.style.display = isHidden ? "block" : "none";
+            toggle.innerHTML = isHidden
+              ? `▾ Subtasks (${section.dataset.count || 0})`
+              : "▸ Subtasks";
           }
-        } else {
-          // Load subtasks
-          toggle.innerHTML = "▾ Loading...";
-          const subtasks = await loadGoalSubtasks(goalType, goalId);
-          section.dataset.loaded = "true";
-          renderGoalSubtasks(section, goalType, goalId, subtasks);
-          toggle.innerHTML = `▾ Subtasks (${subtasks.length})`;
         }
       });
 
       section.appendChild(toggle);
+
+      // Auto-load subtasks immediately
+      (async () => {
+        try {
+          const subtasks = await loadGoalSubtasks(goalType, goalId);
+          section.dataset.loaded = "true";
+          section.dataset.count = subtasks.length;
+          renderGoalSubtasks(section, goalType, goalId, subtasks);
+          // Update toggle text to show count and indicate expanded state
+          toggle.innerHTML = `▾ Subtasks (${subtasks.length})`;
+        } catch (err) {
+          console.error("Auto-load subtasks failed", err);
+          toggle.innerHTML = "▸ Subtasks (Error)";
+        }
+      })();
+
       return section;
     }
 
