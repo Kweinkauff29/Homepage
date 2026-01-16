@@ -46,7 +46,6 @@
     }
 
     body {
-      display: flex;
       justify-content: center;
       align-items: flex-start;
     }
@@ -841,35 +840,79 @@
       // Direct Sync (No Email Prompt)
       // We trust the provided userId (2 or 5) and inject it as creator/assigner.
 
-      // 1. Filter tasks
+      // 1. Filter tasks by PROMO DATE (the chosen date to promote, not the class date)
       const targetMonth = currentMonth.month; // 0-based
-
       const targetYear = currentMonth.year;
 
-      // Filter: Assigned to User AND Event Date is in current displayed month
+      // Filter: Assigned to User AND PROMO Date is in current displayed month
       const candidates = tasks.filter(t => {
         if (t.assignedTo !== name) return false;
-        if (!t.eventDate) return false;
-        // Compare year/month
-        if (t.eventDate.getFullYear() !== targetYear) return false;
-        if (t.eventDate.getMonth() !== targetMonth) return false;
+        if (!t.promoDate) return false;
+        // Compare year/month of the PROMO date
+        if (t.promoDate.getFullYear() !== targetYear) return false;
+        if (t.promoDate.getMonth() !== targetMonth) return false;
         return true;
       });
 
       if (candidates.length === 0) {
-        return alert(`No classes found for ${name} in ${MONTH_NAMES[targetMonth]}.`);
+        return alert(`No class promos found for ${name} in ${MONTH_NAMES[targetMonth]}.`);
       }
 
-      if (!confirm(`Found ${candidates.length} classes for ${name} in ${MONTH_NAMES[targetMonth]}.\n\nSync these to your Wrap Sheet Daily Tasks?`)) return;
-
-      // 3. Post to API
-      let successCount = 0;
       const btn = event.target;
       const originalText = btn.textContent;
-      btn.textContent = "Syncing...";
+      btn.textContent = "Checking...";
       btn.disabled = true;
 
-      for (const task of candidates) {
+      // 2. Fetch existing tasks to check for duplicates
+      const monthKey = `${targetYear}-${String(targetMonth + 1).padStart(2, '0')}`;
+      let existingTasks = [];
+      try {
+        const existingRes = await fetch(`${WRAP_API_BASE}/daily-tasks?month=${monthKey}&assignedToId=${userId}`);
+        if (existingRes.ok) {
+          existingTasks = await existingRes.json();
+        }
+      } catch (e) {
+        console.warn("Could not fetch existing tasks for duplicate check:", e);
+      }
+
+      // Create a Set of existing task identifiers (title + date)
+      const existingSet = new Set();
+      for (const et of existingTasks) {
+        const key = `${et.title}|${et.task_date}`;
+        existingSet.add(key);
+      }
+
+      // Filter out duplicates
+      const newCandidates = candidates.filter(task => {
+        const title = `Class: ${task.eventName}`;
+        const taskDate = toISODate(task.promoDate);
+        const key = `${title}|${taskDate}`;
+        return !existingSet.has(key);
+      });
+
+      const skippedCount = candidates.length - newCandidates.length;
+
+      if (newCandidates.length === 0) {
+        btn.textContent = originalText;
+        btn.disabled = false;
+        return alert(`All ${candidates.length} class promos for ${name} already exist in Wrap Sheet. Nothing to sync.`);
+      }
+
+      const confirmMsg = skippedCount > 0
+        ? `Found ${candidates.length} class promos for ${name}.\n\n${skippedCount} already exist and will be skipped.\n${newCandidates.length} new promos will be added.\n\nContinue?`
+        : `Found ${newCandidates.length} class promos for ${name} in ${MONTH_NAMES[targetMonth]}.\n\nSync these to your Wrap Sheet Daily Tasks?`;
+
+      if (!confirm(confirmMsg)) {
+        btn.textContent = originalText;
+        btn.disabled = false;
+        return;
+      }
+
+      // 3. Post to API
+      btn.textContent = "Syncing...";
+      let successCount = 0;
+
+      for (const task of newCandidates) {
         try {
           const payload = {
             title: `Class: ${task.eventName}`,
@@ -891,7 +934,7 @@
 
           if (res.ok) successCount++;
           else {
-            console.error("Sync failed for", task.title, await res.text());
+            console.error("Sync failed for", task.eventName, await res.text());
           }
 
         } catch (e) {
@@ -902,8 +945,12 @@
       btn.textContent = originalText;
       btn.disabled = false;
 
-      alert(`Synced ${successCount}/${candidates.length} tasks to Wrap Sheet.`);
-      logActivity(`${name} synced ${successCount} classes to Wrap Sheet.`);
+      const summaryMsg = skippedCount > 0
+        ? `Synced ${successCount}/${newCandidates.length} new promos. ${skippedCount} duplicates were skipped.`
+        : `Synced ${successCount}/${newCandidates.length} class promos to Wrap Sheet.`;
+
+      alert(summaryMsg);
+      logActivity(`${name} synced ${successCount} class promos to Wrap Sheet (${skippedCount} duplicates skipped).`);
     }
 
     // ========= ADMIN LOCK =========
