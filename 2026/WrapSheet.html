@@ -5859,11 +5859,34 @@
         }
         row.appendChild(icon);
 
-        // Title
+        // Title & Metadata
+        const contentDiv = document.createElement("div");
+        contentDiv.style.flex = "1";
+        contentDiv.style.display = "flex";
+        contentDiv.style.flexDirection = "column";
+        contentDiv.style.justifyContent = "center";
+
         const titleSpan = document.createElement("span");
         titleSpan.className = "step-title";
         titleSpan.textContent = step.title;
-        row.appendChild(titleSpan);
+        contentDiv.appendChild(titleSpan);
+
+        if (step.status === "done" && step.completed_at) {
+          const metaSpan = document.createElement("span");
+          metaSpan.style.fontSize = "10px";
+          metaSpan.style.color = "#9ca3af"; // var(--ink-soft) approx
+          metaSpan.style.marginTop = "1px";
+
+          const d = new Date(step.completed_at);
+          // Short date format: Jan 16, 2:30 PM
+          const dateStr = d.toLocaleDateString('en-US', { month: 'short', day: 'numeric' }) + ", " + d.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' });
+          const who = step.completed_by_name ? ` by ${step.completed_by_name.split(' ')[0]}` : "";
+
+          metaSpan.textContent = `✓ ${dateStr}${who}`;
+          contentDiv.appendChild(metaSpan);
+        }
+
+        row.appendChild(contentDiv);
 
         // Assignees Display
         const assigneeSpan = document.createElement("span");
