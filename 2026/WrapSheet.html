@@ -2317,6 +2317,11 @@
       </div>
 
       <div class="header-controls">
+        <div id="sync-indicator" style="font-size:11px;color:var(--ink-soft);display:flex;align-items:center;gap:4px;">
+          <span style="font-size:12px;">🔄</span>
+          <span id="last-sync-time">—</span>
+        </div>
+
         <div class="theme-toggle">
           <label for="theme-select">Theme</label>
           <select id="theme-select">
@@ -3535,7 +3540,17 @@
 
     async function refreshAllData(silent = false) {
       await refreshCalendarAndMonthlyGoals();
+      updateLastSyncTime();
       // Any other global refresh
+    }
+
+    function updateLastSyncTime() {
+      const el = document.getElementById("last-sync-time");
+      if (el) {
+        const now = new Date();
+        const timeStr = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+        el.textContent = `Synced ${timeStr}`;
+      }
     }
 
     function pillarsStorageKey(userId) {
@@ -3917,6 +3932,25 @@
       } catch (e) {
         console.error(e);
         showToast("Error deleting task", true);
+      }
+    }
+
+
+
+    async function loadUsers() {
+      const allUsers = await apiGet("/users");
+      // Filter to only show core BER staff
+      const allowedNames = ["kevin", "meighan", "jenna", "erica", "katie"];
+      state.users = allUsers.filter(u =>
+        allowedNames.some(name => u.name.toLowerCase() === name)
+      );
+      populateUserSelects();
+    }
+
+    function populateUserSelects() {
+      const userSelect = document.getElementById("user-select");
+      userSelect.innerHTML = '<option value="">Select your name…</option>';
+      state.users.forEach(u => {
         const opt = document.createElement("option");
         opt.value = u.id;
         opt.textContent = u.name;
@@ -4298,6 +4332,7 @@
       await loadUserDbPreferences();
       await loadPromotedSuggestions(); // New
       initWeeklyTasksUI();
+      updateLastSyncTime();
     }
 
     // Fetch top suggestions assigned to current user
