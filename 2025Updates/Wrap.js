@@ -272,36 +272,42 @@ async function listDailyTasks(env, searchParams) {
         }));
 
         const taskIds = tasks.map((t) => t.id);
-        const placeholders = taskIds.map(() => "?").join(", ");
         const byId = new Map();
         for (const t of tasks) byId.set(t.id, t);
 
-        // ---- Load assignees ----
-        const assigneesRes = await env.WRAP_DB
-            .prepare(
-                `
-      SELECT
-        dta.task_id,
-        u.id    AS user_id,
-        u.name  AS name,
-        u.email AS email
-      FROM daily_task_assignees dta
-      JOIN users u ON dta.user_id = u.id
-      WHERE dta.task_id IN (${placeholders})
-      ORDER BY u.name
-      `
-            )
-            .bind(...taskIds)
-            .all();
+        // Batch size to avoid SQLite variable limit (max 999)
+        const BATCH_SIZE = 100;
 
-        for (const row of assigneesRes.results) {
-            const parent = byId.get(row.task_id);
-            if (parent) {
-                parent.assignees.push({
-                    id: row.user_id,
-                    name: row.name,
-                    email: row.email,
-                });
+        // ---- Load assignees in batches ----
+        for (let i = 0; i < taskIds.length; i += BATCH_SIZE) {
+            const batch = taskIds.slice(i, i + BATCH_SIZE);
+            const placeholders = batch.map(() => "?").join(", ");
+            const assigneesRes = await env.WRAP_DB
+                .prepare(
+                    `
+          SELECT
+            dta.task_id,
+            u.id    AS user_id,
+            u.name  AS name,
+            u.email AS email
+          FROM daily_task_assignees dta
+          JOIN users u ON dta.user_id = u.id
+          WHERE dta.task_id IN (${placeholders})
+          ORDER BY u.name
+          `
+                )
+                .bind(...batch)
+                .all();
+
+            for (const row of assigneesRes.results) {
+                const parent = byId.get(row.task_id);
+                if (parent) {
+                    parent.assignees.push({
+                        id: row.user_id,
+                        name: row.name,
+                        email: row.email,
+                    });
+                }
             }
         }
 
@@ -316,31 +322,35 @@ async function listDailyTasks(env, searchParams) {
             }
         }
 
-        // ---- Load subtasks ----
-        const subtasksRes = await env.WRAP_DB
-            .prepare(
-                `
-      SELECT
-        s.*,
-        u.name  AS assigned_to_name,
-        u.email AS assigned_to_email
-      FROM daily_task_subtasks s
-      LEFT JOIN users u ON s.assigned_to_id = u.id
-      WHERE s.task_id IN (${placeholders})
-      ORDER BY
-        s.due_date IS NULL,  -- non-null due dates first
-        s.due_date,
-        s.id
-      `
-            )
-            .bind(...taskIds)
-            .all();
+        // ---- Load subtasks in batches ----
+        for (let i = 0; i < taskIds.length; i += BATCH_SIZE) {
+            const batch = taskIds.slice(i, i + BATCH_SIZE);
+            const placeholders = batch.map(() => "?").join(", ");
+            const subtasksRes = await env.WRAP_DB
+                .prepare(
+                    `
+          SELECT
+            s.*,
+            u.name  AS assigned_to_name,
+            u.email AS assigned_to_email
+          FROM daily_task_subtasks s
+          LEFT JOIN users u ON s.assigned_to_id = u.id
+          WHERE s.task_id IN (${placeholders})
+          ORDER BY
+            s.due_date IS NULL,  -- non-null due dates first
+            s.due_date,
+            s.id
+          `
+                )
+                .bind(...batch)
+                .all();
 
-        for (const row of subtasksRes.results) {
-            const parent = byId.get(row.task_id);
-            if (!parent) continue;
-            const { task_id, ...rest } = row;
-            parent.subtasks.push(rest);
+            for (const row of subtasksRes.results) {
+                const parent = byId.get(row.task_id);
+                if (!parent) continue;
+                const { task_id, ...rest } = row;
+                parent.subtasks.push(rest);
+            }
         }
 
         return json(tasks);
