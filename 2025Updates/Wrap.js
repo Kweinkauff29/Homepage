@@ -1347,9 +1347,11 @@ async function listProjects(env) {
                 SELECT 
                     s.*, 
                     u.name AS assigned_to_name, 
-                    u.email AS assigned_to_email
+                    u.email AS assigned_to_email,
+                    c.name AS completed_by_name
                 FROM project_steps s
                 LEFT JOIN users u ON s.assigned_to_id = u.id
+                LEFT JOIN users c ON s.completed_by_id = c.id
                 WHERE s.project_id IN (${placeholders})
                 ORDER BY s.project_id, s.step_order, s.id
             `)
@@ -1688,19 +1690,24 @@ async function updateProjectStep(request, env, stepId) {
     const step_order = body.step_order !== undefined ? body.step_order : existing.step_order;
 
     let completed_at = existing.completed_at;
+    let completed_by_id = existing.completed_by_id;
+
     if (existing.status !== "done" && status === "done") {
         completed_at = now;
+        // Use the user ID provided in the body (the person clicking the checkbox)
+        completed_by_id = body.completed_by_id || null;
     } else if (existing.status === "done" && status !== "done") {
         completed_at = null;
+        completed_by_id = null;
     }
 
     await env.WRAP_DB
         .prepare(`
             UPDATE project_steps 
-            SET title = ?, description = ?, assigned_to_id = ?, status = ?, step_order = ?, completed_at = ?, updated_at = ?
+            SET title = ?, description = ?, assigned_to_id = ?, status = ?, step_order = ?, completed_at = ?, completed_by_id = ?, updated_at = ?
             WHERE id = ?
         `)
-        .bind(title, description, assigned_to_id, status, step_order, completed_at, now, stepId)
+        .bind(title, description, assigned_to_id, status, step_order, completed_at, completed_by_id, now, stepId)
         .run();
 
     // Update assignees if provided
@@ -1710,9 +1717,10 @@ async function updateProjectStep(request, env, stepId) {
 
     const { results } = await env.WRAP_DB
         .prepare(`
-            SELECT s.*, u.name AS assigned_to_name
+            SELECT s.*, u.name AS assigned_to_name, u2.name AS completed_by_name
             FROM project_steps s
             LEFT JOIN users u ON s.assigned_to_id = u.id
+            LEFT JOIN users u2 ON s.completed_by_id = u2.id
             WHERE s.id = ?
         `)
         .bind(stepId)

@@ -5882,14 +5882,25 @@
         actionsDiv.style.marginLeft = "auto";
 
         // Complete Button (if assigned or super/owner)
-        if ((isAssigned || isSuperUser || isProjectOwner) && step.status !== "done") {
+        // Complete/Uncomplete Toggle (if assigned or super/owner)
+        if (isAssigned || isSuperUser || isProjectOwner) {
           const actionBtn = document.createElement("button");
           actionBtn.className = "step-action-btn";
-          actionBtn.textContent = "✓";
-          actionBtn.title = "Mark Complete";
+
+          if (step.status === "done") {
+            actionBtn.textContent = "✖"; // Or undo icon
+            actionBtn.title = "Mark Incomplete";
+            actionBtn.style.opacity = "0.6";
+          } else {
+            actionBtn.textContent = "✓";
+            actionBtn.title = "Mark Complete";
+            actionBtn.style.fontWeight = "bold";
+          }
+
           actionBtn.addEventListener("click", async (e) => {
             e.stopPropagation();
-            await markStepComplete(step.id, project.id);
+            const newStatus = step.status === "done" ? "pending" : "done";
+            await toggleProjectStepStatus(step.id, project.id, newStatus);
           });
           actionsDiv.appendChild(actionBtn);
         }
@@ -6091,14 +6102,21 @@
       }
     }
 
-    async function markStepComplete(stepId, projectId) {
+    async function toggleProjectStepStatus(stepId, projectId, newStatus) {
       try {
-        await apiSend(`/project-steps/${stepId}`, "PATCH", { status: "done" });
+        const body = { status: newStatus };
+        if (newStatus === "done") {
+          body.completed_by_id = state.currentUser.id;
+        }
+
+        await apiSend(`/project-steps/${stepId}`, "PATCH", body);
         await loadProjects();
-        showToast("Step completed!");
+
+        if (newStatus === "done") showToast("Step completed!");
+        else showToast("Step unchecked");
       } catch (err) {
         console.error(err);
-        showToast("Error completing step", true);
+        showToast("Error updating step", true);
       }
     }
 
