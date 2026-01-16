@@ -202,26 +202,27 @@ async function replaceProjectStepAssignees(env, stepId, assigneeIds, primaryAssi
 /* ---------- DAILY TASKS ---------- */
 
 async function listDailyTasks(env, searchParams) {
-    const monthKey = searchParams.get("month"); // '2025-12'
-    const assignedToIdRaw = searchParams.get("assignedToId");
+    try {
+        const monthKey = searchParams.get("month"); // '2025-12'
+        const assignedToIdRaw = searchParams.get("assignedToId");
 
-    if (!monthKey) {
-        return json({ error: "month query param required (YYYY-MM)" }, 400);
-    }
-
-    let assignedToId = null;
-    if (assignedToIdRaw) {
-        const n = Number(assignedToIdRaw);
-        if (!Number.isInteger(n) || n <= 0) {
-            return json({ error: "assignedToId must be a positive integer" }, 400);
+        if (!monthKey) {
+            return json({ error: "month query param required (YYYY-MM)" }, 400);
         }
-        assignedToId = n;
-    }
 
-    const start = `${monthKey}-01`;
-    const end = `${monthKey}-31`;
+        let assignedToId = null;
+        if (assignedToIdRaw) {
+            const n = Number(assignedToIdRaw);
+            if (!Number.isInteger(n) || n <= 0) {
+                return json({ error: "assignedToId must be a positive integer" }, 400);
+            }
+            assignedToId = n;
+        }
 
-    let query = `
+        const start = `${monthKey}-01`;
+        const end = `${monthKey}-31`;
+
+        let query = `
     SELECT
       dt.*,
       u_created.name   AS created_by_name,
@@ -235,13 +236,13 @@ async function listDailyTasks(env, searchParams) {
     LEFT JOIN users u_assigner ON dt.assigned_by_id = u_assigner.id
     WHERE dt.task_date BETWEEN ? AND ?
   `;
-    const params = [start, end];
+        const params = [start, end];
 
-    if (assignedToId) {
-        // Show tasks where:
-        // - they are the primary assigned_to_id, OR
-        // - they appear in the multi-assignee join table
-        query += `
+        if (assignedToId) {
+            // Show tasks where:
+            // - they are the primary assigned_to_id, OR
+            // - they appear in the multi-assignee join table
+            query += `
       AND (
         dt.assigned_to_id = ?
         OR EXISTS (
@@ -252,33 +253,33 @@ async function listDailyTasks(env, searchParams) {
         )
       )
     `;
-        params.push(assignedToId, assignedToId);
-    }
+            params.push(assignedToId, assignedToId);
+        }
 
-    query += " ORDER BY dt.task_date, dt.id";
+        query += " ORDER BY dt.task_date, dt.id";
 
-    const { results } = await env.WRAP_DB.prepare(query).bind(...params).all();
+        const { results } = await env.WRAP_DB.prepare(query).bind(...params).all();
 
-    if (!results.length) {
-        return json([]);
-    }
+        if (!results.length) {
+            return json([]);
+        }
 
-    // Start shaping tasks
-    const tasks = results.map((row) => ({
-        ...row,
-        assignees: [],
-        subtasks: [],
-    }));
+        // Start shaping tasks
+        const tasks = results.map((row) => ({
+            ...row,
+            assignees: [],
+            subtasks: [],
+        }));
 
-    const taskIds = tasks.map((t) => t.id);
-    const placeholders = taskIds.map(() => "?").join(", ");
-    const byId = new Map();
-    for (const t of tasks) byId.set(t.id, t);
+        const taskIds = tasks.map((t) => t.id);
+        const placeholders = taskIds.map(() => "?").join(", ");
+        const byId = new Map();
+        for (const t of tasks) byId.set(t.id, t);
 
-    // ---- Load assignees ----
-    const assigneesRes = await env.WRAP_DB
-        .prepare(
-            `
+        // ---- Load assignees ----
+        const assigneesRes = await env.WRAP_DB
+            .prepare(
+                `
       SELECT
         dta.task_id,
         u.id    AS user_id,
@@ -289,36 +290,36 @@ async function listDailyTasks(env, searchParams) {
       WHERE dta.task_id IN (${placeholders})
       ORDER BY u.name
       `
-        )
-        .bind(...taskIds)
-        .all();
+            )
+            .bind(...taskIds)
+            .all();
 
-    for (const row of assigneesRes.results) {
-        const parent = byId.get(row.task_id);
-        if (parent) {
-            parent.assignees.push({
-                id: row.user_id,
-                name: row.name,
-                email: row.email,
-            });
+        for (const row of assigneesRes.results) {
+            const parent = byId.get(row.task_id);
+            if (parent) {
+                parent.assignees.push({
+                    id: row.user_id,
+                    name: row.name,
+                    email: row.email,
+                });
+            }
         }
-    }
 
-    // Fallback for any tasks not in the join table yet
-    for (const t of tasks) {
-        if (!t.assignees.length && t.assigned_to_id) {
-            t.assignees.push({
-                id: t.assigned_to_id,
-                name: t.assigned_to_name,
-                email: t.assigned_to_email,
-            });
+        // Fallback for any tasks not in the join table yet
+        for (const t of tasks) {
+            if (!t.assignees.length && t.assigned_to_id) {
+                t.assignees.push({
+                    id: t.assigned_to_id,
+                    name: t.assigned_to_name,
+                    email: t.assigned_to_email,
+                });
+            }
         }
-    }
 
-    // ---- Load subtasks ----
-    const subtasksRes = await env.WRAP_DB
-        .prepare(
-            `
+        // ---- Load subtasks ----
+        const subtasksRes = await env.WRAP_DB
+            .prepare(
+                `
       SELECT
         s.*,
         u.name  AS assigned_to_name,
@@ -331,18 +332,22 @@ async function listDailyTasks(env, searchParams) {
         s.due_date,
         s.id
       `
-        )
-        .bind(...taskIds)
-        .all();
+            )
+            .bind(...taskIds)
+            .all();
 
-    for (const row of subtasksRes.results) {
-        const parent = byId.get(row.task_id);
-        if (!parent) continue;
-        const { task_id, ...rest } = row;
-        parent.subtasks.push(rest);
+        for (const row of subtasksRes.results) {
+            const parent = byId.get(row.task_id);
+            if (!parent) continue;
+            const { task_id, ...rest } = row;
+            parent.subtasks.push(rest);
+        }
+
+        return json(tasks);
+    } catch (err) {
+        console.error("listDailyTasks error:", err);
+        return json({ error: "Internal server error", details: err.message }, 500);
     }
-
-    return json(tasks);
 }
 
 async function createDailyTask(request, env) {
