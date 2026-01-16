@@ -3487,13 +3487,27 @@
 
 
     // ===== LIVE SYNC =====
-    const LIVE_SYNC_INTERVAL_MS = 30000; // 30 seconds
+    const LIVE_SYNC_INTERVAL_MS = 300000; // 5 minutes
+    const TYPING_COOLDOWN_MS = 30000; // 30 seconds after typing before sync
     let liveSyncIntervalId = null;
+    let lastUserTypingTime = 0;
+
+    // Track user typing activity
+    document.addEventListener("input", () => {
+      lastUserTypingTime = Date.now();
+    });
+
     function startLiveSync() {
       if (liveSyncIntervalId) return; // Already running
       console.log("[LiveSync] Starting with interval:", LIVE_SYNC_INTERVAL_MS, "ms");
       liveSyncIntervalId = setInterval(() => {
         if (document.visibilityState === "visible") {
+          // Check if user was typing recently
+          const timeSinceTyping = Date.now() - lastUserTypingTime;
+          if (timeSinceTyping < TYPING_COOLDOWN_MS) {
+            console.log("[LiveSync] Skipping - user was typing recently (", Math.round(timeSinceTyping / 1000), "s ago)");
+            return;
+          }
           console.log("[LiveSync] Refreshing data...");
           refreshAllData(true); // silent=true to avoid toasts
         }
@@ -3503,6 +3517,12 @@
     }
     function onVisibilityChange() {
       if (document.visibilityState === "visible" && liveSyncIntervalId) {
+        // Check if user was typing recently before syncing on visibility change
+        const timeSinceTyping = Date.now() - lastUserTypingTime;
+        if (timeSinceTyping < TYPING_COOLDOWN_MS) {
+          console.log("[LiveSync] Tab visible but skipping sync - user was typing recently");
+          return;
+        }
         console.log("[LiveSync] Tab visible again, refreshing...");
         refreshAllData(true);
       }
@@ -5222,6 +5242,16 @@
           ownerTag.textContent = owner ? owner.name : "";
           topRow.appendChild(ownerTag);
 
+          const deleteBtn = document.createElement("button");
+          deleteBtn.type = "button";
+          deleteBtn.className = "goal-delete-btn";
+          deleteBtn.textContent = "Remove";
+          deleteBtn.addEventListener("click", async (e) => {
+            e.stopPropagation();
+            await deleteMonthlyGoal(goal.id);
+          });
+          topRow.appendChild(deleteBtn);
+
           card.appendChild(topRow);
 
           const midRow = document.createElement("div");
@@ -5278,8 +5308,12 @@
           const noteArea = document.createElement("textarea");
           noteArea.value = goal.progress_note || goal.description || "";
           noteArea.placeholder = "Description / notes…";
-          noteArea.addEventListener("change", () => {
-            updateMonthlyGoal(goal.id, { progress_note: noteArea.value.trim() });
+          let noteDebounceTimer = null;
+          noteArea.addEventListener("input", () => {
+            clearTimeout(noteDebounceTimer);
+            noteDebounceTimer = setTimeout(() => {
+              updateMonthlyGoal(goal.id, { progress_note: noteArea.value.trim() });
+            }, 3000); // Save after 3 seconds of no typing
           });
           noteRow.appendChild(noteArea);
           card.appendChild(noteRow);
@@ -6557,7 +6591,7 @@
           deleteBtn.textContent = "Remove";
           deleteBtn.addEventListener("click", async (e) => {
             e.stopPropagation();
-            await deleteMonthlyGoal(goal.id);
+            await deleteAnnualGoal(goal.id);
           });
           topRow.appendChild(deleteBtn);
 
@@ -6617,8 +6651,12 @@
           const noteArea = document.createElement("textarea");
           noteArea.value = goal.progress_note || goal.description || "";
           noteArea.placeholder = "Description / notes…";
-          noteArea.addEventListener("change", () => {
-            updateAnnualGoal(goal.id, { progress_note: noteArea.value.trim() });
+          let noteDebounceTimer = null;
+          noteArea.addEventListener("input", () => {
+            clearTimeout(noteDebounceTimer);
+            noteDebounceTimer = setTimeout(() => {
+              updateAnnualGoal(goal.id, { progress_note: noteArea.value.trim() });
+            }, 3000); // Save after 3 seconds of no typing
           });
           noteRow.appendChild(noteArea);
           card.appendChild(noteRow);
