@@ -126,8 +126,10 @@ async function handleUploadMembers(request, env) {
               primary_address1,
               primary_address2,
               memberships,
+              tags,
+              contact_balance,
               updated_at
-            ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, datetime('now'))`
+            ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, datetime('now'))`
                     )
                     .bind(
                         row.contactId ?? null,
@@ -139,7 +141,9 @@ async function handleUploadMembers(request, env) {
                         row.coeLatestDate ?? null,
                         row.primaryAddress1 ?? null,
                         row.primaryAddress2 ?? null,
-                        row.memberships ?? null
+                        row.memberships ?? null,
+                        row.tags ?? null,
+                        row.contactBalance ?? null
                     )
             );
         }
@@ -317,22 +321,83 @@ async function handleLogsRequest(request, env) {
                     matchStatus = "nrds_not_found";
                 }
             } else {
+
                 const fullName = `${firstName.trim()} ${lastName.trim()}`;
-                const { results } = await db
+
+                // 1. Exact match
+                const { results: exactResults } = await db
                     .prepare(
                         "SELECT * FROM members WHERE full_name = ? COLLATE NOCASE LIMIT 1"
                     )
                     .bind(fullName)
                     .all();
-                if (results && results.length) {
-                    member = results[0];
+
+                if (exactResults && exactResults.length) {
+                    member = exactResults[0];
                     matchStatus = "matched_by_name";
                 } else {
-                    matchStatus = "name_not_found";
+                    // 2. Prefix match (e.g. "Ursula Weinkauff" matches "Ursula Weinkauff PA")
+                    const prefixName = `${fullName}%`;
+                    const { results: prefixResults } = await db
+                        .prepare(
+                            "SELECT * FROM members WHERE full_name LIKE ? LIMIT 1"
+                        )
+                        .bind(prefixName)
+                        .all();
+
+                    if (prefixResults && prefixResults.length) {
+                        member = prefixResults[0];
+                        matchStatus = "matched_by_name_prefix";
+                    } else {
+                        // 3. Fallback: Contains match (for reverse cases or middle names)
+                        // Be careful not to match too broadly, so require length > 5
+                        if (fullName.length > 5) {
+                            const containsName = `%${fullName}%`;
+                            const { results: fuzzyResults } = await db
+                                .prepare(
+                                    "SELECT * FROM members WHERE full_name LIKE ? LIMIT 1"
+                                )
+                                .bind(containsName)
+                                .all();
+
+                            if (fuzzyResults && fuzzyResults.length) {
+                                member = fuzzyResults[0];
+                                matchStatus = "matched_by_name_fuzzy";
+                            } else {
+                                matchStatus = "name_not_found";
+                            }
+                        } else {
+                            matchStatus = "name_not_found";
+                        }
+                    }
                 }
             }
         } else {
             matchStatus = "db_not_configured";
+        }
+
+        // Determine REQUEST STATUS and BLOCKING LOGIC
+        let requestStatus = "UNKNOWN";
+
+        if (!member) {
+            requestStatus = "MEMBER_NOT_FOUND";
+        } else {
+            // Check Tags
+            const tags = (member.tags || "").toLowerCase();
+            if (tags.includes("no logs") || tags.includes("nologs") || tags.includes("no-logs")) {
+                requestStatus = "BLOCKED_TAGS";
+            } else {
+                // Check Balance
+                const rawBalance = member.contact_balance || 0;
+                // Ensure it's treated as a number
+                const balance = parseFloat(rawBalance) || 0;
+
+                if (balance > 0) {
+                    requestStatus = "BLOCKED_BALANCE";
+                } else {
+                    requestStatus = "SUCCESS";
+                }
+            }
         }
 
         // Save request to logs_requests table (NEW)
@@ -351,7 +416,7 @@ async function handleLogsRequest(request, env) {
             needsLetter,
             cancelSupra,
             hasListings,
-        }, !!member);
+        }, !!member, requestStatus);
 
         // Always email staff with the request (success or not)
         await sendLogsRequestEmail(env, {
@@ -373,6 +438,7 @@ async function handleLogsRequest(request, env) {
             },
             member,
             matchStatus,
+            requestStatus // Pass status to email
         });
 
         if (!member) {
@@ -385,6 +451,26 @@ async function handleLogsRequest(request, env) {
                     `We submitted your request, but could not automatically locate a member record for "${fullName}". ` +
                     `Please double-check that your name matches exactly as it appears in our MLS (just first and last name) ` +
                     `or provide your NRDS ID. If you still have trouble, please contact support@berealtors.org.`,
+            });
+        }
+
+        // Handle BLOCKED status responses
+        if (requestStatus === "BLOCKED_TAGS") {
+            return jsonResponse({
+                success: false,
+                submitted: true, // It was saved/emailed
+                errorCode: "BLOCKED_TAGS",
+                message: "LOGS cannot be generated. Please contact support@BERealtors.org as there is a hold on your account."
+            });
+        }
+
+        if (requestStatus === "BLOCKED_BALANCE") {
+            const formattedBalance = new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(member.contact_balance || 0);
+            return jsonResponse({
+                success: false,
+                submitted: true,
+                errorCode: "BLOCKED_BALANCE",
+                message: `LOGS cannot be generated since you hold an unpaid balance of ${formattedBalance}. Please contact membership or billing for clarification.`
             });
         }
 
@@ -405,7 +491,7 @@ async function handleLogsRequest(request, env) {
 
 // ============ NEW: SAVE REQUEST TO DATABASE ============
 
-async function saveLogsRequest(env, data, matched = false) {
+async function saveLogsRequest(env, data, matched = false, requestStatus = "UNKNOWN") {
     const db = env.BER_MEMBERS;
     if (!db) {
         console.warn("Cannot save logs request: BER_MEMBERS not configured");
@@ -421,8 +507,8 @@ async function saveLogsRequest(env, data, matched = false) {
         drop_memberships, drop_when, leaving_feedback,
         change_reasons, other_why, new_contact,
         new_broker_interested, needs_letter, cancel_supra,
-        has_listings, member_matched, created_at
-      ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+        has_listings, member_matched, request_status, created_at
+      ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
     `).bind(
             data.firstName || "",
             data.lastName || "",
@@ -439,6 +525,7 @@ async function saveLogsRequest(env, data, matched = false) {
             data.cancelSupra || "",
             data.hasListings || "",
             matched ? 1 : 0,
+            requestStatus,
             now
         ).run();
     } catch (err) {
@@ -535,7 +622,7 @@ async function getLogsStats(env, searchParams) {
 
     try {
         const { results } = await db.prepare(`
-      SELECT change_reasons, new_broker_interested, needs_letter, cancel_supra, has_listings
+      SELECT change_reasons, new_broker_interested, needs_letter, cancel_supra, has_listings, request_status, leaving_feedback, other_why, member_matched
       FROM logs_requests ${whereClause}
     `).bind(...params).all();
 
@@ -547,7 +634,11 @@ async function getLogsStats(env, searchParams) {
             needsLetter: {},
             cancelSupra: {},
             hasListings: {},
+            requestStatus: {},
+            keywords: []
         };
+
+        const allText = [];
 
         (results || []).forEach(row => {
             // Count change reasons (can be multiple per submission)
@@ -568,13 +659,60 @@ async function getLogsStats(env, searchParams) {
 
             const hl = row.has_listings || "N/A";
             stats.hasListings[hl] = (stats.hasListings[hl] || 0) + 1;
+
+            // Count status
+            const status = row.request_status || (row.member_matched ? "SUCCESS" : "MEMBER_NOT_FOUND");
+            stats.requestStatus[status] = (stats.requestStatus[status] || 0) + 1;
+
+            // Collect text for word map
+            if (row.leaving_feedback) allText.push(row.leaving_feedback);
+            if (row.other_why) allText.push(row.other_why);
         });
+
+        // Generate word map
+        stats.keywords = getWordFrequency(allText.join(" "));
 
         return jsonResponse(stats);
     } catch (err) {
         console.error("getLogsStats error:", err);
         return jsonResponse({ error: err.message }, 500);
     }
+}
+
+function getWordFrequency(text) {
+    if (!text) return [];
+
+    // Simple stop words list
+    const stopWords = new Set([
+        "a", "an", "the", "and", "or", "but", "is", "are", "was", "were",
+        "of", "in", "on", "at", "to", "from", "with", "by", "for", "about",
+        "i", "you", "he", "she", "it", "we", "they", "my", "your", "our", "their",
+        "this", "that", "these", "those", "have", "has", "had", "do", "does", "did",
+        "can", "could", "will", "would", "should", "not", "no", "yes", "so", "as",
+        "if", "when", "where", "why", "how", "all", "any", "some", "none",
+        "be", "been", "being", "me", "him", "her", "us", "them", "which", "who",
+        "what", "there", "here", "just", "very", "much", "more", "less", "only",
+        "than", "then", "now", "also", "too", "etc", "re", "na", "n/a", "none", "nothing"
+    ]);
+
+    const words = text
+        .toLowerCase()
+        .replace(/[.,/#!$%^&*;:{}=\-_`~()]/g, "") // Remove punctuation
+        .split(/\s+/);
+
+    const frequency = {};
+
+    words.forEach(word => {
+        if (word.length > 2 && !stopWords.has(word)) { // Filter short words and stop words
+            frequency[word] = (frequency[word] || 0) + 1;
+        }
+    });
+
+    // Sort by count
+    return Object.entries(frequency)
+        .map(([word, count]) => ({ word, weight: count })) // wordcloud2 expects {word, weight}
+        .sort((a, b) => b.weight - a.weight)
+        .slice(0, 50); // Return top 50
 }
 
 async function updateLogsRequest(request, env, id) {

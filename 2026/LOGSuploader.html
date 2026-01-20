@@ -104,8 +104,8 @@
 
 <body>
   <div class="card">
-    <h1>Members DB Upload</h1>
-    <p>Upload the latest <strong>Members Report(2).xlsx</strong> to refresh the Letter of Good Standing database.</p>
+    <h1>Members DB Upload <span style="font-size:0.6em; color:#888; margin-left:10px;">v2 (Tags Support)</span></h1>
+    <p>Upload the latest <strong>Members Report(4).xlsx</strong> to refresh the Letter of Good Standing database.</p>
 
     <div class="hint">
       This will <strong>replace all existing rows</strong> in the D1 database.
@@ -200,27 +200,43 @@
             const firstSheetName = workbook.SheetNames[0];
             const sheet = workbook.Sheets[firstSheetName];
 
-            const raw = XLSX.utils.sheet_to_json(sheet, { defval: "" });
+            // Use header:1 to get array of arrays, so we can trim headers manually
+            const rawData = XLSX.utils.sheet_to_json(sheet, { header: 1, defval: "" });
 
-            const normalized = raw.map((row) => ({
-              contactId: row["ContactId"] || null,
-              nrdsId: row["NRDS Id"] || null,
-              fullName: row["Contact Name"] || null,
-              contactType: row["Contact Type"] || null,
-              membershipStatus: row["Contact Membership Status"] || null,
-              officeName: row["Primary/Contact Name"] || null,
-              coeLatestDate: row["Code of Ethics Latest Date"] || null,
-              primaryAddress1: row["Primary Contact Address 1"] || null,
-              primaryAddress2: row["Primary Contact Address 2"] || null,
-              memberships: row["Memberships"] || null,
-              tags: row["Tags"] || null,
-              contactBalance: row["Contact Balance"] || null,
+            if (!rawData || rawData.length < 2) {
+              resolve([]);
+              return;
+            }
+
+            // Normalize headers: trim and lowercase for easier matching
+            const headers = rawData[0].map(h => String(h || "").trim());
+            const rows = rawData.slice(1);
+
+            // Helper to get value by header name (case-insensitive)
+            const getValue = (rowArray, headerName) => {
+              const idx = headers.findIndex(h => h.toLowerCase() === headerName.toLowerCase());
+              return idx !== -1 ? rowArray[idx] : null;
+            };
+
+            const normalized = rows.map((row) => ({
+              contactId: getValue(row, "ContactId"),
+              nrdsId: getValue(row, "NRDS Id"),
+              fullName: getValue(row, "Contact Name"),
+              contactType: getValue(row, "Contact Type"),
+              membershipStatus: getValue(row, "Contact Membership Status"),
+              officeName: getValue(row, "Primary/Contact Name"),
+              coeLatestDate: getValue(row, "Code of Ethics Latest Date"),
+              primaryAddress1: getValue(row, "Primary Contact Address 1"),
+              primaryAddress2: getValue(row, "Primary Contact Address 2"),
+              memberships: getValue(row, "Memberships"),
+              tags: getValue(row, "Tags"),
+              contactBalance: getValue(row, "Contact Balance"),
             }));
 
-            const filtered = normalized.filter(
-              (r) => r.nrdsId || r.fullName
-            );
+            // Filter out empty rows
+            const filtered = normalized.filter((r) => r.nrdsId || r.fullName);
 
+            console.log("Parsed rows preview:", filtered.slice(0, 3));
             resolve(filtered);
           } catch (err) {
             reject(err);
