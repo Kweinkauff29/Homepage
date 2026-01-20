@@ -2789,14 +2789,8 @@
         return;
       }
 
-      const prefsKey = `user-prefs-${state.activeUser.id}`;
-      try {
-        const prefs = localStorage.getItem(prefsKey);
-        state.userPrefs = prefs ? JSON.parse(prefs) : {}; // default to empty object if no prefs
-      } catch (err) {
-        console.error("Error loading user preferences:", err);
-        state.userPrefs = {}; // fallback
-      }
+      // NOTE: state.userPrefs is loaded by loadUserPrefsForActiveUser() from the DB
+      // Do NOT overwrite it with localStorage here
 
       const pillarsKey = `wrapsheet-pillars-v1:${state.activeUser.id}`;
       try {
@@ -2818,31 +2812,6 @@
 
     function getActiveUserSafe() {
       return state.users.find(u => String(u.id) === String(state.activeUserId)) || null;
-    }
-
-    async function setActiveUser(userIdOrNull) {
-      state.activeUserId = userIdOrNull ? Number(userIdOrNull) : null;
-      state.activeUser = getActiveUserSafe();
-
-      // Sync goals filters to match active user (or "Everyone" if null)
-      const ownerVal = state.activeUserId ? String(state.activeUserId) : "all";
-      state.monthlyOwnerFilter = ownerVal;
-      state.annualOwnerFilter = ownerVal;
-
-      const mo = document.getElementById("monthly-owner-filter");
-      const ao = document.getElementById("annual-owner-filter");
-      if (mo) mo.value = ownerVal;
-      if (ao) ao.value = ownerVal;
-
-      // Load prefs + pillars for whoever we're working on
-      await Promise.all([
-        loadUserPrefsForActiveUser(),
-        loadPillarsForActiveUser()
-      ]);
-
-      renderMonthlyGoals();
-      renderAnnualGoals();
-      renderPillars();
     }
 
 
