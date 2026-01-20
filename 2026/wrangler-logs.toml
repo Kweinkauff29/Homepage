@@ -1,0 +1,18 @@
+name = "ber-logs-api"
+main = "ber-logs-api.js"
+compatibility_date = "2024-01-01"
+
+# D1 Database binding
+# This should already exist - get the database_id from your Cloudflare dashboard
+# or run: wrangler d1 list
+
+[[d1_databases]]
+binding = "BER_MEMBERS"
+database_name = "ber-members"
+database_id = "YOUR_DATABASE_ID_HERE"  # Replace with actual ID
+
+# Environment variables (set these via wrangler secret put)
+# - ADMIN_UPLOAD_KEY: Key for uploading members
+# - MJ_API_KEY: Mailjet API key
+# - MJ_API_SECRET: Mailjet API secret
+# - LOGS_FROM_EMAIL: From email for notifications
