@@ -318,7 +318,18 @@
 
         <label class="full-row">
           When should we drop your membership? <span class="required">*</span>
-          <input type="text" id="dropWhen" placeholder='e.g. "Immediately" or MM/DD/YYYY' />
+          <div class="radio-group"
+            style="margin-top: 0.5rem; flex-direction: column; align-items: flex-start; gap: 0.5rem;">
+            <label>
+              <input type="radio" name="dropWhenOption" value="Immediately" checked onchange="toggleDropDate(this)">
+              Immediately
+            </label>
+            <label style="display: flex; align-items: center; gap: 0.5rem;">
+              <input type="radio" name="dropWhenOption" value="Date" onchange="toggleDropDate(this)">
+              Specific Date
+              <input type="date" id="dropDateSpecific" style="display:none; padding: 0.3rem; margin-left: 0.5rem;" />
+            </label>
+          </div>
         </label>
 
         <label class="full-row">
@@ -620,6 +631,20 @@
       return el ? el.value : null;
     }
 
+    // New function to toggle Drop Date visibility
+    function toggleDropDate(radio) {
+      const dateInput = document.getElementById('dropDateSpecific');
+      if (radio.value === 'Date') {
+        dateInput.style.display = 'inline-block';
+        dateInput.required = true;
+        dateInput.focus();
+      } else {
+        dateInput.style.display = 'none';
+        dateInput.required = false;
+        dateInput.value = '';
+      }
+    }
+
     formEl.addEventListener("submit", async (e) => {
       e.preventDefault();
       letterEl.style.display = "none";
@@ -633,7 +658,14 @@
       const organization = document.getElementById("organization").value.trim();
       const nrdsId = document.getElementById("nrdsId").value.trim();
       const dropMemberships = getCheckedValues("dropMembershipGroup");
-      const dropWhen = document.getElementById("dropWhen").value.trim();
+
+      // LOGIC FOR DROP DATE
+      const dropOption = document.querySelector('input[name="dropWhenOption"]:checked').value;
+      let dropWhen = dropOption;
+      if (dropOption === 'Date') {
+        dropWhen = document.getElementById('dropDateSpecific').value;
+      }
+
       const leavingFeedback = document.getElementById("leavingFeedback").value.trim();
       const otherWhy = document.getElementById("otherWhy").value.trim();
       const changeReasons = getCheckedValues("changeReasonGroup");
@@ -653,7 +685,7 @@
         return;
       }
       if (!dropWhen) {
-        setStatus("Please tell us when to drop your membership.", "err");
+        setStatus("Please tell us when to drop your membership (Immediately or Date).", "err");
         return;
       }
       if (!changeReasons.length) {

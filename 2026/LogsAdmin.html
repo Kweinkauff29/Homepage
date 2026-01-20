@@ -879,34 +879,53 @@
             const ctx = canvas.getContext('2d');
             ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-            const words = (statsData.keywords || []).map(k => [k.word, k.weight * 5]);
+            const keywords = statsData.keywords || [];
+            // Map and filter valid words
+            const words = keywords
+                .filter(k => k.word && k.weight > 0)
+                .map(k => [k.word, k.weight * 5]);
 
             // Remove existing empty message if any
             const existingMsg = container.querySelector('.chart-empty');
             if (existingMsg) existingMsg.remove();
 
+            // Debug info (invisible unless inspected, or helpful for confirming data)
+            console.log('Word Map Data:', words);
+
             if (words.length > 0 && window.WordCloud) {
                 canvas.style.display = 'block';
-                WordCloud(canvas, {
-                    list: words,
-                    gridSize: 8,
-                    weightFactor: function (size) {
-                        // Linear scaling: base 12px + (count * 15px)
-                        const ratio = canvas.width / 1024;
-                        return (12 + (size * 15)) * ratio;
-                    },
-                    fontFamily: "'Oswald', sans-serif",
-                    color: function () {
-                        return (['#e0002a', '#00c853', '#ff9800', '#00a8e8', '#64748b'])[Math.floor(Math.random() * 5)];
-                    },
-                    rotateRatio: 0.5,
-                    backgroundColor: 'rgba(0,0,0,0)'
-                });
+                try {
+                    WordCloud(canvas, {
+                        list: words,
+                        gridSize: 8,
+                        weightFactor: function (size) {
+                            // Linear scaling: base 14px + (count * 12px)
+                            const ratio = canvas.width / 1024;
+                            return (14 + (size * 12)) * ratio;
+                        },
+                        fontFamily: "'Oswald', sans-serif",
+                        color: function () {
+                            // High contrast colors
+                            return (['#e0002a', '#059669', '#d97706', '#0284c7', '#475569'])[Math.floor(Math.random() * 5)];
+                        },
+                        rotateRatio: 0.5,
+                        backgroundColor: 'transparent',
+                        drawOutOfBound: false
+                    });
+                } catch (err) {
+                    console.error("WordCloud Error:", err);
+                    canvas.style.display = 'none';
+                    const errMsg = document.createElement('div');
+                    errMsg.className = 'chart-empty';
+                    errMsg.style.color = 'red';
+                    errMsg.textContent = 'Error rendering map: ' + err.message;
+                    container.appendChild(errMsg);
+                }
             } else {
                 canvas.style.display = 'none';
                 const msg = document.createElement('div');
                 msg.className = 'chart-empty';
-                msg.textContent = 'No feedback text data available yet.';
+                msg.innerHTML = `No feedback text data available yet.<br><span style="font-size:0.8em; opacity:0.7">(Count: ${words.length})</span>`;
                 container.appendChild(msg);
             }
         }
