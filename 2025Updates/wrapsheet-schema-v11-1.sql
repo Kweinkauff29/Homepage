@@ -1,0 +1,1 @@
+ALTER TABLE users ADD COLUMN coin_balance INTEGER DEFAULT 0;

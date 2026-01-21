@@ -1998,160 +1998,556 @@
       }
     }
 
-    /* Task Reminder Container - fixed position, stacks children vertically */
-    .reminder-container {
-      position: fixed;
-      top: 80px;
-      right: 16px;
-      z-index: 9999;
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
-      max-width: 360px;
-    }
-
-    /* Individual reminder banner */
-    .reminder-banner {
-      background: linear-gradient(135deg, #fef3c7, #fde68a);
-      border: 2px solid #f59e0b;
-      border-radius: 12px;
-      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2), 0 4px 8px rgba(245, 158, 11, 0.3);
-      animation: slideInRight 0.3s ease-out;
-    }
-
-    /* Overdue reminder style */
-    .reminder-banner.overdue {
-      background: linear-gradient(135deg, #fee2e2, #fecaca);
-      border: 2px solid #ef4444;
-      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2), 0 4px 8px rgba(239, 68, 68, 0.3);
-    }
-
-    .reminder-banner.hidden {
+    /* ===== COIN REWARD SYSTEM ===== */
+    .coin-counter-wrap {
       display: none;
+      /* Hidden by default */
+      flex-direction: column;
+      align-items: flex-end;
+      gap: 2px;
     }
 
-    @keyframes slideInRight {
-      from {
-        transform: translateX(100%);
-        opacity: 0;
-      }
-
-      to {
-        transform: translateX(0);
-        opacity: 1;
-      }
-    }
-
-    .reminder-content {
+    .coin-counter-wrap.visible {
       display: flex;
+    }
+
+    .coin-counter {
+      display: inline-flex;
       align-items: center;
-      gap: 12px;
-      padding: 12px 16px;
+      gap: 6px;
+      padding: 6px 12px;
+      border-radius: 999px;
+      background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%);
+      border: 2px solid #d97706;
+      box-shadow: 0 2px 8px rgba(245, 158, 11, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.3);
+      font-size: 14px;
+      font-weight: 700;
+      color: #78350f;
+      cursor: default;
+      user-select: none;
+      transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
     }
 
-    .reminder-icon {
-      font-size: 28px;
-      animation: shake 0.5s ease-in-out infinite;
+    .coin-caps {
+      display: flex;
+      gap: 8px;
+      font-size: 10px;
+      color: var(--ink-soft);
+      opacity: 0.8;
     }
 
-    @keyframes shake {
+    .coin-caps span {
+      background: rgba(0, 0, 0, 0.1);
+      padding: 2px 6px;
+      border-radius: 4px;
+    }
+
+    body[data-theme="dark"] .coin-caps span {
+      background: rgba(255, 255, 255, 0.1);
+    }
+
+    .coin-counter:hover {
+      transform: scale(1.05);
+    }
+
+    .coin-counter:hover {
+      transform: scale(1.05);
+    }
+
+    .coin-counter.pulse {
+      animation: coinPulse 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+
+    .coin-icon {
+      font-size: 18px;
+      filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.2));
+    }
+
+    .coin-amount {
+      min-width: 24px;
+      text-align: center;
+      text-shadow: 0 1px 0 rgba(255, 255, 255, 0.4);
+    }
+
+    @keyframes coinPulse {
+      0% {
+        transform: scale(1);
+      }
+
+      50% {
+        transform: scale(1.15);
+      }
+
+      100% {
+        transform: scale(1);
+      }
+    }
+
+    /* Shake animation for coin deduction */
+    .coin-counter.shake {
+      animation: coinShake 0.4s ease-in-out;
+    }
+
+    @keyframes coinShake {
 
       0%,
       100% {
-        transform: rotate(0deg);
+        transform: translateX(0);
       }
 
-      25% {
-        transform: rotate(-10deg);
+      20% {
+        transform: translateX(-5px);
       }
 
-      75% {
-        transform: rotate(10deg);
+      40% {
+        transform: translateX(5px);
+      }
+
+      60% {
+        transform: translateX(-3px);
+      }
+
+      80% {
+        transform: translateX(3px);
       }
     }
 
-    .reminder-text {
-      flex: 1;
-    }
-
-    .reminder-title {
-      font-weight: 700;
-      font-size: 14px;
-      color: #92400e;
-      margin-bottom: 2px;
-    }
-
-    .reminder-time {
-      font-size: 12px;
-      color: #b45309;
-    }
-
-    .reminder-buttons {
+    /* --- BIRD SYSTEM CSS --- */
+    .bird-system-container {
       display: flex;
-      gap: 6px;
+      align-items: flex-end;
+      justify-content: space-between;
+      padding: 0 5px 5px;
+      gap: 15px;
+      height: 160px;
+      /* Force height to accommodate bird and pie */
     }
 
-    .reminder-snooze {
-      background: rgba(146, 64, 14, 0.2);
-      color: #92400e;
-      border: 1px solid #92400e;
-      border-radius: 6px;
-      padding: 8px 12px;
-      font-size: 12px;
-      font-weight: 600;
-      cursor: pointer;
-      transition: background 0.2s;
-    }
-
-    .reminder-snooze:hover {
-      background: rgba(146, 64, 14, 0.3);
-    }
-
-    .reminder-dismiss {
-      background: #f59e0b;
-      color: white;
-      border: none;
-      border-radius: 6px;
-      padding: 8px 12px;
-      font-size: 12px;
-      font-weight: 600;
-      cursor: pointer;
-      transition: background 0.2s;
-    }
-
-    .reminder-dismiss:hover {
-      background: #d97706;
-    }
-
-    /* Checkbox list for assignees */
-    .checkbox-list {
-      border: 1px solid #d1d5db;
-      border-radius: 6px;
-      padding: 8px;
-      max-height: 120px;
-      overflow-y: auto;
-      background: #fff;
-      display: flex;
-      flex-direction: column;
-      gap: 4px;
-    }
-
-    .checkbox-list label {
-      display: flex;
-      flex-direction: row;
-      align-items: center;
-      gap: 8px;
-      font-size: 13px;
-      cursor: pointer;
-      margin: 0;
-      font-weight: normal;
-      white-space: nowrap;
-    }
-
-    .checkbox-list label input[type="checkbox"] {
-      margin: 0;
+    .bird-wrapper {
+      position: relative;
+      width: 110px;
+      height: 120px;
+      cursor: grab;
       flex-shrink: 0;
+      /* background: rgba(0,0,0,0.02); Debug area */
+      border-radius: 50%;
     }
+
+    .bird-wrapper:active {
+      cursor: grabbing;
+    }
+
+    /* Hearts for petting */
+    .pet-heart {
+      position: absolute;
+      font-size: 20px;
+      color: #ec4899;
+      /* Excite pink */
+      pointer-events: none;
+      animation: floatUp 1s ease-out forwards;
+      opacity: 0;
+      z-index: 10;
+    }
+
+    @keyframes floatUp {
+      0% {
+        transform: translateY(0) scale(0.5);
+        opacity: 1;
+      }
+
+      @keyframes floatUp {
+        0% {
+          transform: translateY(0) scale(0.5);
+          opacity: 1;
+        }
+
+        100% {
+          transform: translateY(-40px) scale(1.2);
+          opacity: 0;
+        }
+      }
+
+      /* Edit Bird Button */
+      .edit-bird-btn {
+        position: absolute;
+        bottom: -15px;
+        left: 50%;
+        transform: translateX(-50%);
+        background: var(--panel-elevated);
+        border: 1px solid var(--panel-border);
+        border-radius: 12px;
+        width: 24px;
+        height: 24px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        opacity: 0;
+        transition: opacity 0.2s, transform 0.2s;
+        box-shadow: var(--shadow-md);
+        z-index: 20;
+      }
+
+      .bird-wrapper:hover .edit-bird-btn {
+        opacity: 1;
+        bottom: -5px;
+      }
+
+      .edit-bird-btn:hover {
+        transform: translateX(-50%) scale(1.1);
+        background: var(--bg-main);
+      }
+
+      /* Bird Editor Modal */
+      .bird-editor-layout {
+        display: flex;
+        gap: 20px;
+        padding: 10px;
+      }
+
+      .bird-preview-col {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        background: var(--bg-main);
+        border-radius: var(--radius-md);
+        padding: 20px;
+      }
+
+      .bird-controls-col {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+        max-height: 400px;
+        overflow-y: auto;
+      }
+
+      .color-control-group {
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+      }
+
+      .color-control-group label {
+        font-size: 11px;
+        font-weight: 600;
+        color: var(--ink-soft);
+        text-transform: uppercase;
+      }
+
+      .color-picker-row {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
+
+      .color-input-styled {
+        -webkit-appearance: none;
+        border: none;
+        width: 32px;
+        height: 32px;
+        border-radius: 50%;
+        overflow: hidden;
+        cursor: pointer;
+        padding: 0;
+        background: none;
+      }
+
+      .color-input-styled::-webkit-color-swatch-wrapper {
+        padding: 0;
+      }
+
+      .color-input-styled::-webkit-color-swatch {
+        border: 2px solid var(--panel-border);
+        border-radius: 50%;
+      }
+
+      /* Daily Energy Meter */
+      /* Daily Energy Meter - Horizontal */
+      .coin-meter-container {
+        flex: 1;
+        margin: 0 15px 25px;
+        /* Align with bird feet */
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-end;
+      }
+
+      .coin-meter {
+        width: 100%;
+        height: 24px;
+        background: rgba(0, 0, 0, 0.06);
+        border-radius: 12px;
+        position: relative;
+        overflow: hidden;
+      }
+
+      body[data-theme="dark"] .coin-meter {
+        background: rgba(255, 255, 255, 0.1);
+      }
+
+      .coin-meter-fill {
+        position: absolute;
+        top: 0;
+        left: 0;
+        height: 100%;
+        width: 0%;
+        /* Horizontal fill */
+        background: linear-gradient(to right, #fbbf24, #f59e0b);
+        border-radius: 12px;
+        transition: width 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+        box-shadow: 0 0 10px rgba(251, 191, 36, 0.5);
+      }
+
+      .coin-meter-label {
+        text-align: center;
+        font-size: 11px;
+        font-weight: 600;
+        color: var(--ink-soft);
+        margin-top: 4px;
+      }
+
+      /* Flying coin sprites - use JS animation instead of CSS */
+      .flying-coin {
+        position: fixed;
+        font-size: 28px;
+        z-index: 10001;
+        pointer-events: none;
+        filter: drop-shadow(0 3px 6px rgba(0, 0, 0, 0.4));
+        transition: none;
+      }
+
+      @keyframes coinFly {
+        0% {
+          transform: translate(0, 0) scale(1) rotate(0deg);
+          opacity: 1;
+        }
+
+        30% {
+          transform: translate(calc(var(--dx) * 0.3), calc(var(--dy) * 0.3 - 40px)) scale(1.2) rotate(180deg);
+          opacity: 1;
+        }
+
+        100% {
+          transform: translate(var(--dx), var(--dy)) scale(0.5) rotate(720deg);
+          opacity: 0.8;
+        }
+      }
+
+      @keyframes coinBurst {
+        0% {
+          transform: scale(0) rotate(0deg);
+          opacity: 0;
+        }
+
+        50% {
+          transform: scale(1.3) rotate(180deg);
+          opacity: 1;
+        }
+
+        100% {
+          transform: scale(1) rotate(360deg);
+          opacity: 1;
+        }
+      }
+
+      .coin-burst {
+        animation: coinBurst 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+      }
+
+      /* Task Reminder Container - fixed position, stacks children vertically */
+      .reminder-container {
+        position: fixed;
+        top: 80px;
+        right: 16px;
+        z-index: 9999;
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        max-width: 360px;
+      }
+
+      /* Individual reminder banner */
+      .reminder-banner {
+        background: linear-gradient(135deg, #fef3c7, #fde68a);
+        border: 2px solid #f59e0b;
+        border-radius: 12px;
+        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2), 0 4px 8px rgba(245, 158, 11, 0.3);
+        animation: slideInRight 0.3s ease-out;
+      }
+
+      /* Overdue reminder style */
+      .reminder-banner.overdue {
+        background: linear-gradient(135deg, #fee2e2, #fecaca);
+        border: 2px solid #ef4444;
+        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2), 0 4px 8px rgba(239, 68, 68, 0.3);
+      }
+
+      .reminder-banner.hidden {
+        display: none;
+      }
+
+      @keyframes slideInRight {
+        from {
+          transform: translateX(100%);
+          opacity: 0;
+        }
+
+        to {
+          transform: translateX(0);
+          opacity: 1;
+        }
+      }
+
+      .reminder-content {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        padding: 12px 16px;
+      }
+
+      .reminder-icon {
+        font-size: 28px;
+        animation: shake 0.5s ease-in-out infinite;
+      }
+
+      @keyframes shake {
+
+        0%,
+        100% {
+          transform: rotate(0deg);
+        }
+
+        25% {
+          transform: rotate(-10deg);
+        }
+
+        75% {
+          transform: rotate(10deg);
+        }
+      }
+
+      .reminder-text {
+        flex: 1;
+      }
+
+      .reminder-title {
+        font-weight: 700;
+        font-size: 14px;
+        color: #92400e;
+        margin-bottom: 2px;
+      }
+
+      .reminder-time {
+        font-size: 12px;
+        color: #b45309;
+      }
+
+      .reminder-buttons {
+        display: flex;
+        gap: 6px;
+      }
+
+      .reminder-snooze {
+        background: rgba(146, 64, 14, 0.2);
+        color: #92400e;
+        border: 1px solid #92400e;
+        border-radius: 6px;
+        padding: 8px 12px;
+        font-size: 12px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: background 0.2s;
+      }
+
+      .reminder-snooze:hover {
+        background: rgba(146, 64, 14, 0.3);
+      }
+
+      .reminder-dismiss {
+        background: #f59e0b;
+        color: white;
+        border: none;
+        border-radius: 6px;
+        padding: 8px 12px;
+        font-size: 12px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: background 0.2s;
+      }
+
+      .reminder-dismiss:hover {
+        background: #d97706;
+      }
+
+      /* Checkbox list for assignees */
+      .checkbox-list {
+        border: 1px solid #d1d5db;
+        border-radius: 6px;
+        padding: 8px;
+        max-height: 120px;
+        overflow-y: auto;
+        background: #fff;
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+      }
+
+      .checkbox-list label {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        gap: 8px;
+        font-size: 13px;
+        cursor: pointer;
+        margin: 0;
+        font-weight: normal;
+        white-space: nowrap;
+      }
+
+      .checkbox-list label input[type="checkbox"] {
+        margin: 0;
+        flex-shrink: 0;
+      }
+
+      /* Coin Meter (Horizontal) */
+      .coin-meter-container {
+        margin-top: 15px;
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 4px;
+      }
+
+      .coin-meter {
+        width: 100%;
+        height: 12px;
+        background: rgba(0, 0, 0, 0.1);
+        border-radius: 999px;
+        overflow: hidden;
+        position: relative;
+        box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1);
+      }
+
+      .coin-meter-fill {
+        height: 100%;
+        width: 0%;
+        background: linear-gradient(90deg, #facc15, #eab308);
+        border-radius: 999px;
+        transition: width 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+      }
+
+      .coin-meter-label {
+        font-size: 11px;
+        color: var(--ink-soft);
+        font-weight: 600;
+        font-variant-numeric: tabular-nums;
+      }
   </style>
 </head>
 
@@ -2166,6 +2562,38 @@
       </select>
       <button id="user-select-confirm">Open Wrap Sheet</button>
       <small>This is internal for BER: Meighan, Kevin, Erica, Jenna &amp; Katie.</small>
+    </div>
+  </div>
+
+  <!-- Bird Editor Modal -->
+  <div class="overlay" id="bird-editor-modal" style="display:none;">
+    <div class="modal-panel" style="width: 600px; max-width: 90vw;">
+      <div class="modal-header">
+        <div class="modal-title">Customize Your Bird</div>
+        <button class="modal-close" id="close-bird-editor">×</button>
+      </div>
+      <div class="bird-editor-layout">
+        <!-- Left: Preview -->
+        <div class="bird-preview-col">
+          <div style="width:180px; height:180px;">
+            <svg id="bird-editor-preview" viewBox="0 0 200 200" style="width:100%; height:100%; overflow:visible;">
+              <!-- JS will copy bird SVG here -->
+            </svg>
+          </div>
+          <div style="margin-top:10px; font-size:11px; color:var(--ink-soft); text-align:center;">
+            Preview
+          </div>
+        </div>
+
+        <!-- Right: Controls -->
+        <div class="bird-controls-col" id="bird-color-controls">
+          <!-- JS will inject color pickers here -->
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="button-secondary" id="cancel-bird-editor">Cancel</button>
+        <button class="button-primary" id="save-bird-editor">Save Changes</button>
+      </div>
     </div>
   </div>
 
@@ -2330,6 +2758,18 @@
           </select>
         </div>
 
+        <!-- Coin Counter (for Kevin) -->
+        <div class="coin-counter-wrap" id="coin-counter-wrap">
+          <div class="coin-counter" id="coin-counter" title="Your coin balance">
+            <span class="coin-icon">🪙</span>
+            <span class="coin-amount" id="coin-amount">0</span>
+          </div>
+          <div class="coin-caps" id="coin-caps">
+            <span id="coin-day-progress">0/50 today</span>
+            <span id="coin-week-progress">0/250 week</span>
+          </div>
+        </div>
+
         <div class="user-pill">
           <span id="current-user-label">Not signed in</span>
           <button id="switch-user-btn">Switch</button>
@@ -2386,8 +2826,34 @@
             <div class="calendar-weekdays" id="calendar-weekdays"></div>
             <div class="calendar-days" id="calendar-days"></div>
           </div>
-          <div class="calendar-metrics">
-            <canvas id="status-pie" width="150" height="150"></canvas>
+          <div class="calendar-metrics bird-system-container">
+            <!-- Bird Container -->
+            <div id="finch-container" class="bird-wrapper" title="Pet me!">
+              <svg id="finch-svg" viewBox="0 0 200 200" style="width:100%; height:100%; overflow:visible;">
+                <!-- Bird Logic will inject SVG here -->
+              </svg>
+              <div id="finch-hearts"
+                style="position:absolute; top:0; left:0; width:100%; height:100%; pointer-events:none;"></div>
+
+              <!-- Edit Button -->
+              <button class="edit-bird-btn" id="edit-bird-trigger" title="Edit Colors">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                  stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"></path>
+                </svg>
+              </button>
+            </div>
+
+            <!-- Coin Energy Bar (Horizontal) -->
+            <div class="coin-meter-container">
+              <div class="coin-meter" title="Daily Energy: 50 Coins">
+                <div class="coin-meter-fill" id="bird-energy-fill" style="width: 0%;"></div>
+              </div>
+              <div class="coin-meter-label" id="bird-energy-text">0/50</div>
+            </div>
+
+            <!-- Existing Pie -->
+            <canvas id="status-pie" width="150" height="150" style="margin-bottom:10px;"></canvas>
           </div>
         </section>
 
@@ -2686,6 +3152,7 @@
       weeklyTasks: [],           // Weekly tasks for current week
       currentWeekKey: null,      // '2025-W52' format
       userDbPrefs: null,         // User preferences from D1
+      coinBalance: 0,            // Coin reward balance (Finch-style)
       activeUserId: null,     // who we are currently "working on" (driven by calendar owner select)
       activeUser: null,
       userPrefs: null,        // prefs for activeUserId (titles, category labels, etc.)
@@ -3039,6 +3506,13 @@
 
       if (allDone && doneCount > 0) {
         triggerFireworks('medium');
+        // Bonus coins for completing ALL daily tasks
+        if (isRewardEligible()) {
+          setTimeout(() => {
+            awardCoins(25, null);
+            playCoinBurstSound();
+          }, 600);
+        }
       } else {
         triggerFireworks('small');
       }
@@ -3054,6 +3528,807 @@
         triggerFireworks('small');
       }
     }
+
+    // ===== COIN REWARD SYSTEM (Finch-style) =====
+    const COIN_DAILY_CAP = 50;
+    const COIN_WEEKLY_CAP = 250;
+
+    // Check if current user is eligible for coin rewards
+    function isRewardEligible() {
+      if (!state.currentUser) return false;
+      const name = (state.currentUser.name || "").toLowerCase();
+      // Currently only enabled for Kevin - add more names here to scale
+      return name.includes("kevin");
+    }
+
+    // Get current day/week keys for cap tracking
+    function getCoinDayKey() {
+      return new Date().toISOString().split("T")[0]; // "2026-01-20"
+    }
+    function getCoinWeekKey() {
+      const now = new Date();
+      const startOfYear = new Date(now.getFullYear(), 0, 1);
+      const days = Math.floor((now - startOfYear) / 86400000);
+      const weekNum = Math.ceil((days + startOfYear.getDay() + 1) / 7);
+      return `${now.getFullYear()}-W${String(weekNum).padStart(2, "0")}`;
+    }
+
+    let coinSaveTimeout;
+
+    // Load coin balance from API with local fallback
+    async function loadCoinBalance() {
+      if (!state.currentUser) return;
+
+      // 1. Initial load from local storage for speed
+      loadCoinBalanceLocal();
+      updateCoinCounterDisplay();
+
+      // 2. Fetch authoritative data from server
+      try {
+        const data = await apiSend(`/users/${state.currentUser.id}/coins`);
+        if (data) {
+          state.coinBalance = data.coin_balance || 0;
+          state.coinDayEarned = data.coin_day_earned || 0;
+          state.coinDayKey = data.coin_day_key || "";
+          state.coinWeekEarned = data.coin_week_earned || 0;
+          state.coinWeekKey = data.coin_week_key || "";
+
+          // Sync back to local storage
+          saveCoinBalanceLocal();
+        }
+      } catch (e) {
+        console.warn("Could not load coins from API, using local backup", e);
+      }
+
+      // Reset daily/weekly counters if needed
+      checkCoinRollovers();
+
+      updateCoinCounterDisplay();
+
+      // Show the coin counter wrapper for eligible users
+      const wrapper = document.getElementById("coin-counter-wrap");
+      if (wrapper && isRewardEligible()) {
+        wrapper.classList.add("visible");
+      }
+    }
+
+    function checkCoinRollovers() {
+      // Reset daily counter if new day
+      const today = getCoinDayKey();
+      if (state.coinDayKey !== today) {
+        state.coinDayKey = today;
+        state.coinDayEarned = 0;
+      }
+      // Reset weekly counter if new week
+      const thisWeek = getCoinWeekKey();
+      if (state.coinWeekKey !== thisWeek) {
+        state.coinWeekKey = thisWeek;
+        state.coinWeekEarned = 0;
+      }
+      saveCoinBalanceLocal();
+    }
+
+    function loadCoinBalanceLocal() {
+      try {
+        const prefix = `wrapsheet-coins-${state.currentUser.id}`;
+        state.coinBalance = parseInt(localStorage.getItem(`${prefix}-balance`) || "0", 10);
+        state.coinDayKey = localStorage.getItem(`${prefix}-dayKey`) || "";
+        state.coinDayEarned = parseInt(localStorage.getItem(`${prefix}-dayEarned`) || "0", 10);
+        state.coinWeekKey = localStorage.getItem(`${prefix}-weekKey`) || "";
+        state.coinWeekEarned = parseInt(localStorage.getItem(`${prefix}-weekEarned`) || "0", 10);
+      } catch (e) { }
+    }
+
+    // Save coin balance locally and sync to server
+    function saveCoinBalance() {
+      saveCoinBalanceLocal();
+
+      // Debounce server save
+      clearTimeout(coinSaveTimeout);
+      coinSaveTimeout = setTimeout(saveCoinBalanceToServer, 2000);
+    }
+
+    function saveCoinBalanceLocal() {
+      if (!state.currentUser) return;
+      try {
+        const prefix = `wrapsheet-coins-${state.currentUser.id}`;
+        localStorage.setItem(`${prefix}-balance`, String(state.coinBalance));
+        localStorage.setItem(`${prefix}-dayKey`, state.coinDayKey);
+        localStorage.setItem(`${prefix}-dayEarned`, String(state.coinDayEarned));
+        localStorage.setItem(`${prefix}-weekKey`, state.coinWeekKey);
+        localStorage.setItem(`${prefix}-weekEarned`, String(state.coinWeekEarned));
+      } catch (e) {
+        console.warn("Could not save coin balance:", e);
+      }
+    }
+
+    async function saveCoinBalanceToServer() {
+      if (!state.currentUser) return;
+      try {
+        await apiSend(`/users/${state.currentUser.id}/coins`, "PATCH", {
+          coin_balance: state.coinBalance,
+          coin_day_earned: state.coinDayEarned,
+          coin_day_key: state.coinDayKey,
+          coin_week_earned: state.coinWeekEarned,
+          coin_week_key: state.coinWeekKey
+        });
+        // console.log("Coins saved to server");
+      } catch (e) {
+        console.warn("Error saving coins to server:", e);
+      }
+    }
+
+    // Update the coin counter display and cap progress
+    function updateCoinCounterDisplay() {
+      const amountEl = document.getElementById("coin-amount");
+      if (amountEl) {
+        amountEl.textContent = state.coinBalance || 0;
+      }
+      // Update cap progress display
+      const dayProgress = document.getElementById("coin-day-progress");
+      const weekProgress = document.getElementById("coin-week-progress");
+      if (dayProgress) {
+        dayProgress.textContent = `${state.coinDayEarned || 0}/${COIN_DAILY_CAP} today`;
+      }
+      if (weekProgress) {
+        weekProgress.textContent = `${state.coinWeekEarned || 0}/${COIN_WEEKLY_CAP} week`;
+      }
+
+      // Update Bird Energy Meter
+      if (typeof updateBirdEnergy === "function") {
+        updateBirdEnergy();
+      }
+    }
+
+    // Check how many coins can be awarded (respecting caps)
+    function getAwardableCoins(requested) {
+      const dayRemaining = COIN_DAILY_CAP - (state.coinDayEarned || 0);
+      const weekRemaining = COIN_WEEKLY_CAP - (state.coinWeekEarned || 0);
+      return Math.max(0, Math.min(requested, dayRemaining, weekRemaining));
+    }
+
+    // Award coins - Logic Decoupled from Animation
+    function awardCoins(amount, sourceElement) {
+      if (!isRewardEligible() || amount <= 0) return;
+
+      // Apply caps logic overrides
+      const actualAmount = getAwardableCoins(amount);
+      if (actualAmount <= 0) {
+        showToast("Daily coin cap reached! 🪙");
+        return;
+      }
+
+      // 1. Update State IMMEDIATELY
+      state.coinBalance = (state.coinBalance || 0) + actualAmount;
+      state.coinDayEarned = (state.coinDayEarned || 0) + actualAmount;
+      state.coinWeekEarned = (state.coinWeekEarned || 0) + actualAmount;
+      saveCoinBalance();
+      updateCoinCounterDisplay();
+
+      // 2. Play Sound/Animation
+      playChaChingSound(0);
+
+      const counterEl = document.getElementById("coin-counter");
+      if (counterEl) {
+        counterEl.classList.add("pulse");
+        setTimeout(() => counterEl.classList.remove("pulse"), 150);
+      }
+
+      // 3. Spawn Visuals (Fire and forget)
+      if (counterEl && sourceElement) {
+        // Pass 0 as coinsPerVisual because we already updated the balance
+        spawnFlyingCoinsWithLanding(sourceElement.getBoundingClientRect(), counterEl.getBoundingClientRect(), Math.min(actualAmount, 8), 0, counterEl);
+      }
+    }
+
+    // Deduct coins when unchecking a task
+    function deductCoins(amount) {
+      if (!isRewardEligible() || amount <= 0) return;
+
+      // 1. Always decrement the "earned" counters so user can re-earn towards cap
+      state.coinDayEarned = Math.max(0, (state.coinDayEarned || 0) - amount);
+      state.coinWeekEarned = Math.max(0, (state.coinWeekEarned || 0) - amount);
+
+      // 2. Decrement balance (floor at 0)
+      const oldBalance = state.coinBalance;
+      state.coinBalance = Math.max(0, oldBalance - amount);
+
+      saveCoinBalance();
+      updateCoinCounterDisplay(); // updates caps text and meter width
+
+      // Play sad sound
+      playDeductSound();
+
+      // Animate counter if balance changed
+      const counterEl = document.getElementById("coin-counter");
+      if (counterEl && state.coinBalance !== oldBalance) {
+        animateCoinCounter(oldBalance, state.coinBalance, 300);
+        counterEl.classList.add("shake");
+        setTimeout(() => counterEl.classList.remove("shake"), 400);
+      }
+    }
+
+    // Spawn flying coins - use requestAnimationFrame for visible arc flight
+    function spawnFlyingCoinsWithLanding(fromRect, toRect, count, coinsPerVisual, counterEl) {
+      const startX = fromRect.left + fromRect.width / 2;
+      const startY = fromRect.top + fromRect.height / 2;
+      const endX = toRect.left + toRect.width / 2;
+      const endY = toRect.top + toRect.height / 2;
+
+      for (let i = 0; i < count; i++) {
+        const spawnDelay = i * 120; // Stagger coin spawns
+
+        setTimeout(() => {
+          const coin = document.createElement("div");
+          coin.className = "flying-coin";
+          coin.textContent = "🪙";
+          coin.style.transform = "scale(0)";
+
+          // Randomize start position slightly
+          const offsetX = (Math.random() - 0.5) * 40;
+          const offsetY = (Math.random() - 0.5) * 40;
+          const coinStartX = startX + offsetX;
+          const coinStartY = startY + offsetY;
+
+          coin.style.left = coinStartX + "px";
+          coin.style.top = coinStartY + "px";
+          document.body.appendChild(coin);
+
+          // Flight parameters
+          const duration = 600 + Math.random() * 200;
+          const arcHeight = Math.min(150, Math.abs(endY - coinStartY) * 0.5 + 50);
+          const startTime = performance.now();
+
+          // Animate with requestAnimationFrame
+          function animate(currentTime) {
+            const elapsed = currentTime - startTime;
+            const progress = Math.min(elapsed / duration, 1);
+
+            // Ease out cubic for smooth deceleration
+            const eased = 1 - Math.pow(1 - progress, 3);
+
+            // Calculate position with arc (parabolic curve)
+            const x = coinStartX + (endX - coinStartX) * eased;
+            // Arc: goes up then down using sine curve
+            const arcOffset = Math.sin(progress * Math.PI) * arcHeight;
+            const y = coinStartY + (endY - coinStartY) * eased - arcOffset;
+
+            // Scale and rotation
+            const scale = progress < 0.2
+              ? progress * 5  // Pop in (0 to 1)
+              : progress > 0.9
+                ? 1 - (progress - 0.9) * 5  // Shrink at end
+                : 1;
+            const rotation = progress * 720;
+
+            coin.style.left = x + "px";
+            coin.style.top = y + "px";
+            coin.style.transform = `scale(${scale}) rotate(${rotation}deg)`;
+
+            if (progress < 1) {
+              requestAnimationFrame(animate);
+            } else {
+              // Coin landed!
+              playChaChingSound(i);
+
+              // Increment balance
+              state.coinBalance += coinsPerVisual;
+              saveCoinBalance();
+
+              // Update counter with pulse
+              updateCoinCounterDisplay();
+              counterEl.classList.add("pulse");
+              setTimeout(() => counterEl.classList.remove("pulse"), 150);
+
+              // Remove coin
+              coin.remove();
+            }
+          }
+
+          requestAnimationFrame(animate);
+        }, spawnDelay);
+      }
+    }
+
+    // Animate coin counter from old to new value
+    function animateCoinCounter(from, to, duration) {
+      const amountEl = document.getElementById("coin-amount");
+      if (!amountEl) return;
+
+      const startTime = performance.now();
+      const diff = to - from;
+
+      function step(currentTime) {
+        const elapsed = currentTime - startTime;
+        const progress = Math.min(elapsed / duration, 1);
+        const eased = 1 - Math.pow(1 - progress, 3);
+        const current = Math.round(from + diff * eased);
+        amountEl.textContent = current;
+        if (progress < 1) {
+          requestAnimationFrame(step);
+        }
+      }
+      requestAnimationFrame(step);
+    }
+
+    // Play cha-ching coinslot sound using Web Audio API
+    function playChaChingSound(index) {
+      try {
+        if (!audioContext) {
+          audioContext = new (window.AudioContext || window.webkitAudioContext)();
+        }
+
+        const now = audioContext.currentTime;
+
+        // Create metallic "cha-ching" sound with multiple harmonics
+        const fundamentalFreq = 1200 + (index * 80);
+
+        // Main tone
+        const osc1 = audioContext.createOscillator();
+        const gain1 = audioContext.createGain();
+        osc1.type = "square";
+        osc1.frequency.setValueAtTime(fundamentalFreq, now);
+        osc1.frequency.exponentialRampToValueAtTime(fundamentalFreq * 0.5, now + 0.15);
+        gain1.gain.setValueAtTime(0, now);
+        gain1.gain.linearRampToValueAtTime(0.12, now + 0.01);
+        gain1.gain.exponentialRampToValueAtTime(0.01, now + 0.15);
+        osc1.connect(gain1);
+        gain1.connect(audioContext.destination);
+        osc1.start(now);
+        osc1.stop(now + 0.2);
+
+        // High metallic ping
+        const osc2 = audioContext.createOscillator();
+        const gain2 = audioContext.createGain();
+        osc2.type = "sine";
+        osc2.frequency.setValueAtTime(fundamentalFreq * 2, now);
+        osc2.frequency.exponentialRampToValueAtTime(fundamentalFreq * 1.5, now + 0.1);
+        gain2.gain.setValueAtTime(0, now);
+        gain2.gain.linearRampToValueAtTime(0.08, now + 0.005);
+        gain2.gain.exponentialRampToValueAtTime(0.01, now + 0.12);
+        osc2.connect(gain2);
+        gain2.connect(audioContext.destination);
+        osc2.start(now);
+        osc2.stop(now + 0.15);
+
+        // Low "clunk" for slot machine feel
+        const osc3 = audioContext.createOscillator();
+        const gain3 = audioContext.createGain();
+        osc3.type = "triangle";
+        osc3.frequency.setValueAtTime(200, now);
+        osc3.frequency.exponentialRampToValueAtTime(80, now + 0.05);
+        gain3.gain.setValueAtTime(0.1, now);
+        gain3.gain.exponentialRampToValueAtTime(0.01, now + 0.08);
+        osc3.connect(gain3);
+        gain3.connect(audioContext.destination);
+        osc3.start(now);
+        osc3.stop(now + 0.1);
+
+      } catch (e) {
+        // Silently fail
+      }
+    }
+
+    // --- BIRD SYSTEM LOGIC ---
+
+    let birdState = {
+      isHappy: false,
+      pettingScore: 0,
+      lastMouseX: 0,
+      blinkTimer: null
+    };
+
+    function initBirdSystem() {
+      const svgContainer = document.getElementById("finch-svg");
+      if (!svgContainer) return;
+
+      // Render Bird SVG (Refined "Round Blob" Finch Style)
+      // Reference Colors: Pink Body (#f9a8d4), Yellow Cap/Wings (#fde047), Blue Tummy (#60a5fa)
+      svgContainer.innerHTML = `
+        <g id="bird-whole" transform="translate(100, 110) scale(1.4)">
+           <!-- Legs (Orange) -->
+           <path class="bird-foot-l" d="M -20 70 Q -30 75 -40 70 L -35 60 L -20 50" fill="#f97316" stroke="#ea580c" stroke-width="2.5" stroke-linecap="round" />
+           <path class="bird-foot-r" d="M 20 70 Q 30 75 40 70 L 35 60 L 20 50" fill="#f97316" stroke="#ea580c" stroke-width="2.5" stroke-linecap="round" />
+
+           <!-- Body (Large Pink Blob) -->
+           <!-- Rounder, fuller bottom -->
+           <path class="bird-body" d="M -55 20 C -65 -20 -40 -60 0 -60 C 40 -60 65 -20 55 20 C 50 70 -50 70 -55 20 Z" fill="#f9a8d4" />
+
+           <!-- Head Cap (Yellow) -->
+           <!-- Follows top contour of body, comes down to forehead -->
+           <path class="bird-head" d="M -48 -25 C -40 -50 -20 -60 0 -60 C 20 -60 40 -50 48 -25 C 25 -10 -25 -10 -48 -25 Z" fill="#fde047" />
+
+           <!-- Tummy (Blue) -->
+           <!-- Large round oval -->
+           <ellipse class="bird-tummy" cx="0" cy="35" rx="38" ry="32" fill="#60a5fa" />
+
+           <!-- Wings (Yellow) - Bigger and Rounder -->
+           <!-- Sticking out more noticeably -->
+           <path class="bird-wing-l" d="M -53 10 Q -85 15 -75 45 Q -60 50 -50 35" fill="#fde047" stroke="#eab308" stroke-width="1.5" />
+           <path class="bird-wing-r" d="M 53 10 Q 85 15 75 45 Q 60 50 50 35" fill="#fde047" stroke="#eab308" stroke-width="1.5" />
+
+           <!-- Face -->
+           <g id="bird-face" transform="translate(0, -25)">
+             <!-- Cheeks (Pinker) -->
+             <circle cx="-32" cy="15" r="9" fill="#f472b6" opacity="0.6" />
+             <circle cx="32" cy="15" r="9" fill="#f472b6" opacity="0.6" />
+
+             <!-- Beak (Orange/Yellow) -->
+             <path class="bird-beak" d="M -8 10 Q 0 18 8 10 L 0 4 Z" fill="#facc15" stroke="#ca8a04" stroke-width="1.5" />
+
+             <!-- Eyes -->
+             <g id="eyes-open">
+               <circle cx="-18" cy="0" r="7.5" fill="#1f2937" />
+               <circle cx="18" cy="0" r="7.5" fill="#1f2937" />
+               <circle cx="-15" cy="-3" r="2.5" fill="#fff" />
+               <circle cx="21" cy="-3" r="2.5" fill="#fff" />
+             </g>
+             
+             <!-- Eyes Closed/Happy -->
+             <g id="eyes-closed" style="display:none">
+               <path d="M -24 5 Q -18 10 -12 5" fill="none" stroke="#1f2937" stroke-width="3" stroke-linecap="round" />
+               <path d="M 12 5 Q 18 10 24 5" fill="none" stroke="#1f2937" stroke-width="3" stroke-linecap="round" />
+             </g>
+             <g id="eyes-happy" style="display:none">
+                <path d="M -24 5 Q -18 -5 -12 5" fill="none" stroke="#1f2937" stroke-width="3" stroke-linecap="round" />
+                <path d="M 12 5 Q 18 -5 24 5" fill="none" stroke="#1f2937" stroke-width="3" stroke-linecap="round" />
+             </g>
+           </g>
+        </g>
+      `;
+
+      // Start interactions
+      startBlinking();
+      setupPetting();
+      updateBirdEnergy(); // Init meter
+    }
+
+    function startBlinking() {
+      // Random blink interval between 2s and 6s
+      const nextBlink = 2000 + Math.random() * 4000;
+
+      birdState.blinkTimer = setTimeout(() => {
+        if (!birdState.isHappy) { // Don't blink if happy (closed eyes)
+          toggleEyes(false); // Close
+          setTimeout(() => toggleEyes(true), 150); // Open
+        }
+        startBlinking();
+      }, nextBlink);
+    }
+
+    function toggleEyes(isOpen) {
+      const open = document.getElementById("eyes-open");
+      const closed = document.getElementById("eyes-closed");
+      if (open && closed) {
+        open.style.display = isOpen ? "block" : "none";
+        closed.style.display = isOpen ? "none" : "block";
+      }
+    }
+
+    function setExpression(type) { // 'normal', 'happy'
+      const open = document.getElementById("eyes-open");
+      const closed = document.getElementById("eyes-closed");
+      const happy = document.getElementById("eyes-happy");
+
+      if (!open || !happy) return;
+
+      if (type === 'happy') {
+        open.style.display = "none";
+        closed.style.display = "none";
+        happy.style.display = "block";
+      } else {
+        open.style.display = "block";
+        closed.style.display = "none";
+        happy.style.display = "none";
+      }
+    }
+
+    function setupPetting() {
+      const wrapper = document.getElementById("finch-container");
+      if (!wrapper) return;
+
+      wrapper.addEventListener("mousemove", (e) => {
+        // Calculate movement speed/distance
+        const dist = Math.abs(e.movementX) + Math.abs(e.movementY);
+
+        if (dist > 5) {
+          birdState.pettingScore += dist;
+
+          if (birdState.pettingScore > 300 && !birdState.isHappy) {
+            triggerHappyBird();
+          }
+        }
+      });
+
+      wrapper.addEventListener("mouseleave", () => {
+        birdState.pettingScore = 0;
+        if (birdState.isHappy) {
+          stopHappyBird();
+        }
+      });
+    }
+
+    function triggerHappyBird() {
+      birdState.isHappy = true;
+      setExpression('happy');
+
+      // Bounce animation
+      const bird = document.getElementById("bird-whole");
+      if (bird) {
+        bird.style.transition = "transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1)";
+        bird.style.transform = "translate(100, 125) scale(1.05)"; // Bounce up
+        setTimeout(() => {
+          bird.style.transform = "translate(100, 130) scale(1)";
+        }, 200);
+      }
+
+      // Spawn hearts
+      spawnHeart();
+    }
+
+    function stopHappyBird() {
+      birdState.isHappy = false;
+      setExpression('normal');
+    }
+
+    function spawnHeart() {
+      if (!birdState.isHappy) return;
+
+      const container = document.getElementById("finch-hearts");
+      if (!container) return;
+
+      const heart = document.createElement("div");
+      heart.className = "pet-heart";
+      heart.textContent = "❤️";
+      // Random position near head
+      const left = 30 + Math.random() * 60; // Roughly centered
+      const top = 20 + Math.random() * 20;
+
+      heart.style.left = left + "%";
+      heart.style.top = top + "%";
+
+      container.appendChild(heart);
+
+      // Clean up
+      setTimeout(() => heart.remove(), 1000);
+
+      // Continue spawning if still happy and moving
+      if (birdState.pettingScore > 0) {
+        setTimeout(spawnHeart, 400 + Math.random() * 400);
+      }
+    }
+
+    function updateBirdEnergy() {
+      const fill = document.getElementById("bird-energy-fill");
+      if (fill) {
+        const earned = state.coinDayEarned || 0;
+        const pct = Math.min(100, (earned / COIN_DAILY_CAP) * 100);
+        fill.style.width = pct + "%";
+
+        // Update label
+        const txt = document.getElementById("bird-energy-text");
+        if (txt) txt.textContent = `${earned}/${COIN_DAILY_CAP}`;
+      }
+    }
+
+    // --- BIRD EDITOR LOGIC ---
+
+    // Default Colors
+    const DEFAULT_BIRD_COLORS = {
+      head: "#fde047",
+      body: "#f9a8d4",
+      tummy: "#60a5fa",
+      wings: "#fde047",
+      beak: "#facc15",
+      feet: "#f97316"
+    };
+
+    let currentBirdColors = { ...DEFAULT_BIRD_COLORS };
+
+    async function loadBirdPreferences() {
+      // 1. Try to load from local storage first for speed
+      if (state.currentUser) {
+        try {
+          // Attempt to fetch from API
+          // Endpoint: /api/users/:id/prefs
+          const prefs = await apiSend(`/users/${state.currentUser.id}/prefs`);
+
+          let savedColors = prefs ? (prefs.bird_colors || prefs.birdColors) : null;
+          if (typeof savedColors === 'string') {
+            try { savedColors = JSON.parse(savedColors); } catch (e) { }
+          }
+
+          if (savedColors) {
+            currentBirdColors = { ...DEFAULT_BIRD_COLORS, ...savedColors };
+            applyBirdColors(currentBirdColors);
+          }
+        } catch (e) {
+          console.warn("Could not load bird prefs", e);
+        }
+      }
+    }
+
+    function applyBirdColors(colors, targetSvgId = "bird-whole") {
+      // Apply colors to specific elements via CSS selection
+      // Target can be main bird or preview bird
+      const root = document.getElementById(targetSvgId);
+      if (!root) return;
+
+      const setFill = (cls, val) => {
+        root.querySelectorAll(`.${cls}`).forEach(el => el.setAttribute("fill", val));
+      };
+      const setStroke = (cls, val) => {
+        // For beak/wings, we might also want to darken stroke automatically?
+        // For now just fill, we kept strokes hardcoded or could derive them.
+        root.querySelectorAll(`.${cls}`).forEach(el => el.setAttribute("fill", val));
+      };
+
+      setFill("bird-head", colors.head);
+      setFill("bird-body", colors.body);
+      setFill("bird-tummy", colors.tummy);
+      setFill("bird-wing-l", colors.wings);
+      setFill("bird-wing-r", colors.wings);
+      setFill("bird-beak", colors.beak);
+      setFill("bird-foot-l", colors.feet);
+      setFill("bird-foot-r", colors.feet);
+    }
+
+    function openBirdEditor() {
+      const modal = document.getElementById("bird-editor-modal");
+      const previewSvg = document.getElementById("bird-editor-preview");
+      const controls = document.getElementById("bird-color-controls");
+
+      if (!modal || !previewSvg || !controls) return;
+
+      // 1. Clone current bird to preview
+      const mainBirdGroup = document.getElementById("bird-whole");
+      if (mainBirdGroup) {
+        previewSvg.innerHTML = ""; // Clear
+        const clone = mainBirdGroup.cloneNode(true);
+        clone.id = "bird-preview-group";
+        // Scale up significantly (2.2) to fill the modal box
+        clone.setAttribute("transform", "translate(100, 110) scale(2.2)");
+        previewSvg.appendChild(clone);
+      }
+
+      // 2. Render Color Controls
+      const parts = [
+        { id: "head", label: "Head Cap" },
+        { id: "body", label: "Body" },
+        { id: "tummy", label: "Tummy" },
+        { id: "wings", label: "Wings" },
+        { id: "beak", label: "Beak" },
+        { id: "feet", label: "Feet" }
+      ];
+
+      controls.innerHTML = parts.map(part => `
+         <div class="color-control-group">
+            <label>${part.label}</label>
+            <div class="color-picker-row">
+               <input type="color" class="color-input-styled" 
+                      data-part="${part.id}" 
+                      value="${currentBirdColors[part.id]}"
+                      oninput="handleColorChange('${part.id}', this.value)">
+            </div>
+         </div>
+       `).join("");
+
+      modal.style.display = "flex";
+      applyBirdColors(currentBirdColors, "bird-preview-group");
+    }
+
+    window.handleColorChange = (part, value) => {
+      // Update preview only
+      const previewColors = { ...currentBirdColors }; // Base
+      // Collect all current inputs
+      document.querySelectorAll(".color-input-styled").forEach(input => {
+        previewColors[input.dataset.part] = input.value;
+      });
+      applyBirdColors(previewColors, "bird-preview-group");
+    };
+
+    function closeBirdEditor() {
+      document.getElementById("bird-editor-modal").style.display = "none";
+    }
+
+    async function saveBirdColors() {
+      const newColors = { ...currentBirdColors };
+      document.querySelectorAll(".color-input-styled").forEach(input => {
+        newColors[input.dataset.part] = input.value;
+      });
+
+      // 1. Update State
+      currentBirdColors = newColors;
+
+      // 2. Apply to Real Bird
+      applyBirdColors(currentBirdColors, "bird-whole");
+
+      // 3. Persist to DB
+      if (state.currentUser) {
+        try {
+          await apiSend(`/users/${state.currentUser.id}/prefs`, "PATCH", {
+            userId: state.currentUser.id,
+            birdColors: currentBirdColors
+          });
+          showToast("Bird colors saved!");
+        } catch (e) {
+          console.warn("Save failed", e);
+          showToast("Saved locally (Server error)", true);
+        }
+      }
+
+      closeBirdEditor();
+    }
+
+    // Initialize Editor Listeners
+    document.addEventListener("DOMContentLoaded", () => {
+      setTimeout(() => {
+        initBirdSystem();
+        loadBirdPreferences(); // visual init
+      }, 1000);
+
+      const editBtn = document.getElementById("edit-bird-trigger");
+      if (editBtn) editBtn.addEventListener("click", openBirdEditor);
+
+      const closeBtn = document.getElementById("close-bird-editor");
+      const cancelBtn = document.getElementById("cancel-bird-editor");
+      const saveBtn = document.getElementById("save-bird-editor");
+
+      if (closeBtn) closeBtn.addEventListener("click", closeBirdEditor);
+      if (cancelBtn) cancelBtn.addEventListener("click", closeBirdEditor);
+      if (saveBtn) saveBtn.addEventListener("click", saveBirdColors);
+    });
+
+    // --- END BIRD EDITOR LOGIC ---
+
+    // Play sad deduct sound
+    function playDeductSound() {
+      try {
+        if (!audioContext) {
+          audioContext = new (window.AudioContext || window.webkitAudioContext)();
+        }
+        const now = audioContext.currentTime;
+
+        // Descending sad tone
+        const osc = audioContext.createOscillator();
+        const gain = audioContext.createGain();
+        osc.type = "sine";
+        osc.frequency.setValueAtTime(600, now);
+        osc.frequency.exponentialRampToValueAtTime(200, now + 0.3);
+        gain.gain.setValueAtTime(0.1, now);
+        gain.gain.exponentialRampToValueAtTime(0.01, now + 0.3);
+        osc.connect(gain);
+        gain.connect(audioContext.destination);
+        osc.start(now);
+        osc.stop(now + 0.35);
+      } catch (e) { }
+    }
+
+    // Play burst sound for bonus
+    function playCoinBurstSound() {
+      try {
+        if (!audioContext) {
+          audioContext = new (window.AudioContext || window.webkitAudioContext)();
+        }
+        const now = audioContext.currentTime;
+
+        // Play ascending chord for jackpot feel
+        [523, 659, 784, 880, 1047].forEach((freq, i) => {
+          const osc = audioContext.createOscillator();
+          const gain = audioContext.createGain();
+          osc.type = "sine";
+          osc.frequency.value = freq;
+          gain.gain.setValueAtTime(0, now + i * 0.04);
+          gain.gain.linearRampToValueAtTime(0.08, now + i * 0.04 + 0.02);
+          gain.gain.exponentialRampToValueAtTime(0.01, now + i * 0.04 + 0.5);
+          osc.connect(gain);
+          gain.connect(audioContext.destination);
+          osc.start(now + i * 0.04);
+          osc.stop(now + i * 0.04 + 0.6);
+        });
+      } catch (e) { }
+    }
+
     async function quickUpdateTaskStatus(task, newStatus) {
       const oldStatus = task.status || "pending";
       if (oldStatus === newStatus) return;
@@ -3068,10 +4343,24 @@
         if (newStatus === "done") {
           showToast("Task marked complete");
           checkDailyCompletion(task.task_date);
+
+          // Award coins for task completion
+          if (isRewardEligible()) {
+            const pillEl = document.querySelector(`[data-task-id="${task.id}"]`);
+            awardCoins(5, pillEl);
+          }
         } else if (newStatus === "could_not_complete") {
           showToast("Task marked as could not complete");
+          // Deduct coins if was previously done
+          if (oldStatus === "done" && isRewardEligible()) {
+            deductCoins(5);
+          }
         } else {
           showToast("Task updated");
+          // Deduct coins if was previously done (unchecked)
+          if (oldStatus === "done" && isRewardEligible()) {
+            deductCoins(5);
+          }
         }
 
         // Reload to ensure we pick up any server-side changes (emails, timestamps, assignees)
@@ -4326,6 +5615,11 @@
       await loadPromotedSuggestions(); // New
       initWeeklyTasksUI();
       updateLastSyncTime();
+
+      // Initialize coin reward system for eligible users
+      if (isRewardEligible()) {
+        loadCoinBalance();
+      }
     }
 
     // Fetch top suggestions assigned to current user

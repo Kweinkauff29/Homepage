@@ -1770,12 +1770,14 @@ async function saveUserPreferences(request, env, userId) {
         .bind(userId)
         .all();
 
+    const birdColorsStr = body.bird_colors || body.birdColors ? JSON.stringify(body.bird_colors || body.birdColors) : null;
+
     if (existing.results.length === 0) {
         // Insert new
         await env.WRAP_DB
             .prepare(`
-                INSERT INTO user_preferences (user_id, theme, calendar_view, section_order, enable_weekly_tasks, updated_at)
-                VALUES (?, ?, ?, ?, ?, ?)
+                INSERT INTO user_preferences (user_id, theme, calendar_view, section_order, enable_weekly_tasks, bird_colors, updated_at)
+                VALUES (?, ?, ?, ?, ?, ?, ?)
             `)
             .bind(
                 userId,
@@ -1783,22 +1785,28 @@ async function saveUserPreferences(request, env, userId) {
                 body.calendar_view || "month",
                 body.section_order ? JSON.stringify(body.section_order) : null,
                 body.enable_weekly_tasks || 0,
+                birdColorsStr,
                 now
             )
             .run();
     } else {
         // Update existing
+        // We use COALESCE-like logic: if undefined in body, keep existing.
+        // For bird_colors, if body has it, update it; else keep existing.
+        const current = existing.results[0];
+
         await env.WRAP_DB
             .prepare(`
                 UPDATE user_preferences 
-                SET theme = ?, calendar_view = ?, section_order = ?, enable_weekly_tasks = ?, updated_at = ?
+                SET theme = ?, calendar_view = ?, section_order = ?, enable_weekly_tasks = ?, bird_colors = ?, updated_at = ?
                 WHERE user_id = ?
             `)
             .bind(
-                body.theme !== undefined ? body.theme : existing.results[0].theme,
-                body.calendar_view !== undefined ? body.calendar_view : existing.results[0].calendar_view,
-                body.section_order ? JSON.stringify(body.section_order) : existing.results[0].section_order,
-                body.enable_weekly_tasks !== undefined ? body.enable_weekly_tasks : existing.results[0].enable_weekly_tasks,
+                body.theme !== undefined ? body.theme : current.theme,
+                body.calendar_view !== undefined ? body.calendar_view : current.calendar_view,
+                body.section_order ? JSON.stringify(body.section_order) : current.section_order,
+                body.enable_weekly_tasks !== undefined ? body.enable_weekly_tasks : current.enable_weekly_tasks,
+                birdColorsStr !== null ? birdColorsStr : current.bird_colors,
                 now,
                 userId
             )
@@ -1809,6 +1817,56 @@ async function saveUserPreferences(request, env, userId) {
 }
 
 /* ---------- WEEKLY TASKS (BETA) ---------- */
+
+/* ---------- USER COIN BALANCE ---------- */
+
+async function getUserCoins(env, userId) {
+    const row = await env.WRAP_DB
+        .prepare(`SELECT coin_balance, coin_day_earned, coin_day_key, 
+                         coin_week_earned, coin_week_key FROM users WHERE id = ?`)
+        .bind(userId)
+        .first();
+
+    if (!row) {
+        return json({
+            coin_balance: 0,
+            coin_day_earned: 0,
+            coin_day_key: '',
+            coin_week_earned: 0,
+            coin_week_key: ''
+        });
+    }
+    return json(row);
+}
+
+async function updateUserCoins(request, env, userId) {
+    const body = await getBody(request);
+    const now = new Date().toISOString();
+
+    const { coin_balance, coin_day_earned, coin_day_key, coin_week_earned, coin_week_key } = body;
+
+    await env.WRAP_DB
+        .prepare(`UPDATE users SET 
+            coin_balance = ?, 
+            coin_day_earned = ?, 
+            coin_day_key = ?,
+            coin_week_earned = ?, 
+            coin_week_key = ?
+            WHERE id = ?`)
+        .bind(
+            coin_balance ?? 0,
+            coin_day_earned ?? 0,
+            coin_day_key ?? '',
+            coin_week_earned ?? 0,
+            coin_week_key ?? '',
+            userId
+        )
+        .run();
+
+    return json({ success: true });
+}
+
+
 
 function getWeekKey(date = new Date()) {
     const d = new Date(date);
@@ -1993,6 +2051,30 @@ export default {
             }
             if (pathname === "/api/users" && request.method === "POST") {
                 return await createUser(request, env);
+            }
+
+            // ===== USER PREFERENCES =====
+            const userPrefsMatch = pathname.match(/^\/api\/users\/(\d+)\/prefs$/);
+            if (userPrefsMatch) {
+                const userId = userPrefsMatch[1];
+                if (request.method === "GET") {
+                    return await getUserPreferences(env, userId);
+                }
+                if (request.method === "PATCH") {
+                    return await saveUserPreferences(request, env, userId);
+                }
+            }
+
+            // ===== USER COINS =====
+            const userCoinsMatch = pathname.match(/^\/api\/users\/(\d+)\/coins$/);
+            if (userCoinsMatch) {
+                const userId = userCoinsMatch[1];
+                if (request.method === "GET") {
+                    return await getUserCoins(env, userId);
+                }
+                if (request.method === "PATCH") {
+                    return await updateUserCoins(request, env, userId);
+                }
             }
 
             // ===== DAILY TASKS =====
