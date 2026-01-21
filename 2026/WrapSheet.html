@@ -2533,6 +2533,8 @@
         width: 100px;
         height: 100px;
         flex-shrink: 0;
+        overflow: visible;
+        /* Allow speech bubble to overflow */
       }
 
       #finch-svg {
@@ -2597,69 +2599,89 @@
         top: 0;
       }
 
-      /* Bird Speech Bubble */
+      /* Bird Speech Bubble - Finch Style (positioned to right of bird) */
       .speech-bubble {
         position: absolute;
-        bottom: 100%;
-        left: 50%;
-        transform: translateX(-50%);
-        background: #fff;
-        border: 2px solid var(--ink-soft);
-        color: var(--ink);
-        padding: 8px 12px;
-        border-radius: 12px;
+        top: 50%;
+        left: 100%;
+        transform: translateY(-50%) translateX(10px);
+        background: linear-gradient(135deg, #fef9c3 0%, #fef3c7 100%);
+        border: 2px solid #fbbf24;
+        color: #78350f;
+        padding: 10px 14px;
+        border-radius: 16px;
         font-size: 13px;
         font-weight: 600;
         white-space: nowrap;
-        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        box-shadow: 0 4px 12px rgba(251, 191, 36, 0.3), 0 2px 4px rgba(0, 0, 0, 0.1);
         z-index: 100;
         pointer-events: none;
         opacity: 0;
-        transition: opacity 0.3s, transform 0.3s;
-        margin-bottom: 25px;
-        /* Space above bird */
+        transition: opacity 0.3s ease, transform 0.3s ease;
+        min-width: 80px;
+        text-align: center;
       }
 
       .speech-bubble.visible {
         opacity: 1;
-        transform: translateX(-50%) translateY(-5px);
+        transform: translateY(-50%) translateX(15px);
       }
 
+      /* Arrow pointing left toward the bird */
       .speech-bubble::after {
         content: '';
         position: absolute;
-        top: 100%;
-        left: 50%;
-        margin-left: -6px;
-        border-width: 6px;
+        top: 50%;
+        right: 100%;
+        margin-top: -8px;
+        border-width: 8px;
         border-style: solid;
-        border-color: var(--ink-soft) transparent transparent transparent;
+        border-color: transparent #fbbf24 transparent transparent;
       }
 
-      /* Mute Button */
+      .speech-bubble::before {
+        content: '';
+        position: absolute;
+        top: 50%;
+        right: 100%;
+        margin-top: -6px;
+        margin-right: -2px;
+        border-width: 6px;
+        border-style: solid;
+        border-color: transparent #fef9c3 transparent transparent;
+        z-index: 1;
+      }
+
+      /* Mute Button - Subtle circular icon */
       .bird-mute-btn {
         position: absolute;
-        bottom: 5px;
-        right: 5px;
-        width: 20px;
-        height: 20px;
+        top: -5px;
+        right: -5px;
+        width: 18px;
+        height: 18px;
         border-radius: 50%;
-        background: rgba(255, 255, 255, 0.8);
-        border: 1px solid rgba(0, 0, 0, 0.1);
-        font-size: 10px;
+        background: rgba(255, 255, 255, 0.9);
+        border: 1px solid rgba(0, 0, 0, 0.08);
+        font-size: 9px;
         display: flex;
         align-items: center;
         justify-content: center;
         cursor: pointer;
-        opacity: 0.5;
-        transition: opacity 0.2s, transform 0.1s;
+        opacity: 0;
+        transition: opacity 0.2s, transform 0.1s, background 0.2s;
         z-index: 10;
         padding: 0;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+      }
+
+      #finch-container:hover .bird-mute-btn {
+        opacity: 0.6;
       }
 
       .bird-mute-btn:hover {
-        opacity: 1;
+        opacity: 1 !important;
         background: #fff;
+        transform: scale(1.1);
       }
 
       .bird-mute-btn.muted {
@@ -2667,6 +2689,38 @@
         background: #fee2e2;
         color: #ef4444;
         border-color: #fca5a5;
+      }
+
+      /* Edit Bird Button - Subtle icon that appears on hover */
+      .edit-bird-btn {
+        position: absolute;
+        bottom: -5px;
+        right: -5px;
+        width: 18px;
+        height: 18px;
+        border-radius: 50%;
+        background: rgba(255, 255, 255, 0.9);
+        border: 1px solid rgba(0, 0, 0, 0.08);
+        font-size: 9px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        opacity: 0;
+        transition: opacity 0.2s, transform 0.1s, background 0.2s;
+        z-index: 10;
+        padding: 0;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+      }
+
+      #finch-container:hover .edit-bird-btn {
+        opacity: 0.6;
+      }
+
+      .edit-bird-btn:hover {
+        opacity: 1 !important;
+        background: #fff;
+        transform: scale(1.1);
       }
   </style>
 </head>
@@ -2960,12 +3014,15 @@
               style="display:flex; justify-content:space-between; align-items:flex-start; width:100%; margin-bottom:15px;">
               <!-- Bird Container -->
               <div id="finch-container" class="bird-wrapper" title="Pet me!"
-                style="position:relative; width:100px; height:100px; flex-shrink:0;">
-                <!-- Speech Bubble -->
-                <div id="bird-speech-bubble" class="speech-bubble hidden"></div>
+                style="position:relative; width:100px; height:100px; flex-shrink:0; overflow:visible;">
+                <!-- Speech Bubble - Finch Style (positioned to right) -->
+                <div id="bird-speech-bubble" class="speech-bubble hidden"
+                  style="position:absolute; top:50%; left:105%; transform:translateY(-50%); background:linear-gradient(135deg, #fef9c3 0%, #fef3c7 100%); border:2px solid #fbbf24; color:#78350f; padding:10px 14px; border-radius:16px; font-size:13px; font-weight:600; white-space:nowrap; box-shadow:0 4px 12px rgba(251,191,36,0.3), 0 2px 4px rgba(0,0,0,0.1); z-index:100; min-width:80px; text-align:center; opacity:0; transition:opacity 0.3s ease;">
+                </div>
 
-                <!-- Mute Button -->
-                <button id="bird-mute-btn" class="bird-mute-btn" title="Toggle Squeaks">🔊</button>
+                <!-- Mute Button - Subtle in top right -->
+                <button id="bird-mute-btn" class="bird-mute-btn" title="Toggle Squeaks"
+                  style="position:absolute; top:-5px; right:-5px; width:18px; height:18px; border-radius:50%; background:rgba(255,255,255,0.9); border:1px solid rgba(0,0,0,0.08); font-size:9px; display:flex; align-items:center; justify-content:center; cursor:pointer; opacity:0.4; transition:opacity 0.2s; z-index:10; padding:0; box-shadow:0 1px 3px rgba(0,0,0,0.1);">🔊</button>
 
                 <!-- Bird Name Display -->
                 <div id="bird-name-display"
@@ -2978,8 +3035,9 @@
                 <div id="finch-hearts"
                   style="position:absolute; top:0; left:0; width:100%; height:100%; pointer-events:none;"></div>
 
-                <!-- Edit Button -->
-                <button class="edit-bird-btn" id="edit-bird-trigger" title="Edit Colors">
+                <!-- Edit Button - Subtle in bottom right -->
+                <button class="edit-bird-btn" id="edit-bird-trigger" title="Edit Colors"
+                  style="position:absolute; bottom:-5px; right:-5px; width:18px; height:18px; border-radius:50%; background:rgba(255,255,255,0.9); border:1px solid rgba(0,0,0,0.08); font-size:9px; display:flex; align-items:center; justify-content:center; cursor:pointer; opacity:0.4; transition:opacity 0.2s; z-index:10; padding:0; box-shadow:0 1px 3px rgba(0,0,0,0.1);">
                   <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
                     stroke-linecap="round" stroke-linejoin="round">
                     <path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"></path>
@@ -4235,23 +4293,23 @@
       osc.stop(now + 0.2);
     }
 
+
     function speak(text) {
       const bubble = document.getElementById("bird-speech-bubble");
       if (!bubble) return;
 
       bubble.textContent = text;
       bubble.classList.remove("hidden");
-      // Trigger reflow/animation
+      // Use inline style for opacity (workaround for CSS class issues)
       requestAnimationFrame(() => {
-        bubble.classList.add("visible");
+        bubble.style.opacity = "1";
+        bubble.style.transform = "translateY(-50%) translateX(5px)";
       });
-
-      // Play sound if acceptable? Squeak on speak?
-      // squeak(); 
 
       // Hide after 4 seconds
       setTimeout(() => {
-        bubble.classList.remove("visible");
+        bubble.style.opacity = "0";
+        bubble.style.transform = "translateY(-50%)";
         setTimeout(() => bubble.classList.add("hidden"), 300);
       }, 4000);
     }
