@@ -2514,10 +2514,36 @@
         flex-shrink: 0;
       }
 
+
+      /* Bird System Layout */
+      .bird-system-container {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: flex-start;
+        justify-content: center;
+        gap: 20px;
+        padding: 15px;
+        background: var(--panel);
+        border-radius: 8px;
+        margin: 10px;
+      }
+
+      .bird-wrapper {
+        position: relative;
+        width: 100px;
+        height: 100px;
+        flex-shrink: 0;
+      }
+
+      #finch-svg {
+        width: 100%;
+        height: 100%;
+      }
+
       /* Coin Meter (Horizontal) */
       .coin-meter-container {
-        margin-top: 15px;
-        width: 100%;
+        width: 200px;
+        max-width: 100%;
         display: flex;
         flex-direction: column;
         align-items: center;
@@ -2526,8 +2552,9 @@
 
       .coin-meter {
         width: 100%;
-        height: 12px;
-        background: rgba(0, 0, 0, 0.1);
+        height: 12px !important;
+        min-height: 12px !important;
+        background: rgba(0, 0, 0, 0.1) !important;
         border-radius: 999px;
         overflow: hidden;
         position: relative;
@@ -2926,45 +2953,55 @@
             <div class="calendar-weekdays" id="calendar-weekdays"></div>
             <div class="calendar-days" id="calendar-days"></div>
           </div>
-          <div class="calendar-metrics bird-system-container">
-            <!-- Bird Container -->
-            <div id="finch-container" class="bird-wrapper" title="Pet me!">
-              <!-- Speech Bubble -->
-              <div id="bird-speech-bubble" class="speech-bubble hidden"></div>
+          <div class="calendar-metrics bird-system-container"
+            style="display:flex; flex-direction:column; padding:15px 15px 20px 15px; margin:10px 10px 15px 10px; background:var(--panel); border-radius:8px; height:auto !important;">
+            <!-- Top Row: Bird and Pie -->
+            <div
+              style="display:flex; justify-content:space-between; align-items:flex-start; width:100%; margin-bottom:15px;">
+              <!-- Bird Container -->
+              <div id="finch-container" class="bird-wrapper" title="Pet me!"
+                style="position:relative; width:100px; height:100px; flex-shrink:0;">
+                <!-- Speech Bubble -->
+                <div id="bird-speech-bubble" class="speech-bubble hidden"></div>
 
-              <!-- Mute Button -->
-              <button id="bird-mute-btn" class="bird-mute-btn" title="Toggle Squeaks">🔊</button>
+                <!-- Mute Button -->
+                <button id="bird-mute-btn" class="bird-mute-btn" title="Toggle Squeaks">🔊</button>
 
-              <!-- Bird Name Display -->
-              <div id="bird-name-display"
-                style="position:absolute; top:-20px; width:100%; text-align:center; font-size:12px; font-weight:700; color:var(--ink-soft); text-shadow:0 1px 2px rgba(255,255,255,0.8);">
-              </div>
+                <!-- Bird Name Display -->
+                <div id="bird-name-display"
+                  style="position:absolute; top:-20px; width:100%; text-align:center; font-size:12px; font-weight:700; color:var(--ink-soft); text-shadow:0 1px 2px rgba(255,255,255,0.8);">
+                </div>
 
-              <svg id="finch-svg" viewBox="0 0 200 200" style="width:100%; height:100%; overflow:visible;">
-                <!-- Bird Logic will inject SVG here -->
-              </svg>
-              <div id="finch-hearts"
-                style="position:absolute; top:0; left:0; width:100%; height:100%; pointer-events:none;"></div>
-
-              <!-- Edit Button -->
-              <button class="edit-bird-btn" id="edit-bird-trigger" title="Edit Colors">
-                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                  stroke-linecap="round" stroke-linejoin="round">
-                  <path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"></path>
+                <svg id="finch-svg" viewBox="0 0 200 200" style="width:100%; height:100%; overflow:visible;">
+                  <!-- Bird Logic will inject SVG here -->
                 </svg>
-              </button>
-            </div>
+                <div id="finch-hearts"
+                  style="position:absolute; top:0; left:0; width:100%; height:100%; pointer-events:none;"></div>
 
-            <!-- Coin Energy Bar (Horizontal) -->
-            <div class="coin-meter-container">
-              <div class="coin-meter" title="Daily Energy: 50 Coins">
-                <div class="coin-meter-fill" id="bird-energy-fill" style="width: 0%;"></div>
+                <!-- Edit Button -->
+                <button class="edit-bird-btn" id="edit-bird-trigger" title="Edit Colors">
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                    stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"></path>
+                  </svg>
+                </button>
               </div>
-              <div class="coin-meter-label" id="bird-energy-text">0/50</div>
+
+              <!-- Existing Pie -->
+              <canvas id="status-pie" width="150" height="150"></canvas>
             </div>
 
-            <!-- Existing Pie -->
-            <canvas id="status-pie" width="150" height="150" style="margin-bottom:10px;"></canvas>
+            <!-- Bottom Row: Full Width Coin Energy Bar -->
+            <div class="coin-meter-container"
+              style="width:100%; display:flex; flex-direction:column; align-items:center; gap:4px;">
+              <div class="coin-meter" title="Daily Energy: 50 Coins"
+                style="width:100%; height:20px; min-height:20px; background:#e5e7eb; border-radius:999px; overflow:hidden; position:relative; display:block; box-sizing:border-box; box-shadow:inset 0 1px 3px rgba(0,0,0,0.2);">
+                <div class="coin-meter-fill" id="bird-energy-fill"
+                  style="width: 0%; height:20px; min-height:20px; background:linear-gradient(90deg, #facc15, #eab308); border-radius:999px; display:block;">
+                </div>
+              </div>
+              <div class="coin-meter-label" id="bird-energy-text" style="font-size:11px; font-weight:600;">0/50</div>
+            </div>
           </div>
         </section>
 
