@@ -4167,10 +4167,21 @@
       // 2. Random Encouragement Loop
       if (speechTimer) clearInterval(speechTimer);
       speechTimer = setInterval(() => {
-        // 5% chance every 30s if idle? (Simplified: 10% chance every minute)
+        // 10% chance every minute to show a random message
         if (Math.random() < 0.1) {
-          const idleMessages = ["Tweet?", "I believe in you!", "*hop*", "Don't give up!", "You got this!", "Drink water!", "*flutter*"];
-          speak(idleMessages[Math.floor(Math.random() * idleMessages.length)]);
+          const idleMessages = [
+            // Original messages
+            "Tweet?", "I believe in you!", "*hop*", "Don't give up!", "You got this!", "*flutter*",
+            // Wellness reminders
+            "Did you stretch today?", "Did you drink enough water?", "Are you protecting your peace today?",
+            "Take a deep breath! 🌬️", "Have you taken a break recently?", "How's your posture right now?",
+            "Remember to blink! 👀", "Stand up and stretch!", "You're doing amazing!",
+            "What's one thing you're grateful for?", "Smile! Even if no one's watching.", "Your goals matter!",
+            "Small steps = big progress!", "Be kind to yourself today.", "Celebrate your wins! 🎉"
+          ];
+          const msg = idleMessages[Math.floor(Math.random() * idleMessages.length)];
+          squeak(); // Chirp before speaking
+          speak(msg);
         }
       }, 60000);
 
@@ -4320,6 +4331,9 @@
     function triggerHappyBird() {
       birdState.isHappy = true;
       setExpression('happy');
+
+      // Happy chirp when petted!
+      squeak();
 
       // Bounce animation
       const bird = document.getElementById("bird-whole");
@@ -8466,6 +8480,9 @@
 
             // 4. Init Bird (Redraw)
             if (typeof initBirdSystem === "function") initBirdSystem();
+
+            // 4b. Load saved bird colors and name from API
+            if (typeof loadBirdPreferences === "function") await loadBirdPreferences();
 
             // 5. Refresh Weekly Tasks
             if (typeof initWeeklyTasksUI === "function") initWeeklyTasksUI();
