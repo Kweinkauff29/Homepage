@@ -1753,7 +1753,8 @@ async function getUserPreferences(env, userId) {
             theme: "light",
             calendar_view: "month",
             section_order: null,
-            enable_weekly_tasks: 0
+            enable_weekly_tasks: 0,
+            bird_name: null
         });
     }
 
@@ -1776,8 +1777,8 @@ async function saveUserPreferences(request, env, userId) {
         // Insert new
         await env.WRAP_DB
             .prepare(`
-                INSERT INTO user_preferences (user_id, theme, calendar_view, section_order, enable_weekly_tasks, bird_colors, updated_at)
-                VALUES (?, ?, ?, ?, ?, ?, ?)
+                INSERT INTO user_preferences (user_id, theme, calendar_view, section_order, enable_weekly_tasks, bird_colors, bird_name, updated_at)
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?)
             `)
             .bind(
                 userId,
@@ -1786,19 +1787,18 @@ async function saveUserPreferences(request, env, userId) {
                 body.section_order ? JSON.stringify(body.section_order) : null,
                 body.enable_weekly_tasks || 0,
                 birdColorsStr,
+                body.bird_name || null,
                 now
             )
             .run();
     } else {
         // Update existing
-        // We use COALESCE-like logic: if undefined in body, keep existing.
-        // For bird_colors, if body has it, update it; else keep existing.
         const current = existing.results[0];
 
         await env.WRAP_DB
             .prepare(`
                 UPDATE user_preferences 
-                SET theme = ?, calendar_view = ?, section_order = ?, enable_weekly_tasks = ?, bird_colors = ?, updated_at = ?
+                SET theme = ?, calendar_view = ?, section_order = ?, enable_weekly_tasks = ?, bird_colors = ?, bird_name = ?, updated_at = ?
                 WHERE user_id = ?
             `)
             .bind(
@@ -1807,6 +1807,7 @@ async function saveUserPreferences(request, env, userId) {
                 body.section_order ? JSON.stringify(body.section_order) : current.section_order,
                 body.enable_weekly_tasks !== undefined ? body.enable_weekly_tasks : current.enable_weekly_tasks,
                 birdColorsStr !== null ? birdColorsStr : current.bird_colors,
+                body.bird_name !== undefined ? body.bird_name : current.bird_name,
                 now,
                 userId
             )

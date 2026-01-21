@@ -2553,21 +2553,93 @@
         font-variant-numeric: tabular-nums;
       }
 
-      /* Coin Sprite Animation */
+      /* Coin Sprite Animation - FIXED OVERRIDE */
       .flying-coin {
-        position: fixed;
-        /* Fixed is required for viewport-relative animation */
-        width: 32px;
-        height: 32px;
+        position: fixed !important;
+        width: 32px !important;
+        height: 32px !important;
         pointer-events: none;
-        z-index: 2147483647;
-        /* Max Element Count */
+        z-index: 2147483647 !important;
         display: flex;
         align-items: center;
         justify-content: center;
         font-size: 24px;
         filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.3));
         will-change: transform, left, top;
+        left: 0;
+        top: 0;
+      }
+
+      /* Bird Speech Bubble */
+      .speech-bubble {
+        position: absolute;
+        bottom: 100%;
+        left: 50%;
+        transform: translateX(-50%);
+        background: #fff;
+        border: 2px solid var(--ink-soft);
+        color: var(--ink);
+        padding: 8px 12px;
+        border-radius: 12px;
+        font-size: 13px;
+        font-weight: 600;
+        white-space: nowrap;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        z-index: 100;
+        pointer-events: none;
+        opacity: 0;
+        transition: opacity 0.3s, transform 0.3s;
+        margin-bottom: 25px;
+        /* Space above bird */
+      }
+
+      .speech-bubble.visible {
+        opacity: 1;
+        transform: translateX(-50%) translateY(-5px);
+      }
+
+      .speech-bubble::after {
+        content: '';
+        position: absolute;
+        top: 100%;
+        left: 50%;
+        margin-left: -6px;
+        border-width: 6px;
+        border-style: solid;
+        border-color: var(--ink-soft) transparent transparent transparent;
+      }
+
+      /* Mute Button */
+      .bird-mute-btn {
+        position: absolute;
+        bottom: 5px;
+        right: 5px;
+        width: 20px;
+        height: 20px;
+        border-radius: 50%;
+        background: rgba(255, 255, 255, 0.8);
+        border: 1px solid rgba(0, 0, 0, 0.1);
+        font-size: 10px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        opacity: 0.5;
+        transition: opacity 0.2s, transform 0.1s;
+        z-index: 10;
+        padding: 0;
+      }
+
+      .bird-mute-btn:hover {
+        opacity: 1;
+        background: #fff;
+      }
+
+      .bird-mute-btn.muted {
+        opacity: 0.8;
+        background: #fee2e2;
+        color: #ef4444;
+        border-color: #fca5a5;
       }
   </style>
 </head>
@@ -2607,8 +2679,15 @@
         </div>
 
         <!-- Right: Controls -->
-        <div class="bird-controls-col" id="bird-color-controls">
-          <!-- JS will inject color pickers here -->
+        <div class="bird-controls-col">
+          <label class="bird-name-label">
+            Name Your Bird
+            <input type="text" id="bird-name-input" placeholder="e.g. Chirpy" maxlength="15"
+              style="width:100%; padding:8px; border:1px solid #d1d5db; border-radius:6px; font-size:14px; margin-bottom:15px; text-transform:capitalize;">
+          </label>
+          <div id="bird-color-controls">
+            <!-- JS will inject color pickers here -->
+          </div>
         </div>
       </div>
       <div class="modal-footer">
@@ -2850,6 +2929,17 @@
           <div class="calendar-metrics bird-system-container">
             <!-- Bird Container -->
             <div id="finch-container" class="bird-wrapper" title="Pet me!">
+              <!-- Speech Bubble -->
+              <div id="bird-speech-bubble" class="speech-bubble hidden"></div>
+
+              <!-- Mute Button -->
+              <button id="bird-mute-btn" class="bird-mute-btn" title="Toggle Squeaks">🔊</button>
+
+              <!-- Bird Name Display -->
+              <div id="bird-name-display"
+                style="position:absolute; top:-20px; width:100%; text-align:center; font-size:12px; font-weight:700; color:var(--ink-soft); text-shadow:0 1px 2px rgba(255,255,255,0.8);">
+              </div>
+
               <svg id="finch-svg" viewBox="0 0 200 200" style="width:100%; height:100%; overflow:visible;">
                 <!-- Bird Logic will inject SVG here -->
               </svg>
@@ -3729,6 +3819,13 @@
       // 2. Play Sound/Animation
       playChaChingSound(0);
 
+      // Bird Personality Reactions
+      if (typeof squeak === "function") squeak(); // Happy squeak
+      if (typeof speak === "function" && Math.random() > 0.6) {
+        const praises = ["Great job!", "You did it!", "Keep going!", "Awesome!", "Woohoo!", "So productive!", "Proud of you!"];
+        speak(praises[Math.floor(Math.random() * praises.length)]);
+      }
+
       const counterEl = document.getElementById("coin-counter");
       if (counterEl) {
         counterEl.classList.add("pulse");
@@ -4012,6 +4109,110 @@
       startBlinking();
       setupPetting();
       updateBirdEnergy(); // Init meter
+
+      // Init Personality (Audio/Speech)
+      initBirdPersonality();
+    }
+
+    // --- Bird Personality System ---
+    let birdName = null;
+    let squeaksMuted = localStorage.getItem("bird_squeaks_muted") === "true";
+    let speechTimer = null;
+
+    function initBirdPersonality() {
+      // 1. Mute Button
+      const muteBtn = document.getElementById("bird-mute-btn");
+      if (muteBtn) {
+        updateMuteUI();
+        muteBtn.addEventListener("click", toggleMute);
+      }
+
+      // 2. Random Encouragement Loop
+      if (speechTimer) clearInterval(speechTimer);
+      speechTimer = setInterval(() => {
+        // 5% chance every 30s if idle? (Simplified: 10% chance every minute)
+        if (Math.random() < 0.1) {
+          const idleMessages = ["Tweet?", "I believe in you!", "*hop*", "Don't give up!", "You got this!", "Drink water!", "*flutter*"];
+          speak(idleMessages[Math.floor(Math.random() * idleMessages.length)]);
+        }
+      }, 60000);
+
+      // 3. Update Name UI
+      updateBirdNameUI();
+    }
+
+    function updateMuteUI() {
+      const muteBtn = document.getElementById("bird-mute-btn");
+      if (muteBtn) {
+        muteBtn.textContent = squeaksMuted ? "🔇" : "🔊";
+        muteBtn.classList.toggle("muted", squeaksMuted);
+        muteBtn.title = squeaksMuted ? "Unmute Squeaks" : "Mute Squeaks";
+      }
+    }
+
+    function toggleMute() {
+      squeaksMuted = !squeaksMuted;
+      localStorage.setItem("bird_squeaks_muted", squeaksMuted);
+      updateMuteUI();
+      if (!squeaksMuted) squeak(); // Confirmation squeak
+    }
+
+    // Web Audio API Context
+    const AudioContext = window.AudioContext || window.webkitAudioContext;
+    let audioCtx = new AudioContext();
+
+    function squeak() {
+      if (squeaksMuted) return;
+      if (audioCtx.state === 'suspended') audioCtx.resume();
+
+      const osc = audioCtx.createOscillator();
+      const gainNode = audioCtx.createGain();
+
+      osc.connect(gainNode);
+      gainNode.connect(audioCtx.destination);
+
+      // Finch-like chirp: high pitch, rapid drop
+      // Start high
+      const now = audioCtx.currentTime;
+      osc.type = 'sine';
+      osc.frequency.setValueAtTime(2000 + Math.random() * 500, now);
+      osc.frequency.exponentialRampToValueAtTime(1200, now + 0.1);
+
+      // Envelope
+      gainNode.gain.setValueAtTime(0, now);
+      gainNode.gain.linearRampToValueAtTime(0.1, now + 0.02);
+      gainNode.gain.exponentialRampToValueAtTime(0.001, now + 0.15);
+
+      osc.start(now);
+      osc.stop(now + 0.2);
+    }
+
+    function speak(text) {
+      const bubble = document.getElementById("bird-speech-bubble");
+      if (!bubble) return;
+
+      bubble.textContent = text;
+      bubble.classList.remove("hidden");
+      // Trigger reflow/animation
+      requestAnimationFrame(() => {
+        bubble.classList.add("visible");
+      });
+
+      // Play sound if acceptable? Squeak on speak?
+      // squeak(); 
+
+      // Hide after 4 seconds
+      setTimeout(() => {
+        bubble.classList.remove("visible");
+        setTimeout(() => bubble.classList.add("hidden"), 300);
+      }, 4000);
+    }
+
+    function updateBirdNameUI() {
+      const display = document.getElementById("bird-name-display");
+      if (display) {
+        display.textContent = birdName || "";
+      }
     }
 
     function startBlinking() {
@@ -4169,6 +4370,10 @@
             try { savedColors = JSON.parse(savedColors); } catch (e) { }
           }
 
+          // Load Name
+          birdName = prefs ? prefs.bird_name : null;
+          updateBirdNameUI();
+
           if (savedColors) {
             currentBirdColors = { ...DEFAULT_BIRD_COLORS, ...savedColors };
             applyBirdColors(currentBirdColors);
@@ -4208,8 +4413,12 @@
       const modal = document.getElementById("bird-editor-modal");
       const previewSvg = document.getElementById("bird-editor-preview");
       const controls = document.getElementById("bird-color-controls");
+      const nameInput = document.getElementById("bird-name-input");
 
       if (!modal || !previewSvg || !controls) return;
+
+      // Pre-fill name
+      if (nameInput) nameInput.value = birdName || "";
 
       // 1. Clone current bird to preview
       const mainBirdGroup = document.getElementById("bird-whole");
@@ -4276,12 +4485,16 @@
 
       // 3. Persist to DB
       if (state.currentUser) {
+        birdName = document.getElementById("bird-name-input").value.trim() || null;
+        updateBirdNameUI();
+
         try {
           await apiSend(`/users/${state.currentUser.id}/prefs`, "PATCH", {
             userId: state.currentUser.id,
-            birdColors: currentBirdColors
+            birdColors: currentBirdColors,
+            bird_name: birdName
           });
-          showToast("Bird colors saved!");
+          showToast("Bird saved!");
         } catch (e) {
           console.warn("Save failed", e);
           showToast("Saved locally (Server error)", true);
@@ -4290,6 +4503,9 @@
 
       closeBirdEditor();
     }
+
+
+
 
     // Initialize Editor Listeners
     document.addEventListener("DOMContentLoaded", () => {
