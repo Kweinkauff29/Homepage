@@ -4721,8 +4721,8 @@
       if (state.currentUser) {
         try {
           // Attempt to fetch from API
-          // Endpoint: /api/users/:id/prefs
-          const prefs = await apiSend(`/users/${state.currentUser.id}/prefs`);
+          // Endpoint: /api/user-preferences/:id
+          const prefs = await apiGet(`/user-preferences/${state.currentUser.id}`);
 
           let savedColors = prefs ? (prefs.bird_colors || prefs.birdColors) : null;
           if (typeof savedColors === 'string') {
@@ -4744,6 +4744,10 @@
     }
 
     function applyBirdColors(colors, targetSvgId = "bird-whole") {
+      // Guard against undefined colors
+      if (!colors) {
+        colors = currentBirdColors || DEFAULT_BIRD_COLORS;
+      }
       // Apply colors to specific elements via CSS selection
       // Target can be main bird or preview bird
       const root = document.getElementById(targetSvgId);
@@ -4848,9 +4852,8 @@
         updateBirdNameUI();
 
         try {
-          await apiSend(`/users/${state.currentUser.id}/prefs`, "PATCH", {
-            userId: state.currentUser.id,
-            birdColors: currentBirdColors,
+          await apiSend(`/user-preferences/${state.currentUser.id}`, "PUT", {
+            bird_colors: currentBirdColors,
             bird_name: birdName
           });
           showToast("Bird saved!");
