@@ -1766,8 +1766,8 @@ async function saveUserPreferences(request, env, userId) {
         // Insert new
         await env.WRAP_DB
             .prepare(`
-                INSERT INTO user_preferences (user_id, theme, calendar_view, section_order, enable_weekly_tasks, updated_at)
-                VALUES (?, ?, ?, ?, ?, ?)
+                INSERT INTO user_preferences (user_id, theme, calendar_view, section_order, enable_weekly_tasks, bird_name, bird_colors, updated_at)
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?)
             `)
             .bind(
                 userId,
@@ -1775,6 +1775,8 @@ async function saveUserPreferences(request, env, userId) {
                 body.calendar_view || "month",
                 body.section_order ? JSON.stringify(body.section_order) : null,
                 body.enable_weekly_tasks || 0,
+                body.bird_name || null,
+                body.bird_colors ? JSON.stringify(body.bird_colors) : null,
                 now
             )
             .run();
@@ -1783,7 +1785,7 @@ async function saveUserPreferences(request, env, userId) {
         await env.WRAP_DB
             .prepare(`
                 UPDATE user_preferences 
-                SET theme = ?, calendar_view = ?, section_order = ?, enable_weekly_tasks = ?, updated_at = ?
+                SET theme = ?, calendar_view = ?, section_order = ?, enable_weekly_tasks = ?, bird_name = ?, bird_colors = ?, updated_at = ?
                 WHERE user_id = ?
             `)
             .bind(
@@ -1791,6 +1793,8 @@ async function saveUserPreferences(request, env, userId) {
                 body.calendar_view !== undefined ? body.calendar_view : existing.results[0].calendar_view,
                 body.section_order ? JSON.stringify(body.section_order) : existing.results[0].section_order,
                 body.enable_weekly_tasks !== undefined ? body.enable_weekly_tasks : existing.results[0].enable_weekly_tasks,
+                body.bird_name !== undefined ? body.bird_name : existing.results[0].bird_name,
+                body.bird_colors !== undefined ? JSON.stringify(body.bird_colors) : existing.results[0].bird_colors,
                 now,
                 userId
             )

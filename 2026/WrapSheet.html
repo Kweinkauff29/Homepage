@@ -2149,579 +2149,652 @@
       z-index: 10;
     }
 
+    @keyframes birdJump {
+
+      0%,
+      100% {
+        transform: translateY(0) scale(1) rotate(0deg);
+      }
+
+      30% {
+        transform: translateY(-8px) scale(1.05) rotate(-3deg);
+      }
+
+      50% {
+        transform: translateY(0) scale(0.98) rotate(0deg);
+      }
+
+      70% {
+        transform: translateY(-4px) scale(1.02) rotate(3deg);
+      }
+    }
+
+    @keyframes wingFlapL {
+
+      0%,
+      100% {
+        transform: rotate(0deg);
+      }
+
+      25% {
+        transform: rotate(20deg);
+      }
+
+      50% {
+        transform: rotate(-10deg);
+      }
+
+      75% {
+        transform: rotate(20deg);
+      }
+    }
+
+    @keyframes wingFlapR {
+
+      0%,
+      100% {
+        transform: rotate(0deg);
+      }
+
+      25% {
+        transform: rotate(-20deg);
+      }
+
+      50% {
+        transform: rotate(10deg);
+      }
+
+      75% {
+        transform: rotate(-20deg);
+      }
+    }
+
+    .bird-celebrating .bird-anim-wrapper {
+      animation: birdJump 0.6s ease-in-out infinite;
+      transform-origin: center bottom;
+    }
+
+    .bird-celebrating .bird-wing-l {
+      animation: wingFlapL 0.2s ease-in-out infinite;
+      transform-origin: 100% 50%;
+      transform-box: fill-box;
+      /* Pivot from body connection */
+    }
+
+    .bird-celebrating .bird-wing-r {
+      animation: wingFlapR 0.2s ease-in-out infinite;
+      transform-origin: 0% 50%;
+      transform-box: fill-box;
+      /* Pivot from body connection */
+    }
+
     @keyframes floatUp {
       0% {
         transform: translateY(0) scale(0.5);
         opacity: 1;
       }
 
-      @keyframes floatUp {
-        0% {
-          transform: translateY(0) scale(0.5);
-          opacity: 1;
-        }
-
-        100% {
-          transform: translateY(-40px) scale(1.2);
-          opacity: 0;
-        }
-      }
-
-      /* Edit Bird Button */
-      .edit-bird-btn {
-        position: absolute;
-        bottom: -15px;
-        left: 50%;
-        transform: translateX(-50%);
-        background: var(--panel-elevated);
-        border: 1px solid var(--panel-border);
-        border-radius: 12px;
-        width: 24px;
-        height: 24px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        cursor: pointer;
+      100% {
+        transform: translateY(-40px) scale(1.2);
         opacity: 0;
-        transition: opacity 0.2s, transform 0.2s;
-        box-shadow: var(--shadow-md);
-        z-index: 20;
       }
+    }
 
-      .bird-wrapper:hover .edit-bird-btn {
+    /* Edit Bird Button */
+    .edit-bird-btn {
+      position: absolute;
+      bottom: -15px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: var(--panel-elevated);
+      border: 1px solid var(--panel-border);
+      border-radius: 12px;
+      width: 24px;
+      height: 24px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      opacity: 0;
+      transition: opacity 0.2s, transform 0.2s;
+      box-shadow: var(--shadow-md);
+      z-index: 20;
+    }
+
+    .bird-wrapper:hover .edit-bird-btn {
+      opacity: 1;
+      bottom: -5px;
+    }
+
+    .edit-bird-btn:hover {
+      transform: translateX(-50%) scale(1.1);
+      background: var(--bg-main);
+    }
+
+    /* Bird Editor Modal */
+    .bird-editor-layout {
+      display: flex;
+      gap: 20px;
+      padding: 10px;
+    }
+
+    .bird-preview-col {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      background: var(--bg-main);
+      border-radius: var(--radius-md);
+      padding: 20px;
+    }
+
+    .bird-controls-col {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      max-height: 400px;
+      overflow-y: auto;
+    }
+
+    .color-control-group {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .color-control-group label {
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--ink-soft);
+      text-transform: uppercase;
+    }
+
+    .color-picker-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .color-input-styled {
+      -webkit-appearance: none;
+      border: none;
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      overflow: hidden;
+      cursor: pointer;
+      padding: 0;
+      background: none;
+    }
+
+    .color-input-styled::-webkit-color-swatch-wrapper {
+      padding: 0;
+    }
+
+    .color-input-styled::-webkit-color-swatch {
+      border: 2px solid var(--panel-border);
+      border-radius: 50%;
+    }
+
+    /* Daily Energy Meter */
+    /* Daily Energy Meter - Horizontal */
+    .coin-meter-container {
+      flex: 1;
+      margin: 0 15px 25px;
+      /* Align with bird feet */
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+    }
+
+    .coin-meter {
+      width: 100%;
+      height: 24px;
+      background: rgba(0, 0, 0, 0.06);
+      border-radius: 12px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    body[data-theme="dark"] .coin-meter {
+      background: rgba(255, 255, 255, 0.1);
+    }
+
+    .coin-meter-fill {
+      position: absolute;
+      top: 0;
+      left: 0;
+      height: 100%;
+      width: 0%;
+      /* Horizontal fill */
+      background: linear-gradient(to right, #fbbf24, #f59e0b);
+      border-radius: 12px;
+      transition: width 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+      box-shadow: 0 0 10px rgba(251, 191, 36, 0.5);
+    }
+
+    .coin-meter-label {
+      text-align: center;
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--ink-soft);
+      margin-top: 4px;
+    }
+
+    /* Flying coin sprites - use JS animation instead of CSS */
+    .flying-coin {
+      position: fixed;
+      font-size: 28px;
+      z-index: 10001;
+      pointer-events: none;
+      filter: drop-shadow(0 3px 6px rgba(0, 0, 0, 0.4));
+      transition: none;
+    }
+
+    @keyframes coinFly {
+      0% {
+        transform: translate(0, 0) scale(1) rotate(0deg);
         opacity: 1;
-        bottom: -5px;
       }
 
-      .edit-bird-btn:hover {
-        transform: translateX(-50%) scale(1.1);
-        background: var(--bg-main);
-      }
-
-      /* Bird Editor Modal */
-      .bird-editor-layout {
-        display: flex;
-        gap: 20px;
-        padding: 10px;
-      }
-
-      .bird-preview-col {
-        flex: 1;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-        background: var(--bg-main);
-        border-radius: var(--radius-md);
-        padding: 20px;
-      }
-
-      .bird-controls-col {
-        flex: 1;
-        display: flex;
-        flex-direction: column;
-        gap: 12px;
-        max-height: 400px;
-        overflow-y: auto;
-      }
-
-      .color-control-group {
-        display: flex;
-        flex-direction: column;
-        gap: 4px;
-      }
-
-      .color-control-group label {
-        font-size: 11px;
-        font-weight: 600;
-        color: var(--ink-soft);
-        text-transform: uppercase;
-      }
-
-      .color-picker-row {
-        display: flex;
-        align-items: center;
-        gap: 10px;
-      }
-
-      .color-input-styled {
-        -webkit-appearance: none;
-        border: none;
-        width: 32px;
-        height: 32px;
-        border-radius: 50%;
-        overflow: hidden;
-        cursor: pointer;
-        padding: 0;
-        background: none;
-      }
-
-      .color-input-styled::-webkit-color-swatch-wrapper {
-        padding: 0;
-      }
-
-      .color-input-styled::-webkit-color-swatch {
-        border: 2px solid var(--panel-border);
-        border-radius: 50%;
-      }
-
-      /* Daily Energy Meter */
-      /* Daily Energy Meter - Horizontal */
-      .coin-meter-container {
-        flex: 1;
-        margin: 0 15px 25px;
-        /* Align with bird feet */
-        position: relative;
-        display: flex;
-        flex-direction: column;
-        justify-content: flex-end;
-      }
-
-      .coin-meter {
-        width: 100%;
-        height: 24px;
-        background: rgba(0, 0, 0, 0.06);
-        border-radius: 12px;
-        position: relative;
-        overflow: hidden;
-      }
-
-      body[data-theme="dark"] .coin-meter {
-        background: rgba(255, 255, 255, 0.1);
-      }
-
-      .coin-meter-fill {
-        position: absolute;
-        top: 0;
-        left: 0;
-        height: 100%;
-        width: 0%;
-        /* Horizontal fill */
-        background: linear-gradient(to right, #fbbf24, #f59e0b);
-        border-radius: 12px;
-        transition: width 0.5s cubic-bezier(0.4, 0, 0.2, 1);
-        box-shadow: 0 0 10px rgba(251, 191, 36, 0.5);
-      }
-
-      .coin-meter-label {
-        text-align: center;
-        font-size: 11px;
-        font-weight: 600;
-        color: var(--ink-soft);
-        margin-top: 4px;
-      }
-
-      /* Flying coin sprites - use JS animation instead of CSS */
-      .flying-coin {
-        position: fixed;
-        font-size: 28px;
-        z-index: 10001;
-        pointer-events: none;
-        filter: drop-shadow(0 3px 6px rgba(0, 0, 0, 0.4));
-        transition: none;
-      }
-
-      @keyframes coinFly {
-        0% {
-          transform: translate(0, 0) scale(1) rotate(0deg);
-          opacity: 1;
-        }
-
-        30% {
-          transform: translate(calc(var(--dx) * 0.3), calc(var(--dy) * 0.3 - 40px)) scale(1.2) rotate(180deg);
-          opacity: 1;
-        }
-
-        100% {
-          transform: translate(var(--dx), var(--dy)) scale(0.5) rotate(720deg);
-          opacity: 0.8;
-        }
-      }
-
-      @keyframes coinBurst {
-        0% {
-          transform: scale(0) rotate(0deg);
-          opacity: 0;
-        }
-
-        50% {
-          transform: scale(1.3) rotate(180deg);
-          opacity: 1;
-        }
-
-        100% {
-          transform: scale(1) rotate(360deg);
-          opacity: 1;
-        }
-      }
-
-      .coin-burst {
-        animation: coinBurst 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
-      }
-
-      /* Task Reminder Container - fixed position, stacks children vertically */
-      .reminder-container {
-        position: fixed;
-        top: 80px;
-        right: 16px;
-        z-index: 9999;
-        display: flex;
-        flex-direction: column;
-        gap: 10px;
-        max-width: 360px;
-      }
-
-      /* Individual reminder banner */
-      .reminder-banner {
-        background: linear-gradient(135deg, #fef3c7, #fde68a);
-        border: 2px solid #f59e0b;
-        border-radius: 12px;
-        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2), 0 4px 8px rgba(245, 158, 11, 0.3);
-        animation: slideInRight 0.3s ease-out;
-      }
-
-      /* Overdue reminder style */
-      .reminder-banner.overdue {
-        background: linear-gradient(135deg, #fee2e2, #fecaca);
-        border: 2px solid #ef4444;
-        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2), 0 4px 8px rgba(239, 68, 68, 0.3);
-      }
-
-      .reminder-banner.hidden {
-        display: none;
-      }
-
-      @keyframes slideInRight {
-        from {
-          transform: translateX(100%);
-          opacity: 0;
-        }
-
-        to {
-          transform: translateX(0);
-          opacity: 1;
-        }
-      }
-
-      .reminder-content {
-        display: flex;
-        align-items: center;
-        gap: 12px;
-        padding: 12px 16px;
-      }
-
-      .reminder-icon {
-        font-size: 28px;
-        animation: shake 0.5s ease-in-out infinite;
-      }
-
-      @keyframes shake {
-
-        0%,
-        100% {
-          transform: rotate(0deg);
-        }
-
-        25% {
-          transform: rotate(-10deg);
-        }
-
-        75% {
-          transform: rotate(10deg);
-        }
-      }
-
-      .reminder-text {
-        flex: 1;
-      }
-
-      .reminder-title {
-        font-weight: 700;
-        font-size: 14px;
-        color: #92400e;
-        margin-bottom: 2px;
-      }
-
-      .reminder-time {
-        font-size: 12px;
-        color: #b45309;
-      }
-
-      .reminder-buttons {
-        display: flex;
-        gap: 6px;
-      }
-
-      .reminder-snooze {
-        background: rgba(146, 64, 14, 0.2);
-        color: #92400e;
-        border: 1px solid #92400e;
-        border-radius: 6px;
-        padding: 8px 12px;
-        font-size: 12px;
-        font-weight: 600;
-        cursor: pointer;
-        transition: background 0.2s;
-      }
-
-      .reminder-snooze:hover {
-        background: rgba(146, 64, 14, 0.3);
-      }
-
-      .reminder-dismiss {
-        background: #f59e0b;
-        color: white;
-        border: none;
-        border-radius: 6px;
-        padding: 8px 12px;
-        font-size: 12px;
-        font-weight: 600;
-        cursor: pointer;
-        transition: background 0.2s;
-      }
-
-      .reminder-dismiss:hover {
-        background: #d97706;
-      }
-
-      /* Checkbox list for assignees */
-      .checkbox-list {
-        border: 1px solid #d1d5db;
-        border-radius: 6px;
-        padding: 8px;
-        max-height: 120px;
-        overflow-y: auto;
-        background: #fff;
-        display: flex;
-        flex-direction: column;
-        gap: 4px;
-      }
-
-      .checkbox-list label {
-        display: flex;
-        flex-direction: row;
-        align-items: center;
-        gap: 8px;
-        font-size: 13px;
-        cursor: pointer;
-        margin: 0;
-        font-weight: normal;
-        white-space: nowrap;
-      }
-
-      .checkbox-list label input[type="checkbox"] {
-        margin: 0;
-        flex-shrink: 0;
-      }
-
-
-      /* Bird System Layout */
-      .bird-system-container {
-        display: flex;
-        flex-wrap: wrap;
-        align-items: flex-start;
-        justify-content: center;
-        gap: 20px;
-        padding: 15px;
-        background: var(--panel);
-        border-radius: 8px;
-        margin: 10px;
-      }
-
-      .bird-wrapper {
-        position: relative;
-        width: 100px;
-        height: 100px;
-        flex-shrink: 0;
-        overflow: visible;
-        /* Allow speech bubble to overflow */
-      }
-
-      #finch-svg {
-        width: 100%;
-        height: 100%;
-      }
-
-      /* Coin Meter (Horizontal) */
-      .coin-meter-container {
-        width: 200px;
-        max-width: 100%;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        gap: 4px;
-      }
-
-      .coin-meter {
-        width: 100%;
-        height: 12px !important;
-        min-height: 12px !important;
-        background: rgba(0, 0, 0, 0.1) !important;
-        border-radius: 999px;
-        overflow: hidden;
-        position: relative;
-        box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1);
-      }
-
-      .coin-meter-fill {
-        height: 100%;
-        width: 0%;
-        background: #eab308;
-        /* Fallback */
-        background: linear-gradient(90deg, #facc15, #eab308);
-        border-radius: 999px;
-        transition: width 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
-        min-width: 4px;
-        /* Ensure visibility even at near-0 */
-      }
-
-      .coin-meter-label {
-        font-size: 11px;
-        color: var(--ink-soft);
-        font-weight: 600;
-        font-variant-numeric: tabular-nums;
-      }
-
-      /* Coin Sprite Animation - FIXED OVERRIDE */
-      .flying-coin {
-        position: fixed !important;
-        width: 32px !important;
-        height: 32px !important;
-        pointer-events: none;
-        z-index: 2147483647 !important;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-size: 24px;
-        filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.3));
-        will-change: transform, left, top;
-        left: 0;
-        top: 0;
-      }
-
-      /* Bird Speech Bubble - Finch Style (positioned to right of bird) */
-      .speech-bubble {
-        position: absolute;
-        top: 50%;
-        left: 100%;
-        transform: translateY(-50%) translateX(10px);
-        background: linear-gradient(135deg, #fef9c3 0%, #fef3c7 100%);
-        border: 2px solid #fbbf24;
-        color: #78350f;
-        padding: 10px 14px;
-        border-radius: 16px;
-        font-size: 13px;
-        font-weight: 600;
-        white-space: nowrap;
-        box-shadow: 0 4px 12px rgba(251, 191, 36, 0.3), 0 2px 4px rgba(0, 0, 0, 0.1);
-        z-index: 100;
-        pointer-events: none;
-        opacity: 0;
-        transition: opacity 0.3s ease, transform 0.3s ease;
-        min-width: 80px;
-        text-align: center;
-      }
-
-      .speech-bubble.visible {
+      30% {
+        transform: translate(calc(var(--dx) * 0.3), calc(var(--dy) * 0.3 - 40px)) scale(1.2) rotate(180deg);
         opacity: 1;
-        transform: translateY(-50%) translateX(15px);
       }
 
-      /* Arrow pointing left toward the bird */
-      .speech-bubble::after {
-        content: '';
-        position: absolute;
-        top: 50%;
-        right: 100%;
-        margin-top: -8px;
-        border-width: 8px;
-        border-style: solid;
-        border-color: transparent #fbbf24 transparent transparent;
-      }
-
-      .speech-bubble::before {
-        content: '';
-        position: absolute;
-        top: 50%;
-        right: 100%;
-        margin-top: -6px;
-        margin-right: -2px;
-        border-width: 6px;
-        border-style: solid;
-        border-color: transparent #fef9c3 transparent transparent;
-        z-index: 1;
-      }
-
-      /* Mute Button - Subtle circular icon */
-      .bird-mute-btn {
-        position: absolute;
-        top: -5px;
-        right: -5px;
-        width: 18px;
-        height: 18px;
-        border-radius: 50%;
-        background: rgba(255, 255, 255, 0.9);
-        border: 1px solid rgba(0, 0, 0, 0.08);
-        font-size: 9px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        cursor: pointer;
-        opacity: 0;
-        transition: opacity 0.2s, transform 0.1s, background 0.2s;
-        z-index: 10;
-        padding: 0;
-        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-      }
-
-      #finch-container:hover .bird-mute-btn {
-        opacity: 0.6;
-      }
-
-      .bird-mute-btn:hover {
-        opacity: 1 !important;
-        background: #fff;
-        transform: scale(1.1);
-      }
-
-      .bird-mute-btn.muted {
+      100% {
+        transform: translate(var(--dx), var(--dy)) scale(0.5) rotate(720deg);
         opacity: 0.8;
-        background: #fee2e2;
-        color: #ef4444;
-        border-color: #fca5a5;
       }
+    }
 
-      /* Edit Bird Button - Subtle icon that appears on hover */
-      .edit-bird-btn {
-        position: absolute;
-        bottom: -5px;
-        right: -5px;
-        width: 18px;
-        height: 18px;
-        border-radius: 50%;
-        background: rgba(255, 255, 255, 0.9);
-        border: 1px solid rgba(0, 0, 0, 0.08);
-        font-size: 9px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        cursor: pointer;
+    @keyframes coinBurst {
+      0% {
+        transform: scale(0) rotate(0deg);
         opacity: 0;
-        transition: opacity 0.2s, transform 0.1s, background 0.2s;
-        z-index: 10;
-        padding: 0;
-        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
       }
 
-      #finch-container:hover .edit-bird-btn {
-        opacity: 0.6;
+      50% {
+        transform: scale(1.3) rotate(180deg);
+        opacity: 1;
       }
 
-      .edit-bird-btn:hover {
-        opacity: 1 !important;
-        background: #fff;
-        transform: scale(1.1);
+      100% {
+        transform: scale(1) rotate(360deg);
+        opacity: 1;
       }
+    }
+
+    .coin-burst {
+      animation: coinBurst 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+
+    /* Task Reminder Container - fixed position, stacks children vertically */
+    .reminder-container {
+      position: fixed;
+      top: 80px;
+      right: 16px;
+      z-index: 9999;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      max-width: 360px;
+    }
+
+    /* Individual reminder banner */
+    .reminder-banner {
+      background: linear-gradient(135deg, #fef3c7, #fde68a);
+      border: 2px solid #f59e0b;
+      border-radius: 12px;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2), 0 4px 8px rgba(245, 158, 11, 0.3);
+      animation: slideInRight 0.3s ease-out;
+    }
+
+    /* Overdue reminder style */
+    .reminder-banner.overdue {
+      background: linear-gradient(135deg, #fee2e2, #fecaca);
+      border: 2px solid #ef4444;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2), 0 4px 8px rgba(239, 68, 68, 0.3);
+    }
+
+    .reminder-banner.hidden {
+      display: none;
+    }
+
+    @keyframes slideInRight {
+      from {
+        transform: translateX(100%);
+        opacity: 0;
+      }
+
+      to {
+        transform: translateX(0);
+        opacity: 1;
+      }
+    }
+
+    .reminder-content {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 12px 16px;
+    }
+
+    .reminder-icon {
+      font-size: 28px;
+      animation: shake 0.5s ease-in-out infinite;
+    }
+
+    @keyframes shake {
+
+      0%,
+      100% {
+        transform: rotate(0deg);
+      }
+
+      25% {
+        transform: rotate(-10deg);
+      }
+
+      75% {
+        transform: rotate(10deg);
+      }
+    }
+
+    .reminder-text {
+      flex: 1;
+    }
+
+    .reminder-title {
+      font-weight: 700;
+      font-size: 14px;
+      color: #92400e;
+      margin-bottom: 2px;
+    }
+
+    .reminder-time {
+      font-size: 12px;
+      color: #b45309;
+    }
+
+    .reminder-buttons {
+      display: flex;
+      gap: 6px;
+    }
+
+    .reminder-snooze {
+      background: rgba(146, 64, 14, 0.2);
+      color: #92400e;
+      border: 1px solid #92400e;
+      border-radius: 6px;
+      padding: 8px 12px;
+      font-size: 12px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+
+    .reminder-snooze:hover {
+      background: rgba(146, 64, 14, 0.3);
+    }
+
+    .reminder-dismiss {
+      background: #f59e0b;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      padding: 8px 12px;
+      font-size: 12px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+
+    .reminder-dismiss:hover {
+      background: #d97706;
+    }
+
+    /* Checkbox list for assignees */
+    .checkbox-list {
+      border: 1px solid #d1d5db;
+      border-radius: 6px;
+      padding: 8px;
+      max-height: 120px;
+      overflow-y: auto;
+      background: #fff;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .checkbox-list label {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      gap: 8px;
+      font-size: 13px;
+      cursor: pointer;
+      margin: 0;
+      font-weight: normal;
+      white-space: nowrap;
+    }
+
+    .checkbox-list label input[type="checkbox"] {
+      margin: 0;
+      flex-shrink: 0;
+    }
+
+
+    /* Bird System Layout */
+    .bird-system-container {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: flex-start;
+      justify-content: center;
+      gap: 20px;
+      padding: 15px;
+      background: var(--panel);
+      border-radius: 8px;
+      margin: 10px;
+    }
+
+    .bird-wrapper {
+      position: relative;
+      width: 100px;
+      height: 100px;
+      flex-shrink: 0;
+      overflow: visible;
+      /* Allow speech bubble to overflow */
+    }
+
+    #finch-svg {
+      width: 100%;
+      height: 100%;
+    }
+
+    /* Coin Meter (Horizontal) */
+    .coin-meter-container {
+      width: 200px;
+      max-width: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .coin-meter {
+      width: 100%;
+      height: 12px !important;
+      min-height: 12px !important;
+      background: rgba(0, 0, 0, 0.1) !important;
+      border-radius: 999px;
+      overflow: hidden;
+      position: relative;
+      box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1);
+    }
+
+    .coin-meter-fill {
+      height: 100%;
+      width: 0%;
+      background: #eab308;
+      /* Fallback */
+      background: linear-gradient(90deg, #facc15, #eab308);
+      border-radius: 999px;
+      transition: width 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+      min-width: 4px;
+      /* Ensure visibility even at near-0 */
+    }
+
+    .coin-meter-label {
+      font-size: 11px;
+      color: var(--ink-soft);
+      font-weight: 600;
+      font-variant-numeric: tabular-nums;
+    }
+
+    /* Coin Sprite Animation - FIXED OVERRIDE */
+    .flying-coin {
+      position: fixed !important;
+      width: 32px !important;
+      height: 32px !important;
+      pointer-events: none;
+      z-index: 2147483647 !important;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 24px;
+      filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.3));
+      will-change: transform, left, top;
+      left: 0;
+      top: 0;
+    }
+
+    /* Bird Speech Bubble - Finch Style (positioned to right of bird) */
+    .speech-bubble {
+      position: absolute;
+      top: 50%;
+      left: 100%;
+      transform: translateY(-50%) translateX(10px);
+      background: linear-gradient(135deg, #fef9c3 0%, #fef3c7 100%);
+      border: 2px solid #fbbf24;
+      color: #78350f;
+      padding: 10px 14px;
+      border-radius: 16px;
+      font-size: 13px;
+      font-weight: 600;
+      white-space: nowrap;
+      box-shadow: 0 4px 12px rgba(251, 191, 36, 0.3), 0 2px 4px rgba(0, 0, 0, 0.1);
+      z-index: 100;
+      pointer-events: none;
+      opacity: 0;
+      transition: opacity 0.3s ease, transform 0.3s ease;
+      min-width: 80px;
+      text-align: center;
+    }
+
+    .speech-bubble.visible {
+      opacity: 1;
+      transform: translateY(-50%) translateX(15px);
+    }
+
+    /* Arrow pointing left toward the bird */
+    .speech-bubble::after {
+      content: '';
+      position: absolute;
+      top: 50%;
+      right: 100%;
+      margin-top: -8px;
+      border-width: 8px;
+      border-style: solid;
+      border-color: transparent #fbbf24 transparent transparent;
+    }
+
+    .speech-bubble::before {
+      content: '';
+      position: absolute;
+      top: 50%;
+      right: 100%;
+      margin-top: -6px;
+      margin-right: -2px;
+      border-width: 6px;
+      border-style: solid;
+      border-color: transparent #fef9c3 transparent transparent;
+      z-index: 1;
+    }
+
+    /* Mute Button - Subtle circular icon */
+    .bird-mute-btn {
+      position: absolute;
+      top: -5px;
+      right: -5px;
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.9);
+      border: 1px solid rgba(0, 0, 0, 0.08);
+      font-size: 9px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      opacity: 0;
+      transition: opacity 0.2s, transform 0.1s, background 0.2s;
+      z-index: 10;
+      padding: 0;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    }
+
+    #finch-container:hover .bird-mute-btn {
+      opacity: 0.6;
+    }
+
+    .bird-mute-btn:hover {
+      opacity: 1 !important;
+      background: #fff;
+      transform: scale(1.1);
+    }
+
+    .bird-mute-btn.muted {
+      opacity: 0.8;
+      background: #fee2e2;
+      color: #ef4444;
+      border-color: #fca5a5;
+    }
+
+    /* Edit Bird Button - Subtle icon that appears on hover */
+    .edit-bird-btn {
+      position: absolute;
+      bottom: -5px;
+      right: -5px;
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.9);
+      border: 1px solid rgba(0, 0, 0, 0.08);
+      font-size: 9px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      opacity: 0;
+      transition: opacity 0.2s, transform 0.1s, background 0.2s;
+      z-index: 10;
+      padding: 0;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    }
+
+    #finch-container:hover .edit-bird-btn {
+      opacity: 0.6;
+    }
+
+    .edit-bird-btn:hover {
+      opacity: 1 !important;
+      background: #fff;
+      transform: scale(1.1);
+    }
   </style>
 </head>
 
@@ -3016,13 +3089,11 @@
               <div id="finch-container" class="bird-wrapper" title="Pet me!"
                 style="position:relative; width:100px; height:100px; flex-shrink:0; overflow:visible;">
                 <!-- Speech Bubble - Finch Style (positioned to right) -->
-                <div id="bird-speech-bubble" class="speech-bubble hidden"
-                  style="position:absolute; top:50%; left:105%; transform:translateY(-50%); background:linear-gradient(135deg, #fef9c3 0%, #fef3c7 100%); border:2px solid #fbbf24; color:#78350f; padding:10px 14px; border-radius:16px; font-size:13px; font-weight:600; white-space:nowrap; box-shadow:0 4px 12px rgba(251,191,36,0.3), 0 2px 4px rgba(0,0,0,0.1); z-index:100; min-width:80px; text-align:center; opacity:0; transition:opacity 0.3s ease;">
+                <div id="bird-speech-bubble" class="speech-bubble hidden">
                 </div>
 
                 <!-- Mute Button - Subtle in top right -->
-                <button id="bird-mute-btn" class="bird-mute-btn" title="Toggle Squeaks"
-                  style="position:absolute; top:-5px; right:-5px; width:18px; height:18px; border-radius:50%; background:rgba(255,255,255,0.9); border:1px solid rgba(0,0,0,0.08); font-size:9px; display:flex; align-items:center; justify-content:center; cursor:pointer; opacity:0.4; transition:opacity 0.2s; z-index:10; padding:0; box-shadow:0 1px 3px rgba(0,0,0,0.1);">🔊</button>
+                <button id="bird-mute-btn" class="bird-mute-btn" title="Toggle Squeaks">🔊</button>
 
                 <!-- Bird Name Display -->
                 <div id="bird-name-display"
@@ -3036,8 +3107,7 @@
                   style="position:absolute; top:0; left:0; width:100%; height:100%; pointer-events:none;"></div>
 
                 <!-- Edit Button - Subtle in bottom right -->
-                <button class="edit-bird-btn" id="edit-bird-trigger" title="Edit Colors"
-                  style="position:absolute; bottom:-5px; right:-5px; width:18px; height:18px; border-radius:50%; background:rgba(255,255,255,0.9); border:1px solid rgba(0,0,0,0.08); font-size:9px; display:flex; align-items:center; justify-content:center; cursor:pointer; opacity:0.4; transition:opacity 0.2s; z-index:10; padding:0; box-shadow:0 1px 3px rgba(0,0,0,0.1);">
+                <button class="edit-bird-btn" id="edit-bird-trigger" title="Edit Colors">
                   <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
                     stroke-linecap="round" stroke-linejoin="round">
                     <path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"></path>
@@ -4149,55 +4219,57 @@
       // Reference Colors: Pink Body (#f9a8d4), Yellow Cap/Wings (#fde047), Blue Tummy (#60a5fa)
       svgContainer.innerHTML = `
         <g id="bird-whole" transform="translate(100, 110) scale(1.4)">
-           <!-- Legs (Orange) -->
-           <path class="bird-foot-l" d="M -20 70 Q -30 75 -40 70 L -35 60 L -20 50" fill="#f97316" stroke="#ea580c" stroke-width="2.5" stroke-linecap="round" />
-           <path class="bird-foot-r" d="M 20 70 Q 30 75 40 70 L 35 60 L 20 50" fill="#f97316" stroke="#ea580c" stroke-width="2.5" stroke-linecap="round" />
-
-           <!-- Body (Large Pink Blob) -->
-           <!-- Rounder, fuller bottom -->
-           <path class="bird-body" d="M -55 20 C -65 -20 -40 -60 0 -60 C 40 -60 65 -20 55 20 C 50 70 -50 70 -55 20 Z" fill="#f9a8d4" />
-
-           <!-- Head Cap (Yellow) -->
-           <!-- Follows top contour of body, comes down to forehead -->
-           <path class="bird-head" d="M -48 -25 C -40 -50 -20 -60 0 -60 C 20 -60 40 -50 48 -25 C 25 -10 -25 -10 -48 -25 Z" fill="#fde047" />
-
-           <!-- Tummy (Blue) -->
-           <!-- Large round oval -->
-           <ellipse class="bird-tummy" cx="0" cy="35" rx="38" ry="32" fill="#60a5fa" />
-
-           <!-- Wings (Yellow) - Bigger and Rounder -->
-           <!-- Sticking out more noticeably -->
-           <path class="bird-wing-l" d="M -53 10 Q -85 15 -75 45 Q -60 50 -50 35" fill="#fde047" stroke="#eab308" stroke-width="1.5" />
-           <path class="bird-wing-r" d="M 53 10 Q 85 15 75 45 Q 60 50 50 35" fill="#fde047" stroke="#eab308" stroke-width="1.5" />
-
-           <!-- Face -->
-           <g id="bird-face" transform="translate(0, -25)">
-             <!-- Cheeks (Pinker) -->
-             <circle cx="-32" cy="15" r="9" fill="#f472b6" opacity="0.6" />
-             <circle cx="32" cy="15" r="9" fill="#f472b6" opacity="0.6" />
-
-             <!-- Beak (Orange/Yellow) -->
-             <path class="bird-beak" d="M -8 10 Q 0 18 8 10 L 0 4 Z" fill="#facc15" stroke="#ca8a04" stroke-width="1.5" />
-
-             <!-- Eyes -->
-             <g id="eyes-open">
-               <circle cx="-18" cy="0" r="7.5" fill="#1f2937" />
-               <circle cx="18" cy="0" r="7.5" fill="#1f2937" />
-               <circle cx="-15" cy="-3" r="2.5" fill="#fff" />
-               <circle cx="21" cy="-3" r="2.5" fill="#fff" />
-             </g>
-             
-             <!-- Eyes Closed/Happy -->
-             <g id="eyes-closed" style="display:none">
-               <path d="M -24 5 Q -18 10 -12 5" fill="none" stroke="#1f2937" stroke-width="3" stroke-linecap="round" />
-               <path d="M 12 5 Q 18 10 24 5" fill="none" stroke="#1f2937" stroke-width="3" stroke-linecap="round" />
-             </g>
-             <g id="eyes-happy" style="display:none">
-                <path d="M -24 5 Q -18 -5 -12 5" fill="none" stroke="#1f2937" stroke-width="3" stroke-linecap="round" />
-                <path d="M 12 5 Q 18 -5 24 5" fill="none" stroke="#1f2937" stroke-width="3" stroke-linecap="round" />
+           <g class="bird-anim-wrapper">
+             <!-- Legs (Orange) -->
+             <path class="bird-foot-l" d="M -20 70 Q -30 75 -40 70 L -35 60 L -20 50" fill="#f97316" stroke="#ea580c" stroke-width="2.5" stroke-linecap="round" />
+             <path class="bird-foot-r" d="M 20 70 Q 30 75 40 70 L 35 60 L 20 50" fill="#f97316" stroke="#ea580c" stroke-width="2.5" stroke-linecap="round" />
+ 
+             <!-- Body (Large Pink Blob) -->
+             <!-- Rounder, fuller bottom -->
+             <path class="bird-body" d="M -55 20 C -65 -20 -40 -60 0 -60 C 40 -60 65 -20 55 20 C 50 70 -50 70 -55 20 Z" fill="#f9a8d4" />
+ 
+             <!-- Head Cap (Yellow) -->
+             <!-- Follows top contour of body, comes down to forehead -->
+             <path class="bird-head" d="M -48 -25 C -40 -50 -20 -60 0 -60 C 20 -60 40 -50 48 -25 C 25 -10 -25 -10 -48 -25 Z" fill="#fde047" />
+ 
+             <!-- Tummy (Blue) -->
+             <!-- Large round oval -->
+             <ellipse class="bird-tummy" cx="0" cy="35" rx="38" ry="32" fill="#60a5fa" />
+ 
+             <!-- Wings (Yellow) - Bigger and Rounder -->
+             <!-- Sticking out more noticeably -->
+             <path class="bird-wing-l" d="M -53 10 Q -85 15 -75 45 Q -60 50 -50 35" fill="#fde047" stroke="#eab308" stroke-width="1.5" />
+             <path class="bird-wing-r" d="M 53 10 Q 85 15 75 45 Q 60 50 50 35" fill="#fde047" stroke="#eab308" stroke-width="1.5" />
+ 
+             <!-- Face -->
+             <g id="bird-face" transform="translate(0, -25)">
+               <!-- Cheeks (Pinker) -->
+               <circle cx="-32" cy="15" r="9" fill="#f472b6" opacity="0.6" />
+               <circle cx="32" cy="15" r="9" fill="#f472b6" opacity="0.6" />
+ 
+               <!-- Beak (Orange/Yellow) -->
+               <path class="bird-beak" d="M -8 10 Q 0 18 8 10 L 0 4 Z" fill="#facc15" stroke="#ca8a04" stroke-width="1.5" />
+ 
+               <!-- Eyes -->
+               <g id="eyes-open">
+                 <circle cx="-18" cy="0" r="7.5" fill="#1f2937" />
+                 <circle cx="18" cy="0" r="7.5" fill="#1f2937" />
+                 <circle cx="-15" cy="-3" r="2.5" fill="#fff" />
+                 <circle cx="21" cy="-3" r="2.5" fill="#fff" />
+               </g>
+               
+               <!-- Eyes Closed/Happy -->
+               <g id="eyes-closed" style="display:none">
+                 <path d="M -24 5 Q -18 10 -12 5" fill="none" stroke="#1f2937" stroke-width="3" stroke-linecap="round" />
+                 <path d="M 12 5 Q 18 10 24 5" fill="none" stroke="#1f2937" stroke-width="3" stroke-linecap="round" />
+               </g>
+               <g id="eyes-happy" style="display:none">
+                  <path d="M -24 5 Q -18 -5 -12 5" fill="none" stroke="#1f2937" stroke-width="3" stroke-linecap="round" />
+                  <path d="M 12 5 Q 18 -5 24 5" fill="none" stroke="#1f2937" stroke-width="3" stroke-linecap="round" />
+               </g>
              </g>
            </g>
-        </g>
+         </g>
       `;
 
       // Start interactions
@@ -4211,10 +4283,165 @@
 
     // --- Bird Personality System ---
     let birdName = null;
+    let birdColors = {
+      body: "#f9a8d4",
+      head: "#fde047",
+      tummy: "#60a5fa",
+      wings: "#fde047"
+    };
+
     let squeaksMuted = localStorage.getItem("bird_squeaks_muted") === "true";
     let speechTimer = null;
 
+    function applyBirdColors(colors = birdColors) {
+      // Update state
+      birdColors = { ...birdColors, ...colors };
+
+      const svg = document.getElementById("finch-svg");
+      if (!svg) return;
+
+      // Helper to set fill
+      const setFill = (sel, val) => {
+        const els = svg.querySelectorAll(sel);
+        els.forEach(el => el.setAttribute("fill", val));
+      };
+
+      if (colors.body) setFill(".bird-body", colors.body);
+      if (colors.head) setFill(".bird-head", colors.head);
+      if (colors.tummy) setFill(".bird-tummy", colors.tummy);
+      if (colors.wings) setFill(".bird-wing-l, .bird-wing-r", colors.wings);
+    }
+
+    function initBirdEditor() {
+      const modal = document.getElementById("bird-editor-modal");
+      const openBtn = document.getElementById("edit-bird-trigger");
+      const closeBtn = document.getElementById("close-bird-editor");
+      const cancelBtn = document.getElementById("cancel-bird-editor");
+      const saveBtn = document.getElementById("save-bird-editor");
+      const nameInput = document.getElementById("bird-name-input");
+
+      if (!modal || !openBtn) return;
+
+      // Color Controls Generation
+      const colorControls = document.getElementById("bird-color-controls");
+      if (colorControls) {
+        colorControls.innerHTML = "";
+        const parts = [
+          { id: "body", label: "Body Color" },
+          { id: "head", label: "Head/Cap" },
+          { id: "tummy", label: "Tummy" },
+          { id: "wings", label: "Wings" }
+        ];
+
+        parts.forEach(part => {
+          const row = document.createElement("div");
+          row.style.marginBottom = "10px";
+
+          const label = document.createElement("div");
+          label.textContent = part.label;
+          label.style.fontSize = "12px";
+          label.style.fontWeight = "600";
+          label.style.marginBottom = "4px";
+
+          const input = document.createElement("input");
+          input.type = "color";
+          input.value = birdColors[part.id] || "#ffffff";
+          input.style.width = "100%";
+          input.style.height = "30px";
+          input.style.cursor = "pointer";
+          input.dataset.partId = part.id;
+
+          input.addEventListener("input", (e) => {
+            const val = e.target.value;
+            // Live preview on the Main Bird (and the preview bird if we copy it)
+            // For simplicity, we just apply to the main bird immediately for preview
+            // In a real modal we might want a separate preview SVG, but let's just use the main one logic
+            // Actually the modal has a #bird-editor-preview SVG. Let's start by copying the bird there.
+
+            // Update preview bird
+            const previewSvg = document.getElementById("bird-editor-preview");
+            if (previewSvg) {
+              const els = previewSvg.querySelectorAll(part.id === 'wings' ? '.bird-wing-l, .bird-wing-r' : `.bird-${part.id}`);
+              els.forEach(el => el.setAttribute("fill", val));
+            }
+          });
+
+          row.appendChild(label);
+          row.appendChild(input);
+          colorControls.appendChild(row);
+        });
+      }
+
+      openBtn.addEventListener("click", () => {
+        // Copy current bird state to modal
+        nameInput.value = birdName || "";
+
+        // Copy SVG to preview
+        const mainSvg = document.getElementById("finch-svg");
+        const previewSvg = document.getElementById("bird-editor-preview");
+        if (mainSvg && previewSvg) {
+          previewSvg.innerHTML = mainSvg.innerHTML;
+        }
+
+        // Reset color inputs
+        const inputs = colorControls.querySelectorAll("input[type='color']");
+        inputs.forEach(input => {
+          const part = input.dataset.partId;
+          if (birdColors[part]) input.value = birdColors[part];
+        });
+
+        modal.style.display = "flex";
+      });
+
+      const close = () => modal.style.display = "none";
+      closeBtn.addEventListener("click", close);
+      cancelBtn.addEventListener("click", close);
+
+      saveBtn.addEventListener("click", async () => {
+        const newName = nameInput.value.trim();
+
+        // Collect colors
+        const newColors = { ...birdColors };
+        const inputs = colorControls.querySelectorAll("input[type='color']");
+        inputs.forEach(input => {
+          newColors[input.dataset.partId] = input.value;
+        });
+
+        // 1. Update State
+        birdName = newName;
+        birdColors = newColors;
+        updateBirdNameUI();
+        applyBirdColors(); // Apply to main bird
+
+        // 2. Persist
+        if (state.currentUser) {
+          try {
+            await saveUserDbPreference("bird_name", newName);
+            await saveUserDbPreference("bird_colors", newColors); // Will be JSON stringified by our updated saveUserDbPreference logic? 
+            // Wait, saveUserDbPreference takes (key, value) and sends { [key]: value }. 
+            // My updated Wrap.js accepts bird_colors in body.
+            // But saveUserDbPreference calls apiSend with { [key]: value }.
+            // If I call saveUserDbPreference("bird_colors", object), it sends { bird_colors: object }.
+            // JSON.stringify happens in apiSend? No, apiSend does JSON.stringify(body).
+            // So if value is an object, it gets stringified into the body JSON.
+            // The backend logic I wrote: body.bird_colors ? JSON.stringify(body.bird_colors) : null
+            // If body.bird_colors is ALREADY an object (from JSON parsing the request body), then JSON.stringify(object) works.
+            // Yes, standard fetch sends JSON. 
+            showToast("Bird saved!");
+          } catch (e) {
+            console.error(e);
+            showToast("Error saving bird", true);
+          }
+        }
+
+        close();
+      });
+    }
+
     function initBirdPersonality() {
+      // 0. Init Editor
+      initBirdEditor();
+
       // 1. Mute Button
       const muteBtn = document.getElementById("bird-mute-btn");
       if (muteBtn) {
@@ -4300,16 +4527,17 @@
 
       bubble.textContent = text;
       bubble.classList.remove("hidden");
-      // Use inline style for opacity (workaround for CSS class issues)
+      // Trigger reflow/animation
       requestAnimationFrame(() => {
-        bubble.style.opacity = "1";
-        bubble.style.transform = "translateY(-50%) translateX(5px)";
+        bubble.classList.add("visible");
       });
+
+      // Play sound if acceptable? Squeak on speak?
+      // squeak(); 
 
       // Hide after 4 seconds
       setTimeout(() => {
-        bubble.style.opacity = "0";
-        bubble.style.transform = "translateY(-50%)";
+        bubble.classList.remove("visible");
         setTimeout(() => bubble.classList.add("hidden"), 300);
       }, 4000);
     }
@@ -4365,6 +4593,12 @@
       const wrapper = document.getElementById("finch-container");
       if (!wrapper) return;
 
+      wrapper.addEventListener("click", () => {
+        // Click to pet/poke
+        birdState.pettingScore += 50;
+        triggerBirdCelebration();
+      });
+
       wrapper.addEventListener("mousemove", (e) => {
         // Calculate movement speed/distance
         const dist = Math.abs(e.movementX) + Math.abs(e.movementY);
@@ -4373,7 +4607,7 @@
           birdState.pettingScore += dist;
 
           if (birdState.pettingScore > 300 && !birdState.isHappy) {
-            triggerHappyBird();
+            triggerBirdCelebration();
           }
         }
       });
@@ -4386,31 +4620,47 @@
       });
     }
 
-    function triggerHappyBird() {
+    function triggerBirdCelebration() {
+      if (birdState.isHappy) return;
       birdState.isHappy = true;
       setExpression('happy');
 
-      // Happy chirp when petted!
+      // Add celebrating class for CSS animations
+      const container = document.getElementById("finch-container");
+      if (container) container.classList.add("bird-celebrating");
+
+      // Happy chirp!
       squeak();
 
-      // Bounce animation
-      const bird = document.getElementById("bird-whole");
-      if (bird) {
-        bird.style.transition = "transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1)";
-        bird.style.transform = "translate(100, 125) scale(1.05)"; // Bounce up
-        setTimeout(() => {
-          bird.style.transform = "translate(100, 130) scale(1)";
-        }, 200);
+      // Random celebration message
+      const celebMessages = [
+        "Yay!", "Woohoo!", "Great job!", "So proud!", "Level up!", "You did it!",
+        "Fantastic!", "Keep it up!", "You're on fire!", "Booyah!"
+      ];
+      if (Math.random() < 0.3) {
+        speak(celebMessages[Math.floor(Math.random() * celebMessages.length)]);
       }
 
       // Spawn hearts
       spawnHeart();
+
+      // Revert after a few seconds
+      setTimeout(() => {
+        stopHappyBird();
+      }, 3500);
     }
 
     function stopHappyBird() {
       birdState.isHappy = false;
       setExpression('normal');
+
+      const container = document.getElementById("finch-container");
+      if (container) container.classList.remove("bird-celebrating");
     }
+
+
+
+
 
     function spawnHeart() {
       if (!birdState.isHappy) return;
@@ -6430,6 +6680,12 @@
       quickDone.addEventListener("click", async (e) => {
         e.stopPropagation();
         const newStatus = quickDone.checked ? "done" : "pending";
+
+        // Trigger celebration if marking as done!
+        if (newStatus === "done" && typeof triggerBirdCelebration === "function") {
+          triggerBirdCelebration();
+        }
+
         // If in backlog, updating status keeps it in backlog unless it's marked done (maybe we move done items to today? No, stays in backlog)
         await quickUpdateTaskStatus(task, newStatus);
       });
@@ -7996,6 +8252,23 @@
         // Apply theme
         if (prefs.theme && prefs.theme !== state.theme) {
           applyTheme(prefs.theme);
+        }
+
+        // Apply bird settings
+        if (prefs.bird_name) {
+          birdName = prefs.bird_name;
+          updateBirdNameUI();
+        }
+        if (prefs.bird_colors) {
+          try {
+            const colors = typeof prefs.bird_colors === 'string' ? JSON.parse(prefs.bird_colors) : prefs.bird_colors;
+            if (colors) {
+              birdColors = { ...birdColors, ...colors };
+              applyBirdColors();
+            }
+          } catch (e) {
+            console.warn("Invalid bird_colors", e);
+          }
         }
 
         // Apply calendar view
