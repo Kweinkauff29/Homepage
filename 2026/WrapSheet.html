@@ -4293,25 +4293,6 @@
     let squeaksMuted = localStorage.getItem("bird_squeaks_muted") === "true";
     let speechTimer = null;
 
-    function applyBirdColors(colors = birdColors) {
-      // Update state
-      birdColors = { ...birdColors, ...colors };
-
-      const svg = document.getElementById("finch-svg");
-      if (!svg) return;
-
-      // Helper to set fill
-      const setFill = (sel, val) => {
-        const els = svg.querySelectorAll(sel);
-        els.forEach(el => el.setAttribute("fill", val));
-      };
-
-      if (colors.body) setFill(".bird-body", colors.body);
-      if (colors.head) setFill(".bird-head", colors.head);
-      if (colors.tummy) setFill(".bird-tummy", colors.tummy);
-      if (colors.wings) setFill(".bird-wing-l, .bird-wing-r", colors.wings);
-    }
-
     function initBirdEditor() {
       const modal = document.getElementById("bird-editor-modal");
       const openBtn = document.getElementById("edit-bird-trigger");
@@ -4411,7 +4392,8 @@
         birdName = newName;
         birdColors = newColors;
         updateBirdNameUI();
-        applyBirdColors(); // Apply to main bird
+        currentBirdColors = newColors; // Sync both color states
+        applyBirdColors(currentBirdColors); // Apply to main bird
 
         // 2. Persist
         if (state.currentUser) {
@@ -8266,8 +8248,8 @@
           try {
             const colors = typeof prefs.bird_colors === 'string' ? JSON.parse(prefs.bird_colors) : prefs.bird_colors;
             if (colors) {
-              birdColors = { ...birdColors, ...colors };
-              applyBirdColors();
+              currentBirdColors = { ...currentBirdColors, ...colors };
+              applyBirdColors(currentBirdColors);
             }
           } catch (e) {
             console.warn("Invalid bird_colors", e);
