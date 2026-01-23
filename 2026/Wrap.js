@@ -1991,6 +1991,49 @@ export default {
                 return await createUser(request, env);
             }
 
+            // ===== USER COINS =====
+            const coinsMatch = pathname.match(/^\/api\/users\/(\d+)\/coins$/);
+            if (coinsMatch) {
+                const userId = parseInt(coinsMatch[1], 10);
+
+                if (request.method === "GET") {
+                    const { results } = await env.WRAP_DB
+                        .prepare(`SELECT coin_balance, coin_day_earned, coin_day_key, coin_week_earned, coin_week_key FROM users WHERE id = ?`)
+                        .bind(userId)
+                        .all();
+                    if (!results.length) {
+                        return json({ error: "Not found" }, 404);
+                    }
+                    return json(results[0]);
+                }
+
+                if (request.method === "PUT") {
+                    const body = await getBody(request);
+                    await env.WRAP_DB
+                        .prepare(`
+                            UPDATE users 
+                            SET coin_balance = ?, coin_day_earned = ?, coin_day_key = ?, coin_week_earned = ?, coin_week_key = ?
+                            WHERE id = ?
+                        `)
+                        .bind(
+                            body.coin_balance ?? 0,
+                            body.coin_day_earned ?? 0,
+                            body.coin_day_key ?? "",
+                            body.coin_week_earned ?? 0,
+                            body.coin_week_key ?? "",
+                            userId
+                        )
+                        .run();
+
+                    // Return updated data
+                    const { results } = await env.WRAP_DB
+                        .prepare(`SELECT coin_balance, coin_day_earned, coin_day_key, coin_week_earned, coin_week_key FROM users WHERE id = ?`)
+                        .bind(userId)
+                        .all();
+                    return json(results[0] || {});
+                }
+            }
+
             // ===== DAILY TASKS =====
             if (pathname === "/api/daily-tasks" && request.method === "GET") {
                 return await listDailyTasks(env, searchParams);

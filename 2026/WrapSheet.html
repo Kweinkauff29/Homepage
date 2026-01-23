@@ -3831,29 +3831,27 @@
 
     let coinSaveTimeout;
 
-    // Load coin balance from API with local fallback
+    // Load coin balance from API only (no local fallback)
     async function loadCoinBalance() {
       if (!state.currentUser) return;
 
-      // 1. Initial load from local storage for speed
-      loadCoinBalanceLocal();
-      updateCoinCounterDisplay();
-
-      // 2. Fetch authoritative data from server
       try {
-        const data = await apiSend(`/users/${state.currentUser.id}/coins`);
+        const data = await apiGet(`/users/${state.currentUser.id}/coins`);
         if (data) {
           state.coinBalance = data.coin_balance || 0;
           state.coinDayEarned = data.coin_day_earned || 0;
           state.coinDayKey = data.coin_day_key || "";
           state.coinWeekEarned = data.coin_week_earned || 0;
           state.coinWeekKey = data.coin_week_key || "";
-
-          // Sync back to local storage
-          saveCoinBalanceLocal();
         }
       } catch (e) {
-        console.warn("Could not load coins from API, using local backup", e);
+        console.warn("Could not load coins from API", e);
+        // Initialize defaults if API fails
+        state.coinBalance = 0;
+        state.coinDayEarned = 0;
+        state.coinDayKey = getCoinDayKey();
+        state.coinWeekEarned = 0;
+        state.coinWeekKey = getCoinWeekKey();
       }
 
       // Reset daily/weekly counters if needed
@@ -3881,54 +3879,27 @@
         state.coinWeekKey = thisWeek;
         state.coinWeekEarned = 0;
       }
-      saveCoinBalanceLocal();
+      // Save to server after rollover check
+      saveCoinBalanceToServer();
     }
 
-    function loadCoinBalanceLocal() {
-      try {
-        const prefix = `wrapsheet-coins-${state.currentUser.id}`;
-        state.coinBalance = parseInt(localStorage.getItem(`${prefix}-balance`) || "0", 10);
-        state.coinDayKey = localStorage.getItem(`${prefix}-dayKey`) || "";
-        state.coinDayEarned = parseInt(localStorage.getItem(`${prefix}-dayEarned`) || "0", 10);
-        state.coinWeekKey = localStorage.getItem(`${prefix}-weekKey`) || "";
-        state.coinWeekEarned = parseInt(localStorage.getItem(`${prefix}-weekEarned`) || "0", 10);
-      } catch (e) { }
-    }
-
-    // Save coin balance locally and sync to server
+    // Save coin balance to server (debounced)
     function saveCoinBalance() {
-      saveCoinBalanceLocal();
-
       // Debounce server save
       clearTimeout(coinSaveTimeout);
       coinSaveTimeout = setTimeout(saveCoinBalanceToServer, 2000);
     }
 
-    function saveCoinBalanceLocal() {
-      if (!state.currentUser) return;
-      try {
-        const prefix = `wrapsheet-coins-${state.currentUser.id}`;
-        localStorage.setItem(`${prefix}-balance`, String(state.coinBalance));
-        localStorage.setItem(`${prefix}-dayKey`, state.coinDayKey);
-        localStorage.setItem(`${prefix}-dayEarned`, String(state.coinDayEarned));
-        localStorage.setItem(`${prefix}-weekKey`, state.coinWeekKey);
-        localStorage.setItem(`${prefix}-weekEarned`, String(state.coinWeekEarned));
-      } catch (e) {
-        console.warn("Could not save coin balance:", e);
-      }
-    }
-
     async function saveCoinBalanceToServer() {
       if (!state.currentUser) return;
       try {
-        await apiSend(`/users/${state.currentUser.id}/coins`, "PATCH", {
+        await apiSend(`/users/${state.currentUser.id}/coins`, "PUT", {
           coin_balance: state.coinBalance,
           coin_day_earned: state.coinDayEarned,
           coin_day_key: state.coinDayKey,
           coin_week_earned: state.coinWeekEarned,
           coin_week_key: state.coinWeekKey
         });
-        // console.log("Coins saved to server");
       } catch (e) {
         console.warn("Error saving coins to server:", e);
       }
