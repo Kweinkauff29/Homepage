@@ -2112,278 +2112,6 @@
       }
     }
 
-    /* --- BIRD SYSTEM CSS --- */
-    .bird-system-container {
-      display: flex;
-      align-items: flex-end;
-      justify-content: space-between;
-      padding: 0 5px 5px;
-      gap: 15px;
-      height: 160px;
-      /* Force height to accommodate bird and pie */
-    }
-
-    .bird-wrapper {
-      position: relative;
-      width: 110px;
-      height: 120px;
-      cursor: grab;
-      flex-shrink: 0;
-      /* background: rgba(0,0,0,0.02); Debug area */
-      border-radius: 50%;
-    }
-
-    .bird-wrapper:active {
-      cursor: grabbing;
-    }
-
-    /* Hearts for petting */
-    .pet-heart {
-      position: absolute;
-      font-size: 20px;
-      color: #ec4899;
-      /* Excite pink */
-      pointer-events: none;
-      animation: floatUp 1s ease-out forwards;
-      opacity: 0;
-      z-index: 10;
-    }
-
-    @keyframes birdJump {
-
-      0%,
-      100% {
-        transform: translateY(0) scale(1) rotate(0deg);
-      }
-
-      30% {
-        transform: translateY(-8px) scale(1.05) rotate(-3deg);
-      }
-
-      50% {
-        transform: translateY(0) scale(0.98) rotate(0deg);
-      }
-
-      70% {
-        transform: translateY(-4px) scale(1.02) rotate(3deg);
-      }
-    }
-
-    @keyframes wingFlapL {
-
-      0%,
-      100% {
-        transform: rotate(0deg);
-      }
-
-      25% {
-        transform: rotate(20deg);
-      }
-
-      50% {
-        transform: rotate(-10deg);
-      }
-
-      75% {
-        transform: rotate(20deg);
-      }
-    }
-
-    @keyframes wingFlapR {
-
-      0%,
-      100% {
-        transform: rotate(0deg);
-      }
-
-      25% {
-        transform: rotate(-20deg);
-      }
-
-      50% {
-        transform: rotate(10deg);
-      }
-
-      75% {
-        transform: rotate(-20deg);
-      }
-    }
-
-    .bird-celebrating .bird-anim-wrapper {
-      animation: birdJump 0.6s ease-in-out infinite;
-      transform-origin: center bottom;
-    }
-
-    .bird-celebrating .bird-wing-l {
-      animation: wingFlapL 0.2s ease-in-out infinite;
-      transform-origin: 100% 50%;
-      transform-box: fill-box;
-      /* Pivot from body connection */
-    }
-
-    .bird-celebrating .bird-wing-r {
-      animation: wingFlapR 0.2s ease-in-out infinite;
-      transform-origin: 0% 50%;
-      transform-box: fill-box;
-      /* Pivot from body connection */
-    }
-
-    @keyframes floatUp {
-      0% {
-        transform: translateY(0) scale(0.5);
-        opacity: 1;
-      }
-
-      100% {
-        transform: translateY(-40px) scale(1.2);
-        opacity: 0;
-      }
-    }
-
-    /* Edit Bird Button */
-    .edit-bird-btn {
-      position: absolute;
-      bottom: -15px;
-      left: 50%;
-      transform: translateX(-50%);
-      background: var(--panel-elevated);
-      border: 1px solid var(--panel-border);
-      border-radius: 12px;
-      width: 24px;
-      height: 24px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      cursor: pointer;
-      opacity: 0;
-      transition: opacity 0.2s, transform 0.2s;
-      box-shadow: var(--shadow-md);
-      z-index: 20;
-    }
-
-    .bird-wrapper:hover .edit-bird-btn {
-      opacity: 1;
-      bottom: -5px;
-    }
-
-    .edit-bird-btn:hover {
-      transform: translateX(-50%) scale(1.1);
-      background: var(--bg-main);
-    }
-
-    /* Bird Editor Modal */
-    .bird-editor-layout {
-      display: flex;
-      gap: 20px;
-      padding: 10px;
-    }
-
-    .bird-preview-col {
-      flex: 1;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      background: var(--bg-main);
-      border-radius: var(--radius-md);
-      padding: 20px;
-    }
-
-    .bird-controls-col {
-      flex: 1;
-      display: flex;
-      flex-direction: column;
-      gap: 12px;
-      max-height: 400px;
-      overflow-y: auto;
-    }
-
-    .color-control-group {
-      display: flex;
-      flex-direction: column;
-      gap: 4px;
-    }
-
-    .color-control-group label {
-      font-size: 11px;
-      font-weight: 600;
-      color: var(--ink-soft);
-      text-transform: uppercase;
-    }
-
-    .color-picker-row {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-    }
-
-    .color-input-styled {
-      -webkit-appearance: none;
-      border: none;
-      width: 32px;
-      height: 32px;
-      border-radius: 50%;
-      overflow: hidden;
-      cursor: pointer;
-      padding: 0;
-      background: none;
-    }
-
-    .color-input-styled::-webkit-color-swatch-wrapper {
-      padding: 0;
-    }
-
-    .color-input-styled::-webkit-color-swatch {
-      border: 2px solid var(--panel-border);
-      border-radius: 50%;
-    }
-
-    /* Daily Energy Meter */
-    /* Daily Energy Meter - Horizontal */
-    .coin-meter-container {
-      flex: 1;
-      margin: 0 15px 25px;
-      /* Align with bird feet */
-      position: relative;
-      display: flex;
-      flex-direction: column;
-      justify-content: flex-end;
-    }
-
-    .coin-meter {
-      width: 100%;
-      height: 24px;
-      background: rgba(0, 0, 0, 0.06);
-      border-radius: 12px;
-      position: relative;
-      overflow: hidden;
-    }
-
-    body[data-theme="dark"] .coin-meter {
-      background: rgba(255, 255, 255, 0.1);
-    }
-
-    .coin-meter-fill {
-      position: absolute;
-      top: 0;
-      left: 0;
-      height: 100%;
-      width: 0%;
-      /* Horizontal fill */
-      background: linear-gradient(to right, #fbbf24, #f59e0b);
-      border-radius: 12px;
-      transition: width 0.5s cubic-bezier(0.4, 0, 0.2, 1);
-      box-shadow: 0 0 10px rgba(251, 191, 36, 0.5);
-    }
-
-    .coin-meter-label {
-      text-align: center;
-      font-size: 11px;
-      font-weight: 600;
-      color: var(--ink-soft);
-      margin-top: 4px;
-    }
-
     /* Flying coin sprites - use JS animation instead of CSS */
     .flying-coin {
       position: fixed;
@@ -2586,369 +2314,6 @@
       margin: 0;
       flex-shrink: 0;
     }
-
-
-    /* Bird System Layout */
-    .bird-system-container {
-      display: flex;
-      flex-wrap: wrap;
-      align-items: flex-start;
-      justify-content: center;
-      gap: 20px;
-      padding: 15px;
-      background: var(--panel);
-      border-radius: 8px;
-      margin: 10px;
-    }
-
-    .bird-wrapper {
-      position: relative;
-      width: 100px;
-      height: 100px;
-      flex-shrink: 0;
-      overflow: visible;
-      /* Allow speech bubble to overflow */
-    }
-
-    #finch-svg {
-      width: 100%;
-      height: 100%;
-    }
-
-    /* Coin Meter (Horizontal) */
-    .coin-meter-container {
-      width: 200px;
-      max-width: 100%;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 4px;
-    }
-
-    .coin-meter {
-      width: 100%;
-      height: 12px !important;
-      min-height: 12px !important;
-      background: rgba(0, 0, 0, 0.1) !important;
-      border-radius: 999px;
-      overflow: hidden;
-      position: relative;
-      box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1);
-    }
-
-    .coin-meter-fill {
-      height: 100%;
-      width: 0%;
-      background: #eab308;
-      /* Fallback */
-      background: linear-gradient(90deg, #facc15, #eab308);
-      border-radius: 999px;
-      transition: width 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
-      min-width: 4px;
-      /* Ensure visibility even at near-0 */
-    }
-
-    .coin-meter-label {
-      font-size: 11px;
-      color: var(--ink-soft);
-      font-weight: 600;
-      font-variant-numeric: tabular-nums;
-    }
-
-    /* Coin Sprite Animation - FIXED OVERRIDE */
-    .flying-coin {
-      position: fixed !important;
-      width: 32px !important;
-      height: 32px !important;
-      pointer-events: none;
-      z-index: 2147483647 !important;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 24px;
-      filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.3));
-      will-change: transform, left, top;
-      left: 0;
-      top: 0;
-    }
-
-    /* Bird Speech Bubble - Finch Style (positioned to right of bird) */
-    .speech-bubble {
-      position: absolute;
-      top: 50%;
-      left: 100%;
-      transform: translateY(-50%) translateX(10px);
-      background: linear-gradient(135deg, #fef9c3 0%, #fef3c7 100%);
-      border: 2px solid #fbbf24;
-      color: #78350f;
-      padding: 10px 14px;
-      border-radius: 16px;
-      font-size: 13px;
-      font-weight: 600;
-      white-space: nowrap;
-      box-shadow: 0 4px 12px rgba(251, 191, 36, 0.3), 0 2px 4px rgba(0, 0, 0, 0.1);
-      z-index: 100;
-      pointer-events: none;
-      opacity: 0;
-      transition: opacity 0.3s ease, transform 0.3s ease;
-      min-width: 80px;
-      text-align: center;
-    }
-
-    .speech-bubble.visible {
-      opacity: 1;
-      transform: translateY(-50%) translateX(15px);
-    }
-
-    /* Arrow pointing left toward the bird */
-    .speech-bubble::after {
-      content: '';
-      position: absolute;
-      top: 50%;
-      right: 100%;
-      margin-top: -8px;
-      border-width: 8px;
-      border-style: solid;
-      border-color: transparent #fbbf24 transparent transparent;
-    }
-
-    .speech-bubble::before {
-      content: '';
-      position: absolute;
-      top: 50%;
-      right: 100%;
-      margin-top: -6px;
-      margin-right: -2px;
-      border-width: 6px;
-      border-style: solid;
-      border-color: transparent #fef9c3 transparent transparent;
-      z-index: 1;
-    }
-
-    /* Mute Button - Subtle circular icon */
-    .bird-mute-btn {
-      position: absolute;
-      top: -5px;
-      right: -5px;
-      width: 18px;
-      height: 18px;
-      border-radius: 50%;
-      background: rgba(255, 255, 255, 0.9);
-      border: 1px solid rgba(0, 0, 0, 0.08);
-      font-size: 9px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      cursor: pointer;
-      opacity: 0;
-      transition: opacity 0.2s, transform 0.1s, background 0.2s;
-      z-index: 10;
-      padding: 0;
-      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-    }
-
-    #finch-container:hover .bird-mute-btn {
-      opacity: 0.6;
-    }
-
-    .bird-mute-btn:hover {
-      opacity: 1 !important;
-      background: #fff;
-      transform: scale(1.1);
-    }
-
-    .bird-mute-btn.muted {
-      opacity: 0.8;
-      background: #fee2e2;
-      color: #ef4444;
-      border-color: #fca5a5;
-    }
-
-    /* Edit Bird Button - Subtle icon that appears on hover */
-    .edit-bird-btn {
-      position: absolute;
-      bottom: -5px;
-      right: -5px;
-      width: 18px;
-      height: 18px;
-      border-radius: 50%;
-      background: rgba(255, 255, 255, 0.9);
-      border: 1px solid rgba(0, 0, 0, 0.08);
-      font-size: 9px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      cursor: pointer;
-      opacity: 0;
-      transition: opacity 0.2s, transform 0.1s, background 0.2s;
-      z-index: 10;
-      padding: 0;
-      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-    }
-
-    #finch-container:hover .edit-bird-btn {
-      opacity: 0.6;
-    }
-
-    .edit-bird-btn:hover {
-      opacity: 1 !important;
-      background: #fff;
-      transform: scale(1.1);
-    }
-
-    /* ===== SHOP MODAL STYLES ===== */
-    .shop-tabs {
-      display: flex;
-      border-bottom: 1px solid #e5e7eb;
-    }
-
-    .shop-tab {
-      flex: 1;
-      padding: 12px;
-      background: none;
-      border: none;
-      font-size: 14px;
-      font-weight: 500;
-      color: #6b7280;
-      cursor: pointer;
-      transition: all 0.2s;
-    }
-
-    .shop-tab:hover {
-      background: #f9fafb;
-    }
-
-    .shop-tab.active {
-      color: #2563eb;
-      border-bottom: 2px solid #2563eb;
-      margin-bottom: -1px;
-    }
-
-    .shop-content {
-      padding: 16px;
-      max-height: 400px;
-      overflow-y: auto;
-    }
-
-    .shop-tab-content.hidden {
-      display: none;
-    }
-
-    .shop-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
-      gap: 12px;
-    }
-
-    .shop-item {
-      background: #fff;
-      border: 1px solid #e5e7eb;
-      border-radius: 12px;
-      padding: 12px;
-      text-align: center;
-      cursor: pointer;
-      transition: all 0.2s;
-      position: relative;
-    }
-
-    .shop-item:hover {
-      border-color: #2563eb;
-      box-shadow: 0 4px 12px rgba(37, 99, 235, 0.1);
-      transform: translateY(-2px);
-    }
-
-    .shop-item.owned {
-      border-color: #22c55e;
-      background: #f0fdf4;
-    }
-
-    .shop-item.equipped {
-      border-color: #f59e0b;
-      background: #fffbeb;
-    }
-
-    .shop-item-preview {
-      width: 60px;
-      height: 60px;
-      margin: 0 auto 8px;
-      background: #f3f4f6;
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-
-    .shop-item-preview svg {
-      width: 40px;
-      height: 40px;
-    }
-
-    .shop-item-name {
-      font-size: 13px;
-      font-weight: 500;
-      color: #1f2937;
-      margin-bottom: 4px;
-    }
-
-    .shop-item-price {
-      font-size: 12px;
-      color: #6b7280;
-    }
-
-    .shop-item-price .coin {
-      color: #fbbf24;
-    }
-
-    .shop-item-badge {
-      position: absolute;
-      top: -6px;
-      right: -6px;
-      font-size: 10px;
-      padding: 2px 6px;
-      border-radius: 10px;
-      font-weight: 600;
-    }
-
-    .shop-item-badge.owned {
-      background: #22c55e;
-      color: #fff;
-    }
-
-    .shop-item-badge.equipped {
-      background: #f59e0b;
-      color: #fff;
-    }
-
-    /* Shop Button in bird area */
-    .shop-bird-btn {
-      position: absolute;
-      bottom: -5px;
-      left: -5px;
-      width: 18px;
-      height: 18px;
-      border-radius: 50%;
-      background: rgba(255, 255, 255, 0.9);
-      border: 1px solid rgba(0, 0, 0, 0.08);
-      font-size: 10px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      cursor: pointer;
-      opacity: 0;
-      transition: opacity 0.2s, transform 0.1s;
-      z-index: 10;
-      padding: 0;
-      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-    }
-
-    #finch-container:hover .shop-bird-btn {
-      opacity: 0.6;
-    }
-
-    .shop-bird-btn:hover {
-      opacity: 1 !important;
-      transform: scale(1.1);
-    }
   </style>
 </head>
 
@@ -2966,74 +2331,7 @@
     </div>
   </div>
 
-  <!-- Bird Editor Modal -->
-  <div class="overlay" id="bird-editor-modal" style="display:none;">
-    <div class="modal-panel" style="width: 600px; max-width: 90vw;">
-      <div class="modal-header">
-        <div class="modal-title">Customize Your Bird</div>
-        <button class="modal-close" id="close-bird-editor">×</button>
-      </div>
-      <div class="bird-editor-layout">
-        <!-- Left: Preview -->
-        <div class="bird-preview-col">
-          <div style="width:180px; height:180px;">
-            <svg id="bird-editor-preview" viewBox="0 0 200 200" style="width:100%; height:100%; overflow:visible;">
-              <!-- JS will copy bird SVG here -->
-            </svg>
-          </div>
-          <div style="margin-top:10px; font-size:11px; color:var(--ink-soft); text-align:center;">
-            Preview
-          </div>
-        </div>
-
-        <!-- Right: Controls -->
-        <div class="bird-controls-col">
-          <label class="bird-name-label">
-            Name Your Bird
-            <input type="text" id="bird-name-input" placeholder="e.g. Chirpy" maxlength="15"
-              style="width:100%; padding:8px; border:1px solid #d1d5db; border-radius:6px; font-size:14px; margin-bottom:15px; text-transform:capitalize;">
-          </label>
-          <div id="bird-color-controls">
-            <!-- JS will inject color pickers here -->
-          </div>
-        </div>
-      </div>
-      <div class="modal-footer">
-        <button class="button-secondary" id="cancel-bird-editor">Cancel</button>
-        <button class="button-primary" id="save-bird-editor">Save Changes</button>
-      </div>
-    </div>
-  </div>
-
-  <!-- Bird Shop Modal -->
-  <div id="shop-modal" class="modal hidden">
-    <div class="modal-panel" style="max-width:600px;">
-      <div class="modal-header">
-        <div class="modal-title">🛒 Bird Shop</div>
-        <div id="shop-balance" style="margin-left:auto;margin-right:16px;font-size:14px;color:var(--accent);">💰 0
-        </div>
-        <button class="modal-close" id="shop-modal-close">&times;</button>
-      </div>
-      <div class="shop-tabs">
-        <button class="shop-tab active" data-tab="shop">Shop</button>
-        <button class="shop-tab" data-tab="inventory">My Items</button>
-      </div>
-      <div class="modal-body" style="max-height:400px;overflow-y:auto;">
-        <div id="shop-tab-content">
-          <div id="shop-items-grid" class="shop-grid"></div>
-        </div>
-        <div id="inventory-tab-content" style="display:none;">
-          <div id="inventory-grid" class="shop-grid"></div>
-          <div id="inventory-empty" style="text-align:center;color:var(--ink-soft);padding:20px;">
-            No items purchased yet. Visit the shop to buy some!
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-
   <!-- Task modal -->
-
   <div id="task-modal" class="modal hidden">
     <div class="modal-panel">
       <div class="modal-header">
@@ -3152,39 +2450,6 @@
     </div>
   </div>
 
-  <!-- Bird Shop Modal -->
-  <div id="shop-modal" class="modal hidden">
-    <div class="modal-panel" style="max-width:600px;">
-      <div class="modal-header">
-        <div class="modal-title">🪙 Bird Shop</div>
-        <button class="modal-close" id="shop-modal-close">&times;</button>
-      </div>
-      <div class="modal-body" style="padding:0;">
-        <!-- Shop Tabs -->
-        <div class="shop-tabs">
-          <button class="shop-tab active" data-tab="shop">Shop</button>
-          <button class="shop-tab" data-tab="inventory">My Items</button>
-        </div>
-        <!-- Content -->
-        <div class="shop-content">
-          <div id="shop-tab-shop" class="shop-tab-content active">
-            <div id="shop-items-grid" class="shop-grid"></div>
-          </div>
-          <div id="shop-tab-inventory" class="shop-tab-content hidden">
-            <div id="inventory-grid" class="shop-grid"></div>
-          </div>
-        </div>
-      </div>
-      <div class="modal-footer">
-        <div style="display:flex;align-items:center;gap:8px;">
-          <span style="font-size:20px;">🪙</span>
-          <span id="shop-balance">0</span> coins
-        </div>
-        <button class="button-secondary" id="shop-modal-done">Done</button>
-      </div>
-    </div>
-  </div>
-
   <!-- Task Reminder Container (holds multiple stacked reminders) -->
   <div id="reminder-container" class="reminder-container"></div>
 
@@ -3251,8 +2516,7 @@
       <div id="customize-instructions"
         style="background:linear-gradient(90deg,rgba(3,170,225,0.1),transparent);border-radius:8px;padding:8px 12px;margin-bottom:12px;display:flex;align-items:center;gap:10px;font-size:11px;color:var(--ink-soft);">
         <span style="font-size:16px;">⚙️</span>
-        <span><strong>Customize your layout:</strong> Drag sections by their handle (⋮⋮) to reorder. Your arrangement
-          is
+        <span><strong>Customize your layout:</strong> Drag sections by their handle (⋮⋮) to reorder. Your arrangement is
           saved automatically.</span>
         <button id="hide-instructions-btn"
           style="margin-left:auto;background:none;border:none;color:var(--ink-soft);cursor:pointer;font-size:14px;">×</button>
@@ -3296,56 +2560,8 @@
             <div class="calendar-weekdays" id="calendar-weekdays"></div>
             <div class="calendar-days" id="calendar-days"></div>
           </div>
-          <div class="calendar-metrics bird-system-container"
-            style="display:flex; flex-direction:column; padding:15px 15px 20px 15px; margin:10px 10px 15px 10px; background:var(--panel); border-radius:8px; height:auto !important;">
-            <!-- Top Row: Bird and Pie -->
-            <div
-              style="display:flex; justify-content:space-between; align-items:flex-start; width:100%; margin-bottom:15px;">
-              <!-- Bird Container -->
-              <div id="finch-container" class="bird-wrapper" title="Pet me!"
-                style="position:relative; width:100px; height:100px; flex-shrink:0; overflow:visible;">
-                <!-- Speech Bubble - Finch Style (positioned to right) -->
-                <div id="bird-speech-bubble" class="speech-bubble hidden">
-                </div>
-
-                <!-- Mute Button - Subtle in top right -->
-                <button id="bird-mute-btn" class="bird-mute-btn" title="Toggle Squeaks">🔊</button>
-
-                <!-- Bird Name Display -->
-                <div id="bird-name-display"
-                  style="position:absolute; top:-20px; width:100%; text-align:center; font-size:12px; font-weight:700; color:var(--ink-soft); text-shadow:0 1px 2px rgba(255,255,255,0.8);">
-                </div>
-
-                <svg id="finch-svg" viewBox="0 0 200 200" style="width:100%; height:100%; overflow:visible;">
-                  <!-- Bird Logic will inject SVG here -->
-                </svg>
-                <div id="finch-hearts"
-                  style="position:absolute; top:0; left:0; width:100%; height:100%; pointer-events:none;"></div>
-
-                <!-- Edit Button - Subtle in bottom right -->
-                <button class="edit-bird-btn" id="edit-bird-trigger" title="Edit Colors">
-                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                    stroke-linecap="round" stroke-linejoin="round">
-                    <path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"></path>
-                  </svg>
-                </button>
-              </div>
-
-              <!-- Existing Pie -->
-              <canvas id="status-pie" width="150" height="150"></canvas>
-            </div>
-
-            <!-- Bottom Row: Full Width Coin Energy Bar -->
-            <div class="coin-meter-container"
-              style="width:100%; display:flex; flex-direction:column; align-items:center; gap:4px;">
-              <div class="coin-meter" title="Daily Energy: 50 Coins"
-                style="width:100%; height:20px; min-height:20px; background:#e5e7eb; border-radius:999px; overflow:hidden; position:relative; display:block; box-sizing:border-box; box-shadow:inset 0 1px 3px rgba(0,0,0,0.2);">
-                <div class="coin-meter-fill" id="bird-energy-fill"
-                  style="width: 0%; height:20px; min-height:20px; background:linear-gradient(90deg, #facc15, #eab308); border-radius:999px; display:block;">
-                </div>
-              </div>
-              <div class="coin-meter-label" id="bird-energy-text" style="font-size:11px; font-weight:600;">0/50</div>
-            </div>
+          <div class="calendar-metrics">
+            <canvas id="status-pie" width="150" height="150"></canvas>
           </div>
         </section>
 
@@ -4027,8 +3243,10 @@
 
     // Check if current user is eligible for coin rewards
     function isRewardEligible() {
-      // All logged-in users are eligible for coin rewards
-      return !!state.currentUser;
+      if (!state.currentUser) return false;
+      const name = (state.currentUser.name || "").toLowerCase();
+      // Currently only enabled for Kevin - add more names here to scale
+      return name.includes("kevin");
     }
 
     // Get current day/week keys for cap tracking
@@ -4045,27 +3263,29 @@
 
     let coinSaveTimeout;
 
-    // Load coin balance from API only (no local fallback)
+    // Load coin balance from API with local fallback
     async function loadCoinBalance() {
       if (!state.currentUser) return;
 
+      // 1. Initial load from local storage for speed
+      loadCoinBalanceLocal();
+      updateCoinCounterDisplay();
+
+      // 2. Fetch authoritative data from server
       try {
-        const data = await apiGet(`/users/${state.currentUser.id}/coins`);
+        const data = await apiSend(`/users/${state.currentUser.id}/coins`);
         if (data) {
           state.coinBalance = data.coin_balance || 0;
           state.coinDayEarned = data.coin_day_earned || 0;
           state.coinDayKey = data.coin_day_key || "";
           state.coinWeekEarned = data.coin_week_earned || 0;
           state.coinWeekKey = data.coin_week_key || "";
+
+          // Sync back to local storage
+          saveCoinBalanceLocal();
         }
       } catch (e) {
-        console.warn("Could not load coins from API", e);
-        // Initialize defaults if API fails
-        state.coinBalance = 0;
-        state.coinDayEarned = 0;
-        state.coinDayKey = getCoinDayKey();
-        state.coinWeekEarned = 0;
-        state.coinWeekKey = getCoinWeekKey();
+        console.warn("Could not load coins from API, using local backup", e);
       }
 
       // Reset daily/weekly counters if needed
@@ -4093,50 +3313,54 @@
         state.coinWeekKey = thisWeek;
         state.coinWeekEarned = 0;
       }
-      // Save to server after rollover check
-      saveCoinBalanceToServer();
+      saveCoinBalanceLocal();
     }
 
-    // Save coin balance to server (debounced)
-    // IMPORTANT: Capture user and data NOW to prevent race condition on user switch
-    function saveCoinBalance() {
-      // Cancel any pending save for a different user
-      clearTimeout(coinSaveTimeout);
-
-      // Capture current user and data at THIS moment
-      const userId = state.currentUser?.id;
-      const coinData = {
-        coin_balance: state.coinBalance,
-        coin_day_earned: state.coinDayEarned,
-        coin_day_key: state.coinDayKey,
-        coin_week_earned: state.coinWeekEarned,
-        coin_week_key: state.coinWeekKey
-      };
-
-      if (!userId) return;
-
-      // Debounce but use captured data
-      coinSaveTimeout = setTimeout(() => saveCoinBalanceToServerWithData(userId, coinData), 2000);
-    }
-
-    async function saveCoinBalanceToServerWithData(userId, coinData) {
+    function loadCoinBalanceLocal() {
       try {
-        await apiSend(`/users/${userId}/coins`, "PUT", coinData);
+        const prefix = `wrapsheet-coins-${state.currentUser.id}`;
+        state.coinBalance = parseInt(localStorage.getItem(`${prefix}-balance`) || "0", 10);
+        state.coinDayKey = localStorage.getItem(`${prefix}-dayKey`) || "";
+        state.coinDayEarned = parseInt(localStorage.getItem(`${prefix}-dayEarned`) || "0", 10);
+        state.coinWeekKey = localStorage.getItem(`${prefix}-weekKey`) || "";
+        state.coinWeekEarned = parseInt(localStorage.getItem(`${prefix}-weekEarned`) || "0", 10);
+      } catch (e) { }
+    }
+
+    // Save coin balance locally and sync to server
+    function saveCoinBalance() {
+      saveCoinBalanceLocal();
+
+      // Debounce server save
+      clearTimeout(coinSaveTimeout);
+      coinSaveTimeout = setTimeout(saveCoinBalanceToServer, 2000);
+    }
+
+    function saveCoinBalanceLocal() {
+      if (!state.currentUser) return;
+      try {
+        const prefix = `wrapsheet-coins-${state.currentUser.id}`;
+        localStorage.setItem(`${prefix}-balance`, String(state.coinBalance));
+        localStorage.setItem(`${prefix}-dayKey`, state.coinDayKey);
+        localStorage.setItem(`${prefix}-dayEarned`, String(state.coinDayEarned));
+        localStorage.setItem(`${prefix}-weekKey`, state.coinWeekKey);
+        localStorage.setItem(`${prefix}-weekEarned`, String(state.coinWeekEarned));
       } catch (e) {
-        console.warn("Error saving coins to server:", e);
+        console.warn("Could not save coin balance:", e);
       }
     }
 
     async function saveCoinBalanceToServer() {
       if (!state.currentUser) return;
       try {
-        await apiSend(`/users/${state.currentUser.id}/coins`, "PUT", {
+        await apiSend(`/users/${state.currentUser.id}/coins`, "PATCH", {
           coin_balance: state.coinBalance,
           coin_day_earned: state.coinDayEarned,
           coin_day_key: state.coinDayKey,
           coin_week_earned: state.coinWeekEarned,
           coin_week_key: state.coinWeekKey
         });
+        // console.log("Coins saved to server");
       } catch (e) {
         console.warn("Error saving coins to server:", e);
       }
@@ -4157,11 +3381,6 @@
       if (weekProgress) {
         weekProgress.textContent = `${state.coinWeekEarned || 0}/${COIN_WEEKLY_CAP} week`;
       }
-
-      // Update Bird Energy Meter
-      if (typeof updateBirdEnergy === "function") {
-        updateBirdEnergy();
-      }
     }
 
     // Check how many coins can be awarded (respecting caps)
@@ -4171,94 +3390,86 @@
       return Math.max(0, Math.min(requested, dayRemaining, weekRemaining));
     }
 
-    // Award coins - Logic Decoupled from Animation
+    // Award coins with animation and sound - coins land one by one
     function awardCoins(amount, sourceElement) {
       if (!isRewardEligible() || amount <= 0) return;
 
-      // Apply caps logic overrides
+      // Apply caps
       const actualAmount = getAwardableCoins(amount);
       if (actualAmount <= 0) {
         showToast("Daily coin cap reached! 🪙");
         return;
       }
 
-      // 1. Update State IMMEDIATELY
-      state.coinBalance = (state.coinBalance || 0) + actualAmount;
+      const counterEl = document.getElementById("coin-counter");
+      if (!counterEl) return;
+
+      // Get source and target positions
+      let fromRect;
+      if (sourceElement) {
+        fromRect = sourceElement.getBoundingClientRect();
+      } else {
+        fromRect = {
+          left: window.innerWidth / 2 - 20,
+          top: window.innerHeight / 2,
+          width: 40,
+          height: 40
+        };
+      }
+      const toRect = counterEl.getBoundingClientRect();
+
+      // Spawn flying coins - each triggers counter increment and sound on landing
+      const coinCount = Math.min(actualAmount, 8); // Cap visual coins
+      const coinsPerVisual = Math.ceil(actualAmount / coinCount);
+
+      spawnFlyingCoinsWithLanding(fromRect, toRect, coinCount, coinsPerVisual, counterEl);
+
+      // Update state (caps)
       state.coinDayEarned = (state.coinDayEarned || 0) + actualAmount;
       state.coinWeekEarned = (state.coinWeekEarned || 0) + actualAmount;
-      saveCoinBalance();
-      updateCoinCounterDisplay();
-
-      // 2. Play Sound/Animation
-      playChaChingSound(0);
-
-      // Bird Personality Reactions
-      if (typeof squeak === "function") squeak(); // Happy squeak
-      if (typeof speak === "function" && Math.random() > 0.6) {
-        const praises = ["Great job!", "You did it!", "Keep going!", "Awesome!", "Woohoo!", "So productive!", "Proud of you!"];
-        speak(praises[Math.floor(Math.random() * praises.length)]);
-      }
-
-      const counterEl = document.getElementById("coin-counter");
-      if (counterEl) {
-        counterEl.classList.add("pulse");
-        setTimeout(() => counterEl.classList.remove("pulse"), 150);
-      }
-
-      // 3. Spawn Visuals (Fire and forget)
-      if (counterEl && sourceElement) {
-        // Pass 0 as coinsPerVisual because we already updated the balance
-        spawnFlyingCoinsWithLanding(sourceElement.getBoundingClientRect(), counterEl.getBoundingClientRect(), Math.min(actualAmount, 8), 0, counterEl);
-      }
     }
 
     // Deduct coins when unchecking a task
     function deductCoins(amount) {
       if (!isRewardEligible() || amount <= 0) return;
 
-      // 1. Always decrement the "earned" counters so user can re-earn towards cap
-      state.coinDayEarned = Math.max(0, (state.coinDayEarned || 0) - amount);
-      state.coinWeekEarned = Math.max(0, (state.coinWeekEarned || 0) - amount);
+      const counterEl = document.getElementById("coin-counter");
+      if (!counterEl) return;
 
-      // 2. Decrement balance (floor at 0)
       const oldBalance = state.coinBalance;
-      state.coinBalance = Math.max(0, oldBalance - amount);
+      const actualDeduct = Math.min(amount, oldBalance);
 
+      if (actualDeduct <= 0) return;
+
+      state.coinBalance -= actualDeduct;
+      state.coinDayEarned = Math.max(0, (state.coinDayEarned || 0) - actualDeduct);
+      state.coinWeekEarned = Math.max(0, (state.coinWeekEarned || 0) - actualDeduct);
       saveCoinBalance();
-      updateCoinCounterDisplay(); // updates caps text and meter width
 
       // Play sad sound
       playDeductSound();
 
-      // Animate counter if balance changed
-      const counterEl = document.getElementById("coin-counter");
-      if (counterEl && state.coinBalance !== oldBalance) {
-        animateCoinCounter(oldBalance, state.coinBalance, 300);
-        counterEl.classList.add("shake");
-        setTimeout(() => counterEl.classList.remove("shake"), 400);
-      }
+      // Animate counter down with shake
+      animateCoinCounter(oldBalance, state.coinBalance, 300);
+      counterEl.classList.add("shake");
+      setTimeout(() => counterEl.classList.remove("shake"), 400);
     }
 
     // Spawn flying coins - use requestAnimationFrame for visible arc flight
     function spawnFlyingCoinsWithLanding(fromRect, toRect, count, coinsPerVisual, counterEl) {
-      // Use viewport stats (Fixed positioning)
       const startX = fromRect.left + fromRect.width / 2;
       const startY = fromRect.top + fromRect.height / 2;
       const endX = toRect.left + toRect.width / 2;
       const endY = toRect.top + toRect.height / 2;
 
       for (let i = 0; i < count; i++) {
-        const spawnDelay = i * 80; // Faster stagger
+        const spawnDelay = i * 120; // Stagger coin spawns
 
         setTimeout(() => {
           const coin = document.createElement("div");
           coin.className = "flying-coin";
           coin.textContent = "🪙";
           coin.style.transform = "scale(0)";
-
-          // Force styles in JS to ensure visibility
-          coin.style.position = "fixed";
-          coin.style.zIndex = "2147483647";
 
           // Randomize start position slightly
           const offsetX = (Math.random() - 0.5) * 40;
@@ -4309,17 +3520,12 @@
 
               // Increment balance
               state.coinBalance += coinsPerVisual;
-
-              // Only save if meaningful
-              if (coinsPerVisual > 0) saveCoinBalance();
+              saveCoinBalance();
 
               // Update counter with pulse
-              if (typeof updateCoinCounterDisplay === "function") updateCoinCounterDisplay();
-
-              if (counterEl) {
-                counterEl.classList.add("pulse");
-                setTimeout(() => counterEl.classList.remove("pulse"), 150);
-              }
+              updateCoinCounterDisplay();
+              counterEl.classList.add("pulse");
+              setTimeout(() => counterEl.classList.remove("pulse"), 150);
 
               // Remove coin
               coin.remove();
@@ -4409,775 +3615,6 @@
         // Silently fail
       }
     }
-
-    // --- BIRD SYSTEM LOGIC ---
-
-    let birdState = {
-      isHappy: false,
-      pettingScore: 0,
-      lastMouseX: 0,
-      blinkTimer: null
-    };
-
-    function initBirdSystem() {
-      const svgContainer = document.getElementById("finch-svg");
-      if (!svgContainer) return;
-
-      // Render Bird SVG (Refined "Round Blob" Finch Style)
-      // Reference Colors: Pink Body (#f9a8d4), Yellow Cap/Wings (#fde047), Blue Tummy (#60a5fa)
-      svgContainer.innerHTML = `
-        <g id="bird-whole" transform="translate(100, 110) scale(1.4)">
-           <g class="bird-anim-wrapper">
-             <!-- Legs (Orange) -->
-             <path class="bird-foot-l" d="M -20 70 Q -30 75 -40 70 L -35 60 L -20 50" fill="#f97316" stroke="#ea580c" stroke-width="2.5" stroke-linecap="round" />
-             <path class="bird-foot-r" d="M 20 70 Q 30 75 40 70 L 35 60 L 20 50" fill="#f97316" stroke="#ea580c" stroke-width="2.5" stroke-linecap="round" />
- 
-             <!-- Body (Large Pink Blob) -->
-             <!-- Rounder, fuller bottom -->
-             <path class="bird-body" d="M -55 20 C -65 -20 -40 -60 0 -60 C 40 -60 65 -20 55 20 C 50 70 -50 70 -55 20 Z" fill="#f9a8d4" />
- 
-             <!-- Head Cap (Yellow) -->
-             <!-- Follows top contour of body, comes down to forehead -->
-             <path class="bird-head" d="M -48 -25 C -40 -50 -20 -60 0 -60 C 20 -60 40 -50 48 -25 C 25 -10 -25 -10 -48 -25 Z" fill="#fde047" />
- 
-             <!-- Tummy (Blue) -->
-             <!-- Large round oval -->
-             <ellipse class="bird-tummy" cx="0" cy="35" rx="38" ry="32" fill="#60a5fa" />
- 
-             <!-- Wings (Yellow) - Bigger and Rounder -->
-             <!-- Sticking out more noticeably -->
-             <path class="bird-wing-l" d="M -53 10 Q -85 15 -75 45 Q -60 50 -50 35" fill="#fde047" stroke="#eab308" stroke-width="1.5" />
-             <path class="bird-wing-r" d="M 53 10 Q 85 15 75 45 Q 60 50 50 35" fill="#fde047" stroke="#eab308" stroke-width="1.5" />
- 
-             <!-- Face -->
-             <g id="bird-face" transform="translate(0, -25)">
-               <!-- Cheeks (Pinker) -->
-               <circle cx="-32" cy="15" r="9" fill="#f472b6" opacity="0.6" />
-               <circle cx="32" cy="15" r="9" fill="#f472b6" opacity="0.6" />
- 
-               <!-- Beak (Orange/Yellow) -->
-               <path class="bird-beak" d="M -8 10 Q 0 18 8 10 L 0 4 Z" fill="#facc15" stroke="#ca8a04" stroke-width="1.5" />
- 
-               <!-- Eyes -->
-               <g id="eyes-open">
-                 <circle cx="-18" cy="0" r="7.5" fill="#1f2937" />
-                 <circle cx="18" cy="0" r="7.5" fill="#1f2937" />
-                 <circle cx="-15" cy="-3" r="2.5" fill="#fff" />
-                 <circle cx="21" cy="-3" r="2.5" fill="#fff" />
-               </g>
-               
-               <!-- Eyes Closed/Happy -->
-               <g id="eyes-closed" style="display:none">
-                 <path d="M -24 5 Q -18 10 -12 5" fill="none" stroke="#1f2937" stroke-width="3" stroke-linecap="round" />
-                 <path d="M 12 5 Q 18 10 24 5" fill="none" stroke="#1f2937" stroke-width="3" stroke-linecap="round" />
-               </g>
-               <g id="eyes-happy" style="display:none">
-                  <path d="M -24 5 Q -18 -5 -12 5" fill="none" stroke="#1f2937" stroke-width="3" stroke-linecap="round" />
-                  <path d="M 12 5 Q 18 -5 24 5" fill="none" stroke="#1f2937" stroke-width="3" stroke-linecap="round" />
-               </g>
-             </g>
-           </g>
-         </g>
-      `;
-
-      // Start interactions
-      startBlinking();
-      setupPetting();
-      updateBirdEnergy(); // Init meter
-
-      // Init Personality (Audio/Speech)
-      initBirdPersonality();
-    }
-
-    // --- Bird Personality System ---
-    let birdName = null;
-    let birdColors = {
-      body: "#f9a8d4",
-      head: "#fde047",
-      tummy: "#60a5fa",
-      wings: "#fde047"
-    };
-
-    let squeaksMuted = localStorage.getItem("bird_squeaks_muted") === "true";
-    let speechTimer = null;
-
-    function initBirdEditor() {
-      const modal = document.getElementById("bird-editor-modal");
-      const openBtn = document.getElementById("edit-bird-trigger");
-      const closeBtn = document.getElementById("close-bird-editor");
-      const cancelBtn = document.getElementById("cancel-bird-editor");
-      const saveBtn = document.getElementById("save-bird-editor");
-      const nameInput = document.getElementById("bird-name-input");
-
-      if (!modal || !openBtn) return;
-
-      // Color Controls Generation
-      const colorControls = document.getElementById("bird-color-controls");
-      if (colorControls) {
-        colorControls.innerHTML = "";
-        const parts = [
-          { id: "body", label: "Body Color" },
-          { id: "head", label: "Head/Cap" },
-          { id: "tummy", label: "Tummy" },
-          { id: "wings", label: "Wings" }
-        ];
-
-        parts.forEach(part => {
-          const row = document.createElement("div");
-          row.style.marginBottom = "10px";
-
-          const label = document.createElement("div");
-          label.textContent = part.label;
-          label.style.fontSize = "12px";
-          label.style.fontWeight = "600";
-          label.style.marginBottom = "4px";
-
-          const input = document.createElement("input");
-          input.type = "color";
-          input.value = birdColors[part.id] || "#ffffff";
-          input.style.width = "100%";
-          input.style.height = "30px";
-          input.style.cursor = "pointer";
-          input.dataset.partId = part.id;
-
-          input.addEventListener("input", (e) => {
-            const val = e.target.value;
-            // Live preview on the Main Bird (and the preview bird if we copy it)
-            // For simplicity, we just apply to the main bird immediately for preview
-            // In a real modal we might want a separate preview SVG, but let's just use the main one logic
-            // Actually the modal has a #bird-editor-preview SVG. Let's start by copying the bird there.
-
-            // Update preview bird
-            const previewSvg = document.getElementById("bird-editor-preview");
-            if (previewSvg) {
-              const els = previewSvg.querySelectorAll(part.id === 'wings' ? '.bird-wing-l, .bird-wing-r' : `.bird-${part.id}`);
-              els.forEach(el => el.setAttribute("fill", val));
-            }
-          });
-
-          row.appendChild(label);
-          row.appendChild(input);
-          colorControls.appendChild(row);
-        });
-      }
-
-      openBtn.addEventListener("click", () => {
-        // Copy current bird state to modal
-        nameInput.value = birdName || "";
-
-        // Copy SVG to preview
-        const mainSvg = document.getElementById("finch-svg");
-        const previewSvg = document.getElementById("bird-editor-preview");
-        if (mainSvg && previewSvg) {
-          previewSvg.innerHTML = mainSvg.innerHTML;
-        }
-
-        // Reset color inputs
-        const inputs = colorControls.querySelectorAll("input[type='color']");
-        inputs.forEach(input => {
-          const part = input.dataset.partId;
-          if (birdColors[part]) input.value = birdColors[part];
-        });
-
-        modal.style.display = "flex";
-      });
-
-      const close = () => modal.style.display = "none";
-      closeBtn.addEventListener("click", close);
-      cancelBtn.addEventListener("click", close);
-
-      saveBtn.addEventListener("click", async () => {
-        const newName = nameInput.value.trim();
-
-        // Collect colors
-        const newColors = { ...birdColors };
-        const inputs = colorControls.querySelectorAll("input[type='color']");
-        inputs.forEach(input => {
-          newColors[input.dataset.partId] = input.value;
-        });
-
-        // 1. Update State
-        birdName = newName;
-        birdColors = newColors;
-        updateBirdNameUI();
-        currentBirdColors = newColors; // Sync both color states
-        applyBirdColors(currentBirdColors); // Apply to main bird
-
-        // 2. Persist
-        if (state.currentUser) {
-          try {
-            await saveUserDbPreference("bird_name", newName);
-            await saveUserDbPreference("bird_colors", newColors); // Will be JSON stringified by our updated saveUserDbPreference logic? 
-            // Wait, saveUserDbPreference takes (key, value) and sends { [key]: value }. 
-            // My updated Wrap.js accepts bird_colors in body.
-            // But saveUserDbPreference calls apiSend with { [key]: value }.
-            // If I call saveUserDbPreference("bird_colors", object), it sends { bird_colors: object }.
-            // JSON.stringify happens in apiSend? No, apiSend does JSON.stringify(body).
-            // So if value is an object, it gets stringified into the body JSON.
-            // The backend logic I wrote: body.bird_colors ? JSON.stringify(body.bird_colors) : null
-            // If body.bird_colors is ALREADY an object (from JSON parsing the request body), then JSON.stringify(object) works.
-            // Yes, standard fetch sends JSON. 
-            showToast("Bird saved!");
-          } catch (e) {
-            console.error(e);
-            showToast("Error saving bird", true);
-          }
-        }
-
-        close();
-      });
-    }
-
-    function initBirdPersonality() {
-      // 0. Init Editor
-      initBirdEditor();
-
-      // 1. Mute Button
-      const muteBtn = document.getElementById("bird-mute-btn");
-      if (muteBtn) {
-        updateMuteUI();
-        muteBtn.addEventListener("click", toggleMute);
-      }
-
-      // 2. Random Encouragement Loop
-      if (speechTimer) clearInterval(speechTimer);
-      speechTimer = setInterval(() => {
-        // 10% chance every minute to show a random message
-        if (Math.random() < 0.1) {
-          const idleMessages = [
-            // Original messages
-            "Tweet?", "I believe in you!", "*hop*", "Don't give up!", "You got this!", "*flutter*",
-            // Wellness reminders
-            "Did you stretch today?", "Did you drink enough water?", "Are you protecting your peace today?",
-            "Take a deep breath! 🌬️", "Have you taken a break recently?", "How's your posture right now?",
-            "Remember to blink! 👀", "Stand up and stretch!", "You're doing amazing!",
-            "What's one thing you're grateful for?", "Smile! Even if no one's watching.", "Your goals matter!",
-            "Small steps = big progress!", "Be kind to yourself today.", "Celebrate your wins! 🎉"
-          ];
-          const msg = idleMessages[Math.floor(Math.random() * idleMessages.length)];
-          squeak(); // Chirp before speaking
-          speak(msg);
-        }
-      }, 60000);
-
-      // 3. Update Name UI
-      updateBirdNameUI();
-    }
-
-    // Bird name and preferences helper functions
-    function updateBirdNameUI() {
-      const el = document.getElementById("bird-name-display");
-      if (el) {
-        el.textContent = birdName || "Bird";
-      }
-    }
-
-    async function saveUserDbPreference(key, value) {
-      if (!state.currentUser) return;
-      try {
-        const payload = {};
-        payload[key] = value;
-
-        await fetch(`${API_BASE}/user-preferences/${state.currentUser.id}`, {
-          method: 'PUT',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(payload)
-        });
-
-        // Also update local state
-        if (key === 'bird_name') birdName = value;
-        if (key === 'bird_colors') {
-          birdColors = (typeof value === 'string') ? JSON.parse(value) : value;
-        }
-      } catch (e) {
-        console.error("Failed to save preference:", e);
-      }
-    }
-
-    async function loadUserDbPreferences() {
-      if (!state.currentUser) return;
-      try {
-        const res = await fetch(`${API_BASE}/user-preferences/${state.currentUser.id}`);
-        if (res.ok) {
-          const data = await res.json();
-          state.userDbPrefs = data;
-
-          if (data.bird_name) {
-            birdName = data.bird_name;
-            updateBirdNameUI();
-          }
-          if (data.bird_colors) {
-            let colors = data.bird_colors;
-            if (typeof colors === "string") {
-              try { colors = JSON.parse(colors); } catch (e) { }
-            }
-            birdColors = colors;
-            applyBirdColors(colors);
-          }
-        }
-      } catch (e) {
-        console.error("Failed to load user preferences:", e);
-      }
-    }
-
-    async function loadBirdPreferences() {
-      if (!state.currentUser) return;
-      try {
-        const res = await fetch(`${API_BASE}/user-preferences/${state.currentUser.id}`);
-        if (res.ok) {
-          const data = await res.json();
-          if (data.bird_name) {
-            birdName = data.bird_name;
-            updateBirdNameUI();
-          }
-          if (data.bird_colors) {
-            let colors = data.bird_colors;
-            if (typeof colors === "string") {
-              try { colors = JSON.parse(colors); } catch (e) { }
-            }
-            birdColors = colors;
-            applyBirdColors(colors);
-          }
-        }
-      } catch (e) {
-        console.error("Failed to load bird preferences:", e);
-      }
-    }
-
-    function applyBirdColors(colors) {
-      if (!colors) colors = birdColors;
-      const svg = document.getElementById("finch-svg");
-      if (!svg) return;
-
-      if (colors.body) {
-        svg.querySelectorAll(".bird-body").forEach(el => el.setAttribute("fill", colors.body));
-      }
-      if (colors.head) {
-        svg.querySelectorAll(".bird-head").forEach(el => el.setAttribute("fill", colors.head));
-      }
-      if (colors.tummy) {
-        svg.querySelectorAll(".bird-tummy").forEach(el => el.setAttribute("fill", colors.tummy));
-      }
-      if (colors.wings) {
-        svg.querySelectorAll(".bird-wing-l, .bird-wing-r").forEach(el => el.setAttribute("fill", colors.wings));
-      }
-    }
-
-    function updateMuteUI() {
-      const muteBtn = document.getElementById("bird-mute-btn");
-      if (muteBtn) {
-        muteBtn.textContent = squeaksMuted ? "🔇" : "🔊";
-        muteBtn.classList.toggle("muted", squeaksMuted);
-        muteBtn.title = squeaksMuted ? "Unmute Squeaks" : "Mute Squeaks";
-      }
-    }
-
-    function toggleMute() {
-      squeaksMuted = !squeaksMuted;
-      localStorage.setItem("bird_squeaks_muted", squeaksMuted);
-      updateMuteUI();
-      if (!squeaksMuted) squeak(); // Confirmation squeak
-    }
-
-    // Web Audio API Context
-    const AudioContext = window.AudioContext || window.webkitAudioContext;
-    let audioCtx = new AudioContext();
-
-    function squeak() {
-      if (squeaksMuted) return;
-      if (audioCtx.state === 'suspended') audioCtx.resume();
-
-      const osc = audioCtx.createOscillator();
-      const gainNode = audioCtx.createGain();
-
-      osc.connect(gainNode);
-      gainNode.connect(audioCtx.destination);
-
-      // Finch-like chirp: high pitch, rapid drop
-      // Start high
-      const now = audioCtx.currentTime;
-      osc.type = 'sine';
-      osc.frequency.setValueAtTime(2000 + Math.random() * 500, now);
-      osc.frequency.exponentialRampToValueAtTime(1200, now + 0.1);
-
-      // Envelope
-      gainNode.gain.setValueAtTime(0, now);
-      gainNode.gain.linearRampToValueAtTime(0.1, now + 0.02);
-      gainNode.gain.exponentialRampToValueAtTime(0.001, now + 0.15);
-
-      osc.start(now);
-      osc.stop(now + 0.2);
-    }
-
-
-    function speak(text) {
-      const bubble = document.getElementById("bird-speech-bubble");
-      if (!bubble) return;
-
-      bubble.textContent = text;
-      bubble.classList.remove("hidden");
-      // Trigger reflow/animation
-      requestAnimationFrame(() => {
-        bubble.classList.add("visible");
-      });
-
-      // Play sound if acceptable? Squeak on speak?
-      // squeak(); 
-
-      // Hide after 4 seconds
-      setTimeout(() => {
-        bubble.classList.remove("visible");
-        setTimeout(() => bubble.classList.add("hidden"), 300);
-      }, 4000);
-    }
-
-    function updateBirdNameUI() {
-      const display = document.getElementById("bird-name-display");
-      if (display) {
-        display.textContent = birdName || "";
-      }
-    }
-
-    function startBlinking() {
-      // Random blink interval between 2s and 6s
-      const nextBlink = 2000 + Math.random() * 4000;
-
-      birdState.blinkTimer = setTimeout(() => {
-        if (!birdState.isHappy) { // Don't blink if happy (closed eyes)
-          toggleEyes(false); // Close
-          setTimeout(() => toggleEyes(true), 150); // Open
-        }
-        startBlinking();
-      }, nextBlink);
-    }
-
-    function toggleEyes(isOpen) {
-      const open = document.getElementById("eyes-open");
-      const closed = document.getElementById("eyes-closed");
-      if (open && closed) {
-        open.style.display = isOpen ? "block" : "none";
-        closed.style.display = isOpen ? "none" : "block";
-      }
-    }
-
-    function setExpression(type) { // 'normal', 'happy'
-      const open = document.getElementById("eyes-open");
-      const closed = document.getElementById("eyes-closed");
-      const happy = document.getElementById("eyes-happy");
-
-      if (!open || !happy) return;
-
-      if (type === 'happy') {
-        open.style.display = "none";
-        closed.style.display = "none";
-        happy.style.display = "block";
-      } else {
-        open.style.display = "block";
-        closed.style.display = "none";
-        happy.style.display = "none";
-      }
-    }
-
-    function setupPetting() {
-      const wrapper = document.getElementById("finch-container");
-      if (!wrapper) return;
-
-      wrapper.addEventListener("click", () => {
-        // Click to pet/poke
-        birdState.pettingScore += 50;
-        triggerBirdCelebration();
-      });
-
-      wrapper.addEventListener("mousemove", (e) => {
-        // Calculate movement speed/distance
-        const dist = Math.abs(e.movementX) + Math.abs(e.movementY);
-
-        if (dist > 5) {
-          birdState.pettingScore += dist;
-
-          if (birdState.pettingScore > 300 && !birdState.isHappy) {
-            triggerBirdCelebration();
-          }
-        }
-      });
-
-      wrapper.addEventListener("mouseleave", () => {
-        birdState.pettingScore = 0;
-        if (birdState.isHappy) {
-          stopHappyBird();
-        }
-      });
-    }
-
-    function triggerBirdCelebration() {
-      if (birdState.isHappy) return;
-      birdState.isHappy = true;
-      setExpression('happy');
-
-      // Add celebrating class for CSS animations
-      const container = document.getElementById("finch-container");
-      if (container) container.classList.add("bird-celebrating");
-
-      // Happy chirp!
-      squeak();
-
-      // Random celebration message
-      const celebMessages = [
-        "Yay!", "Woohoo!", "Great job!", "So proud!", "Level up!", "You did it!",
-        "Fantastic!", "Keep it up!", "You're on fire!", "Booyah!"
-      ];
-      if (Math.random() < 0.3) {
-        speak(celebMessages[Math.floor(Math.random() * celebMessages.length)]);
-      }
-
-      // Spawn hearts
-      spawnHeart();
-
-      // Revert after a few seconds
-      setTimeout(() => {
-        stopHappyBird();
-      }, 3500);
-    }
-
-    function stopHappyBird() {
-      birdState.isHappy = false;
-      setExpression('normal');
-
-      const container = document.getElementById("finch-container");
-      if (container) container.classList.remove("bird-celebrating");
-    }
-
-
-
-
-
-    function spawnHeart() {
-      if (!birdState.isHappy) return;
-
-      const container = document.getElementById("finch-hearts");
-      if (!container) return;
-
-      const heart = document.createElement("div");
-      heart.className = "pet-heart";
-      heart.textContent = "❤️";
-      // Random position near head
-      const left = 30 + Math.random() * 60; // Roughly centered
-      const top = 20 + Math.random() * 20;
-
-      heart.style.left = left + "%";
-      heart.style.top = top + "%";
-
-      container.appendChild(heart);
-
-      // Clean up
-      setTimeout(() => heart.remove(), 1000);
-
-      // Continue spawning if still happy and moving
-      if (birdState.pettingScore > 0) {
-        setTimeout(spawnHeart, 400 + Math.random() * 400);
-      }
-    }
-
-    function updateBirdEnergy() {
-      const fill = document.getElementById("bird-energy-fill");
-      if (fill) {
-        const earned = state.coinDayEarned || 0;
-        const pct = Math.min(100, (earned / COIN_DAILY_CAP) * 100);
-        fill.style.width = pct + "%";
-
-        // Update label
-        const txt = document.getElementById("bird-energy-text");
-        if (txt) txt.textContent = `${earned}/${COIN_DAILY_CAP}`;
-      }
-    }
-
-    // --- BIRD EDITOR LOGIC ---
-
-    // Default Colors
-    const DEFAULT_BIRD_COLORS = {
-      head: "#fde047",
-      body: "#f9a8d4",
-      tummy: "#60a5fa",
-      wings: "#fde047",
-      beak: "#facc15",
-      feet: "#f97316"
-    };
-
-    let currentBirdColors = { ...DEFAULT_BIRD_COLORS };
-
-    async function loadBirdPreferences() {
-      // 1. Try to load from local storage first for speed
-      if (state.currentUser) {
-        try {
-          // Attempt to fetch from API
-          // Endpoint: /api/user-preferences/:id
-          const prefs = await apiGet(`/user-preferences/${state.currentUser.id}`);
-
-          let savedColors = prefs ? (prefs.bird_colors || prefs.birdColors) : null;
-          if (typeof savedColors === 'string') {
-            try { savedColors = JSON.parse(savedColors); } catch (e) { }
-          }
-
-          // Load Name
-          birdName = prefs ? prefs.bird_name : null;
-          updateBirdNameUI();
-
-          if (savedColors) {
-            currentBirdColors = { ...DEFAULT_BIRD_COLORS, ...savedColors };
-            applyBirdColors(currentBirdColors);
-          }
-        } catch (e) {
-          console.warn("Could not load bird prefs", e);
-        }
-      }
-    }
-
-    function applyBirdColors(colors, targetSvgId = "bird-whole") {
-      // Guard against undefined colors
-      if (!colors) {
-        colors = currentBirdColors || DEFAULT_BIRD_COLORS;
-      }
-      // Apply colors to specific elements via CSS selection
-      // Target can be main bird or preview bird
-      const root = document.getElementById(targetSvgId);
-      if (!root) return;
-
-      const setFill = (cls, val) => {
-        root.querySelectorAll(`.${cls}`).forEach(el => el.setAttribute("fill", val));
-      };
-      const setStroke = (cls, val) => {
-        // For beak/wings, we might also want to darken stroke automatically?
-        // For now just fill, we kept strokes hardcoded or could derive them.
-        root.querySelectorAll(`.${cls}`).forEach(el => el.setAttribute("fill", val));
-      };
-
-      setFill("bird-head", colors.head);
-      setFill("bird-body", colors.body);
-      setFill("bird-tummy", colors.tummy);
-      setFill("bird-wing-l", colors.wings);
-      setFill("bird-wing-r", colors.wings);
-      setFill("bird-beak", colors.beak);
-      setFill("bird-foot-l", colors.feet);
-      setFill("bird-foot-r", colors.feet);
-    }
-
-    function openBirdEditor() {
-      const modal = document.getElementById("bird-editor-modal");
-      const previewSvg = document.getElementById("bird-editor-preview");
-      const controls = document.getElementById("bird-color-controls");
-      const nameInput = document.getElementById("bird-name-input");
-
-      if (!modal || !previewSvg || !controls) return;
-
-      // Pre-fill name
-      if (nameInput) nameInput.value = birdName || "";
-
-      // 1. Clone current bird to preview
-      const mainBirdGroup = document.getElementById("bird-whole");
-      if (mainBirdGroup) {
-        previewSvg.innerHTML = ""; // Clear
-        const clone = mainBirdGroup.cloneNode(true);
-        clone.id = "bird-preview-group";
-        // Scale up significantly (2.2) to fill the modal box
-        clone.setAttribute("transform", "translate(100, 110) scale(2.2)");
-        previewSvg.appendChild(clone);
-      }
-
-      // 2. Render Color Controls
-      const parts = [
-        { id: "head", label: "Head Cap" },
-        { id: "body", label: "Body" },
-        { id: "tummy", label: "Tummy" },
-        { id: "wings", label: "Wings" },
-        { id: "beak", label: "Beak" },
-        { id: "feet", label: "Feet" }
-      ];
-
-      controls.innerHTML = parts.map(part => `
-         <div class="color-control-group">
-            <label>${part.label}</label>
-            <div class="color-picker-row">
-               <input type="color" class="color-input-styled" 
-                      data-part="${part.id}" 
-                      value="${currentBirdColors[part.id]}"
-                      oninput="handleColorChange('${part.id}', this.value)">
-            </div>
-         </div>
-       `).join("");
-
-      modal.style.display = "flex";
-      applyBirdColors(currentBirdColors, "bird-preview-group");
-    }
-
-    window.handleColorChange = (part, value) => {
-      // Update preview only
-      const previewColors = { ...currentBirdColors }; // Base
-      // Collect all current inputs
-      document.querySelectorAll(".color-input-styled").forEach(input => {
-        previewColors[input.dataset.part] = input.value;
-      });
-      applyBirdColors(previewColors, "bird-preview-group");
-    };
-
-    function closeBirdEditor() {
-      document.getElementById("bird-editor-modal").style.display = "none";
-    }
-
-    async function saveBirdColors() {
-      const newColors = { ...currentBirdColors };
-      document.querySelectorAll(".color-input-styled").forEach(input => {
-        newColors[input.dataset.part] = input.value;
-      });
-
-      // 1. Update State
-      currentBirdColors = newColors;
-
-      // 2. Apply to Real Bird
-      applyBirdColors(currentBirdColors, "bird-whole");
-
-      // 3. Persist to DB
-      if (state.currentUser) {
-        birdName = document.getElementById("bird-name-input").value.trim() || null;
-        updateBirdNameUI();
-
-        try {
-          await apiSend(`/user-preferences/${state.currentUser.id}`, "PUT", {
-            bird_colors: currentBirdColors,
-            bird_name: birdName
-          });
-          showToast("Bird saved!");
-        } catch (e) {
-          console.warn("Save failed", e);
-          showToast("Saved locally (Server error)", true);
-        }
-      }
-
-      closeBirdEditor();
-    }
-
-
-
-
-    // Initialize Editor Listeners
-    document.addEventListener("DOMContentLoaded", () => {
-      setTimeout(() => {
-        initBirdSystem();
-        loadBirdPreferences(); // visual init
-      }, 1000);
-
-      const editBtn = document.getElementById("edit-bird-trigger");
-      if (editBtn) editBtn.addEventListener("click", openBirdEditor);
-
-      const closeBtn = document.getElementById("close-bird-editor");
-      const cancelBtn = document.getElementById("cancel-bird-editor");
-      const saveBtn = document.getElementById("save-bird-editor");
-
-      if (closeBtn) closeBtn.addEventListener("click", closeBirdEditor);
-      if (cancelBtn) cancelBtn.addEventListener("click", closeBirdEditor);
-      if (saveBtn) saveBtn.addEventListener("click", saveBirdColors);
-    });
-
-    // --- END BIRD EDITOR LOGIC ---
 
     // Play sad deduct sound
     function playDeductSound() {
@@ -6972,12 +5409,6 @@
       quickDone.addEventListener("click", async (e) => {
         e.stopPropagation();
         const newStatus = quickDone.checked ? "done" : "pending";
-
-        // Trigger celebration if marking as done!
-        if (newStatus === "done" && typeof triggerBirdCelebration === "function") {
-          triggerBirdCelebration();
-        }
-
         // If in backlog, updating status keeps it in backlog unless it's marked done (maybe we move done items to today? No, stays in backlog)
         await quickUpdateTaskStatus(task, newStatus);
       });
@@ -8546,23 +6977,6 @@
           applyTheme(prefs.theme);
         }
 
-        // Apply bird settings
-        if (prefs.bird_name) {
-          birdName = prefs.bird_name;
-          updateBirdNameUI();
-        }
-        if (prefs.bird_colors) {
-          try {
-            const colors = typeof prefs.bird_colors === 'string' ? JSON.parse(prefs.bird_colors) : prefs.bird_colors;
-            if (colors) {
-              currentBirdColors = { ...currentBirdColors, ...colors };
-              applyBirdColors(currentBirdColors);
-            }
-          } catch (e) {
-            console.warn("Invalid bird_colors", e);
-          }
-        }
-
         // Apply calendar view
         if (prefs.calendar_view && prefs.calendar_view !== state.calendarView) {
           state.calendarView = prefs.calendar_view;
@@ -9062,89 +7476,11 @@
       }
     }
 
-    // [Fix] User Switcher Logic for Isolation
-    function initUserSwitcher() {
-      const confirmBtn = document.getElementById("user-select-confirm");
-      const select = document.getElementById("user-select");
-      const switchBtn = document.getElementById("switch-user-btn");
-      const overlay = document.getElementById("user-overlay");
-
-      if (confirmBtn && select) {
-        confirmBtn.addEventListener("click", async () => {
-          const val = select.value;
-          if (!val) return;
-
-          const user = state.users.find(u => String(u.id) === String(val));
-          if (!user) return;
-
-          // IMPORTANT: Save current user's coins immediately before switching
-          // This prevents race condition where debounced save fires after switch
-          if (state.currentUser && state.currentUser.id !== user.id) {
-            clearTimeout(coinSaveTimeout); // Cancel any pending debounced save
-            await saveCoinBalanceToServer(); // Save current user's coins NOW
-          }
-
-          // Force update state
-          state.currentUser = user;
-          state.activeUser = user;
-          state.activeUserId = user.id;
-
-          localStorage.setItem("wrapsheet-user-id", user.id);
-
-          // Reset UI
-          document.getElementById("current-user-label").textContent = user.name;
-          if (overlay) overlay.style.display = "none";
-
-          // RELOAD ALL DATA
-          showActionLoader({ main: "Switching User…", sub: "Loading your coins & bird" });
-
-          try {
-            // 1. Load Coins (Local + Server)
-            await loadCoinBalance();
-
-            // 2. Load Prefs (Bird Colors, etc.)
-            await loadUserDbPreferences();
-
-            // 3. Load Pillars & Goals
-            await setActiveUser(user.id);
-
-            // 4. Init Bird (Redraw)
-            if (typeof initBirdSystem === "function") initBirdSystem();
-
-            // 4b. Load saved bird colors and name from API
-            if (typeof loadBirdPreferences === "function") await loadBirdPreferences();
-
-            // 4c. Load shop data and apply equipped items
-            await loadShopData();
-            applyEquippedItems();
-
-            // 5. Refresh Weekly Tasks
-            if (typeof initWeeklyTasksUI === "function") initWeeklyTasksUI();
-
-            showToast(`Welcome, ${user.name.split(" ")[0]}!`);
-
-          } catch (e) {
-            console.error("Switch User Error", e);
-          } finally {
-            hideActionLoader();
-          }
-        });
-      }
-
-      if (switchBtn) {
-        switchBtn.addEventListener("click", () => {
-          if (overlay) overlay.style.display = "flex";
-        });
-      }
-    }
-
     // Initialize draggable sections
     document.addEventListener("DOMContentLoaded", () => {
       initDraggableSections();
       initInstructionsHide();
       initTaskReminders(); // Start reminder check loop
-      initShop(); // Initialize shop UI
-      if (typeof initUserSwitcher === "function") initUserSwitcher();
     });
 
     // ===== TASK REMINDERS SYSTEM =====
@@ -9373,340 +7709,7 @@
     function toggleReminderChimes(enabled) {
       localStorage.setItem("wrapsheet-reminder-chimes", enabled ? "true" : "false");
     }
-
-    // ===== BIRD SHOP SYSTEM =====
-    let shopItems = [];
-    let userInventory = [];
-    let equippedItems = {};
-
-    async function loadShopData() {
-      if (!state.currentUser) return;
-
-      try {
-        // Load all shop items
-        const itemsRes = await fetch(`${API_BASE}/shop/items`);
-        if (itemsRes.ok) {
-          shopItems = await itemsRes.json();
-        }
-
-        // Load user's inventory
-        const invRes = await fetch(`${API_BASE}/users/${state.currentUser.id}/inventory`);
-        if (invRes.ok) {
-          userInventory = await invRes.json();
-        }
-
-        // Load user's coin balance
-        const coinsRes = await fetch(`${API_BASE}/users/${state.currentUser.id}/coins`);
-        if (coinsRes.ok) {
-          const coinsData = await coinsRes.json();
-          state.coinBalance = coinsData.coin_balance || 0;
-          updateCoinCounterDisplay();
-        }
-
-        // Load equipped items
-        const eqRes = await fetch(`${API_BASE}/users/${state.currentUser.id}/equipped`);
-        if (eqRes.ok) {
-          const data = await eqRes.json();
-          equippedItems = data.equipped_items || {};
-        }
-
-        applyEquippedItems();
-      } catch (err) {
-        console.error("Failed to load shop data:", err);
-      }
-    }
-
-    function openShopModal() {
-      const modal = document.getElementById("shop-modal");
-      if (modal) {
-        modal.classList.remove("hidden");
-        updateShopBalance();
-        renderShopItems();
-      }
-    }
-
-    function closeShopModal() {
-      const modal = document.getElementById("shop-modal");
-      if (modal) modal.classList.add("hidden");
-    }
-
-    function updateShopBalance() {
-      const el = document.getElementById("shop-balance");
-      if (el) {
-        el.textContent = `💰 ${state.coinBalance || 0}`;
-      }
-    }
-
-    function renderShopItems() {
-      const grid = document.getElementById("shop-items-grid");
-      if (!grid) return;
-
-      grid.innerHTML = shopItems.map(item => {
-        const owned = userInventory.some(inv => inv.item_id === item.id);
-        const equipped = Object.values(equippedItems).includes(item.id);
-
-        return `
-            <div class="shop-item ${owned ? 'owned' : ''} ${equipped ? 'equipped' : ''}" 
-                 data-item-id="${item.id}" onclick="handleShopItemClick(${item.id})">
-              ${owned ? `<span class="shop-item-badge owned">Owned</span>` : ''}
-              ${equipped ? `<span class="shop-item-badge equipped">Equipped</span>` : ''}
-              <div class="shop-item-preview">
-                ${item.svg_data || `<span style="font-size:24px;">${item.category === 'pet' ? '🐾' : '👒'}</span>`}
-              </div>
-              <div class="shop-item-name">${item.name}</div>
-              <div class="shop-item-price">
-                ${owned ? 'In Inventory' : `<span class="coin">💰</span> ${item.price}`}
-              </div>
-            </div>
-          `;
-      }).join("");
-    }
-
-    function renderInventory() {
-      const grid = document.getElementById("inventory-grid");
-      const empty = document.getElementById("inventory-empty");
-      if (!grid) return;
-
-      // Filter shop items to only those owned
-      const ownedItems = shopItems.filter(item =>
-        userInventory.some(inv => (inv.item_id || inv.id) === item.id)
-      );
-
-      if (ownedItems.length === 0) {
-        grid.innerHTML = "";
-        if (empty) empty.style.display = "block";
-        return;
-      }
-
-      if (empty) empty.style.display = "none";
-
-      grid.innerHTML = ownedItems.map(item => {
-        const equipped = Object.values(equippedItems).includes(item.id);
-
-        return `
-            <div class="shop-item ${equipped ? 'equipped' : ''}" data-item-id="${item.id}">
-              ${equipped ? `<span class="shop-item-badge equipped">Equipped</span>` : ''}
-              <div class="shop-item-preview">
-                ${item.svg_data || `<span style="font-size:24px;">${item.category === 'pet' ? '🐾' : '👒'}</span>`}
-              </div>
-              <div class="shop-item-name">${item.name}</div>
-              <button onclick="toggleEquip(${item.id}, '${item.category}')" 
-                      style="margin-top:8px;padding:4px 12px;border-radius:20px;border:none;
-                             background:${equipped ? '#ef4444' : '#22c55e'};color:#fff;cursor:pointer;">
-                ${equipped ? 'Unequip' : 'Equip'}
-              </button>
-            </div>
-          `;
-      }).join("");
-    }
-
-    async function handleShopItemClick(itemId) {
-      const item = shopItems.find(i => i.id === itemId);
-      if (!item) return;
-
-      const owned = userInventory.some(inv => inv.item_id === itemId);
-
-      if (owned) {
-        // Already owned - show equip option
-        const equipped = Object.values(equippedItems).includes(itemId);
-        if (equipped) {
-          unequipItem(item.category);
-        } else {
-          equipItem(itemId, item.category);
-        }
-      } else {
-        // Not owned - try to purchase
-        await purchaseItem(itemId);
-      }
-    }
-
-    async function purchaseItem(itemId) {
-      if (!state.currentUser) return;
-
-      const item = shopItems.find(i => i.id === itemId);
-      if (!item) return;
-
-      if ((state.coinBalance || 0) < item.price) {
-        showToast("Not enough coins!", true);
-        return;
-      }
-
-      try {
-        const res = await fetch(`${API_BASE}/users/${state.currentUser.id}/inventory`, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ item_id: itemId })
-        });
-
-        if (res.ok) {
-          const data = await res.json();
-          state.coinBalance = data.new_balance;
-          userInventory.push({ item_id: itemId, purchased_at: new Date().toISOString() });
-
-          updateShopBalance();
-          updateCoinCounterDisplay();
-          renderShopItems();
-          showToast(`Purchased ${item.name}! 🎉`);
-        } else {
-          const err = await res.json();
-          showToast(err.error || "Purchase failed", true);
-        }
-      } catch (err) {
-        console.error("Purchase error:", err);
-        showToast("Purchase failed", true);
-      }
-    }
-
-    function equipItem(itemId, category) {
-      equippedItems[category] = itemId;
-      saveEquippedItems();
-      applyEquippedItems();
-      renderShopItems();
-      renderInventory();
-      showToast("Equipped!");
-    }
-
-    function unequipItem(category) {
-      delete equippedItems[category];
-      saveEquippedItems();
-      applyEquippedItems();
-      renderShopItems();
-      renderInventory();
-      showToast("Unequipped!");
-    }
-
-    function toggleEquip(itemId, category) {
-      const equipped = Object.values(equippedItems).includes(itemId);
-      if (equipped) {
-        unequipItem(category);
-      } else {
-        equipItem(itemId, category);
-      }
-    }
-
-    async function saveEquippedItems() {
-      if (!state.currentUser) return;
-
-      try {
-        await fetch(`${API_BASE}/users/${state.currentUser.id}/equipped`, {
-          method: "PUT",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ equipped_items: equippedItems })
-        });
-      } catch (err) {
-        console.error("Failed to save equipped items:", err);
-      }
-    }
-
-    function applyEquippedItems() {
-      // Remove existing equipped item overlays
-      document.querySelectorAll(".equipped-item-overlay").forEach(el => el.remove());
-
-      const birdSvg = document.getElementById("finch-svg");
-      if (!birdSvg) return;
-
-      // Apply each equipped item
-      Object.entries(equippedItems).forEach(([category, itemId]) => {
-        const item = shopItems.find(i => i.id === itemId);
-        if (!item || !item.svg_data) return;
-
-        // Create overlay group
-        const g = document.createElementNS("http://www.w3.org/2000/svg", "g");
-        g.classList.add("equipped-item-overlay");
-        g.setAttribute("data-category", category);
-
-        // Position based on category
-        let transform = "";
-        switch (category) {
-          case "hat":
-            transform = "translate(23, 2) scale(0.35)";
-            break;
-          case "glasses":
-            transform = "translate(22, 18) scale(0.3)";
-            break;
-          case "scarf":
-            transform = "translate(18, 42) scale(0.35)";
-            break;
-          case "pet":
-            transform = "translate(60, 48) scale(0.4)";
-            break;
-        }
-        g.setAttribute("transform", transform);
-        g.innerHTML = item.svg_data;
-
-        birdSvg.appendChild(g);
-      });
-    }
-
-    function initShop() {
-      // Shop button in bird container
-      const finchContainer = document.getElementById("finch-container");
-      if (finchContainer && !document.querySelector(".shop-bird-btn")) {
-        const shopBtn = document.createElement("button");
-        shopBtn.className = "shop-bird-btn";
-        shopBtn.innerHTML = "🛒";
-        shopBtn.title = "Bird Shop";
-        shopBtn.onclick = (e) => {
-          e.stopPropagation();
-          openShopModal();
-        };
-        finchContainer.appendChild(shopBtn);
-      }
-
-      // Modal close button
-      const closeBtn = document.getElementById("shop-modal-close");
-      if (closeBtn) {
-        closeBtn.onclick = closeShopModal;
-      }
-
-      // Tab switching
-      document.querySelectorAll(".shop-tab").forEach(tab => {
-        tab.onclick = (e) => {
-          const tabName = e.target.dataset.tab;
-
-          // Update active tab
-          document.querySelectorAll(".shop-tab").forEach(t => t.classList.remove("active"));
-          e.target.classList.add("active");
-
-          // Show/hide content
-          document.getElementById("shop-tab-content").style.display =
-            tabName === "shop" ? "block" : "none";
-          document.getElementById("inventory-tab-content").style.display =
-            tabName === "inventory" ? "block" : "none";
-
-          if (tabName === "inventory") {
-            renderInventory();
-          } else {
-            renderShopItems();
-          }
-        };
-      });
-
-      // Close modal on backdrop click
-      const modal = document.getElementById("shop-modal");
-      if (modal) {
-        modal.onclick = (e) => {
-          if (e.target === modal) closeShopModal();
-        };
-      }
-    }
-
-    // Initialize shop when page loads (add to existing init chain)
-    (function () {
-      const originalInit = window.onload;
-      window.onload = function () {
-        if (originalInit) originalInit();
-        initShop();
-        // Load shop data after a short delay to ensure user is set
-        setTimeout(async () => {
-          if (state.currentUser) {
-            await loadShopData();
-          }
-        }, 1000);
-      };
-    })();
   </script>
-
 </body>
 
 </html>

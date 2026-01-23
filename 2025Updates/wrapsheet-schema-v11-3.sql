@@ -1,0 +1,1 @@
+ALTER TABLE users ADD COLUMN coin_day_key TEXT DEFAULT '';

@@ -1,0 +1,1 @@
+ALTER TABLE users ADD COLUMN coin_week_earned INTEGER DEFAULT 0;
