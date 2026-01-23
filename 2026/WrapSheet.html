@@ -3811,10 +3811,8 @@
 
     // Check if current user is eligible for coin rewards
     function isRewardEligible() {
-      if (!state.currentUser) return false;
-      const name = (state.currentUser.name || "").toLowerCase();
-      // Currently only enabled for Kevin - add more names here to scale
-      return name.includes("kevin");
+      // All logged-in users are eligible for coin rewards
+      return !!state.currentUser;
     }
 
     // Get current day/week keys for cap tracking
