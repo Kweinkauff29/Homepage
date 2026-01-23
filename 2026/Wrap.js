@@ -2034,6 +2034,158 @@ export default {
                 }
             }
 
+            // ===== SHOP ITEMS =====
+            if (pathname === "/api/shop/items" && request.method === "GET") {
+                const { results } = await env.WRAP_DB
+                    .prepare(`SELECT * FROM shop_items ORDER BY type, sort_order`)
+                    .all();
+                return json(results);
+            }
+
+            // ===== USER INVENTORY =====
+            const inventoryMatch = pathname.match(/^\/api\/users\/(\d+)\/inventory$/);
+            if (inventoryMatch) {
+                const userId = parseInt(inventoryMatch[1], 10);
+
+                if (request.method === "GET") {
+                    // Get user's purchased items with item details
+                    const { results } = await env.WRAP_DB
+                        .prepare(`
+                            SELECT ui.id as inventory_id, ui.purchased_at, si.*
+                            FROM user_inventory ui
+                            JOIN shop_items si ON ui.item_id = si.id
+                            WHERE ui.user_id = ?
+                            ORDER BY si.type, si.sort_order
+                        `)
+                        .bind(userId)
+                        .all();
+                    return json(results);
+                }
+
+                if (request.method === "POST") {
+                    // Purchase item
+                    const body = await getBody(request);
+                    const itemId = body.item_id;
+
+                    if (!itemId) {
+                        return json({ error: "item_id required" }, 400);
+                    }
+
+                    // Get item price
+                    const itemRes = await env.WRAP_DB
+                        .prepare(`SELECT * FROM shop_items WHERE id = ?`)
+                        .bind(itemId)
+                        .all();
+
+                    if (!itemRes.results.length) {
+                        return json({ error: "Item not found" }, 404);
+                    }
+
+                    const item = itemRes.results[0];
+
+                    // Check if already owned
+                    const ownedRes = await env.WRAP_DB
+                        .prepare(`SELECT id FROM user_inventory WHERE user_id = ? AND item_id = ?`)
+                        .bind(userId, itemId)
+                        .all();
+
+                    if (ownedRes.results.length > 0) {
+                        return json({ error: "Already owned" }, 400);
+                    }
+
+                    // Get user's coin balance
+                    const userRes = await env.WRAP_DB
+                        .prepare(`SELECT coin_balance FROM users WHERE id = ?`)
+                        .bind(userId)
+                        .all();
+
+                    if (!userRes.results.length) {
+                        return json({ error: "User not found" }, 404);
+                    }
+
+                    const balance = userRes.results[0].coin_balance || 0;
+
+                    if (balance < item.price) {
+                        return json({ error: "Insufficient coins", required: item.price, balance }, 400);
+                    }
+
+                    // Deduct coins
+                    await env.WRAP_DB
+                        .prepare(`UPDATE users SET coin_balance = coin_balance - ? WHERE id = ?`)
+                        .bind(item.price, userId)
+                        .run();
+
+                    // Add to inventory
+                    const now = new Date().toISOString();
+                    await env.WRAP_DB
+                        .prepare(`INSERT INTO user_inventory (user_id, item_id, purchased_at) VALUES (?, ?, ?)`)
+                        .bind(userId, itemId, now)
+                        .run();
+
+                    // Return updated balance and purchased item
+                    const newBalanceRes = await env.WRAP_DB
+                        .prepare(`SELECT coin_balance FROM users WHERE id = ?`)
+                        .bind(userId)
+                        .all();
+
+                    return json({
+                        success: true,
+                        item,
+                        new_balance: newBalanceRes.results[0]?.coin_balance || 0
+                    }, 201);
+                }
+            }
+
+            // ===== USER EQUIPPED ITEMS =====
+            const equippedMatch = pathname.match(/^\/api\/users\/(\d+)\/equipped$/);
+            if (equippedMatch) {
+                const userId = parseInt(equippedMatch[1], 10);
+
+                if (request.method === "GET") {
+                    const { results } = await env.WRAP_DB
+                        .prepare(`SELECT equipped_items FROM user_preferences WHERE user_id = ?`)
+                        .bind(userId)
+                        .all();
+
+                    if (!results.length) {
+                        return json({});
+                    }
+
+                    try {
+                        return json(JSON.parse(results[0].equipped_items || "{}"));
+                    } catch (e) {
+                        return json({});
+                    }
+                }
+
+                if (request.method === "PUT") {
+                    const body = await getBody(request);
+                    const equippedJson = JSON.stringify(body);
+
+                    // Check if prefs exist
+                    const existing = await env.WRAP_DB
+                        .prepare(`SELECT user_id FROM user_preferences WHERE user_id = ?`)
+                        .bind(userId)
+                        .all();
+
+                    if (existing.results.length === 0) {
+                        // Insert new
+                        await env.WRAP_DB
+                            .prepare(`INSERT INTO user_preferences (user_id, equipped_items, updated_at) VALUES (?, ?, ?)`)
+                            .bind(userId, equippedJson, new Date().toISOString())
+                            .run();
+                    } else {
+                        // Update existing
+                        await env.WRAP_DB
+                            .prepare(`UPDATE user_preferences SET equipped_items = ?, updated_at = ? WHERE user_id = ?`)
+                            .bind(equippedJson, new Date().toISOString(), userId)
+                            .run();
+                    }
+
+                    return json(body);
+                }
+            }
+
             // ===== DAILY TASKS =====
             if (pathname === "/api/daily-tasks" && request.method === "GET") {
                 return await listDailyTasks(env, searchParams);

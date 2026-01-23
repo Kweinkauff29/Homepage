@@ -2795,6 +2795,160 @@
       background: #fff;
       transform: scale(1.1);
     }
+
+    /* ===== SHOP MODAL STYLES ===== */
+    .shop-tabs {
+      display: flex;
+      border-bottom: 1px solid #e5e7eb;
+    }
+
+    .shop-tab {
+      flex: 1;
+      padding: 12px;
+      background: none;
+      border: none;
+      font-size: 14px;
+      font-weight: 500;
+      color: #6b7280;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .shop-tab:hover {
+      background: #f9fafb;
+    }
+
+    .shop-tab.active {
+      color: #2563eb;
+      border-bottom: 2px solid #2563eb;
+      margin-bottom: -1px;
+    }
+
+    .shop-content {
+      padding: 16px;
+      max-height: 400px;
+      overflow-y: auto;
+    }
+
+    .shop-tab-content.hidden {
+      display: none;
+    }
+
+    .shop-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+      gap: 12px;
+    }
+
+    .shop-item {
+      background: #fff;
+      border: 1px solid #e5e7eb;
+      border-radius: 12px;
+      padding: 12px;
+      text-align: center;
+      cursor: pointer;
+      transition: all 0.2s;
+      position: relative;
+    }
+
+    .shop-item:hover {
+      border-color: #2563eb;
+      box-shadow: 0 4px 12px rgba(37, 99, 235, 0.1);
+      transform: translateY(-2px);
+    }
+
+    .shop-item.owned {
+      border-color: #22c55e;
+      background: #f0fdf4;
+    }
+
+    .shop-item.equipped {
+      border-color: #f59e0b;
+      background: #fffbeb;
+    }
+
+    .shop-item-preview {
+      width: 60px;
+      height: 60px;
+      margin: 0 auto 8px;
+      background: #f3f4f6;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .shop-item-preview svg {
+      width: 40px;
+      height: 40px;
+    }
+
+    .shop-item-name {
+      font-size: 13px;
+      font-weight: 500;
+      color: #1f2937;
+      margin-bottom: 4px;
+    }
+
+    .shop-item-price {
+      font-size: 12px;
+      color: #6b7280;
+    }
+
+    .shop-item-price .coin {
+      color: #fbbf24;
+    }
+
+    .shop-item-badge {
+      position: absolute;
+      top: -6px;
+      right: -6px;
+      font-size: 10px;
+      padding: 2px 6px;
+      border-radius: 10px;
+      font-weight: 600;
+    }
+
+    .shop-item-badge.owned {
+      background: #22c55e;
+      color: #fff;
+    }
+
+    .shop-item-badge.equipped {
+      background: #f59e0b;
+      color: #fff;
+    }
+
+    /* Shop Button in bird area */
+    .shop-bird-btn {
+      position: absolute;
+      bottom: -5px;
+      left: -5px;
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.9);
+      border: 1px solid rgba(0, 0, 0, 0.08);
+      font-size: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      opacity: 0;
+      transition: opacity 0.2s, transform 0.1s;
+      z-index: 10;
+      padding: 0;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    }
+
+    #finch-container:hover .shop-bird-btn {
+      opacity: 0.6;
+    }
+
+    .shop-bird-btn:hover {
+      opacity: 1 !important;
+      transform: scale(1.1);
+    }
   </style>
 </head>
 
@@ -2966,6 +3120,39 @@
       <div class="modal-footer">
         <button class="button-secondary" id="project-step-modal-cancel">Cancel</button>
         <button class="button-primary" id="project-step-save-btn">Save Changes</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Bird Shop Modal -->
+  <div id="shop-modal" class="modal hidden">
+    <div class="modal-panel" style="max-width:600px;">
+      <div class="modal-header">
+        <div class="modal-title">🪙 Bird Shop</div>
+        <button class="modal-close" id="shop-modal-close">&times;</button>
+      </div>
+      <div class="modal-body" style="padding:0;">
+        <!-- Shop Tabs -->
+        <div class="shop-tabs">
+          <button class="shop-tab active" data-tab="shop">Shop</button>
+          <button class="shop-tab" data-tab="inventory">My Items</button>
+        </div>
+        <!-- Content -->
+        <div class="shop-content">
+          <div id="shop-tab-shop" class="shop-tab-content active">
+            <div id="shop-items-grid" class="shop-grid"></div>
+          </div>
+          <div id="shop-tab-inventory" class="shop-tab-content hidden">
+            <div id="inventory-grid" class="shop-grid"></div>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <div style="display:flex;align-items:center;gap:8px;">
+          <span style="font-size:20px;">🪙</span>
+          <span id="shop-balance">0</span> coins
+        </div>
+        <button class="button-secondary" id="shop-modal-done">Done</button>
       </div>
     </div>
   </div>
@@ -4423,6 +4610,254 @@
 
       // 3. Update Name UI
       updateBirdNameUI();
+    }
+
+    // ===== BIRD SHOP SYSTEM =====
+    let shopItems = [];
+    let userInventory = [];
+    let equippedItems = {}; // { hat: itemId, glasses: itemId, scarf: itemId, pet: itemId }
+
+    async function loadShopData() {
+      if (!state.currentUser) return;
+
+      try {
+        // Load all shop items
+        shopItems = await apiGet('/shop/items') || [];
+
+        // Load user's inventory
+        userInventory = await apiGet(`/users/${state.currentUser.id}/inventory`) || [];
+
+        // Load equipped items
+        equippedItems = await apiGet(`/users/${state.currentUser.id}/equipped`) || {};
+      } catch (e) {
+        console.warn('Could not load shop data', e);
+      }
+    }
+
+    function openShopModal() {
+      const modal = document.getElementById('shop-modal');
+      if (!modal) return;
+
+      modal.classList.remove('hidden');
+      updateShopBalance();
+      renderShopItems();
+      renderInventory();
+    }
+
+    function closeShopModal() {
+      const modal = document.getElementById('shop-modal');
+      if (modal) modal.classList.add('hidden');
+    }
+
+    function updateShopBalance() {
+      const el = document.getElementById('shop-balance');
+      if (el) el.textContent = state.coinBalance || 0;
+    }
+
+    function renderShopItems() {
+      const grid = document.getElementById('shop-items-grid');
+      if (!grid) return;
+
+      const ownedIds = new Set(userInventory.map(i => i.id));
+
+      grid.innerHTML = shopItems.map(item => {
+        const owned = ownedIds.has(item.id);
+        const equipped = Object.values(equippedItems).includes(item.id);
+
+        return `
+          <div class="shop-item ${owned ? 'owned' : ''} ${equipped ? 'equipped' : ''}" 
+               data-item-id="${item.id}" data-owned="${owned}">
+            ${owned ? '<span class="shop-item-badge owned">Owned</span>' : ''}
+            ${equipped ? '<span class="shop-item-badge equipped">In Use</span>' : ''}
+            <div class="shop-item-preview">
+              <svg viewBox="-30 -30 60 60">${item.svg_data || ''}</svg>
+            </div>
+            <div class="shop-item-name">${item.name}</div>
+            <div class="shop-item-price">
+              ${owned ? '<span style="color:#22c55e">✓ Owned</span>' : `<span class="coin">🪙</span> ${item.price}`}
+            </div>
+          </div>
+        `;
+      }).join('');
+
+      // Add click handlers
+      grid.querySelectorAll('.shop-item[data-owned="false"]').forEach(el => {
+        el.addEventListener('click', () => purchaseItem(parseInt(el.dataset.itemId)));
+      });
+    }
+
+    function renderInventory() {
+      const grid = document.getElementById('inventory-grid');
+      if (!grid) return;
+
+      if (userInventory.length === 0) {
+        grid.innerHTML = '<div style="text-align:center;padding:40px;color:#9ca3af;">No items yet! Visit the shop to buy some.</div>';
+        return;
+      }
+
+      grid.innerHTML = userInventory.map(item => {
+        const equipped = Object.values(equippedItems).includes(item.id);
+        const category = item.type === 'pet' ? 'pet' : item.category;
+
+        return `
+          <div class="shop-item ${equipped ? 'equipped' : ''}" 
+               data-item-id="${item.id}" data-category="${category}">
+            ${equipped ? '<span class="shop-item-badge equipped">In Use</span>' : ''}
+            <div class="shop-item-preview">
+              <svg viewBox="-30 -30 60 60">${item.svg_data || ''}</svg>
+            </div>
+            <div class="shop-item-name">${item.name}</div>
+            <div class="shop-item-price">
+              ${equipped ? '<button class="unequip-btn" style="font-size:11px;">Unequip</button>' : '<button class="equip-btn" style="font-size:11px;">Equip</button>'}
+            </div>
+          </div>
+        `;
+      }).join('');
+
+      // Add click handlers for equip/unequip
+      grid.querySelectorAll('.equip-btn').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+          e.stopPropagation();
+          const itemEl = btn.closest('.shop-item');
+          equipItem(parseInt(itemEl.dataset.itemId), itemEl.dataset.category);
+        });
+      });
+
+      grid.querySelectorAll('.unequip-btn').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+          e.stopPropagation();
+          const itemEl = btn.closest('.shop-item');
+          unequipItem(itemEl.dataset.category);
+        });
+      });
+    }
+
+    async function purchaseItem(itemId) {
+      const item = shopItems.find(i => i.id === itemId);
+      if (!item) return;
+
+      if (state.coinBalance < item.price) {
+        showToast(`Not enough coins! Need ${item.price}`, true);
+        return;
+      }
+
+      if (!confirm(`Buy ${item.name} for ${item.price} coins?`)) return;
+
+      try {
+        const result = await apiSend(`/users/${state.currentUser.id}/inventory`, 'POST', { item_id: itemId });
+
+        if (result.error) {
+          showToast(result.error, true);
+          return;
+        }
+
+        // Update local state
+        state.coinBalance = result.new_balance;
+        userInventory.push(result.item);
+
+        updateShopBalance();
+        updateCoinCounterDisplay();
+        renderShopItems();
+        renderInventory();
+
+        showToast(`Bought ${item.name}! 🎉`);
+        playChaChingSound(0);
+      } catch (e) {
+        console.error('Purchase failed', e);
+        showToast('Purchase failed', true);
+      }
+    }
+
+    async function equipItem(itemId, category) {
+      equippedItems[category] = itemId;
+      await saveEquippedItems();
+      renderInventory();
+      renderShopItems();
+      applyEquippedItems();
+      showToast('Equipped!');
+    }
+
+    async function unequipItem(category) {
+      delete equippedItems[category];
+      await saveEquippedItems();
+      renderInventory();
+      renderShopItems();
+      applyEquippedItems();
+      showToast('Unequipped');
+    }
+
+    async function saveEquippedItems() {
+      if (!state.currentUser) return;
+      try {
+        await apiSend(`/users/${state.currentUser.id}/equipped`, 'PUT', equippedItems);
+      } catch (e) {
+        console.warn('Could not save equipped items', e);
+      }
+    }
+
+    function applyEquippedItems() {
+      // Apply equipped items to the bird SVG
+      const container = document.getElementById('finch-svg');
+      if (!container) return;
+
+      // Remove existing equipped overlays
+      container.querySelectorAll('.equipped-overlay').forEach(el => el.remove());
+
+      // Add equipped items
+      Object.entries(equippedItems).forEach(([category, itemId]) => {
+        const item = userInventory.find(i => i.id === itemId) || shopItems.find(i => i.id === itemId);
+        if (!item || !item.svg_data) return;
+
+        const g = document.createElementNS('http://www.w3.org/2000/svg', 'g');
+        g.classList.add('equipped-overlay');
+        g.setAttribute('data-category', category);
+
+        // Position based on category
+        let transform = '';
+        if (category === 'hat') transform = 'translate(100, 65) scale(1.2)';
+        else if (category === 'glasses') transform = 'translate(100, 95) scale(0.8)';
+        else if (category === 'scarf') transform = 'translate(100, 140) scale(0.8)';
+        else if (category === 'pet' || category === 'companion') transform = 'translate(180, 150) scale(0.8)';
+
+        g.setAttribute('transform', transform);
+        g.innerHTML = item.svg_data;
+
+        container.appendChild(g);
+      });
+    }
+
+    function initShop() {
+      // Tab switching
+      document.querySelectorAll('.shop-tab').forEach(tab => {
+        tab.addEventListener('click', () => {
+          document.querySelectorAll('.shop-tab').forEach(t => t.classList.remove('active'));
+          document.querySelectorAll('.shop-tab-content').forEach(c => c.classList.add('hidden'));
+
+          tab.classList.add('active');
+          const tabId = `shop-tab-${tab.dataset.tab}`;
+          document.getElementById(tabId)?.classList.remove('hidden');
+        });
+      });
+
+      // Modal controls
+      document.getElementById('shop-modal-close')?.addEventListener('click', closeShopModal);
+      document.getElementById('shop-modal-done')?.addEventListener('click', closeShopModal);
+
+      // Shop button in bird area
+      const shopBtn = document.createElement('button');
+      shopBtn.className = 'shop-bird-btn';
+      shopBtn.id = 'shop-bird-btn';
+      shopBtn.innerHTML = '🛒';
+      shopBtn.title = 'Open Shop';
+      shopBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        openShopModal();
+      });
+
+      const finchContainer = document.getElementById('finch-container');
+      if (finchContainer) {
+        finchContainer.appendChild(shopBtn);
+      }
     }
 
     function updateMuteUI() {
@@ -8769,6 +9204,10 @@
             // 4b. Load saved bird colors and name from API
             if (typeof loadBirdPreferences === "function") await loadBirdPreferences();
 
+            // 4c. Load shop data and apply equipped items
+            await loadShopData();
+            applyEquippedItems();
+
             // 5. Refresh Weekly Tasks
             if (typeof initWeeklyTasksUI === "function") initWeeklyTasksUI();
 
@@ -8794,6 +9233,7 @@
       initDraggableSections();
       initInstructionsHide();
       initTaskReminders(); // Start reminder check loop
+      initShop(); // Initialize shop UI
       if (typeof initUserSwitcher === "function") initUserSwitcher();
     });
 
