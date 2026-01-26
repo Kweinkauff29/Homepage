@@ -145,6 +145,66 @@
       font-size: 3rem;
     }
 
+    /* Tier Badge Styling */
+    .tier-badge {
+      display: inline-block;
+      padding: 10px 30px;
+      margin-bottom: 20px;
+      font-family: 'Oswald', sans-serif;
+      font-size: 24px;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      color: white;
+      border-radius: 4px;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      animation: badgeSlideDown 0.8s ease-out forwards;
+      opacity: 0;
+      /* Start hidden for animation */
+      width: 100%;
+      max-width: 300px;
+    }
+
+    @keyframes badgeSlideDown {
+      0% {
+        opacity: 0;
+        transform: translateY(-20px);
+      }
+
+      100% {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .tier-badge.diamond {
+      background: linear-gradient(135deg, #005f6b 0%, #008080 100%);
+      border: 1px solid #004d57;
+    }
+
+    .tier-badge.platinum {
+      background: linear-gradient(135deg, #7f8c8d 0%, #bdc3c7 100%);
+      border: 1px solid #7f8c8d;
+      color: #2c3e50;
+    }
+
+    .tier-badge.gold {
+      background: linear-gradient(135deg, #d4af37 0%, #ffd700 100%);
+      border: 1px solid #b8860b;
+      color: #5c4002;
+    }
+
+    .tier-badge.silver {
+      background: linear-gradient(135deg, #95a5a6 0%, #ecf0f1 100%);
+      border: 1px solid #7f8c8d;
+      color: #2c3e50;
+    }
+
+    .tier-badge.bronze {
+      background: linear-gradient(135deg, #a0522d 0%, #cd7f32 100%);
+      border: 1px solid #8b4513;
+    }
+
+
     .carousel img.show {
       opacity: 1;
       width: 95%;
@@ -1919,51 +1979,52 @@
   <!-- RIGHT: Affiliates Carousel -->
   <div class="bemSection__col">
     <div class="carousel" style="box-shadow: none !important;">
-      <h3 style="color:var(--ber-teal);">2025 Year Sponsors</h3>
+      <h3 style="color:var(--ber-teal);">2026 Year Sponsors</h3>
       <div class="sponsor-group show" id="diamond">
-        <a><img src="http://bonitaesterorealtors.com/wp-content/uploads/2025/11/Diamond.png" class="show" alt=""></a>
-        <a href="https://cottrelltitle.com/" target="_blank"><img
-            src="http://bonitaesterorealtors.com/wp-content/uploads/2025/11/Cottrell-Title-logo.png" class="show"
-            alt=""></a>
-        <a href="https://stateinsuranceusa.com/" target="_blank"><img
-            src="http://bonitaesterorealtors.com/wp-content/uploads/2025/11/SIUSA.png" class="show" alt=""></a>
-        <a href="https://housemaster.com" target="_blank"><img
-            src="http://bonitaesterorealtors.com/wp-content/uploads/2025/11/HouseMaster-Home-Inspections-logo.png"
-            class="show" alt=""></a>
+        <div class="tier-badge diamond">Diamond</div>
         <a href="https://www.saadlegal.com/" target="_blank"><img
-            src="http://bonitaesterorealtors.com/wp-content/uploads/2025/11/Law-Office-of-Sam-J.-Saad-III-logo.webp"
-            class="show" alt=""></a>
-        <a href="https://www.lawfirmnaples.com/" target="_blank"><img
-            src="http://bonitaesterorealtors.com/wp-content/uploads/2025/11/Woods-·-Weidenmiller-·-Michetti-·-Rudnick-logo.jpg"
-            class="show" alt=""></a>
+            src="https://www.saadlegal.com/wp-content/uploads/sites/1404714/2025/06/SamJSaad-site-logo-new.png"
+            class="show" alt="Law Office of Sam J. Saad III"></a>
+        <a href="https://stateinsuranceusa.com/" target="_blank"><img
+            src="https://stateinsuranceusa.com/wp-content/uploads/2023/01/logo-1.png" class="show"
+            alt="State Insurance USA"></a>
+        <a href="https://movement.com/" target="_blank"><img
+            src="https://bonitaesterorealtors.com/wp-content/uploads/2025/12/Movement-mortgage.png" class="show"
+            alt="Movement Mortgage"></a>
+        <a href="https://www.lawfirmnaples.com/" target="_blank" style="background: #021a3f;"><img
+            src="https://www.lawfirmnaples.com/wp-content/themes/paperstreet/images/logo.png" class="show"
+            alt="Woods · Weidenmiller · Michetti · Rudnick"></a>
+      </div>
+      <div class="sponsor-group" id="platinum">
+        <div class="tier-badge platinum">Platinum</div>
+        <a href="https://cottrelltitle.com/" target="_blank"><img
+            src="https://cottrelltitle.com/wp-content/uploads/cottrell-title-logo.png" class="show"
+            alt="Cottrell Title & Escrow"></a>
+        <a href="https://housemaster.com/" target="_blank"><img
+            src="https://bonitaesterorealtors.com/wp-content/uploads/2025/12/Housemaster.png" class="show"
+            alt="HouseMaster"></a>
       </div>
       <div class="sponsor-group" id="gold">
-        <a><img src="http://bonitaesterorealtors.com/wp-content/uploads/2025/11/Gold.png" class="show" alt=""></a>
-        <a href="https://hiltonmovers.com/" target="_blank"><img
-            src="http://bonitaesterorealtors.com/wp-content/uploads/2025/11/Hilton-Moving-and-Storage-logo.png"
-            class="show" alt=""></a>
-        <a href="https://www.privateclienttitle.com/" target="_blank"><img
-            src="http://bonitaesterorealtors.com/wp-content/uploads/2025/11/Private-Client-Title-Escrow-logo.webp"
-            class="show" alt=""></a>
-        <a href="https://www.daviesduke.com/" target="_blank"><img
-            src="http://bonitaesterorealtors.com/wp-content/uploads/2025/11/Davies-Duke-logo.webp" class="show"
-            alt=""></a>
+        <div class="tier-badge gold">Gold</div>
+        <a><img src="https://www.premiummortgage.com/images/logo.png" class="show"
+            alt="Premium Mortgage Corporation"></a>
+        <a><img
+            src="https://bonitaesterorealtors.com/wp-content/uploads/2026/01/lane_logo_letters-pantone1815_icon-cmyk15-29-98-6-1536x306-1.webp"
+            class="show" alt="Lane Insurance Group"></a>
       </div>
       <div class="sponsor-group" id="silver">
-        <a><img src="http://bonitaesterorealtors.com/wp-content/uploads/2025/11/Silver.png" class="show" alt=""></a>
-        <a><img src="http://bonitaesterorealtors.com/wp-content/uploads/2025/11/239-Inspection-Services-logo.png"
-            class="show" alt=""></a>
+        <div class="tier-badge silver">Silver</div>
+        <a href="https://hiltonmovers.com/" target="_blank"><img
+            src="https://hiltonmovers.com/wp-content/uploads/Hilton_logo.png" class="show"
+            alt="Hilton Moving and Storage"></a>
+        <a><img src="https://bonitaesterorealtors.com/wp-content/uploads/2025/12/Lower-Mortgage.svg" class="show"
+            alt="Lower Mortgage"></a>
+        <a><img src="https://d1to58gssdw062.cloudfront.net/images/logo_blue.svg" alt="Revolution Mortgage"
+            class="show"></a>
       </div>
       <div class="sponsor-group" id="bronze">
-        <a><img src="http://bonitaesterorealtors.com/wp-content/uploads/2025/11/Bronze.png" class="show" alt=""></a>
-        <a><img src="http://bonitaesterorealtors.com/wp-content/uploads/2025/11/Premium-Mortgage-Corporation-logo.png"
-            class="show" alt=""></a>
-        <a><img
-            src="http://bonitaesterorealtors.com/wp-content/uploads/2025/11/Dwelling-Check-Home-Inspections-logo.png"
-            class="show" alt=""></a>
-        <a><img
-            src="http://bonitaesterorealtors.com/wp-content/uploads/2025/11/Dwelling-Check-Home-Inspections-logo.png"
-            class="show" alt=""></a>
+        <div class="tier-badge bronze">Bronze</div>
+        <!-- No confirmed Bronze sponsors yet -->
       </div>
     </div>
   </div>
