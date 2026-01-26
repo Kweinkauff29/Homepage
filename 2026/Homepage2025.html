@@ -146,62 +146,165 @@
     }
 
     /* Tier Badge Styling */
+    /* Tier Badge Styling - Enhanced */
     .tier-badge {
+      position: relative;
       display: inline-block;
-      padding: 10px 30px;
-      margin-bottom: 20px;
+      padding: 12px 40px;
+      margin-bottom: 25px;
       font-family: 'Oswald', sans-serif;
-      font-size: 24px;
+      font-size: 26px;
+      font-weight: 700;
       text-transform: uppercase;
-      letter-spacing: 2px;
+      letter-spacing: 3px;
       color: white;
-      border-radius: 4px;
-      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-      animation: badgeSlideDown 0.8s ease-out forwards;
+      text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+      border-radius: 6px;
+      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.4);
+      animation: badgeBounceIn 0.8s cubic-bezier(0.68, -0.55, 0.265, 1.55) forwards;
       opacity: 0;
-      /* Start hidden for animation */
       width: 100%;
-      max-width: 300px;
+      max-width: 320px;
+      overflow: hidden;
+      border: 1px solid rgba(0, 0, 0, 0.1);
+      z-index: 10;
+      /* Ensure badge stays on top */
     }
 
-    @keyframes badgeSlideDown {
+    /* Fly-In Animations */
+    @keyframes flyInLeft {
       0% {
         opacity: 0;
-        transform: translateY(-20px);
+        transform: translateX(-100px);
       }
 
       100% {
         opacity: 1;
-        transform: translateY(0);
+        transform: translateX(0);
       }
     }
 
+    @keyframes flyInRight {
+      0% {
+        opacity: 0;
+        transform: translateX(100px);
+      }
+
+      100% {
+        opacity: 1;
+        transform: translateX(0);
+      }
+    }
+
+    /* Apply animations to sponsor logos when their group is shown */
+    .carousel .sponsor-group.show>a,
+    .carousel .sponsor-group.show>img {
+      opacity: 0;
+      /* Start hidden */
+      animation-duration: 0.8s;
+      animation-fill-mode: forwards;
+      animation-timing-function: ease-out;
+      display: inline-block;
+      /* Required for transform */
+    }
+
+    /* Alternating directions */
+    .carousel .sponsor-group.show>a:nth-of-type(odd),
+    .carousel .sponsor-group.show>img:nth-of-type(odd) {
+      animation-name: flyInLeft;
+    }
+
+    .carousel .sponsor-group.show>a:nth-of-type(even),
+    .carousel .sponsor-group.show>img:nth-of-type(even) {
+      animation-name: flyInRight;
+    }
+
+    /* Staggered delays */
+    .carousel .sponsor-group.show>a:nth-of-type(1),
+    .carousel .sponsor-group.show>img:nth-of-type(1) {
+      animation-delay: 0.2s;
+    }
+
+    .carousel .sponsor-group.show>a:nth-of-type(2),
+    .carousel .sponsor-group.show>img:nth-of-type(2) {
+      animation-delay: 0.4s;
+    }
+
+    .carousel .sponsor-group.show>a:nth-of-type(3),
+    .carousel .sponsor-group.show>img:nth-of-type(3) {
+      animation-delay: 0.6s;
+    }
+
+    .carousel .sponsor-group.show>a:nth-of-type(4),
+    .carousel .sponsor-group.show>img:nth-of-type(4) {
+      animation-delay: 0.8s;
+    }
+
+    .carousel .sponsor-group.show>a:nth-of-type(5),
+    .carousel .sponsor-group.show>img:nth-of-type(5) {
+      animation-delay: 1.0s;
+    }
+
+    /* Shine Effect */
+    .tier-badge::after {
+      content: '';
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: linear-gradient(to right, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0.3) 50%, rgba(255, 255, 255, 0) 100%);
+      transform: rotate(30deg);
+      animation: shine 3s infinite linear;
+    }
+
+    @keyframes shine {
+      0% {
+        transform: translateX(-100%) rotate(30deg);
+      }
+
+      100% {
+        transform: translateX(100%) rotate(30deg);
+      }
+    }
+
+    @keyframes badgeBounceIn {
+      0% {
+        opacity: 0;
+        transform: translateY(-30px) scale(0.9);
+      }
+
+      100% {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+      }
+    }
+
+    /* Premium Gradients */
     .tier-badge.diamond {
-      background: linear-gradient(135deg, #005f6b 0%, #008080 100%);
-      border: 1px solid #004d57;
+      background: linear-gradient(135deg, #004d57 0%, #008080 50%, #00a3a3 100%);
+      border-bottom: 3px solid #00333a;
     }
 
     .tier-badge.platinum {
-      background: linear-gradient(135deg, #7f8c8d 0%, #bdc3c7 100%);
-      border: 1px solid #7f8c8d;
+      background: linear-gradient(135deg, #7f8c8d 0%, #bdc3c7 50%, #ecf0f1 100%);
       color: #2c3e50;
+      text-shadow: 1px 1px 0 rgba(255, 255, 255, 0.8);
+      border-bottom: 3px solid #636e72;
     }
 
     .tier-badge.gold {
-      background: linear-gradient(135deg, #d4af37 0%, #ffd700 100%);
-      border: 1px solid #b8860b;
+      background: linear-gradient(135deg, #b8860b 0%, #ffd700 50%, #ffe066 100%);
       color: #5c4002;
+      text-shadow: 1px 1px 0 rgba(255, 255, 255, 0.6);
+      border-bottom: 3px solid #8a6608;
     }
 
     .tier-badge.silver {
-      background: linear-gradient(135deg, #95a5a6 0%, #ecf0f1 100%);
-      border: 1px solid #7f8c8d;
-      color: #2c3e50;
-    }
-
-    .tier-badge.bronze {
-      background: linear-gradient(135deg, #a0522d 0%, #cd7f32 100%);
-      border: 1px solid #8b4513;
+      background: linear-gradient(135deg, #7f8c8d 0%, #95a5a6 50%, #bdc3c7 100%);
+      color: #000;
+      text-shadow: 1px 1px 0 rgba(255, 255, 255, 0.5);
+      border-bottom: 3px solid #5a6366;
     }
 
 
@@ -2022,10 +2125,7 @@
         <a><img src="https://d1to58gssdw062.cloudfront.net/images/logo_blue.svg" alt="Revolution Mortgage"
             class="show"></a>
       </div>
-      <div class="sponsor-group" id="bronze">
-        <div class="tier-badge bronze">Bronze</div>
-        <!-- No confirmed Bronze sponsors yet -->
-      </div>
+      <!-- Bronze tier removed as requested -->
     </div>
   </div>
 </div>
