@@ -2615,6 +2615,23 @@
       height: 100%;
     }
 
+    /* Pet Animation */
+    @keyframes pet-float {
+
+      0%,
+      100% {
+        transform: translateY(0);
+      }
+
+      50% {
+        transform: translateY(-3px);
+      }
+    }
+
+    .pet-anim {
+      animation: pet-float 3s ease-in-out infinite;
+    }
+
     /* Coin Meter (Horizontal) */
     .coin-meter-container {
       width: 200px;
@@ -6120,7 +6137,7 @@
     async function loadUsers() {
       const allUsers = await apiGet("/users");
       // Filter to only show core BER staff
-      const allowedNames = ["kevin", "meighan", "jenna", "erica", "katie"];
+      const allowedNames = ["kevin", "meighan", "jenna", "erica", "katie", "testwhale"];
       state.users = allUsers.filter(u =>
         allowedNames.some(name => u.name.toLowerCase() === name)
       );
@@ -9118,6 +9135,9 @@
             await loadShopData();
             applyEquippedItems();
 
+            // Safety retry to ensure items persist after any async bird renders
+            setTimeout(() => applyEquippedItems(), 500);
+
             // 5. Refresh Weekly Tasks
             if (typeof initWeeklyTasksUI === "function") initWeeklyTasksUI();
 
@@ -9451,7 +9471,7 @@
               ${owned ? `<span class="shop-item-badge owned">Owned</span>` : ''}
               ${equipped ? `<span class="shop-item-badge equipped">Equipped</span>` : ''}
               <div class="shop-item-preview">
-                ${item.svg_data || `<span style="font-size:24px;">${item.category === 'pet' ? '🐾' : '👒'}</span>`}
+                ${item.svg_data ? `<svg viewBox="-25 -25 50 50" style="width:100%;height:100%">${item.svg_data}</svg>` : `<span style="font-size:24px;">${item.category === 'pet' ? '🐾' : '👒'}</span>`}
               </div>
               <div class="shop-item-name">${item.name}</div>
               <div class="shop-item-price">
@@ -9487,7 +9507,7 @@
             <div class="shop-item ${equipped ? 'equipped' : ''}" data-item-id="${item.id}">
               ${equipped ? `<span class="shop-item-badge equipped">Equipped</span>` : ''}
               <div class="shop-item-preview">
-                ${item.svg_data || `<span style="font-size:24px;">${item.category === 'pet' ? '🐾' : '👒'}</span>`}
+                ${item.svg_data ? `<svg viewBox="-25 -25 50 50" style="width:100%;height:100%">${item.svg_data}</svg>` : `<span style="font-size:24px;">${item.category === 'pet' ? '🐾' : '👒'}</span>`}
               </div>
               <div class="shop-item-name">${item.name}</div>
               <button onclick="toggleEquip(${item.id}, '${item.category}')" 
@@ -9616,20 +9636,28 @@
         g.setAttribute("data-category", category);
 
         // Position based on category
+        const catLower = category.toLowerCase();
         let transform = "";
-        switch (category) {
+
+        console.log(`Applying item: ${category} (id: ${itemId})`);
+
+        switch (catLower) {
           case "hat":
-            transform = "translate(23, 2) scale(0.35)";
+            transform = "translate(100, 15) scale(1.6)";
             break;
           case "glasses":
-            transform = "translate(22, 18) scale(0.3)";
+            transform = "translate(100, 50) scale(1.5)";
             break;
           case "scarf":
-            transform = "translate(18, 42) scale(0.35)";
+            transform = "translate(100, 85) scale(1.5)";
             break;
           case "pet":
-            transform = "translate(60, 48) scale(0.4)";
+          case "companion":
+            transform = "translate(160, 150) scale(2.0)";
+            g.classList.add("pet-anim"); // Add float animation
             break;
+          default:
+            console.warn(`Unknown category: ${category}`);
         }
         g.setAttribute("transform", transform);
         g.innerHTML = item.svg_data;
