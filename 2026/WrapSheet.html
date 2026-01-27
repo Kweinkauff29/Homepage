@@ -9643,24 +9643,27 @@
 
         switch (catLower) {
           case "hat":
-            transform = "translate(100, 15) scale(1.6)";
+            transform = "translate(100, 25) scale(2.6)";
             break;
           case "glasses":
-            transform = "translate(100, 50) scale(1.5)";
+            transform = "translate(100, 65) scale(2.2)";
             break;
           case "scarf":
-            transform = "translate(100, 85) scale(1.5)";
+            transform = "translate(100, 100) scale(2.2)";
             break;
           case "pet":
           case "companion":
-            transform = "translate(160, 150) scale(2.0)";
-            g.classList.add("pet-anim"); // Add float animation
+            transform = "translate(225, 140) scale(3.0)";
+            // Don't add class here to avoid override, add to inner wrapper
             break;
           default:
             console.warn(`Unknown category: ${category}`);
         }
         g.setAttribute("transform", transform);
-        g.innerHTML = item.svg_data;
+
+        // Wrap content in a group for animation if needed
+        const animClass = (catLower === "pet" || catLower === "companion") ? "pet-anim" : "";
+        g.innerHTML = `<g class="${animClass}">${item.svg_data}</g>`;
 
         birdSvg.appendChild(g);
       });
