@@ -145,6 +145,169 @@
       font-size: 3rem;
     }
 
+    /* Tier Badge Styling */
+    /* Tier Badge Styling - Enhanced */
+    .tier-badge {
+      position: relative;
+      display: inline-block;
+      padding: 12px 40px;
+      margin-bottom: 25px;
+      font-family: 'Oswald', sans-serif;
+      font-size: 26px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 3px;
+      color: white;
+      text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+      border-radius: 6px;
+      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.4);
+      animation: badgeBounceIn 0.8s cubic-bezier(0.68, -0.55, 0.265, 1.55) forwards;
+      opacity: 0;
+      width: 100%;
+      max-width: 320px;
+      overflow: hidden;
+      border: 1px solid rgba(0, 0, 0, 0.1);
+      z-index: 10;
+      /* Ensure badge stays on top */
+    }
+
+    /* Fly-In Animations */
+    @keyframes flyInLeft {
+      0% {
+        opacity: 0;
+        transform: translateX(-100px);
+      }
+
+      100% {
+        opacity: 1;
+        transform: translateX(0);
+      }
+    }
+
+    @keyframes flyInRight {
+      0% {
+        opacity: 0;
+        transform: translateX(100px);
+      }
+
+      100% {
+        opacity: 1;
+        transform: translateX(0);
+      }
+    }
+
+    /* Apply animations to sponsor logos when their group is shown */
+    .carousel .sponsor-group.show>a,
+    .carousel .sponsor-group.show>img {
+      opacity: 0;
+      /* Start hidden */
+      animation-duration: 0.8s;
+      animation-fill-mode: forwards;
+      animation-timing-function: ease-out;
+      display: inline-block;
+      /* Required for transform */
+    }
+
+    /* Alternating directions */
+    .carousel .sponsor-group.show>a:nth-of-type(odd),
+    .carousel .sponsor-group.show>img:nth-of-type(odd) {
+      animation-name: flyInLeft;
+    }
+
+    .carousel .sponsor-group.show>a:nth-of-type(even),
+    .carousel .sponsor-group.show>img:nth-of-type(even) {
+      animation-name: flyInRight;
+    }
+
+    /* Staggered delays */
+    .carousel .sponsor-group.show>a:nth-of-type(1),
+    .carousel .sponsor-group.show>img:nth-of-type(1) {
+      animation-delay: 0.2s;
+    }
+
+    .carousel .sponsor-group.show>a:nth-of-type(2),
+    .carousel .sponsor-group.show>img:nth-of-type(2) {
+      animation-delay: 0.4s;
+    }
+
+    .carousel .sponsor-group.show>a:nth-of-type(3),
+    .carousel .sponsor-group.show>img:nth-of-type(3) {
+      animation-delay: 0.6s;
+    }
+
+    .carousel .sponsor-group.show>a:nth-of-type(4),
+    .carousel .sponsor-group.show>img:nth-of-type(4) {
+      animation-delay: 0.8s;
+    }
+
+    .carousel .sponsor-group.show>a:nth-of-type(5),
+    .carousel .sponsor-group.show>img:nth-of-type(5) {
+      animation-delay: 1.0s;
+    }
+
+    /* Shine Effect */
+    .tier-badge::after {
+      content: '';
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: linear-gradient(to right, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0.3) 50%, rgba(255, 255, 255, 0) 100%);
+      transform: rotate(30deg);
+      animation: shine 3s infinite linear;
+    }
+
+    @keyframes shine {
+      0% {
+        transform: translateX(-100%) rotate(30deg);
+      }
+
+      100% {
+        transform: translateX(100%) rotate(30deg);
+      }
+    }
+
+    @keyframes badgeBounceIn {
+      0% {
+        opacity: 0;
+        transform: translateY(-30px) scale(0.9);
+      }
+
+      100% {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+      }
+    }
+
+    /* Premium Gradients */
+    .tier-badge.diamond {
+      background: linear-gradient(135deg, #004d57 0%, #008080 50%, #00a3a3 100%);
+      border-bottom: 3px solid #00333a;
+    }
+
+    .tier-badge.platinum {
+      background: linear-gradient(135deg, #7f8c8d 0%, #bdc3c7 50%, #ecf0f1 100%);
+      color: #2c3e50;
+      text-shadow: 1px 1px 0 rgba(255, 255, 255, 0.8);
+      border-bottom: 3px solid #636e72;
+    }
+
+    .tier-badge.gold {
+      background: linear-gradient(135deg, #b8860b 0%, #ffd700 50%, #ffe066 100%);
+      color: #5c4002;
+      text-shadow: 1px 1px 0 rgba(255, 255, 255, 0.6);
+      border-bottom: 3px solid #8a6608;
+    }
+
+    .tier-badge.silver {
+      background: linear-gradient(135deg, #7f8c8d 0%, #95a5a6 50%, #bdc3c7 100%);
+      color: #000;
+      text-shadow: 1px 1px 0 rgba(255, 255, 255, 0.5);
+      border-bottom: 3px solid #5a6366;
+    }
+
+
     .carousel img.show {
       opacity: 1;
       width: 95%;
@@ -1919,52 +2082,50 @@
   <!-- RIGHT: Affiliates Carousel -->
   <div class="bemSection__col">
     <div class="carousel" style="box-shadow: none !important;">
-      <h3 style="color:var(--ber-teal);">2025 Year Sponsors</h3>
+      <h3 style="color:var(--ber-teal);">2026 Year Sponsors</h3>
       <div class="sponsor-group show" id="diamond">
-        <a><img src="http://bonitaesterorealtors.com/wp-content/uploads/2025/11/Diamond.png" class="show" alt=""></a>
-        <a href="https://cottrelltitle.com/" target="_blank"><img
-            src="http://bonitaesterorealtors.com/wp-content/uploads/2025/11/Cottrell-Title-logo.png" class="show"
-            alt=""></a>
-        <a href="https://stateinsuranceusa.com/" target="_blank"><img
-            src="http://bonitaesterorealtors.com/wp-content/uploads/2025/11/SIUSA.png" class="show" alt=""></a>
-        <a href="https://housemaster.com" target="_blank"><img
-            src="http://bonitaesterorealtors.com/wp-content/uploads/2025/11/HouseMaster-Home-Inspections-logo.png"
-            class="show" alt=""></a>
+        <div class="tier-badge diamond">Diamond</div>
         <a href="https://www.saadlegal.com/" target="_blank"><img
-            src="http://bonitaesterorealtors.com/wp-content/uploads/2025/11/Law-Office-of-Sam-J.-Saad-III-logo.webp"
-            class="show" alt=""></a>
-        <a href="https://www.lawfirmnaples.com/" target="_blank"><img
-            src="http://bonitaesterorealtors.com/wp-content/uploads/2025/11/Woods-·-Weidenmiller-·-Michetti-·-Rudnick-logo.jpg"
-            class="show" alt=""></a>
+            src="https://www.saadlegal.com/wp-content/uploads/sites/1404714/2025/06/SamJSaad-site-logo-new.png"
+            class="show" alt="Law Office of Sam J. Saad III"></a>
+        <a href="https://stateinsuranceusa.com/" target="_blank"><img
+            src="https://stateinsuranceusa.com/wp-content/uploads/2023/01/logo-1.png" class="show"
+            alt="State Insurance USA"></a>
+        <a href="https://movement.com/" target="_blank"><img
+            src="https://bonitaesterorealtors.com/wp-content/uploads/2025/12/Movement-mortgage.png" class="show"
+            alt="Movement Mortgage"></a>
+        <a href="https://www.lawfirmnaples.com/" target="_blank" style="background: #021a3f;"><img
+            src="https://www.lawfirmnaples.com/wp-content/themes/paperstreet/images/logo.png" class="show"
+            alt="Woods · Weidenmiller · Michetti · Rudnick"></a>
+      </div>
+      <div class="sponsor-group" id="platinum">
+        <div class="tier-badge platinum">Platinum</div>
+        <a href="https://cottrelltitle.com/" target="_blank"><img
+            src="https://cottrelltitle.com/wp-content/uploads/cottrell-title-logo.png" class="show"
+            alt="Cottrell Title & Escrow"></a>
+        <a href="https://housemaster.com/" target="_blank"><img
+            src="https://bonitaesterorealtors.com/wp-content/uploads/2025/12/Housemaster.png" class="show"
+            alt="HouseMaster"></a>
       </div>
       <div class="sponsor-group" id="gold">
-        <a><img src="http://bonitaesterorealtors.com/wp-content/uploads/2025/11/Gold.png" class="show" alt=""></a>
-        <a href="https://hiltonmovers.com/" target="_blank"><img
-            src="http://bonitaesterorealtors.com/wp-content/uploads/2025/11/Hilton-Moving-and-Storage-logo.png"
-            class="show" alt=""></a>
-        <a href="https://www.privateclienttitle.com/" target="_blank"><img
-            src="http://bonitaesterorealtors.com/wp-content/uploads/2025/11/Private-Client-Title-Escrow-logo.webp"
-            class="show" alt=""></a>
-        <a href="https://www.daviesduke.com/" target="_blank"><img
-            src="http://bonitaesterorealtors.com/wp-content/uploads/2025/11/Davies-Duke-logo.webp" class="show"
-            alt=""></a>
+        <div class="tier-badge gold">Gold</div>
+        <a><img src="https://www.premiummortgage.com/images/logo.png" class="show"
+            alt="Premium Mortgage Corporation"></a>
+        <a><img
+            src="https://bonitaesterorealtors.com/wp-content/uploads/2026/01/lane_logo_letters-pantone1815_icon-cmyk15-29-98-6-1536x306-1.webp"
+            class="show" alt="Lane Insurance Group"></a>
       </div>
       <div class="sponsor-group" id="silver">
-        <a><img src="http://bonitaesterorealtors.com/wp-content/uploads/2025/11/Silver.png" class="show" alt=""></a>
-        <a><img src="http://bonitaesterorealtors.com/wp-content/uploads/2025/11/239-Inspection-Services-logo.png"
-            class="show" alt=""></a>
+        <div class="tier-badge silver">Silver</div>
+        <a href="https://hiltonmovers.com/" target="_blank"><img
+            src="https://hiltonmovers.com/wp-content/uploads/Hilton_logo.png" class="show"
+            alt="Hilton Moving and Storage"></a>
+        <a><img src="https://bonitaesterorealtors.com/wp-content/uploads/2025/12/Lower-Mortgage.svg" class="show"
+            alt="Lower Mortgage"></a>
+        <a><img src="https://d1to58gssdw062.cloudfront.net/images/logo_blue.svg" alt="Revolution Mortgage"
+            class="show"></a>
       </div>
-      <div class="sponsor-group" id="bronze">
-        <a><img src="http://bonitaesterorealtors.com/wp-content/uploads/2025/11/Bronze.png" class="show" alt=""></a>
-        <a><img src="http://bonitaesterorealtors.com/wp-content/uploads/2025/11/Premium-Mortgage-Corporation-logo.png"
-            class="show" alt=""></a>
-        <a><img
-            src="http://bonitaesterorealtors.com/wp-content/uploads/2025/11/Dwelling-Check-Home-Inspections-logo.png"
-            class="show" alt=""></a>
-        <a><img
-            src="http://bonitaesterorealtors.com/wp-content/uploads/2025/11/Dwelling-Check-Home-Inspections-logo.png"
-            class="show" alt=""></a>
-      </div>
+      <!-- Bronze tier removed as requested -->
     </div>
   </div>
 </div>
@@ -2457,7 +2618,45 @@
 
   <div class="carousel2">
 
-    <!-- NEW: CCOR Name Change Approved -->
+    <!-- NEW: Florida Migration Trends -->
+    <div class="row news-row">
+      <div class="col-sm-5" id="exception">
+        <img class="article-img" style="object-fit: contain !important;"
+          src="https://images.unsplash.com/photo-1605723517503-3cadb5818a0c?auto=format&fit=crop&w=1600&q=80"
+          alt="Florida Migration Trends">
+      </div>
+      <div class="col-sm-7">
+        <h4>Florida Migration Trends: Who's Moving to Florida in 2020 vs. 2025</h4>
+        <p class="italics">January 22nd, 2026</p>
+        <p>Explore the latest data on migration trends affecting Southwest Florida. This detailed visual report compares
+          2020 statistics with 2025 projections, offering key insights for real estate professionals planning for the
+          future year.</p>
+        <a href="https://bonitaesterorealtors.com/florida-migration-trends-whos-moving-to-florida-in-2020-vs-2025-data-charts-what-it-means-for-southwest-florida-real-estate/"
+          target="_blank">
+          <button class="btn btn-primary" type="button" name="button">Read More</button>
+        </a>
+      </div>
+    </div>
+
+    <!-- NEW: Realtor.com+ Launches -->
+    <div class="row news-row">
+      <div class="col-sm-5" id="exception">
+        <img class="article-img" style="object-fit: contain !important;"
+          src="https://images.unsplash.com/photo-1560472354-b33ff0c44a43?auto=format&fit=crop&w=1600&q=80"
+          alt="Realtor.com+ Launches">
+      </div>
+      <div class="col-sm-7">
+        <h4>Realtor.com+ Launches — Bonita Springs-Estero MLS Among the First Markets</h4>
+        <p class="italics">January 21st, 2026</p>
+        <p>We are proud to announce that Bonita Springs-Estero MLS is among the first markets to launch Realtor.com+.
+          Learn what this means for your listings and how this new integration enhances visibility for your clients.</p>
+        <a href="https://bonitaesterorealtors.com/realtor-com-launches-bonita-springs-estero-mls-among-the-first-markets/"
+          target="_blank">
+          <button class="btn btn-primary" type="button" name="button">Read More</button>
+        </a>
+      </div>
+    </div>
+
     <div class="row news-row">
       <div class="col-sm-5" id="exception">
         <img class="article-img" style="object-fit: contain !important;"
@@ -3953,7 +4152,7 @@
 
   </div>
   <div class="col-sm-8">
-    <h3 class="resrow">Upcoming at BER - January 16th, 2026</h3>
+    <h3 class="resrow">Upcoming at BER - January 23rd, 2026</h3>
 
     <style>
       .frame-class {
@@ -3975,7 +4174,7 @@
       }
     </style>
 
-    <iframe class="frame-class" src="https://bonitaspringsesterorealtorsfl.growthzoneapp.com/ap/EmailViewer/pQQkZElp">
+    <iframe class="frame-class" src="https://bonitaspringsesterorealtorsfl.growthzoneapp.com/ap/EmailViewer/Lw1GxMxp">
     </iframe>
   </div>
 </div>

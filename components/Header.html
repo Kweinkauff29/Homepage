@@ -1,126 +1,851 @@
-
-  <!--
-  BER Global Header (v3.2) — animated topbar (no waves)
-  - Keeps ALL original links
-  - Fully responsive (mobile + iPad)
-  - Accessible + keyboard friendly
-  - Inline SVG social icons (reliable)
-  - Stronger gradient sweep on the top bar
--->
-
 <style>
-  :root{
-    --brand:#03AAE1;          /* aqua */
-    --brand-ink:#0CA7A4;      /* deep teal */
-    --accent:#FBAE24;         /* sun yellow */
-    --ink:#0b1220;            /* text */
-    --muted:#5b6577;          /* secondary text */
-    --line:#e5e7eb;           /* border */
-    --bg:#ffffff;             /* surface */
-    --radius:14px;
-    --shadow:0 12px 28px rgba(2,8,20,.08), 0 2px 6px rgba(2,8,20,.04);
+  :root {
+    --ber-font: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", "Apple Color Emoji";
+  }
+
+  /* Make everything in the header use the same stack as the dropdowns */
+  .ber-topbar,
+  .ber-header,
+  .ber-nav,
+  .ber-menu,
+  .ber-submenu,
+  .ber-link,
+  .ber-subbtn,
+  .ber-submenu a,
+  #ber-inline-search,
+  .ber-inline-searchbox,
+  .ber-inline-results,
+  .ber-inline-result {
+    font-family: var(--ber-font);
   }
 
   /* Namespace */
-  .ber-topbar{ position: sticky; top: 0; z-index: 1001; }
-  .ber-header{ position: sticky; top: var(--topbar-h, 0px); z-index: 1000; }
-    .ber-container{max-width:1200px;margin:0 auto;padding:0 16px}
-  .sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+  .ber-topbar {
+    position: sticky;
+    top: 0;
+    z-index: 1001;
+  }
 
+  .ber-header {
+    position: sticky;
+    top: var(--topbar-h, 0px);
+    z-index: 1000;
+  }
 
-  .vc_column-inner {margin-bottom: 0 !important;}
+  .ber-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 16px
+  }
+
+  .sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0
+  }
+
+  .vc_column-inner {
+    margin-bottom: 0 !important;
+  }
+
+  .e-con {
+    padding: 0 !important;
+  }
 
   /* === TOPBAR (contact + socials) === */
-  .ber-topbar{
-    background:linear-gradient(120deg,#7EF0F0 0%, #03AAE1 18%, #0CA7A4 48%, #006b86 78%, #7EF0F0 100%);
-    background-size:400% 100%;
-    animation:ribbonFlow 10s ease-in-out infinite alternate;
-    color:#fff; font-size:14px;
+  .ber-topbar {
+    background: linear-gradient(120deg, #7EF0F0 0%, #03AAE1 18%, #0CA7A4 48%, #006b86 78%, #7EF0F0 100%);
+    background-size: 400% 100%;
+    animation: ribbonFlow 10s ease-in-out infinite alternate;
+    color: #fff;
+    font-size: 14px;
     margin: -5px -25px 1px -25px;
-  }
-  @keyframes ribbonFlow{0%{background-position:0% 0}100%{background-position:400% 0}}
-
-  .ber-topbar .row{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:10px 0;flex-wrap:nowrap}
-  .ber-topbar a{color:#fff;text-decoration:none}
-  .ber-topbar a:hover{text-decoration:underline}
-
-  /* ensure single-line layout on desktop */
-  .ber-contact{display:flex;align-items:center;min-width:0;flex:1 1 auto}
-  .ber-contact p{margin:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-  .ber-social{display:flex;gap:8px;flex:0 0 auto;margin-left:auto}
-
-  @media (max-width:768px){
-    .ber-topbar .row{flex-wrap:wrap}
-    .ber-contact{flex:1 1 100%}
-    .ber-social{margin-left:0}
+    padding-top: env(safe-area-inset-top, 0);
   }
 
-  .ber-social-btn{display:inline-flex;align-items:center;justify-content:center;width:36px;height:36px;border-radius:999px;background:#ffffff20;color:#fff;border:1px solid #ffffff33;backdrop-filter:saturate(1.2);transition:transform .15s ease, background .15s ease}
-  .ber-social-btn:hover{background:#ffffff35;transform:translateY(-1px)}
-  .ber-social-btn svg{width:18px;height:18px;display:block}
+  @keyframes ribbonFlow {
+    0% {
+      background-position: 0% 0
+    }
+
+    100% {
+      background-position: 400% 0
+    }
+  }
+
+  .ber-topbar .row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    padding: 10px 0;
+    flex-wrap: nowrap
+  }
+
+  .ber-topbar a {
+    color: #fff;
+    text-decoration: none
+  }
+
+  .ber-topbar a:hover {
+    text-decoration: underline
+  }
+
+  .ber-contact {
+    display: flex;
+    align-items: center;
+    min-width: 0;
+    flex: 1 1 auto
+  }
+
+  .ber-contact p {
+    margin: 0;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis
+  }
+
+  .ber-social {
+    display: flex;
+    gap: 8px;
+    flex: 0 0 auto;
+    margin-left: auto
+  }
+
+  @media (max-width:768px) {
+    .ber-topbar .row {
+      flex-wrap: wrap
+    }
+
+    .ber-contact {
+      flex: 1 1 100%
+    }
+
+    .ber-social {
+      margin-left: 0
+    }
+  }
+
+  .ber-social-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+    border-radius: 999px;
+    background: #ffffff20;
+    color: #fff;
+    border: 1px solid #ffffff33;
+    backdrop-filter: saturate(1.2);
+    transition: transform .15s ease, background .15s ease
+  }
+
+  .ber-social-btn:hover {
+    background: #ffffff35;
+    transform: translateY(-1px)
+  }
+
+  .ber-social-btn svg {
+    width: 18px;
+    height: 18px;
+    display: block
+  }
 
   /* === HEADER (sticky) === */
-  .ber-header{position:sticky;top:0;z-index:1000;background:rgba(255,255,255,.92);backdrop-filter:saturate(1.2) blur(8px);border-bottom:1px solid #ffffffaa}
-  .ber-header .bar{display:flex;align-items:center;justify-content:space-between;gap:18px;padding:14px 0}
-  .ber-brand{display:flex;align-items:center;gap:12px;text-decoration:none;color:inherit}
-  .ber-brand img{height:58px;width:auto;filter:drop-shadow(0 1px 0 rgba(0,0,0,.03))}
+  .ber-header {
+    position: sticky;
+    top: var(--topbar-h, 0px);
+    z-index: 1000;
+    background: rgba(255, 255, 255, .92);
+    backdrop-filter: saturate(1.2) blur(8px);
+    border-bottom: 1px solid #ffffffaa
+  }
 
-  /* Menu trigger (mobile/ipad) */
-  .ber-nav-toggle{display:none;appearance:none;border:1px solid var(--line);background:var(--bg);padding:10px 12px;border-radius:12px;font-weight:700;cursor:pointer}
-  .ber-nav-toggle:focus-visible{outline:3px solid var(--brand)}
-  .ber-nav-toggle svg{width:18px;height:18px;margin-right:8px}
+  .ber-header .bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 18px;
+    padding: 14px 0
+  }
+
+  .ber-brand {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    text-decoration: none;
+    color: inherit
+  }
+
+  .ber-brand img {
+    height: 58px;
+    width: auto;
+    filter: drop-shadow(0 1px 0 rgba(0, 0, 0, .03))
+  }
+
+  /* Menu trigger (mobile/tablet) */
+  .ber-nav-toggle {
+    display: none;
+    appearance: none;
+    border: 1px solid var(--line, #e5e7eb);
+    background: #fff;
+    padding: 10px 14px;
+    border-radius: 12px;
+    font-weight: 700;
+    cursor: pointer;
+    min-height: 44px;
+  }
+
+  .ber-nav-toggle:focus-visible {
+    outline: 3px solid var(--brand, #03AAE1)
+  }
+
+  .ber-nav-toggle svg {
+    width: 18px;
+    height: 18px;
+    margin-right: 8px
+  }
 
   /* Primary nav */
-  .ber-nav{position:relative}
-  .ber-menu{display:flex;gap:6px;list-style:none;padding:0;margin:0}
-  .ber-menu>li{position:relative}
-  .ber-link, .ber-subbtn{display:inline-flex;align-items:center;gap:8px;font-weight:700;padding:12px 14px;border-radius:12px;border:0;background:transparent;cursor:pointer;color:var(--ink);text-decoration:none;position:relative}
+  .ber-nav {
+    position: relative;
+    z-index: 40;
+  }
 
-  /* modern underline */
-  .ber-link::after, .ber-subbtn::after{content:"";position:absolute;left:12px;right:12px;bottom:6px;height:3px;border-radius:3px;background:linear-gradient(90deg,var(--brand),var(--accent));transform:scaleX(0);transform-origin:left;transition:transform .18s ease}
-  .ber-link:hover::after, .ber-subbtn:hover::after{transform:scaleX(1)}
-  .ber-link:hover, .ber-subbtn:hover{color:var(--brand-ink);background:#f7fbff}
+  .ber-menu {
+    display: flex;
+    gap: 6px;
+    list-style: none;
+    padding: 0;
+    margin: 0
+  }
 
-  .ber-caret{width:9px;height:9px;border-right:2px solid currentColor;border-bottom:2px solid currentColor;transform:rotate(45deg);transition:transform .18s ease}
-  .ber-subbtn[aria-expanded="true"] .ber-caret{transform:rotate(-135deg)}
+  .ber-menu>li {
+    position: relative
+  }
+
+  .ber-link,
+  .ber-subbtn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-weight: 700;
+    padding: 12px 14px;
+    border-radius: 12px;
+    border: 0;
+    background: transparent;
+    cursor: pointer;
+    color: var(--ink, #0f172a);
+    text-decoration: none;
+    position: relative
+  }
+
+  .ber-link::after,
+  .ber-subbtn::after {
+    content: "";
+    position: absolute;
+    left: 12px;
+    right: 12px;
+    bottom: 6px;
+    height: 3px;
+    border-radius: 3px;
+    background: linear-gradient(90deg, var(--brand, #03AAE1), var(--accent, #FBAE24));
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform .18s ease
+  }
+
+  .ber-link:hover::after,
+  .ber-subbtn:hover::after {
+    transform: scaleX(1)
+  }
+
+  .ber-link:hover,
+  .ber-subbtn:hover {
+    color: var(--brand-ink, #0CA7A4);
+    background: #f7fbff
+  }
+
+  .ber-caret {
+    width: 9px;
+    height: 9px;
+    border-right: 2px solid currentColor;
+    border-bottom: 2px solid currentColor;
+    transform: rotate(45deg);
+    transition: transform .18s ease
+  }
+
+  .ber-subbtn[aria-expanded="true"] .ber-caret {
+    transform: rotate(-135deg)
+  }
 
   /* Submenus */
-  .ber-submenu{
-    position:absolute;left:0;top:calc(100% + 12px);min-width:280px;background:#fff;border:1px solid var(--line);
-    border-radius:var(--radius);box-shadow:var(--shadow);padding:10px;list-style:none;margin:0;display:none;
+  .ber-submenu {
+    position: absolute;
+    left: 0;
+    top: calc(100% + 12px);
+    min-width: 280px;
+    background: #fff;
+    border: 1px solid var(--line, #e5e7eb);
+    border-radius: var(--radius, 14px);
+    box-shadow: 0 18px 38px rgba(2, 8, 20, .12);
+    padding: 10px;
+    list-style: none;
+    margin: 0;
+    display: none;
+    z-index: 60;
   }
-  .ber-submenu a{display:block;padding:10px 12px;border-radius:10px;color:var(--ink);text-decoration:none;font-weight:600;font-size:15px}
-  .ber-submenu a:hover{background:#f7fbff;color:var(--brand-ink)}
-  .ber-submenu::before{content:"";position:absolute;top:-6px;left:22px;width:12px;height:12px;background:#fff;border-left:1px solid var(--line);border-top:1px solid var(--line);transform:rotate(45deg)}
 
-  /* Hover open (desktop) */
-  @media (hover:hover){ .ber-menu>li:hover>.ber-submenu{display:block} }
+  .ber-submenu a {
+    display: block;
+    padding: 10px 12px;
+    border-radius: 10px;
+    color: var(--ink, #0f172a);
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 15px
+  }
 
-  /* Backdrop for mobile menu */
-  .ber-backdrop{position:fixed;inset:0;background:rgba(2,8,20,.4);display:none;z-index:998}
-  .ber-backdrop.is-open{display:block}
+  .ber-submenu a:hover {
+    background: #f7fbff;
+    color: var(--brand-ink, #0CA7A4)
+  }
 
-  /* Mobile / iPad */
-  @media (max-width:1024px){
-    .ber-nav-toggle{display:inline-flex;align-items:center}
-    .ber-menu{
-      position:fixed;inset:72px 0 auto 0;background:#fff;border-top:1px solid var(--line);
-      display:none;flex-direction:column;padding:14px 16px;gap:8px;z-index:999;max-height:calc(100dvh - 72px);overflow:auto;
+  .ber-submenu::before {
+    content: "";
+    position: absolute;
+    top: -6px;
+    left: 22px;
+    width: 12px;
+    height: 12px;
+    background: #fff;
+    border-left: 1px solid var(--line, #e5e7eb);
+    border-top: 1px solid var(--line, #e5e7eb);
+    transform: rotate(45deg)
+  }
+
+  .ber-submenu::after {
+    content: "";
+    position: absolute;
+    top: -20px;
+    left: 0;
+    right: 0;
+    height: 20px;
+    background: transparent;
+  }
+
+  @media (hover:hover) {
+    .ber-menu>li:hover>.ber-submenu {
+      display: block
     }
-    .ber-menu.is-open{display:flex}
-    .ber-menu>li{width:100%}
-    .ber-link, .ber-subbtn{width:100%;justify-content:space-between;padding:14px 12px;border:1px solid var(--line)}
-    .ber-link::after, .ber-subbtn::after{left:12px;right:12px;bottom:10px}
-    .ber-submenu{position:static;display:none;border:1px solid var(--line);box-shadow:none;margin:6px 0 10px;border-radius:12px}
-    .ber-submenu.is-open{display:block}
-    .ber-submenu::before{display:none}
   }
 
-  /* Focus */
-  .ber-link:focus-visible, .ber-subbtn:focus-visible, .ber-submenu a:focus-visible{outline:3px solid var(--brand);outline-offset:2px}
+  .ber-backdrop {
+    position: fixed;
+    inset: 0;
+    background: rgba(2, 8, 20, .4);
+    display: none;
+    z-index: 998
+  }
 
-  /* Motion reduction */
-  @media (prefers-reduced-motion: reduce){ .ber-topbar{animation:none} }
+  .ber-backdrop.is-open {
+    display: block
+  }
+
+  /* Mobile / Tablet */
+  @media (max-width:1024px) {
+    .ber-nav-toggle {
+      display: inline-flex;
+      align-items: center
+    }
+
+    .ber-menu {
+      position: fixed;
+      left: 0;
+      right: 0;
+      top: calc(var(--topbar-h, 0px) + var(--header-h, 72px));
+      background: #fff;
+      border-top: 1px solid var(--line, #e5e7eb);
+      display: none;
+      flex-direction: column;
+      padding: 14px 16px;
+      gap: 8px;
+      z-index: 999;
+      max-height: calc(100dvh - (var(--topbar-h, 0px) + var(--header-h, 72px)));
+      overflow: auto;
+      padding-bottom: max(14px, env(safe-area-inset-bottom, 0));
+    }
+
+    .ber-menu.is-open {
+      display: flex
+    }
+
+    .ber-menu>li {
+      width: 100%
+    }
+
+    .ber-link,
+    .ber-subbtn {
+      width: 100%;
+      justify-content: space-between;
+      padding: 16px 14px;
+      border: 1px solid var(--line, #e5e7eb)
+    }
+
+    .ber-link::after,
+    .ber-subbtn::after {
+      left: 12px;
+      right: 12px;
+      bottom: 10px
+    }
+
+    .ber-submenu {
+      position: static;
+      display: none;
+      border: 1px solid var(--line, #e5e7eb);
+      box-shadow: none;
+      margin: 6px 0 10px;
+      border-radius: 12px
+    }
+
+    .ber-submenu.is-open {
+      display: block
+    }
+
+    .ber-submenu::before {
+      display: none
+    }
+  }
+
+  body.no-scroll {
+    overflow: hidden;
+  }
+
+  .ber-link:focus-visible,
+  .ber-subbtn:focus-visible,
+  .ber-submenu a:focus-visible {
+    outline: 3px solid var(--brand, #03AAE1);
+    outline-offset: 2px
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .ber-topbar {
+      animation: none
+    }
+  }
+
+  .ber-inline-label {
+    font-weight: 700;
+    color: var(--muted, #6b7280);
+    white-space: nowrap;
+  }
+
+  /* ========= INLINE QUICK SEARCH ========= */
+  #ber-inline-search {
+    margin-top: 10px;
+  }
+
+  .ber-inline-searchbox {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    position: relative;
+    z-index: 20;
+  }
+
+  .ber-inline-wrap {
+    position: relative;
+    width: 100%;
+    max-width: 640px;
+  }
+
+  @media (max-width:640px) {
+    .ber-inline-searchbox {
+      flex-wrap: wrap;
+      align-items: flex-start;
+    }
+
+    .ber-inline-label {
+      margin-bottom: 6px;
+    }
+
+    .ber-inline-wrap {
+      max-width: 100%;
+    }
+  }
+
+  .ber-inline-wrap .ber-input-icon {
+    position: absolute;
+    left: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    pointer-events: none;
+    width: 18px;
+    height: 18px;
+    opacity: .7;
+  }
+
+  .ber-inline-searchbox input {
+    width: 100%;
+    padding: 12px 14px 12px 40px;
+    border: 1.5px solid var(--line, #e5e7eb);
+    border-radius: var(--radius, 14px);
+    font-size: 16px;
+    background: #f7fbff;
+    box-shadow: 0 6px 18px rgba(2, 8, 20, .06);
+    transition: border .15s ease, box-shadow .15s ease, background .15s ease;
+    font-family: inherit;
+  }
+
+  .ber-inline-searchbox input::placeholder {
+    color: #6b7280;
+    opacity: .9;
+  }
+
+  .ber-inline-searchbox input:focus {
+    outline: none;
+    background: #fff;
+    border-color: var(--brand, #03AAE1);
+    box-shadow: 0 0 0 3px rgba(3, 170, 225, .18), 0 10px 24px rgba(2, 8, 20, .08);
+  }
+
+  /* Results dropdown */
+  .ber-inline-results {
+    position: absolute;
+    top: calc(100% + 6px);
+    left: 0;
+    right: 0;
+    background: #fff;
+    border: 1px solid var(--line, #e5e7eb);
+    border-radius: var(--radius, 14px);
+    box-shadow: 0 12px 28px rgba(2, 8, 20, .08), 0 2px 6px rgba(2, 8, 20, .04);
+    animation: fadeIn .2s ease forwards;
+    z-index: 30;
+    max-height: min(60dvh, 420px);
+    overflow: auto;
+  }
+
+  .ber-inline-results[hidden] {
+    display: none;
+  }
+
+  .ber-inline-results h5 {
+    margin: 8px 12px 4px;
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--brand-ink, #0CA7A4);
+    text-transform: uppercase;
+  }
+
+  .ber-inline-result {
+    display: block;
+    padding: 12px 12px;
+    color: var(--ink, #0f172a);
+    text-decoration: none;
+    font-weight: 600;
+    border-radius: 10px;
+    transition: background .15s ease;
+  }
+
+  .ber-inline-result:hover {
+    background: #f7fbff;
+  }
+
+  /* Suggestions panel */
+  .ber-inline-suggest {
+    position: absolute;
+    top: calc(100% + 6px);
+    left: 0;
+    right: 0;
+    background: #fff;
+    border: 1px solid var(--line, #e5e7eb);
+    border-radius: var(--radius, 14px);
+    box-shadow: 0 12px 28px rgba(2, 8, 20, .08), 0 2px 6px rgba(2, 8, 20, .04);
+    padding: 10px;
+    z-index: 31;
+    animation: fadeIn .2s ease forwards;
+    max-height: min(60dvh, 420px);
+    overflow: auto;
+    padding-bottom: max(10px, env(safe-area-inset-bottom, 0));
+  }
+
+  .ber-inline-suggest[hidden] {
+    display: none;
+  }
+
+  .ber-suggest-title {
+    margin: 6px 6px 8px;
+    font-size: 12px;
+    font-weight: 800;
+    color: #64748b;
+    letter-spacing: .02em;
+    text-transform: uppercase;
+  }
+
+  .ber-suggest-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    padding: 0 6px 6px;
+  }
+
+  .ber-suggest-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 10px 12px;
+    border: 1px solid var(--line, #e5e7eb);
+    border-radius: 999px;
+    background: #f7fbff;
+    font-weight: 700;
+    font-size: 13px;
+    cursor: pointer;
+    user-select: none;
+    transition: transform .12s ease, background .15s ease, border-color .15s ease;
+    min-height: 40px;
+  }
+
+  .ber-suggest-chip:hover {
+    background: #eff6ff;
+    border-color: var(--brand, #03AAE1);
+    transform: translateY(-1px);
+  }
+
+  .ber-suggest-chip:active {
+    transform: translateY(0);
+  }
+
+  /* "More examples" */
+  .ber-suggest-actions {
+    display: flex;
+    justify-content: center;
+    padding: 6px;
+    margin-top: 6px;
+    border-top: 1px dashed var(--line, #e5e7eb);
+  }
+
+  .ber-more-btn {
+    appearance: none;
+    border: 1px solid var(--line, #e5e7eb);
+    background: #f7fbff;
+    border-radius: 999px;
+    padding: 10px 12px;
+    font-weight: 800;
+    font-size: 13px;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    min-height: 40px;
+    transition: transform .12s ease, background .15s ease, border-color .15s ease, opacity .15s ease;
+  }
+
+  .ber-more-btn svg {
+    width: 16px;
+    height: 16px;
+  }
+
+  .ber-more-btn:hover {
+    background: #eff6ff;
+    border-color: var(--brand, #03AAE1);
+    transform: translateY(-1px);
+  }
+
+  .ber-more-btn:disabled {
+    opacity: .5;
+    cursor: not-allowed;
+    transform: none;
+  }
+
+  /* Results footer actions (CLEAR button) */
+  .ber-results-actions {
+    display: flex;
+    justify-content: center;
+    padding: 10px;
+    margin-top: 6px;
+    border-top: 1px dashed var(--line, #e5e7eb);
+    position: sticky;
+    bottom: 0;
+    background: linear-gradient(0deg, #fff 85%, rgba(255, 255, 255, 0.7));
+    backdrop-filter: saturate(1.1);
+  }
+
+  .ber-clear-btn {
+    appearance: none;
+    border: 1.5px solid #ef4444;
+    color: #b91c1c;
+    background: #fef2f2;
+    border-radius: 999px;
+    padding: 10px 14px;
+    font-weight: 900;
+    font-size: 13px;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    min-height: 40px;
+    transition: transform .12s ease, background .15s ease, border-color .15s ease, color .15s ease, box-shadow .15s ease;
+  }
+
+  .ber-clear-btn:hover {
+    background: #fee2e2;
+    border-color: #dc2626;
+    color: #991b1b;
+    transform: translateY(-1px);
+  }
+
+  .ber-clear-btn:active {
+    transform: translateY(0);
+  }
+
+  .ber-clear-btn svg {
+    width: 16px;
+    height: 16px;
+  }
+
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+      transform: translateY(-3px);
+    }
+
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  .ber-inline-result {
+    position: relative;
+  }
+
+  .ber-inline-result::after {
+    content: "";
+    position: absolute;
+    left: 12px;
+    right: 12px;
+    bottom: 6px;
+    height: 3px;
+    border-radius: 3px;
+    background: linear-gradient(90deg, var(--brand, #03AAE1), var(--accent, #FBAE24));
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform .18s ease;
+  }
+
+  .ber-inline-result:hover::after {
+    transform: scaleX(1);
+  }
+
+  /* Category color tags */
+  .ber-inline-results h5.cat-membership {
+    color: #0CA7A4;
+  }
+
+  .ber-inline-results h5.cat-education {
+    color: #03AAE1;
+  }
+
+  .ber-inline-results h5.cat-mls {
+    color: #006b86;
+  }
+
+  .ber-inline-results h5.cat-events {
+    color: #FBAE24;
+  }
+
+  .ber-inline-results h5.cat-advocacy {
+    color: #8B5CF6;
+  }
+
+  .ber-inline-results h5.cat-research {
+    color: #10B981;
+  }
+
+  .ber-inline-results h5.cat-resources {
+    color: #2563EB;
+  }
+
+  .ber-inline-results h5.cat-leadership {
+    color: #EF4444;
+  }
+
+  .ber-inline-results h5.cat-global {
+    color: #14B8A6;
+  }
+
+  .ber-inline-results h5.cat-support {
+    color: #6B7280;
+  }
+
+  .ber-inline-results h5.cat-public {
+    color: #0EA5E9;
+  }
+
+  .ber-inline-results h5.cat-news {
+    color: #f43f5e;
+  }
+
+  .ber-inline-results h5.cat-diversity {
+    color: #a855f7;
+  }
+
+  .ber-inline-results h5.cat-logistics {
+    color: #0d9488;
+  }
+
+  .ber-inline-results h5.cat-other {
+    color: #111827;
+  }
+
+  :root {
+    --mls-blue: #0077C8;
+    /* MLS blue */
+    --memberportal-orange: #FFC24A;
+    /* MP lighter orange (tweak if needed) */
+  }
+
+  /* Color variants */
+  .ber-cta--mls {
+    background: var(--mls-blue) !important;
+    color: #fff !important;
+  }
+
+  .ber-cta--portal {
+    background: var(--memberportal-orange) !important;
+    color: #111 !important;
+    /* better contrast on light orange */
+    text-shadow: none;
+  }
+
+  .ber-cta--mls:hover {
+    filter: brightness(.95);
+  }
+
+  .ber-cta--portal:hover {
+    filter: saturate(1.1) brightness(.98);
+  }
+
+  .ber-cta--mls:focus-visible,
+  .ber-cta--portal:focus-visible {
+    outline: 3px solid #0000;
+    box-shadow: 0 0 0 3px #ffffff, 0 0 0 6px rgba(0, 0, 0, .25);
+  }
+
+  @media (max-width:1024px) {
+
+    .ber-cta--mls,
+    .ber-cta--portal {
+      border: 0 !important;
+    }
+  }
 </style>
 
 <a class="sr-only" href="#main">Skip to content</a>
@@ -131,24 +856,39 @@
     <div class="row">
       <div class="ber-contact">
         <p>
-          <!-- phone icon -->
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" style="vertical-align:-2px"><path d="M6.62 10.79a15.05 15.05 0 006.59 6.59l2.2-2.2a1 1 0 011.01-.24c1.12.37 2.33.57 3.58.57a1 1 0 011 1V21a1 1 0 01-1 1C10.85 22 2 13.15 2 2a1 1 0 011-1h3.5a1 1 0 011 1c0 1.25.2 2.46.57 3.58a1 1 0 01-.24 1.01l-2.2 2.2z"/></svg>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" style="vertical-align:-2px">
+            <path
+              d="M6.62 10.79a15.05 15.05 0 006.59 6.59l2.2-2.2a1 1 0 011.01-.24c1.12.37 2.33.57 3.58.57a1 1 0 011 1V21a1 1 0 01-1 1C10.85 22 2 13.15 2 2a1 1 0 011-1h3.5a1 1 0 011 1c0 1.25.2 2.46.57 3.58a1 1 0 01-.24 1.01l-2.2 2.2z" />
+          </svg>
           &nbsp;Phone: <a href="tel:+12399926771">(239) 992-6771</a>
           &nbsp;&nbsp;|&nbsp;&nbsp;
-          <!-- mail icon -->
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" style="vertical-align:-2px"><path d="M20 4H4a2 2 0 00-2 2v12a2 2 0 002 2h16a2 2 0 002-2V6a2 2 0 00-2-2zm0 4l-8 5L4 8V6l8 5 8-5v2z"/></svg>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" style="vertical-align:-2px">
+            <path d="M20 4H4a2 2 0 00-2 2v12a2 2 0 002 2h16a2 2 0 002-2V6a2 2 0 00-2-2zm0 4l-8 5L4 8V6l8 5 8-5v2z" />
+          </svg>
           &nbsp;Email: <a href="mailto:Support@BERealtors.org">Support@BERealtors.org</a>
         </p>
       </div>
       <div class="ber-social" aria-label="Social links">
-        <a class="ber-social-btn" href="https://www.facebook.com/groups/482719335711288" target="_blank" aria-label="Facebook" rel="noopener">
-          <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M22 12.06C22 6.49 17.52 2 12 2S2 6.49 2 12.06c0 5.01 3.66 9.16 8.44 9.94v-7.03H7.9v-2.9h2.54V9.41c0-2.5 1.49-3.88 3.77-3.88 1.09 0 2.23.2 2.23.2v2.46h-1.26c-1.24 0-1.63.77-1.63 1.56v1.87h2.78l-.44 2.9h-2.34V22c4.78-.78 8.44-4.93 8.44-9.94z"/></svg>
+        <a class="ber-social-btn" href="https://www.facebook.com/groups/482719335711288" target="_blank"
+          aria-label="Facebook" rel="noopener">
+          <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+            <path
+              d="M22 12.06C22 6.49 17.52 2 12 2S2 6.49 2 12.06c0 5.01 3.66 9.16 8.44 9.94v-7.03H7.9v-2.9h2.54V9.41c0-2.5 1.49-3.88 3.77-3.88 1.09 0 2.23.2 2.23.2v2.46h-1.26c-1.24 0-1.63.77-1.63 1.56v1.87h2.78l-.44 2.9h-2.34V22c4.78-.78 8.44-4.93 8.44-9.94z" />
+          </svg>
         </a>
-        <a class="ber-social-btn" href="https://www.youtube.com/c/Bonitaesterorealtors" target="_blank" aria-label="YouTube" rel="noopener">
-          <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M23.5 6.2a3 3 0 00-2.1-2.1C19.6 3.5 12 3.5 12 3.5s-7.6 0-9.4.6A3 3 0 00.5 6.2 31.8 31.8 0 000 12c0 1.9.1 3.8.5 5.8a3 3 0 002.1 2.1c1.8.6 9.4.6 9.4.6s7.6 0 9.4-.6a3 3 0 002.1-2.1c.4-2 .5-3.9.5-5.8 0-1.9-.1-3.8-.5-5.8zM9.8 15.5v-7l6.5 3.5-6.5 3.5z"/></svg>
+        <a class="ber-social-btn" href="https://www.youtube.com/c/Bonitaesterorealtors" target="_blank"
+          aria-label="YouTube" rel="noopener">
+          <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+            <path
+              d="M23.5 6.2a3 3 0 00-2.1-2.1C19.6 3.5 12 3.5 12 3.5s-7.6 0-9.4.6A3 3 0 00.5 6.2 31.8 31.8 0 000 12c0 1.9.1 3.8.5 5.8a3 3 0 002.1 2.1c1.8.6 9.4.6 9.4.6s7.6 0 9.4-.6a3 3 0 002.1-2.1c.4-2 .5-3.9.5-5.8 0-1.9-.1-3.8-.5-5.8zM9.8 15.5v-7l6.5 3.5-6.5 3.5z" />
+          </svg>
         </a>
-        <a class="ber-social-btn" href="https://www.instagram.com/bonita_estero_realtors/" target="_blank" aria-label="Instagram" rel="noopener">
-          <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M7 2h10a5 5 0 015 5v10a5 5 0 01-5 5H7a5 5 0 01-5-5V7a5 5 0 015-5zm0 2a3 3 0 00-3 3v10a3 3 0 003 3h10a3 3 0 003-3V7a3 3 0 00-3-3H7zm5 3.5a5.5 5.5 0 110 11 5.5 5.5 0 010-11zm0 2a3.5 3.5 0 100 7 3.5 3.5 0 000-7zm5.75-.75a1.25 1.25 0 110 2.5 1.25 1.25 0 010-2.5z"/></svg>
+        <a class="ber-social-btn" href="https://www.instagram.com/bonita_estero_realtors/" target="_blank"
+          aria-label="Instagram" rel="noopener">
+          <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+            <path
+              d="M7 2h10a5 5 0 015 5v10a5 5 0 01-5 5H7a5 5 0 01-5-5V7a5 5 0 015-5zm0 2a3 3 0 00-3 3v10a3 3 0 003 3h10a3 3 0 003-3V7a3 3 0 00-3-3H7zm5 3.5a5.5 5.5 0 110 11 5.5 5.5 0 010-11zm0 2a3.5 3.5 0 100 7 3.5 3.5 0 000-7zm5.75-.75a1.25 1.25 0 110 2.5 1.25 1.25 0 010-2.5z" />
+          </svg>
         </a>
       </div>
     </div>
@@ -159,49 +899,100 @@
 <header class="ber-header" role="banner">
   <div class="ber-container">
     <div class="bar">
-      <a class="ber-brand" href="https://www.bonitaesterorealtors.com/" aria-label="Bonita Springs-Estero REALTORS® Home">
-        <img src="https://www.bonitaesterorealtors.com/wp-content/uploads/2022/10/BonitaSpringsEsteroRealtors_Logo_Vertical.png" alt="Bonita Springs-Estero REALTORS®">
+      <a class="ber-brand" href="https://www.bonitaesterorealtors.com/"
+        aria-label="Bonita Springs-Estero REALTORS® Home">
+        <img
+          src="https://www.bonitaesterorealtors.com/wp-content/uploads/2022/10/BonitaSpringsEsteroRealtors_Logo_Vertical.png"
+          alt="Bonita Springs-Estero REALTORS®">
       </a>
 
       <button class="ber-nav-toggle" aria-controls="ber-primary-nav" aria-expanded="false">
-        <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M3 6h18v2H3zM3 11h18v2H3zM3 16h18v2H3z"/></svg>
+        <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+          <path d="M3 6h18v2H3zM3 11h18v2H3zM3 16h18v2H3z" />
+        </svg>
         Menu
       </button>
 
       <nav class="ber-nav" aria-label="Primary">
         <ul id="ber-primary-nav" class="ber-menu" data-close-on-outside="true">
+          <!-- Quick access buttons -->
+          <li>
+            <a class="ber-link ber-cta ber-cta--mls" href="https://matrix.swflamls.com/matrix/login.aspx"
+              target="_blank" rel="noopener">
+              MLS
+            </a>
+          </li>
+          <li>
+            <a class="ber-link ber-cta ber-cta--portal" href="https://members.bonitaesterorealtors.com/MIC/Login"
+              target="_blank" rel="noopener">
+              Member Portal
+            </a>
+          </li>
+
+
+
+          <!-- Existing “About” item continues here 
+          <li>
+            <button class="ber-subbtn" aria-expanded="false" aria-controls="menu-about">
+              About <span class="ber-caret" aria-hidden="true"></span>
+            </button>
+            <ul id="menu-about" class="ber-submenu" role="menu">
+              ...
+            </ul>
+          </li> -->
+
           <!-- About -->
           <li>
-            <button class="ber-subbtn" aria-expanded="false" aria-controls="menu-about">About BER <span class="ber-caret" aria-hidden="true"></span></button>
+            <button class="ber-subbtn" aria-expanded="false" aria-controls="menu-about">About BER <span
+                class="ber-caret" aria-hidden="true"></span></button>
             <ul id="menu-about" class="ber-submenu" role="menu">
-              <li><a href="https://www.bonitaesterorealtors.com/about/">About Bonita Springs-Estero Realtors</a></li>
-              <li><a href="https://www.bonitaesterorealtors.com/2024-sales-excellence-award-winners/">BER Sales Excellence Awards</a></li>
-              <li><a href="https://www.bonitaesterorealtors.com/2022-bod-and-past-pres/">Board of Directors</a></li>
-              <li><a href="https://www.bonitaesterorealtors.com/home-foundation/">BER Home Foundation</a></li>
-              <li><a href="https://www.bonitaesterorealtors.com/leadership-academy">Leadership Academy</a></li>
-              <li><a href="http://bonitaspringsesterorealtorsfl.growthzoneapp.com/realtordirectory/Find?term=&advFilter=eyJDdXN0b21GaWVsZFZhbHVlcyI6W10sIkNvdW50cmllcyI6W10sIlN0YXRlcyI6W10sIkNpdGllcyI6W10sIlBvc3RhbENvZGVzIjpbXSwiQ2F0ZWdvcnlWYWx1ZXMiOltdLCJSYWRpdXMiOiIwIn0%3D">Realtor Directory</a></li>
-              <li><a href="http://bonitaspringsesterorealtorsfl.growthzoneapp.com/brokerdirectory/Find?term=&advFilter=eyJDdXN0b21GaWVsZFZhbHVlcyI6W10sIkNvdW50cmllcyI6W10sIlN0YXRlcyI6W10sIkNpdGllcyI6W10sIlBvc3RhbENvZGVzIjpbXSwiQ2F0ZWdvcnlWYWx1ZXMiOltdLCJSYWRpdXMiOiIwIn0%3D">Broker Directory</a></li>
-              <li><a href="https://www.bonitaesterorealtors.com/simplyrets-listings/">Property Search</a></li>
-              <li><a href="https://members.bonitaesterorealtors.com/affiliatedirectory">Affiliate Directory</a></li>
+              <li><a href="https://www.bonitaesterorealtors.com/about/">About Bonita Springs-Estero
+                  Realtors</a></li>
+              <li><a href="https://www.bonitaesterorealtors.com/2024-sales-excellence-award-winners/">BER
+                  Sales
+                  Excellence Awards</a></li>
+              <li><a href="https://bonitaesterorealtors.com/board-of-directors/">Board of
+                  Directors</a></li>
+              <li><a href="https://www.bonitaesterorealtors.com/home-foundation/">BER Home Foundation</a>
+              </li>
+              <li><a href="https://www.bonitaesterorealtors.com/leadership-academy">Leadership Academy</a>
+              </li>
+              <li><a
+                  href="http://bonitaspringsesterorealtorsfl.growthzoneapp.com/realtordirectory/Find?term=&advFilter=eyJDdXN0b21GaWVsZFZhbHVlcyI6W10sIkNvdW50cmllcyI6W10sIlN0YXRlcyI6W10sIkNpdGllcyI6W10sIlBvc3RhbENvZGVzIjpbXSwiQ2F0ZWdvcnlWYWx1ZXMiOltdLCJSYWRpdXMiOiIwIn0%3D">Realtor
+                  Directory</a></li>
+              <li><a
+                  href="http://bonitaspringsesterorealtorsfl.growthzoneapp.com/brokerdirectory/Find?term=&advFilter=eyJDdXN0b21GaWVsZFZhbHVlcyI6W10sIkNvdW50cmllcyI6W10sIlN0YXRlcyI6W10sIkNpdGllcyI6W10sIlBvc3RhbENvZGVzIjpbXSwiQ2F0ZWdvcnlWYWx1ZXMiOltdLCJSYWRpdXMiOiIwIn0%3D">Broker
+                  Directory</a></li>
+              <li><a href="https://www.bonitaesterorealtors.com/simplyrets-listings/">Property Search</a>
+              </li>
+              <li><a href="https://members.bonitaesterorealtors.com/affiliatedirectory">Affiliate
+                  Directory</a></li>
             </ul>
           </li>
 
           <!-- Membership -->
           <li>
-            <button class="ber-subbtn" aria-expanded="false" aria-controls="menu-membership">Membership <span class="ber-caret" aria-hidden="true"></span></button>
+            <button class="ber-subbtn" aria-expanded="false" aria-controls="menu-membership">Membership
+              <span class="ber-caret" aria-hidden="true"></span></button>
             <ul id="menu-membership" class="ber-submenu" role="menu">
               <li><a href="https://www.bonitaesterorealtors.com/join-bser/">Join BER</a></li>
-              <li><a href="https://bonitaspringsesterorealtorsfl.growthzoneapp.com/ap/Form/Fill/rJD9lS4P">Join A Committee</a></li>
-              <li><a href="https://bonitaspringsesterorealtorsfl.growthzoneapp.com/realtorstore/">Store</a></li>
+              <li><a href="https://bonitaspringsesterorealtorsfl.growthzoneapp.com/ap/Form/Fill/LbnDeCKL">Join
+                  A
+                  Committee</a></li>
+              <li><a href="https://bonitaspringsesterorealtorsfl.growthzoneapp.com/realtorstore/">Store</a>
+              </li>
             </ul>
           </li>
 
           <!-- News & Events -->
           <li>
-            <button class="ber-subbtn" aria-expanded="false" aria-controls="menu-news">News &amp; Events <span class="ber-caret" aria-hidden="true"></span></button>
+            <button class="ber-subbtn" aria-expanded="false" aria-controls="menu-news">News &amp; Events
+              <span class="ber-caret" aria-hidden="true"></span></button>
             <ul id="menu-news" class="ber-submenu" role="menu">
               <li><a href="https://members.bonitaesterorealtors.com/bercalendar">Event Calendar</a></li>
-              <li><a href="https://www.bonitaesterorealtors.com/2022-realtor-review-page-q1/">The Realtor Review Magazine</a></li>
+              <li><a href="https://www.bonitaesterorealtors.com/2022-realtor-review-page-q1/">The Realtor
+                  Review
+                  Magazine</a></li>
               <li><a href="https://www.bonitaesterorealtors.com/ber-news-home/">BER News</a></li>
             </ul>
           </li>
@@ -211,132 +1002,1300 @@
 
           <!-- Resources -->
           <li>
-            <button class="ber-subbtn" aria-expanded="false" aria-controls="menu-resources">Resources <span class="ber-caret" aria-hidden="true"></span></button>
+            <button class="ber-subbtn" aria-expanded="false" aria-controls="menu-resources">Resources <span
+                class="ber-caret" aria-hidden="true"></span></button>
             <ul id="menu-resources" class="ber-submenu" role="menu">
+              <li><a href="https://bonitaesterorealtors.com/ber-shorts-library/">Video Library</a></li>
+              <li><a href="https://bonitaesterorealtors.com/ber-guided-walkthroughs/">Guided
+                  Walkthroughs</a></li>
+              <li><a href="https://bonitaesterorealtors.com/floor-plans-4/">Floor Plans</a></li>
               <li><a href="https://bonitaesterorealtors.com/mls-membership-information/">MLS Info</a></li>
               <li><a href="https://www.bonitaesterorealtors.com/rpac/">RPAC</a></li>
-              <li><a href="https://bonitaspringsesterorealtorsfl.growthzoneapp.com/ap/Membership/Application/yr4lMArl">Reciprocal Listings</a></li>
-              <li><a href="https://www.bonitaesterorealtors.com/our-commitment-to-diversity/">Bonita Springs-Estero REALTORS® Global Network</a></li>
-              <li><a href="https://www.bonitaesterorealtors.com/broker-manager/">Broker/Manager Resources</a></li>
-              <li><a href="https://www.bonitaesterorealtors.com/florida-realtors-2/">Florida Realtors</a></li>
-              <li><a href="https://www.bonitaesterorealtors.com/market-reports-2/">Market Reports</a></li>
-              <li><a href="https://www.bonitaesterorealtors.com/important-links-and-contacts/">Important Links &amp; Resources</a></li>
-              <li><a href="https://www.bonitaesterorealtors.com/homebuyerssellers/">Home Buyers &amp; Sellers</a></li>
+              <li><a
+                  href="https://bonitaspringsesterorealtorsfl.growthzoneapp.com/ap/Membership/Application/yr4lMArl">Reciprocal
+                  Listings</a></li>
+              <li><a href="https://www.bonitaesterorealtors.com/our-commitment-to-diversity/">Bonita
+                  Springs-Estero
+                  REALTORS® Global Network</a></li>
+              <li><a href="https://www.bonitaesterorealtors.com/broker-manager/">Broker/Manager
+                  Resources</a></li>
+              <li><a href="https://www.bonitaesterorealtors.com/florida-realtors-2/">Florida Realtors</a>
+              </li>
+              <li><a href="https://bonitaesterorealtors.com/market-reports/">Market Reports</a></li>
+              <li><a href="https://www.bonitaesterorealtors.com/important-links-and-contacts/">Important
+                  Links &amp;
+                  Resources</a></li>
+              <li><a href="https://www.bonitaesterorealtors.com/homebuyerssellers/">Home Buyers &amp;
+                  Sellers</a></li>
               <li><a href="https://join.bonitaesterorealtors.com/ber-truck">BER BOX Truck Rental</a></li>
-              <li><a href="https://bonitaspringsesterorealtorsfl.growthzoneapp.com/ap/Form/Fill/rOxknh2p">Media Room Rental</a></li>
-              <li><a href="https://www.leegov.com/dhs/Documents/Housing/CDBG%20Application%2003.01.2023.pdf">Lee County Homeownership Assistance</a></li>
-              <li><a href="https://www.flipsnack.com/759C5EAA9F7/nar-2024-member-guide/full-view.html">2024 NAR Membership Guide</a></li>
-            </ul>
-          </li>
-
-          <!-- Membership Tools -->
-          <li>
-            <button class="ber-subbtn" aria-expanded="false" aria-controls="menu-tools">Membership Tools <span class="ber-caret" aria-hidden="true"></span></button>
-            <ul id="menu-tools" class="ber-submenu" role="menu">
-              <li><a href="https://www.bonitaesterorealtors.com/mls-membership-information/">MLS</a></li>
-              <li><a href="https://www.bonitaesterorealtors.com/professional-standards/">Professional Standards</a></li>
-              <li><a href="https://www.bonitaesterorealtors.com/wp-content/uploads/2025/01/2025-MLS-Rules.pdf">MLS Rules &amp; Regulations</a></li>
-              <li><a href="https://www.bonitaesterorealtors.com/supra-information/">Supra</a></li>
-              <li><a href="https://www.bonitaesterorealtors.com/document-library/">Floor Plans</a></li>
-              <li><a href="https://www.bonitaesterorealtors.com/social-media-policy/">Social Media Policy</a></li>
-              <li><a href="https://bonitasprings.wpengine.com/rpac/">What is RPAC?</a></li>
+              <li><a href="https://bonitaspringsesterorealtorsfl.growthzoneapp.com/ap/Form/Fill/rOxknh2p">Media
+                  Room
+                  Rental</a></li>
+              <li><a href="https://www.leegov.com/dhs/Documents/Housing/CDBG%20Application%2003.01.2023.pdf">Lee
+                  County
+                  Homeownership Assistance</a></li>
+              <li><a href="https://www.flipsnack.com/759C5EAA9F7/nar-2024-member-guide/full-view.html">2024
+                  NAR
+                  Membership Guide</a></li>
             </ul>
           </li>
         </ul>
       </nav>
     </div>
+
+    <!-- === INLINE QUICK LINKS SEARCH (under nav) === -->
+    <div id="ber-inline-search"></div>
   </div>
 </header>
 
 <div class="ber-backdrop" hidden></div>
 
+<!-- Minimal sticky + dynamic heights -->
+<style>
+  .ber-topbar {
+    position: sticky;
+    top: 0;
+    z-index: 1001;
+  }
+
+  .ber-header {
+    position: sticky;
+    top: var(--topbar-h, 0px);
+    z-index: 1000;
+  }
+</style>
 <script>
-  (function(){
-    const qs=(s,r=document)=>r.querySelector(s);
-    const qsa=(s,r=document)=>Array.from(r.querySelectorAll(s));
+  (function () {
+    var tb = document.querySelector('.ber-topbar');
+    var hd = document.querySelector('.ber-header');
 
-    const toggle=qs('.ber-nav-toggle');
-    const menu=qs('#ber-primary-nav');
-    const backdrop=document.querySelector('.ber-backdrop');
-    const subBtns=qsa('.ber-subbtn');
+    function setVars() {
+      var th = tb ? tb.offsetHeight : 0;
+      var hh = 0;
+      if (hd) {
+        var bar = hd.querySelector('.bar');
+        hh = bar ? bar.offsetHeight : hd.offsetHeight;
+      }
+      document.documentElement.style.setProperty('--topbar-h', th + 'px');
+      document.documentElement.style.setProperty('--header-h', hh + 'px');
+    }
+    window.addEventListener('load', setVars, { once: true });
+    window.addEventListener('resize', setVars, { passive: true });
+    setVars();
+  })();
+</script>
 
-    function closeAllSubmenus(){
-      subBtns.forEach(b=>{
-        b.setAttribute('aria-expanded','false');
-        const id=b.getAttribute('aria-controls');
-        const sub=qs('#'+id);
-        if(sub){sub.classList.remove('is-open');sub.style.display='none';}
+<!-- === Mobile/Tablet NAV logic === -->
+<script>
+  (function () {
+    const qs = (s, r = document) => r.querySelector(s);
+    const qsa = (s, r = document) => Array.from(r.querySelectorAll(s));
+
+    const toggle = qs('.ber-nav-toggle');
+    const menu = qs('#ber-primary-nav');
+    const backdrop = qs('.ber-backdrop');
+    const subBtns = qsa('.ber-subbtn');
+
+    function closeAllSubmenus() {
+      subBtns.forEach(b => {
+        b.setAttribute('aria-expanded', 'false');
+        const id = b.getAttribute('aria-controls');
+        const sub = qs('#' + id);
+        if (sub) { sub.classList.remove('is-open'); sub.style.display = 'none'; }
       });
     }
 
-    function closeMenu(){
+    function closeMenu() {
+      if (!menu) return;
       menu.classList.remove('is-open');
-      toggle && toggle.setAttribute('aria-expanded','false');
-      backdrop && backdrop.classList.remove('is-open');
-      if (backdrop) backdrop.setAttribute('hidden','');
+      if (toggle) toggle.setAttribute('aria-expanded', 'false');
+      if (backdrop) {
+        backdrop.classList.remove('is-open');
+        backdrop.setAttribute('hidden', '');
+      }
+      document.body.classList.remove('no-scroll');
       closeAllSubmenus();
     }
 
-    // Toggle full menu (mobile/ipad)
-    toggle && toggle.addEventListener('click',()=>{
-      const open=menu.classList.toggle('is-open');
-      toggle.setAttribute('aria-expanded',open);
-      if(backdrop){
-        backdrop.classList.toggle('is-open',open);
-        if(open) backdrop.removeAttribute('hidden'); else backdrop.setAttribute('hidden','');
-      }
-      if(!open) closeAllSubmenus();
-    });
+    if (toggle) {
+      toggle.addEventListener('click', () => {
+        const open = menu.classList.toggle('is-open');
+        toggle.setAttribute('aria-expanded', open);
+        if (backdrop) {
+          backdrop.classList.toggle('is-open', open);
+          if (open) backdrop.removeAttribute('hidden'); else backdrop.setAttribute('hidden', '');
+        }
+        document.body.classList.toggle('no-scroll', open);
+        if (!open) closeAllSubmenus();
+      });
+    }
 
-    // Accordion submenus on small screens; desktop still hover-opens via CSS
-    subBtns.forEach(btn=>{
-      btn.addEventListener('click',()=>{
-        const id=btn.getAttribute('aria-controls');
-        const sub=qs('#'+id);
-        const expanded=btn.getAttribute('aria-expanded')==='true';
-        if(window.matchMedia('(max-width:1024px)').matches){
-          btn.setAttribute('aria-expanded',String(!expanded));
-          if(sub){sub.classList.toggle('is-open',!expanded);sub.style.display=!expanded?'block':'none';}
+    subBtns.forEach(btn => {
+      btn.addEventListener('click', () => {
+        const id = btn.getAttribute('aria-controls');
+        const sub = qs('#' + id);
+        const expanded = btn.getAttribute('aria-expanded') === 'true';
+        if (window.matchMedia('(max-width:1024px)').matches) {
+          btn.setAttribute('aria-expanded', String(!expanded));
+          if (sub) { sub.classList.toggle('is-open', !expanded); sub.style.display = !expanded ? 'block' : 'none'; }
           return;
         }
-        // Desktop click: close others then open this
         closeAllSubmenus();
-        btn.setAttribute('aria-expanded',String(!expanded));
-        if(sub){sub.classList.toggle('is-open',!expanded);sub.style.display=!expanded?'block':'none';}
+        btn.setAttribute('aria-expanded', String(!expanded));
+        if (sub) { sub.classList.toggle('is-open', !expanded); sub.style.display = !expanded ? 'block' : 'none'; }
       });
     });
 
-    // Close on outside click / backdrop click
-    document.addEventListener('click',(e)=>{
-      if(menu && !menu.contains(e.target) && !toggle.contains(e.target)){
+    document.addEventListener('click', (e) => {
+      if (menu && !menu.contains(e.target) && (!toggle || !toggle.contains(e.target))) {
         closeMenu();
       }
-    });
-    backdrop && backdrop.addEventListener('click', closeMenu);
+    }, { passive: true });
+    if (backdrop) backdrop.addEventListener('click', closeMenu, { passive: true });
 
-    // ESC to close
-    document.addEventListener('keydown',(e)=>{
-      if(e.key==='Escape'){
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') {
         closeMenu();
-        toggle && toggle.focus();
+        if (toggle) toggle.focus();
       }
     });
+
+    window.addEventListener('orientationchange', closeMenu);
   })();
 </script>
-<!-- Minimal sticky patch -->
-<style>
-  .ber-topbar{ position: sticky; top: 0; z-index: 1001; }
-  .ber-header{ position: sticky; top: var(--topbar-h, 0px); z-index: 1000; }
-</style>
+
+<!-- === INLINE QUICK SEARCH logic (with More + Clear) === -->
 <script>
-  (function(){
-    var tb = document.querySelector('.ber-topbar');
-    function setVars(){
-      var h = tb ? tb.offsetHeight : 0;
-      document.documentElement.style.setProperty('--topbar-h', h + 'px');
+  (function () {
+    const host = document.getElementById('ber-inline-search');
+    host.innerHTML = `
+    <div class="ber-inline-searchbox" role="search">
+      <label for="ber-searchbox" class="ber-inline-label">Looking for something?</label>
+      <div class="ber-inline-wrap">
+        <!-- search icon -->
+        <svg class="ber-input-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M10 4a6 6 0 104.472 10.056l4.736 4.736 1.414-1.414-4.736-4.736A6 6 0 0010 4zm0 2a4 4 0 110 8 4 4 0 010-8z" fill="currentColor"/></svg>
+        <input id="ber-searchbox" type="text"
+          placeholder="Ask anything: renew membership, RPAC, MLS, classes…"
+          aria-label="Quick Links Search" autocomplete="off" aria-haspopup="listbox" aria-expanded="false" enterkeyhint="search">
+        <div id="ber-suggest" class="ber-inline-suggest" hidden aria-live="polite">
+          <div class="ber-suggest-title">Try one of these</div>
+          <div class="ber-suggest-list" id="ber-suggest-list"></div>
+          <div class="ber-suggest-actions">
+            <button id="ber-more-btn" type="button" class="ber-more-btn" aria-label="Show more example questions">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M11 11V6h2v5h5v2h-5v5h-2v-5H6v-2h5z"/></svg>
+              More examples
+            </button>
+          </div>
+        </div>
+        <div id="ber-search-results" class="ber-inline-results" hidden role="listbox"></div>
+      </div>
+    </div>`;
+
+    const input = document.getElementById('ber-searchbox');
+    const results = document.getElementById('ber-search-results');
+    const suggest = document.getElementById('ber-suggest');
+    const suggestList = document.getElementById('ber-suggest-list');
+    const moreBtn = document.getElementById('ber-more-btn');
+
+    /* Dataset */
+    const berLinks = [
+      {
+        title: "Member Portal",
+        category: "Membership",
+        url: "https://members.bonitaesterorealtors.com/MIC/Login",
+        keywords: [
+          "member", "portal", "login", "account", "renew", "renewal",
+          "pay", "dues", "invoice", "profile", "password", "payment",
+          "bill", "mic"
+        ],
+        questions: [
+          "how do I renew my membership",
+          "pay my dues",
+          "where do I pay dues",
+          "log in to member portal",
+          "update my info",
+          "change password",
+          "see my invoices",
+          "view my bills",
+          "membership payment",
+          "account access",
+          "renew membership online",
+          "pay my membership invoice",
+          "update contact information",
+          "login to my account",
+          "where do I find membership payment"
+        ]
+      },
+      {
+        title: "Join BER",
+        category: "Membership",
+        url: "https://www.bonitaesterorealtors.com/join-bser/",
+        keywords: [
+          "join", "apply", "become member", "sign up", "application",
+          "membership", "membership benefits", "what's included",
+          "member benefits", "what membership do I need",
+          "membership costs", "dues", "fees", "how to join"
+        ],
+        questions: [
+          "become a member",
+          "apply for membership",
+          "join association",
+          "join bonita springs estero realtors",
+          "what are the membership benefits",
+          "how much does membership cost",
+          "which membership do I need",
+          "compare membership types",
+          "how to join BER",
+          "becoming a member process",
+          "apply to be a realtor",
+          "what does membership include",
+          "how to get started with membership",
+          "cost to join",
+          "membership application process"
+        ]
+      },
+      {
+        title: "Continuing Education (License / CE)",
+        category: "Education",
+        url: "https://www.bonitaesterorealtors.com/continuing-education-2/",
+        keywords: [
+          "license renewal", "renew license", "ce credits",
+          "post-licensing", "post licensing", "pre-licensing",
+          "pre licensing", "real estate license", "get my real estate license"
+        ],
+        questions: [
+          "renew my real estate license",
+          "get my real estate license",
+          "how to earn ce credits",
+          "post-licensing requirements",
+          "pre-licensing course",
+          "what are CE requirements",
+          "where to take continuing education",
+          "CE credits needed",
+          "license renewal classes",
+          "online CE courses",
+          "post licensing vs pre licensing",
+          "exam prep courses",
+          "CE deadlines",
+          "how to register for CE classes",
+          "CE requirements for Florida real estate license"
+        ]
+      },
+      {
+        title: "Event Calendar (Classes & Education)",
+        category: "Events",
+        url: "https://members.bonitaesterorealtors.com/bercalendar",
+        keywords: [
+          "calendar", "classes", "events", "training", "seminars",
+          "upcoming", "schedule", "register", "education",
+          "education calendar", "education schedule", "education classes",
+          "class calendar", "training schedule"
+        ],
+        questions: [
+          "see upcoming events",
+          "class calendar",
+          "training schedule",
+          "what classes are available",
+          "find education classes",
+          "register for a class",
+          "education events",
+          "view event calendar",
+          "upcoming training sessions",
+          "what events are happening",
+          "how to register for events",
+          "class schedule",
+          "browse events by date",
+          "calendar of seminars",
+          "education events near me"
+        ]
+      },
+      {
+        title: "MLS Login",
+        category: "MLS",
+        url: "https://matrix.swflamls.com/matrix/login.aspx",
+        keywords: [
+          "mls", "matrix", "login", "listings",
+          "property input", "add listing", "access mls"
+        ],
+        questions: [
+          "how to log into mls",
+          "open matrix",
+          "input a listing",
+          "enter new listing",
+          "mls access",
+          "login to SWFL MLS",
+          "mls login link",
+          "where to sign into MLS",
+          "enter listing into MLS",
+          "access property search",
+          "reset my MLS password",
+          "matrix login page",
+          "how to add a listing to MLS",
+          "connect to MLS system",
+          "open MLS portal"
+        ]
+      },
+      {
+        title: "MLS Rules & Regulations",
+        category: "MLS",
+        url: "https://www.bonitaesterorealtors.com/wp-content/uploads/2025/01/2025-MLS-Rules.pdf",
+        keywords: [
+          "mls rules", "regulations", "policies",
+          "standards", "compliance"
+        ],
+        questions: [
+          "where to find mls rules",
+          "mls policies",
+          "mls compliance rules",
+          "matrix guidelines",
+          "download MLS rules",
+          "MLS compliance handbook",
+          "matrix rules",
+          "what are the MLS policies",
+          "MLS violation rules",
+          "where to find MLS standards",
+          "MLS guidelines PDF",
+          "rules for listing a property",
+          "MLS rulebook",
+          "MLS regs 2025",
+          "MLS compliance requirements"
+        ]
+      },
+      {
+        title: "RPAC",
+        category: "Advocacy",
+        url: "https://www.bonitaesterorealtors.com/rpac/",
+        keywords: [
+          "rpac", "advocacy", "donate",
+          "political action", "support"
+        ],
+        questions: [
+          "what is rpac",
+          "donate to rpac",
+          "contribute to rpac",
+          "support advocacy",
+          "what does RPAC stand for",
+          "RPAC donation page",
+          "support RPAC cause",
+          "how to contribute to RPAC",
+          "RPAC membership",
+          "what is RPAC's mission",
+          "why donate to RPAC",
+          "political advocacy contributions",
+          "RPAC fundraising",
+          "RPAC events",
+          "RPAC involvement"
+        ]
+      },
+      {
+        title: "Market Reports",
+        category: "Research",
+        url: "https://bonitaesterorealtors.com/market-reports/",
+        keywords: [
+          "market", "statistics", "data",
+          "trends", "reports", "local housing"
+        ],
+        questions: [
+          "see housing data",
+          "local market trends",
+          "monthly housing report",
+          "market stats bonita springs",
+          "housing market stats",
+          "view market reports",
+          "latest housing statistics",
+          "local real estate trends",
+          "how to access market reports",
+          "market data for Bonita Springs",
+          "monthly stats report",
+          "download market report",
+          "housing data analysis",
+          "current market conditions",
+          "regional market statistics"
+        ]
+      },
+      {
+        title: "Realtor Store",
+        category: "Resources",
+        url: "https://bonitaspringsesterorealtorsfl.growthzoneapp.com/realtorstore/",
+        keywords: [
+          "store", "shop", "supplies",
+          "lockbox", "merchandise", "signs"
+        ],
+        questions: [
+          "buy realtor supplies",
+          "purchase signs",
+          "get lockboxes",
+          "where is the store",
+          "where to buy realtor supplies",
+          "order real estate signs",
+          "purchase lockbox",
+          "store hours and location",
+          "get realtor merchandise",
+          "real estate store items",
+          "where is the realtor store located",
+          "buy open house signs",
+          "shop for realtor gear",
+          "order supplies online",
+          "store contact"
+        ]
+      },
+      {
+        title: "Affiliate Application",
+        category: "Affiliates",
+        url: "https://bonitaspringsesterorealtorsfl.growthzoneapp.com/ap/Membership/Application/4pVedor8",
+        keywords: [
+          "affiliate", "vendor", "apply",
+          "join affiliate", "partner"
+        ],
+        questions: [
+          "join as an affiliate",
+          "apply as a vendor",
+          "affiliate membership",
+          "become affiliate",
+          "how to become an affiliate",
+          "affiliate application form",
+          "vendor membership",
+          "partner application process",
+          "apply to be a vendor",
+          "affiliate benefits",
+          "affiliate membership cost",
+          "qualify as affiliate",
+          "steps to join as affiliate",
+          "affiliate sign‑up",
+          "affiliate registration"
+        ]
+      },
+      {
+        title: "Leadership Academy",
+        category: "Leadership",
+        url: "https://www.bonitaesterorealtors.com/leadership-academy/",
+        keywords: [
+          "leadership", "academy", "program",
+          "development", "training"
+        ],
+        questions: [
+          "join leadership academy",
+          "leadership training",
+          "realtor leadership program",
+          "professional development",
+          "apply for leadership academy",
+          "leadership academy details",
+          "what is leadership academy",
+          "leadership training program",
+          "professional development program",
+          "academy schedule",
+          "leadership classes",
+          "leadership program requirements",
+          "who can join leadership academy",
+          "how to enroll in leadership academy",
+          "leadership academy cost"
+        ]
+      },
+      {
+        title: "BER Global Network",
+        category: "Global",
+        url: "https://www.bonitaesterorealtors.com/b-e-a-r-global-network/",
+        keywords: [
+          "global", "international", "foreign buyers",
+          "network", "global business", "gbc"
+        ],
+        questions: [
+          "international real estate network",
+          "connect with foreign buyers",
+          "global business council",
+          "global network membership",
+          "international real estate resources",
+          "foreign buyer network",
+          "join global business council",
+          "global network benefits",
+          "global real estate group",
+          "network for international clients",
+          "attend global network events",
+          "global business training",
+          "global membership cost",
+          "connect with international buyers",
+          "learn about global real estate"
+        ]
+      },
+      {
+        title: "Our Commitment to Diversity",
+        category: "Diversity",
+        url: "https://www.bonitaesterorealtors.com/our-commitment-to-diversity/",
+        keywords: [
+          "diversity", "inclusion", "global diversity",
+          "equal opportunity", "commitment"
+        ],
+        questions: [
+          "diversity and inclusion at ber",
+          "global diversity page",
+          "diversity initiatives",
+          "inclusion policy",
+          "equal opportunity statement",
+          "diversity programs",
+          "BER diversity commitment",
+          "how does BER support diversity",
+          "diversity resources",
+          "diversity page",
+          "commitment to diversity and inclusion",
+          "diversity mission",
+          "equal opportunity pledge",
+          "diversity statement",
+          "DEI at BER"
+        ]
+      },
+      {
+        title: "Important Links & Contacts",
+        category: "Support",
+        url: "https://www.bonitaesterorealtors.com/important-links-and-contacts/",
+        keywords: [
+          "links", "contacts", "help",
+          "support", "phone", "email", "directory"
+        ],
+        questions: [
+          "who do I contact",
+          "support number",
+          "board staff directory",
+          "find contact info",
+          "important links",
+          "contact BER",
+          "important phone numbers",
+          "support contact",
+          "helpdesk email",
+          "association contacts",
+          "links to resources",
+          "staff directory",
+          "who do I call for help",
+          "important contact list",
+          "member services contact"
+        ]
+      },
+      {
+        title: "Home Buyers & Sellers",
+        category: "Public",
+        url: "https://www.bonitaesterorealtors.com/homebuyerssellers/",
+        keywords: [
+          "buyers", "sellers", "homeowner",
+          "resources", "guide", "advice"
+        ],
+        questions: [
+          "resources for buyers",
+          "resources for sellers",
+          "homebuyer guide",
+          "homeseller tips",
+          "homebuyer resources",
+          "seller resources",
+          "advice for buyers",
+          "selling tips",
+          "home buying guide",
+          "home selling guide",
+          "buyer and seller information",
+          "guides for homeowners",
+          "homeowner resources",
+          "how to buy a home",
+          "how to sell a home"
+        ]
+      },
+      {
+        title: "Video Library",
+        category: "Resources",
+        url: "https://bonitaesterorealtors.com/ber-shorts-library/",
+        keywords: [
+          "video", "library", "shorts", "tutorials", "tech tip",
+          "what to know", "guides", "how to", "youtube"
+        ],
+        questions: [
+          "watch video tutorials",
+          "tech tip tuesday videos",
+          "what to know wednesday videos",
+          "video guides",
+          "how to videos",
+          "shorts library",
+          "view ber videos",
+          "real estate video tips",
+          "where are the tutorial videos",
+          "watch tech tips"
+        ]
+      },
+      {
+        title: "Guided Walkthroughs",
+        category: "Resources",
+        url: "https://bonitaesterorealtors.com/ber-guided-walkthroughs/",
+        keywords: [
+          "guides", "walkthroughs", "written guides", "step by step",
+          "scribe", "tutorials", "instructions", "documentation",
+          "how to", "pdf"
+        ],
+        questions: [
+          "read written guides",
+          "step by step tutorials",
+          "how to use matrix guide",
+          "agent 3000 guides",
+          "view written instructions",
+          "guided walkthroughs",
+          "scribe guides",
+          "documentation for mls",
+          "find written tutorials",
+          "read how to guides"
+        ]
+      },
+      {
+        title: "Join a Committee",
+        category: "Membership",
+        url: "https://bonitaspringsesterorealtorsfl.growthzoneapp.com/ap/Form/Fill/LbnDeCKL",
+        keywords: [
+          "committee", "volunteer", "serve",
+          "get involved", "leadership"
+        ],
+        questions: [
+          "how to join a committee",
+          "volunteer opportunities",
+          "serve on a committee",
+          "committee application",
+          "volunteer for a committee",
+          "committee sign up",
+          "how to get involved with BER",
+          "join committees",
+          "serve on a committee",
+          "committee membership",
+          "volunteer opportunities at BER",
+          "committee involvement",
+          "committee volunteer sign up",
+          "committee service",
+          "participate on a committee"
+        ]
+      },
+      {
+        title: "New Sales Associate Application",
+        category: "Membership",
+        url: "https://bonitaspringsesterorealtorsfl.growthzoneapp.com/ap/Membership/Application/DLb3lMr7",
+        keywords: [
+          "new agent", "sales associate",
+          "application", "join realtor"
+        ],
+        questions: [
+          "apply as new sales associate",
+          "new agent membership",
+          "sales associate application",
+          "new agent application form",
+          "join as a sales associate",
+          "become a new real estate agent",
+          "sales associate membership cost",
+          "apply to be a new agent",
+          "sales associate benefits",
+          "new agent form",
+          "sales associate registration",
+          "requirements for new agents",
+          "new sales associate sign up",
+          "how to join as a new agent",
+          "sales associate fee"
+        ]
+      },
+      {
+        title: "Office/Broker Application",
+        category: "Membership",
+        url: "https://bonitaspringsesterorealtorsfl.growthzoneapp.com/ap/Membership/Application/MrDg3QLx",
+        keywords: [
+          "office", "broker", "application",
+          "new office"
+        ],
+        questions: [
+          "apply as a broker",
+          "open office application",
+          "office membership",
+          "broker office application form",
+          "apply for office membership",
+          "start a new brokerage with BER",
+          "office membership cost",
+          "broker application requirements",
+          "open an office membership",
+          "office registration",
+          "join as a brokerage",
+          "become a broker member",
+          "office membership application",
+          "broker membership process",
+          "brokerage sign up"
+        ]
+      },
+      {
+        title: "Property Search",
+        category: "Public",
+        url: "https://www.bonitaesterorealtors.com/simplyrets-listings/",
+        keywords: [
+          "property", "homes", "search",
+          "mls search", "listings", "buyers"
+        ],
+        questions: [
+          "search for homes",
+          "find listings",
+          "mls search on site",
+          "search properties",
+          "home search tool",
+          "MLS property search",
+          "find homes for sale",
+          "house search",
+          "search real estate listings",
+          "property search website",
+          "MLS search",
+          "home listings search",
+          "search by address",
+          "property finder",
+          "find houses online"
+        ]
+      },
+      {
+        title: "MLS Tips & Recordings",
+        category: "MLS",
+        url: "https://corelogic.thoughtindustries.com/learn/dashboard",
+        keywords: [
+          "mls tips", "recordings", "training",
+          "videos", "matrix help"
+        ],
+        questions: [
+          "where are mls trainings",
+          "watch matrix recordings",
+          "mls how to videos",
+          "MLS training videos",
+          "matrix tips and tricks",
+          "MLS tutorial",
+          "learn MLS features",
+          "matrix recordings",
+          "MLS video library",
+          "watch MLS tutorials",
+          "MLS help videos",
+          "matrix help center",
+          "MLS on‑demand training",
+          "online MLS training",
+          "matrix training resources"
+        ]
+      },
+      {
+        title: "BER News & Articles",
+        category: "News",
+        url: "https://bonitaesterorealtors.com/",
+        keywords: [
+          "news", "articles", "updates",
+          "announcements", "blog"
+        ],
+        questions: [
+          "latest news",
+          "association updates",
+          "recent articles",
+          "news and articles",
+          "association news updates",
+          "latest BER articles",
+          "recent news posts",
+          "news blog",
+          "association announcements",
+          "BER updates",
+          "real estate news",
+          "what’s new at BER",
+          "read latest articles",
+          "news homepage",
+          "association blog"
+        ]
+      },
+      {
+        title: "Floor Plans Library",
+        category: "Resources",
+        url: "https://bonitaesterorealtors.com/document-library/",
+        keywords: [
+          "floor plans", "templates", "documents",
+          "library", "forms"
+        ],
+        questions: [
+          "download floor plans",
+          "find floor plan templates",
+          "document library",
+          "download floor plan templates",
+          "floor plan documents",
+          "floor plan resources",
+          "find floor plans",
+          "floor plan library access",
+          "floor plan drawings",
+          "home floor plan templates",
+          "floor plan library page",
+          "floor plan files",
+          "floor plan database",
+          "floor plan docs",
+          "access document library"
+        ]
+      },
+      {
+        title: "BER BOX TRUCK Rentals",
+        category: "Logistics",
+        url: "https://join.bonitaesterorealtors.com/ber-truck",
+        keywords: [
+          "box truck", "truck rental",
+          "moving", "move", "ber truck", "rent truck"
+        ],
+        questions: [
+          "rent the ber box truck",
+          "how to book the box truck",
+          "moving truck rental",
+          "book the BER box truck",
+          "box truck rental cost",
+          "truck rental schedule",
+          "reserve moving truck",
+          "moving truck booking",
+          "BER box truck availability",
+          "truck rental reservation",
+          "box truck rental process",
+          "how to rent the box truck",
+          "book a moving truck",
+          "truck rental details",
+          "box truck guidelines"
+        ]
+      },
+      /* New items (already at 15 questions each) */
+      {
+        title: "Reciprocal Listings",
+        category: "MLS",
+        url: "https://bonitaesterorealtors.com/reciprocal-application-orientation/",
+        keywords: [
+          "reciprocal", "listing", "reciprocal listings",
+          "out-of-area access", "temporary access",
+          "mls reciprocity", "mls agreement", "form"
+        ],
+        questions: [
+          "how do I get reciprocal MLS access",
+          "apply for a reciprocal listing",
+          "I’m from another board—can I enter a listing",
+          "where is the reciprocal listing form",
+          "reciprocal membership process",
+          "reciprocal listing fee information",
+          "can non‑members list on your MLS",
+          "how long does reciprocal access last",
+          "do I need my broker’s approval for a reciprocal listing",
+          "what are the requirements for reciprocal listings",
+          "reciprocal listing cost per listing",
+          "how do I submit photos for a reciprocal listing",
+          "do I need a letter of good standing",
+          "where do I pay for reciprocal listing",
+          "temporary MLS access request"
+        ]
+      },
+      {
+        title: "Media Room Rental",
+        category: "Facilities",
+        url: "https://bonitaspringsesterorealtorsfl.growthzoneapp.com/ap/Form/Fill/rOxknh2p",
+        keywords: [
+          "media room", "studio rental", "podcast room",
+          "video equipment", "meeting space",
+          "room reservation", "rent studio", "recording space"
+        ],
+        questions: [
+          "how do I book the media room",
+          "rent the BER media room",
+          "reserve a studio for recording",
+          "does BER offer podcast recording space",
+          "media room booking form",
+          "how much is the media room rental",
+          "what equipment is included in the media room",
+          "schedule time in the media studio",
+          "rent a room for video shoot",
+          "book a podcast studio",
+          "media room availability calendar",
+          "reserve a space for filming",
+          "can affiliates rent the media room",
+          "media room policies",
+          "is tech support available for media room"
+        ]
+      },
+      {
+        title: "Broker/Manager Resources",
+        category: "Broker Tools",
+        url: "https://www.bonitaesterorealtors.com/broker-manager/",
+        keywords: [
+          "broker resources", "manager tools", "risk management",
+          "broker compliance", "office management",
+          "legal resources", "broker forms", "training"
+        ],
+        questions: [
+          "resources for managing brokers",
+          "what tools do brokers have",
+          "broker manager page",
+          "help for office managers",
+          "risk management resources",
+          "broker compliance guidelines",
+          "broker training materials",
+          "find broker forms",
+          "information for designated brokers",
+          "best practices for managing an office",
+          "where can I find legal resources for brokers",
+          "ADA and fair housing resources",
+          "broker safety resources",
+          "how to handle arbitration and complaints",
+          "broker involvement program information"
+        ]
+      },
+      {
+        title: "Affiliate Directory",
+        category: "Affiliates",
+        url: "https://members.bonitaesterorealtors.com/affiliatedirectory",
+        keywords: [
+          "affiliate directory", "vendor list", "trusted vendors",
+          "business partners", "service providers", "affiliate members"
+        ],
+        questions: [
+          "find a local affiliate",
+          "search the vendor directory",
+          "who are BER’s affiliate members",
+          "look up an affiliate by name",
+          "where is the affiliate directory",
+          "find photographers and inspectors",
+          "browse affiliate companies",
+          "trusted service providers list",
+          "affiliate contact information",
+          "affiliate members near me",
+          "directory of partner businesses",
+          "how to contact an affiliate",
+          "find inspectors and lenders",
+          "affiliate company search",
+          "affiliate network listing"
+        ]
+      },
+      {
+        title: "Realtor Directory",
+        category: "Membership",
+        url: "https://bonitaspringsesterorealtorsfl.growthzoneapp.com/realtordirectory/Find",
+        keywords: [
+          "realtor directory", "agent search", "member lookup",
+          "find a realtor", "agent directory", "member list"
+        ],
+        questions: [
+          "find a local REALTOR",
+          "look up a real estate agent",
+          "realtor member directory",
+          "search agents by name",
+          "realtor lookup tool",
+          "where is the realtor directory",
+          "find a realtor near Bonita Springs",
+          "agent roster search",
+          "get contact info for agents",
+          "search members by office",
+          "how to find a buyer’s agent",
+          "real estate agent contact list",
+          "directory of BER members",
+          "agent profile lookup",
+          "realtor search by specialty"
+        ]
+      },
+      {
+        title: "Broker Directory",
+        category: "Membership",
+        url: "https://bonitaspringsesterorealtorsfl.growthzoneapp.com/brokerdirectory/Find",
+        keywords: [
+          "broker directory", "broker list", "find broker",
+          "brokerage lookup", "office directory"
+        ],
+        questions: [
+          "search for a broker",
+          "broker member directory",
+          "find a broker in Bonita or Estero",
+          "brokerage company search",
+          "where is the broker directory",
+          "lookup a managing broker",
+          "broker office contact info",
+          "list of member brokers",
+          "find broker by name",
+          "brokerage contact information",
+          "broker lookup tool",
+          "broker office locations",
+          "how to contact a broker",
+          "find broker near me",
+          "search brokers by specialty"
+        ]
+      },
+      {
+        title: "Professional Standards",
+        category: "Compliance",
+        url: "https://www.bonitaesterorealtors.com/professional-standards/",
+        keywords: [
+          "professional standards", "ethics complaint", "grievance",
+          "code of ethics", "disciplinary process", "complaint form"
+        ],
+        questions: [
+          "how do I file an ethics complaint",
+          "report a REALTOR for misconduct",
+          "what is the professional standards process",
+          "where can I find the code of ethics",
+          "how to submit a grievance",
+          "rules for professional conduct",
+          "ethics violation procedures",
+          "who handles ethics complaints",
+          "professional standards committee",
+          "ethics complaint form",
+          "learn about NAR code of ethics",
+          "ethics training requirements",
+          "what happens after filing a complaint",
+          "report unprofessional behavior",
+          "ethics rules for REALTORS"
+        ]
+      },
+      {
+        title: "Facility Rental Rates & Forms",
+        category: "Facilities",
+        url: "https://www.bonitaesterorealtors.com/facility-rental-rates-and-forms/",
+        keywords: [
+          "facility rental", "meeting room", "classroom rental",
+          "rental rates", "facility forms", "room booking"
+        ],
+        questions: [
+          "rent a meeting room",
+          "what are the facility rental rates",
+          "how to book classroom space",
+          "facility rental forms",
+          "meeting space pricing",
+          "rent a board room",
+          "training room availability",
+          "facility rental policy",
+          "reserve space at the association",
+          "book a classroom",
+          "rent meeting space for event",
+          "facility rental procedures",
+          "conference room rates",
+          "facility reservation form",
+          "find rental fee information"
+        ]
+      },
+      {
+        title: "Supra Lockboxes",
+        category: "MLS",
+        url: "https://www.bonitaesterorealtors.com/supra/",
+        keywords: [
+          "supra", "lockbox", "keybox",
+          "supra lockbox", "access keys", "e‑key"
+        ],
+        questions: [
+          "how do I get a supra lockbox",
+          "purchase a supra keybox",
+          "supra e‑key access",
+          "supra lockbox program",
+          "supra pricing",
+          "where to obtain supra keys",
+          "return a supra lockbox",
+          "supra key app download",
+          "lockbox troubleshooting",
+          "supra FAQs",
+          "activate my supra key",
+          "supra support contact",
+          "how to assign a lockbox",
+          "supra lockbox instructions",
+          "supra user guide"
+        ]
+      },
+      {
+        title: "Social Media Policy",
+        category: "Legal",
+        url: "https://www.bonitaesterorealtors.com/social-media-policy/",
+        keywords: [
+          "social media policy", "online conduct", "guidelines",
+          "posting rules", "communications policy"
+        ],
+        questions: [
+          "what is the BER social media policy",
+          "guidelines for posting online",
+          "rules for social media use",
+          "social media do’s and don’ts",
+          "policy on sharing listings",
+          "can I advertise on social media",
+          "social media rules for REALTORS",
+          "social media compliance",
+          "social media advertising guidelines",
+          "online conduct policy",
+          "realtor social media restrictions",
+          "how to stay compliant on social media",
+          "post approval requirements",
+          "communication guidelines",
+          "social media best practices"
+        ]
+      }
+    ];
+
+    /* Helpers */
+    function normalize(str) { return (str || "").toLowerCase().replace(/[^\w\s]/g, "").trim(); }
+    function score(item, query) {
+      const q = normalize(query);
+      const kws = [...(item.keywords || []), ...(item.questions || [])];
+      let pts = 0;
+      for (const k of kws) {
+        const s = normalize(k);
+        if (s.includes(q)) pts += 2;
+        else if (q && q.includes(s)) pts += 1;
+      }
+      if (item.title.toLowerCase().includes(q)) pts += 2;
+      return pts;
     }
-    window.addEventListener('load', setVars, { once: true });
-    window.addEventListener('resize', setVars);
-    setVars();
+    function unique(arr) { return Array.from(new Set(arr)); }
+    function shuffle(a) { for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1));[a[i], a[j]] = [a[j], a[i]]; } return a; }
+
+    /* Suggestions pool + paging */
+    const allQuestions = unique(
+      berLinks.flatMap(l => l.questions || []).map(q => q.replace(/\s+/g, ' ').trim())
+    );
+    let suggestPool = shuffle(allQuestions.slice());
+    let displayCount = 16;
+    const PAGE_SIZE = 12;
+
+    function renderSuggestions(reset = false) {
+      if (reset) {
+        suggestPool = shuffle(allQuestions.slice());
+        displayCount = 16;
+      }
+      suggestList.innerHTML = "";
+      const end = Math.min(displayCount, suggestPool.length);
+      for (let i = 0; i < end; i++) {
+        const q = suggestPool[i];
+        const btn = document.createElement('button');
+        btn.type = "button";
+        btn.className = "ber-suggest-chip";
+        btn.textContent = q.charAt(0).toUpperCase() + q.slice(1);
+        btn.addEventListener('click', () => {
+          input.value = q;
+          suggest.hidden = true;
+          runSearch();
+          input.focus();
+        });
+        suggestList.appendChild(btn);
+      }
+      if (moreBtn) {
+        const moreLeft = suggestPool.length - displayCount;
+        moreBtn.disabled = moreLeft <= 0;
+      }
+    }
+
+    /* Events */
+    let debounce;
+    input.addEventListener('focus', () => {
+      if (!normalize(input.value)) {
+        renderSuggestions(true);
+        suggest.hidden = false;
+        results.hidden = true;
+        input.setAttribute('aria-expanded', 'true');
+      }
+    });
+
+    input.addEventListener('input', () => {
+      clearTimeout(debounce);
+      const hasText = !!normalize(input.value);
+      suggest.hidden = hasText;
+      input.setAttribute('aria-expanded', String(!hasText));
+      debounce = setTimeout(() => {
+        if (hasText) { runSearch(); } else { results.hidden = true; if (document.activeElement === input) { renderSuggestions(true); suggest.hidden = false; } }
+      }, 120);
+    });
+
+    if (moreBtn) {
+      moreBtn.addEventListener('click', () => {
+        displayCount += PAGE_SIZE;
+        renderSuggestions(false);
+        suggest.hidden = false;
+        input.focus();
+        suggest.scrollTop = suggest.scrollHeight;
+      });
+    }
+
+    /* CREATE CLEAR BUTTON + render results */
+    function appendClearButton() {
+      const actions = document.createElement('div');
+      actions.className = 'ber-results-actions';
+      const btn = document.createElement('button');
+      btn.type = 'button';
+      btn.className = 'ber-clear-btn';
+      btn.setAttribute('aria-label', 'Clear search');
+      btn.innerHTML = `
+      <svg viewBox="0 0 24 24" aria-hidden="true">
+        <path fill="currentColor" d="M6.4 5l12.6 12.6-1.4 1.4L5 6.4 6.4 5zm12.6 1.4L6.4 19.1 5 17.7 17.7 5 19 6.4z"/>
+      </svg>
+      Clear
+    `;
+      btn.addEventListener('click', () => {
+        input.value = '';
+        results.hidden = true;
+        results.innerHTML = '';
+        renderSuggestions(true);
+        suggest.hidden = false;
+        input.focus();
+        input.dispatchEvent(new Event('input'));
+      });
+      actions.appendChild(btn);
+      results.appendChild(actions);
+    }
+
+    function runSearch() {
+      const val = normalize(input.value);
+      results.innerHTML = "";
+      if (!val) { results.hidden = true; return; }
+
+      const matched = berLinks.map(l => ({ item: l, pts: score(l, val) }))
+        .filter(o => o.pts > 0)
+        .sort((a, b) => b.pts - a.pts)
+        .slice(0, 12);
+
+      if (matched.length === 0) {
+        const p = document.createElement('p');
+        p.style.cssText = "padding:12px;text-align:center;color:var(--muted,#6b7280)";
+        p.textContent = 'No matches found. Try “MLS”, “Join BER”, or “Event Calendar”.';
+        results.appendChild(p);
+        appendClearButton();
+        results.hidden = false;
+        return;
+      }
+
+      // Group by category
+      const groups = {};
+      matched.forEach(m => {
+        const cat = m.item.category || "Other";
+        (groups[cat] ||= []).push(m.item);
+      });
+
+      for (const cat in groups) {
+        const sec = document.createElement('div');
+        const slug = (cat || 'Other').toLowerCase().replace(/&/g, 'and').replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '');
+        const h = document.createElement('h5');
+        h.className = `cat-${slug || 'other'}`;
+        h.textContent = cat;
+        sec.appendChild(h);
+
+        groups[cat].forEach(link => {
+          const a = document.createElement('a');
+          a.href = link.url;
+          a.className = "ber-inline-result";
+          a.textContent = link.title;
+          a.setAttribute('role', 'option');
+          sec.appendChild(a);
+        });
+        results.appendChild(sec);
+      }
+
+      /* add red CLEAR button at the bottom of the popup */
+      appendClearButton();
+      results.hidden = false;
+    }
+
+    // Close panels on outside click, ESC, or scroll
+    document.addEventListener('click', e => {
+      const within = host.contains(e.target);
+      if (!within) {
+        results.hidden = true;
+        suggest.hidden = true;
+        input.setAttribute('aria-expanded', 'false');
+      }
+    }, { passive: true });
+
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') {
+        results.hidden = true;
+        suggest.hidden = true;
+        input.setAttribute('aria-expanded', 'false');
+        input.blur();
+      }
+    });
+
+    window.addEventListener('scroll', () => {
+      results.hidden = true;
+      suggest.hidden = true;
+      input.setAttribute('aria-expanded', 'false');
+    }, { passive: true });
   })();
 </script>
