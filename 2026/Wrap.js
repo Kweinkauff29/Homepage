@@ -222,7 +222,7 @@ async function listDailyTasks(env, searchParams) {
         const start = `${monthKey}-01`;
         const end = `${monthKey}-31`;
 
-        let query = `
+        const query = `
     SELECT
       dt.*,
       u_created.name   AS created_by_name,
@@ -236,13 +236,14 @@ async function listDailyTasks(env, searchParams) {
     LEFT JOIN users u_assigner ON dt.assigned_by_id = u_assigner.id
     WHERE dt.task_date BETWEEN ? AND ?
   `;
+        let whereClause = "";
         const params = [start, end];
 
         if (assignedToId) {
             // Show tasks where:
             // - they are the primary assigned_to_id, OR
             // - they appear in the multi-assignee join table
-            query += `
+            whereClause += `
       AND (
         dt.assigned_to_id = ?
         OR EXISTS (
@@ -256,9 +257,24 @@ async function listDailyTasks(env, searchParams) {
             params.push(assignedToId, assignedToId);
         }
 
-        query += " ORDER BY dt.task_date, dt.id";
+        // Sorting:
+        // 1. Priority DESC (3 > 2 > 1)
+        // 2. Status (pending, in_progress, then done/blocked)
+        // 3. Task Time (if any)
+        // 4. Created At
+        const finalQuery = query + whereClause + `
+    ORDER BY
+      COALESCE(dt.priority, 1) DESC,
+      CASE
+        WHEN dt.status = 'pending' THEN 1
+        WHEN dt.status = 'in_progress' THEN 2
+        ELSE 3
+      END,
+      dt.task_time IS NULL, dt.task_time,
+      dt.created_at
+  `;
 
-        const { results } = await env.WRAP_DB.prepare(query).bind(...params).all();
+        const { results } = await env.WRAP_DB.prepare(finalQuery).bind(...params).all();
 
         if (!results.length) {
             return json([]);
@@ -375,6 +391,9 @@ async function createDailyTask(request, env) {
         assigned_to_id,
         assigned_by_id,
         assignee_ids, // optional array of user IDs for multi-assign
+        linked_monthly_goal_id, // NEW
+        color,
+        priority
     } = body || {};
 
     // --- NEW: Auth / Look up user from header ---
@@ -451,6 +470,9 @@ async function createDailyTask(request, env) {
         normalizedStatus, // 9 status
         now,            // 10 created_at
         now,            // 11 updated_at
+        linked_monthly_goal_id || null, // 12
+        color || null, // 13
+        priority || 1 // 14
     ];
 
     // HARD GUARD: if anything is still undefined, we bail before D1
@@ -467,8 +489,8 @@ async function createDailyTask(request, env) {
       (title, notes, task_date, task_time,
        created_by_id, assigned_to_id, assigned_by_id,
        assigned_at, status, completion_notified,
-       created_at, updated_at)
-    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, 0, ?, ?)
+       created_at, updated_at, linked_monthly_goal_id, color, priority)
+    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, 0, ?, ?, ?, ?, ?)
   `);
 
     const info = await stmt.bind(...values).run();
@@ -510,6 +532,9 @@ async function updateDailyTask(request, env, id, ctx) {
     const notes = body.notes ?? existing.notes;
     const task_date = body.task_date ?? existing.task_date;
     const task_time = body.task_time !== undefined ? body.task_time : existing.task_time; // Allow null to clear time
+    const linked_monthly_goal_id = body.linked_monthly_goal_id !== undefined ? body.linked_monthly_goal_id : existing.linked_monthly_goal_id;
+    const color = body.color !== undefined ? body.color : existing.color;
+    const priority = body.priority !== undefined ? body.priority : existing.priority;
 
     let assigned_to_id = body.assigned_to_id ?? existing.assigned_to_id;
     assigned_to_id = Number(assigned_to_id);
@@ -533,7 +558,8 @@ async function updateDailyTask(request, env, id, ctx) {
         .prepare(`
       UPDATE daily_tasks
       SET title = ?, notes = ?, task_date = ?, task_time = ?, assigned_to_id = ?, status = ?,
-          completed_at = ?, completion_notified = ?, updated_at = ?
+          completed_at = ?, completion_notified = ?, updated_at = ?,
+          linked_monthly_goal_id = ?, color = ?, priority = ?
       WHERE id = ?
     `)
         .bind(
@@ -546,6 +572,9 @@ async function updateDailyTask(request, env, id, ctx) {
             completed_at,
             completion_notified,
             nowIso,
+            linked_monthly_goal_id,
+            color || null,
+            priority || 1,
             id
         )
         .run();
@@ -760,181 +789,47 @@ async function updateDailySubtask(request, env, subtaskId) {
     return json(results[0]);
 }
 
-/* ---------- MONTHLY GOALS ---------- */
-
-async function listMonthlyGoals(env, searchParams) {
-    const monthKey = searchParams.get("month");
-    const ownerIdRaw = searchParams.get("ownerId");
-
-    if (!monthKey) {
-        return json({ error: "month query param required" }, 400);
-    }
-
-    let ownerId = null;
-    if (ownerIdRaw) {
-        const n = Number(ownerIdRaw);
-        if (!Number.isInteger(n) || n <= 0) {
-            return json({ error: "ownerId must be a positive integer" }, 400);
-        }
-        ownerId = n;
-    }
-
-    let query = `
-    SELECT mg.*, u.name AS owner_name, u.email AS owner_email
-    FROM monthly_goals mg
-    JOIN users u ON mg.owner_id = u.id
-    WHERE mg.month_key = ?
-  `;
-    const params = [monthKey];
-
-    if (ownerId) {
-        query += " AND mg.owner_id = ?";
-        params.push(ownerId);
-    }
-
-    query += " ORDER BY mg.category, mg.id";
-
-    const { results } = await env.WRAP_DB.prepare(query).bind(...params).all();
-    return json(results);
-}
-
-async function createMonthlyGoal(request, env) {
-    const body = await getBody(request);
-    const { owner_id, month_key, category, title, description = "" } = body;
-
-    if (!owner_id || !month_key || !category || !title) {
-        return json({ error: "Missing required fields" }, 400);
-    }
-
-    const now = new Date().toISOString();
-
-    const info = await env.WRAP_DB
-        .prepare(`
-      INSERT INTO monthly_goals
-        (owner_id, month_key, category, title, description,
-         progress_percent, progress_note, is_complete,
-         created_at, updated_at)
-      VALUES (?, ?, ?, ?, ?, 0, '', 0, ?, ?)
-    `)
-        .bind(owner_id, month_key, category, title, description, now, now)
-        .run();
-
-    const insertedId = info.meta?.last_row_id;
-    if (!insertedId) {
-        console.log("createMonthlyGoal: missing inserted id meta", info);
-        return json({ error: "Could not determine inserted id" }, 500);
-    }
-
-    const { results } = await env.WRAP_DB
-        .prepare(`SELECT * FROM monthly_goals WHERE id = ?`)
-        .bind(insertedId)
-        .all();
-
-    return json(results[0], 201);
-}
-
-async function updateMonthlyGoal(request, env, id) {
-    const body = await getBody(request);
-
-    const existingRes = await env.WRAP_DB
-        .prepare(`SELECT * FROM monthly_goals WHERE id = ?`)
-        .bind(id)
-        .all();
-
-    if (!existingRes.results.length) {
-        return json({ error: "Goal not found" }, 404);
-    }
-
-    const existing = existingRes.results[0];
-    const now = new Date().toISOString();
-
-    const title = body.title ?? existing.title;
-    const description = body.description ?? existing.description;
-    const progress_percent =
-        body.progress_percent !== undefined ? body.progress_percent : existing.progress_percent;
-    const progress_note = body.progress_note ?? existing.progress_note;
-    const is_complete =
-        body.is_complete !== undefined ? (body.is_complete ? 1 : 0) : existing.is_complete;
-
-    await env.WRAP_DB
-        .prepare(
-            `UPDATE monthly_goals
-       SET title = ?, description = ?, progress_percent = ?, progress_note = ?, is_complete = ?, updated_at = ?
-       WHERE id = ?`
-        )
-        .bind(title, description, progress_percent, progress_note, is_complete, now, id)
-        .run();
-
-    const { results } = await env.WRAP_DB
-        .prepare(`SELECT * FROM monthly_goals WHERE id = ?`)
-        .bind(id)
-        .all();
-
-    return json(results[0]);
-}
 
 /* ---------- ANNUAL GOALS ---------- */
 
 async function listAnnualGoals(env, searchParams) {
-    const year = searchParams.get("year");
-    const ownerIdRaw = searchParams.get("ownerId");
+    const year = searchParams.get("year") || new Date().getFullYear();
 
-    if (!year) {
-        return json({ error: "year query param required" }, 400);
-    }
+    // Fetch annual goals for the year
+    const { results } = await env.WRAP_DB
+        .prepare(`
+            SELECT ag.*, u.name AS owner_name, u.email AS owner_email
+            FROM annual_goals ag
+            LEFT JOIN users u ON ag.owner_id = u.id
+            WHERE ag.year = ?
+            ORDER BY ag.category, ag.id
+        `)
+        .bind(year)
+        .all();
 
-    let ownerId = null;
-    if (ownerIdRaw) {
-        const n = Number(ownerIdRaw);
-        if (!Number.isInteger(n) || n <= 0) {
-            return json({ error: "ownerId must be a positive integer" }, 400);
-        }
-        ownerId = n;
-    }
-
-    let query = `
-    SELECT ag.*, u.name AS owner_name, u.email AS owner_email
-    FROM annual_goals ag
-    JOIN users u ON ag.owner_id = u.id
-    WHERE ag.year = ?
-  `;
-    const params = [year];
-
-    if (ownerId) {
-        query += " AND ag.owner_id = ?";
-        params.push(ownerId);
-    }
-
-    query += " ORDER BY ag.category, ag.id";
-
-    const { results } = await env.WRAP_DB.prepare(query).bind(...params).all();
     return json(results);
 }
 
 async function createAnnualGoal(request, env) {
     const body = await getBody(request);
-    const { owner_id, year, category, title, description = "" } = body;
+    const { title, description, year, category, owner_id } = body;
 
-    if (!owner_id || !year || !category || !title) {
-        return json({ error: "Missing required fields" }, 400);
+    if (!title || !category) {
+        return json({ error: "title and category are required" }, 400);
     }
 
     const now = new Date().toISOString();
 
     const info = await env.WRAP_DB
         .prepare(`
-      INSERT INTO annual_goals
-        (owner_id, year, category, title, description,
-         progress_percent, progress_note, is_complete,
-         created_at, updated_at)
-      VALUES (?, ?, ?, ?, ?, 0, '', 0, ?, ?)
-    `)
-        .bind(owner_id, year, category, title, description, now, now)
+            INSERT INTO annual_goals (title, description, year, category, owner_id, status, created_at, updated_at)
+            VALUES (?, ?, ?, ?, ?, 'pending', ?, ?)
+        `)
+        .bind(title, description || "", year || new Date().getFullYear(), category, owner_id || null, now, now)
         .run();
 
     const insertedId = info.meta?.last_row_id;
     if (!insertedId) {
-        console.log("createAnnualGoal: missing inserted id meta", info);
         return json({ error: "Could not determine inserted id" }, 500);
     }
 
@@ -955,7 +850,7 @@ async function updateAnnualGoal(request, env, id) {
         .all();
 
     if (!existingRes.results.length) {
-        return json({ error: "Goal not found" }, 404);
+        return json({ error: "Annual goal not found" }, 404);
     }
 
     const existing = existingRes.results[0];
@@ -963,19 +858,17 @@ async function updateAnnualGoal(request, env, id) {
 
     const title = body.title ?? existing.title;
     const description = body.description ?? existing.description;
-    const progress_percent =
-        body.progress_percent !== undefined ? body.progress_percent : existing.progress_percent;
-    const progress_note = body.progress_note ?? existing.progress_note;
-    const is_complete =
-        body.is_complete !== undefined ? (body.is_complete ? 1 : 0) : existing.is_complete;
+    const category = body.category ?? existing.category;
+    const owner_id = body.owner_id ?? existing.owner_id;
+    const status = body.status ?? existing.status;
 
     await env.WRAP_DB
-        .prepare(
-            `UPDATE annual_goals
-       SET title = ?, description = ?, progress_percent = ?, progress_note = ?, is_complete = ?, updated_at = ?
-       WHERE id = ?`
-        )
-        .bind(title, description, progress_percent, progress_note, is_complete, now, id)
+        .prepare(`
+            UPDATE annual_goals
+            SET title = ?, description = ?, category = ?, owner_id = ?, status = ?, updated_at = ?
+            WHERE id = ?
+        `)
+        .bind(title, description, category, owner_id, status, now, id)
         .run();
 
     const { results } = await env.WRAP_DB
@@ -985,6 +878,241 @@ async function updateAnnualGoal(request, env, id) {
 
     return json(results[0]);
 }
+
+async function deleteAnnualGoal(env, id) {
+    await env.WRAP_DB.prepare(`DELETE FROM annual_goals WHERE id = ?`).bind(id).run();
+    // Also unlink monthly goals? Or keep them orphaned?
+    // Optionally: await env.WRAP_DB.prepare(`UPDATE monthly_goals SET annual_goal_id = NULL WHERE annual_goal_id = ?`).bind(id).run();
+
+    return new Response(null, { status: 204, headers: CORS_HEADERS });
+}
+
+/* ---------- MONTHLY GOALS (INITIATIVES) ---------- */
+
+async function listMonthlyGoals(env, searchParams) {
+    const monthKey = searchParams.get("month");
+    const ownerIdRaw = searchParams.get("ownerId");
+
+    if (!monthKey) {
+        return json({ error: "month query param required" }, 400);
+    }
+
+    let params = [monthKey];
+    let query = `
+    SELECT mg.*, u.name AS owner_name, u.email AS owner_email, ag.title AS annual_goal_title
+    FROM monthly_goals mg
+    LEFT JOIN users u ON mg.owner_id = u.id
+    LEFT JOIN annual_goals ag ON mg.annual_goal_id = ag.id
+    WHERE mg.month_key = ?
+  `;
+
+    if (ownerIdRaw) {
+        // Updated logic for multi-owner
+        const ownerId = Number(ownerIdRaw);
+        if (Number.isInteger(ownerId) && ownerId > 0) {
+            query += `
+                AND (
+                    mg.owner_id = ?
+                    OR EXISTS (
+                        SELECT 1 FROM monthly_goal_assignees mga
+                        WHERE mga.goal_id = mg.id AND mga.user_id = ?
+                    )
+                )
+            `;
+            params.push(ownerId, ownerId);
+        }
+    }
+
+    query += " ORDER BY mg.category, mg.id";
+
+    const { results } = await env.WRAP_DB.prepare(query).bind(...params).all();
+
+    // Hydrate assignees
+    if (results.length > 0) {
+        const goalIds = results.map(r => r.id);
+        const placeholders = goalIds.map(() => "?").join(", ");
+
+        const assigneesRes = await env.WRAP_DB
+            .prepare(`
+                SELECT mga.goal_id, u.id, u.name, u.email
+                FROM monthly_goal_assignees mga
+                JOIN users u ON mga.user_id = u.id
+                WHERE mga.goal_id IN (${placeholders})
+            `)
+            .bind(...goalIds)
+            .all();
+
+        const assigneesMap = new Map();
+        for (const row of assigneesRes.results) {
+            if (!assigneesMap.has(row.goal_id)) assigneesMap.set(row.goal_id, []);
+            assigneesMap.get(row.goal_id).push(row);
+        }
+
+        for (const goal of results) {
+            goal.assignees = assigneesMap.get(goal.id) || [];
+            // Fallback to primary owner if no multi-assignees
+            if (goal.assignees.length === 0 && goal.owner_id) {
+                goal.assignees.push({
+                    id: goal.owner_id,
+                    name: goal.owner_name,
+                    email: goal.owner_email
+                });
+            }
+        }
+    }
+
+    return json(results);
+}
+
+// Helper to update monthly goal assignees
+async function replaceMonthlyGoalAssignees(env, goalId, assigneeIds, primaryOwnerId) {
+    let cleanIds = [];
+    if (Array.isArray(assigneeIds)) {
+        cleanIds = assigneeIds
+            .map(v => Number(v))
+            .filter(v => Number.isInteger(v) && v > 0);
+    }
+
+    const primary = Number(primaryOwnerId);
+    if (Number.isInteger(primary) && primary > 0 && !cleanIds.includes(primary)) {
+        cleanIds.push(primary);
+    }
+
+    await env.WRAP_DB.prepare(`DELETE FROM monthly_goal_assignees WHERE goal_id = ?`).bind(goalId).run();
+
+    if (!cleanIds.length) return;
+
+    const stmt = env.WRAP_DB.prepare(`INSERT INTO monthly_goal_assignees (goal_id, user_id) VALUES (?, ?)`);
+    for (const uid of cleanIds) {
+        await stmt.bind(goalId, uid).run();
+    }
+}
+
+
+
+async function createMonthlyGoal(request, env) {
+    const body = await getBody(request);
+    const { owner_id, month_key, category, title, description = "", annual_goal_id, committee, assignee_ids } = body;
+
+    if (!owner_id || !month_key || !category || !title) {
+        return json({ error: "Missing required fields" }, 400);
+    }
+
+    const now = new Date().toISOString();
+
+    const info = await env.WRAP_DB
+        .prepare(`
+      INSERT INTO monthly_goals
+        (owner_id, month_key, category, title, description,
+         annual_goal_id, committee,
+         progress_percent, progress_note, is_complete,
+         created_at, updated_at)
+      VALUES (?, ?, ?, ?, ?, ?, ?, 0, '', 0, ?, ?)
+    `)
+        .bind(owner_id, month_key, category, title, description, annual_goal_id || null, committee || null, now, now)
+        .run();
+
+    const insertedId = info.meta?.last_row_id;
+    if (!insertedId) {
+        console.log("createMonthlyGoal: missing inserted id meta", info);
+        return json({ error: "Could not determine inserted id" }, 500);
+    }
+
+    // Handle multi-assign
+    await replaceMonthlyGoalAssignees(env, insertedId, assignee_ids, owner_id);
+
+    const { results } = await env.WRAP_DB
+        .prepare(`SELECT * FROM monthly_goals WHERE id = ?`)
+        .bind(insertedId)
+        .all();
+
+    const newGoal = results[0];
+
+    // Hydrate assignees for immediate frontend return
+    const ids = assignee_ids || [];
+    // We can't easily get names/emails without another generic query or passing them in.
+    // But for now, let's at least return the structure expected if possible, or reliance on reload.
+    // Actually, let's just fetch them to be safe and clean.
+    const assigneesRes = await env.WRAP_DB
+        .prepare(`SELECT id, name, email FROM users WHERE id IN (${ids.join(',') || '0'})`)
+        .bind()
+        .all();
+    newGoal.assignees = assigneesRes.results || [];
+
+    // Fallback for primary owner if list empty
+    if (newGoal.assignees.length === 0) {
+        // fetch owner
+        const ownerRes = await env.WRAP_DB.prepare(`SELECT id, name, email FROM users WHERE id = ?`).bind(owner_id).first();
+        if (ownerRes) newGoal.assignees.push(ownerRes);
+    }
+
+    return json(newGoal, 201);
+}
+
+async function updateMonthlyGoal(request, env, id) {
+    const body = await getBody(request);
+    const assignee_ids = body.assignee_ids;
+
+    const existingRes = await env.WRAP_DB
+        .prepare(`SELECT * FROM monthly_goals WHERE id = ?`)
+        .bind(id)
+        .all();
+
+    if (!existingRes.results.length) {
+        return json({ error: "Goal not found" }, 404);
+    }
+
+    const existing = existingRes.results[0];
+    const now = new Date().toISOString();
+
+    const owner_id = body.owner_id ?? existing.owner_id;
+    const title = body.title ?? existing.title;
+    const description = body.description ?? existing.description;
+    const progress_note = body.progress_note ?? existing.progress_note;
+    const is_complete = body.is_complete !== undefined ? (body.is_complete ? 1 : 0) : existing.is_complete;
+
+    // New fields
+    const annual_goal_id = body.annual_goal_id !== undefined ? body.annual_goal_id : existing.annual_goal_id;
+    const committee = body.committee !== undefined ? body.committee : existing.committee;
+
+    // Recalculate progress if not manually overriding?
+    // For now we keep manual progress_percent override possible, usually calc'd by subtasks
+    const progress_percent = body.progress_percent !== undefined ? body.progress_percent : existing.progress_percent;
+
+    await env.WRAP_DB
+        .prepare(`
+      UPDATE monthly_goals
+      SET owner_id = ?, title = ?, description = ?,
+          progress_percent = ?, progress_note = ?, is_complete = ?,
+          annual_goal_id = ?, committee = ?,
+          updated_at = ?
+      WHERE id = ?
+    `)
+        .bind(
+            owner_id, title, description,
+            progress_percent, progress_note, is_complete,
+            annual_goal_id, committee,
+            now, id
+        )
+        .run();
+
+    // Update multi-assign
+    await replaceMonthlyGoalAssignees(env, id, assignee_ids, owner_id);
+
+    const { results } = await env.WRAP_DB
+        .prepare(`SELECT * FROM monthly_goals WHERE id = ?`)
+        .bind(id)
+        .all();
+
+    return json(results[0]);
+}
+
+
+
+
+/* ---------- ANNUAL GOALS ---------- */
+
+
 
 /* ---------- GOAL CATEGORIES ---------- */
 
@@ -1163,8 +1291,19 @@ async function updateGoalSubtask(request, env, subtaskId) {
 
     const title = body.title ?? existing.title;
     const notes = body.notes ?? existing.notes;
+    const due_date = body.due_date !== undefined ? body.due_date : existing.due_date;
     const status = body.status ?? existing.status;
     const weight = body.weight !== undefined ? body.weight : existing.weight;
+
+    let assigned_to_id =
+        body.assigned_to_id !== undefined ? body.assigned_to_id : existing.assigned_to_id;
+
+    if (assigned_to_id !== null && assigned_to_id !== undefined) {
+        assigned_to_id = Number(assigned_to_id);
+        if (!Number.isInteger(assigned_to_id)) {
+            return json({ error: "Invalid assigned_to_id" }, 400);
+        }
+    }
 
     let completed_at = existing.completed_at;
     if (existing.status !== "done" && status === "done") {
@@ -1176,10 +1315,20 @@ async function updateGoalSubtask(request, env, subtaskId) {
     await env.WRAP_DB
         .prepare(`
             UPDATE goal_subtasks
-            SET title = ?, notes = ?, status = ?, weight = ?, completed_at = ?, updated_at = ?
+            SET title = ?, notes = ?, due_date = ?, status = ?,
+            assigned_to_id = ?, completed_at = ?, updated_at = ?
             WHERE id = ?
         `)
-        .bind(title, notes, status, weight, completed_at, now, subtaskId)
+        .bind(
+            String(title),
+            String(notes),
+            due_date || null,
+            String(status),
+            assigned_to_id,
+            completed_at,
+            now,
+            subtaskId
+        )
         .run();
 
     // Recalculate goal progress if status changed
@@ -1251,13 +1400,16 @@ async function addGoalSubtaskToCalendar(request, env, subtaskId) {
 
     const now = new Date().toISOString();
 
+    // Determine linked goal (for color coding)
+    const linkedMonthlyGoalId = subtask.goal_type === 'monthly' ? subtask.goal_id : null;
+
     // Create daily task
     const taskInfo = await env.WRAP_DB
         .prepare(`
             INSERT INTO daily_tasks
                 (title, notes, task_date, created_by_id, assigned_to_id, assigned_by_id,
-                 assigned_at, status, completion_notified, created_at, updated_at)
-            VALUES (?, ?, ?, ?, ?, ?, ?, 'pending', 0, ?, ?)
+                 assigned_at, status, completion_notified, created_at, updated_at, linked_monthly_goal_id)
+            VALUES (?, ?, ?, ?, ?, ?, ?, 'pending', 0, ?, ?, ?)
         `)
         .bind(
             taskTitle,
@@ -1268,7 +1420,8 @@ async function addGoalSubtaskToCalendar(request, env, subtaskId) {
             assigned_by_id || assigned_to_id,
             now,
             now,
-            now
+            now,
+            linkedMonthlyGoalId
         )
         .run();
 
@@ -1983,12 +2136,55 @@ export default {
         }
 
         try {
+
             // ===== USERS =====
             if (pathname === "/api/users" && request.method === "GET") {
                 return await listUsers(env, searchParams);
             }
             if (pathname === "/api/users" && request.method === "POST") {
                 return await createUser(request, env);
+            }
+
+
+
+            // ===== ANNUAL GOALS (NEW) =====
+            if (pathname === "/api/annual-goals") {
+                if (request.method === "GET") return await listAnnualGoals(env, searchParams);
+                if (request.method === "POST") return await createAnnualGoal(request, env);
+            }
+            const annualGoalMatch = pathname.match(/^\/api\/annual-goals\/(\d+)$/);
+            if (annualGoalMatch) {
+                const id = Number(annualGoalMatch[1]);
+                if (request.method === "PUT") return await updateAnnualGoal(request, env, id);
+                if (request.method === "DELETE") return await deleteAnnualGoal(env, id);
+            }
+
+            // ===== WEEKLY PLANNER =====
+            if (pathname === "/api/weekly-planner") {
+                if (request.method === "GET") return await getWeeklyPlan(env, searchParams);
+                if (request.method === "POST") return await updateWeeklyEntry(request, env);
+            }
+
+            // ===== GOAL CATEGORIES (NEW) =====
+            if (pathname === "/api/goal-categories") {
+                if (request.method === "GET") return await listGoalCategories(env, searchParams);
+                if (request.method === "POST") return await createGoalCategory(request, env);
+            }
+            const goalCatMatch = pathname.match(/^\/api\/goal-categories\/(\d+)$/);
+            if (goalCatMatch) {
+                const id = Number(goalCatMatch[1]);
+                if (request.method === "PUT") return await updateGoalCategory(request, env, id);
+            }
+
+            // ===== MONTHLY GOALS (INITIATIVES) =====
+            if (pathname === "/api/monthly-goals") {
+                if (request.method === "GET") return await listMonthlyGoals(env, searchParams);
+                if (request.method === "POST") return await createMonthlyGoal(request, env);
+            }
+            const monthlyGoalMatch = pathname.match(/^\/api\/monthly-goals\/(\d+)$/);
+            if (monthlyGoalMatch) {
+                const id = Number(monthlyGoalMatch[1]);
+                if (request.method === "PUT") return await updateMonthlyGoal(request, env, id);
             }
 
             // ===== USER COINS =====
@@ -2237,21 +2433,26 @@ export default {
                     }
 
                     if (request.method === "DELETE") {
-                        // Clean up dependent rows first (prevents orphan data)
-                        await env.WRAP_DB
-                            .prepare(`DELETE FROM daily_task_assignees WHERE task_id = ?`)
-                            .bind(id)
-                            .run();
-                        await env.WRAP_DB
-                            .prepare(`DELETE FROM daily_task_subtasks WHERE task_id = ?`)
-                            .bind(id)
-                            .run();
-                        await env.WRAP_DB
-                            .prepare(`DELETE FROM daily_tasks WHERE id = ?`)
-                            .bind(id)
-                            .run();
+                        try {
+                            // Clean up dependent rows first (prevents orphan data)
+                            await env.WRAP_DB
+                                .prepare(`DELETE FROM daily_task_assignees WHERE task_id = ?`)
+                                .bind(id)
+                                .run();
+                            await env.WRAP_DB
+                                .prepare(`DELETE FROM daily_task_subtasks WHERE task_id = ?`)
+                                .bind(id)
+                                .run();
+                            await env.WRAP_DB
+                                .prepare(`DELETE FROM daily_tasks WHERE id = ?`)
+                                .bind(id)
+                                .run();
 
-                        return new Response(null, { status: 204, headers: CORS_HEADERS });
+                            return new Response(null, { status: 204, headers: CORS_HEADERS });
+                        } catch (err) {
+                            console.error("Error deleting daily task:", err);
+                            return json({ error: "Failed to delete task: " + err.message }, 500);
+                        }
                     }
                 }
             }
@@ -3318,6 +3519,43 @@ async function updateUserPrefs(request, env) {
             prefs_json = excluded.prefs_json, 
             updated_at = excluded.updated_at
     `).bind(nUserId, jsonStr, now).run();
+
+    return json({ success: true });
+}
+// ==========================================
+// WEEKLY PLANNER
+// ==========================================
+
+async function getWeeklyPlan(env, params) {
+    const week = params.get("week");
+    if (!week) return json({ error: "Missing week parameter" }, 400);
+
+    const { results } = await env.WRAP_DB
+        .prepare(`SELECT * FROM weekly_entries WHERE week_start = ?`)
+        .bind(week)
+        .all();
+
+    return json(results);
+}
+
+async function updateWeeklyEntry(request, env) {
+    const body = await getBody(request);
+    const { week_start, category, row_key, col_key, value, user_id } = body;
+
+    if (!week_start || !category || !row_key || !col_key) {
+        return json({ error: "Missing required fields" }, 400);
+    }
+
+    // Upsert logic (SQLite)
+    await env.WRAP_DB
+        .prepare(`
+      INSERT INTO weekly_entries (week_start, category, row_key, col_key, value, updated_by_id, updated_at)
+      VALUES (?, ?, ?, ?, ?, ?, datetime('now'))
+      ON CONFLICT(week_start, category, row_key, col_key) 
+      DO UPDATE SET value = excluded.value, updated_by_id = excluded.updated_by_id, updated_at = excluded.updated_at
+    `)
+        .bind(week_start, category, row_key, col_key, value, user_id)
+        .run();
 
     return json({ success: true });
 }

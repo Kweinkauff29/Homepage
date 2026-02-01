@@ -1,0 +1,17 @@
+name = "wrapsheet"
+main = "Wrap.js"
+compatibility_date = "2024-01-01"
+
+[[d1_databases]]
+binding = "WRAP_DB"
+database_name = "wrap_sheet"
+database_id = "fbba489f-fc17-4472-b70f-578ce5fd9933"
+
+# Service Binding to GrowthZone proxy worker
+[[services]]
+binding = "GZ_PROXY"
+service = "gz-realestate-proxy"
+
+# Daily cron at 5am UTC (12am EST)
+[triggers]
+crons = ["0 5 * * *"]

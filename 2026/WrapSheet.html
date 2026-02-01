@@ -598,14 +598,73 @@
     }
 
     .goal-card {
+      background: rgba(30, 41, 59, 0.7);
+      border: 1px solid rgba(55, 65, 81, 0.6);
       border-radius: var(--radius-sm);
-      border: 1px solid rgba(75, 85, 99, 0.9);
-      background: rgba(15, 23, 42, 0.97);
-      padding: 4px;
+      padding: 8px;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      transition: all 0.2s;
+    }
+
+    .goal-card.completed {
+      opacity: 0.6;
+      background: rgba(30, 41, 59, 0.4);
+    }
+
+    /* Assignee Grid Styling */
+    .assignee-grid {
       display: grid;
-      grid-template-columns: minmax(0, 1fr);
-      gap: 2px;
+      grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+      gap: 8px;
+      margin-top: 4px;
+    }
+
+    .assignee-option {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 8px;
+      background: rgba(15, 23, 42, 0.8);
+      /* Slightly darker for contrast */
+      border: 1px solid var(--panel-border);
+      border-radius: 6px;
+      cursor: pointer;
+      transition: all 0.2s;
       font-size: 11px;
+      user-select: none;
+      color: #ffffff !important;
+      /* Force white text */
+    }
+
+    .assignee-option:hover {
+      border-color: var(--accent);
+      background: rgba(3, 170, 225, 0.2);
+    }
+
+    .assignee-option input[type="checkbox"] {
+      accent-color: var(--accent);
+      cursor: pointer;
+    }
+
+    .assignee-option.selected {
+      background: rgba(3, 170, 225, 0.25);
+      border-color: var(--accent);
+      color: #fff;
+    }
+
+    /* Subtask creation list */
+    .transient-subtasks {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      margin-bottom: 8px;
+    }
+
+    .subtask-row-new {
+      display: flex;
+      gap: 4px;
     }
 
     .goal-card.completed {
@@ -2966,6 +3025,72 @@
       opacity: 1 !important;
       transform: scale(1.1);
     }
+
+    /* Weekly Planner Styles */
+    .weekly-section-header {
+      font-size: 16px;
+      font-weight: 700;
+      color: var(--accent);
+      margin-bottom: 10px;
+      padding-bottom: 5px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .weekly-grid {
+      display: grid;
+      gap: 1px;
+      background: var(--border);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      overflow: hidden;
+    }
+
+    .weekly-row {
+      display: contents;
+      /* Allows children to participate in parent grid */
+    }
+
+    .weekly-cell {
+      background: var(--card-bg);
+      padding: 8px;
+      min-height: 40px;
+      font-size: 13px;
+      position: relative;
+    }
+
+    .weekly-cell.header {
+      background: var(--bg-main);
+      font-weight: 600;
+      color: var(--ink-soft);
+      text-align: center;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .weekly-cell.row-header {
+      background: var(--bg-main);
+      font-weight: 600;
+      color: var(--ink);
+      text-align: left;
+      justify-content: flex-start;
+    }
+
+    .weekly-cell textarea {
+      width: 100%;
+      height: 100%;
+      min-height: 24px;
+      background: transparent;
+      border: none;
+      color: var(--ink);
+      resize: none;
+      font-family: inherit;
+      outline: none;
+    }
+
+    .weekly-cell textarea:focus {
+      background: rgba(255, 255, 255, 0.05);
+    }
   </style>
 </head>
 
@@ -3080,6 +3205,31 @@
           <div class="field-hint">Set a time to get a reminder 30 minutes before.</div>
         </label>
 
+        <!-- New: Color & Priority -->
+        <div style="display:flex; gap:15px; margin-bottom:15px;">
+          <label style="flex:1;">
+            Color
+            <select id="task-color">
+              <option value="">Default (None)</option>
+              <option value="#f43f5e">Excite (Pink)</option>
+              <option value="#3b82f6">Engage (Blue)</option>
+              <option value="#10b981">Empower (Green)</option>
+              <option value="#06b6d4">Tools (Teal)</option>
+              <option value="#8b5cf6">Focus (Violet)</option>
+              <option value="#f59e0b">Growth (Amber)</option>
+            </select>
+          </label>
+
+          <label style="flex:1;">
+            Priority
+            <select id="task-priority">
+              <option value="1">Low ☕</option>
+              <option value="2">Medium ⚡</option>
+              <option value="3">High 🔥</option>
+            </select>
+          </label>
+        </div>
+
         <!-- Repeat controls – simplified -->
         <label>
           Repeat
@@ -3139,6 +3289,130 @@
           <button class="button-danger" id="task-delete-btn" style="display:none;">Delete</button>
           <button class="button-primary" id="task-save-btn">Save Task</button>
         </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Goal Create Modal -->
+  <div id="goal-create-modal" class="modal hidden">
+    <div class="modal-panel" style="width: min(500px, 100% - 32px);">
+      <div class="modal-header">
+        <div class="modal-title" id="goal-create-modal-title">New Goal</div>
+        <button class="modal-close" id="goal-create-modal-close">×</button>
+      </div>
+      <div class="modal-body">
+        <label>
+          Goal Name
+          <input id="create-goal-title" placeholder="e.g., Q1 Marketing Push" />
+        </label>
+
+        <label>
+          Header / Notes
+          <textarea id="create-goal-desc" placeholder="Details about this goal..." style="min-height: 60px;"></textarea>
+        </label>
+
+        <label>
+          Subtasks
+          <div id="create-goal-subtasks-list" class="transient-subtasks">
+            <!-- Subtask inputs added here -->
+          </div>
+          <div class="subtask-row-new">
+            <input id="new-subtask-input" placeholder="Add a subtask..." style="flex:1;" />
+            <button class="button-secondary" id="btn-add-transient-subtask" style="padding:4px 8px;">+</button>
+          </div>
+        </label>
+
+        <!-- Advanced Fields Container -->
+        <div id="create-goal-advanced"
+          style="display:flex; flex-direction:column; gap:8px; border-top:1px solid var(--panel-border); padding-top:8px; margin-top:4px;">
+          <label id="create-goal-committee-wrapper">
+            Committee / Workgroup
+            <select id="create-goal-committee">
+              <option value="">(None)</option>
+              <option value="Events Workgroup">Events Workgroup</option>
+              <option value="Global Diversity Workgroup">Global Diversity Workgroup</option>
+              <option value="Government Affair/RPAC Workgroup">Government Affair/RPAC Workgroup</option>
+              <option value="Grievance">Grievance</option>
+              <option value="Media (Brokers ONLY)">Media (Brokers ONLY)</option>
+              <option value="MLS Committee">MLS Committee</option>
+              <option value="Professional Development Workgroup">Professional Development Workgroup</option>
+              <option value="Professional Standards">Professional Standards</option>
+              <option value="Realtor Review Workgroup">Realtor Review Workgroup</option>
+              <option value="YPN Workgroup">YPN Workgroup</option>
+              <option value="Leadership Development Committee">Leadership Development Committee</option>
+              <option value="Leadership Academy">Leadership Academy</option>
+            </select>
+          </label>
+
+          <div id="create-goal-parent-wrapper">
+            <label>
+              Linked Annual Goal
+              <select id="create-goal-parent">
+                <option value="">(None)</option>
+              </select>
+            </label>
+          </div>
+
+          <label>
+            Assignees
+            <div id="create-goal-assignees-grid" class="assignee-grid">
+              <!-- Populated by JS -->
+            </div>
+          </label>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="button-secondary" id="goal-create-modal-cancel">Cancel</button>
+        <button class="button-primary" id="goal-create-save-btn">Create Goal</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Goal Edit Modal (Advanced) -->
+  <div id="goal-edit-modal" class="modal hidden">
+    <div class="modal-panel">
+      <div class="modal-header">
+        <div class="modal-title" id="goal-edit-modal-title">Edit Goal</div>
+        <button class="modal-close" id="goal-edit-modal-close">×</button>
+      </div>
+      <div class="modal-body">
+        <label>
+          Committee / Workgroup
+          <select id="goal-edit-committee">
+            <option value="">(None)</option>
+            <option value="Events Workgroup">Events Workgroup</option>
+            <option value="Global Diversity Workgroup">Global Diversity Workgroup</option>
+            <option value="Government Affair/RPAC Workgroup">Government Affair/RPAC Workgroup</option>
+            <option value="Grievance">Grievance</option>
+            <option value="Media (Brokers ONLY)">Media (Brokers ONLY)</option>
+            <option value="MLS Committee">MLS Committee</option>
+            <option value="Professional Development Workgroup">Professional Development Workgroup</option>
+            <option value="Professional Standards">Professional Standards</option>
+            <option value="Realtor Review Workgroup">Realtor Review Workgroup</option>
+            <option value="YPN Workgroup">YPN Workgroup</option>
+            <option value="Leadership Development Committee">Leadership Development Committee</option>
+            <option value="Leadership Academy">Leadership Academy</option>
+          </select>
+        </label>
+        <div id="goal-edit-parent-wrapper">
+          <label>
+            Linked Annual Goal
+            <select id="goal-edit-parent">
+              <option value="">(None)</option>
+            </select>
+          </label>
+        </div>
+        <label>
+          Assignees (Multi-select)
+          <div id="goal-edit-assignees-list"
+            style="max-height: 120px; overflow-y: auto; border: 1px solid var(--panel-border); border-radius: 8px; padding: 4px; background: rgba(15,23,42,0.3);">
+            <!-- Checkboxes injected by JS -->
+          </div>
+        </label>
+      </div>
+      <div class="modal-footer">
+        <button class="button-secondary" id="goal-edit-modal-cancel">Cancel</button>
+        <button class="button-primary" id="goal-edit-save-btn">Save Changes</button>
       </div>
     </div>
   </div>
@@ -3398,6 +3672,7 @@
             <div class="panel-title">Goals & Focus</div>
             <div class="goals-tabs">
               <button class="goals-tab active" data-tab="monthly">Monthly Strategies</button>
+              <button class="goals-tab" data-tab="weekly">Weekly Strategy</button>
               <button class="goals-tab" data-tab="annual">Annual Goals</button>
             </div>
           </div>
@@ -3434,6 +3709,38 @@
               </label>
             </div>
             <div class="goals-grid" id="annual-goals-grid"></div>
+          </div>
+
+          <!-- Weekly Team Planner -->
+          <div id="weekly-planner-panel" style="display:none;">
+            <div class="goals-controls" style="justify-content:center; gap:20px;">
+              <button id="weekly-prev" class="icon-btn"
+                style="background:var(--card-bg); border:1px solid var(--border); border-radius:4px; px:10px;">← Prev
+                Week</button>
+              <span id="weekly-current-label" style="font-weight:600; color:var(--accent);">Week of ...</span>
+              <button id="weekly-next" class="icon-btn"
+                style="background:var(--card-bg); border:1px solid var(--border); border-radius:4px; px:10px;">Next Week
+                →</button>
+            </div>
+
+            <!-- Priorities Grid -->
+            <div class="weekly-section">
+              <div class="weekly-section-header">Top 3-5 Priorities</div>
+              <div id="weekly-priorities-grid" class="weekly-grid"></div>
+            </div>
+
+            <!-- Marketing Grid -->
+            <div class="weekly-section" style="margin-top:30px;">
+              <div class="weekly-section-header">Marketing</div>
+              <div id="weekly-marketing-grid" class="weekly-grid"></div>
+            </div>
+
+            <!-- Projects Grid -->
+            <div class="weekly-section" style="margin-top:30px;">
+              <div class="weekly-section-header">Projects & Events</div>
+              <div id="weekly-projects-grid" class="weekly-grid"></div>
+            </div>
+
           </div>
 
         </section>
@@ -3624,6 +3931,15 @@
       "Moving the Needle",
       "Team Work"
     ];
+
+    const CATEGORY_COLORS = {
+      "Compliance/Audit": "var(--evolve)", // Emerald
+      "Marketing": "var(--excite)", // Pink
+      "Products & Tools": "var(--accent)", // Teal
+      "Personal Focus": "#8b5cf6", // Violet
+      "Moving the Needle": "var(--elevate)", // Amber
+      "Team Work": "var(--engage)" // Blue
+    };
 
     const ANNUAL_CATEGORIES = [
       "Compliance/Audit",
@@ -6606,13 +6922,16 @@
       if (!container) return;
       container.innerHTML = "";
 
-      if (!state.backlogTasks || state.backlogTasks.length === 0) {
+      // Hide completed tasks from backlog (they appear on calendar now)
+      const visible = (state.backlogTasks || []).filter(t => t.status !== 'done');
+
+      if (visible.length === 0) {
         if (empty) empty.style.display = "block";
         return;
       }
       if (empty) empty.style.display = "none";
 
-      state.backlogTasks.forEach(task => {
+      visible.forEach(task => {
         const pill = buildTaskPill(task);
         container.appendChild(pill);
       });
@@ -6868,6 +7187,20 @@
         tasksByDate[key].push(t);
       });
 
+      // Include completed backlog tasks on their completion date
+      if (state.backlogTasks) {
+        state.backlogTasks.forEach(t => {
+          if (t.status === 'done' && t.completed_at) {
+            const d = new Date(t.completed_at);
+            const key = dateKey(d.getFullYear(), d.getMonth(), d.getDate());
+            if (!tasksByDate[key]) tasksByDate[key] = [];
+            if (!tasksByDate[key].some(existing => existing.id === t.id)) {
+              tasksByDate[key].push(t);
+            }
+          }
+        });
+      }
+
       if (state.calendarView === "month") {
         const weekdayLabels = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
         weekdayLabels.forEach(label => {
@@ -6934,6 +7267,30 @@
         // Removed explicit width 100% to let grid handle it
       }
 
+      // Apply Color Coding from Linked Monthly Goal
+      if (task.linked_monthly_goal_id) {
+        const parentGoal = (state.monthlyGoals || []).find(g => g.id === task.linked_monthly_goal_id);
+        if (parentGoal && parentGoal.category) {
+          const colorVar = CATEGORY_COLORS[parentGoal.category];
+          if (colorVar) {
+            pill.style.background = colorVar;
+            pill.style.color = "#fff";
+            pill.style.borderColor = "transparent";
+            pill.style.textShadow = "0 1px 2px rgba(0,0,0,0.5)";
+            pill.style.boxShadow = `0 2px 5px -1px ${colorVar}`;
+          }
+        }
+      }
+
+      // CUSTOM COLOR OVERRIDE
+      if (task.color && task.color !== "#ffffff" && task.color !== "") {
+        pill.style.background = task.color;
+        pill.style.color = "#fff";
+        pill.style.borderColor = "transparent";
+        pill.style.textShadow = "0 1px 2px rgba(0,0,0,0.5)";
+        pill.style.boxShadow = `0 2px 5px -1px ${task.color}`;
+      }
+
       // DRAGGABLE
       pill.draggable = true;
       pill.dataset.taskId = task.id;
@@ -6956,7 +7313,13 @@
 
       const title = document.createElement("div");
       title.className = "task-title";
-      title.textContent = task.title;
+
+      // PRIORITY ICON
+      let pIcon = "";
+      if (task.priority === 3) pIcon = "🔥 ";
+      if (task.priority === 2) pIcon = "⚡ ";
+
+      title.textContent = pIcon + task.title;
       pill.appendChild(title);
 
       const assignee = document.createElement("div");
@@ -7133,6 +7496,13 @@
       if (rs) rs.value = dateStr;   // default series start = this date
       if (re) re.value = "";        // no end set yet
 
+      // NEW: Set default color and priority
+      const colorInput = document.getElementById("task-color");
+      if (colorInput) colorInput.value = "#ffffff"; // Default to white or a neutral color
+
+      const priorityInput = document.getElementById("task-priority");
+      if (priorityInput) priorityInput.value = "1"; // Default to lowest priority
+
       modal.dataset.date = dateStr;
       modal.classList.remove("hidden");
     }
@@ -7152,6 +7522,13 @@
       document.getElementById("task-modal-date").textContent = task.task_date || "";
       const taskAssignedTo = document.getElementById("task-assigned-to");
       taskAssignedTo.value = String(task.assigned_to_id);
+
+      // NEW: Hydrate Color & Priority
+      const colorInput = document.getElementById("task-color");
+      if (colorInput) colorInput.value = task.color || ""; // Default to None if null
+
+      const priorityInput = document.getElementById("task-priority");
+      if (priorityInput) priorityInput.value = task.priority ? String(task.priority) : "1";
 
       // NEW: preselect multi-assignees checkboxes
       const container = document.getElementById("task-assignees-container");
@@ -7373,7 +7750,11 @@
       const ownerFilter = state.monthlyOwnerFilter;
       const goals = state.monthlyGoals.filter(g => {
         if (ownerFilter === "all") return true;
-        return String(g.owner_id) === ownerFilter;
+        const filterId = parseInt(ownerFilter, 10);
+        const isOwner = g.owner_id === filterId;
+        const inAssigneeIds = g.assignee_ids && g.assignee_ids.includes(filterId);
+        const inAssignees = g.assignees && g.assignees.some(u => u.id === filterId);
+        return isOwner || inAssigneeIds || inAssignees;
       });
 
       const goalsByCategory = {};
@@ -7387,10 +7768,30 @@
         const col = document.createElement("div");
         col.className = "goal-column";
 
+        // Apply Premium Color Design (Glassmorphism + Glow)
+        const colorVar = CATEGORY_COLORS[category];
+        if (colorVar) {
+          // Glassy background with tint
+          col.style.background = `linear-gradient(145deg, color-mix(in srgb, ${colorVar}, transparent 92%), rgba(10, 15, 30, 0.4))`;
+          // Colored accent border
+          col.style.border = `1px solid color-mix(in srgb, ${colorVar}, transparent 60%)`;
+          col.style.borderTop = `3px solid ${colorVar}`;
+          // Subtle glow
+          col.style.boxShadow = `0 8px 30px -15px color-mix(in srgb, ${colorVar}, transparent 70%)`;
+        } else {
+          // Default styling if no category color matches (shouldn't happen for main list)
+        }
+
         // Editable category title
         const titleInput = document.createElement("input");
         titleInput.type = "text";
         titleInput.className = "goal-column-title-input";
+        // Use the color for the text, maybe add a text-shadow for "neon" feel?
+        if (colorVar) {
+          titleInput.style.color = colorVar;
+          titleInput.style.textShadow = `0 0 10px color-mix(in srgb, ${colorVar}, transparent 70%)`;
+        }
+
         titleInput.value = getCustomCategoryName("monthly", category);
         titleInput.dataset.originalCategory = category;
         titleInput.dataset.goalType = "monthly";
@@ -7408,6 +7809,7 @@
         const list = document.createElement("div");
         const items = goalsByCategory[category] || [];
         items.forEach(goal => {
+          console.log("Rendering Goal:", goal);
           const card = document.createElement("div");
           card.className = "goal-card";
           if (goal.is_complete) card.classList.add("completed");
@@ -7424,11 +7826,39 @@
           });
           topRow.appendChild(titleInput);
 
+          // Multi-assignee display
           const ownerTag = document.createElement("div");
           ownerTag.className = "goal-owner-tag";
-          const owner = state.users.find(u => u.id === goal.owner_id);
-          ownerTag.textContent = owner ? owner.name : "";
+          let names = [];
+
+          // Backend returns 'assignees' array of objects {id, name, email}
+          if (goal.assignees && Array.isArray(goal.assignees) && goal.assignees.length > 0) {
+            names = goal.assignees.map(u => u.name.split(" ")[0]);
+          } else if (goal.assignee_ids && Array.isArray(goal.assignee_ids) && goal.assignee_ids.length > 0) {
+            // Fallback for immediate local optimistic update if needed
+            names = goal.assignee_ids.map(id => {
+              const u = state.users.find(x => x.id === id);
+              return u ? u.name.split(" ")[0] : "?";
+            });
+          } else {
+            // Fallback to owner field
+            const owner = state.users.find(u => u.id === goal.owner_id);
+            if (owner) names.push(owner.name.split(" ")[0]);
+          }
+          ownerTag.textContent = names.join(", ");
           topRow.appendChild(ownerTag);
+
+          const editBtn = document.createElement("button");
+          editBtn.type = "button";
+          editBtn.className = "goal-delete-btn";
+          editBtn.textContent = "✎";
+          editBtn.title = "Edit Details";
+          editBtn.style.marginRight = "6px";
+          editBtn.addEventListener("click", (e) => {
+            e.stopPropagation();
+            openGoalEditModal(goal.id, 'monthly');
+          });
+          topRow.appendChild(editBtn);
 
           const deleteBtn = document.createElement("button");
           deleteBtn.type = "button";
@@ -7439,6 +7869,16 @@
             await deleteMonthlyGoal(goal.id);
           });
           topRow.appendChild(deleteBtn);
+
+          // Committee Tag
+          if (goal.committee) {
+            const commTag = document.createElement("div");
+            commTag.className = "chip";
+            commTag.style.fontSize = "9px";
+            commTag.style.marginLeft = "4px";
+            commTag.textContent = goal.committee;
+            topRow.appendChild(commTag);
+          }
 
           card.appendChild(topRow);
 
@@ -7516,57 +7956,18 @@
         col.appendChild(list);
 
         // Add form for new goals in this category
-        const addForm = document.createElement("div");
-        addForm.className = "goal-add-form";
+        const addBtnContainer = document.createElement("div");
+        addBtnContainer.className = "goal-add-form"; // reuse class for padding
 
-        const addTitleInput = document.createElement("input");
-        addTitleInput.type = "text";
-        addTitleInput.placeholder = "Add new goal…";
-        addForm.appendChild(addTitleInput);
-
-        const addOwnerSelect = document.createElement("select");
-        state.users.forEach(u => {
-          const opt = document.createElement("option");
-          opt.value = u.id;
-          opt.textContent = u.name;
-          addOwnerSelect.appendChild(opt);
+        const openCreateBtn = document.createElement("button");
+        openCreateBtn.textContent = "+ Add Monthly Strategy";
+        openCreateBtn.style.width = "100%";
+        openCreateBtn.addEventListener("click", () => {
+          openGoalCreateModal("monthly", category);
         });
-        if (state.currentUser) {
-          addOwnerSelect.value = String(state.currentUser.id);
-        }
-        addForm.appendChild(addOwnerSelect);
+        addBtnContainer.appendChild(openCreateBtn);
 
-        const addButton = document.createElement("button");
-        addButton.textContent = "Add Goal";
-        addButton.addEventListener("click", async () => {
-          const title = addTitleInput.value.trim();
-          const ownerId = parseInt(addOwnerSelect.value, 10);
-          if (!title) {
-            showToast("Enter a goal title", true);
-            return;
-          }
-          if (!ownerId) {
-            showToast("Pick an owner", true);
-            return;
-          }
-          try {
-            await createMonthlyGoal({
-              owner_id: ownerId,
-              month_key: monthKeyFromDate(state.currentMonthDate),
-              category,
-              title,
-              description: ""
-            });
-            addTitleInput.value = "";
-            showToast("Monthly goal added");
-          } catch (err) {
-            console.error(err);
-            showToast("Error adding monthly goal", true);
-          }
-        });
-        addForm.appendChild(addButton);
-
-        col.appendChild(addForm);
+        col.appendChild(addBtnContainer);
 
         grid.appendChild(col);
       });
@@ -8929,57 +9330,18 @@
 
         col.appendChild(list);
 
-        const addForm = document.createElement("div");
-        addForm.className = "goal-add-form";
+        const addBtnContainer = document.createElement("div");
+        addBtnContainer.className = "goal-add-form"; // reuse class for padding
 
-        const addTitleInput = document.createElement("input");
-        addTitleInput.type = "text";
-        addTitleInput.placeholder = "Add new annual goal…";
-        addForm.appendChild(addTitleInput);
-
-        const addOwnerSelect = document.createElement("select");
-        state.users.forEach(u => {
-          const opt = document.createElement("option");
-          opt.value = u.id;
-          opt.textContent = u.name;
-          addOwnerSelect.appendChild(opt);
+        const openCreateBtn = document.createElement("button");
+        openCreateBtn.textContent = "+ Add Annual Goal";
+        openCreateBtn.style.width = "100%";
+        openCreateBtn.addEventListener("click", () => {
+          openGoalCreateModal("annual", category);
         });
-        if (state.currentUser) {
-          addOwnerSelect.value = String(state.currentUser.id);
-        }
-        addForm.appendChild(addOwnerSelect);
+        addBtnContainer.appendChild(openCreateBtn);
 
-        const addButton = document.createElement("button");
-        addButton.textContent = "Add Goal";
-        addButton.addEventListener("click", async () => {
-          const title = addTitleInput.value.trim();
-          const ownerId = parseInt(addOwnerSelect.value, 10);
-          if (!title) {
-            showToast("Enter a goal title", true);
-            return;
-          }
-          if (!ownerId) {
-            showToast("Pick an owner", true);
-            return;
-          }
-          try {
-            await createAnnualGoal({
-              owner_id: ownerId,
-              year: state.annualYear,
-              category,
-              title,
-              description: ""
-            });
-            addTitleInput.value = "";
-            showToast("Annual goal added");
-          } catch (err) {
-            console.error(err);
-            showToast("Error adding annual goal", true);
-          }
-        });
-        addForm.appendChild(addButton);
-
-        col.appendChild(addForm);
+        col.appendChild(addBtnContainer);
 
         grid.appendChild(col);
       });
@@ -9736,6 +10098,571 @@
         }, 1000);
       };
     })();
+    // ===== GOAL CREATE MODAL =====
+    let createGoalContext = { type: null, category: null };
+    let transientSubtasks = [];
+
+    function initGoalCreateModal() {
+      const modal = document.getElementById("goal-create-modal");
+      if (!modal) return;
+
+      document.getElementById("goal-create-modal-close").addEventListener("click", () => modal.classList.add("hidden"));
+      document.getElementById("goal-create-modal-cancel").addEventListener("click", () => modal.classList.add("hidden"));
+
+      // Subtask adding
+      document.getElementById("btn-add-transient-subtask").addEventListener("click", () => {
+        const input = document.getElementById("new-subtask-input");
+        const val = input.value.trim();
+        if (val) {
+          transientSubtasks.push(val);
+          renderTransientSubtasks();
+          input.value = "";
+          input.focus();
+        }
+      });
+      document.getElementById("new-subtask-input").addEventListener("keydown", (e) => {
+        if (e.key === "Enter") {
+          e.preventDefault();
+          document.getElementById("btn-add-transient-subtask").click();
+        }
+      });
+
+      // Save
+      document.getElementById("goal-create-save-btn").addEventListener("click", async () => {
+        const title = document.getElementById("create-goal-title").value.trim();
+        if (!title) {
+          showToast("Please enter a goal name", true);
+          return;
+        }
+
+        const desc = document.getElementById("create-goal-desc").value.trim();
+        const committee = document.getElementById("create-goal-committee").value;
+        const parentId = document.getElementById("create-goal-parent").value;
+
+        // Assignees
+        const assigneeIds = [];
+        document.querySelectorAll("#create-goal-assignees-grid input:checked").forEach(cb => {
+          assigneeIds.push(parseInt(cb.value, 10));
+        });
+        // Ensure current user is assigned if no one else? Or just rely on selection.
+        // If "everyone" is selected? (Not implemented here, implied multiselect)
+
+        // If assigneeIds is empty, maybe default to current user? 
+        // Let's default to current user if empty in the UI pre-selection, but respect empty if passed.
+        if (assigneeIds.length === 0 && state.currentUser) {
+          assigneeIds.push(state.currentUser.id);
+        }
+
+        try {
+          showActionLoader({ main: "Creating Goal...", sub: "Setting up tasks" });
+
+          let newGoalId = null;
+
+          if (createGoalContext.type === "monthly") {
+            // Post Monthly
+            // Assuming createMonthlyGoal returns the ID or we need to mod it to return ID?
+            // existing createMonthlyGoal doesn't return ID. We might need to call API directly here or mod function.
+            // Let's mod `createMonthlyGoal` to return the response json.
+            // Actually `createMonthlyGoal` calls `apiSend`. `apiSend` returns response data.
+
+            // Auto-add pending subtask if typed but not added
+            const pendingSub = document.getElementById("new-subtask-input").value.trim();
+            if (pendingSub) {
+              transientSubtasks.push(pendingSub);
+            }
+
+            // Construct payload
+            const payload = {
+              title,
+              category: createGoalContext.category,
+              description: desc,
+              committee: committee || null,
+              annual_goal_id: parentId ? parseInt(parentId, 10) : null,
+              assignee_ids: assigneeIds,
+              month_key: monthKeyFromDate(state.currentMonthDate),
+              owner_id: assigneeIds[0] || state.currentUser?.id // Primary owner
+            };
+
+            // We need to use apiSend directly to get the ID, because createMonthlyGoal swallows return?
+            // Let's check createMonthlyGoal. It awaits but doesn't return.
+            // I will use apiSend directly here for control.
+            console.log("Creating Goal Payload:", payload);
+            const res = await apiSend("/monthly-goals", "POST", payload);
+            if (res && res.id) newGoalId = res.id;
+
+          } else {
+            // Annual
+            const payload = {
+              title,
+              category: createGoalContext.category,
+              description: desc,
+              assignee_ids: assigneeIds, // If annual supports multi
+              owner_id: assigneeIds[0] || state.currentUser?.id,
+              year: state.annualYear
+            };
+            const res = await apiSend("/annual-goals", "POST", payload);
+            if (res && res.id) newGoalId = res.id;
+          }
+
+          // Create Subtasks
+          if (newGoalId && transientSubtasks.length > 0) {
+            for (const stTitle of transientSubtasks) {
+              await apiSend(`/goals/${createGoalContext.type}/${newGoalId}/subtasks`, "POST", { title: stTitle });
+            }
+          }
+
+          // Refresh
+          if (createGoalContext.type === "monthly") await loadMonthlyGoals();
+          else await loadAnnualGoals();
+
+          modal.classList.add("hidden");
+          showToast("Goal created successfully");
+
+        } catch (e) {
+          console.error(e);
+          showToast("Error creating goal", true);
+        } finally {
+          hideActionLoader();
+        }
+      });
+    }
+
+    function renderTransientSubtasks() {
+      const container = document.getElementById("create-goal-subtasks-list");
+      container.innerHTML = "";
+      transientSubtasks.forEach((txt, idx) => {
+        const row = document.createElement("div");
+        row.style.display = "flex";
+        row.style.gap = "6px";
+        row.style.alignItems = "center";
+
+        const span = document.createElement("span");
+        span.textContent = "• " + txt;
+        span.style.flex = "1";
+        span.style.fontSize = "12px";
+
+        const del = document.createElement("button");
+        del.textContent = "×";
+        del.className = "goal-delete-btn"; // reuse style
+        del.onclick = () => {
+          transientSubtasks.splice(idx, 1);
+          renderTransientSubtasks();
+        };
+
+        row.appendChild(span);
+        row.appendChild(del);
+        container.appendChild(row);
+      });
+    }
+
+    function openGoalCreateModal(type, category) {
+      const modal = document.getElementById("goal-create-modal");
+      if (!modal) return;
+
+      createGoalContext = { type, category };
+      transientSubtasks = [];
+      renderTransientSubtasks();
+
+      document.getElementById("create-goal-title").value = "";
+      document.getElementById("create-goal-desc").value = "";
+      document.getElementById("new-subtask-input").value = "";
+      document.getElementById("create-goal-committee").value = "";
+
+      // Parent Dropdown
+      const parentWrap = document.getElementById("create-goal-parent-wrapper");
+      const parentSel = document.getElementById("create-goal-parent");
+      const committeeWrap = document.getElementById("create-goal-committee-wrapper");
+
+      if (type === "monthly") {
+        parentWrap.style.display = "block";
+        committeeWrap.style.display = "flex"; // label is flex or block?
+        // Populate Annual Goals
+        parentSel.innerHTML = '<option value="">(None)</option>';
+        state.annualGoals.forEach(ag => {
+          if (state.currentUser && ag.owner_id !== state.currentUser.id) return;
+          const opt = document.createElement("option");
+          opt.value = ag.id;
+          opt.textContent = ag.title;
+          parentSel.appendChild(opt);
+        });
+      } else {
+        parentWrap.style.display = "none";
+        committeeWrap.style.display = "none"; // Hide committee for annual for now
+      }
+
+      // Assignees Grid
+      const grid = document.getElementById("create-goal-assignees-grid");
+      grid.innerHTML = "";
+      state.users.forEach(u => {
+        const card = document.createElement("label");
+        card.className = "assignee-option";
+
+        const cb = document.createElement("input");
+        cb.type = "checkbox";
+        cb.value = u.id;
+
+        // Pre-select current user?
+        if (state.currentUser && u.id === state.currentUser.id) {
+          cb.checked = true;
+          card.classList.add("selected");
+        }
+
+        cb.addEventListener("change", () => {
+          if (cb.checked) card.classList.add("selected");
+          else card.classList.remove("selected");
+        });
+
+        const name = document.createElement("span");
+        name.textContent = u.name.split(" ")[0]; // First name only for compactness
+
+        card.appendChild(cb);
+        card.appendChild(name);
+        grid.appendChild(card);
+      });
+
+      document.getElementById("goal-create-modal-title").textContent = `New ${type === 'monthly' ? 'Monthly Strategy' : 'Annual Goal'}`;
+      modal.classList.remove("hidden");
+      document.getElementById("create-goal-title").focus();
+    }
+
+    // Call init
+    document.addEventListener("DOMContentLoaded", initGoalCreateModal);
+
+    // ===== GOAL EDIT MODAL (Advanced) =====
+    let currentEditingGoalId = null;
+    let currentEditingGoalType = null; // 'monthly' or 'annual'
+
+    function initGoalEditModal() {
+      const modal = document.getElementById("goal-edit-modal");
+      if (!modal) return;
+
+      document.getElementById("goal-edit-modal-close").addEventListener("click", () => modal.classList.add("hidden"));
+      document.getElementById("goal-edit-modal-cancel").addEventListener("click", () => modal.classList.add("hidden"));
+
+      document.getElementById("goal-edit-save-btn").addEventListener("click", async () => {
+        if (!currentEditingGoalId || !currentEditingGoalType) return;
+
+        const committee = document.getElementById("goal-edit-committee").value;
+        const parentId = document.getElementById("goal-edit-parent").value;
+        const parentIdVal = parentId ? parseInt(parentId, 10) : null;
+
+        // Assignees
+        const assigneeIds = [];
+        document.querySelectorAll(".goal-edit-assignee-cb:checked").forEach(cb => {
+          assigneeIds.push(parseInt(cb.value, 10));
+        });
+
+        try {
+          if (currentEditingGoalType === "monthly") {
+            await updateMonthlyGoal(currentEditingGoalId, {
+              committee: committee || null,
+              annual_goal_id: parentIdVal,
+              assignee_ids: assigneeIds
+            });
+            await loadMonthlyGoals();
+          } else {
+            // Annual goals logic if needed
+          }
+          modal.classList.add("hidden");
+          showToast("Goal updated");
+        } catch (err) {
+          console.error(err);
+          showToast("Error updating goal", true);
+        }
+      });
+    }
+
+    // Call init on load
+    document.addEventListener("DOMContentLoaded", initGoalEditModal);
+
+    function openGoalEditModal(goalId, type) {
+      const modal = document.getElementById("goal-edit-modal");
+      if (!modal) return;
+
+      currentEditingGoalId = goalId;
+      currentEditingGoalType = type;
+
+      // Find goal object
+      let goal;
+      if (type === "monthly") {
+        goal = state.monthlyGoals.find(g => g.id === goalId);
+        if (goal) document.getElementById("goal-edit-parent-wrapper").style.display = "block";
+      } else {
+        goal = state.annualGoals.find(g => g.id === goalId);
+        if (goal) document.getElementById("goal-edit-parent-wrapper").style.display = "none";
+      }
+
+      if (!goal) return;
+
+      document.getElementById("goal-edit-modal-title").textContent = `Edit ${type === 'monthly' ? 'Strategy' : 'Goal'}`;
+
+      // Populate Committee
+      document.getElementById("goal-edit-committee").value = goal.committee || "";
+
+      // Populate Parent Goal (Annual Goals)
+      const parentSelect = document.getElementById("goal-edit-parent");
+      parentSelect.innerHTML = '<option value="">(None)</option>';
+      state.annualGoals.forEach(ag => {
+        // Filter: Only show annual goals for current user
+        if (state.currentUser && ag.owner_id !== state.currentUser.id) return;
+
+        const opt = document.createElement("option");
+        opt.value = ag.id;
+        opt.textContent = ag.title;
+        if (goal.annual_goal_id === ag.id) opt.selected = true;
+        parentSelect.appendChild(opt);
+      });
+
+      // Populate Assignees (Grid)
+      const list = document.getElementById("goal-edit-assignees-list");
+      list.className = "assignee-grid"; // Use grid class
+      list.style.maxHeight = ""; // remove inline scroll style if exists
+      list.style.overflowY = "";
+      list.style.background = "transparent";
+      list.innerHTML = "";
+
+      state.users.forEach(u => {
+        const label = document.createElement("label");
+        label.className = "assignee-option";
+
+        const input = document.createElement("input");
+        input.type = "checkbox";
+        input.className = "goal-edit-assignee-cb";
+        input.value = u.id;
+
+        // Check if assigned
+        let isAssigned = false;
+        if (goal.assignees && Array.isArray(goal.assignees)) {
+          if (goal.assignees.some(a => a.id === u.id)) isAssigned = true;
+        } else if (goal.assignee_ids && Array.isArray(goal.assignee_ids)) {
+          // fallback if backend sends raw ids
+          if (goal.assignee_ids.includes(u.id)) isAssigned = true;
+        } else if (goal.owner_id === u.id) {
+          // Fallback to checking owner if assignees not hydrated yet
+          isAssigned = true;
+        }
+
+        if (isAssigned) {
+          input.checked = true;
+          label.classList.add("selected");
+        }
+
+        input.addEventListener("change", () => {
+          if (input.checked) label.classList.add("selected");
+          else label.classList.remove("selected");
+        });
+
+        const span = document.createElement("span");
+        span.textContent = u.name.split(" ")[0];
+
+        label.appendChild(input);
+        label.appendChild(span);
+        list.appendChild(label);
+      });
+
+      modal.classList.remove("hidden");
+    }
+
+    // ==========================================
+    // WEEKLY TEAM PLANNER LOGIC
+    // ==========================================
+
+    let currentWeeklyStart = getMonday(new Date()).toISOString().split('T')[0];
+
+    function getMonday(d) {
+      d = new Date(d);
+      var day = d.getDay(),
+        diff = d.getDate() - day + (day == 0 ? -6 : 1); // adjust when day is sunday
+      return new Date(d.setDate(diff));
+    }
+
+    function initWeeklyPlanner() {
+      // Nav Buttons
+      const prevBtn = document.getElementById("weekly-prev");
+      if (prevBtn) prevBtn.addEventListener("click", () => changeWeeklyWeek(-7));
+
+      const nextBtn = document.getElementById("weekly-next");
+      if (nextBtn) nextBtn.addEventListener("click", () => changeWeeklyWeek(7));
+
+      // Tab Listner
+      const tab = document.querySelector('.goals-tab[data-tab="weekly"]');
+      if (tab) tab.addEventListener('click', renderWeeklyPlanner);
+    }
+
+    document.addEventListener("DOMContentLoaded", initWeeklyPlanner);
+
+    function changeWeeklyWeek(days) {
+      const d = new Date(currentWeeklyStart);
+      d.setDate(d.getDate() + days);
+      currentWeeklyStart = d.toISOString().split('T')[0];
+      renderWeeklyPlanner();
+    }
+
+    async function renderWeeklyPlanner() {
+      // Update UI Label
+      const d = new Date(currentWeeklyStart);
+      const label = `Week of ${d.toLocaleDateString('en-US', { month: 'numeric', day: 'numeric', year: 'numeric' })}`;
+      document.getElementById("weekly-current-label").textContent = label;
+
+      // Show/Hide Panels
+      document.getElementById("monthly-goals-panel").style.display = "none";
+      document.getElementById("annual-goals-panel").style.display = "none";
+      document.getElementById("weekly-planner-panel").style.display = "block";
+
+      document.querySelectorAll(".goals-tab").forEach(b => b.classList.remove("active"));
+      document.querySelector('.goals-tab[data-tab="weekly"]').classList.add("active");
+
+      // Load Data
+      const data = await loadWeeklyPlan(currentWeeklyStart);
+
+      renderPrioritiesGrid(data);
+      renderMarketingGrid(data);
+      renderProjectsGrid(data);
+    }
+
+    async function loadWeeklyPlan(weekStart) {
+      try {
+        const res = await fetch(`${API_BASE}/weekly-planner?week=${weekStart}`, {
+          headers: { "x-user-id": state.currentUser ? state.currentUser.id : "" }
+        });
+        if (!res.ok) throw new Error("Failed to load");
+        return await res.json();
+      } catch (e) {
+        console.error(e);
+        return [];
+      }
+    }
+
+    function renderPrioritiesGrid(data) {
+      const container = document.getElementById("weekly-priorities-grid");
+      container.innerHTML = "";
+
+      const cols = ["", "Erica", "Katie", "Kevin", "Jenna", "Meighan"];
+      const rows = ["1", "2", "3", "4", "5"];
+
+      container.style.gridTemplateColumns = `40px repeat(${cols.length - 1}, 1fr)`;
+
+      cols.forEach(c => {
+        const div = document.createElement("div");
+        div.className = "weekly-cell header";
+        div.textContent = c;
+        container.appendChild(div);
+      });
+
+      rows.forEach(r => {
+        const rHead = document.createElement("div");
+        rHead.className = "weekly-cell header";
+        rHead.textContent = r;
+        container.appendChild(rHead);
+
+        cols.slice(1).forEach(c => {
+          const cell = document.createElement("div");
+          cell.className = "weekly-cell";
+          const textarea = document.createElement("textarea");
+          const entry = data.find(d => d.category === "priorities" && d.row_key === r && d.col_key === c);
+          textarea.value = entry ? entry.value : "";
+          textarea.addEventListener("change", (e) => updateWeeklyEntry("priorities", r, c, e.target.value));
+          cell.appendChild(textarea);
+          container.appendChild(cell);
+        });
+      });
+    }
+
+    function renderMarketingGrid(data) {
+      const container = document.getElementById("weekly-marketing-grid");
+      container.innerHTML = "";
+
+      const cols = ["Topic", "FB Post", "FB Story", "LinkedIn", "Instagram", "TikTok"];
+      const rows = [
+        "Microvolunteerism Monday", "Tech Tip Tuesday", "WTK Wednesday",
+        "Thoughtful Thursday", "Friday Blast Shorts", "Classes",
+        "Office Closures", "Daily FB Story", "Magazine Needs", "Gift Card Promotion"
+      ];
+
+      container.style.gridTemplateColumns = `200px repeat(${cols.length - 1}, 1fr)`;
+
+      cols.forEach(c => {
+        const div = document.createElement("div");
+        div.className = "weekly-cell header";
+        div.textContent = c;
+        container.appendChild(div);
+      });
+
+      rows.forEach(r => {
+        const rHead = document.createElement("div");
+        rHead.className = "weekly-cell row-header";
+        rHead.textContent = r;
+        container.appendChild(rHead);
+
+        cols.slice(1).forEach(c => {
+          const cell = document.createElement("div");
+          cell.className = "weekly-cell";
+          const textarea = document.createElement("textarea");
+          const entry = data.find(d => d.category === "marketing" && d.row_key === r && d.col_key === c);
+          textarea.value = entry ? entry.value : "";
+          textarea.addEventListener("change", (e) => updateWeeklyEntry("marketing", r, c, e.target.value));
+          cell.appendChild(textarea);
+          container.appendChild(cell);
+        });
+      });
+    }
+
+    function renderProjectsGrid(data) {
+      const container = document.getElementById("weekly-projects-grid");
+      container.innerHTML = "";
+
+      const cols = ["Project / Event", "Notes"];
+      container.style.gridTemplateColumns = `250px 1fr`;
+
+      cols.forEach(c => {
+        const div = document.createElement("div");
+        div.className = "weekly-cell header";
+        div.textContent = c;
+        container.appendChild(div);
+      });
+
+      for (let i = 1; i <= 10; i++) {
+        const rowKey = `row_${i}`;
+
+        const c1 = document.createElement("div");
+        c1.className = "weekly-cell";
+        const t1 = document.createElement("textarea");
+        t1.placeholder = "Project Name...";
+        const e1 = data.find(d => d.category === "projects" && d.row_key === rowKey && d.col_key === "name");
+        t1.value = e1 ? e1.value : "";
+        t1.addEventListener("change", (e) => updateWeeklyEntry("projects", rowKey, "name", e.target.value));
+        c1.appendChild(t1);
+        container.appendChild(c1);
+
+        const c2 = document.createElement("div");
+        c2.className = "weekly-cell";
+        const t2 = document.createElement("textarea");
+        t2.placeholder = "Notes...";
+        const e2 = data.find(d => d.category === "projects" && d.row_key === rowKey && d.col_key === "notes");
+        t2.value = e2 ? e2.value : "";
+        t2.addEventListener("change", (e) => updateWeeklyEntry("projects", rowKey, "notes", e.target.value));
+        c2.appendChild(t2);
+        container.appendChild(c2);
+      }
+    }
+
+    async function updateWeeklyEntry(category, rowKey, colKey, value) {
+      if (!state.currentUser) return;
+
+      await fetch(`${API_BASE}/weekly-planner`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          week_start: currentWeeklyStart,
+          category,
+          row_key: rowKey,
+          col_key: colKey,
+          value,
+          user_id: state.currentUser.id
+        })
+      });
+    }
+
   </script>
 
 </body>
