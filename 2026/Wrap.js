@@ -552,6 +552,9 @@ async function updateDailyTask(request, env, id, ctx) {
     if (statusChangedToDone) {
         completed_at = nowIso;
         completion_notified = 0;
+    } else if (status !== "done" && existing.status === "done") {
+        // If moving AWAY from done, clear the completion time so it disappears from ticker
+        completed_at = null;
     }
 
     await env.WRAP_DB
@@ -1729,26 +1732,37 @@ async function duplicateProject(request, env, id) {
     }
 
     // 4. Duplicate steps & assignees
+    // 4. Duplicate steps & assignees
     for (const s of originSteps) {
-        const stepInfo = await env.WRAP_DB.prepare(`
-            INSERT INTO project_steps 
-                (project_id, step_order, title, description, assigned_to_id, status, created_at, updated_at)
-            VALUES (?, ?, ?, ?, ?, 'pending', ?, ?)
-        `)
-            .bind(newProjectId, s.step_order, s.title, s.description, s.assigned_to_id, now, now)
-            .run();
-
-        const newStepId = stepInfo.meta?.last_row_id;
-        if (newStepId) {
-            // Copy assignees from project_step_assignees
-            await env.WRAP_DB.prepare(`
-                INSERT INTO project_step_assignees (step_id, user_id, created_at)
-                SELECT ?, user_id, ?
-                FROM project_step_assignees
-                WHERE step_id = ?
+        try {
+            const stepInfo = await env.WRAP_DB.prepare(`
+                INSERT INTO project_steps 
+                    (project_id, step_order, title, description, assigned_to_id, status, created_at, updated_at)
+                VALUES (?, ?, ?, ?, ?, 'pending', ?, ?)
             `)
-                .bind(newStepId, now, s.id)
+                .bind(newProjectId, s.step_order, s.title, s.description, s.assigned_to_id, now, now)
                 .run();
+
+            const newStepId = stepInfo.meta?.last_row_id;
+            if (newStepId) {
+                // Copy assignees from project_step_assignees
+                try {
+                    await env.WRAP_DB.prepare(`
+                        INSERT INTO project_step_assignees (step_id, user_id, created_at)
+                        SELECT ?, user_id, ?
+                        FROM project_step_assignees
+                        WHERE step_id = ?
+                    `)
+                        .bind(newStepId, now, s.id)
+                        .run();
+                } catch (assigneeErr) {
+                    console.error("Failed to duplicate assignees for step", s.id, assigneeErr);
+                    // Continue even if assignees fail
+                }
+            }
+        } catch (err) {
+            console.error("Failed to duplicate step", s.id, err);
+            // Continue to next step
         }
     }
 
@@ -2163,6 +2177,14 @@ export default {
             if (pathname === "/api/weekly-planner") {
                 if (request.method === "GET") return await getWeeklyPlan(env, searchParams);
                 if (request.method === "POST") return await updateWeeklyEntry(request, env);
+            }
+
+            // ===== TICKER & REACTIONS (NEW) =====
+            if (pathname === "/api/ticker") {
+                if (request.method === "GET") return await getTicker(env);
+            }
+            if (pathname === "/api/reactions") {
+                if (request.method === "POST") return await addReaction(request, env);
             }
 
             // ===== GOAL CATEGORIES (NEW) =====
@@ -2605,7 +2627,7 @@ export default {
                     return await getProjectWithSteps(env, projectId);
                 }
 
-                if (request.method === "PATCH") {
+                if (request.method === "PATCH" || request.method === "PUT") {
                     return await updateProject(request, env, projectId);
                 }
 
@@ -3556,6 +3578,48 @@ async function updateWeeklyEntry(request, env) {
     `)
         .bind(week_start, category, row_key, col_key, value, user_id)
         .run();
+
+    return json({ success: true });
+}
+
+// ==========================================
+// TICKER & REACTIONS
+// ==========================================
+
+async function getTicker(env) {
+    // Fetch tasks completed in the last 30 minutes
+    const { results } = await env.WRAP_DB.prepare(`
+        SELECT 
+            dt.id, 
+            dt.title, 
+            dt.completed_at, 
+            u.name as user_name,
+            (SELECT COUNT(*) FROM task_reactions tr WHERE tr.task_id = dt.id AND tr.reaction = 'thumbs_up') as thumbs_up_count,
+            (SELECT COUNT(*) FROM task_reactions tr WHERE tr.task_id = dt.id AND tr.reaction = 'heart') as heart_count
+        FROM daily_tasks dt
+        LEFT JOIN users u ON dt.assigned_to_id = u.id
+        WHERE dt.status = 'done' 
+          AND dt.completed_at > datetime('now', '-30 minutes')
+        ORDER BY dt.completed_at DESC
+    `).all();
+
+    return json(results);
+}
+
+async function addReaction(request, env) {
+    const body = await getBody(request);
+    const { task_id, reaction, user_id } = body;
+
+    if (!task_id || !reaction || !user_id) {
+        return json({ error: "Missing fields" }, 400);
+    }
+
+    // Upsert reaction (ensure one per user per task per reaction type)
+    await env.WRAP_DB.prepare(`
+        INSERT INTO task_reactions (task_id, user_id, reaction)
+        VALUES (?, ?, ?)
+        ON CONFLICT(task_id, user_id, reaction) DO NOTHING
+    `).bind(task_id, user_id, reaction).run();
 
     return json({ success: true });
 }

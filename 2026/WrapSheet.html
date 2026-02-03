@@ -507,30 +507,36 @@
     /* Goals */
 
     .goals-tabs {
-      display: flex;
-      gap: 6px;
+      display: inline-flex;
+      background: #111827;
+      /* Dark background like screenshot */
       border-radius: 999px;
-      padding: 2px;
-      background: rgba(15, 23, 42, 0.95);
-      border: 1px solid rgba(55, 65, 81, 0.9);
-      font-size: 11px;
+      padding: 4px;
+      gap: 0;
+      border: 1px solid #374151;
     }
 
     .goals-tab {
-      flex: 1;
-      padding: 4px 6px;
+      padding: 6px 16px;
       border-radius: 999px;
       border: none;
       background: transparent;
-      color: var(--ink-soft);
+      color: #9ca3af;
+      /* Gray text */
       cursor: pointer;
       text-transform: uppercase;
-      letter-spacing: 0.14em;
+      font-weight: 600;
+      font-size: 10px;
+      letter-spacing: 0.05em;
+      transition: all 0.2s;
     }
 
     .goals-tab.active {
-      background: linear-gradient(135deg, var(--accent), var(--accent-soft));
-      color: #f9fafb;
+      background: #EAB308;
+      /* Yellow/Gold active state */
+      color: #111827;
+      /* Dark text on yellow */
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
     }
 
     .goals-controls {
@@ -3028,21 +3034,26 @@
 
     /* Weekly Planner Styles */
     .weekly-section-header {
-      font-size: 16px;
+      font-size: 15px;
       font-weight: 700;
-      color: var(--accent);
-      margin-bottom: 10px;
-      padding-bottom: 5px;
-      border-bottom: 1px solid var(--border);
+      color: #06b6d4;
+      /* Cyan color from screenshot */
+      margin-top: 20px;
+      margin-bottom: 8px;
     }
 
     .weekly-grid {
       display: grid;
       gap: 1px;
-      background: var(--border);
+      /* background: var(--border);  Too faint */
+      background: #94a3b8;
+      /* Darker gray for visible lines */
       border: 1px solid var(--border);
       border-radius: 8px;
       overflow: hidden;
+      margin-bottom: 40px;
+      /* Added spacing */
+      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
     }
 
     .weekly-row {
@@ -3059,9 +3070,11 @@
     }
 
     .weekly-cell.header {
-      background: var(--bg-main);
+      background: #f8fafc;
+      /* Very light gray */
       font-weight: 600;
-      color: var(--ink-soft);
+      color: #64748b;
+      font-size: 11px;
       text-align: center;
       display: flex;
       align-items: center;
@@ -3069,11 +3082,15 @@
     }
 
     .weekly-cell.row-header {
-      background: var(--bg-main);
-      font-weight: 600;
-      color: var(--ink);
-      text-align: left;
+      background: #f1f5f9;
+      /* Slightly darker gray for row headers */
+      font-weight: 700;
+      color: #334155;
+      font-size: 11px;
+      display: flex;
+      align-items: center;
       justify-content: flex-start;
+      padding-left: 10px;
     }
 
     .weekly-cell textarea {
@@ -3091,10 +3108,108 @@
     .weekly-cell textarea:focus {
       background: rgba(255, 255, 255, 0.05);
     }
+
+    /* Header Ticker Styles */
+    #header-ticker-container {
+      width: 100%;
+      height: 32px;
+      background: linear-gradient(90deg, #0f172a, #1e293b, #0f172a);
+      display: flex;
+      align-items: center;
+      position: relative;
+      overflow: hidden;
+      border-bottom: 1px solid rgba(51, 65, 85, 0.5);
+      margin-bottom: 20px;
+      /* Spacing before main content */
+      mask-image: linear-gradient(to right, transparent, black 5%, black 95%, transparent);
+      -webkit-mask-image: linear-gradient(to right, transparent, black 10%, black 90%, transparent);
+    }
+
+    .header-default-sub {
+      color: var(--ink-soft);
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      width: 100%;
+      text-align: center;
+    }
+
+    .ticker-card {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 3px 16px;
+      background: rgba(30, 41, 59, 1);
+      border: 1px solid rgba(56, 189, 248, 0.2);
+      border-radius: 999px;
+      font-size: 11px;
+      color: #e2e8f0;
+      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+
+      position: absolute;
+      left: 0;
+      white-space: nowrap;
+      cursor: pointer;
+      will-change: transform;
+    }
+
+    .ticker-card.zoomed {
+      z-index: 10;
+      border-color: rgba(56, 189, 248, 0.6);
+      box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.2);
+      /* Transform is handled by JS loop now, class just adds style overrides */
+    }
+
+    .ticker-user {
+      font-weight: 700;
+      color: #38bdf8;
+    }
+
+    .ticker-task {
+      color: #f8fafc;
+      font-weight: 500;
+      max-width: 300px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .ticker-time {
+      color: #94a3b8;
+      font-size: 9px;
+      margin-left: 4px;
+    }
+
+    .ticker-reactions {
+      display: flex;
+      gap: 4px;
+      margin-left: 8px;
+    }
+
+    .ticker-reaction-btn {
+      background: transparent;
+      border: none;
+      cursor: pointer;
+      padding: 0;
+      font-size: 12px;
+      transition: transform 0.2s;
+    }
+
+    .ticker-reaction-btn:hover {
+      transform: scale(1.5);
+    }
+
+    .ticker-reaction-count {
+      font-size: 9px;
+      margin-left: 1px;
+      color: #cbd5e1;
+    }
   </style>
 </head>
 
 <body>
+
+  <!-- Task Ticker -->
+
   <!-- User chooser -->
   <div id="user-overlay" class="overlay">
     <div class="overlay-panel">
@@ -3502,40 +3617,45 @@
           <h1>Wrap Sheet</h1>
           <span>BER • DAILY TASKS • GOALS</span>
         </div>
-      </div>
 
-      <div class="header-controls">
-        <div id="sync-indicator" style="font-size:11px;color:var(--ink-soft);display:flex;align-items:center;gap:4px;">
-          <span style="font-size:12px;">🔄</span>
-          <span id="last-sync-time">—</span>
-        </div>
-
-        <div class="theme-toggle">
-          <label for="theme-select">Theme</label>
-          <select id="theme-select">
-            <option value="light">Day</option>
-            <option value="dark">Night</option>
-          </select>
-        </div>
-
-        <!-- Coin Counter (for Kevin) -->
-        <div class="coin-counter-wrap" id="coin-counter-wrap">
-          <div class="coin-counter" id="coin-counter" title="Your coin balance">
-            <span class="coin-icon">🪙</span>
-            <span class="coin-amount" id="coin-amount">0</span>
+        <div class="header-controls">
+          <div id="sync-indicator"
+            style="font-size:11px;color:var(--ink-soft);display:flex;align-items:center;gap:4px;">
+            <span style="font-size:12px;">🔄</span>
+            <span id="last-sync-time">—</span>
           </div>
-          <div class="coin-caps" id="coin-caps">
-            <span id="coin-day-progress">0/50 today</span>
-            <span id="coin-week-progress">0/250 week</span>
+
+          <div class="theme-toggle">
+            <label for="theme-select">Theme</label>
+            <select id="theme-select">
+              <option value="light">Day</option>
+              <option value="dark">Night</option>
+            </select>
+          </div>
+
+          <!-- Coin Counter (for Kevin) -->
+          <div class="coin-counter-wrap" id="coin-counter-wrap">
+            <div class="coin-counter" id="coin-counter" title="Your coin balance">
+              <span class="coin-icon">🪙</span>
+              <span class="coin-amount" id="coin-amount">0</span>
+            </div>
+            <div class="coin-caps" id="coin-caps">
+              <span id="coin-day-progress">0/50 today</span>
+              <span id="coin-week-progress">0/250 week</span>
+            </div>
+          </div>
+
+          <div class="user-pill">
+            <span id="current-user-label">Not signed in</span>
+            <button id="switch-user-btn">Switch</button>
           </div>
         </div>
-
-        <div class="user-pill">
-          <span id="current-user-label">Not signed in</span>
-          <button id="switch-user-btn">Switch</button>
-        </div>
-      </div>
     </header>
+
+    <!-- Full-width Ticker Bar -->
+    <div id="header-ticker-container">
+      <!-- Ticker items injected here -->
+    </div>
 
     <main class="app-main">
       <!-- Customization Instructions -->
@@ -6653,9 +6773,16 @@
           if (tab === "monthly") {
             document.getElementById("monthly-goals-panel").style.display = "";
             document.getElementById("annual-goals-panel").style.display = "none";
+            document.getElementById("weekly-planner-panel").style.display = "none";
+          } else if (tab === "weekly") {
+            document.getElementById("monthly-goals-panel").style.display = "none";
+            document.getElementById("annual-goals-panel").style.display = "none";
+            document.getElementById("weekly-planner-panel").style.display = "";
+            initWeeklyPlanner(); // Ensure it renders
           } else {
             document.getElementById("monthly-goals-panel").style.display = "none";
             document.getElementById("annual-goals-panel").style.display = "";
+            document.getElementById("weekly-planner-panel").style.display = "none";
           }
         });
       });
@@ -7631,7 +7758,9 @@
         status,
         task_time: taskTime, // scheduled time for reminders
         assigned_to_id: assignedToId,
-        assignee_ids: assigneeIds
+        assignee_ids: assigneeIds,
+        color: document.getElementById("task-color") ? document.getElementById("task-color").value : "#ffffff",
+        priority: document.getElementById("task-priority") ? parseInt(document.getElementById("task-priority").value) : 1
       };
 
       try {
@@ -8220,7 +8349,30 @@
     }
 
 
+
     // ===== JOINT PROJECTS =====
+    async function toggleProjectStatus(project) {
+      const newStatus = project.status === 'completed' ? 'active' : 'completed';
+      const confirmMsg = newStatus === 'completed'
+        ? "Mark project as completed? It will move to the 'Completed' section."
+        : "Re-open this project?";
+
+      if (!confirm(confirmMsg)) return;
+
+      try {
+        showActionLoader();
+        // Fix: apiPut is not defined, use apiSend
+        await apiSend(`/projects/${project.id}`, "PUT", { status: newStatus });
+        loadProjects(); // Reload to refresh lists
+        showToast(`Project marked as ${newStatus}`);
+      } catch (err) {
+        console.error(err);
+        showToast("Failed to update status", true);
+      } finally {
+        hideActionLoader();
+      }
+    }
+
     async function loadProjects() {
       try {
         const projects = await apiGet("/projects");
@@ -8233,8 +8385,14 @@
 
     function renderProjects() {
       const grid = document.getElementById("projects-grid");
+      const section = document.getElementById("section-projects");
       if (!grid) return;
+
       grid.innerHTML = "";
+
+      // Cleanup old completed section if exists
+      const oldCompleted = document.getElementById("completed-projects-container");
+      if (oldCompleted) oldCompleted.remove();
 
       const projects = state.projects || [];
 
@@ -8243,10 +8401,51 @@
         return;
       }
 
-      projects.forEach(project => {
+      const activeProjects = projects.filter(p => p.status !== 'completed');
+      const completedProjects = projects.filter(p => p.status === 'completed');
+
+      // Render Active
+      activeProjects.forEach(project => {
         const card = buildProjectCard(project);
         grid.appendChild(card);
       });
+
+      // Render Completed
+      if (completedProjects.length > 0 && section) {
+        const details = document.createElement("details");
+        details.id = "completed-projects-container";
+        details.style.marginTop = "20px";
+        details.style.borderTop = "1px solid var(--panel-border)";
+        details.style.paddingTop = "15px";
+        // Match grid margin quirks if necessary, or just block
+
+        const summary = document.createElement("summary");
+        summary.textContent = `Completed Projects (${completedProjects.length})`;
+        summary.style.cursor = "pointer";
+        summary.style.fontWeight = "600";
+        summary.style.color = "var(--ink-soft)";
+        summary.style.fontSize = "12px";
+        summary.style.userSelect = "none";
+        summary.style.outline = "none";
+        summary.style.marginBottom = "15px";
+        details.appendChild(summary);
+
+        const completedGrid = document.createElement("div");
+        // Re-use the grid class for layout
+        completedGrid.className = "projects-grid";
+
+        completedProjects.forEach(project => {
+          const card = buildProjectCard(project);
+          card.style.opacity = "0.75";
+          card.style.filter = "grayscale(0.8)";
+          // Ensure we can still un-complete them? 
+          // buildProjectCard handles edit/delete, so yes.
+          completedGrid.appendChild(card);
+        });
+
+        details.appendChild(completedGrid);
+        section.appendChild(details);
+      }
     }
 
     function buildProjectCard(project) {
@@ -8324,7 +8523,6 @@
       };
       title.appendChild(copyBtn);
 
-      // Delete Project Button
       const deleteProjBtn = document.createElement("button");
       deleteProjBtn.textContent = "🗑";
       deleteProjBtn.title = "Delete Entire Project";
@@ -8340,6 +8538,23 @@
         deleteProject(project);
       };
       title.appendChild(deleteProjBtn);
+
+      // Completion Checkmark
+      const completeBtn = document.createElement("button");
+      const isCompleted = project.status === 'completed';
+      completeBtn.textContent = isCompleted ? "↩" : "✅";
+      completeBtn.title = isCompleted ? "Re-open Project" : "Mark as Completed";
+      completeBtn.style.background = "none";
+      completeBtn.style.border = "none";
+      completeBtn.style.cursor = "pointer";
+      completeBtn.style.fontSize = "14px";
+      completeBtn.style.marginLeft = "8px"; // Spacing
+      completeBtn.style.color = isCompleted ? "var(--ink-soft)" : "var(--success)";
+      completeBtn.onclick = (e) => {
+        e.stopPropagation();
+        toggleProjectStatus(project);
+      };
+      title.appendChild(completeBtn);
 
       const progressLabel = document.createElement("div");
       progressLabel.className = "project-progress-label";
@@ -8451,9 +8666,14 @@
         contentDiv.style.flexDirection = "column";
         contentDiv.style.justifyContent = "center";
 
+        // Priority Icon
+        let priorityIcon = "";
+        if (step.priority == 3) priorityIcon = "🔥 ";
+        else if (step.priority == 2) priorityIcon = "⚡ ";
+
         const titleSpan = document.createElement("span");
         titleSpan.className = "step-title";
-        titleSpan.textContent = step.title;
+        titleSpan.textContent = priorityIcon + step.title;
         contentDiv.appendChild(titleSpan);
 
         if (step.status === "done" && step.completed_at) {
@@ -10523,7 +10743,7 @@
     async function loadWeeklyPlan(weekStart) {
       try {
         const res = await fetch(`${API_BASE}/weekly-planner?week=${weekStart}`, {
-          headers: { "x-user-id": state.currentUser ? state.currentUser.id : "" }
+          // headers: { "x-user-id": state.currentUser ? state.currentUser.id : "" } // Not strictly needed for GET if public, but good practice
         });
         if (!res.ok) throw new Error("Failed to load");
         return await res.json();
@@ -10561,7 +10781,14 @@
           const textarea = document.createElement("textarea");
           const entry = data.find(d => d.category === "priorities" && d.row_key === r && d.col_key === c);
           textarea.value = entry ? entry.value : "";
-          textarea.addEventListener("change", (e) => updateWeeklyEntry("priorities", r, c, e.target.value));
+
+          let debounce = null;
+          textarea.addEventListener("input", (e) => {
+            clearTimeout(debounce);
+            debounce = setTimeout(() => {
+              updateWeeklyEntry("priorities", r, c, e.target.value);
+            }, 2000);
+          });
           cell.appendChild(textarea);
           container.appendChild(cell);
         });
@@ -10600,7 +10827,14 @@
           const textarea = document.createElement("textarea");
           const entry = data.find(d => d.category === "marketing" && d.row_key === r && d.col_key === c);
           textarea.value = entry ? entry.value : "";
-          textarea.addEventListener("change", (e) => updateWeeklyEntry("marketing", r, c, e.target.value));
+
+          let debounce = null;
+          textarea.addEventListener("input", (e) => {
+            clearTimeout(debounce);
+            debounce = setTimeout(() => {
+              updateWeeklyEntry("marketing", r, c, e.target.value);
+            }, 2000);
+          });
           cell.appendChild(textarea);
           container.appendChild(cell);
         });
@@ -10611,9 +10845,11 @@
       const container = document.getElementById("weekly-projects-grid");
       container.innerHTML = "";
 
+      // Configure Grid Columns: Name, Notes, (Delete placeholder if needed later)
       const cols = ["Project / Event", "Notes"];
       container.style.gridTemplateColumns = `250px 1fr`;
 
+      // Render Headers
       cols.forEach(c => {
         const div = document.createElement("div");
         div.className = "weekly-cell header";
@@ -10621,48 +10857,317 @@
         container.appendChild(div);
       });
 
-      for (let i = 1; i <= 10; i++) {
-        const rowKey = `row_${i}`;
+      // 1. Identify existing rows from data
+      const projectEntries = data.filter(d => d.category === "projects");
+      let rowKeys = [...new Set(projectEntries.map(d => d.row_key))];
 
-        const c1 = document.createElement("div");
-        c1.className = "weekly-cell";
-        const t1 = document.createElement("textarea");
-        t1.placeholder = "Project Name...";
-        const e1 = data.find(d => d.category === "projects" && d.row_key === rowKey && d.col_key === "name");
-        t1.value = e1 ? e1.value : "";
-        t1.addEventListener("change", (e) => updateWeeklyEntry("projects", rowKey, "name", e.target.value));
-        c1.appendChild(t1);
-        container.appendChild(c1);
+      // Sort keys to keep order (if they are timestamps or numbered)
+      rowKeys.sort();
 
-        const c2 = document.createElement("div");
-        c2.className = "weekly-cell";
-        const t2 = document.createElement("textarea");
-        t2.placeholder = "Notes...";
-        const e2 = data.find(d => d.category === "projects" && d.row_key === rowKey && d.col_key === "notes");
-        t2.value = e2 ? e2.value : "";
-        t2.addEventListener("change", (e) => updateWeeklyEntry("projects", rowKey, "notes", e.target.value));
-        c2.appendChild(t2);
-        container.appendChild(c2);
+      // Ensure at least one row exists
+      if (rowKeys.length === 0) {
+        rowKeys.push(`proj_${Date.now()}`);
       }
+
+      // 2. Render Rows
+      rowKeys.forEach(rowKey => {
+        renderProjectRow(container, data, rowKey);
+      });
+
+      // 3. "Add Row" Button (Outside grid? No, inside is tricky with grid layout. 
+      //    We'll append a button AFTER the grid in the container's parent)
+
+      let btnContainer = document.getElementById("projects-add-btn-container");
+      if (!btnContainer) {
+        btnContainer = document.createElement("div");
+        btnContainer.id = "projects-add-btn-container";
+        btnContainer.style.marginTop = "-35px"; // Pull up close to bottom of grid
+        btnContainer.style.marginBottom = "40px";
+        btnContainer.style.textAlign = "right"; // Right align
+        container.parentNode.appendChild(btnContainer);
+      }
+      btnContainer.innerHTML = ""; // Clear old buttons
+
+      const addBtn = document.createElement("button");
+      addBtn.textContent = "+ Add Project";
+      addBtn.className = "button-secondary";
+      addBtn.style.fontSize = "12px";
+      addBtn.onclick = () => {
+        const newKey = `proj_${Date.now()}`;
+        renderProjectRow(container, [], newKey); // Append new row
+      };
+      btnContainer.appendChild(addBtn);
+    }
+
+    function renderProjectRow(container, data, rowKey) {
+      // Col 1: Name
+      const c1 = document.createElement("div");
+      c1.className = "weekly-cell";
+      const t1 = document.createElement("textarea");
+      t1.placeholder = "Project Name...";
+      const e1 = data.find(d => d.category === "projects" && d.row_key === rowKey && d.col_key === "name");
+      t1.value = e1 ? e1.value : "";
+
+      let d1 = null;
+      t1.addEventListener("input", (e) => {
+        clearTimeout(d1);
+        d1 = setTimeout(() => {
+          updateWeeklyEntry("projects", rowKey, "name", e.target.value);
+        }, 2000);
+      });
+      c1.appendChild(t1);
+      container.appendChild(c1);
+
+      // Col 2: Notes
+      const c2 = document.createElement("div");
+      c2.className = "weekly-cell";
+      const t2 = document.createElement("textarea");
+      t2.placeholder = "Details & Notes...";
+      const e2 = data.find(d => d.category === "projects" && d.row_key === rowKey && d.col_key === "notes");
+      t2.value = e2 ? e2.value : "";
+
+      let d2 = null;
+      t2.addEventListener("input", (e) => {
+        clearTimeout(d2);
+        d2 = setTimeout(() => {
+          updateWeeklyEntry("projects", rowKey, "notes", e.target.value);
+        }, 2000);
+      });
+      c2.appendChild(t2);
+      container.appendChild(c2);
     }
 
     async function updateWeeklyEntry(category, rowKey, colKey, value) {
-      if (!state.currentUser) return;
+      if (!state.currentUser) {
+        console.warn("Cannot save: No current user");
+        showToast("Error: Please select a user first!", true);
+        return;
+      }
 
-      await fetch(`${API_BASE}/weekly-planner`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          week_start: currentWeeklyStart,
-          category,
-          row_key: rowKey,
-          col_key: colKey,
-          value,
-          user_id: state.currentUser.id
-        })
+      // showToast("Saving...", false); // Optional: verbose
+
+      try {
+        const res = await fetch(`${API_BASE}/weekly-planner`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            week_start: currentWeeklyStart,
+            category,
+            row_key: rowKey,
+            col_key: colKey,
+            value,
+            user_id: state.currentUser.id
+          })
+        });
+
+        if (!res.ok) {
+          const err = await res.text();
+          console.error("Save failed:", err);
+          showToast("Failed to save entry", true);
+        } else {
+          // Success
+          console.log("Entry saved:", category, rowKey, colKey);
+          showToast("Saved ✓");
+        }
+      } catch (err) {
+        console.error("Network error saving entry:", err);
+        showToast("Network error: Could not save", true);
+      }
+    }
+
+
+    // Start Ticker
+    initTicker();
+    setInterval(initTicker, 30000);
+
+    let tickerTasks = [];
+    let tickerQueue = [];
+    let isTickerAnimating = false;
+    let isTickerPaused = false;
+    let currentTickerCard = null;
+
+    async function initTicker() {
+      try {
+        const res = await fetch(`${API_BASE}/ticker`);
+        if (!res.ok) return;
+        tickerTasks = await res.json();
+
+        const container = document.getElementById("header-ticker-container");
+
+        // Clear or update logic? 
+        // If empty, just stop
+        if (tickerTasks.length === 0) {
+          // No default text requested
+          if (container) container.innerHTML = "";
+          return;
+        }
+
+        if (tickerQueue.length === 0) {
+          tickerQueue = [...tickerTasks];
+        }
+
+        if (!isTickerAnimating && tickerQueue.length > 0) {
+          runTickerAnimation();
+        }
+      } catch (e) {
+        console.error("Ticker load error", e);
+      }
+    }
+
+    function startTickerLoop() {
+      // Legacy function from previous replace, mostly unused now as runTickerAnimation handles queuing
+      // But let's clean it up to avoid confusion if called
+      if (tickerInterval) clearInterval(tickerInterval);
+      runTickerAnimation();
+    }
+
+    function runTickerAnimation() {
+      if (tickerQueue.length === 0) {
+        if (tickerTasks.length > 0) {
+          tickerQueue = [...tickerTasks];
+        } else {
+          isTickerAnimating = false;
+          return;
+        }
+      }
+
+      isTickerAnimating = true;
+      const task = tickerQueue.shift();
+
+      animateTickerCard(task, () => {
+        // Wait a bit before next?
+        setTimeout(() => {
+          runTickerAnimation();
+        }, 500);
       });
     }
 
+    function animateTickerCard(task, onComplete) {
+      const container = document.getElementById("header-ticker-container");
+      if (!container) return;
+
+      // Ensure container is clear of old cards if somehow stuck
+      container.innerHTML = "";
+
+      // Build Card
+      const completedDate = new Date(task.completed_at);
+      const diffMs = new Date() - completedDate;
+      const diffMins = Math.floor(diffMs / 60000);
+      const timeText = diffMins <= 0 ? "just now" : `${diffMins}m ago`;
+
+      const card = document.createElement("div");
+      card.className = "ticker-card";
+      // Fix: Start invisible and far right to prevent "flash" at left:0
+      card.style.transform = "translateX(100vw)";
+      card.style.opacity = "0";
+
+      card.innerHTML = `
+            <span class="ticker-user">${task.user_name || 'Someone'}</span>
+            <span style="color:#94a3b8;font-size:10px;">completed</span>
+            <span class="ticker-task">${task.title}</span>
+            <span class="ticker-time">${timeText}</span>
+            <div class="ticker-reactions">
+                <button class="ticker-reaction-btn" onclick="reactToTask(${task.id}, 'thumbs_up', this); event.stopPropagation();">
+                    👍 <span class="ticker-reaction-count">${task.thumbs_up_count || ''}</span>
+                </button>
+                <button class="ticker-reaction-btn" onclick="reactToTask(${task.id}, 'heart', this); event.stopPropagation();">
+                    ❤️ <span class="ticker-reaction-count">${task.heart_count || ''}</span>
+                </button>
+            </div>
+        `;
+
+      container.appendChild(card);
+      currentTickerCard = card;
+
+      card.addEventListener("mouseenter", () => isTickerPaused = true);
+      card.addEventListener("mouseleave", () => isTickerPaused = false);
+
+      // Calculate Animation
+      requestAnimationFrame(() => {
+        const cardWidth = card.offsetWidth || 300;
+        const containerWidth = container.offsetWidth;
+
+        let posX = containerWidth + 50;
+        let state = 'SCROLL_IN';
+        let scale = 1;
+        let zoomTimer = 0;
+        const speed = 4; // Faster entrance
+
+        // Now that we have calculated width, set opacity back to 1 for the loop
+        card.style.opacity = "1";
+
+        function step() {
+          if (isTickerPaused) {
+            requestAnimationFrame(step);
+            return;
+          }
+
+          const currentContainerWidth = container.offsetWidth;
+          const targetCenter = (currentContainerWidth / 2) - (card.offsetWidth / 2);
+
+          if (state === 'SCROLL_IN') {
+            posX -= speed;
+            if (posX <= targetCenter) {
+              posX = targetCenter;
+              state = 'ZOOM';
+            }
+          } else if (state === 'ZOOM') {
+            zoomTimer++;
+            // Zoom Up (30 frame/0.5s) -> Hold (240 frames/4s) -> Zoom Down (30 frames/0.5s)
+            if (zoomTimer < 30) {
+              scale = 1 + (0.15 * (zoomTimer / 30));
+            } else if (zoomTimer > 300) {
+              // Start Zoom Out after 5 seconds (300 frames)
+              const outProgress = (zoomTimer - 300) / 30;
+              scale = 1.15 - (0.15 * outProgress);
+              if (scale < 1) scale = 1;
+            }
+
+            if (zoomTimer >= 330) { // End zoom phase
+              state = 'SCROLL_OUT';
+              scale = 1;
+            }
+          } else if (state === 'SCROLL_OUT') {
+            posX -= speed;
+            // Fix: Larger buffer to ensure it is FULLY off screen before removing
+            if (posX < -(card.offsetWidth + 200)) {
+              card.remove();
+              onComplete();
+              return;
+            }
+          }
+
+          card.style.transform = `translateX(${posX}px) scale(${scale})`;
+          if (state === 'ZOOM' && scale > 1.05) card.classList.add("zoomed");
+          else card.classList.remove("zoomed");
+
+          requestAnimationFrame(step);
+        }
+        requestAnimationFrame(step);
+      });
+    }
+
+    async function reactToTask(taskId, reaction, btn) {
+      if (!state.currentUser) {
+        showToast("Please select a user first!", true);
+        return;
+      }
+
+      const countSpan = btn.querySelector(".ticker-reaction-count");
+      let current = parseInt(countSpan.innerText) || 0;
+      countSpan.innerText = current + 1;
+
+      btn.style.transform = "scale(1.5)";
+      setTimeout(() => btn.style.transform = "scale(1)", 200);
+
+      try {
+        await fetch(`${API_BASE}/reactions`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ task_id: taskId, reaction, user_id: state.currentUser.id })
+        });
+      } catch (e) { console.error(e); }
+    }
   </script>
 
 </body>
