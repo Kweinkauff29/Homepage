@@ -1,515 +1,953 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
+
 <head>
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Poppins&family=Ubuntu:wght@500&display=swap" rel="stylesheet">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Leadership Academy | Bonita Springs-Estero REALTORS®</title>
+  <meta name="description"
+    content="Join the BER Leadership Academy – a transformative program developing visionary leaders in real estate. Apply for the 2026 class today.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 
   <style>
-    /* Define the initial state of the div elements */
-    .pulsing-caret {
-      position: fixed;
-      bottom: 20px;
-      left: 50%;
-      transform: translateX(-50%);
-      font-size: 40px;
-      animation: pulse 1.5s ease-in-out infinite;
+    :root {
+      --primary: #0d9488;
+      --primary-dark: #0f766e;
+      --accent: #f59e0b;
+      --bg-dark: #0f172a;
+      --bg-light: #f8fafc;
+      --text-dark: #1e293b;
+      --text-muted: #64748b;
+      --radius: 16px;
+      --shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+      --shadow-lg: 0 10px 40px rgba(0, 0, 0, 0.12);
     }
 
-    @keyframes pulse {
-      0% {
-        transform: translateX(-50%) scale(1);
-      }
-      50% {
-        transform: translateX(-50%) scale(1.2);
-      }
-      100% {
-        transform: translateX(-50%) scale(1);
-      }
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
     }
 
-    .split-columns {
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--bg-light);
+      color: var(--text-dark);
+      line-height: 1.6;
+    }
+
+    /* Hero Section */
+    .hero {
+      background: linear-gradient(135deg, var(--bg-dark) 0%, #1e3a5f 100%);
+      color: white;
+      padding: 80px 20px;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: url('https://www.bonitaesterorealtors.com/wp-content/uploads/2024/12/LA2.png') center/cover no-repeat;
+      opacity: 0.25;
+    }
+
+    .hero-content {
+      position: relative;
+      z-index: 1;
+      max-width: 900px;
+      margin: 0 auto;
+    }
+
+    .hero-badge {
+      display: inline-block;
+      background: var(--accent);
+      color: var(--bg-dark);
+      padding: 8px 20px;
+      border-radius: 50px;
+      font-weight: 700;
+      font-size: 14px;
+      margin-bottom: 20px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    .hero h1 {
+      font-size: clamp(2.5rem, 6vw, 4rem);
+      font-weight: 800;
+      margin-bottom: 20px;
+      background: linear-gradient(135deg, #fff 0%, #94a3b8 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .hero p {
+      font-size: 1.2rem;
+      color: #94a3b8;
+      max-width: 700px;
+      margin: 0 auto 30px;
+    }
+
+    .cta-button {
+      display: inline-block;
+      background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+      color: white;
+      padding: 16px 40px;
+      border-radius: 50px;
+      text-decoration: none;
+      font-weight: 700;
+      font-size: 1.1rem;
+      transition: transform 0.3s, box-shadow 0.3s;
+      box-shadow: 0 4px 20px rgba(13, 148, 136, 0.4);
+    }
+
+    .cta-button:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 8px 30px rgba(13, 148, 136, 0.5);
+    }
+
+    /* Container */
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 20px;
+    }
+
+    /* Section Styling */
+    section {
+      padding: 80px 0;
+    }
+
+    .section-header {
+      text-align: center;
+      margin-bottom: 50px;
+    }
+
+    .section-header h2 {
+      font-size: 2.5rem;
+      font-weight: 800;
+      color: var(--text-dark);
+      margin-bottom: 15px;
+    }
+
+    .section-header p {
+      font-size: 1.1rem;
+      color: var(--text-muted);
+      max-width: 600px;
+      margin: 0 auto;
+    }
+
+    /* Benefits Grid */
+    .benefits-section {
+      background: white;
+    }
+
+    .benefits-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 30px;
+    }
+
+    .benefit-card {
+      background: linear-gradient(135deg, #f8fafc 0%, #fff 100%);
+      border: 1px solid #e2e8f0;
+      border-radius: var(--radius);
+      padding: 30px;
+      transition: transform 0.3s, box-shadow 0.3s;
+    }
+
+    .benefit-card:hover {
+      transform: translateY(-5px);
+      box-shadow: var(--shadow-lg);
+    }
+
+    .benefit-icon {
+      width: 60px;
+      height: 60px;
+      background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+      border-radius: 12px;
       display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 28px;
+      margin-bottom: 20px;
     }
 
-    .left-column {
-      flex: 1;
-      padding-right: 20px;
-      text-align: center;
+    .benefit-card h3 {
+      font-size: 1.3rem;
+      font-weight: 700;
+      margin-bottom: 10px;
+      color: var(--text-dark);
     }
 
-    .left-column li {
+    .benefit-card p {
+      color: var(--text-muted);
+      font-size: 0.95rem;
+    }
+
+    /* For Whom Section */
+    .for-whom-section {
+      background: var(--bg-dark);
+      color: white;
+    }
+
+    .for-whom-section .section-header h2 {
+      color: white;
+    }
+
+    .for-whom-section .section-header p {
+      color: #94a3b8;
+    }
+
+    .audience-cards {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+      gap: 30px;
+    }
+
+    .audience-card {
+      background: white;
+      border: 1px solid #e2e8f0;
+      border-radius: var(--radius);
+      padding: 40px;
+      box-shadow: var(--shadow);
+      color: var(--text-dark);
+    }
+
+    .audience-card h3 {
+      font-size: 1.5rem;
+      font-weight: 700;
+      margin-bottom: 15px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .audience-card h3 .badge {
+      background: var(--accent);
+      color: var(--bg-dark);
+      padding: 4px 12px;
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: 700;
+    }
+
+    .audience-card ul {
       list-style: none;
-    }
-
-    .right-column {
-      flex: 1;
-    }
-
-    .person {
-      text-align: center;
       margin-top: 20px;
     }
 
-    .person img {
-      width: 200px;
-      height: auto;
-      border-radius: 50%;
+    .audience-card li {
+      padding: 10px 0;
+      border-bottom: 1px solid #e2e8f0;
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      color: var(--text-dark);
+      font-size: 0.95rem;
+      line-height: 1.5;
     }
 
-
-    .grid-item {
-      margin: 10px;
-      width: 100%;
-      height: 100%;
-      margin: 0 5px;
-
+    .audience-card li:last-child {
+      border-bottom: none;
     }
 
-    .grid-item img {
-      width: 100%;
-      height: 245px !important;
-      object-fit: cover;
-      max-height: 245px !important;
+    .audience-card li::before {
+      content: '✓';
+      color: var(--primary);
+      font-weight: bold;
+      flex-shrink: 0;
     }
 
-    h1 {
-      font-family: 'Poppins', sans-serif;
-      text-align: center;
-      color: teal;
-      }
-    .grid {
+    /* Schedule Section */
+    .schedule-section {
+      background: white;
+    }
+
+    .schedule-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-      grid-gap: 10px;
-      margin: 50px 10% 50px 10%;
-      justify-items: center;
-    }
-    .grid-item {
-      text-align: center;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 20px;
     }
 
-    .grid-item:nth-last-child(-n+3) {
+    .schedule-item {
+      background: #f8fafc;
+      border-left: 4px solid var(--primary);
+      padding: 20px;
+      border-radius: 0 var(--radius) var(--radius) 0;
+      transition: transform 0.2s;
+    }
+
+    .schedule-item:hover {
+      transform: translateX(5px);
+    }
+
+    .schedule-item.highlight {
+      background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+      color: white;
+      border-left-color: var(--accent);
+    }
+
+    .schedule-item .date {
+      font-weight: 700;
+      font-size: 0.9rem;
+      color: var(--primary);
+      margin-bottom: 5px;
+    }
+
+    .schedule-item.highlight .date {
+      color: var(--accent);
+    }
+
+    .schedule-item .event {
+      font-weight: 600;
+      font-size: 1rem;
+    }
+
+    .schedule-note {
+      text-align: center;
+      margin-top: 30px;
+      padding: 20px;
+      background: #fef3c7;
+      border-radius: var(--radius);
+      color: #92400e;
+      font-weight: 500;
+    }
+
+    /* Commitments Section */
+    .commitments-section {
+      background: #f1f5f9;
+    }
+
+    .commitments-list {
+      max-width: 800px;
+      margin: 0 auto;
+    }
+
+    .commitment-item {
+      background: white;
+      border-radius: var(--radius);
+      padding: 25px 30px;
+      margin-bottom: 15px;
+      display: flex;
+      align-items: flex-start;
+      gap: 20px;
+      box-shadow: var(--shadow);
+    }
+
+    .commitment-number {
+      width: 40px;
+      height: 40px;
+      background: var(--primary);
+      color: white;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      flex-shrink: 0;
+    }
+
+    .commitment-text {
+      flex: 1;
+    }
+
+    .commitment-text strong {
+      color: var(--text-dark);
+    }
+
+    /* Leaders Section */
+    .leaders-section {
+      background: white;
+    }
+
+    .leaders-grid {
+      display: flex;
+      justify-content: center;
+      gap: 60px;
+      flex-wrap: wrap;
+    }
+
+    .leader-card {
+      text-align: center;
+      max-width: 350px;
+    }
+
+    .leader-card img {
+      width: 180px;
+      height: 180px;
+      border-radius: 50%;
+      object-fit: cover;
+      object-position: center 20%;
+      border: 5px solid var(--primary);
+      margin-bottom: 20px;
+      box-shadow: var(--shadow-lg);
+    }
+
+    .leader-card h3 {
+      font-size: 1.3rem;
+      font-weight: 700;
+      color: var(--text-dark);
+      margin-bottom: 5px;
+    }
+
+    .leader-card p {
+      color: var(--text-muted);
+      font-size: 0.95rem;
+    }
+
+    .leader-card .leader-title {
+      color: var(--primary);
+      font-weight: 600;
+      margin-bottom: 12px;
+    }
+
+    .leader-card .leader-bio {
+      font-size: 0.9rem;
+      line-height: 1.6;
+      color: var(--text-muted);
+      margin-top: 0;
+    }
+
+    /* Alumni Section */
+    .alumni-section {
+      background: #f8fafc;
+    }
+
+    /* Photo Collage Grid - Classic Frame Layout */
+    .collage-grid {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      grid-template-rows: repeat(2, 1fr);
+      gap: 10px;
+      max-width: 1000px;
+      margin: 0 auto;
+      padding: 30px;
+      background: linear-gradient(145deg, #d4c4b5 0%, #c9b8a5 30%, #bea995 70%, #a89985 100%);
+      border-radius: 6px;
+      box-shadow:
+        inset 0 2px 4px rgba(255, 255, 255, 0.4),
+        inset 0 -2px 6px rgba(0, 0, 0, 0.15),
+        0 10px 40px rgba(0, 0, 0, 0.2);
+      border: 4px solid #c4b4a5;
+    }
+
+    .collage-item {
+      position: relative;
+      overflow: hidden;
+      border-radius: 3px;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+      border: 4px solid white;
+      background: white;
+    }
+
+    .collage-item img {
+      width: 100%;
+      height: 200px;
+      object-fit: cover;
+      object-position: center top;
+      display: block;
+      transition: transform 0.3s ease;
+    }
+
+    .collage-item:hover img {
+      transform: scale(1.03);
+    }
+
+    /* Collage caption at bottom */
+    .collage-caption {
+      text-align: center;
+      margin-top: 20px;
+      font-family: 'Georgia', serif;
+      font-size: 1.4rem;
+      font-weight: 600;
+      color: #5c5145;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+    }
+
+    .collage-caption span {
+      display: block;
+      font-size: 0.9rem;
+      font-weight: normal;
+      letter-spacing: 4px;
+      margin-top: 5px;
+      color: #7a6f63;
+    }
+
+    /* CTA Section */
+    .cta-section {
+      background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+      color: white;
+      text-align: center;
+      padding: 100px 20px;
+    }
+
+    .cta-section h2 {
+      font-size: 2.5rem;
+      font-weight: 800;
+      margin-bottom: 20px;
+    }
+
+    .cta-section p {
+      font-size: 1.2rem;
+      opacity: 0.9;
+      margin-bottom: 30px;
+      max-width: 600px;
       margin-left: auto;
       margin-right: auto;
     }
 
-    .scroll-in {
-      opacity: 0;
-      transform: translateX(-100px);
-      transition: opacity 0.5s, transform 0.5s;
+    .cta-section .cta-button {
+      background: white;
+      color: var(--primary-dark);
     }
-    .scroll-in img {
-      max-width: 100%;
-      height: auto;
+
+    .cta-section .cta-button:hover {
+      box-shadow: 0 8px 30px rgba(255, 255, 255, 0.3);
     }
-    body {
-        width: 100%;
-        margin: auto;
+
+    /* Photo Gallery - Full Width 4 Photos */
+    .gallery-row {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 15px;
+      margin-top: 40px;
+      width: 100%;
     }
-    #headText {
-        font-family: 'Poppins', sans-serif;
-        margin: -20px 5% 30px 5%;
-        text-align: center;
-    }
-    #head1 {
-        font-family: 'Poppins', sans-serif;
-        margin: auto 5% auto 5%;
-        text-align: left; 
-        color: teal;
-    }
-    #bodyText {
-        font-family: 'Poppins', sans-serif;
-        margin: auto 5% 30px 5%;
-        text-align: center;
-    }
-    .image-row {
-      display: flex;
-      justify-content: center;
-      margin-bottom: 20px;
-    }
-    .image-row img {
-      width: 300px; /* Adjust the width as needed */
-      height: auto;
-      margin: 0 10px; /* Adjust the margin as needed */
-      opacity: 0;
-      transition: opacity 0.5s;
+
+    .gallery-row img {
+      width: 100%;
+      height: 220px;
       object-fit: cover;
-
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      transition: transform 0.3s, opacity 0.4s;
     }
 
-    li {
-      margin: 10px auto;
+    .gallery-row img:hover {
+      transform: scale(1.03);
     }
 
-    /* Existing CSS code */
-
-    @media only screen and (max-width: 600px) {
-      .left-column {
-        padding-right: 0;
+    /* Responsive */
+    @media (max-width: 768px) {
+      .hero {
+        padding: 60px 20px;
       }
 
-      .right-column {
-        margin-top: 20px;
+      section {
+        padding: 60px 0;
       }
 
-      .grid {
-        grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+      .section-header h2 {
+        font-size: 2rem;
       }
 
-      .grid-item img {
-        height: 150px !important;
-        max-height: 150px;
+      .audience-cards {
+        grid-template-columns: 1fr;
       }
 
-      .person img {
-        width: 150px;
+      .leaders-grid {
+        gap: 40px;
       }
-
-      .pulsing-caret {
-        font-size: 30px;
-      }
-
-      #headText,
-      #head1,
-      #bodyText {
-        margin: 10px 5%;
-      }
-
-      .image-row {
-        display: flex;
-        flex-wrap: wrap;
-        justify-content: center;
-      }
-
-      .image-row img {
-        width: 100%;
-        max-width: 200px;
-        height: auto;
-        margin: 10px;
-      }
-
-      #head1 {
-      font-family: 'Poppins', sans-serif;
-      text-align: center;
-      color: teal;
     }
-
-
-    .split-columns {
-      display: contents;
-    }
-    }
-
   </style>
+</head>
+
+<body>
+
+  <!-- Hero Section -->
+  <section class="hero">
+    <div class="hero-content">
+      <span class="hero-badge">🎓 Now Accepting 2026 Applications</span>
+      <h1>BER Leadership Academy</h1>
+      <p>A transformative year-long program developing visionary leaders who shape the future of real estate in
+        Southwest Florida.</p>
+      <a href="https://bonitaspringsesterorealtorsfl.growthzoneapp.com/ap/Form/Fill/r4MojhQp" class="cta-button">Apply
+        Now for 2026</a>
+    </div>
+  </section>
+
+  <!-- Benefits Section -->
+  <section class="benefits-section">
+    <div class="container">
+      <div class="section-header">
+        <h2>Why Join the Leadership Academy?</h2>
+        <p>Unlock your full potential and gain skills that set you apart in the industry.</p>
+      </div>
+      <div class="benefits-grid">
+        <div class="benefit-card">
+          <div class="benefit-icon">🎯</div>
+          <h3>Build Your Network</h3>
+          <p>Connect with industry leaders, local government officials, and like-minded professionals who become
+            lifelong contacts and referral partners.</p>
+        </div>
+        <div class="benefit-card">
+          <div class="benefit-icon">📚</div>
+          <h3>Gain Insider Knowledge</h3>
+          <p>Learn how local systems work—from county government to emergency management—giving you expertise that sets
+            you apart with clients.</p>
+        </div>
+        <div class="benefit-card">
+          <div class="benefit-icon">🏆</div>
+          <h3>Advance Your Career</h3>
+          <p>Graduates are positioned for leadership roles within BER, Florida Realtors, and NAR. Many become committee
+            chairs and board members.</p>
+        </div>
+        <div class="benefit-card">
+          <div class="benefit-icon">🤝</div>
+          <h3>Make an Impact</h3>
+          <p>Participate in community service projects and become a recognized leader who shapes policies affecting our
+            industry.</p>
+        </div>
+        <div class="benefit-card">
+          <div class="benefit-icon">📍</div>
+          <h3>Attend Florida Realtors Convention</h3>
+          <p>Experience the state's largest real estate event with hotel costs covered (shared room). Network with
+            thousands of Realtors statewide.</p>
+        </div>
+        <div class="benefit-card">
+          <div class="benefit-icon">💡</div>
+          <h3>Learn Leadership Skills</h3>
+          <p>Master Robert's Rules, public speaking, media relations, and organizational management through hands-on
+            training modules.</p>
+        </div>
+      </div>
+
+      <div class="gallery-row" id="gallery">
+        <img
+          src="https://www.bonitaesterorealtors.com/wp-content/uploads/2023/07/313970335_10166833849520582_524968419129836610_n.jpg"
+          alt="Leadership Academy Event">
+        <img
+          src="https://www.bonitaesterorealtors.com/wp-content/uploads/2023/07/269621906_10165906106815582_543070390877219035_n.jpg"
+          alt="Leadership Academy Class">
+        <img
+          src="https://www.bonitaesterorealtors.com/wp-content/uploads/2023/07/271731637_10224917436910505_3041546481207044055_n.jpg"
+          alt="Leadership Academy Networking">
+        <img
+          src="https://www.bonitaesterorealtors.com/wp-content/uploads/2023/07/275607402_1295176884335608_6050236263405955768_n.jpg"
+          alt="Leadership Academy Group">
+      </div>
+    </div>
+  </section>
+
   <script>
-    // Function to handle scroll event
-    function handleScroll() {
-      var scrollPosition = window.scrollY;
-      var screenWidth = window.innerWidth;
-
-      var div1 = document.getElementById('div1');
-      var div2 = document.getElementById('div2');
-      var div3 = document.getElementById('div3');
-      var div4 = document.getElementById('div4');
-
-
-      if (scrollPosition >= 0) {
-        div1.style.opacity = 1;
-        div1.style.transform = 'translateX(0)';
-      }
-
-      if (scrollPosition >= 300) {
-        div2.style.opacity = 1;
-        div2.style.transform = 'translateX(0)';
-      }
-
-      if (scrollPosition >= 600) {
-        div3.style.opacity = 1;
-        div3.style.transform = 'translateX(0)';
-      }
-
-      if (scrollPosition >= 900) {
-        div4.style.opacity = 1;
-        div4.style.transform = 'translateX(0)';
-      }
-
-      var pulsingCaret = document.getElementById('pulsing-caret');
-      if (screenWidth < 800) {
-      if (scrollPosition > 2500) {
-        pulsingCaret.style.display = 'none';
-      } else {
-        pulsingCaret.style.display = 'block';
-      }
-    } else if (screenWidth > 700) {
-      if (scrollPosition > 1000) {
-        pulsingCaret.style.display = 'none';
-      } else {
-        pulsingCaret.style.display = 'block';
-      }
-    }
-    }
-
-    // Function to handle image roll animation
-    function handleImageSwap() {
-      var imageRow = document.getElementById('image-row');
-      var images = imageRow.getElementsByTagName('img');
-      var imageLinks = [
+    // Rotating Photo Gallery
+    (function () {
+      const imageLinks = [
         "https://www.bonitaesterorealtors.com/wp-content/uploads/2023/07/313970335_10166833849520582_524968419129836610_n.jpg",
         "https://www.bonitaesterorealtors.com/wp-content/uploads/2023/07/269621906_10165906106815582_543070390877219035_n.jpg",
         "https://www.bonitaesterorealtors.com/wp-content/uploads/2023/07/269759136_10165906320620582_6984053925364003265_n.jpg",
         "https://www.bonitaesterorealtors.com/wp-content/uploads/2023/07/271731637_10224917436910505_3041546481207044055_n.jpg",
         "https://www.bonitaesterorealtors.com/wp-content/uploads/2023/07/275607402_1295176884335608_6050236263405955768_n.jpg",
         "https://www.bonitaesterorealtors.com/wp-content/uploads/2023/07/306966472_10166664420105582_7534537244427181455_n.jpg"
-        // Add more image links as needed
       ];
 
-      function shuffleArray(array) {
-        var currentIndex = array.length;
-        var temporaryValue, randomIndex;
-
-        while (currentIndex !== 0) {
-          randomIndex = Math.floor(Math.random() * currentIndex);
-          currentIndex -= 1;
-          temporaryValue = array[currentIndex];
-          array[currentIndex] = array[randomIndex];
-          array[randomIndex] = temporaryValue;
+      function shuffleArray(arr) {
+        const a = [...arr];
+        for (let i = a.length - 1; i > 0; i--) {
+          const j = Math.floor(Math.random() * (i + 1));
+          [a[i], a[j]] = [a[j], a[i]];
         }
-
-        return array;
+        return a;
       }
 
       function swapImages() {
-        var shuffledLinks = shuffleArray(imageLinks);
-
-        for (var i = 0; i < images.length; i++) {
-          images[i].style.opacity = 0;
-          images[i].src = shuffledLinks[i % shuffledLinks.length];
-        }
-
-        setTimeout(showImages, 500); // Delay showing images by 500 milliseconds for better visual effect
+        const images = document.querySelectorAll('#gallery img');
+        const shuffled = shuffleArray(imageLinks);
+        images.forEach((img, i) => {
+          img.style.opacity = 0;
+          setTimeout(() => {
+            img.src = shuffled[i % shuffled.length];
+            img.style.opacity = 1;
+          }, 400);
+        });
       }
 
-      function showImages() {
-        for (var i = 0; i < images.length; i++) {
-          images[i].style.opacity = 1;
-        }
-      }
-
-      // Initial image swap
+      // Initial swap and repeat every 7 seconds
       swapImages();
-
-      // Repeat image swap every 6 seconds
       setInterval(swapImages, 7000);
-    }
-
-    // Attach the scroll event listener
-    window.addEventListener('scroll', handleScroll);
+    })();
   </script>
-</head>
-<body>
-  <div class="scroll-in" id="div1">
-    <img src="https://www.bonitaesterorealtors.com/wp-content/uploads/2024/12/LA2.png" alt="">
-    <div id="headText"><p>Introducing our exclusive Leadership Development Program, designed to identify, nurture, and empower the next generation of visionary leaders within our association and the broader community. Our program aims to cultivate individuals with the necessary skills, knowledge, and self-assurance to excel in their roles and effectively inspire and influence others they encounter, both within our association and throughout the community.</p>
-    </div>
-    <div class="image-row" id="image-row">
-        <img src="" alt="">
-        <img src="" alt="">
-        <img src="" alt="">
+
+  <!-- For Whom Section -->
+  <section class="for-whom-section">
+    <div class="container">
+      <div class="section-header">
+        <h2>Who Should Apply?</h2>
+        <p>The Leadership Academy welcomes both Realtors and Affiliates who are ready to grow.</p>
       </div>
-
-      </p></div>
-  </div>
-
-  <div class="scroll-in" id="div2">
-    <h1 id="head1">Leadership Academy Application</h1>
-    <div id="bodyText"><p>Are you ready to unlock your full leadership potential and make a significant impact on our organization and the wider community? Look no further. Our program is designed to identify, cultivate, and empower the next generation of visionary leaders within BER. Through a comprehensive and tailored training curriculum, participants will embark on a transformative journey, acquiring the essential skills, knowledge, and self-assurance necessary to excel in their leadership roles. Join us on this transformative leadership journey and become a driving force within our organization and community. Together, we can shape a brighter future and make a difference that will resonate for years to come. Apply now for the BER Leadership Advancement Program and step into your role as a visionary leader!</p>
-    <div id="bodyText">Use the link here to apply: <a href="https://bonitaspringsesterorealtorsfl.growthzoneapp.com/ap/Form/Fill/Lwxd6Ugr">Click HERE</a></div>
-    </div>
-  </div>
-
-
-  <!--Div for Academy Class-->
-  <style>
-    #div3 {
-      text-align: center;
-    }
-  
-  </style>
-
-  <div class="scroll-in" id="div3">
-    <div>
-      <h1>Leadership Academy Class of 2023</h1>
-      <div class="grid">
-        <div class="grid-item">
-          <img src="https://www.bonitaesterorealtors.com/wp-content/uploads/2024/12/395ff730-0d59-4990-8f05-73eed39c1087.png" alt="Photo 1">
-          <p>Corey Allen</p>
+      <div class="audience-cards">
+        <div class="audience-card">
+          <h3>For REALTORS® <span class="badge">$200</span></h3>
+          <p>Take your career to the next level and become a recognized leader in the association.</p>
+          <ul>
+            <li>Gain deep knowledge of local government, economic development, and community systems</li>
+            <li>Build relationships with top producers and industry veterans</li>
+            <li>Position yourself for committee leadership and board positions</li>
+            <li>Become the "go-to" expert in your market area</li>
+            <li>Complete NAR's Leadership100 certification (required for graduation)</li>
+            <li>Receive polo shirt, name tag, and FR Convention registration included</li>
+          </ul>
         </div>
-        <div class="grid-item">
-          <img src="https://www.bonitaesterorealtors.com/wp-content/uploads/2024/12/22bff7b1-b3a5-470c-bb1b-7bd7dde29d2d.png" alt="Photo 2">
-          <p>Kathy Stegemann</p>
-        </div>
-        <div class="grid-item">
-          <img src="https://www.bonitaesterorealtors.com/wp-content/uploads/2024/12/75432a8c-5455-4a90-ac9a-cae19abc279c.png" alt="Photo 3">
-          <p>Karen McIntyre</p>
-        </div>
-        <div class="grid-item">
-          <img src="https://www.bonitaesterorealtors.com/wp-content/uploads/2024/12/881af109-4ea8-4347-8e05-2510277013ef-e1734638089119.png" alt="Photo 4">
-          <p>LuAnn Vizzone</p>
-        </div>
-        <div class="grid-item">
-          <img src="https://www.bonitaesterorealtors.com/wp-content/uploads/2024/12/81cf8260-b62d-40e3-a9ce-a1014bc09b1f.png" alt="Photo 5">
-          <p>Rebekah Sidener</p>
-        </div>
-        <div class="grid-item">
-          <img src="https://www.bonitaesterorealtors.com/wp-content/uploads/2024/12/d4be2436-9454-4dfe-a3e7-bcaa4e887fd6.png" alt="Photo 6">
-          <p>Mike Brindley</p>
-        </div>
-        <div class="grid-item">
-          <img src="https://www.bonitaesterorealtors.com/wp-content/uploads/2024/12/92c0ea15-82d3-43f3-8913-cf490b528260.png" alt="Photo 7">
-          <p>Keaton West</p>
-        </div>
-        <div class="grid-item">
-          <img src="https://www.bonitaesterorealtors.com/wp-content/uploads/2024/12/70cf9c3e-c626-400a-978d-64c8763b7e13.png" alt="Photo 8">
-          <p>Robert Klein</p>
-        </div>
-        <div class="grid-item">
-          <img src="https://www.bonitaesterorealtors.com/wp-content/uploads/2024/12/762f47f5-6803-445b-8069-573a14aa1780.png" alt="Photo 8">
-          <p>Sandy Wilder</p>
-        </div>
-        <div class="grid-item">
-          <img src="https://www.bonitaesterorealtors.com/wp-content/uploads/2024/12/ec607f80-fda2-49c8-bc88-064b77a31dbf.png" alt="Photo 9">
-          <p>Josie Mendiola</p>
-        </div>
-        <div class="grid-item">
-          <img src="https://www.bonitaesterorealtors.com/wp-content/uploads/2024/12/7003a8a3-488d-47ad-a457-fdc5ad62a3f4.png" alt="Photo 10">
-          <p>Jamie Fox</p>
+        <div class="audience-card">
+          <h3>For AFFILIATES <span class="badge">$500</span></h3>
+          <p>Get unparalleled access to the Realtor community and build your referral network.</p>
+          <ul>
+            <li>12+ months of consistent face time with engaged Realtors</li>
+            <li>Marketing perks and visibility throughout the program</li>
+            <li>Build genuine relationships (not just business cards)</li>
+            <li>Understand how Realtors think and what they need from partners</li>
+            <li>Position your company as a trusted industry partner</li>
+            <li>Receive polo shirt, name tag, and FR Convention registration included</li>
+          </ul>
         </div>
       </div>
     </div>
-  </div>
+  </section>
 
-  <div class="scroll-in" id="div4">
-    <div class="split-columns">
-      <div class="left-column">
-        <h1>Leadership Academy Modules:</h1>
-        <ul>
-          <li>Module 1 - History</li>
-          <li>G.A.R.D.</li>
-          <li>Module 2 - Public Safety</li>
-          <li>Module 3 - Non-profit Day</li>
-          <li>Module 4 - Media</li>
-          <li>Module 5 - Economic Development</li>
-          <li>Module 6 - Emergency Management</li>
-          <li>Module 7 - Sustainability</li>
-          <li>Module 8 - Lee County Gov't</li>
-          <li>Module 9 - Roberts Rules</li>
-          <li>Florida Realtors Expo & Convention</li>
-          <li>Module 10 - Education</li>
-          <li>Module 11 - Waterways</li>
-          <li>Module 12 - Manufacturing</li>
-        </ul>
+  <!-- 2026 Schedule Section -->
+  <section class="schedule-section">
+    <div class="container">
+      <div class="section-header">
+        <h2>2026 Leadership Academy Schedule</h2>
+        <p>Classes are held on Wednesdays from 9am to 1pm. Most meetings are held off-site.</p>
       </div>
-      <div class="right-column">
-        <div class="person">
-          <img src="https://www.bonitaesterorealtors.com/wp-content/uploads/2024/11/danielledamianov.jpg" alt="Ellen Boyce">
-          <h3>Danielle Damianove</h3>
-          <p>Leadership Academy Chair</p>
+      <div class="schedule-grid">
+        <div class="schedule-item highlight">
+          <div class="date">Feb 17 & 20</div>
+          <div class="event">Applicant Interviews</div>
         </div>
-        <div class="person">
-          <img src="https://www.bonitaesterorealtors.com/wp-content/uploads/2024/11/Corlin.jpg" alt="Second Person">
-          <h3>Corlin Tucker</h3>
-          <p>Another Title or Role</p>
+        <div class="schedule-item highlight">
+          <div class="date">Feb 20</div>
+          <div class="event">Applicants Notified</div>
+        </div>
+        <div class="schedule-item">
+          <div class="date">March 4</div>
+          <div class="event">Introductory Module</div>
+        </div>
+        <div class="schedule-item">
+          <div class="date">March 25</div>
+          <div class="event">Retreat (Full Day)</div>
+        </div>
+        <div class="schedule-item">
+          <div class="date">April 15</div>
+          <div class="event">Module 2</div>
+        </div>
+        <div class="schedule-item">
+          <div class="date">TBD</div>
+          <div class="event">Raisin Cane Sugar Tour (Full Day)</div>
+        </div>
+        <div class="schedule-item">
+          <div class="date">April 29</div>
+          <div class="event">Module 3</div>
+        </div>
+        <div class="schedule-item">
+          <div class="date">May 13</div>
+          <div class="event">Module 4</div>
+        </div>
+        <div class="schedule-item">
+          <div class="date">May 27</div>
+          <div class="event">Module 5</div>
+        </div>
+        <div class="schedule-item">
+          <div class="date">June 10</div>
+          <div class="event">Module 6</div>
+        </div>
+        <div class="schedule-item">
+          <div class="date">June 24</div>
+          <div class="event">Module 7</div>
+        </div>
+        <div class="schedule-item">
+          <div class="date">July 8</div>
+          <div class="event">Module 8</div>
+        </div>
+        <div class="schedule-item">
+          <div class="date">July 22</div>
+          <div class="event">Module 9</div>
+        </div>
+        <div class="schedule-item">
+          <div class="date">August 5</div>
+          <div class="event">Module 10</div>
+        </div>
+        <div class="schedule-item highlight">
+          <div class="date">Aug 20-21</div>
+          <div class="event">Florida Realtors Convention & Expo</div>
+        </div>
+        <div class="schedule-item">
+          <div class="date">Sept 2</div>
+          <div class="event">Module 11</div>
+        </div>
+        <div class="schedule-item">
+          <div class="date">Sept 16</div>
+          <div class="event">Module 12</div>
+        </div>
+        <div class="schedule-item">
+          <div class="date">Sept 30</div>
+          <div class="event">Module 13</div>
+        </div>
+        <div class="schedule-item">
+          <div class="date">Oct 14</div>
+          <div class="event">Module 14</div>
+        </div>
+        <div class="schedule-item">
+          <div class="date">Oct 28</div>
+          <div class="event">Module 15</div>
+        </div>
+        <div class="schedule-item highlight">
+          <div class="date">Nov 19</div>
+          <div class="event">🎓 Graduation Ceremony</div>
         </div>
       </div>
-      
-    </div>    
-
-    <div>
-      <h1>Commitments:</h1>
-      <p>
-        <ol style="text-align: left;
-        margin: auto 10% 50px 10%;">
-        <li>Commit to attending the program classes.   Attendance is defined as full session.  Early out or late arrival will be counted as an absence.  Any absence should be approved in advance. You will be ineligible to graduate if you miss more than 2 classes.
-        </li>
-        <li>If you are not currently involved on a Bonita-Springs Estero REALTORS® Committee, you hereby agree to regular and consistent committee involvement commencing with the conclusion of this program.
-        </li>
-        <li>You will be strongly encouraged/required to attend Florida Realtors Expo and Convention. The board will pay for hotel costs (room share) and may or may not provide transportation.  
-          </li>
-        <li>You will be required to participate in a Leadership Development Class Project which must be approved by the Leadership Committee.
-          </li>
-        <li>You will be required to attend a pre-selection interview.
-          </li>
-        <li>The cost to join the Leadership Academy is $200.  This includes your shirt, name tag, and registration to Florida Realtors Expo & Convention.  This is to be paid by the introductory module.  
-          </li>
-        <li>If employed by an affiliate company, real estate admin or real estate team, please make sure that you have communicated with your employer to make sure that they are aware of your schedule and the sponsorship cost of $500 (affiliates only) to participate in the academy.  Marketing perks included. 
-          </li>
-        <li>You are required to complete C2EX, Fairhaven, & Leadership100 at no cost at nar.realtor prior to graduation. 
-        </li>
-      </ol>
- 
- 
-            <h1>2024 LEADERSHIP SCHEDULE</h1>
-
-            <ul style="text-align: left;
-            margin: auto 10% 50px 10%;">
-            <li>Dec 11 and 13            Applicant Interviews</li>
-
-            <li>Dec 15                        Applicants Notified</li>
-
-            <li>Jan 24                        Introductory Retreat - Full day</li>
-
-            <li>Feb 7                          Raisin Cane Sugar Tour Tentative (optional-all day)</li>
-
-            Classes will be held on Wednesdays from 9 am to 1 pm – Most meetings will be held off-site and occasionally modules may run long.  Carpooling is encouraged.  Dates are subject to change.           
-
-            <li>Feb 21                         Module 1</li>
-
-            <li>March 6                       Module 2</li>       
-
-            <li>March 27                     Module 3</li>
-
-            <li>April 10                       Module 4</li>   
-
-            <li>April 24                       Module 5</li>
-
-            <li>May 8                         Module 6</li>    
-
-            <li>May 21 (Tues)            Module 7</li>     
-
-            <li>June 12                      Module 8</li>
-
-            <li>June 26                      Module 9</li>
-
-            <li>July 10                       Module 10</li>
-
-            <li>Aug 20-22                  Florida Realtors Convention & Expo</li>              
-
-            <li>Sept 11                      Module 11</li>
-
-            <li>Sept 25                      Module 12</li>
-
-            <li>Oct 13                        Module 13</li>
-
-            <li>Nov 20                       Module 14</li>
-            </ul>      
-          </p>
+      <div class="schedule-note">
+        📌 <strong>Note:</strong> Dates are subject to change. Class project and community outreach may be held on a
+        Saturday (TBD). Carpooling is encouraged.
+      </div>
     </div>
+  </section>
 
-  </div>
-  
+  <!-- Commitments Section -->
+  <section class="commitments-section">
+    <div class="container">
+      <div class="section-header">
+        <h2>Program Commitments</h2>
+        <p>By applying, you agree to the following requirements to ensure a successful experience.</p>
+      </div>
+      <div class="commitments-list">
+        <div class="commitment-item">
+          <div class="commitment-number">1</div>
+          <div class="commitment-text"><strong>Attendance:</strong> Commit to attending all program classes. Early
+            departures or late arrivals count as absences. You may not miss more than 2 classes to graduate.</div>
+        </div>
+        <div class="commitment-item">
+          <div class="commitment-number">2</div>
+          <div class="commitment-text"><strong>Committee Involvement:</strong> If not already on a BER committee, agree
+            to regular committee involvement after completing the program.</div>
+        </div>
+        <div class="commitment-item">
+          <div class="commitment-number">3</div>
+          <div class="commitment-text"><strong>Florida Realtors Convention:</strong> Strongly encouraged to attend. BER
+            covers hotel costs for shared rooms and may provide transportation.</div>
+        </div>
+        <div class="commitment-item">
+          <div class="commitment-number">4</div>
+          <div class="commitment-text"><strong>Class Project:</strong> Participate in a Leadership Development Class
+            Project with a community service component, approved by the Leadership Committee.</div>
+        </div>
+        <div class="commitment-item">
+          <div class="commitment-number">5</div>
+          <div class="commitment-text"><strong>Interview:</strong> Attend a pre-selection interview (Feb 17 or 20).
+          </div>
+        </div>
+        <div class="commitment-item">
+          <div class="commitment-number">6</div>
+          <div class="commitment-text"><strong>Investment:</strong> $200 for Realtors (includes shirt, name tag, FR
+            Convention registration). $500 for Affiliates (includes marketing perks). Due by the introductory module.
+          </div>
+        </div>
+        <div class="commitment-item">
+          <div class="commitment-number">7</div>
+          <div class="commitment-text"><strong>NAR Certification:</strong> Complete NAR's Leadership100 at <a
+              href="https://nar.realtor" target="_blank">nar.realtor</a> (free) prior to graduation.</div>
+        </div>
+      </div>
+    </div>
+  </section>
 
-  <div style="height: 100px !important;"></div>
+  <!-- Leadership Team -->
+  <section class="leaders-section">
+    <div class="container">
+      <div class="section-header">
+        <h2>Meet Your Leadership Team</h2>
+        <p>Guided by experienced leaders committed to your success.</p>
+      </div>
+      <div class="leaders-grid">
+        <div class="leader-card">
+          <img
+            src="https://www.bonitaesterorealtors.com/wp-content/uploads/2024/11/c195d3d0248b30c43bde01b3dd05ad90-h_l.jpg"
+            alt="Mark True">
+          <h3>Mark True</h3>
+          <p class="leader-title">Leadership Academy Chair</p>
+          <p class="leader-bio">Mark is a Southwest Florida REALTOR® serving Bonita Springs and Estero. After a 31-year
+            career as a Walmart store manager, he transitioned into real estate to help families find their dream homes.
+            He is deeply committed to developing the next generation of industry leaders.</p>
+        </div>
+        <div class="leader-card">
+          <img src="https://bonitaesterorealtors.com/wp-content/uploads/2018/11/meighan.jpg" alt="Meighan Harris">
+          <h3>Meighan Harris</h3>
+          <p class="leader-title">CEO, Bonita Springs-Estero REALTORS®</p>
+          <p class="leader-bio">Meighan has led BER since being promoted from COO, after joining the association in 2014
+            as education coordinator. Under her leadership, BER has grown to over 1,400 REALTOR® members and 120+
+            affiliates. She is passionate about education, advocacy, and empowering real estate professionals.</p>
+        </div>
+      </div>
+    </div>
+  </section>
 
-  <div class="pulsing-caret" id="pulsing-caret">˅</div>
+  <!-- Alumni Section - 2025 Graduates -->
+  <section class="alumni-section">
+    <div class="container">
+      <div class="section-header">
+        <h2>🎓 Leadership Academy Class of 2025</h2>
+        <p>Congratulations to our newest graduates!</p>
+      </div>
+      <div class="collage-grid">
+        <div class="collage-item"><img
+            src="https://bonitaesterorealtors.com/wp-content/uploads/2026/02/591616797_1440752454725027_8103395792861534111_n.jpg"
+            alt="2025 Graduate"></div>
+        <div class="collage-item"><img
+            src="https://bonitaesterorealtors.com/wp-content/uploads/2026/02/590591309_1440751431391796_1522593651594180848_n.jpg"
+            alt="2025 Graduate"></div>
+        <div class="collage-item"><img
+            src="https://bonitaesterorealtors.com/wp-content/uploads/2026/02/590483577_1440752471391692_4606270012948363983_n.jpg"
+            alt="2025 Graduate" style="object-position: 25% top;"></div>
+        <div class="collage-item"><img
+            src="https://bonitaesterorealtors.com/wp-content/uploads/2026/02/590477498_1440752144725058_9126731412897137106_n.jpg"
+            alt="2025 Graduate"></div>
+        <div class="collage-item"><img
+            src="https://bonitaesterorealtors.com/wp-content/uploads/2026/02/590472323_1440752128058393_4543618204433071358_n.jpg"
+            alt="2025 Graduate" style="object-position: 21% top;"></div>
+        <div class="collage-item"><img
+            src="https://bonitaesterorealtors.com/wp-content/uploads/2026/02/590409875_1440752311391708_1579471808345564989_n.jpg"
+            alt="2025 Graduate"></div>
+        <div class="collage-item"><img
+            src="https://bonitaesterorealtors.com/wp-content/uploads/2026/02/589791471_1440752124725060_4190877232811288378_n.jpg"
+            alt="2025 Graduate"></div>
+        <div class="collage-item"><img
+            src="https://bonitaesterorealtors.com/wp-content/uploads/2026/02/589718206_1440752168058389_1327681676476512658_n.jpg"
+            alt="2025 Graduate"></div>
+        <div class="collage-item"><img
+            src="https://bonitaesterorealtors.com/wp-content/uploads/2026/02/589717541_1440752338058372_230303587824607912_n.jpg"
+            alt="2025 Graduate"></div>
+        <div class="collage-item"><img
+            src="https://bonitaesterorealtors.com/wp-content/uploads/2026/02/589655424_1440752348058371_5385859469828715535_n.jpg"
+            alt="2025 Graduate"></div>
+      </div>
+      <div class="collage-caption">
+        Leadership Academy<span>Class of 2025</span>
+      </div>
+    </div>
+  </section>
 
-  <!-- Add more div elements as needed -->
+  <!-- Final CTA -->
+  <section class="cta-section">
+    <div class="container">
+      <h2>Ready to Lead?</h2>
+      <p>Applications are now open for the 2026 Leadership Academy class. Don't miss your chance to transform your
+        career and make a lasting impact.</p>
+      <a href="https://bonitaspringsesterorealtorsfl.growthzoneapp.com/ap/Form/Fill/r4MojhQp" class="cta-button">Apply
+        Now for 2026 →</a>
+    </div>
+  </section>
 
-  <script>
-    // Trigger the initial animation for elements in the viewport on page load
-    handleScroll();
-    handleImageSwap();
-  </script>
 </body>
+
 </html>
