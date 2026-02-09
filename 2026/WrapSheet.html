@@ -918,6 +918,65 @@
       color: var(--accent);
     }
 
+    /* View Options Toolbar Drag Feedback */
+    .view-option-btn.drag-over {
+      transform: scale(1.05);
+      border-color: var(--theme-primary);
+      box-shadow: 0 0 0 2px rgba(var(--theme-primary-rgb), 0.2);
+      background: var(--bg-secondary);
+      transition: all 0.2s ease;
+    }
+
+    /* Section Help UI */
+    .section-header-help {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 16px;
+      height: 16px;
+      margin-left: 8px;
+      border-radius: 50%;
+      background: var(--bg-secondary);
+      color: var(--ink-soft);
+      font-size: 10px;
+      font-weight: bold;
+      cursor: help;
+      border: 1px solid var(--panel-border);
+      transition: all 0.2s ease;
+      opacity: 0.6;
+    }
+
+    .section-header-help:hover {
+      background: var(--theme-primary);
+      color: white;
+      border-color: var(--theme-primary);
+      opacity: 1;
+    }
+
+    .section-help-box {
+      margin-top: 8px;
+      margin-bottom: 12px;
+      padding: 10px 12px;
+      background: var(--bg-secondary);
+      border: 1px solid var(--panel-border);
+      border-left: 3px solid var(--theme-primary);
+      border-radius: 6px;
+      font-size: 13px;
+      color: var(--ink-base);
+      line-height: 1.4;
+      animation: fadeIn 0.3s ease-out;
+      display: block;
+      /* Visible by default */
+    }
+
+    .section-help-box.hidden {
+      display: none;
+    }
+
+    .section-help-box strong {
+      color: var(--theme-primary);
+    }
+
     /* ===== JOINT PROJECTS ===== */
     .projects-section {
       margin-top: 16px;
@@ -1994,6 +2053,70 @@
     .pillar-task-row.promo:hover {
       background: #e0f2fe;
     }
+
+    /* View Options Toolbar */
+    .view-options-bar {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      padding: 16px;
+
+      /* Match .panel style */
+      background: var(--panel-elevated);
+      border: 1px solid var(--panel-border);
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow-md);
+
+      margin-bottom: 24px;
+      align-items: center;
+    }
+
+    .view-option {
+      background: transparent;
+      border: 1px solid var(--panel-border);
+      color: var(--ink-soft);
+      padding: 8px 16px;
+      border-radius: var(--radius-md);
+      cursor: pointer;
+      font-size: 0.9rem;
+      font-weight: 500;
+      transition: all 0.2s ease;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      user-select: none;
+    }
+
+    .view-option:hover {
+      background: var(--bg-main);
+      color: var(--ink);
+      border-color: var(--ink-soft);
+    }
+
+    .view-option.active {
+      background: rgba(3, 170, 225, 0.15);
+      color: var(--accent);
+      border-color: var(--accent);
+      box-shadow: none;
+    }
+
+    content: "✓";
+    font-weight: bold;
+    }
+
+    .drag-handle {
+      margin-left: 4px;
+      color: var(--ink-soft);
+      font-size: 14px;
+      opacity: 0.4;
+      cursor: grab;
+      line-height: 1;
+    }
+
+    .view-option:hover .drag-handle {
+      opacity: 0.8;
+      color: var(--theme-primary);
+    }
   </style>
   <!-- Fireworks Library -->
   <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
@@ -3032,6 +3155,72 @@
       transform: scale(1.1);
     }
 
+    /* Header Bird Controls */
+    .header-bird-controls {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-left: 12px;
+      margin-right: 12px;
+      padding-left: 12px;
+      border-left: 1px solid var(--panel-border);
+    }
+
+    .header-icon-btn {
+      background: rgba(255, 255, 255, 0.1);
+      border: 1px solid var(--panel-border);
+      font-size: 14px;
+      cursor: pointer;
+      padding: 0 12px;
+      border-radius: 99px;
+      color: var(--ink-soft);
+      transition: all 0.2s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: auto !important;
+      height: 32px;
+      gap: 6px;
+    }
+
+    .btn-label {
+      font-size: 12px;
+      font-weight: 500;
+    }
+
+    .btn-icon {
+      font-size: 14px;
+      display: flex;
+    }
+
+    .header-icon-btn:hover {
+      background: var(--bg-main);
+      color: var(--ink);
+      transform: scale(1.1);
+      border-color: var(--accent);
+    }
+
+    /* Override previous absolute positioning for buttons moved to header */
+    #bird-mute-btn.header-icon-btn,
+    #edit-bird-trigger.header-icon-btn {
+      position: static !important;
+      opacity: 1 !important;
+    }
+
+    /* Make coin wrapper interactive */
+    .coin-counter-wrap {
+      cursor: pointer;
+      transition: transform 0.2s;
+    }
+
+    .coin-counter-wrap:hover {
+      transform: scale(1.02);
+    }
+
+    .coin-counter-wrap:active {
+      transform: scale(0.98);
+    }
+
     /* Weekly Planner Styles */
     .weekly-section-header {
       font-size: 15px;
@@ -3219,7 +3408,7 @@
         <option value="">Loading team...</option>
       </select>
       <button id="user-select-confirm">Open Wrap Sheet</button>
-      <small>This is internal for BER: Meighan, Kevin, Erica, Jenna &amp; Katie.</small>
+      <small>This is internal for BER: Meighan, Kevin, Erica, Jenna, Katie & Melodie.</small>
     </div>
   </div>
 
@@ -3303,6 +3492,7 @@
 
       <div class="modal-body">
         <input type="hidden" id="task-id" />
+        <input type="hidden" id="task-series-id" />
 
         <label>
           Title
@@ -3345,15 +3535,17 @@
           </label>
         </div>
 
-        <!-- Repeat controls – simplified -->
+        <!-- Repeat controls – enhanced -->
         <label>
           Repeat
           <select id="task-repeat-type">
             <option value="none">Do not repeat</option>
             <option value="daily">Daily (Mon–Fri)</option>
             <option value="weekly">Weekly (same weekday)</option>
+            <option value="biweekly">Biweekly (every 2 weeks)</option>
             <option value="monthly_date">Monthly – same date (1st, 14th…)</option>
             <option value="monthly_weekday">Monthly – same weekday pattern (1st Monday)</option>
+            <option value="yearly">Yearly (same date)</option>
           </select>
         </label>
 
@@ -3372,6 +3564,9 @@
           For monthly repeats, create the first task on the date you want
           (e.g. the 1st or the 1st Monday), then set an end date for the series.
           If the monthly date lands on a weekend, it will shift to a nearby weekday.
+          <br><br>
+          <strong>Series Tracking:</strong> All tasks in a series will be linked together,
+          allowing you to delete the entire series at once if needed.
         </div>
 
         <label>
@@ -3404,6 +3599,33 @@
           <button class="button-danger" id="task-delete-btn" style="display:none;">Delete</button>
           <button class="button-primary" id="task-save-btn">Save Task</button>
         </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Delete Confirmation Modal -->
+  <div id="delete-confirm-modal" class="modal hidden">
+    <div class="modal-panel" style="width: min(400px, 100% - 32px);">
+      <div class="modal-header">
+        <div class="modal-title">Delete Task</div>
+        <button class="modal-close" id="delete-confirm-close">×</button>
+      </div>
+      <div class="modal-body">
+        <p id="delete-confirm-message" style="margin-bottom: 16px;"></p>
+        <div id="delete-confirm-options" style="display:none; margin-bottom: 12px;">
+          <label style="display:flex; gap:8px; align-items:center; margin-bottom:8px; cursor:pointer;">
+            <input type="radio" name="delete-choice" value="one" checked />
+            <span>Delete only this task</span>
+          </label>
+          <label style="display:flex; gap:8px; align-items:center; cursor:pointer;">
+            <input type="radio" name="delete-choice" value="all" />
+            <span id="delete-all-label">Delete all matching tasks</span>
+          </label>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="button-secondary" id="delete-confirm-cancel">Cancel</button>
+        <button class="button-danger" id="delete-confirm-yes">Delete</button>
       </div>
     </div>
   </div>
@@ -3633,15 +3855,31 @@
             </select>
           </div>
 
-          <!-- Coin Counter (for Kevin) -->
-          <div class="coin-counter-wrap" id="coin-counter-wrap">
-            <div class="coin-counter" id="coin-counter" title="Your coin balance">
-              <span class="coin-icon">🪙</span>
-              <span class="coin-amount" id="coin-amount">0</span>
-            </div>
-            <div class="coin-caps" id="coin-caps">
-              <span id="coin-day-progress">0/50 today</span>
-              <span id="coin-week-progress">0/250 week</span>
+          <!-- Bird Controls & Shop -->
+          <div class="header-bird-controls">
+            <!-- Mute Button -->
+            <button id="bird-mute-btn" class="header-icon-btn" title="Toggle Squeaks">
+              <span class="btn-icon">🔊</span>
+              <span class="btn-label">Mute</span>
+            </button>
+
+            <!-- Customize Button -->
+            <button id="edit-bird-trigger" class="header-icon-btn" title="Customize Bird">
+              <span class="btn-icon">🎨</span>
+              <span class="btn-label">Customize</span>
+            </button>
+
+            <!-- Coin Counter (Trigger Shop) -->
+            <div class="coin-counter-wrap" id="coin-counter-wrap" onclick="openShopModal()" style="cursor:pointer;"
+              title="Open Shop">
+              <div class="coin-counter" id="coin-counter">
+                <span class="coin-icon">🪙</span>
+                <span class="coin-amount" id="coin-amount">0</span>
+              </div>
+              <div class="coin-caps" id="coin-caps">
+                <span id="coin-day-progress">0/50 today</span>
+                <span id="coin-week-progress">0/250 week</span>
+              </div>
             </div>
           </div>
 
@@ -3658,15 +3896,33 @@
     </div>
 
     <main class="app-main">
-      <!-- Customization Instructions -->
-      <div id="customize-instructions"
-        style="background:linear-gradient(90deg,rgba(3,170,225,0.1),transparent);border-radius:8px;padding:8px 12px;margin-bottom:12px;display:flex;align-items:center;gap:10px;font-size:11px;color:var(--ink-soft);">
-        <span style="font-size:16px;">⚙️</span>
-        <span><strong>Customize your layout:</strong> Drag sections by their handle (⋮⋮) to reorder. Your arrangement
-          is
-          saved automatically.</span>
-        <button id="hide-instructions-btn"
-          style="margin-left:auto;background:none;border:none;color:var(--ink-soft);cursor:pointer;font-size:14px;">×</button>
+      <!-- Section Toggle Toolbar -->
+      <div class="view-options-container" style="margin-bottom: 24px;">
+        <div class="view-options-header" style="margin-bottom:12px;">
+          <h3 style="margin:0 0 4px 0;font-size:16px;">Customize Dashboard</h3>
+          <p style="margin:0 0 8px 0;font-size:13px;color:var(--ink-soft);">Drag buttons to reorder sections. Toggle to
+            show/hide.</p>
+          <div
+            style="font-size:12px;color:var(--ink-soft);background:rgba(3,170,225,0.05);padding:8px;border-radius:6px;border-left:3px solid var(--theme-primary);">
+            <strong>Tip:</strong> Move your most used sections to the left for quick access.
+          </div>
+        </div>
+        <!-- Section Toggle Toolbar -->
+        <div class="view-options-bar" id="view-options-bar">
+          <!-- Buttons injected by JS or hardcoded -->
+          <div class="view-option" draggable="true" data-target="section-daily-tasks">Daily Tasks <span
+              class="drag-handle">⋮⋮</span></div>
+          <div class="view-option" draggable="true" data-target="section-weekly-strategy">Weekly Strategy <span
+              class="drag-handle">⋮⋮</span></div>
+          <div class="view-option" draggable="true" data-target="section-goals">Goals & Focus <span
+              class="drag-handle">⋮⋮</span></div>
+          <div class="view-option" draggable="true" data-target="section-projects">Projects <span
+              class="drag-handle">⋮⋮</span></div>
+          <div class="view-option" draggable="true" data-target="section-backlog">Backlog <span
+              class="drag-handle">⋮⋮</span></div>
+          <div class="view-option" draggable="true" data-target="section-pillars">Pillars <span
+              class="drag-handle">⋮⋮</span></div>
+        </div>
       </div>
 
       <!-- Draggable Sections Container -->
@@ -3719,8 +3975,7 @@
                 <div id="bird-speech-bubble" class="speech-bubble hidden">
                 </div>
 
-                <!-- Mute Button - Subtle in top right -->
-                <button id="bird-mute-btn" class="bird-mute-btn" title="Toggle Squeaks">🔊</button>
+                <!-- Mute Button moved to header -->
 
                 <!-- Bird Name Display -->
                 <div id="bird-name-display"
@@ -3733,13 +3988,7 @@
                 <div id="finch-hearts"
                   style="position:absolute; top:0; left:0; width:100%; height:100%; pointer-events:none;"></div>
 
-                <!-- Edit Button - Subtle in bottom right -->
-                <button class="edit-bird-btn" id="edit-bird-trigger" title="Edit Colors">
-                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                    stroke-linecap="round" stroke-linejoin="round">
-                    <path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"></path>
-                  </svg>
-                </button>
+                <!-- Edit Button moved to header -->
               </div>
 
               <!-- Existing Pie -->
@@ -3761,7 +4010,7 @@
         </section>
 
         <!-- Task Backlog Section -->
-        <section class="panel draggable-section" id="section-backlog" draggable="true">
+        <section class="panel draggable-section" id="section-backlog">
           <div class="panel-header">
             <span class="section-drag-handle" title="Drag to reorder">⋮⋮</span>
             <div class="panel-title">Task Backlog</div>
@@ -3786,13 +4035,13 @@
         </section>
 
         <!-- Goals Section -->
-        <section class="panel draggable-section" id="section-goals" draggable="true">
+        <section class="panel draggable-section" id="section-goals">
           <div class="panel-header">
             <span class="section-drag-handle" title="Drag to reorder">⋮⋮</span>
             <div class="panel-title">Goals & Focus</div>
             <div class="goals-tabs">
               <button class="goals-tab active" data-tab="monthly">Monthly Strategies</button>
-              <button class="goals-tab" data-tab="weekly">Weekly Strategy</button>
+              <!-- Weekly Strategy moved to own section -->
               <button class="goals-tab" data-tab="annual">Annual Goals</button>
             </div>
           </div>
@@ -3831,8 +4080,18 @@
             <div class="goals-grid" id="annual-goals-grid"></div>
           </div>
 
-          <!-- Weekly Team Planner -->
-          <div id="weekly-planner-panel" style="display:none;">
+          <!-- Weekly Team Planner moved to own section -->
+
+        </section>
+
+        <!-- Weekly Strategy Section (New) -->
+        <section class="panel draggable-section" id="section-weekly-strategy" draggable="true">
+          <div class="panel-header">
+            <span class="section-drag-handle" title="Drag to reorder">⋮⋮</span>
+            <div class="panel-title">Weekly Strategy</div>
+          </div>
+
+          <div id="weekly-planner-panel">
             <div class="goals-controls" style="justify-content:center; gap:20px;">
               <button id="weekly-prev" class="icon-btn"
                 style="background:var(--card-bg); border:1px solid var(--border); border-radius:4px; px:10px;">← Prev
@@ -3860,9 +4119,7 @@
               <div class="weekly-section-header">Projects & Events</div>
               <div id="weekly-projects-grid" class="weekly-grid"></div>
             </div>
-
           </div>
-
         </section>
 
         <!-- Joint Projects Section -->
@@ -5219,7 +5476,7 @@
     function updateMuteUI() {
       const muteBtn = document.getElementById("bird-mute-btn");
       if (muteBtn) {
-        muteBtn.textContent = squeaksMuted ? "🔇" : "🔊";
+        muteBtn.innerHTML = `<span class="btn-icon">${squeaksMuted ? "🔇" : "🔊"}</span> <span class="btn-label">Mute</span>`;
         muteBtn.classList.toggle("muted", squeaksMuted);
         muteBtn.title = squeaksMuted ? "Unmute Squeaks" : "Mute Squeaks";
       }
@@ -5880,6 +6137,16 @@
             results.push(formatDateKeyFromDate(current));
           }
         }
+      } else if (repeatType === "biweekly") {
+        // Every 2 weeks (14 days)
+        let current = new Date(base);
+        while (true) {
+          current = addDays(current, 14);
+          if (current > seriesEnd || results.length >= maxOccurrences) break;
+          if (current >= seriesStart) {
+            results.push(formatDateKeyFromDate(current));
+          }
+        }
       } else if (repeatType === "monthly_date") {
         const dayOfMonth = base.getDate();
         let y = base.getFullYear();
@@ -5917,6 +6184,23 @@
           const cand = nthWeekdayOfMonth(y, m, weekday, nth);
           if (!cand) continue;
 
+          if (cand > seriesEnd || results.length >= maxOccurrences) break;
+          if (cand >= seriesStart && cand > base) {
+            results.push(formatDateKeyFromDate(cand));
+          }
+        }
+      } else if (repeatType === "yearly") {
+        // Same date each year
+        const dayOfMonth = base.getDate();
+        const monthOfYear = base.getMonth();
+        let y = base.getFullYear();
+
+        while (true) {
+          y++;
+          const daysInMonth = new Date(y, monthOfYear + 1, 0).getDate();
+          const safeDay = Math.min(dayOfMonth, daysInMonth);
+          let cand = new Date(y, monthOfYear, safeDay);
+          cand = adjustToBusinessDay(cand);
           if (cand > seriesEnd || results.length >= maxOccurrences) break;
           if (cand >= seriesStart && cand > base) {
             results.push(formatDateKeyFromDate(cand));
@@ -5983,6 +6267,8 @@
     }
 
     async function apiGet(path) {
+
+
       const res = await fetch(API_BASE + path, {
         headers: { "Accept": "application/json" }
       });
@@ -5992,6 +6278,8 @@
 
     async function apiSend(path, method, body) {
       showActionLoader(); // TikTok-style popup
+
+
 
       // random delay between 500ms and 2000ms
       const delayMs = 500 + Math.random() * 1500;
@@ -6024,6 +6312,8 @@
         }
         const data = JSON.parse(text);
         return data;
+      } catch (e) {
+        throw e;
       } finally {
         hideActionLoader();
       }
@@ -6573,10 +6863,13 @@
     async function loadUsers() {
       const allUsers = await apiGet("/users");
       // Filter to only show core BER staff
-      const allowedNames = ["kevin", "meighan", "jenna", "erica", "katie", "testwhale"];
+      const allowedNames = ["kevin", "meighan", "jenna", "erica", "katie", "testwhale", "melodie"];
       state.users = allUsers.filter(u =>
         allowedNames.some(name => u.name.toLowerCase() === name)
       );
+
+
+
       populateUserSelects();
     }
 
@@ -6765,6 +7058,7 @@
       });
 
       // Goals tabs
+      // Goals tabs
       document.querySelectorAll(".goals-tab").forEach(btn => {
         btn.addEventListener("click", () => {
           const tab = btn.dataset.tab;
@@ -6773,16 +7067,9 @@
           if (tab === "monthly") {
             document.getElementById("monthly-goals-panel").style.display = "";
             document.getElementById("annual-goals-panel").style.display = "none";
-            document.getElementById("weekly-planner-panel").style.display = "none";
-          } else if (tab === "weekly") {
-            document.getElementById("monthly-goals-panel").style.display = "none";
-            document.getElementById("annual-goals-panel").style.display = "none";
-            document.getElementById("weekly-planner-panel").style.display = "";
-            initWeeklyPlanner(); // Ensure it renders
           } else {
             document.getElementById("monthly-goals-panel").style.display = "none";
             document.getElementById("annual-goals-panel").style.display = "";
-            document.getElementById("weekly-planner-panel").style.display = "none";
           }
         });
       });
@@ -6827,6 +7114,20 @@
       document.getElementById("task-modal-cancel").addEventListener("click", closeTaskModal);
       document.getElementById("task-save-btn").addEventListener("click", onTaskSave);
       document.getElementById("task-delete-btn").addEventListener("click", onTaskDelete);
+
+      // Delete confirmation modal controls
+      document.getElementById("delete-confirm-close").addEventListener("click", () => {
+        document.getElementById("delete-confirm-modal").classList.add("hidden");
+        pendingDeleteInfo = null;
+      });
+      document.getElementById("delete-confirm-cancel").addEventListener("click", () => {
+        document.getElementById("delete-confirm-modal").classList.add("hidden");
+        pendingDeleteInfo = null;
+      });
+      document.getElementById("delete-confirm-yes").addEventListener("click", () => {
+        const deleteAll = document.querySelector('input[name="delete-choice"]:checked')?.value === "all";
+        executeTaskDelete(deleteAll);
+      });
 
       // Project Step Modal listeners
       document.getElementById("project-step-modal-close").addEventListener("click", () => document.getElementById("project-step-modal").classList.add("hidden"));
@@ -7694,6 +7995,10 @@
       if (rs) rs.value = task.task_date || "";
       if (re) re.value = "";
 
+      // Store series_id if this task belongs to a series
+      const seriesIdInput = document.getElementById("task-series-id");
+      if (seriesIdInput) seriesIdInput.value = task.series_id || "";
+
       modal.dataset.date = task.task_date || "";
       modal.classList.remove("hidden");
     }
@@ -7777,9 +8082,12 @@
               repeatEndStr
             );
             if (extraDates.length) {
+              // Generate a unique series_id to link these repeated tasks
+              const seriesId = crypto.randomUUID();
               const payloads = extraDates.map(d => ({
                 ...basePayload,
                 task_date: d,
+                series_id: seriesId,
                 created_by_id: state.currentUser.id,
                 assigned_by_id: state.currentUser.id
               }));
@@ -7807,9 +8115,12 @@
             );
             const allDates = [dateStr, ...extraDates];
 
+            // Generate a unique series_id to link all tasks in this series
+            const seriesId = crypto.randomUUID();
             const payloads = allDates.map(d => ({
               ...basePayload,
               task_date: d,
+              series_id: seriesId,
               created_by_id: state.currentUser.id,
               assigned_by_id: state.currentUser.id
             }));
@@ -7833,34 +8144,95 @@
 
 
 
-    async function onTaskDelete() {
+    // Store pending delete info for the modal
+    let pendingDeleteInfo = null;
+
+    function onTaskDelete() {
       const id = document.getElementById("task-id").value;
       if (!id) return;
-      if (!confirm("Delete this task?")) return;
 
-      // random delay between 500ms and 2000ms
+      // Get the task title from the modal for matching
+      const taskTitle = document.getElementById("task-title-input").value.trim();
+
+      // Find all tasks with the same title (for potential bulk delete)
+      const matchingTasks = (state.dailyTasks || []).filter(t =>
+        t.title && t.title.trim().toLowerCase() === taskTitle.toLowerCase()
+      );
+
+      // Store info for when user confirms
+      pendingDeleteInfo = { id, taskTitle, matchingTasks };
+
+      // Configure and show the delete confirmation modal
+      const modal = document.getElementById("delete-confirm-modal");
+      const message = document.getElementById("delete-confirm-message");
+      const options = document.getElementById("delete-confirm-options");
+      const allLabel = document.getElementById("delete-all-label");
+
+      if (matchingTasks.length > 1) {
+        // Multiple tasks - show options
+        message.textContent = `Found ${matchingTasks.length} tasks named "${taskTitle}".`;
+        allLabel.textContent = `Delete all ${matchingTasks.length} matching tasks`;
+        options.style.display = "block";
+        // Reset to "one" option
+        document.querySelector('input[name="delete-choice"][value="one"]').checked = true;
+      } else {
+        // Single task - simple confirmation
+        message.textContent = `Delete task "${taskTitle}"?`;
+        options.style.display = "none";
+      }
+
+      modal.classList.remove("hidden");
+    }
+
+    async function executeTaskDelete(deleteAll) {
+      if (!pendingDeleteInfo) return;
+
+      const { id, taskTitle, matchingTasks } = pendingDeleteInfo;
+      pendingDeleteInfo = null;
+
+      // Close both modals
+      document.getElementById("delete-confirm-modal").classList.add("hidden");
+      closeTaskModal();
+
       const delayMs = 500 + Math.random() * 1500;
       const delayPromise = new Promise(resolve => setTimeout(resolve, delayMs));
 
       try {
-        showActionLoader({
-          main: "Deleting…",
-          sub: "Cleaning up this task"
-        });
+        if (deleteAll && matchingTasks.length > 1) {
+          // Delete all tasks with the same title
+          showActionLoader({
+            main: "Deleting all matching tasks…",
+            sub: `Removing ${matchingTasks.length} tasks named "${taskTitle}"`
+          });
 
-        const fetchPromise = fetch(API_BASE + "/daily-tasks/" + id, {
-          method: "DELETE"
-        });
+          // Delete each matching task
+          for (const t of matchingTasks) {
+            await fetch(API_BASE + "/daily-tasks/" + t.id, { method: "DELETE" });
+          }
 
-        const res = await Promise.all([fetchPromise, delayPromise]).then(
-          ([res]) => res
-        );
+          await delayPromise;
+          await loadDailyTasks();
+          showToast(`Deleted ${matchingTasks.length} tasks named "${taskTitle}"`);
+        } else {
+          // Delete single task
+          showActionLoader({
+            main: "Deleting…",
+            sub: "Cleaning up this task"
+          });
 
-        if (!res.ok) throw new Error("Delete failed");
+          const fetchPromise = fetch(API_BASE + "/daily-tasks/" + id, {
+            method: "DELETE"
+          });
 
-        closeTaskModal();
-        await loadDailyTasks();
-        showToast("Task deleted");
+          const res = await Promise.all([fetchPromise, delayPromise]).then(
+            ([res]) => res
+          );
+
+          if (!res.ok) throw new Error("Delete failed");
+
+          await loadDailyTasks();
+          showToast("Task deleted");
+        }
       } catch (err) {
         console.error(err);
         showToast("Error deleting task (check Worker)", true);
@@ -9222,6 +9594,9 @@
         if (prefs.section_order) {
           applySavedSectionOrder();
         }
+
+        // Apply saved section visibility (always call to allow localStorage fallback)
+        applySavedSectionVisibility();
       } catch (err) {
         console.warn("Could not load user preferences:", err);
       }
@@ -9242,79 +9617,97 @@
     // ===== DRAGGABLE SECTIONS =====
     let draggedSection = null;
 
-    function initDraggableSections() {
-      const container = document.getElementById("sections-container");
+    // --- Button Drag & Drop Logic ---
+
+    function initButtonDragAndDrop() {
+      const container = document.getElementById("view-options-bar");
       if (!container) return;
 
-      const sections = container.querySelectorAll(".draggable-section");
+      let draggedBtn = null;
 
-      sections.forEach(section => {
-        // Drag start
-        // Drag start
-        // Drag start
-        section.addEventListener("dragstart", (e) => {
-          // If dragging from an interactive element, blocking section drag
-          if (e.target.closest('.task-pill') || e.target.closest('input') || e.target.closest('button') || e.target.closest('.weekly-task-item') || e.target.closest('.goal-card')) {
-            return;
-          }
-          // Note: We removed the strict handle check so user can drag by header/body if empty.
+      container.addEventListener("dragstart", (e) => {
+        const btn = e.target.closest(".view-option");
+        if (!btn) return;
 
-          draggedSection = section;
-          section.classList.add("dragging");
-          e.dataTransfer.effectAllowed = "move";
-          e.dataTransfer.setData("text/plain", section.id);
-        });
-
-        // Drag end
-        section.addEventListener("dragend", () => {
-          draggedSection = null;
-          section.classList.remove("dragging");
-          container.querySelectorAll(".draggable-section").forEach(s => {
-            s.classList.remove("drop-target");
-          });
-        });
-
-        // Drag over
-        section.addEventListener("dragover", (e) => {
-          e.preventDefault();
-          if (draggedSection && draggedSection !== section) {
-            section.classList.add("drop-target");
-          }
-        });
-
-        // Drag leave
-        section.addEventListener("dragleave", () => {
-          section.classList.remove("drop-target");
-        });
-
-        // Drop
-        section.addEventListener("drop", (e) => {
-          e.preventDefault();
-          section.classList.remove("drop-target");
-
-          if (draggedSection && draggedSection !== section) {
-            // Determine insert position
-            const bounding = section.getBoundingClientRect();
-            const offset = e.clientY - bounding.top;
-
-            if (offset > bounding.height / 2) {
-              // Insert after
-              section.parentNode.insertBefore(draggedSection, section.nextSibling);
-            } else {
-              // Insert before
-              section.parentNode.insertBefore(draggedSection, section);
-            }
-
-            // Save the new order
-            saveSectionOrder();
-            showToast("Layout saved!");
-          }
-        });
+        draggedBtn = btn;
+        btn.classList.add("dragging");
+        e.dataTransfer.effectAllowed = "move";
+        e.dataTransfer.setData("text/plain", btn.dataset.target);
       });
 
-      // Apply saved order on load
-      applySavedSectionOrder();
+      container.addEventListener("dragend", (e) => {
+        if (draggedBtn) {
+          draggedBtn.classList.remove("dragging");
+          draggedBtn = null;
+        }
+
+        // Sync Sections and Save Order on completion
+        syncSectionsToButtons();
+      });
+
+      container.addEventListener("dragover", (e) => {
+        e.preventDefault();
+        const target = e.target.closest(".view-option");
+
+        if (!draggedBtn || !target || target === draggedBtn) return;
+
+        // Live Sort Logic: Move the dragged element in DOM based on cursor position
+        const bounding = target.getBoundingClientRect();
+        const offset = e.clientX - bounding.left;
+        const midpoint = bounding.width / 2;
+
+        if (offset < midpoint) {
+          // Hovering Left side -> Insert Before
+          container.insertBefore(draggedBtn, target);
+        } else {
+          // Hovering Right side -> Insert After
+          container.insertBefore(draggedBtn, target.nextSibling);
+        }
+      });
+
+      container.addEventListener("drop", (e) => {
+        e.preventDefault();
+        // Drop logic handled by dragover (live sort) + dragend (save)
+      });
     }
+
+    function syncSectionsToButtons() {
+      const btnContainer = document.getElementById("view-options-bar");
+      const sectionContainer = document.getElementById("sections-container");
+      if (!btnContainer || !sectionContainer) return;
+
+      const buttons = Array.from(btnContainer.querySelectorAll(".view-option"));
+
+      // Reorder sections based on button order
+      buttons.forEach(btn => {
+        const targetId = btn.dataset.target;
+        const section = document.getElementById(targetId);
+        if (section) {
+          sectionContainer.appendChild(section);
+        }
+      });
+
+      // Save the new section order
+      saveSectionOrder();
+      showToast("Layout saved!");
+    }
+
+    // Call this after loading section order to ensure buttons match
+    function syncButtonsToSections() {
+      const btnContainer = document.getElementById("view-options-bar");
+      const sectionContainer = document.getElementById("sections-container");
+      if (!btnContainer || !sectionContainer) return;
+
+      const sections = Array.from(sectionContainer.querySelectorAll(".draggable-section")); // Uses current DOM order
+
+      sections.forEach(section => {
+        const btn = btnContainer.querySelector(`.view-option[data-target="${section.id}"]`);
+        if (btn) {
+          btnContainer.appendChild(btn);
+        }
+      });
+    }
+
 
     function saveSectionOrder() {
       const container = document.getElementById("sections-container");
@@ -9369,6 +9762,9 @@
           container.appendChild(section);
         }
       });
+
+      // Sync buttons to match saved section order
+      syncButtonsToSections();
     }
 
     function initInstructionsHide() {
@@ -9740,9 +10136,111 @@
       }
     }
 
+    // ===== SECTION HELP UI =====
+    function initSectionHelp() {
+      const sections = {
+        "section-daily-tasks": {
+          title: "Daily Tasks",
+          text: "Your daily action items. <strong>Tip:</strong> Drag tasks here from the Backlog to schedule them for today."
+        },
+        "section-backlog": {
+          title: "Backlog",
+          text: "A holding area for future tasks and ideas. <strong>Tip:</strong> Review weekly and drag items to Daily Tasks when ready."
+        },
+        "section-weekly-strategy": {
+          title: "Weekly Strategy",
+          text: "High-level goals for the week. <strong>Tip:</strong> Use this to align your Daily Tasks with broader objectives."
+        },
+        "section-projects": {
+          title: "Joint Projects",
+          text: "Shared long-term initiatives. <strong>Tip:</strong> Track progress and assign steps to team members."
+        },
+        "section-goals": {
+          title: "Goals & Focus",
+          text: "Long-term vision. <strong>Tip:</strong> Set Monthly and Annual goals to keep the big picture in focus."
+        },
+        "section-pillars": {
+          title: "Pillars",
+          text: "Company-wide suggestions. <strong>Tip:</strong> Submit ideas and vote on team priorities."
+        }
+      };
+
+      for (const [id, info] of Object.entries(sections)) {
+        const section = document.getElementById(id);
+        if (!section) continue;
+
+        // Try to find the title container
+        const header = section.querySelector(".panel-title, .section-title, .projects-title");
+        if (header) {
+          // Avoid duplicates
+          if (header.querySelector(".section-header-help")) continue;
+
+          // Create Icon
+          const icon = document.createElement("span");
+          icon.className = "section-header-help";
+          icon.textContent = "?";
+          icon.title = "Click for help";
+
+          // Create Help Box
+          const helpBox = document.createElement("div");
+          helpBox.className = "section-help-box";
+          helpBox.innerHTML = info.text +
+            '<div style="margin-top:8px;text-align:right;"><button class="help-close-btn" style="border:none;background:transparent;color:var(--theme-primary);cursor:pointer;font-size:11px;font-weight:bold;padding:2px 0;">Got it</button></div>';
+
+          // Insert Icon
+          header.appendChild(icon);
+
+          // Insert Box after header container
+          let insertTarget = header;
+          if (header.classList.contains("projects-title")) {
+            // projects-title is inside projects-header
+            const parent = header.closest(".projects-header");
+            if (parent) insertTarget = parent;
+          } else if (header.closest(".panel-header")) {
+            // some panels have a header wrapper
+            insertTarget = header.closest(".panel-header");
+          }
+
+          if (insertTarget && insertTarget.parentNode) {
+            insertTarget.parentNode.insertBefore(helpBox, insertTarget.nextSibling);
+          } else {
+            header.appendChild(helpBox); // Fallback
+          }
+
+          // Toggle Logic (Icon click)
+          icon.addEventListener("click", (e) => {
+            e.stopPropagation();
+            e.preventDefault();
+            const isHidden = helpBox.classList.contains("hidden");
+
+            if (isHidden) {
+              helpBox.classList.remove("hidden");
+              icon.style.opacity = "1";
+            } else {
+              helpBox.classList.add("hidden");
+              icon.style.opacity = "0.6";
+            }
+          });
+
+          // Close Button Logic
+          const closeBtn = helpBox.querySelector(".help-close-btn");
+          if (closeBtn) {
+            closeBtn.addEventListener("click", (e) => {
+              e.stopPropagation();
+              e.preventDefault();
+              helpBox.classList.add("hidden");
+              icon.style.opacity = "0.6";
+            });
+          }
+        }
+      }
+    }
+
     // Initialize draggable sections
     document.addEventListener("DOMContentLoaded", () => {
-      initDraggableSections();
+      initButtonDragAndDrop();
+      initSectionHelp();
+      applySavedSectionOrder();
       initInstructionsHide();
       initTaskReminders(); // Start reminder check loop
       initShop(); // Initialize shop UI
@@ -10253,6 +10751,7 @@
 
     function initShop() {
       // Shop button in bird container
+      /* Shop button moved to header coin counter
       const finchContainer = document.getElementById("finch-container");
       if (finchContainer && !document.querySelector(".shop-bird-btn")) {
         const shopBtn = document.createElement("button");
@@ -10265,6 +10764,7 @@
         };
         finchContainer.appendChild(shopBtn);
       }
+      */
 
       // Modal close button
       const closeBtn = document.getElementById("shop-modal-close");
@@ -10704,12 +11204,102 @@
       const nextBtn = document.getElementById("weekly-next");
       if (nextBtn) nextBtn.addEventListener("click", () => changeWeeklyWeek(7));
 
-      // Tab Listner
-      const tab = document.querySelector('.goals-tab[data-tab="weekly"]');
-      if (tab) tab.addEventListener('click', renderWeeklyPlanner);
+      // Initial render
+      renderWeeklyPlanner();
     }
 
     document.addEventListener("DOMContentLoaded", initWeeklyPlanner);
+
+    // View Options Toolbar Logic & Persistence
+    document.addEventListener("DOMContentLoaded", () => {
+      const toggles = document.querySelectorAll(".view-option");
+
+      toggles.forEach(toggle => {
+        const targetId = toggle.dataset.target;
+        const section = document.getElementById(targetId);
+        if (!section) return;
+
+        // Set initial visual state based on default HTML visibility (fallback before prefs load)
+        const isVisible = section.style.display !== "none" && !section.classList.contains("hidden");
+        if (isVisible) toggle.classList.add("active");
+
+        // Handle click
+        toggle.addEventListener("click", () => {
+          const isCurrentlyVisible = section.style.display !== "none" && !section.classList.contains("hidden");
+
+          if (isCurrentlyVisible) {
+            section.style.display = "none";
+            toggle.classList.remove("active");
+          } else {
+            section.style.display = "";
+            section.classList.remove("hidden");
+            toggle.classList.add("active");
+          }
+          // Save the new state
+          saveSectionVisibility();
+        });
+      });
+    });
+
+    // ===== SECTION VISIBILITY PREFS =====
+    function saveSectionVisibility() {
+      const visibility = {};
+      const toggles = document.querySelectorAll(".view-option");
+      toggles.forEach(toggle => {
+        const targetId = toggle.dataset.target;
+        const section = document.getElementById(targetId);
+        if (section) {
+          // true if visible
+          visibility[targetId] = section.style.display !== "none" && !section.classList.contains("hidden");
+        }
+      });
+
+      // Save to D1
+      saveUserDbPreference("section_visibility", visibility);
+
+      // Save to localStorage fallback
+      if (state.currentUser) {
+        localStorage.setItem(`section-visibility-${state.currentUser.id}`, JSON.stringify(visibility));
+      }
+    }
+
+    function applySavedSectionVisibility() {
+      let prefs = null;
+
+      // Try D1 first
+      if (state.userDbPrefs && state.userDbPrefs.section_visibility) {
+        prefs = state.userDbPrefs.section_visibility;
+      }
+      // Fallback to localStorage
+      else if (state.currentUser) {
+        const local = localStorage.getItem(`section-visibility-${state.currentUser.id}`);
+        if (local) prefs = local;
+      }
+
+      if (!prefs) return;
+
+      if (typeof prefs === 'string') {
+        try { prefs = JSON.parse(prefs); } catch (e) { }
+      }
+
+      Object.keys(prefs).forEach(sectionId => {
+        const section = document.getElementById(sectionId);
+        const toggle = document.querySelector(`.view-option[data-target="${sectionId}"]`);
+
+        // If we have a stored preference for this section
+        if (section && toggle && prefs[sectionId] !== undefined) {
+          const isVisible = prefs[sectionId];
+          if (isVisible) {
+            section.style.display = "";
+            section.classList.remove("hidden");
+            toggle.classList.add("active");
+          } else {
+            section.style.display = "none";
+            toggle.classList.remove("active");
+          }
+        }
+      });
+    }
 
     function changeWeeklyWeek(days) {
       const d = new Date(currentWeeklyStart);
@@ -10723,14 +11313,6 @@
       const d = new Date(currentWeeklyStart);
       const label = `Week of ${d.toLocaleDateString('en-US', { month: 'numeric', day: 'numeric', year: 'numeric' })}`;
       document.getElementById("weekly-current-label").textContent = label;
-
-      // Show/Hide Panels
-      document.getElementById("monthly-goals-panel").style.display = "none";
-      document.getElementById("annual-goals-panel").style.display = "none";
-      document.getElementById("weekly-planner-panel").style.display = "block";
-
-      document.querySelectorAll(".goals-tab").forEach(b => b.classList.remove("active"));
-      document.querySelector('.goals-tab[data-tab="weekly"]').classList.add("active");
 
       // Load Data
       const data = await loadWeeklyPlan(currentWeeklyStart);
@@ -10757,7 +11339,7 @@
       const container = document.getElementById("weekly-priorities-grid");
       container.innerHTML = "";
 
-      const cols = ["", "Erica", "Katie", "Kevin", "Jenna", "Meighan"];
+      const cols = ["", "Erica", "Katie", "Kevin", "Jenna", "Meighan", "Melodie"];
       const rows = ["1", "2", "3", "4", "5"];
 
       container.style.gridTemplateColumns = `40px repeat(${cols.length - 1}, 1fr)`;
