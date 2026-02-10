@@ -7,44 +7,43 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <style>
     :root {
-      /* Light / “Day” default */
-      --ink: #0f172a;
-      --ink-soft: #6b7280;
-      --bg-main: #f3f4f6;
+      /* Matrix.org / Kayak Club Theme (Black & White) */
+      --ink: #000000;
+      --ink-soft: #555555;
+      --bg-main: #ffffff;
 
       --panel: #ffffff;
       --panel-elevated: #ffffff;
-      --panel-border: #d1d5db;
+      --panel-border: #000000;
 
-      /* BER logo colors */
-      --accent: #03aae1;
-      /* teal from logo */
-      --accent-soft: #fbbf24;
-      /* sun */
+      /* High Contrast Accents */
+      --accent: #000000;
+      /* black replaces teal */
+      --accent-soft: #e5e5e5;
+      /* light gray */
       --accent-muted: #9ca3af;
 
       --danger: #e11d48;
       --success: #16a34a;
 
-      --radius-lg: 16px;
-      --radius-md: 10px;
-      --radius-sm: 6px;
+      --radius-lg: 24px;
+      /* Larger card rounding */
+      --radius-md: 16px;
+      --radius-sm: 8px;
+      --radius-btn: 999px;
+      /* Pill buttons */
 
-      --shadow-xl: 0 20px 50px rgba(15, 23, 42, 0.15);
-      --shadow-md: 0 10px 25px rgba(15, 23, 42, 0.12);
+      --shadow-xl: none;
+      /* Remove shadows for flat, high-contrast look */
+      --shadow-md: none;
 
-      --font-sans: system-ui, -apple-system, BlinkMacSystemFont, "SF Pro Text",
-        "Segoe UI", sans-serif;
+      --font-sans: "Helvetica Neue", Helvetica, Arial, sans-serif;
 
-      /* Board Ideas Pillar Colors */
+      /* Board Ideas Pillar Colors - Keep distinct but maybe mute/bold them? keeping as is for functionality */
       --elevate: #f59e0b;
-      /* Amber */
       --engage: #3b82f6;
-      /* Blue */
       --evolve: #10b981;
-      /* Emerald */
       --excite: #ec4899;
-      /* Pink */
     }
 
     * {
@@ -69,24 +68,29 @@
       min-height: 100vh;
     }
 
-    /* Night mode – basically your current look */
+    /* High Contrast Dark Mode (Matrix Dark) */
+    /* High Contrast Dark Mode (Matrix Dark - Grey variant) */
     body[data-theme="dark"] {
-      --ink: #e5e7eb;
-      --ink-soft: #9ca3af;
-      /* Defining the gradient here for reference, but applying strictly to html below */
-      --bg-main: radial-gradient(circle at top left, #111827 0, #020617 45%, #000 100%);
+      --ink: #ffffff;
+      --ink-soft: #a0a0a0;
+      /* Dark Grey Background as requested */
+      --bg-main: #121212;
 
-      --panel: #020617;
-      --panel-elevated: #020617;
-      --panel-border: #1f2937;
+      --panel: #1e1e1e;
+      --panel-elevated: #1e1e1e;
+      --panel-border: #404040;
 
-      --shadow-xl: 0 25px 60px rgba(0, 0, 0, 0.65);
-      --shadow-md: 0 12px 30px rgba(0, 0, 0, 0.45);
+      --shadow-xl: none;
+      --shadow-md: none;
     }
+
+    /* ... (rest of html rule) ... */
+
+
 
     /* NUCLEAR OPTION: Force full page background on the WP Parent Site */
     html {
-      background: radial-gradient(circle at top left, #111827 0, #020617 45%, #000 100%) fixed !important;
+      background: var(--bg-main) !important;
       background-size: cover !important;
       min-height: 100vh !important;
     }
@@ -124,21 +128,27 @@
 
     .app-shell {
       width: 100%;
-      margin: 0;
-      padding: 16px 24px;
+      max-width: 1600px;
+      /* Optional constraint for readability on huge screens */
+      margin: 0 auto;
+      padding: 16px;
+      /* Reduced from 24px */
       display: flex;
       flex-direction: column;
-      gap: 16px;
+      gap: 12px;
+      /* Reduced from 24px */
     }
 
     header.app-header {
       display: flex;
       align-items: center;
       justify-content: space-between;
-      padding: 12px 16px;
+      padding: 8px 16px;
+      /* Reduced from 16px 24px */
       border-radius: var(--radius-lg);
       background: var(--panel-elevated);
-      box-shadow: var(--shadow-md);
+      /* No shadow, just border */
+      box-shadow: none;
       border: 1px solid var(--panel-border);
     }
 
@@ -220,11 +230,11 @@
       background: var(--panel);
       border-radius: var(--radius-lg);
       border: 1px solid var(--panel-border);
-      box-shadow: var(--shadow-xl);
-      padding: 12px 12px 16px;
+      box-shadow: none;
+      padding: 16px;
       display: flex;
       flex-direction: column;
-      gap: 8px;
+      gap: 12px;
     }
 
     .panel-header {
@@ -232,30 +242,38 @@
       align-items: center;
       justify-content: space-between;
       gap: 12px;
-      padding-bottom: 4px;
-      border-bottom: 1px solid rgba(55, 65, 81, 0.9);
+      padding-bottom: 8px;
+      border-bottom: 2px solid var(--ink);
+      /* Thicker, bolder separators */
+      margin-bottom: 8px;
     }
 
     .panel-title {
-      font-size: 13px;
-      letter-spacing: 0.16em;
-      text-transform: uppercase;
-      color: var(--ink-soft);
+      font-size: 14px;
+      font-weight: 700;
+      letter-spacing: -0.01em;
+      /* Tight typography like Matrix */
+      text-transform: none;
+      /* Matrix uses sentence case often, but let's stick to clean sans */
+      color: var(--ink);
     }
 
     .chip {
       font-size: 11px;
-      padding: 2px 8px;
-      border-radius: 999px;
-      border: 1px solid rgba(148, 163, 184, 0.6);
+      padding: 4px 12px;
+      border-radius: var(--radius-btn);
+      border: 1px solid var(--ink);
       text-transform: uppercase;
-      letter-spacing: 0.14em;
-      color: var(--ink-soft);
+      font-weight: 700;
+      letter-spacing: 0.05em;
+      color: var(--ink);
+      background: transparent;
     }
 
     .chip-accent {
-      border-color: rgba(248, 113, 113, 0.9);
-      color: #fecaca;
+      background: var(--ink);
+      color: var(--bg-main);
+      border-color: var(--ink);
     }
 
     /* Calendar */
@@ -266,21 +284,24 @@
       gap: 8px;
       flex-wrap: wrap;
       font-size: 12px;
-      color: var(--ink-soft);
+      color: var(--ink);
     }
 
     .calendar-controls button {
-      border-radius: 999px;
-      border: 1px solid rgba(75, 85, 99, 0.9);
-      background: rgba(15, 23, 42, 0.95);
+      border-radius: var(--radius-btn);
+      border: 1px solid var(--ink);
+      background: transparent;
       color: var(--ink);
-      padding: 4px 8px;
-      font-size: 11px;
+      padding: 6px 16px;
+      font-size: 12px;
+      font-weight: 600;
       cursor: pointer;
+      transition: all 0.2s ease;
     }
 
     .calendar-controls button:hover {
-      border-color: var(--accent-soft);
+      background: var(--ink);
+      color: var(--bg-main);
     }
 
     .calendar-controls span.month-label {
@@ -363,9 +384,9 @@
     .day-cell {
       position: relative;
       min-height: 86px;
-      background: radial-gradient(circle at top, rgba(15, 23, 42, 0.96), rgba(15, 23, 42, 0.98));
+      background: var(--bg-main);
       border-radius: var(--radius-md);
-      border: 1px solid rgba(55, 65, 81, 0.9);
+      border: 1px solid var(--panel-border);
       padding: 4px 4px 20px;
       display: flex;
       flex-direction: column;
@@ -373,8 +394,8 @@
     }
 
     .day-cell.is-today {
-      border-color: var(--accent-soft);
-      box-shadow: 0 0 0 1px rgba(56, 189, 248, 0.4);
+      border: 2px solid var(--ink);
+      box-shadow: none;
     }
 
     .day-cell-empty {
@@ -419,15 +440,21 @@
     .task-pill {
       display: flex;
       align-items: flex-start;
-      gap: 4px;
-      padding: 4px 6px;
+      gap: 6px;
+      padding: 6px 8px;
       border-radius: var(--radius-sm);
-      background: rgba(15, 23, 42, 0.96);
-      border: 1px solid rgba(75, 85, 99, 0.9);
+      background: var(--panel);
+      border: 1px solid var(--panel-border);
       cursor: pointer;
       white-space: normal;
       word-wrap: break-word;
       min-height: fit-content;
+      transition: all 0.2s;
+    }
+
+    .task-pill:hover {
+      box-shadow: 2px 2px 0 var(--ink);
+      transform: translateY(-1px);
     }
 
     .task-quick-actions {
@@ -506,37 +533,35 @@
 
     /* Goals */
 
+    /* Goals */
+
     .goals-tabs {
       display: inline-flex;
-      background: #111827;
-      /* Dark background like screenshot */
-      border-radius: 999px;
-      padding: 4px;
-      gap: 0;
-      border: 1px solid #374151;
+      background: transparent;
+      border-radius: var(--radius-btn);
+      padding: 0;
+      gap: 8px;
+      border: none;
     }
 
     .goals-tab {
-      padding: 6px 16px;
-      border-radius: 999px;
-      border: none;
+      padding: 8px 24px;
+      border-radius: var(--radius-btn);
+      border: 1px solid var(--ink);
       background: transparent;
-      color: #9ca3af;
-      /* Gray text */
+      color: var(--ink);
       cursor: pointer;
-      text-transform: uppercase;
-      font-weight: 600;
-      font-size: 10px;
-      letter-spacing: 0.05em;
+      text-transform: none;
+      font-weight: 700;
+      font-size: 13px;
+      letter-spacing: -0.01em;
       transition: all 0.2s;
     }
 
     .goals-tab.active {
-      background: #EAB308;
-      /* Yellow/Gold active state */
-      color: #111827;
-      /* Dark text on yellow */
-      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+      background: var(--ink);
+      color: var(--bg-main);
+      box-shadow: none;
     }
 
     .goals-controls {
@@ -544,7 +569,7 @@
       flex-wrap: wrap;
       gap: 8px;
       font-size: 11px;
-      color: var(--ink-soft);
+      color: var(--ink);
       align-items: center;
     }
 
@@ -552,24 +577,26 @@
       display: inline-flex;
       align-items: center;
       gap: 4px;
+      font-weight: 600;
     }
 
     .goals-controls input[type="month"],
     .goals-controls select,
     .goals-controls input[type="number"] {
-      background: rgba(15, 23, 42, 0.96);
-      border-radius: 999px;
-      border: 1px solid rgba(55, 65, 81, 0.9);
+      background: transparent;
+      border-radius: var(--radius-btn);
+      border: 1px solid var(--ink);
       color: var(--ink);
-      padding: 3px 8px;
-      font-size: 11px;
+      padding: 6px 16px;
+      font-size: 12px;
+      font-weight: 600;
     }
 
     .goals-grid {
-      margin-top: 8px;
+      margin-top: 12px;
       display: grid;
       grid-template-columns: repeat(3, minmax(0, 1fr));
-      gap: 8px;
+      gap: 12px;
     }
 
     @media (max-width: 1200px) {
@@ -586,37 +613,47 @@
 
     .goal-column {
       border-radius: var(--radius-md);
-      border: 1px solid rgba(55, 65, 81, 0.9);
-      background: radial-gradient(circle at top, rgba(15, 23, 42, 0.97), rgba(15, 23, 42, 0.99));
-      padding: 6px 6px 8px;
+      border: 1px solid var(--panel-border);
+      background: transparent;
+      padding: 12px;
       display: flex;
       flex-direction: column;
-      gap: 4px;
+      gap: 8px;
     }
 
     .goal-column-title {
-      font-size: 11px;
+      font-size: 12px;
+      font-weight: 700;
       text-transform: uppercase;
-      letter-spacing: 0.16em;
-      color: var(--ink-soft);
-      border-bottom: 1px solid rgba(31, 41, 55, 0.9);
-      padding-bottom: 4px;
+      letter-spacing: 0.05em;
+      color: var(--ink);
+      border-bottom: 2px solid var(--ink);
+      padding-bottom: 8px;
+      margin-bottom: 4px;
     }
 
     .goal-card {
-      background: rgba(30, 41, 59, 0.7);
-      border: 1px solid rgba(55, 65, 81, 0.6);
+      background: var(--panel);
+      border: 1px solid var(--panel-border);
       border-radius: var(--radius-sm);
-      padding: 8px;
+      padding: 12px;
       display: flex;
       flex-direction: column;
-      gap: 6px;
+      gap: 8px;
       transition: all 0.2s;
+      box-shadow: none;
+    }
+
+    .goal-card:hover {
+      transform: translateY(-2px);
+      box-shadow: 4px 4px 0 var(--ink);
+      /* Brutalist hover effect */
     }
 
     .goal-card.completed {
       opacity: 0.6;
-      background: rgba(30, 41, 59, 0.4);
+      background: #f3f4f6;
+      text-decoration: line-through;
     }
 
     /* Assignee Grid Styling */
@@ -631,33 +668,32 @@
       display: flex;
       align-items: center;
       gap: 8px;
-      padding: 6px 8px;
-      background: rgba(15, 23, 42, 0.8);
-      /* Slightly darker for contrast */
+      padding: 6px 12px;
+      background: transparent;
       border: 1px solid var(--panel-border);
-      border-radius: 6px;
+      border-radius: var(--radius-btn);
       cursor: pointer;
       transition: all 0.2s;
       font-size: 11px;
+      font-weight: 600;
       user-select: none;
-      color: #ffffff !important;
-      /* Force white text */
+      color: var(--ink) !important;
     }
 
     .assignee-option:hover {
-      border-color: var(--accent);
-      background: rgba(3, 170, 225, 0.2);
+      background: var(--ink);
+      color: var(--bg-main) !important;
     }
 
     .assignee-option input[type="checkbox"] {
-      accent-color: var(--accent);
+      accent-color: var(--ink);
       cursor: pointer;
     }
 
     .assignee-option.selected {
-      background: rgba(3, 170, 225, 0.25);
-      border-color: var(--accent);
-      color: #fff;
+      background: var(--ink);
+      border-color: var(--ink);
+      color: var(--bg-main) !important;
     }
 
     /* Subtask creation list */
@@ -1168,7 +1204,7 @@
     }
 
     body:not([data-theme="dark"]) .project-title {
-      color: #0f172a;
+      color: var(--ink);
     }
 
     body:not([data-theme="dark"]) .project-step {
@@ -1180,14 +1216,14 @@
     }
 
     body:not([data-theme="dark"]) .step-title {
-      color: #0f172a;
+      color: var(--ink);
     }
 
     body:not([data-theme="dark"]) .add-step-form input,
     body:not([data-theme="dark"]) .add-step-form select {
       background: #ffffff;
       border-color: #d1d5db;
-      color: #0f172a;
+      color: var(--ink);
     }
 
     /* ===== WEEKLY TASKS (BETA) ===== */
@@ -1298,13 +1334,13 @@
     }
 
     body:not([data-theme="dark"]) .weekly-task-title {
-      color: #0f172a;
+      color: var(--ink);
     }
 
     body:not([data-theme="dark"]) .add-weekly-task-form input {
       background: #ffffff;
       border-color: #d1d5db;
-      color: #0f172a;
+      color: var(--ink);
     }
 
     /* ===== DRAGGABLE SECTIONS ===== */
@@ -1654,14 +1690,30 @@
 
     /* Calendar controls */
     body:not([data-theme="dark"]) .calendar-controls button,
-    body:not([data-theme="dark"]) .calendar-controls select {
-      background: #ffffff;
-      color: #0f172a;
-      border-color: #d1d5db;
+    body:not([data-theme="dark"]) .calendar-controls select,
+    body:not([data-theme="dark"]) #weekly-prev,
+    body:not([data-theme="dark"]) #weekly-next,
+    body:not([data-theme="dark"]) .add-project-btn,
+    body:not([data-theme="dark"]) .tip-box,
+    body:not([data-theme="dark"]) .header-hint-box {
+      background: #000000 !important;
+      color: #ffffff !important;
+      border: 1px solid #000000 !important;
+    }
+
+    body:not([data-theme="dark"]) .calendar-controls button:hover,
+    body:not([data-theme="dark"]) #weekly-prev:hover,
+    body:not([data-theme="dark"]) #weekly-next:hover,
+    body:not([data-theme="dark"]) .add-project-btn:hover {
+      background: #333333 !important;
+    }
+
+    body:not([data-theme="dark"]) .header-hint {
+      color: var(--ink);
     }
 
     body:not([data-theme="dark"]) .calendar-controls span.month-label {
-      color: #0f172a;
+      color: var(--ink);
     }
 
     /* Weekday row */
@@ -1701,7 +1753,7 @@
     body:not([data-theme="dark"]) .goal-add-form select {
       background: #ffffff;
       border-color: #d1d5db;
-      color: #0f172a;
+      color: var(--ink);
     }
 
     /* Overlay & modal surfaces */
@@ -1713,7 +1765,7 @@
     body:not([data-theme="dark"]) .modal-panel {
       background: #ffffff;
       border-color: #e5e7eb;
-      color: #0f172a;
+      color: var(--ink);
     }
 
     body:not([data-theme="dark"]) .overlay-panel select,
@@ -1722,7 +1774,7 @@
     body:not([data-theme="dark"]) .modal-body textarea {
       background: #ffffff;
       border-color: #d1d5db;
-      color: #0f172a;
+      color: var(--ink);
     }
 
     body:not([data-theme="dark"]) .modal {
@@ -1747,7 +1799,7 @@
     }
 
     body:not([data-theme="dark"]) .goal-subtask-title {
-      color: #0f172a;
+      color: var(--ink);
     }
 
     body:not([data-theme="dark"]) .goal-subtask-calendar-btn {
@@ -1773,7 +1825,7 @@
     body:not([data-theme="dark"]) .add-subtask-form input {
       background: #ffffff;
       border-color: #d1d5db;
-      color: #0f172a;
+      color: var(--ink);
     }
 
     body:not([data-theme="dark"]) .add-subtask-form button {
@@ -1972,22 +2024,37 @@
     }
 
     body[data-theme="dark"] .pillar-task-row {
-      background: rgba(2, 6, 23, 0.28);
-      border-color: rgba(2, 6, 23, 0.35);
+      background: rgba(255, 255, 255, 0.1);
+      border-color: rgba(255, 255, 255, 0.2);
     }
 
     .pillar-task-title {
       font-size: 12px;
       font-weight: 700;
-      color: #0f172a;
+      color: var(--ink);
+      /* Was hardcoded #0f172a */
       line-height: 1.2;
     }
 
     .pillar-task-meta {
       margin-top: 4px;
       font-size: 11px;
-      color: rgba(15, 23, 42, 0.85);
+      color: var(--ink-soft);
+      /* Was hardcoded rgba */
       line-height: 1.25;
+    }
+
+    /* Dark Mode Input Fixes */
+    body[data-theme="dark"] input,
+    body[data-theme="dark"] select,
+    body[data-theme="dark"] textarea {
+      color: #ffffff !important;
+      background: rgba(255, 255, 255, 0.1) !important;
+      border-color: rgba(255, 255, 255, 0.3) !important;
+    }
+
+    body[data-theme="dark"] ::placeholder {
+      color: rgba(255, 255, 255, 0.5) !important;
     }
 
     .pillar-empty {
@@ -2015,7 +2082,8 @@
       justify-content: center;
       text-align: center;
       padding: 16px;
-      color: #0f172a;
+      color: #000000 !important;
+      /* Force black text on light circle */
       border: 1px solid rgba(15, 23, 42, 0.18);
     }
 
@@ -2058,8 +2126,8 @@
     .view-options-bar {
       display: flex;
       flex-wrap: wrap;
-      gap: 12px;
-      padding: 16px;
+      gap: 8px;
+      padding: 8px;
 
       /* Match .panel style */
       background: var(--panel-elevated);
@@ -2166,7 +2234,6 @@
       #section-projects {
         width: calc(50% - 20px);
       }
-    }
     }
 
     .panel {
@@ -2564,6 +2631,7 @@
     }
 
     .color-input-styled {
+      appearance: none;
       -webkit-appearance: none;
       border: none;
       width: 32px;
@@ -4027,29 +4095,23 @@
 
     <main class="app-main">
       <!-- Section Toggle Toolbar -->
-      <div class="view-options-container" style="margin-bottom: 24px;">
-        <div class="view-options-header" style="margin-bottom:12px;">
-          <h3 style="margin:0 0 4px 0;font-size:16px;">Customize Dashboard</h3>
-          <p style="margin:0 0 8px 0;font-size:13px;color:var(--ink-soft);">Drag buttons to reorder sections. Toggle to
-            show/hide.</p>
-          <div
-            style="font-size:12px;color:var(--ink-soft);background:rgba(3,170,225,0.05);padding:8px;border-radius:6px;border-left:3px solid var(--theme-primary);">
-            <strong>Tip:</strong> Move your most used sections to the left for quick access.
-          </div>
+      <!-- Section Toggle Toolbar -->
+      <div class="view-options-bar" id="view-options-bar" style="margin-bottom: 16px;">
+        <div style="display:flex; flex-direction:column; gap:2px; margin-right:auto; padding-left: 4px;">
+          <span style="font-size:12px; font-weight:700; color:var(--ink);">Customize</span>
+          <span style="font-size:10px; color:var(--ink-soft);">Drag to reorder</span>
         </div>
-        <!-- Section Toggle Toolbar -->
-        <div class="view-options-bar" id="view-options-bar">
-          <!-- Grouped Buttons -->
-          <div class="view-option" draggable="true" data-target="section-daily-tasks,section-backlog">Daily & Backlog
-            <span class="drag-handle">⋮⋮</span>
-          </div>
-          <div class="view-option" draggable="true" data-target="section-gamification">Metrics <span
-              class="drag-handle">⋮⋮</span></div>
-          <div class="view-option" draggable="true" data-target="section-weekly-strategy,section-projects">Strategy &
-            Projects <span class="drag-handle">⋮⋮</span></div>
-          <div class="view-option" draggable="true" data-target="section-goals,section-pillars">Goals & Pillars <span
-              class="drag-handle">⋮⋮</span></div>
+
+        <!-- Grouped Buttons -->
+        <div class="view-option" draggable="true" data-target="section-daily-tasks,section-backlog">Daily & Backlog
+          <span class="drag-handle">⋮⋮</span>
         </div>
+        <div class="view-option" draggable="true" data-target="section-gamification">Metrics <span
+            class="drag-handle">⋮⋮</span></div>
+        <div class="view-option" draggable="true" data-target="section-weekly-strategy,section-projects">Strategy &
+          Projects <span class="drag-handle">⋮⋮</span></div>
+        <div class="view-option" draggable="true" data-target="section-goals,section-pillars">Goals & Pillars <span
+            class="drag-handle">⋮⋮</span></div>
       </div>
 
       <!-- Draggable Sections Container -->
@@ -4120,9 +4182,22 @@
 
         <!-- Gamification Section (Bird/Stats) -->
         <section class="panel draggable-section" id="section-gamification">
-          <div class="panel-header">
-            <span class="section-drag-handle" title="Drag to reorder">⋮⋮</span>
-            <div class="panel-title">Team Pulse & Gamification</div>
+          <div class="panel-header" style="display: flex; align-items: center; justify-content: space-between;">
+            <div style="display: flex; align-items: center;">
+              <span class="section-drag-handle" title="Drag to reorder">⋮⋮</span>
+              <div class="panel-title">Team Pulse & Gamification</div>
+            </div>
+
+            <!-- Range Toggle UI -->
+            <div class="metrics-range-toggle"
+              style="display: flex; background: var(--accent-soft); padding: 2px; border-radius: 999px;">
+              <button onclick="setMetricsRange('day')" id="metrics-btn-day" class="toggle-btn"
+                style="border: none; background: transparent; padding: 4px 12px; border-radius: 999px; font-size: 11px; font-weight: 600; cursor: pointer; color: var(--ink-soft);">Day</button>
+              <button onclick="setMetricsRange('week')" id="metrics-btn-week" class="toggle-btn active"
+                style="border: none; background: var(--accent); color: var(--bg-main); padding: 4px 12px; border-radius: 999px; font-size: 11px; font-weight: 600; cursor: pointer;">Week</button>
+              <button onclick="setMetricsRange('month')" id="metrics-btn-month" class="toggle-btn"
+                style="border: none; background: transparent; padding: 4px 12px; border-radius: 999px; font-size: 11px; font-weight: 600; cursor: pointer; color: var(--ink-soft);">Month</button>
+            </div>
           </div>
 
           <!-- Team Metrics Dashboard -->
@@ -4204,13 +4279,9 @@
 
           <div id="weekly-planner-panel">
             <div class="goals-controls" style="justify-content:center; gap:20px;">
-              <button id="weekly-prev" class="icon-btn"
-                style="background:var(--card-bg); border:1px solid var(--border); border-radius:4px; px:10px;">← Prev
-                Week</button>
+              <button id="weekly-prev" class="icon-btn">← Prev Week</button>
               <span id="weekly-current-label" style="font-weight:600; color:var(--accent);">Week of ...</span>
-              <button id="weekly-next" class="icon-btn"
-                style="background:var(--card-bg); border:1px solid var(--border); border-radius:4px; px:10px;">Next Week
-                →</button>
+              <button id="weekly-next" class="icon-btn">Next Week →</button>
             </div>
 
             <!-- Priorities Grid -->
@@ -4505,6 +4576,7 @@
       userPrefs: null,        // prefs for activeUserId (titles, category labels, etc.)
       monthlyCategoryDefs: null, // [{key,label}]
       annualCategoryDefs: null,
+      metricsRange: 'week', // NEW: 'day' | 'week' | 'month'
     };
 
 
@@ -7117,10 +7189,13 @@
     async function loadUsers() {
       const allUsers = await apiGet("/users");
       // Filter to only show core BER staff
-      const allowedNames = ["kevin", "meighan", "jenna", "erica", "katie", "testwhale", "melodie"];
-      state.users = allUsers.filter(u =>
-        allowedNames.some(name => u.name.toLowerCase().includes(name))
-      );
+      const allowedNames = ["kevin", "meighan", "jenna", "erica", "katie", "melodie"];
+      const excludedNames = ["kevin test", "kevin weinkauff", "meighan harris", "test whale"];
+      state.users = allUsers.filter(u => {
+        const lower = u.name.toLowerCase();
+        if (excludedNames.some(ex => lower.includes(ex))) return false;
+        return allowedNames.some(name => lower.includes(name));
+      });
 
 
 
@@ -10568,62 +10643,40 @@
           // Avoid duplicates
           if (header.querySelector(".section-header-help")) continue;
 
-          // Create Icon
-          const icon = document.createElement("span");
-          icon.className = "section-header-help";
-          icon.textContent = "?";
-          icon.title = "Click for help";
+          // Create help icon
+          const helpIcon = document.createElement("span");
+          helpIcon.className = "section-header-help";
+          helpIcon.innerHTML = "?";
+          helpIcon.title = "Show tip";
+          helpIcon.style.cssText = "display:inline-flex; align-items:center; justify-content:center; width:16px; height:16px; border-radius:50%; background:var(--ink-soft); color:var(--bg-main); font-size:10px; font-weight:bold; margin-left:8px; cursor:pointer;";
 
-          // Create Help Box
-          const helpBox = document.createElement("div");
-          helpBox.className = "section-help-box";
-          helpBox.innerHTML = info.text +
-            '<div style="margin-top:8px;text-align:right;"><button class="help-close-btn" style="border:none;background:transparent;color:var(--theme-primary);cursor:pointer;font-size:11px;font-weight:bold;padding:2px 0;">Got it</button></div>';
-
-          // Insert Icon
-          header.appendChild(icon);
-
-          // Insert Box after header container
-          let insertTarget = header;
-          if (header.classList.contains("projects-title")) {
-            // projects-title is inside projects-header
-            const parent = header.closest(".projects-header");
-            if (parent) insertTarget = parent;
-          } else if (header.closest(".panel-header")) {
-            // some panels have a header wrapper
-            insertTarget = header.closest(".panel-header");
-          }
-
-          if (insertTarget && insertTarget.parentNode) {
-            insertTarget.parentNode.insertBefore(helpBox, insertTarget.nextSibling);
-          } else {
-            header.appendChild(helpBox); // Fallback
-          }
-
-          // Toggle Logic (Icon click)
-          icon.addEventListener("click", (e) => {
+          helpIcon.onclick = (e) => {
             e.stopPropagation();
-            e.preventDefault();
-            const isHidden = helpBox.classList.contains("hidden");
-
-            if (isHidden) {
-              helpBox.classList.remove("hidden");
-              icon.style.opacity = "1";
+            // Toggle tip
+            let existingTip = section.querySelector(".tip-box");
+            if (existingTip) {
+              existingTip.remove();
             } else {
-              helpBox.classList.add("hidden");
-              icon.style.opacity = "0.6";
-            }
-          });
+              const tip = document.createElement("div");
+              tip.className = "tip-box";
+              // Matrix Style: Black bg, white text is handled by CSS .tip-box
+              tip.style.cssText = "margin-top:8px; padding:8px 12px; border-radius:6px; font-size:12px; line-height:1.4;";
+              tip.innerHTML = info.text;
 
-          // Close Button Logic
-          const closeBtn = helpBox.querySelector(".help-close-btn");
-          if (closeBtn) {
-            closeBtn.addEventListener("click", (e) => {
-              e.stopPropagation();
-              e.preventDefault();
-              helpBox.classList.add("hidden");
-              icon.style.opacity = "0.6";
-            });
+              // Insert after header
+              header.parentNode.insertBefore(tip, header.nextSibling);
+            }
+          };
+
+          header.appendChild(helpIcon);
+
+          // Auto-show for Pillars (as requested in screenshot)
+          if (id === "section-pillars") {
+            const tip = document.createElement("div");
+            tip.className = "tip-box";
+            tip.style.cssText = "margin-top:8px; padding:8px 12px; border-radius:6px; font-size:12px; line-height:1.4;";
+            tip.innerHTML = info.text;
+            header.parentNode.insertBefore(tip, header.nextSibling);
           }
         }
       }
@@ -12173,7 +12226,7 @@
     function toggleMetricsView() {
       const dashboard = document.getElementById("team-metrics-dashboard");
       const birdContent = document.getElementById("gamification-content");
-      const btn = document.getElementById("toggle-metrics-view"); // Toolbar button if exists
+      const btn = document.getElementById("toggle-metrics-view");
 
       if (dashboard.style.display === "none") {
         dashboard.style.display = "block";
@@ -12187,14 +12240,55 @@
       }
     }
 
+    function setMetricsRange(range) {
+      state.metricsRange = range;
+      // Update UI buttons
+      ['day', 'week', 'month'].forEach(r => {
+        const btn = document.getElementById(`metrics-btn-${r}`);
+        if (btn) {
+          if (r === range) {
+            btn.classList.add('active');
+            btn.style.background = 'var(--accent)';
+            btn.style.color = 'var(--bg-main)';
+          } else {
+            btn.classList.remove('active');
+            btn.style.background = 'transparent';
+            btn.style.color = 'var(--ink-soft)';
+          }
+        }
+      });
+      renderTeamMetrics();
+    }
+
     function calculateTeamStats() {
-      // 1. Filter for current week's tasks
       const allTasks = state.dailyTasks || [];
+      const now = new Date();
+      const todayStr = now.toISOString().split('T')[0];
+
+      // Current Week Range (visible)
+      const [startKey, endKey] = getVisibleDateRange();
+      const weekStartObj = new Date(startKey);
+      const weekEndObj = new Date(endKey);
+
+      // Month Range (visible)
+      const base = state.currentMonthDate;
+      const mStart = new Date(base.getFullYear(), base.getMonth(), 1);
+      const mEnd = new Date(base.getFullYear(), base.getMonth() + 1, 0);
+
+      const isInRange = (dStr) => {
+        if (!dStr) return false;
+        const pts = dStr.split('T')[0].split('-').map(Number);
+        const dObj = new Date(pts[0], pts[1] - 1, pts[2]);
+        const dateKeyOnly = dStr.split('T')[0];
+
+        if (state.metricsRange === 'day') return dateKeyOnly === todayStr;
+        if (state.metricsRange === 'week') return dObj >= weekStartObj && dObj <= weekEndObj;
+        if (state.metricsRange === 'month') return dObj >= mStart && dObj <= mEnd;
+        return true;
+      };
 
       // Group by User
       const userStats = {};
-
-      // Helper to ensure user entry exists
       const ensureUser = (id, fallbackName) => {
         if (!userStats[id]) {
           userStats[id] = {
@@ -12206,95 +12300,82 @@
             total: 0
           };
         }
-        // Upgrade name if we found a better one than "User X"
         if (fallbackName && userStats[id].name.startsWith("User ")) {
           userStats[id].name = fallbackName;
         }
       };
 
-      // A. Force initialization of Core Team (Guarantees Melodie & co are present)
       const CORE_TEAM = [
         { id: 1, name: "Katie" },
         { id: 2, name: "Kevin" },
         { id: 3, name: "Erica" },
         { id: 4, name: "Jenna" },
         { id: 5, name: "Meighan" },
-        { id: 6, name: "Melodie" },
-        { id: 7, name: "Melodie" } // Fallback ID for Melodie if needed
+        { id: 6, name: "Melodie" }
       ];
 
-      CORE_TEAM.forEach(u => {
-        ensureUser(u.id, u.name);
-      });
-
-      // B. Merge any additional names from state.users (e.g. TestWhale)
-      if (state.users && state.users.length > 0) {
-        state.users.forEach(u => {
-          // EXCLUDE dummy/test users 19, 20 explicitly
-          if (u.id === 19 || u.id === 20) return;
-          ensureUser(u.id, u.first_name || u.username);
-        });
-      }
+      CORE_TEAM.forEach(u => ensureUser(u.id, u.name));
 
       // Workload & Completion Counts
       allTasks.forEach(t => {
         const uid = t.assigned_to_id;
         if (!uid) return;
 
-        // B. Harvest name from task if available (often task objects have joined user data)
+        // Apply Unified Filter
+        if (!isInRange(t.task_date)) return;
+
         const possibleName = t.user_name || t.assigned_to_name || t.assignee_name;
         ensureUser(uid, possibleName);
 
-        // Ensure consistent lookup (handle string vs int)
         const stats = userStats[uid] || userStats[String(uid)];
         if (stats) {
           stats.total++;
-          if (t.status === 'done') {
-            stats.completed++;
-          } else if (t.status === 'could_not_complete') {
-            stats.couldnotcomplete++;
-          } else if (t.status === 'in_progress' || t.status === 'doing') {
-            stats.inprogress++;
-          } else {
-            stats.todo++;
-          }
+          if (t.status === 'done') stats.completed++;
+          else if (t.status === 'could_not_complete') stats.couldnotcomplete++;
+          else if (t.status === 'in_progress' || t.status === 'doing') stats.inprogress++;
+          else stats.todo++;
         }
       });
 
-      // 2. Efficiency (Completed by Day of Week)
-      const completedByDay = {};
+      // 2. Efficiency (Completed by Day & User)
+      const completedByDay = {}; // Total
+      const userEfficiency = {}; // { uid: { dateKey: count } }
+      CORE_TEAM.forEach(u => userEfficiency[u.id] = {});
 
-      // Get current visible range
-      const [startKey, endKey] = getVisibleDateRange();
+      // Use proper axis days based on range
       const days = [];
-      let curr = new Date(startKey);
-      const end = new Date(endKey);
-      let cap = 0;
-
-      // Generate days for the axis
-      while (curr <= end && cap < 14) {
-        const k = curr.toISOString().split('T')[0];
-        days.push(k);
-        completedByDay[k] = 0;
-        curr.setDate(curr.getDate() + 1);
-        cap++;
+      if (state.metricsRange === 'day') {
+        days.push(todayStr); // Just today
+      } else if (state.metricsRange === 'week' || state.metricsRange === 'month') {
+        let loopCurr = new Date(state.metricsRange === 'month' ? mStart : startKey);
+        const loopEnd = new Date(state.metricsRange === 'month' ? mEnd : endKey);
+        let cap = 0;
+        while (loopCurr <= loopEnd && cap < 40) {
+          const k = loopCurr.toISOString().split('T')[0];
+          days.push(k);
+          loopCurr.setDate(loopCurr.getDate() + 1);
+          cap++;
+        }
       }
+
+      days.forEach(k => completedByDay[k] = 0);
 
       allTasks.forEach(t => {
         if (t.status === 'done') {
-          // Use completed_at if available, else fallback to task_date
-          // format: YYYY-MM-DD
-          let dStr = t.completed_at || t.task_date;
-          if (dStr) {
-            const dateKey = dStr.split('T')[0];
-            if (completedByDay.hasOwnProperty(dateKey)) {
-              completedByDay[dateKey]++;
+          const uid = t.assigned_to_id;
+          const completionDate = t.completed_at || t.task_date;
+          if (!isInRange(completionDate)) return;
+
+          const dateKey = completionDate.split('T')[0];
+          if (completedByDay.hasOwnProperty(dateKey)) {
+            completedByDay[dateKey]++;
+            if (userEfficiency[uid]) {
+              userEfficiency[uid][dateKey] = (userEfficiency[uid][dateKey] || 0) + 1;
             }
           }
         }
       });
 
-      // 3. Aggregate Team Stats
       let teamTotal = 0;
       let teamCompleted = 0;
       Object.values(userStats).forEach(s => {
@@ -12303,8 +12384,6 @@
       });
 
       const teamRate = teamTotal > 0 ? Math.round((teamCompleted / teamTotal) * 100) : 0;
-
-      // Find MVP (Most completed)
       let mvp = { name: "None", count: -1 };
       Object.values(userStats).forEach(s => {
         if (s.completed > mvp.count) {
@@ -12316,6 +12395,8 @@
       return {
         userStats,
         dailyEfficiency: days.map(d => ({ date: d, count: completedByDay[d] })),
+        userEfficiency: userEfficiency, // New: structured per user
+        days: days, // New: helper for chart mapping
         teamTotal,
         teamRate,
         mvp
@@ -12325,13 +12406,15 @@
     function renderTeamMetrics() {
       const stats = calculateTeamStats();
 
+      const rangeLabel = state.metricsRange === 'day' ? 'Daily' : (state.metricsRange === 'month' ? 'Monthly' : 'Weekly');
+
       // 1. Render Key Stat Cards
       const statsRow = document.getElementById("metrics-stats-row");
       if (statsRow) {
         statsRow.innerHTML = `
             <div class="stat-card" style="background:var(--bg-main); padding:16px; border-radius:12px; flex:1; text-align:center;">
                <div style="font-size:24px; font-weight:800; color:var(--ink);">${stats.teamTotal}</div>
-               <div style="font-size:11px; text-transform:uppercase; color:var(--ink-soft); font-weight:600;">Total Weekly Tasks</div>
+               <div style="font-size:11px; text-transform:uppercase; color:var(--ink-soft); font-weight:600;">Total ${rangeLabel} Tasks</div>
             </div>
             <div class="stat-card" style="background:var(--bg-main); padding:16px; border-radius:12px; flex:1; text-align:center;">
                <div style="font-size:24px; font-weight:800; color:${stats.teamRate >= 80 ? 'var(--success)' : 'var(--accent)'};">${stats.teamRate}%</div>
@@ -12339,14 +12422,14 @@
             </div>
             <div class="stat-card" style="background:var(--bg-main); padding:16px; border-radius:12px; flex:1; text-align:center;">
                <div style="font-size:24px; font-weight:800; color:var(--elevate);">${stats.mvp.name}</div>
-               <div style="font-size:11px; text-transform:uppercase; color:var(--ink-soft); font-weight:600;">Weekly MVP 🏆</div>
+               <div style="font-size:11px; text-transform:uppercase; color:var(--ink-soft); font-weight:600;">${rangeLabel} MVP 🏆</div>
             </div>
          `;
       }
 
       // 2. Render Charts
       renderWorkloadChart(stats.userStats);
-      renderEfficiencyChart(stats.dailyEfficiency);
+      renderEfficiencyChart(stats);
     }
 
     function renderWorkloadChart(userStats) {
@@ -12369,16 +12452,16 @@
       });
 
       const finalStats = Object.values(aggregated);
-
       const labels = finalStats.map(s => s.name);
-      // Data Arrays
       const todoData = finalStats.map(s => s.todo);
       const doingData = finalStats.map(s => s.inprogress);
       const doneData = finalStats.map(s => s.completed);
       const blockedData = finalStats.map(s => s.couldnotcomplete);
 
-      const d = state.currentMonthDate;
-      const timeLabel = d.toLocaleString("default", { month: "long", year: "numeric" });
+      let timeLabel = state.metricsRange.charAt(0).toUpperCase() + state.metricsRange.slice(1);
+      if (state.metricsRange === 'month') {
+        timeLabel = state.currentMonthDate.toLocaleString("default", { month: "long" });
+      }
 
       if (workloadChart) workloadChart.destroy();
 
@@ -12428,46 +12511,76 @@
       });
     }
 
-    function renderEfficiencyChart(dailyData) {
+    function renderEfficiencyChart(stats) {
+      const dailyData = stats.dailyEfficiency;
+      const userEff = stats.userEfficiency;
+      const days = stats.days;
+
       const canvas = document.getElementById('chart-efficiency');
       if (!canvas) return;
       const ctx = canvas.getContext('2d');
 
-      const labels = dailyData.map(d => {
-        // Parse "YYYY-MM-DD"
-        const [y, m, day] = d.date.split('-').map(Number);
+      const labels = days.map(d => {
+        const [y, m, day] = d.split('-').map(Number);
         const date = new Date(y, m - 1, day);
+        if (state.metricsRange === 'day') return date.toLocaleDateString('en-US', { weekday: 'long' });
+        if (state.metricsRange === 'month') return day; // Just day number for month visibility
         return date.toLocaleDateString('en-US', { weekday: 'short' });
       });
-      const data = dailyData.map(d => d.count);
 
       if (efficiencyChart) efficiencyChart.destroy();
+
+      const teamDatasets = [
+        { id: 1, label: 'Katie', color: '#ec4899' },
+        { id: 2, label: 'Kevin', color: '#3b82f6' },
+        { id: 3, label: 'Erica', color: '#10b981' },
+        { id: 4, label: 'Jenna', color: '#f59e0b' },
+        { id: 5, label: 'Meighan', color: '#8b5cf6' },
+        { id: 6, label: 'Melodie', color: '#64748b' }
+      ];
+
+      const datasets = [
+        {
+          label: 'Total',
+          data: dailyData.map(d => d.count),
+          borderColor: '#000000',
+          backgroundColor: 'transparent',
+          borderWidth: 3,
+          tension: 0.4,
+          pointRadius: 4
+        }
+      ];
+
+      teamDatasets.forEach(u => {
+        datasets.push({
+          label: u.label,
+          data: days.map(d => userEff[u.id] ? (userEff[u.id][d] || 0) : 0),
+          borderColor: u.color,
+          backgroundColor: 'transparent',
+          borderWidth: 2,
+          tension: 0.4,
+          pointRadius: 3
+        });
+      });
 
       efficiencyChart = new Chart(ctx, {
         type: 'line',
         data: {
           labels: labels,
-          datasets: [{
-            label: 'Tasks Completed',
-            data: data,
-            borderColor: '#3b82f6', // blue
-            backgroundColor: 'rgba(59, 130, 246, 0.1)',
-            fill: true,
-            tension: 0.4,
-            pointRadius: 4,
-            pointBackgroundColor: '#fff',
-            pointBorderWidth: 2
-          }]
+          datasets: datasets
         },
         options: {
           responsive: true,
           maintainAspectRatio: false,
           plugins: {
-            title: { display: true, text: 'Daily Velocity', align: 'start', font: { size: 14, weight: 'bold' } },
-            legend: { display: false }
+            title: { display: true, text: `Daily Velocity (${state.metricsRange.charAt(0).toUpperCase() + state.metricsRange.slice(1)})`, align: 'start', font: { size: 14, weight: 'bold' } },
+            legend: { display: true, position: 'bottom', labels: { boxWidth: 12, font: { size: 10 } } }
           },
           scales: {
-            x: { grid: { display: false } },
+            x: {
+              grid: { display: false },
+              ticks: { autoSkip: state.metricsRange === 'month', maxTicksLimit: 10 }
+            },
             y: { beginAtZero: true, suggestedMax: 5, ticks: { stepSize: 1 }, grid: { color: 'rgba(0,0,0,0.05)' } }
           }
         }
