@@ -123,9 +123,9 @@
     }
 
     .app-shell {
-      max-width: 1440px;
-      margin: 0 auto;
-      padding: 16px 16px 24px;
+      width: 100%;
+      margin: 0;
+      padding: 16px 24px;
       display: flex;
       flex-direction: column;
       gap: 16px;
@@ -2069,6 +2069,8 @@
 
       margin-bottom: 24px;
       align-items: center;
+      justify-content: space-between;
+      /* Full width distribution */
     }
 
     .view-option {
@@ -2083,8 +2085,14 @@
       transition: all 0.2s ease;
       display: flex;
       align-items: center;
+      justify-content: center;
       gap: 8px;
       user-select: none;
+      flex: 1;
+      /* Grow to fill space */
+      text-align: center;
+      min-width: 140px;
+      /* Prevent too smushed */
     }
 
     .view-option:hover {
@@ -2100,8 +2108,10 @@
       box-shadow: none;
     }
 
-    content: "✓";
-    font-weight: bold;
+    .view-option.active::after {
+      content: "✓";
+      font-weight: bold;
+      margin-left: 6px;
     }
 
     .drag-handle {
@@ -2117,9 +2127,57 @@
       opacity: 0.8;
       color: var(--theme-primary);
     }
+
+    /* Dashboard Layout Overhaul (Flex) */
+    #sections-container {
+      display: flex;
+      flex-wrap: wrap;
+      margin: -10px;
+      /* Negative margin for gutter */
+    }
+
+    .draggable-section {
+      margin: 10px;
+      width: calc(100% - 20px);
+      /* Default full width */
+      box-sizing: border-box;
+    }
+
+    /* Row 1: Daily Tasks (60%) & Backlog (40%) */
+    @media (min-width: 1025px) {
+      #section-daily-tasks {
+        width: calc(60% - 20px);
+      }
+
+      #section-backlog {
+        width: calc(40% - 20px);
+      }
+
+      /* Row 2: Gamification (Full) */
+      #section-gamification {
+        width: calc(100% - 20px);
+      }
+
+      /* Row 3: Strategy (50%) & Projects (50%) */
+      #section-weekly-strategy {
+        width: calc(50% - 20px);
+      }
+
+      #section-projects {
+        width: calc(50% - 20px);
+      }
+    }
+    }
+
+    .panel {
+      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+      border: 1px solid var(--panel-border);
+    }
   </style>
   <!-- Fireworks Library -->
   <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+  <!-- Chart.js for Metrics -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
   <style>
     /* Gamification Overlay */
@@ -3233,41 +3291,102 @@
 
     .weekly-grid {
       display: grid;
-      gap: 1px;
-      /* background: var(--border);  Too faint */
-      background: #94a3b8;
-      /* Darker gray for visible lines */
-      border: 1px solid var(--border);
-      border-radius: 8px;
+      border: 1px solid var(--panel-border);
+      border-radius: var(--radius-md);
       overflow: hidden;
-      margin-bottom: 40px;
-      /* Added spacing */
-      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
-    }
-
-    .weekly-row {
-      display: contents;
-      /* Allows children to participate in parent grid */
+      background: var(--panel);
+      /* Remove fixed height to allow expansion */
+      height: auto;
     }
 
     .weekly-cell {
-      background: var(--card-bg);
       padding: 8px;
-      min-height: 40px;
-      font-size: 13px;
+      border-right: 1px solid var(--panel-border);
+      border-bottom: 1px solid var(--panel-border);
+      font-size: 12px;
       position: relative;
+      /* Auto height */
+      height: auto;
+      min-height: 50px;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .weekly-cell textarea {
+      width: 100%;
+      height: 100%;
+      min-height: 48px;
+      /* Ensure space for text */
+      border: none;
+      background: transparent;
+      resize: vertical;
+      /* Allow resize */
+      font-family: inherit;
+      font-size: inherit;
+      color: var(--ink);
+      outline: none;
+      overflow: hidden;
+      /* Hide scrollbars */
+      line-height: 1.4;
     }
 
     .weekly-cell.header {
-      background: #f8fafc;
-      /* Very light gray */
+      background: var(--panel-elevated);
       font-weight: 600;
-      color: #64748b;
-      font-size: 11px;
-      text-align: center;
+      color: var(--ink-soft);
       display: flex;
       align-items: center;
       justify-content: center;
+      text-align: center;
+    }
+
+    /* User Column Colors */
+    .user-col-erica {
+      background: rgba(236, 72, 153, 0.05);
+    }
+
+    .user-col-katie {
+      background: rgba(59, 130, 246, 0.05);
+    }
+
+    .user-col-kevin {
+      background: rgba(16, 185, 129, 0.05);
+    }
+
+    .user-col-jenna {
+      background: rgba(245, 158, 11, 0.05);
+    }
+
+    .user-col-meighan {
+      background: rgba(139, 92, 246, 0.05);
+    }
+
+    .user-col-melodie {
+      background: rgba(249, 115, 22, 0.05);
+    }
+
+    body[data-theme="dark"] .user-col-erica {
+      background: rgba(236, 72, 153, 0.1);
+    }
+
+    body[data-theme="dark"] .user-col-katie {
+      background: rgba(59, 130, 246, 0.1);
+    }
+
+    body[data-theme="dark"] .user-col-kevin {
+      background: rgba(16, 185, 129, 0.1);
+    }
+
+    body[data-theme="dark"] .user-col-jenna {
+      background: rgba(245, 158, 11, 0.1);
+    }
+
+    body[data-theme="dark"] .user-col-meighan {
+      background: rgba(139, 92, 246, 0.1);
+    }
+
+    body[data-theme="dark"] .user-col-melodie {
+      background: rgba(249, 115, 22, 0.1);
     }
 
     .weekly-cell.row-header {
@@ -3391,6 +3510,17 @@
       font-size: 9px;
       margin-left: 1px;
       color: #cbd5e1;
+    }
+
+    /* Backlog Compact Style */
+    .backlog-pill .task-title {
+      font-size: 11px !important;
+      line-height: 1.3;
+    }
+
+    .backlog-pill {
+      padding: 8px !important;
+      min-height: 60px;
     }
   </style>
 </head>
@@ -3909,18 +4039,15 @@
         </div>
         <!-- Section Toggle Toolbar -->
         <div class="view-options-bar" id="view-options-bar">
-          <!-- Buttons injected by JS or hardcoded -->
-          <div class="view-option" draggable="true" data-target="section-daily-tasks">Daily Tasks <span
+          <!-- Grouped Buttons -->
+          <div class="view-option" draggable="true" data-target="section-daily-tasks,section-backlog">Daily & Backlog
+            <span class="drag-handle">⋮⋮</span>
+          </div>
+          <div class="view-option" draggable="true" data-target="section-gamification">Metrics <span
               class="drag-handle">⋮⋮</span></div>
-          <div class="view-option" draggable="true" data-target="section-weekly-strategy">Weekly Strategy <span
-              class="drag-handle">⋮⋮</span></div>
-          <div class="view-option" draggable="true" data-target="section-goals">Goals & Focus <span
-              class="drag-handle">⋮⋮</span></div>
-          <div class="view-option" draggable="true" data-target="section-projects">Projects <span
-              class="drag-handle">⋮⋮</span></div>
-          <div class="view-option" draggable="true" data-target="section-backlog">Backlog <span
-              class="drag-handle">⋮⋮</span></div>
-          <div class="view-option" draggable="true" data-target="section-pillars">Pillars <span
+          <div class="view-option" draggable="true" data-target="section-weekly-strategy,section-projects">Strategy &
+            Projects <span class="drag-handle">⋮⋮</span></div>
+          <div class="view-option" draggable="true" data-target="section-goals,section-pillars">Goals & Pillars <span
               class="drag-handle">⋮⋮</span></div>
         </div>
       </div>
@@ -3963,8 +4090,70 @@
             <div class="calendar-weekdays" id="calendar-weekdays"></div>
             <div class="calendar-days" id="calendar-days"></div>
           </div>
-          <div class="calendar-metrics bird-system-container"
-            style="display:flex; flex-direction:column; padding:15px 15px 20px 15px; margin:10px 10px 15px 10px; background:var(--panel); border-radius:8px; height:auto !important;">
+
+        </section>
+
+        <!-- Task Backlog Section -->
+        <section class="panel draggable-section" id="section-backlog">
+          <div class="panel-header">
+            <span class="section-drag-handle" title="Drag to reorder">⋮⋮</span>
+            <div class="panel-title">Task Backlog</div>
+            <div class="header-hint" style="font-size:11px;color:var(--ink-soft);margin-left:auto;">
+              Drag here to park tasks · Drag to calendar to schedule
+            </div>
+          </div>
+          <div class="backlog-container" id="backlog-container"
+            style="padding:10px;min-height:80px;background:rgba(0,0,0,0.03);border-radius:6px;margin:10px;">
+            <div id="backlog-list" style="display:grid;grid-template-columns:repeat(2, 1fr);gap:8px;"></div>
+            <div id="backlog-empty"
+              style="font-size:11px;color:var(--ink-soft);text-align:center;padding:10px;width:100%;grid-column:1/-1;display:none;">
+              No parked tasks.
+            </div>
+          </div>
+          <div class="add-backlog-form" style="padding:0 10px 10px;display:flex;gap:6px;">
+            <input type="text" id="new-backlog-input" placeholder="Add to backlog..."
+              style="flex:1;font-size:11px;padding:5px;border-radius:4px;border:1px solid var(--panel-border);background:var(--panel);">
+            <button id="add-backlog-btn"
+              style="border:none;background:var(--accent);color:#fff;border-radius:4px;padding:5px 10px;font-size:11px;cursor:pointer;">Add</button>
+          </div>
+        </section>
+
+        <!-- Gamification Section (Bird/Stats) -->
+        <section class="panel draggable-section" id="section-gamification">
+          <div class="panel-header">
+            <span class="section-drag-handle" title="Drag to reorder">⋮⋮</span>
+            <div class="panel-title">Team Pulse & Gamification</div>
+          </div>
+
+          <!-- Team Metrics Dashboard -->
+          <div id="team-metrics-dashboard" style="padding: 0 16px 16px 16px;">
+            <!-- Injected by JS -->
+            <div class="metrics-stats-row" style="display: flex; gap: 16px; margin-bottom: 24px;"
+              id="metrics-stats-row"></div>
+            <div class="metrics-charts-row" style="display: grid; grid-template-columns: 1fr 1fr; gap: 24px;">
+              <div class="chart-container"
+                style="background: var(--bg-main); padding: 16px; border-radius: 12px; height: auto; min-height:300px; position: relative; display:flex; flex-direction:column;">
+                <div style="flex:1;"><canvas id="chart-workload"></canvas></div>
+                <div style="margin-top:12px; font-size:11px; color:var(--ink-soft); text-align:center;">
+                  <strong>Workload per active user.</strong> <br>Active = To Do + In Progress.
+                </div>
+              </div>
+              <div class="chart-container"
+                style="background: var(--bg-main); padding: 16px; border-radius: 12px; height: auto; min-height:300px; position: relative; display:flex; flex-direction:column;">
+                <div style="flex:1;"><canvas id="chart-efficiency"></canvas></div>
+                <div style="margin-top:12px; font-size:11px; color:var(--ink-soft); text-align:center;">
+                  <strong>Tasks completed per day.</strong> <br>Measures team velocity this week.
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Divider -->
+          <div style="height: 1px; background: var(--panel-border); margin: 0 16px 16px 16px;"></div>
+
+          <!-- Existing Bird Content -->
+          <div id="gamification-content" class="calendar-metrics bird-system-container"
+            style="display:flex; flex-direction:column; padding:15px; background:var(--panel); border-radius:8px; height:auto;">
             <!-- Top Row: Bird and Pie -->
             <div
               style="display:flex; justify-content:space-between; align-items:flex-start; width:100%; margin-bottom:15px;">
@@ -3972,27 +4161,22 @@
               <div id="finch-container" class="bird-wrapper" title="Pet me!"
                 style="position:relative; width:100px; height:100px; flex-shrink:0; overflow:visible;">
                 <!-- Speech Bubble - Finch Style (positioned to right) -->
-                <div id="bird-speech-bubble" class="speech-bubble hidden">
-                </div>
-
-                <!-- Mute Button moved to header -->
-
+                <div id="bird-speech-bubble" class="speech-bubble hidden"></div>
                 <!-- Bird Name Display -->
                 <div id="bird-name-display"
                   style="position:absolute; top:-20px; width:100%; text-align:center; font-size:12px; font-weight:700; color:var(--ink-soft); text-shadow:0 1px 2px rgba(255,255,255,0.8);">
                 </div>
-
                 <svg id="finch-svg" viewBox="0 0 200 200" style="width:100%; height:100%; overflow:visible;">
                   <!-- Bird Logic will inject SVG here -->
                 </svg>
                 <div id="finch-hearts"
                   style="position:absolute; top:0; left:0; width:100%; height:100%; pointer-events:none;"></div>
-
-                <!-- Edit Button moved to header -->
               </div>
 
               <!-- Existing Pie -->
-              <canvas id="status-pie" width="150" height="150"></canvas>
+              <div style="position:relative; display:flex; flex-direction:column; align-items:center;">
+                <canvas id="status-pie" width="150" height="150"></canvas>
+              </div>
             </div>
 
             <!-- Bottom Row: Full Width Coin Energy Bar -->
@@ -4009,80 +4193,7 @@
           </div>
         </section>
 
-        <!-- Task Backlog Section -->
-        <section class="panel draggable-section" id="section-backlog">
-          <div class="panel-header">
-            <span class="section-drag-handle" title="Drag to reorder">⋮⋮</span>
-            <div class="panel-title">Task Backlog</div>
-            <div class="header-hint" style="font-size:11px;color:var(--ink-soft);margin-left:auto;">
-              Drag here to park tasks · Drag to calendar to schedule
-            </div>
-          </div>
-          <div class="backlog-container" id="backlog-container"
-            style="padding:10px;min-height:80px;background:rgba(0,0,0,0.03);border-radius:6px;margin:10px;">
-            <div id="backlog-list" style="display:grid;grid-template-columns:repeat(3, 1fr);gap:8px;"></div>
-            <div id="backlog-empty"
-              style="font-size:11px;color:var(--ink-soft);text-align:center;padding:10px;width:100%;grid-column:1/-1;display:none;">
-              No parked tasks.
-            </div>
-          </div>
-          <div class="add-backlog-form" style="padding:0 10px 10px;display:flex;gap:6px;">
-            <input type="text" id="new-backlog-input" placeholder="Add to backlog..."
-              style="flex:1;font-size:11px;padding:5px;border-radius:4px;border:1px solid var(--panel-border);background:var(--panel);">
-            <button id="add-backlog-btn"
-              style="border:none;background:var(--accent);color:#fff;border-radius:4px;padding:5px 10px;font-size:11px;cursor:pointer;">Add</button>
-          </div>
-        </section>
 
-        <!-- Goals Section -->
-        <section class="panel draggable-section" id="section-goals">
-          <div class="panel-header">
-            <span class="section-drag-handle" title="Drag to reorder">⋮⋮</span>
-            <div class="panel-title">Goals & Focus</div>
-            <div class="goals-tabs">
-              <button class="goals-tab active" data-tab="monthly">Monthly Strategies</button>
-              <!-- Weekly Strategy moved to own section -->
-              <button class="goals-tab" data-tab="annual">Annual Goals</button>
-            </div>
-          </div>
-
-          <!-- Monthly Goals -->
-          <div id="monthly-goals-panel">
-            <div class="goals-controls">
-              <label>
-                Month
-                <input type="month" id="monthly-month-input" />
-              </label>
-              <label>
-                Owner
-                <select id="monthly-owner-filter">
-                  <option value="all">Everyone</option>
-                </select>
-              </label>
-            </div>
-            <div class="goals-grid" id="monthly-goals-grid"></div>
-          </div>
-
-          <!-- Annual Goals -->
-          <div id="annual-goals-panel" style="display:none;">
-            <div class="goals-controls">
-              <label>
-                Year
-                <select id="annual-year-input"></select>
-              </label>
-              <label>
-                Owner
-                <select id="annual-owner-filter">
-                  <option value="all">Everyone</option>
-                </select>
-              </label>
-            </div>
-            <div class="goals-grid" id="annual-goals-grid"></div>
-          </div>
-
-          <!-- Weekly Team Planner moved to own section -->
-
-        </section>
 
         <!-- Weekly Strategy Section (New) -->
         <section class="panel draggable-section" id="section-weekly-strategy" draggable="true">
@@ -4152,6 +4263,40 @@
           <div class="add-weekly-task-form">
             <input type="text" id="new-weekly-task-input" placeholder="Add weekly task...">
             <button id="add-weekly-task-btn">Add</button>
+          </div>
+        </section>
+
+        <!-- Goals Section -->
+        <section class="panel draggable-section" id="section-goals">
+          <div class="panel-header">
+            <span class="section-drag-handle" title="Drag to reorder">⋮⋮</span>
+            <div class="panel-title">Goals & Focus</div>
+            <div class="goals-tabs">
+              <button class="goals-tab active" data-tab="monthly">Monthly Strategies</button>
+              <button class="goals-tab" data-tab="annual">Annual Goals</button>
+            </div>
+          </div>
+
+          <!-- Monthly Goals -->
+          <div id="monthly-goals-panel">
+            <div class="goals-controls">
+              <label>Month <input type="month" id="monthly-month-input" /></label>
+              <label>Owner <select id="monthly-owner-filter">
+                  <option value="all">Everyone</option>
+                </select></label>
+            </div>
+            <div class="goals-grid" id="monthly-goals-grid"></div>
+          </div>
+
+          <!-- Annual Goals -->
+          <div id="annual-goals-panel" style="display:none;">
+            <div class="goals-controls">
+              <label>Year <select id="annual-year-input"></select></label>
+              <label>Owner <select id="annual-owner-filter">
+                  <option value="all">Everyone</option>
+                </select></label>
+            </div>
+            <div class="goals-grid" id="annual-goals-grid"></div>
           </div>
         </section>
 
@@ -6453,6 +6598,9 @@
       }
       restoreUserFromStorage();
       if (state.currentUser) {
+        // Default to My Tasks on load
+        state.calendarOwnerId = state.currentUser.id;
+
         document.getElementById("user-overlay").classList.add("hidden");
         document.getElementById("user-overlay").classList.add("hidden");
         await refreshAllData();
@@ -6707,6 +6855,112 @@
       }
     }
 
+    // NEW: Calendar Owner Filter Logic
+    function populateCalendarOwnerFilter() {
+      const sel = document.getElementById("calendar-owner-select");
+      if (!sel) return;
+      sel.innerHTML = "";
+
+      // 1. My Tasks (Default)
+      const myOpt = document.createElement("option");
+      myOpt.value = ""; // Empty string = My Tasks (current user)
+      myOpt.textContent = "My Tasks";
+      sel.appendChild(myOpt);
+
+      // 2. Combined View
+      const combinedOpt = document.createElement("option");
+      combinedOpt.value = "combined";
+      combinedOpt.textContent = "Combined View (All)";
+      sel.appendChild(combinedOpt);
+
+      // 3. Team Members
+      if (state.users && state.users.length) {
+        state.users.forEach(u => {
+          // Exclude dummy users if needed for list purity
+          if (u.id === 19 || u.id === 20) return;
+          const opt = document.createElement("option");
+          opt.value = String(u.id);
+          opt.textContent = u.name;
+          sel.appendChild(opt);
+        });
+      }
+
+      // Restore selection
+      if (state.calendarOwnerId === "combined") {
+        sel.value = "combined";
+      } else if (state.calendarOwnerId) {
+        sel.value = String(state.calendarOwnerId);
+      } else {
+        sel.value = "";
+      }
+
+      // Attach Listener
+      sel.onchange = async () => {
+        const val = sel.value;
+        if (val === "") {
+          state.calendarOwnerId = state.currentUser ? state.currentUser.id : null;
+        } else if (val === "combined") {
+          state.calendarOwnerId = "combined";
+        } else {
+          state.calendarOwnerId = Number(val);
+        }
+        await refreshCalendarAndMonthlyGoals();
+      };
+    }
+
+    // NEW: Calendar Owner Filter Logic
+    function populateCalendarOwnerFilter() {
+      const sel = document.getElementById("calendar-owner-select");
+      if (!sel) return;
+      sel.innerHTML = "";
+
+      // 1. My Tasks (Default)
+      const myOpt = document.createElement("option");
+      myOpt.value = ""; // Empty string = My Tasks (current user)
+      myOpt.textContent = "My Tasks";
+      sel.appendChild(myOpt);
+
+      // 2. Combined View
+      const combinedOpt = document.createElement("option");
+      combinedOpt.value = "combined";
+      combinedOpt.textContent = "Combined View (All)";
+      sel.appendChild(combinedOpt);
+
+      // 3. Team Members
+      if (state.users && state.users.length) {
+        state.users.forEach(u => {
+          // Exclude dummy users if needed for list purity
+          if (u.id === 19 || u.id === 20) return;
+          const opt = document.createElement("option");
+          opt.value = String(u.id);
+          opt.textContent = u.name;
+          sel.appendChild(opt);
+        });
+      }
+
+      // Restore selection
+      if (state.calendarOwnerId === "combined") {
+        sel.value = "combined";
+      } else if (state.calendarOwnerId) {
+        sel.value = String(state.calendarOwnerId);
+      } else {
+        sel.value = "";
+      }
+
+      // Attach Listener
+      sel.onchange = async () => {
+        const val = sel.value;
+        if (val === "") {
+          state.calendarOwnerId = state.currentUser ? state.currentUser.id : null;
+        } else if (val === "combined") {
+          state.calendarOwnerId = "combined";
+        } else {
+          state.calendarOwnerId = Number(val);
+        }
+        await refreshCalendarAndMonthlyGoals();
+      };
+    }
+
     function openPillarModal(pillarKey, task = null) {
       if (!state.currentUser) {
         showToast("Pick your user first", true);
@@ -6865,12 +7119,13 @@
       // Filter to only show core BER staff
       const allowedNames = ["kevin", "meighan", "jenna", "erica", "katie", "testwhale", "melodie"];
       state.users = allUsers.filter(u =>
-        allowedNames.some(name => u.name.toLowerCase() === name)
+        allowedNames.some(name => u.name.toLowerCase().includes(name))
       );
 
 
 
       populateUserSelects();
+      populateCalendarOwnerFilter(); // NEW
     }
 
     function populateUserSelects() {
@@ -7317,7 +7572,8 @@
         let path = "/daily-tasks?month=1900-01"; // Backlog Month
 
         if (targetId) {
-          path += "&assignedToId=" + encodeURIComponent(targetId);
+          // REMOVED: Fetch all backlog for potential team metrics
+          // path += "&assignedToId=" + encodeURIComponent(targetId);
         } else {
           // If we really don't have a user (not logged in?), maybe we fetch nothing? 
           // Or fetch all (unsafe). Let's assume fetch all is fallback but we prefer isolation.
@@ -7344,14 +7600,92 @@
       }
     }
 
+    // Pagination State
+    const paginationState = {
+      backlog: 1,
+      projects: 1
+    };
+
+    function paginateList(items, page, perPage) {
+      const start = (page - 1) * perPage;
+      const end = start + perPage;
+      return {
+        data: items.slice(start, end),
+        totalPages: Math.ceil(items.length / perPage)
+      };
+    }
+
+    function renderPaginationControls(containerId, currentPage, totalPages, type) {
+      const container = document.getElementById(containerId);
+      if (!container || totalPages <= 1) return; // No controls needed
+      const controls = document.createElement("div");
+      controls.className = "pagination-controls";
+      controls.style.display = "flex";
+      controls.style.justifyContent = "center";
+      controls.style.gap = "8px";
+      controls.style.marginTop = "10px";
+      controls.style.fontSize = "12px";
+
+      const prev = document.createElement("button");
+      prev.textContent = "←";
+      prev.disabled = currentPage === 1;
+      prev.style.border = "none";
+      prev.style.background = "transparent";
+      prev.style.cursor = prev.disabled ? "default" : "pointer";
+      prev.style.opacity = prev.disabled ? "0.3" : "1";
+      prev.onclick = () => {
+        if (currentPage > 1) {
+          paginationState[type]--;
+          if (type === 'backlog') renderBacklog();
+          if (type === 'projects') renderProjects();
+        }
+      };
+
+      const label = document.createElement("span");
+      label.textContent = `${currentPage} / ${totalPages}`;
+      label.style.color = "var(--ink-soft)";
+
+      const next = document.createElement("button");
+      next.textContent = "→";
+      next.disabled = currentPage === totalPages;
+      next.style.border = "none";
+      next.style.background = "transparent";
+      next.style.cursor = next.disabled ? "default" : "pointer";
+      next.style.opacity = next.disabled ? "0.3" : "1";
+      next.onclick = () => {
+        if (currentPage < totalPages) {
+          paginationState[type]++;
+          if (type === 'backlog') renderBacklog();
+          if (type === 'projects') renderProjects();
+        }
+      };
+
+      controls.appendChild(prev);
+      controls.appendChild(label);
+      controls.appendChild(next);
+      container.parentNode.appendChild(controls);
+    }
+
     function renderBacklog() {
       const container = document.getElementById("backlog-list");
       const empty = document.getElementById("backlog-empty");
+      // Clean up old pagination if exists
+      const oldControls = container.parentNode.querySelector(".pagination-controls");
+      if (oldControls) oldControls.remove();
+
       if (!container) return;
       container.innerHTML = "";
 
-      // Hide completed tasks from backlog (they appear on calendar now)
-      const visible = (state.backlogTasks || []).filter(t => t.status !== 'done');
+      const ownerId = state.calendarOwnerId || (state.currentUser ? state.currentUser.id : null);
+
+      const visible = state.backlogTasks.filter(t => {
+        if (ownerId !== "combined" && ownerId && t.assigned_to_id !== ownerId && (!t.assignee_ids || !t.assignee_ids.includes(ownerId))) {
+          return false;
+        }
+        // Hide completed tasks unless recently done? Backlog usually hides done.
+        if (t.status === 'done') return false;
+        return true;
+      });
 
       if (visible.length === 0) {
         if (empty) empty.style.display = "block";
@@ -7359,10 +7693,23 @@
       }
       if (empty) empty.style.display = "none";
 
-      visible.forEach(task => {
+      // Pagination
+      const ITEMS_PER_PAGE = 10; // Grid 2x5
+      const { data, totalPages } = paginateList(visible, paginationState.backlog, ITEMS_PER_PAGE);
+
+      // Reset page if out of bounds (e.g. after deletion)
+      if (paginationState.backlog > totalPages && totalPages > 0) {
+        paginationState.backlog = totalPages;
+        renderBacklog();
+        return;
+      }
+
+      data.forEach(task => {
         const pill = buildTaskPill(task);
         container.appendChild(pill);
       });
+
+      renderPaginationControls("backlog-list", paginationState.backlog, totalPages, 'backlog');
     }
 
     async function checkAndMigrateOverdueTasks() {
@@ -7463,6 +7810,9 @@
         loadBacklogTasks() // NEW
       ]);
       await checkAndMigrateOverdueTasks(); // Auto-migrate overdue
+      if (document.getElementById("team-metrics-dashboard").style.display !== "none") {
+        renderTeamMetrics();
+      }
     }
 
     function updateMonthLabel() {
@@ -7506,7 +7856,8 @@
 
         const results = await Promise.all(months.map(mk => {
           let path = "/daily-tasks?month=" + encodeURIComponent(mk);
-          if (ownerFilterOn) path += "&assignedToId=" + encodeURIComponent(state.calendarOwnerId);
+          // REMOVED: assignedToId filter to fetch ALL data for metrics
+          // if (ownerFilterOn) path += "&assignedToId=" + encodeURIComponent(state.calendarOwnerId);
           return apiGet(path);
         }));
 
@@ -7518,6 +7869,9 @@
         });
 
         state.dailyTasks = merged;
+        if (document.getElementById("team-metrics-dashboard").style.display !== "none") {
+          renderTeamMetrics();
+        }
         renderCalendar();
       } catch (err) {
         console.error(err);
@@ -7609,16 +7963,30 @@
       const todayKey = dateKey(today.getFullYear(), today.getMonth(), today.getDate());
 
       const tasksByDate = {};
+      const ownerId = state.calendarOwnerId;
+
       state.dailyTasks.forEach(t => {
+        // Filter by owner if set
+        // Allow "combined" to show all
+        if (ownerId !== "combined" && ownerId && t.assigned_to_id !== ownerId && (!t.assignee_ids || !t.assignee_ids.includes(ownerId))) {
+          return;
+        }
+
         const key = t.task_date;
         if (!tasksByDate[key]) tasksByDate[key] = [];
         tasksByDate[key].push(t);
       });
 
       // Include completed backlog tasks on their completion date
+      // Include completed backlog tasks on their completion date
       if (state.backlogTasks) {
         state.backlogTasks.forEach(t => {
           if (t.status === 'done' && t.completed_at) {
+            // Apply same filter as daily tasks
+            if (ownerId !== "combined" && ownerId && t.assigned_to_id !== ownerId && (!t.assignee_ids || !t.assignee_ids.includes(ownerId))) {
+              return;
+            }
+
             const d = new Date(t.completed_at);
             const key = dateKey(d.getFullYear(), d.getMonth(), d.getDate());
             if (!tasksByDate[key]) tasksByDate[key] = [];
@@ -8765,6 +9133,9 @@
       // Cleanup old completed section if exists
       const oldCompleted = document.getElementById("completed-projects-container");
       if (oldCompleted) oldCompleted.remove();
+      // Cleanup old pagination controls
+      const oldControls = grid.parentNode.querySelector(".pagination-controls");
+      if (oldControls) oldControls.remove();
 
       const projects = state.projects || [];
 
@@ -8776,11 +9147,23 @@
       const activeProjects = projects.filter(p => p.status !== 'completed');
       const completedProjects = projects.filter(p => p.status === 'completed');
 
-      // Render Active
-      activeProjects.forEach(project => {
+      // Pagination for Active Projects
+      const PROJECTS_PER_PAGE = 6; // 3x2 grid
+      const { data, totalPages } = paginateList(activeProjects, paginationState.projects, PROJECTS_PER_PAGE);
+
+      if (paginationState.projects > totalPages && totalPages > 0) {
+        paginationState.projects = totalPages;
+        renderProjects();
+        return;
+      }
+
+      // Render Active Page
+      data.forEach(project => {
         const card = buildProjectCard(project);
         grid.appendChild(card);
       });
+
+      renderPaginationControls("projects-grid", paginationState.projects, totalPages, 'projects');
 
       // Render Completed
       if (completedProjects.length > 0 && section) {
@@ -9680,11 +10063,13 @@
 
       // Reorder sections based on button order
       buttons.forEach(btn => {
-        const targetId = btn.dataset.target;
-        const section = document.getElementById(targetId);
-        if (section) {
-          sectionContainer.appendChild(section);
-        }
+        const targetIds = btn.dataset.target.split(',');
+        targetIds.forEach(id => {
+          const section = document.getElementById(id.trim());
+          if (section) {
+            sectionContainer.appendChild(section);
+          }
+        });
       });
 
       // Save the new section order
@@ -9699,11 +10084,19 @@
       if (!btnContainer || !sectionContainer) return;
 
       const sections = Array.from(sectionContainer.querySelectorAll(".draggable-section")); // Uses current DOM order
+      const processedButtons = new Set();
 
       sections.forEach(section => {
-        const btn = btnContainer.querySelector(`.view-option[data-target="${section.id}"]`);
-        if (btn) {
+        // Find button that contains this section ID
+        const buttons = Array.from(btnContainer.querySelectorAll(".view-option"));
+        const btn = buttons.find(b => {
+          const targets = b.dataset.target.split(',').map(s => s.trim());
+          return targets.includes(section.id);
+        });
+
+        if (btn && !processedButtons.has(btn)) {
           btnContainer.appendChild(btn);
+          processedButtons.add(btn);
         }
       });
     }
@@ -11215,24 +11608,36 @@
       const toggles = document.querySelectorAll(".view-option");
 
       toggles.forEach(toggle => {
-        const targetId = toggle.dataset.target;
-        const section = document.getElementById(targetId);
-        if (!section) return;
+        const targetIds = toggle.dataset.target.split(',');
 
-        // Set initial visual state based on default HTML visibility (fallback before prefs load)
-        const isVisible = section.style.display !== "none" && !section.classList.contains("hidden");
+        // Check visibility of first target to determine toggle state
+        const firstId = targetIds[0].trim();
+        const firstSection = document.getElementById(firstId);
+        if (!firstSection) return;
+
+        // Initial state logic
+        const isVisible = firstSection.style.display !== "none" && !firstSection.classList.contains("hidden");
         if (isVisible) toggle.classList.add("active");
 
         // Handle click
         toggle.addEventListener("click", () => {
-          const isCurrentlyVisible = section.style.display !== "none" && !section.classList.contains("hidden");
+          const isCurrentlyVisible = firstSection.style.display !== "none" && !firstSection.classList.contains("hidden");
+
+          targetIds.forEach(id => {
+            const section = document.getElementById(id.trim());
+            if (!section) return;
+
+            if (isCurrentlyVisible) {
+              section.style.display = "none";
+            } else {
+              section.style.display = "";
+              section.classList.remove("hidden");
+            }
+          });
 
           if (isCurrentlyVisible) {
-            section.style.display = "none";
             toggle.classList.remove("active");
           } else {
-            section.style.display = "";
-            section.classList.remove("hidden");
             toggle.classList.add("active");
           }
           // Save the new state
@@ -11246,16 +11651,21 @@
       const visibility = {};
       const toggles = document.querySelectorAll(".view-option");
       toggles.forEach(toggle => {
-        const targetId = toggle.dataset.target;
-        const section = document.getElementById(targetId);
-        if (section) {
-          // true if visible
-          visibility[targetId] = section.style.display !== "none" && !section.classList.contains("hidden");
-        }
+        const targetIds = toggle.dataset.target.split(',');
+        targetIds.forEach(id => {
+          const section = document.getElementById(id.trim());
+          if (section) {
+            const isVisible = section.style.display !== "none" && !section.classList.contains("hidden");
+            visibility[id.trim()] = isVisible;
+          }
+        });
       });
+      localStorage.setItem("wrapSheet_visibility", JSON.stringify(visibility));
 
       // Save to D1
-      saveUserDbPreference("section_visibility", visibility);
+      if (typeof saveUserDbPreference === 'function') {
+        saveUserDbPreference("section_visibility", visibility);
+      }
 
       // Save to localStorage fallback
       if (state.currentUser) {
@@ -11360,6 +11770,9 @@
         cols.slice(1).forEach(c => {
           const cell = document.createElement("div");
           cell.className = "weekly-cell";
+          // Add user color class
+          cell.classList.add(`user-col-${c.toLowerCase()}`);
+
           const textarea = document.createElement("textarea");
           const entry = data.find(d => d.category === "priorities" && d.row_key === r && d.col_key === c);
           textarea.value = entry ? entry.value : "";
@@ -11750,6 +12163,317 @@
         });
       } catch (e) { console.error(e); }
     }
+    // ======================================================
+    // TEAM METRICS DASHBOARD
+    // ======================================================
+
+    let workloadChart = null;
+    let efficiencyChart = null;
+
+    function toggleMetricsView() {
+      const dashboard = document.getElementById("team-metrics-dashboard");
+      const birdContent = document.getElementById("gamification-content");
+      const btn = document.getElementById("toggle-metrics-view"); // Toolbar button if exists
+
+      if (dashboard.style.display === "none") {
+        dashboard.style.display = "block";
+        birdContent.style.display = "none";
+        renderTeamMetrics();
+        if (btn) btn.classList.add("active");
+      } else {
+        dashboard.style.display = "none";
+        birdContent.style.display = "flex";
+        if (btn) btn.classList.remove("active");
+      }
+    }
+
+    function calculateTeamStats() {
+      // 1. Filter for current week's tasks
+      const allTasks = state.dailyTasks || [];
+
+      // Group by User
+      const userStats = {};
+
+      // Helper to ensure user entry exists
+      const ensureUser = (id, fallbackName) => {
+        if (!userStats[id]) {
+          userStats[id] = {
+            name: fallbackName || `User ${id}`,
+            todo: 0,
+            inprogress: 0,
+            completed: 0,
+            couldnotcomplete: 0,
+            total: 0
+          };
+        }
+        // Upgrade name if we found a better one than "User X"
+        if (fallbackName && userStats[id].name.startsWith("User ")) {
+          userStats[id].name = fallbackName;
+        }
+      };
+
+      // A. Force initialization of Core Team (Guarantees Melodie & co are present)
+      const CORE_TEAM = [
+        { id: 1, name: "Katie" },
+        { id: 2, name: "Kevin" },
+        { id: 3, name: "Erica" },
+        { id: 4, name: "Jenna" },
+        { id: 5, name: "Meighan" },
+        { id: 6, name: "Melodie" },
+        { id: 7, name: "Melodie" } // Fallback ID for Melodie if needed
+      ];
+
+      CORE_TEAM.forEach(u => {
+        ensureUser(u.id, u.name);
+      });
+
+      // B. Merge any additional names from state.users (e.g. TestWhale)
+      if (state.users && state.users.length > 0) {
+        state.users.forEach(u => {
+          // EXCLUDE dummy/test users 19, 20 explicitly
+          if (u.id === 19 || u.id === 20) return;
+          ensureUser(u.id, u.first_name || u.username);
+        });
+      }
+
+      // Workload & Completion Counts
+      allTasks.forEach(t => {
+        const uid = t.assigned_to_id;
+        if (!uid) return;
+
+        // B. Harvest name from task if available (often task objects have joined user data)
+        const possibleName = t.user_name || t.assigned_to_name || t.assignee_name;
+        ensureUser(uid, possibleName);
+
+        // Ensure consistent lookup (handle string vs int)
+        const stats = userStats[uid] || userStats[String(uid)];
+        if (stats) {
+          stats.total++;
+          if (t.status === 'done') {
+            stats.completed++;
+          } else if (t.status === 'could_not_complete') {
+            stats.couldnotcomplete++;
+          } else if (t.status === 'in_progress' || t.status === 'doing') {
+            stats.inprogress++;
+          } else {
+            stats.todo++;
+          }
+        }
+      });
+
+      // 2. Efficiency (Completed by Day of Week)
+      const completedByDay = {};
+
+      // Get current visible range
+      const [startKey, endKey] = getVisibleDateRange();
+      const days = [];
+      let curr = new Date(startKey);
+      const end = new Date(endKey);
+      let cap = 0;
+
+      // Generate days for the axis
+      while (curr <= end && cap < 14) {
+        const k = curr.toISOString().split('T')[0];
+        days.push(k);
+        completedByDay[k] = 0;
+        curr.setDate(curr.getDate() + 1);
+        cap++;
+      }
+
+      allTasks.forEach(t => {
+        if (t.status === 'done') {
+          // Use completed_at if available, else fallback to task_date
+          // format: YYYY-MM-DD
+          let dStr = t.completed_at || t.task_date;
+          if (dStr) {
+            const dateKey = dStr.split('T')[0];
+            if (completedByDay.hasOwnProperty(dateKey)) {
+              completedByDay[dateKey]++;
+            }
+          }
+        }
+      });
+
+      // 3. Aggregate Team Stats
+      let teamTotal = 0;
+      let teamCompleted = 0;
+      Object.values(userStats).forEach(s => {
+        teamTotal += s.total;
+        teamCompleted += s.completed;
+      });
+
+      const teamRate = teamTotal > 0 ? Math.round((teamCompleted / teamTotal) * 100) : 0;
+
+      // Find MVP (Most completed)
+      let mvp = { name: "None", count: -1 };
+      Object.values(userStats).forEach(s => {
+        if (s.completed > mvp.count) {
+          mvp = { name: s.name, count: s.completed };
+        }
+      });
+      if (mvp.count <= 0) mvp.name = "-";
+
+      return {
+        userStats,
+        dailyEfficiency: days.map(d => ({ date: d, count: completedByDay[d] })),
+        teamTotal,
+        teamRate,
+        mvp
+      };
+    }
+
+    function renderTeamMetrics() {
+      const stats = calculateTeamStats();
+
+      // 1. Render Key Stat Cards
+      const statsRow = document.getElementById("metrics-stats-row");
+      if (statsRow) {
+        statsRow.innerHTML = `
+            <div class="stat-card" style="background:var(--bg-main); padding:16px; border-radius:12px; flex:1; text-align:center;">
+               <div style="font-size:24px; font-weight:800; color:var(--ink);">${stats.teamTotal}</div>
+               <div style="font-size:11px; text-transform:uppercase; color:var(--ink-soft); font-weight:600;">Total Weekly Tasks</div>
+            </div>
+            <div class="stat-card" style="background:var(--bg-main); padding:16px; border-radius:12px; flex:1; text-align:center;">
+               <div style="font-size:24px; font-weight:800; color:${stats.teamRate >= 80 ? 'var(--success)' : 'var(--accent)'};">${stats.teamRate}%</div>
+               <div style="font-size:11px; text-transform:uppercase; color:var(--ink-soft); font-weight:600;">Completion Rate</div>
+            </div>
+            <div class="stat-card" style="background:var(--bg-main); padding:16px; border-radius:12px; flex:1; text-align:center;">
+               <div style="font-size:24px; font-weight:800; color:var(--elevate);">${stats.mvp.name}</div>
+               <div style="font-size:11px; text-transform:uppercase; color:var(--ink-soft); font-weight:600;">Weekly MVP 🏆</div>
+            </div>
+         `;
+      }
+
+      // 2. Render Charts
+      renderWorkloadChart(stats.userStats);
+      renderEfficiencyChart(stats.dailyEfficiency);
+    }
+
+    function renderWorkloadChart(userStats) {
+      const canvas = document.getElementById('chart-workload');
+      if (!canvas) return;
+      const ctx = canvas.getContext('2d');
+
+      // Filter out "User X" entries
+      const validStats = Object.values(userStats).filter(s => !s.name.startsWith("User "));
+
+      const aggregated = {};
+      validStats.forEach(s => {
+        if (!aggregated[s.name]) {
+          aggregated[s.name] = { name: s.name, todo: 0, inprogress: 0, completed: 0, couldnotcomplete: 0 };
+        }
+        aggregated[s.name].todo += (s.todo || 0);
+        aggregated[s.name].inprogress += (s.inprogress || 0);
+        aggregated[s.name].completed += (s.completed || 0);
+        aggregated[s.name].couldnotcomplete += (s.couldnotcomplete || 0);
+      });
+
+      const finalStats = Object.values(aggregated);
+
+      const labels = finalStats.map(s => s.name);
+      // Data Arrays
+      const todoData = finalStats.map(s => s.todo);
+      const doingData = finalStats.map(s => s.inprogress);
+      const doneData = finalStats.map(s => s.completed);
+      const blockedData = finalStats.map(s => s.couldnotcomplete);
+
+      const d = state.currentMonthDate;
+      const timeLabel = d.toLocaleString("default", { month: "long", year: "numeric" });
+
+      if (workloadChart) workloadChart.destroy();
+
+      workloadChart = new Chart(ctx, {
+        type: 'bar',
+        data: {
+          labels: labels,
+          datasets: [
+            {
+              label: 'To Do',
+              data: todoData,
+              backgroundColor: '#9ca3af', // gray
+              borderRadius: 4,
+            },
+            {
+              label: 'In Progress',
+              data: doingData,
+              backgroundColor: '#3b82f6', // blue
+              borderRadius: 4,
+            },
+            {
+              label: 'Done',
+              data: doneData,
+              backgroundColor: '#10b981', // emerald
+              borderRadius: 4,
+            },
+            {
+              label: 'Blocked / Incomplete',
+              data: blockedData,
+              backgroundColor: '#ef4444', // red
+              borderRadius: 4,
+            }
+          ]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            title: { display: true, text: `Team Workload (${timeLabel})`, align: 'start', font: { size: 14, weight: 'bold' } },
+            legend: { position: 'bottom' }
+          },
+          scales: {
+            x: { stacked: false, grid: { display: false } }, // Changed to false to show side-by-side or true for stack? User didn't specify. Groups are better.
+            y: { stacked: false, beginAtZero: true, grid: { color: 'rgba(0,0,0,0.05)' } }
+          }
+        }
+      });
+    }
+
+    function renderEfficiencyChart(dailyData) {
+      const canvas = document.getElementById('chart-efficiency');
+      if (!canvas) return;
+      const ctx = canvas.getContext('2d');
+
+      const labels = dailyData.map(d => {
+        // Parse "YYYY-MM-DD"
+        const [y, m, day] = d.date.split('-').map(Number);
+        const date = new Date(y, m - 1, day);
+        return date.toLocaleDateString('en-US', { weekday: 'short' });
+      });
+      const data = dailyData.map(d => d.count);
+
+      if (efficiencyChart) efficiencyChart.destroy();
+
+      efficiencyChart = new Chart(ctx, {
+        type: 'line',
+        data: {
+          labels: labels,
+          datasets: [{
+            label: 'Tasks Completed',
+            data: data,
+            borderColor: '#3b82f6', // blue
+            backgroundColor: 'rgba(59, 130, 246, 0.1)',
+            fill: true,
+            tension: 0.4,
+            pointRadius: 4,
+            pointBackgroundColor: '#fff',
+            pointBorderWidth: 2
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            title: { display: true, text: 'Daily Velocity', align: 'start', font: { size: 14, weight: 'bold' } },
+            legend: { display: false }
+          },
+          scales: {
+            x: { grid: { display: false } },
+            y: { beginAtZero: true, suggestedMax: 5, ticks: { stepSize: 1 }, grid: { color: 'rgba(0,0,0,0.05)' } }
+          }
+        }
+      });
+    }
+
   </script>
 
 </body>
