@@ -11633,14 +11633,23 @@
     // WEEKLY TEAM PLANNER LOGIC
     // ==========================================
 
-    let currentWeeklyStart = getMonday(new Date()).toISOString().split('T')[0];
+
+    // Helper to get local YYYY-MM-DD
+    function getLocalDateString(d) {
+      const year = d.getFullYear();
+      const month = String(d.getMonth() + 1).padStart(2, '0');
+      const day = String(d.getDate()).padStart(2, '0');
+      return `${year}-${month}-${day}`;
+    }
 
     function getMonday(d) {
       d = new Date(d);
       var day = d.getDay(),
         diff = d.getDate() - day + (day == 0 ? -6 : 1); // adjust when day is sunday
-      return new Date(d.setDate(diff));
+      return new Date(d.setDate(diff));;
     }
+
+    let currentWeeklyStart = getLocalDateString(getMonday(new Date()));
 
     function initWeeklyPlanner() {
       // Nav Buttons
@@ -11765,15 +11774,21 @@
     }
 
     function changeWeeklyWeek(days) {
-      const d = new Date(currentWeeklyStart);
+      // Parse current string as local date (YYYY-MM-DD)
+      const parts = currentWeeklyStart.split("-");
+      const d = new Date(parts[0], parts[1] - 1, parts[2]); // Constructor uses local time
+
       d.setDate(d.getDate() + days);
-      currentWeeklyStart = d.toISOString().split('T')[0];
+      currentWeeklyStart = getLocalDateString(d);
       renderWeeklyPlanner();
     }
 
     async function renderWeeklyPlanner() {
       // Update UI Label
-      const d = new Date(currentWeeklyStart);
+      // Parse YYYY-MM-DD manually to avoid UTC conversion issues
+      const parts = currentWeeklyStart.split("-");
+      const d = new Date(parts[0], parts[1] - 1, parts[2]);
+
       const label = `Week of ${d.toLocaleDateString('en-US', { month: 'numeric', day: 'numeric', year: 'numeric' })}`;
       document.getElementById("weekly-current-label").textContent = label;
 
