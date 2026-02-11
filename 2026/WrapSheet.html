@@ -3625,7 +3625,8 @@
               <!-- JS will copy bird SVG here -->
             </svg>
           </div>
-          <div style="margin-top:10px; font-size:11px; color:var(--ink-soft); text-align:center;">
+          <div id="bird-preview-label"
+            style="margin-top:10px; font-size:11px; color:var(--ink-soft); text-align:center;">
             Preview
           </div>
         </div>
@@ -5663,6 +5664,10 @@
               try { colors = JSON.parse(colors); } catch (e) { }
             }
             birdColors = colors;
+            // SYNC with global editor state
+            if (typeof currentBirdColors !== 'undefined') {
+              currentBirdColors = { ...DEFAULT_BIRD_COLORS, ...colors };
+            }
             applyBirdColors(colors);
           }
         }
@@ -6038,23 +6043,46 @@
 
     window.handleColorChange = (part, value) => {
       try {
+        // Debug Feedback
+        const label = document.getElementById("bird-preview-label");
+        if (label) label.textContent = `Preview: ${part} -> ${value}`;
+
         // Update preview only
         const previewColors = { ...currentBirdColors };
         if (!previewColors) {
           console.error("currentBirdColors is missing!");
+          if (label) label.textContent = "Error: Colors missing";
           return;
         }
 
-        // Collect all current inputs to support multi-change without save
-        // But for single change, just updating the part is enough for preview responsiveness
         previewColors[part] = value;
-
-        // Also update local state so if they save, it's captured
         if (currentBirdColors) currentBirdColors[part] = value;
 
-        applyBirdColors(previewColors, "bird-preview-group");
+        // Force direct update if applyBirdColors is flaky
+        const previewGroup = document.getElementById("bird-preview-group");
+        if (previewGroup) {
+          const el = previewGroup.querySelector(`.bird-${part}`);
+          if (el) el.setAttribute("fill", value);
+          else if (label) label.textContent += " (no element)";
+
+          // Still try global apply (handles secondary parts like wings-r)
+          // applyBirdColors(previewColors, "bird-preview-group");
+          // actually let's replicate applyBirdColors for wings/feet which have pairs
+          if (part === 'wings') {
+            previewGroup.querySelectorAll('.bird-wing-l, .bird-wing-r').forEach(e => e.setAttribute('fill', value));
+          } else if (part === 'feet') {
+            previewGroup.querySelectorAll('.bird-foot-l, .bird-foot-r').forEach(e => e.setAttribute('fill', value));
+          } else {
+            // single elements like head, body, tummy, beak
+            const e = previewGroup.querySelector(`.bird-${part}`);
+            if (e) e.setAttribute('fill', value);
+          }
+        } else {
+          if (label) label.textContent += " (no group)";
+        }
       } catch (e) {
         console.error("handleColorChange error:", e);
+        showToast("Error: " + e.message);
       }
     };
 
@@ -6120,8 +6148,16 @@
     // Initialize Editor Listeners
     document.addEventListener("DOMContentLoaded", () => {
       setTimeout(() => {
-        initBirdSystem();
-        loadBirdPreferences(); // visual init
+        try {
+          initBirdSystem();
+        } catch (e) {
+          console.error("initBirdSystem failed:", e);
+        }
+        try {
+          loadBirdPreferences(); // visual init
+        } catch (e) {
+          console.error("loadBirdPreferences failed:", e);
+        }
       }, 1000);
 
       const editBtn = document.getElementById("edit-bird-trigger");
