@@ -1920,55 +1920,66 @@ async function getUserPreferences(env, userId) {
 }
 
 async function saveUserPreferences(request, env, userId) {
-    const body = await getBody(request);
-    const now = new Date().toISOString();
+    console.log(`[DEBUG] saveUserPreferences calling for userId=${userId}`);
+    try {
+        const body = await getBody(request);
+        const now = new Date().toISOString();
+        console.log(`[DEBUG] Body:`, JSON.stringify(body));
 
-    // Check if prefs exist
-    const existing = await env.WRAP_DB
-        .prepare(`SELECT * FROM user_preferences WHERE user_id = ?`)
-        .bind(userId)
-        .all();
+        // Check if prefs exist
+        const existing = await env.WRAP_DB
+            .prepare(`SELECT * FROM user_preferences WHERE user_id = ?`)
+            .bind(userId)
+            .all();
 
-    if (existing.results.length === 0) {
-        // Insert new
-        await env.WRAP_DB
-            .prepare(`
-                INSERT INTO user_preferences (user_id, theme, calendar_view, section_order, enable_weekly_tasks, bird_name, bird_colors, updated_at)
-                VALUES (?, ?, ?, ?, ?, ?, ?, ?)
-            `)
-            .bind(
-                userId,
-                body.theme || "light",
-                body.calendar_view || "month",
-                body.section_order ? JSON.stringify(body.section_order) : null,
-                body.enable_weekly_tasks || 0,
-                body.bird_name || null,
-                body.bird_colors ? JSON.stringify(body.bird_colors) : null,
-                now
-            )
-            .run();
-    } else {
-        // Update existing
-        await env.WRAP_DB
-            .prepare(`
-                UPDATE user_preferences 
-                SET theme = ?, calendar_view = ?, section_order = ?, enable_weekly_tasks = ?, bird_name = ?, bird_colors = ?, updated_at = ?
-                WHERE user_id = ?
-            `)
-            .bind(
-                body.theme !== undefined ? body.theme : existing.results[0].theme,
-                body.calendar_view !== undefined ? body.calendar_view : existing.results[0].calendar_view,
-                body.section_order ? JSON.stringify(body.section_order) : existing.results[0].section_order,
-                body.enable_weekly_tasks !== undefined ? body.enable_weekly_tasks : existing.results[0].enable_weekly_tasks,
-                body.bird_name !== undefined ? body.bird_name : existing.results[0].bird_name,
-                body.bird_colors !== undefined ? JSON.stringify(body.bird_colors) : existing.results[0].bird_colors,
-                now,
-                userId
-            )
-            .run();
+        if (existing.results.length === 0) {
+            console.log(`[DEBUG] No existing prefs, inserting...`);
+            // Insert new
+            const result = await env.WRAP_DB
+                .prepare(`
+                    INSERT INTO user_preferences (user_id, theme, calendar_view, section_order, enable_weekly_tasks, bird_name, bird_colors, updated_at)
+                    VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+                `)
+                .bind(
+                    userId,
+                    body.theme || "light",
+                    body.calendar_view || "month",
+                    body.section_order ? JSON.stringify(body.section_order) : null,
+                    body.enable_weekly_tasks || 0,
+                    body.bird_name || null,
+                    body.bird_colors ? JSON.stringify(body.bird_colors) : null,
+                    now
+                )
+                .run();
+            console.log(`[DEBUG] Insert result:`, JSON.stringify(result));
+        } else {
+            console.log(`[DEBUG] Updating existing prefs...`);
+            // Update existing
+            const result = await env.WRAP_DB
+                .prepare(`
+                    UPDATE user_preferences 
+                    SET theme = ?, calendar_view = ?, section_order = ?, enable_weekly_tasks = ?, bird_name = ?, bird_colors = ?, updated_at = ?
+                    WHERE user_id = ?
+                `)
+                .bind(
+                    body.theme !== undefined ? body.theme : existing.results[0].theme,
+                    body.calendar_view !== undefined ? body.calendar_view : existing.results[0].calendar_view,
+                    body.section_order ? JSON.stringify(body.section_order) : existing.results[0].section_order,
+                    body.enable_weekly_tasks !== undefined ? body.enable_weekly_tasks : existing.results[0].enable_weekly_tasks,
+                    body.bird_name !== undefined ? body.bird_name : existing.results[0].bird_name,
+                    body.bird_colors !== undefined ? JSON.stringify(body.bird_colors) : existing.results[0].bird_colors,
+                    now,
+                    userId
+                )
+                .run();
+            console.log(`[DEBUG] Update result:`, JSON.stringify(result));
+        }
+
+        return getUserPreferences(env, userId);
+    } catch (err) {
+        console.error(`[ERROR] saveUserPreferences failed:`, err);
+        return json({ error: err.message }, 500);
     }
-
-    return getUserPreferences(env, userId);
 }
 
 /* ---------- WEEKLY TASKS (BETA) ---------- */
