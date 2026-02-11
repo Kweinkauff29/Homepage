@@ -6064,22 +6064,41 @@
 
       // 3. Persist to DB
       if (state.currentUser) {
+        // Show loading state
+        const saveBtn = document.getElementById("save-bird-editor");
+        const originalText = saveBtn ? saveBtn.textContent : "Save";
+        if (saveBtn) {
+          saveBtn.textContent = "Saving...";
+          saveBtn.disabled = true;
+        }
+
         birdName = document.getElementById("bird-name-input").value.trim() || null;
         updateBirdNameUI();
 
         try {
+          // Await the API call to ensure it completes
           await apiSend(`/user-preferences/${state.currentUser.id}`, "PUT", {
             bird_colors: currentBirdColors,
             bird_name: birdName
           });
-          showToast("Bird saved!");
-        } catch (e) {
-          console.warn("Save failed", e);
-          showToast("Saved locally (Server error)", true);
-        }
-      }
+          showToast("Bird saved successfully!");
 
-      closeBirdEditor();
+          // Only close if successful
+          closeBirdEditor();
+        } catch (e) {
+          console.error("Save failed", e);
+          showToast("Failed to save changes. Please try again.", true);
+        } finally {
+          // Reset button state
+          if (saveBtn) {
+            saveBtn.textContent = originalText;
+            saveBtn.disabled = false;
+          }
+        }
+      } else {
+        // Guest mode - just close
+        closeBirdEditor();
+      }
     }
 
 
@@ -11103,22 +11122,36 @@
       }
     }
 
-    function equipItem(itemId, category) {
+    async function equipItem(itemId, category) {
       equippedItems[category] = itemId;
-      saveEquippedItems();
-      applyEquippedItems();
-      renderShopItems();
-      renderInventory();
-      showToast("Equipped!");
+      try {
+        await saveEquippedItems();
+        applyEquippedItems();
+        renderShopItems();
+        renderInventory();
+        showToast("Equipped!");
+      } catch (e) {
+        // Revert on error
+        delete equippedItems[category];
+        renderShopItems();
+      }
     }
 
-    function unequipItem(category) {
+    async function unequipItem(category) {
+      const oldItem = equippedItems[category];
       delete equippedItems[category];
-      saveEquippedItems();
-      applyEquippedItems();
-      renderShopItems();
-      renderInventory();
-      showToast("Unequipped!");
+
+      try {
+        await saveEquippedItems();
+        applyEquippedItems();
+        renderShopItems();
+        renderInventory();
+        showToast("Unequipped!");
+      } catch (e) {
+        // Revert on error
+        if (oldItem) equippedItems[category] = oldItem;
+        renderShopItems();
+      }
     }
 
     function toggleEquip(itemId, category) {
@@ -11141,6 +11174,8 @@
         });
       } catch (err) {
         console.error("Failed to save equipped items:", err);
+        showToast("Failed to save equipped items", true);
+        throw err; // Re-throw to let caller know
       }
     }
 
