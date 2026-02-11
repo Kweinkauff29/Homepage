@@ -27,8 +27,4 @@ CREATE INDEX IF NOT EXISTS idx_weekly_tasks_assigned ON weekly_tasks(assigned_to
 -- but running these is generally safe if they don't exist, will error if they do. 
 -- In Cloudflare D1, it's best to run one by one or ignore error if exists)
 
--- Try adding bird_colors
-ALTER TABLE user_preferences ADD COLUMN bird_colors TEXT;
 
--- Try adding bird_name 
-ALTER TABLE user_preferences ADD COLUMN bird_name TEXT;
