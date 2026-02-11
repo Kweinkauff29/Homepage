@@ -1907,16 +1907,40 @@ async function getUserPreferences(env, userId) {
 
     if (results.length === 0) {
         // Return defaults if no prefs exist
+        const defaultBirdColors = {
+            head: "#ffde59",
+            body: "#d9d9d9",
+            tummy: "#54a6fb",
+            wings: "#ffde59",
+            beak: "#ffde59",
+            feet: "#ff7b1c"
+        };
         return json({
             user_id: Number(userId),
             theme: "light",
             calendar_view: "month",
             section_order: null,
-            enable_weekly_tasks: 0
+            enable_weekly_tasks: 0,
+            bird_name: "Wrap Bird",
+            bird_colors: JSON.stringify(defaultBirdColors)
         });
     }
 
-    return json(results[0]);
+    // Ensure we send back defaults if null in DB too
+    const prefs = results[0];
+    if (!prefs.bird_colors) {
+        prefs.bird_colors = JSON.stringify({
+            head: "#ffde59",
+            body: "#d9d9d9",
+            tummy: "#54a6fb",
+            wings: "#ffde59",
+            beak: "#ffde59",
+            feet: "#ff7b1c"
+        });
+    }
+    if (!prefs.bird_name) prefs.bird_name = "Wrap Bird";
+
+    return json(prefs);
 }
 
 async function saveUserPreferences(request, env, userId) {

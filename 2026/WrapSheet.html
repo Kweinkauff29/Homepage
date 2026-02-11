@@ -6037,18 +6037,31 @@
     }
 
     window.handleColorChange = (part, value) => {
-      // Update preview only
-      const previewColors = { ...currentBirdColors }; // Base
-      // Collect all current inputs
-      document.querySelectorAll(".color-input-styled").forEach(input => {
-        previewColors[input.dataset.part] = input.value;
-      });
-      applyBirdColors(previewColors, "bird-preview-group");
+      try {
+        // Update preview only
+        const previewColors = { ...currentBirdColors };
+        if (!previewColors) {
+          console.error("currentBirdColors is missing!");
+          return;
+        }
+
+        // Collect all current inputs to support multi-change without save
+        // But for single change, just updating the part is enough for preview responsiveness
+        previewColors[part] = value;
+
+        // Also update local state so if they save, it's captured
+        if (currentBirdColors) currentBirdColors[part] = value;
+
+        applyBirdColors(previewColors, "bird-preview-group");
+      } catch (e) {
+        console.error("handleColorChange error:", e);
+      }
     };
 
     function closeBirdEditor() {
       document.getElementById("bird-editor-modal").style.display = "none";
     }
+
 
     async function saveBirdColors() {
       const newColors = { ...currentBirdColors };
