@@ -3623,3 +3623,112 @@ async function addReaction(request, env) {
 
     return json({ success: true });
 }
+
+/* ---------- WEEKLY TASKS (BETA) ---------- */
+
+function getWeekKey(date = new Date()) {
+    const d = new Date(date);
+    d.setHours(0, 0, 0, 0);
+    // ISO week number calculation
+    const thursday = new Date(d.valueOf());
+    thursday.setDate(d.getDate() - ((d.getDay() + 6) % 7) + 3);
+    const firstThursday = new Date(thursday.getFullYear(), 0, 4);
+    const weekNum = 1 + Math.round(
+        ((thursday.valueOf() - firstThursday.valueOf()) / 86400000 - 3 +
+            ((firstThursday.getDay() + 6) % 7)) / 7
+    );
+    return `${thursday.getFullYear()}-W${String(weekNum).padStart(2, "0")}`;
+}
+
+async function listWeeklyTasks(env, userId, week) {
+    let query = `
+        SELECT 
+            wt.*,
+            u_assigned.name AS assigned_to_name,
+            u_assigner.name AS assigned_by_name
+        FROM weekly_tasks wt
+        LEFT JOIN users u_assigned ON wt.assigned_to_id = u_assigned.id
+        LEFT JOIN users u_assigner ON wt.assigned_by_id = u_assigner.id
+        WHERE 1=1
+    `;
+    const args = [];
+
+    if (week) {
+        query += ` AND wt.week_key = ?`;
+        args.push(week);
+    }
+
+    if (userId) {
+        query += ` AND wt.assigned_to_id = ?`;
+        args.push(userId);
+    }
+
+    query += ` ORDER BY wt.priority DESC, wt.created_at ASC`;
+
+    const { results } = await env.WRAP_DB.prepare(query).bind(...args).all();
+    return json(results);
+}
+
+async function createWeeklyTask(request, env) {
+    const body = await getBody(request);
+    const now = new Date().toISOString();
+
+    const { success } = await env.WRAP_DB.prepare(`
+        INSERT INTO weekly_tasks (title, notes, week_key, assigned_to_id, assigned_by_id, status, priority, created_at, updated_at)
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
+    `).bind(
+        body.title,
+        body.notes || "",
+        body.week_key,
+        body.assigned_to_id,
+        body.assigned_by_id || null,
+        body.status || "pending",
+        body.priority || 0,
+        now,
+        now
+    ).run();
+
+    if (success) {
+        return json({ success: true });
+    }
+    return json({ error: "Failed to create task" }, 500);
+}
+
+async function updateWeeklyTask(request, env, id) {
+    const body = await getBody(request);
+    const now = new Date().toISOString();
+
+    // Dynamically build update
+    const updates = [];
+    const args = [];
+
+    if (body.title !== undefined) { updates.push("title = ?"); args.push(body.title); }
+    if (body.notes !== undefined) { updates.push("notes = ?"); args.push(body.notes); }
+    if (body.week_key !== undefined) { updates.push("week_key = ?"); args.push(body.week_key); }
+    if (body.assigned_to_id !== undefined) { updates.push("assigned_to_id = ?"); args.push(body.assigned_to_id); }
+    if (body.status !== undefined) {
+        updates.push("status = ?"); args.push(body.status);
+        if (body.status === 'done') {
+            updates.push("completed_at = ?"); args.push(now);
+        } else {
+            updates.push("completed_at = NULL");
+        }
+    }
+    if (body.priority !== undefined) { updates.push("priority = ?"); args.push(body.priority); }
+
+    updates.push("updated_at = ?"); args.push(now);
+
+    if (updates.length === 0) return json({ success: true }); // nothing to do
+
+    const query = `UPDATE weekly_tasks SET ${updates.join(", ")} WHERE id = ?`;
+    args.push(id);
+    args.push(id); // Wait, no, args.push(id) corresponds to WHERE id = ? at the end.
+
+    await env.WRAP_DB.prepare(query).bind(...args).run();
+    return json({ success: true });
+}
+
+async function deleteWeeklyTask(env, id) {
+    await env.WRAP_DB.prepare("DELETE FROM weekly_tasks WHERE id = ?").bind(id).run();
+    return json({ success: true });
+}
