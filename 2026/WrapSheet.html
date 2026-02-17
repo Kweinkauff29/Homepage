@@ -1100,6 +1100,51 @@
       transition: width 0.3s ease;
     }
 
+    /* Internal Tools Section */
+    .internal-tools-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 16px;
+      padding: 16px;
+    }
+
+    .tool-link-card {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      padding: 24px 16px;
+      background: var(--bg-main);
+      border: 1px solid var(--panel-border);
+      border-radius: var(--radius-lg);
+      text-decoration: none;
+      transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+      text-align: center;
+      gap: 12px;
+    }
+
+    .tool-link-card:hover {
+      transform: translateY(-2px);
+      border-color: var(--accent);
+      background: rgba(3, 170, 225, 0.05);
+      box-shadow: var(--shadow-md);
+    }
+
+    .tool-icon {
+      font-size: 24px;
+    }
+
+    .tool-name {
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--ink);
+    }
+
+    .tool-desc {
+      font-size: 11px;
+      color: var(--ink-soft);
+    }
+
     .project-progress-fill.complete {
       background: var(--success);
     }
@@ -4113,6 +4158,8 @@
           Projects <span class="drag-handle">⋮⋮</span></div>
         <div class="view-option" draggable="true" data-target="section-goals,section-pillars">Goals & Pillars <span
             class="drag-handle">⋮⋮</span></div>
+        <div class="view-option" draggable="true" data-target="section-internal-tools">Internal Tools <span
+            class="drag-handle">⋮⋮</span></div>
       </div>
 
       <!-- Draggable Sections Container -->
@@ -4383,6 +4430,31 @@
           <!-- Subheader removed in favor of panel-header layout -->
 
           <div class="pillar-grid" id="pillar-grid"></div>
+        </section>
+
+        <!-- Internal Tools Section -->
+        <section class="panel draggable-section" id="section-internal-tools" draggable="true">
+          <div class="panel-header">
+            <span class="section-drag-handle" title="Drag to reorder">⋮⋮</span>
+            <div class="panel-title">Internal Tools</div>
+          </div>
+          <div class="internal-tools-grid">
+            <a href="https://www.ccreschool.com/admin?key=matrixadmin" target="_blank" class="tool-link-card">
+              <span class="tool-icon">📝</span>
+              <div class="tool-name">MLS Test Completions</div>
+              <div class="tool-desc">Current Status: ALPHA</div>
+            </a>
+            <a href="https://bonitaesterorealtors.com/promo-calendar-internal/" target="_blank" class="tool-link-card">
+              <span class="tool-icon">📅</span>
+              <div class="tool-name">Class Promo Calendar</div>
+              <div class="tool-desc">Internal Scheduling View</div>
+            </a>
+            <a href="https://bonitaesterorealtors.com/logsrequest/" target="_blank" class="tool-link-card">
+              <span class="tool-icon">✉️</span>
+              <div class="tool-name">Letter of Good Standing</div>
+              <div class="tool-desc">Request & Processing Form</div>
+            </a>
+          </div>
         </section>
       </div> <!-- End sections-container -->
 
@@ -10318,6 +10390,14 @@
       savedOrder.forEach(id => {
         const section = document.getElementById(id);
         if (section) {
+          container.appendChild(section);
+        }
+      });
+
+      // Append any "new" sections that aren't in the saved order yet (default to bottom)
+      const allSections = container.querySelectorAll(".draggable-section");
+      allSections.forEach(section => {
+        if (!savedOrder.includes(section.id)) {
           container.appendChild(section);
         }
       });
