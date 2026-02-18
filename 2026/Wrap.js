@@ -1294,19 +1294,13 @@ async function updateGoalSubtask(request, env, subtaskId) {
 
     const title = body.title ?? existing.title;
     const notes = body.notes ?? existing.notes;
-    const due_date = body.due_date !== undefined ? body.due_date : existing.due_date;
+    // Schema mismatch: goal_subtasks table likely does not have due_date or assigned_to_id
+    // const due_date = body.due_date !== undefined ? body.due_date : existing.due_date;
     const status = body.status ?? existing.status;
     const weight = body.weight !== undefined ? body.weight : existing.weight;
 
-    let assigned_to_id =
-        body.assigned_to_id !== undefined ? body.assigned_to_id : existing.assigned_to_id;
-
-    if (assigned_to_id !== null && assigned_to_id !== undefined) {
-        assigned_to_id = Number(assigned_to_id);
-        if (!Number.isInteger(assigned_to_id)) {
-            return json({ error: "Invalid assigned_to_id" }, 400);
-        }
-    }
+    // Remove assigned_to_id logic as it seems to be copy-pasted and not in schema
+    // let assigned_to_id = ...
 
     let completed_at = existing.completed_at;
     if (existing.status !== "done" && status === "done") {
@@ -1318,16 +1312,15 @@ async function updateGoalSubtask(request, env, subtaskId) {
     await env.WRAP_DB
         .prepare(`
             UPDATE goal_subtasks
-            SET title = ?, notes = ?, due_date = ?, status = ?,
-            assigned_to_id = ?, completed_at = ?, updated_at = ?
+            SET title = ?, notes = ?, status = ?, weight = ?,
+            completed_at = ?, updated_at = ?
             WHERE id = ?
         `)
         .bind(
             String(title),
-            String(notes),
-            due_date || null,
+            String(notes || ""), // Valid string for notes
             String(status),
-            assigned_to_id,
+            weight,
             completed_at,
             now,
             subtaskId

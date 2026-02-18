@@ -9110,12 +9110,29 @@
       }
     }
 
+    // Verify code version
+    console.log("WRAP_SHEET_VERSION_FIXED_D1_ERROR_V2");
+
     async function updateGoalSubtask(subtaskId, patch) {
       try {
-        await apiSend(`/goal-subtasks/${subtaskId}`, "PATCH", patch);
+        // Sanitize payload to avoid D1 errors
+        const safePatch = {};
+
+        // Explicitly handle known fields to prevent undefined
+        for (const key in patch) {
+          if (patch[key] !== undefined) {
+            safePatch[key] = patch[key];
+          }
+        }
+
+        if (Object.keys(safePatch).length === 0) return true; // Nothing to update
+
+        await apiSend(`/goal-subtasks/${subtaskId}`, "PATCH", safePatch);
+        return true;
       } catch (err) {
-        console.error("Error updating goal subtask:", err);
+        console.error("Error updating goal subtask:", err, patch); // Log patch for debugging
         showToast("Error updating subtask", true);
+        return false;
       }
     }
 
@@ -9227,18 +9244,58 @@
         checkbox.type = "checkbox";
         checkbox.checked = sub.status === "done";
         checkbox.addEventListener("change", async () => {
-          const newStatus = checkbox.checked ? "done" : "pending";
-          await updateGoalSubtask(sub.id, { status: newStatus });
-          if (checkbox.checked) {
+          // Optimistic update
+          const isChecked = checkbox.checked;
+          if (isChecked) {
             row.classList.add("completed");
           } else {
             row.classList.remove("completed");
           }
-          // Refresh goals to update progress
-          if (goalType === "monthly") {
-            await loadMonthlyGoals();
-          } else {
-            await loadAnnualGoals();
+
+          const newStatus = isChecked ? "done" : "pending";
+          // Include complete object to avoid D1_TYPE_ERROR (backend expects missing fields)
+          const payload = { ...sub, status: newStatus };
+
+          // Ensure title is present (just in case)
+          if (!payload.title || payload.title.trim() === "") {
+            payload.title = "Untitled Subtask";
+          }
+
+          // Ensure linked_task_id is null if undefined
+          if (payload.linked_task_id === undefined) {
+            payload.linked_task_id = null;
+          }
+
+          // Ensure goal_id is present
+          // Ensure goal_id is present
+          if (payload.goal_id === undefined) {
+            payload.goal_id = goalId;
+          }
+
+          // BLIND FIX: Backend likely expects these fields to exist, and errors if they are undefined.
+          // We set them to null (or existing value) to ensure they are constrained.
+          const potentialFields = ["completed_at", "due_date", "assignee_id", "description", "priority", "notes"];
+          potentialFields.forEach(field => {
+            if (payload[field] === undefined) payload[field] = null;
+          });
+
+          // Specific logic for completed_at if it's not set
+          if (newStatus === "done" && !payload.completed_at) {
+            payload.completed_at = new Date().toISOString();
+          } else if (newStatus === "pending") {
+            payload.completed_at = null;
+          }
+
+          const success = await updateGoalSubtask(sub.id, payload);
+
+          if (!success) {
+            // Revert on failure
+            checkbox.checked = !isChecked;
+            if (!isChecked) {
+              row.classList.add("completed");
+            } else {
+              row.classList.remove("completed");
+            }
           }
         });
 

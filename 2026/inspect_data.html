@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>GrowthZone Data Inspector</title>
+</head>
+
+<body>
+    <h1>API Data Inspector</h1>
+    <div id="status">Loading...</div>
+    <pre id="output"></pre>
+    <script>
+        const apiKey = 'cR1djHVMkndNjLbwXyhDyOV7dWPJ6TnufYtcdOHc';
+        const BASE_URL = 'https://bonitaspringsesterorealtorsfl.growthzoneapp.com';
+        const CONTACTS_BASE_URL = `${BASE_URL}/api/contacts`;
+
+        async function inspectData() {
+            try {
+                // Fetch first page to inspect structure
+                const url = `${CONTACTS_BASE_URL}?skip=0&orderBy=ContactId&pageSize=10`;
+                const res = await fetch(url, {
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': 'ApiKey ' + apiKey
+                    }
+                });
+                const data = await res.json();
+                const results = data.Results || [];
+
+                // Find a contact with diverse fields if possible
+                const interestingContact = results.find(c => c.CustomFields && c.CustomFields.length > 0) || results[0];
+
+                document.getElementById('output').textContent = JSON.stringify(results, null, 2);
+                document.getElementById('status').textContent = `Loaded ${results.length} contacts.`;
+
+                // Also try to fetch specific category summary for one contact as testAPi.html suggested
+                if (interestingContact) {
+                    const sumUrl = `${BASE_URL}/api/contacts/${interestingContact.ContactId}`;
+                    const sumRes = await fetch(sumUrl, {
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'Authorization': 'ApiKey ' + apiKey
+                        }
+                    });
+                    const sumData = await sumRes.json();
+                    document.getElementById('output').textContent += "\n\n=== FULL DETAILS FOR ONE CONTACT ===\n" + JSON.stringify(sumData, null, 2);
+                }
+
+            } catch (err) {
+                document.getElementById('status').textContent = 'Error: ' + err.message;
+            }
+        }
+
+        inspectData();
+    </script>
+</body>
+
+</html>

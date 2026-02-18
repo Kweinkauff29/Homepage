@@ -1,0 +1,1248 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Agent Directory - Bonita Springs-Estero Realtors</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
+        integrity="sha512-9usAa10IRO0HhonpyAIVpjrylPvoDwiPUiKdWk5t3PyolY1cOd4DSE0Ga+ri4AuTroPR5aQvXU9xC6qOPnzFeg=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <style>
+        :root {
+            --primary: #006aff;
+            --primary-hover: #005ce6;
+            --bg-color: #f9f9fb;
+            --card-bg: #ffffff;
+            --text-main: #2a2a33;
+            --text-secondary: #595966;
+            --border-color: #e5e5ea;
+            --shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+            --shadow-hover: 0 8px 16px rgba(0, 0, 0, 0.1);
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            margin: 0;
+            padding: 0;
+            line-height: 1.5;
+        }
+
+        /* Header */
+        header {
+            background-color: #fff;
+            border-bottom: 1px solid var(--border-color);
+            padding: 1rem 2rem;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            height: 80px;
+        }
+
+        .brand img {
+            height: 50px;
+            width: auto;
+        }
+
+        /* Main Container */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        /* Controls / Search */
+        .controls {
+            margin-bottom: 3rem;
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            align-items: center;
+            text-align: center;
+        }
+
+        .controls h1 {
+            margin: 0 0 0.5rem 0;
+            font-size: 2rem;
+            font-weight: 700;
+        }
+
+        .controls p {
+            color: var(--text-secondary);
+            margin: 0;
+        }
+
+        .search-bar {
+            position: relative;
+            width: 100%;
+            max-width: 600px;
+            margin-top: 1.5rem;
+        }
+
+        .search-bar input {
+            width: 100%;
+            padding: 1rem 1rem 1rem 3rem;
+            font-size: 1rem;
+            border: 1px solid var(--border-color);
+            border-radius: 99px;
+            outline: none;
+            transition: border-color 0.2s, box-shadow 0.2s;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.02);
+        }
+
+        .search-bar input:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(0, 106, 255, 0.1);
+        }
+
+        .search-icon {
+            position: absolute;
+            left: 1.2rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #999;
+            pointer-events: none;
+        }
+
+        .status-line {
+            font-size: 0.875rem;
+            color: var(--text-secondary);
+            margin-top: 0.5rem;
+            min-height: 1.5rem;
+        }
+
+        /* Grid */
+        .directory-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 1.5rem;
+            padding-bottom: 2rem;
+        }
+
+        /* Card entrance animation */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(24px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Agent Card */
+        .agent-card {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            overflow: hidden;
+            transition: transform 0.2s, box-shadow 0.2s;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            opacity: 0;
+            animation: fadeInUp 0.4s ease forwards;
+        }
+
+        .agent-card:hover {
+            transform: translateY(-4px);
+            box-shadow: var(--shadow-hover);
+            border-color: var(--primary);
+        }
+
+        .card-header {
+            padding: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            border-bottom: 1px solid #f0f0f5;
+        }
+
+        .avatar {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background-color: #f0f0f0;
+            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" fill="%23ccc" viewBox="0 0 24 24"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>');
+            background-size: cover;
+            background-position: center;
+            flex-shrink: 0;
+            border: 3px solid #fff;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .info {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .agent-name {
+            font-weight: 700;
+            font-size: 1.125rem;
+            margin: 0;
+            color: var(--text-main);
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .agent-office {
+            font-size: 0.825rem;
+            color: var(--text-secondary);
+            margin: 0.15rem 0 0 0;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .card-body {
+            padding: 1.25rem;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+        }
+
+        .detail-row {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .detail-row i {
+            width: 16px;
+            text-align: center;
+            flex-shrink: 0;
+            color: #999;
+        }
+
+        .company-name {
+            font-weight: 600;
+            color: #333;
+        }
+
+        .contact-link {
+            color: var(--text-secondary);
+            text-decoration: none;
+            transition: color 0.2s;
+        }
+
+        .contact-link:hover {
+            color: var(--primary);
+            text-decoration: underline;
+        }
+
+        .card-actions {
+            padding: 1rem;
+            background-color: #fbfbfd;
+            border-top: 1px solid var(--border-color);
+            display: flex;
+            gap: 1rem;
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0.6rem 1rem;
+            border-radius: 6px;
+            font-size: 0.875rem;
+            font-weight: 600;
+            text-decoration: none;
+            cursor: pointer;
+            transition: all 0.2s;
+            flex: 1;
+        }
+
+        .btn-primary {
+            background-color: var(--primary);
+            color: #fff;
+            border: none;
+        }
+
+        .btn-primary:hover {
+            background-color: var(--primary-hover);
+        }
+
+        /* Pagination */
+        .pagination {
+            display: flex;
+            justify-content: center;
+            gap: 0.5rem;
+            margin-top: 2rem;
+        }
+
+        .page-btn {
+            padding: 0.5rem 1rem;
+            border: 1px solid var(--border-color);
+            background: #fff;
+            border-radius: 6px;
+            cursor: pointer;
+            color: var(--text-secondary);
+            font-weight: 600;
+            transition: all 0.2s;
+        }
+
+        .page-btn:hover:not(:disabled) {
+            border-color: var(--primary);
+            color: var(--primary);
+        }
+
+        .page-btn.active {
+            background-color: var(--primary);
+            color: #fff;
+            border-color: var(--primary);
+        }
+
+        .page-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        /* Loading Skeleton */
+        .skeleton {
+            background: #eee;
+            background: linear-gradient(110deg, #ececec 8%, #f5f5f5 18%, #ececec 33%);
+            border-radius: 5px;
+            background-size: 200% 100%;
+            animation: 1.5s shine linear infinite;
+        }
+
+        @keyframes shine {
+            to {
+                background-position-x: -200%;
+            }
+        }
+
+        .skeleton-card {
+            height: 280px;
+            border-radius: 12px;
+            background: #fff;
+            border: 1px solid var(--border-color);
+        }
+
+        /* ====== MODAL STYLES ====== */
+        .modal-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.55);
+            backdrop-filter: blur(4px);
+            -webkit-backdrop-filter: blur(4px);
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity .25s ease;
+        }
+
+        .modal-overlay.open {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .modal-content {
+            background: #fff;
+            border-radius: 16px;
+            width: 96%;
+            max-width: 680px;
+            max-height: 90vh;
+            overflow-y: auto;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, .25);
+            transform: translateY(30px) scale(0.97);
+            transition: transform .3s ease;
+            position: relative;
+        }
+
+        .modal-overlay.open .modal-content {
+            transform: translateY(0) scale(1);
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            border: none;
+            background: rgba(0, 0, 0, .06);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.1rem;
+            color: #555;
+            transition: background .2s;
+            z-index: 2;
+        }
+
+        .modal-close:hover {
+            background: rgba(0, 0, 0, .12);
+        }
+
+        .modal-hero {
+            display: flex;
+            align-items: center;
+            gap: 1.25rem;
+            padding: 2rem 2rem 1.25rem;
+        }
+
+        .modal-avatar {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 3px solid #fff;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, .12);
+            flex-shrink: 0;
+            background: #f0f0f0 url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" fill="%23ccc" viewBox="0 0 24 24"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>') center/60% no-repeat;
+        }
+
+        .modal-hero-info h2 {
+            margin: 0;
+            font-size: 1.5rem;
+            color: var(--text-main);
+        }
+
+        .modal-hero-info .office-label {
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+            margin-top: 0.15rem;
+        }
+
+        .modal-hero-info .membership-badge {
+            display: inline-block;
+            background: #e8f0fe;
+            color: #1a56db;
+            padding: 0.2rem 0.6rem;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            margin-top: 0.5rem;
+        }
+
+        .modal-section {
+            padding: 0 2rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .modal-section-title {
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
+            color: #888;
+            font-weight: 700;
+            margin-bottom: 0.6rem;
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+        }
+
+        .modal-section-title i {
+            font-size: 0.8rem;
+        }
+
+        .modal-detail-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 0.6rem;
+        }
+
+        .modal-detail-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 0.5rem;
+            font-size: 0.875rem;
+            color: var(--text-secondary);
+        }
+
+        .modal-detail-item i {
+            color: var(--primary);
+            margin-top: 2px;
+            width: 16px;
+            flex-shrink: 0;
+            text-align: center;
+        }
+
+        .modal-detail-item a {
+            color: var(--text-secondary);
+            text-decoration: none;
+        }
+
+        .modal-detail-item a:hover {
+            color: var(--primary);
+            text-decoration: underline;
+        }
+
+        .modal-detail-item.full {
+            grid-column: 1 / -1;
+        }
+
+        .modal-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.4rem;
+        }
+
+        .modal-tag {
+            background: #f3f4f6;
+            color: #555;
+            padding: 0.25rem 0.65rem;
+            border-radius: 99px;
+            font-size: 0.78rem;
+            font-weight: 500;
+        }
+
+        .modal-listings-placeholder {
+            background: #f8f9fb;
+            border: 2px dashed var(--border-color);
+            border-radius: 10px;
+            padding: 2rem;
+            text-align: center;
+            color: #999;
+            font-size: 0.9rem;
+        }
+
+        .modal-listings-placeholder i {
+            font-size: 1.5rem;
+            display: block;
+            margin-bottom: 0.5rem;
+            color: #ccc;
+        }
+
+        .modal-actions {
+            padding: 1.25rem 2rem;
+            border-top: 1px solid var(--border-color);
+            display: flex;
+            gap: 0.75rem;
+        }
+
+        .modal-actions .btn {
+            flex: 1;
+            text-align: center;
+        }
+
+        .btn-outline {
+            background: transparent;
+            border: 2px solid var(--primary);
+            color: var(--primary);
+            padding: 0.55rem 1rem;
+            border-radius: 6px;
+            font-size: 0.875rem;
+            font-weight: 600;
+            text-decoration: none;
+            cursor: pointer;
+            transition: all .2s;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .btn-outline:hover {
+            background: var(--primary);
+            color: #fff;
+        }
+
+        /* Modal loading spinner */
+        .modal-spinner {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 4rem 2rem;
+            gap: 1rem;
+        }
+
+        .modal-spinner::before {
+            content: '';
+            width: 36px;
+            height: 36px;
+            border: 3px solid #e5e5ea;
+            border-top-color: var(--primary);
+            border-radius: 50%;
+            animation: spin .7s linear infinite;
+        }
+
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        @media (max-width: 600px) {
+            .modal-hero {
+                flex-direction: column;
+                text-align: center;
+                padding: 1.5rem 1.25rem 1rem;
+            }
+
+            .modal-section {
+                padding: 0 1.25rem;
+            }
+
+            .modal-detail-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .modal-actions {
+                padding: 1rem 1.25rem;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <header>
+        <div class="brand">
+            <a href="#">
+                <img src="https://res.cloudinary.com/micronetonline/image/upload/q_auto,f_auto,c_limit,w_750,h_200/v1769792542/tenants/6c24b0da-8a6e-4f2b-8547-26a8c1dc4581/5dbb052cc2524586a22d920b56dc4103/Affiliate-Spotlight-6-3.png"
+                    alt="Bonita Springs-Estero Realtors">
+            </a>
+        </div>
+        <div>
+            <!-- Additional nav links could go here -->
+        </div>
+    </header>
+
+    <div class="container">
+
+        <div class="controls">
+            <h1>Find a Real Estate Professional</h1>
+            <p>Search our directory of trusted agents in Bonita Springs & Estero.</p>
+
+            <div class="search-bar">
+                <div class="search-icon">
+                    <i class="fas fa-search"></i>
+                </div>
+                <input type="text" id="searchInput" placeholder="Search by name, office, or city..." disabled>
+            </div>
+            <div id="statusLine" class="status-line">Connecting to member database...</div>
+        </div>
+
+        <div id="directoryGrid" class="directory-grid">
+            <!-- Skeletons specific to initial load -->
+            <div class="skeleton-card skeleton"></div>
+            <div class="skeleton-card skeleton"></div>
+            <div class="skeleton-card skeleton"></div>
+            <div class="skeleton-card skeleton"></div>
+            <div class="skeleton-card skeleton"></div>
+            <div class="skeleton-card skeleton"></div>
+            <div class="skeleton-card skeleton"></div>
+            <div class="skeleton-card skeleton"></div>
+        </div>
+
+        <div id="pagination" class="pagination"></div>
+
+    </div>
+
+    <!-- Agent Detail Modal -->
+    <div class="modal-overlay" id="agentModal">
+        <div class="modal-content">
+            <button class="modal-close" id="modalClose" aria-label="Close">&times;</button>
+            <div id="modalBody">
+                <div class="modal-spinner">Loading agent details...</div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // ------------------------------------------------------------------------
+        // CONFIGURATION
+        // ------------------------------------------------------------------------
+        const apiKey = 'cR1djHVMkndNjLbwXyhDyOV7dWPJ6TnufYtcdOHc';
+        const BASE_URL = 'https://bonitaspringsesterorealtorsfl.growthzoneapp.com';
+        const CONTACTS_BASE_URL = `${BASE_URL}/api/contacts`;
+        const PAGE_SIZE_FALLBACK = 100;
+        const ITEMS_PER_PAGE = 50; // Per user request
+
+        // DOM Elements
+        const searchInput = document.getElementById('searchInput');
+        const directoryGrid = document.getElementById('directoryGrid');
+        const statusLine = document.getElementById('statusLine');
+        const paginationDiv = document.getElementById('pagination');
+
+        let allContacts = [];
+        let displayedContacts = []; // Filtered list
+        let searchDebounceHandle = null;
+        let currentPage = 1;
+
+        // ------------------------------------------------------------------------
+        // INITIALIZATION
+        // ------------------------------------------------------------------------
+        document.addEventListener('DOMContentLoaded', async () => {
+            try {
+                // Fetch contacts
+                const activeContacts = await fetchAllContactsActiveIndividuals();
+
+                // Deduplicate logic
+                const seenIds = new Set();
+                const uniqueContacts = [];
+                for (const c of activeContacts) {
+                    if (!seenIds.has(c.ContactId)) {
+                        seenIds.add(c.ContactId);
+                        uniqueContacts.push(c);
+                    }
+                }
+
+                // Prioritize & randomize
+                allContacts = prioritizeAndRandomize(uniqueContacts);
+                displayedContacts = allContacts;
+
+                statusLine.textContent = `Showing ${allContacts.length.toLocaleString()} active agents.`;
+                searchInput.disabled = false;
+                searchInput.focus();
+
+                renderPage(1); // Render first 50
+
+                // Setup Search
+                searchInput.addEventListener('input', handleSearch);
+
+            } catch (err) {
+                console.error('Error loading directory:', err);
+                statusLine.textContent = 'Unable to load member directory. Please try again later.';
+                statusLine.style.color = 'red';
+                directoryGrid.innerHTML = '';
+            }
+        });
+
+        // ------------------------------------------------------------------------
+        // API FETCHING  (optimised: $top=5000 bulk loads + membership-based realtor filtering)
+        // ------------------------------------------------------------------------
+
+        // REALTOR® membership type IDs from /api/memberships/types
+        const REALTOR_TYPE_IDS = [
+            10122,  // Primary REALTOR®
+            10138,  // Designated REALTOR®
+            10139,  // Secondary REALTOR®
+            10140,  // Secondary Designated REALTOR®
+            10165,  // REALTOR® - Out of State
+            34117   // Secondary Designated Realtor-Out of State
+        ];
+
+        /**
+         * Fetch active REALTOR® ContactIds from the memberships endpoint.
+         * Returns a Set of ContactIds that hold an active REALTOR® membership.
+         */
+        async function fetchRealtorContactIds() {
+            const ids = new Set();
+            const MEMBERSHIPS_URL = `${BASE_URL}/api/memberships/all`;
+
+            // Fetch each realtor membership type
+            const promises = REALTOR_TYPE_IDS.map(async (typeId) => {
+                let skip = 0;
+                while (true) {
+                    const url = `${MEMBERSHIPS_URL}?$skip=${skip}&$top=2000`;
+                    const res = await fetch(url, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'Authorization': 'ApiKey ' + apiKey
+                        },
+                        body: JSON.stringify({ MembershipTypeId: typeId })
+                    });
+                    if (!res.ok) break;
+                    const data = await res.json();
+                    const results = data.Results || [];
+                    if (results.length === 0) break;
+
+                    results.forEach(m => {
+                        if (m.Status === 'Active') ids.add(m.ContactId);
+                    });
+
+                    skip += results.length;
+                    if (skip >= (data.TotalRecordAvailable || 0)) break;
+                }
+            });
+
+            await Promise.all(promises);
+            return ids;
+        }
+
+        /**
+         * Fetch ALL contacts using $top=5000 for speed, then cross-reference
+         * against the REALTOR® membership set.
+         */
+        async function fetchAllContactsActiveIndividuals() {
+            // Step 1 — Fetch realtor membership ContactIds in parallel with contacts
+            statusLine.textContent = 'Loading membership data...';
+            const [realtorIds] = await Promise.all([fetchRealtorContactIds()]);
+            statusLine.textContent = `Found ${realtorIds.size.toLocaleString()} active REALTOR® memberships. Loading contacts...`;
+
+            // Step 2 — Bulk-load all contacts (3 requests for ~10800 records)
+            let all = [];
+            let skip = 0;
+            const PAGE = 5000;
+            let totalAvailable = null;
+
+            while (true) {
+                const url = `${CONTACTS_BASE_URL}?$skip=${skip}&$top=${PAGE}`;
+                try {
+                    const res = await fetch(url, {
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'Authorization': 'ApiKey ' + apiKey
+                        }
+                    });
+                    if (!res.ok) throw new Error(`API ${res.status}`);
+
+                    const data = await res.json();
+                    const results = data.Results || [];
+
+                    if (totalAvailable === null) totalAvailable = data.TotalRecordAvailable || 0;
+                    if (results.length === 0) break;
+
+                    all = all.concat(results);
+                    skip += results.length;
+
+                    statusLine.textContent =
+                        `Loading... ${all.length.toLocaleString()} of ${totalAvailable.toLocaleString()} contacts fetched.`;
+
+                    if (skip >= totalAvailable) break;
+                } catch (e) {
+                    console.error('Fetch error at skip=' + skip, e);
+                    break;
+                }
+            }
+
+            // Step 3 — Filter: Active + Individual + Name + is a REALTOR®
+            return all.filter(c =>
+                c.Status === 'Active' &&
+                c.SystemContactTypeId === 1 &&
+                c.Name &&
+                realtorIds.has(c.ContactId)
+            );
+        }
+
+        // ------------------------------------------------------------------------
+        // PRIORITIZATION & RANDOMIZATION
+        // ------------------------------------------------------------------------
+        function prioritizeAndRandomize(contacts) {
+            // Scoring: Photo (50pts) + Phone (10pts) + Email (10pts)
+            // Tie-breaker: Random
+            const scored = contacts.map(c => {
+                let score = 0;
+                if (c.ImageUrl) score += 50;
+                if (c.Phone) score += 10;
+                if (c.EmailAddress) score += 10;
+                // Awards logic could go here if available in list view
+                return { ...c, _score: score, _random: Math.random() };
+            });
+
+            // Sort by Score DESC, then Random
+            return scored.sort((a, b) => {
+                if (b._score !== a._score) {
+                    return b._score - a._score; // Higher score first
+                }
+                return a._random - b._random; // Randomize within tier
+            });
+        }
+
+
+        // ------------------------------------------------------------------------
+        // SEARCH LOGIC
+        // ------------------------------------------------------------------------
+        function handleSearch() {
+            const term = searchInput.value.trim().toLowerCase();
+
+            clearTimeout(searchDebounceHandle);
+            searchDebounceHandle = setTimeout(() => {
+                if (!term) {
+                    displayedContacts = allContacts; // Reset to original prioritization order
+                } else {
+                    displayedContacts = allContacts.filter(c => {
+                        // Search in Name, City, and PrimaryContact (Office Name)
+                        const nameMatch = c.Name && c.Name.toLowerCase().includes(term);
+                        const cityMatch = c.City && c.City.toLowerCase().includes(term);
+                        const companyMatch = (c.PrimaryContact || "").toLowerCase().includes(term);
+                        return nameMatch || cityMatch || companyMatch;
+                    });
+                }
+
+                currentPage = 1;
+                renderPage(1);
+
+                if (term) {
+                    statusLine.textContent = `Found ${displayedContacts.length} matches for "${term}"`;
+                } else {
+                    statusLine.textContent = `Showing ${allContacts.length.toLocaleString()} active agents.`;
+                }
+            }, 300);
+        }
+
+        // ------------------------------------------------------------------------
+        // RENDERING & PAGINATION
+        // ------------------------------------------------------------------------
+        function renderPage(page) {
+            const start = (page - 1) * ITEMS_PER_PAGE;
+            const end = start + ITEMS_PER_PAGE;
+            const slice = displayedContacts.slice(start, end);
+
+            renderGrid(slice);
+            renderPagination(page, Math.ceil(displayedContacts.length / ITEMS_PER_PAGE));
+        }
+
+        function renderPagination(current, total) {
+            paginationDiv.innerHTML = '';
+            if (total <= 1) return;
+
+            // Previous
+            const prevBtn = document.createElement('button');
+            prevBtn.className = 'page-btn';
+            prevBtn.innerHTML = '<i class="fas fa-chevron-left"></i>';
+            prevBtn.disabled = current === 1;
+            prevBtn.onclick = () => { currentPage--; renderPage(currentPage); window.scrollTo(0, 0); };
+            paginationDiv.appendChild(prevBtn);
+
+            // Page Numbers logic (simplified: show current, first, last, neighbors)
+            let startPage = Math.max(1, current - 2);
+            let endPage = Math.min(total, current + 2);
+
+            if (startPage > 1) {
+                const firstBtn = createPageBtn(1, current);
+                paginationDiv.appendChild(firstBtn);
+                if (startPage > 2) {
+                    const ellipsis = document.createElement('span');
+                    ellipsis.textContent = '...';
+                    ellipsis.style.padding = '0.5rem';
+                    paginationDiv.appendChild(ellipsis);
+                }
+            }
+
+            for (let i = startPage; i <= endPage; i++) {
+                paginationDiv.appendChild(createPageBtn(i, current));
+            }
+
+            if (endPage < total) {
+                if (endPage < total - 1) {
+                    const ellipsis = document.createElement('span');
+                    ellipsis.textContent = '...';
+                    ellipsis.style.padding = '0.5rem';
+                    paginationDiv.appendChild(ellipsis);
+                }
+                const lastBtn = createPageBtn(total, current);
+                paginationDiv.appendChild(lastBtn);
+            }
+
+            // Next
+            const nextBtn = document.createElement('button');
+            nextBtn.className = 'page-btn';
+            nextBtn.innerHTML = '<i class="fas fa-chevron-right"></i>';
+            nextBtn.disabled = current === total;
+            nextBtn.onclick = () => { currentPage++; renderPage(currentPage); window.scrollTo(0, 0); };
+            paginationDiv.appendChild(nextBtn);
+        }
+
+        function createPageBtn(i, current) {
+            const btn = document.createElement('button');
+            btn.className = `page-btn ${i === current ? 'active' : ''}`;
+            btn.textContent = i;
+            btn.onclick = () => { currentPage = i; renderPage(i); window.scrollTo(0, 0); };
+            return btn;
+        }
+
+        function renderGrid(contacts) {
+            directoryGrid.innerHTML = '';
+
+            if (contacts.length === 0) {
+                directoryGrid.innerHTML = '<div style="grid-column: 1/-1; text-align: center; color: #777; padding: 2rem;">No agents found matching your search.</div>';
+                return;
+            }
+
+            const fragment = document.createDocumentFragment();
+
+            contacts.forEach((contact, idx) => {
+                const card = document.createElement('div');
+                card.className = 'agent-card';
+                card.style.animationDelay = `${idx * 40}ms`;
+
+                const companyName = contact.PrimaryContact || contact.CompanyName || "Local Real Estate Office";
+                const cityState = contact.City ? `${contact.City}, ${contact.State || 'FL'}` : 'Southwest Florida';
+
+                const phone = contact.Phone || "";
+                const email = contact.EmailAddress || "";
+                const photoUrl = contact.ImageUrl;
+
+                let avatarHtml;
+                if (photoUrl) {
+                    avatarHtml = `<div class="avatar"><img src="${photoUrl}" alt="${contact.Name}"></div>`;
+                } else {
+                    avatarHtml = `<div class="avatar"></div>`;
+                }
+
+                card.innerHTML = `
+                <div class="card-header">
+                    ${avatarHtml}
+                    <div class="info">
+                        <h3 class="agent-name">${contact.FirstName || ''} ${contact.LastName || contact.Name}</h3>
+                        <div class="agent-office" title="${companyName}">${companyName}</div>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div class="detail-row">
+                        <i class="fas fa-map-marker-alt"></i>
+                        <span>${cityState}</span>
+                    </div>
+                    ${phone ? `
+                    <div class="detail-row">
+                        <i class="fas fa-phone"></i>
+                        <a href="tel:${phone}" class="contact-link">${phone}</a>
+                    </div>` : ''}
+                    ${email ? `
+                    <div class="detail-row" title="${email}">
+                        <i class="fas fa-envelope"></i>
+                        <a href="mailto:${email}" class="contact-link">${email}</a>
+                    </div>` : ''}
+                </div>
+                <div class="card-actions">
+                    <button class="btn btn-primary" onclick="openAgentModal(${contact.ContactId})">
+                        <i class="fas fa-user" style="margin-right:0.4rem"></i> More Details
+                    </button>
+                </div>
+            `;
+                fragment.appendChild(card);
+            });
+
+            directoryGrid.appendChild(fragment);
+        }
+
+        function constructRealtorLink(contact) {
+            const baseSearch = "https://www.realtor.com/realestateagents/";
+
+            if (!contact.FirstName || !contact.LastName) {
+                const parts = (contact.Name || "").split(' ');
+                if (parts.length >= 2) {
+                    const fname = parts[0].toLowerCase().replace(/[^a-z0-9]/g, '');
+                    const lname = parts[parts.length - 1].toLowerCase().replace(/[^a-z0-9]/g, '');
+                    const city = (contact.City || "estero").toLowerCase().replace(/[^a-z0-9]/g, '');
+                    const state = (contact.State || "fl").toLowerCase();
+                    return `${baseSearch}${fname}-${lname}_${city}_${state}`;
+                }
+                return "https://www.realtor.com/realestateagents/";
+            }
+
+            const fname = contact.FirstName.toLowerCase().replace(/[^a-z0-9]/g, '');
+            const lname = contact.LastName.toLowerCase().replace(/[^a-z0-9]/g, '');
+            const city = (contact.City || "estero").toLowerCase().replace(/[^a-z0-9]/g, '');
+            const state = (contact.State || "fl").toLowerCase();
+
+            return `${baseSearch}${fname}-${lname}_${city}_${state}`;
+        }
+
+
+        // ----------------------------------------------------------------
+        // MODAL SYSTEM
+        // ----------------------------------------------------------------
+        const agentModal = document.getElementById('agentModal');
+        const modalBody = document.getElementById('modalBody');
+        const modalCloseBtn = document.getElementById('modalClose');
+
+        // Cache for detail data so we don't refetch
+        const detailCache = {};
+
+        function closeAgentModal() {
+            agentModal.classList.remove('open');
+            document.body.style.overflow = '';
+        }
+
+        modalCloseBtn.addEventListener('click', closeAgentModal);
+        agentModal.addEventListener('click', e => {
+            if (e.target === agentModal) closeAgentModal();
+        });
+        document.addEventListener('keydown', e => {
+            if (e.key === 'Escape') closeAgentModal();
+        });
+
+        async function openAgentModal(contactId) {
+            // Open immediately with spinner
+            agentModal.classList.add('open');
+            document.body.style.overflow = 'hidden';
+            modalBody.innerHTML = '<div class="modal-spinner">Loading agent details...</div>';
+
+            // Find the basic contact data we already have
+            const basic = allContacts.find(c => c.ContactId === contactId) || {};
+
+            try {
+                let detail;
+                if (detailCache[contactId]) {
+                    detail = detailCache[contactId];
+                } else {
+                    const res = await fetch(`${BASE_URL}/api/contacts/OrgGeneral/${contactId}`, {
+                        headers: { 'Authorization': 'ApiKey ' + apiKey }
+                    });
+                    if (!res.ok) throw new Error(`HTTP ${res.status}`);
+                    detail = await res.json();
+                    detailCache[contactId] = detail;
+                }
+                renderAgentModal(basic, detail);
+            } catch (err) {
+                console.error('Detail fetch error', err);
+                // Fallback: render basic data only
+                renderAgentModal(basic, null);
+            }
+        }
+
+        function renderAgentModal(basic, detail) {
+            const name = basic.FirstName
+                ? `${basic.FirstName} ${basic.LastName || ''}`
+                : (basic.Name || detail?.ContactDisplayName || 'Agent');
+            const officeName = basic.PrimaryContact || basic.CompanyName || 'Local Real Estate Office';
+            const photoUrl = basic.ImageUrl || '';
+            const realtorLink = constructRealtorLink(basic);
+
+            // === Extract detail data ===
+            const contactInfos = detail?.ContactInfos || [];
+            const phones = contactInfos.filter(ci => ci.Type === 2);
+            const emails = contactInfos.filter(ci => ci.Type === 1);
+            const addresses = contactInfos.filter(ci => ci.Type === 3);
+            const webAddresses = contactInfos.filter(ci => ci.Type === 4);
+
+            const experiences = detail?.ContactExperiences || [];
+            const memberships = (detail?.Memberships || []).filter(m => m.MembershipStatusTypeId === 2);
+            const groups = (detail?.Groups || []).filter(g => g.IsPublicViewable !== false);
+            const categories = detail?.Categories || [];
+            const title = detail?.Title || '';
+            const certifications = detail?.Certifications || null;
+
+            // Build contact info section
+            let contactHtml = '';
+            phones.forEach(p => {
+                contactHtml += `<div class="modal-detail-item"><i class="fas fa-phone"></i><span>${p.TypeName}: <a href="tel:${p.Value}">${p.Value}</a></span></div>`;
+            });
+            emails.forEach(e => {
+                contactHtml += `<div class="modal-detail-item"><i class="fas fa-envelope"></i><span><a href="mailto:${e.Value}">${e.Value}</a></span></div>`;
+            });
+            addresses.forEach(a => {
+                contactHtml += `<div class="modal-detail-item full"><i class="fas fa-map-marker-alt"></i><span>${a.TypeName}: ${a.Value}</span></div>`;
+            });
+            webAddresses.forEach(w => {
+                const url = w.Value.startsWith('http') ? w.Value : 'https://' + w.Value;
+                contactHtml += `<div class="modal-detail-item full"><i class="fas fa-globe"></i><span><a href="${url}" target="_blank">${w.Value}</a></span></div>`;
+            });
+
+            // Fallback: use basic data if detail endpoint didn't give contact info
+            if (!contactHtml && (basic.Phone || basic.EmailAddress)) {
+                if (basic.Phone) contactHtml += `<div class="modal-detail-item"><i class="fas fa-phone"></i><span><a href="tel:${basic.Phone}">${basic.Phone}</a></span></div>`;
+                if (basic.EmailAddress) contactHtml += `<div class="modal-detail-item"><i class="fas fa-envelope"></i><span><a href="mailto:${basic.EmailAddress}">${basic.EmailAddress}</a></span></div>`;
+            }
+
+            // Build experience / license section
+            let experienceHtml = '';
+            experiences.forEach(exp => {
+                const parts = [];
+                if (exp.RoleOrPosition) parts.push(`<strong>${exp.RoleOrPosition}</strong>`);
+                if (exp.EmployerSchoolOrg) parts.push(`at ${exp.EmployerSchoolOrg}`);
+                if (exp.LicenseType) parts.push(`License: ${exp.LicenseType}`);
+                if (exp.StartDate) {
+                    const yr = new Date(exp.StartDate).getFullYear();
+                    parts.push(`Since ${yr}`);
+                }
+                if (parts.length) {
+                    experienceHtml += `<div class="modal-detail-item full"><i class="fas fa-id-badge"></i><span>${parts.join(' · ')}</span></div>`;
+                }
+            });
+
+            // Build membership badges
+            let membershipHtml = '';
+            memberships.forEach(m => {
+                membershipHtml += `<span class="modal-tag">${m.Name}${m.SummaryDescription ? ' · ' + m.SummaryDescription : ''}</span>`;
+            });
+
+            // Build group / committee tags
+            let groupsHtml = '';
+            // Filter to meaningful groups (skip internal/admin)
+            const meaningfulGroups = groups.filter(g => {
+                const n = (g.Name || '').toLowerCase();
+                return !n.includes('automation') && !n.includes('invoice') && !n.includes('audit')
+                    && !n.includes('license expir') && !n.includes('supra users');
+            });
+            meaningfulGroups.forEach(g => {
+                groupsHtml += `<span class="modal-tag">${g.Name}</span>`;
+            });
+
+            // Assemble modal
+            modalBody.innerHTML = `
+                <div class="modal-hero">
+                    ${photoUrl
+                    ? `<img class="modal-avatar" src="${photoUrl}" alt="${name}">`
+                    : `<div class="modal-avatar"></div>`}
+                    <div class="modal-hero-info">
+                        <h2>${name}</h2>
+                        <div class="office-label">${officeName}${title ? ' · ' + title : ''}</div>
+                        ${memberships.length ? `<div class="membership-badge">${memberships[0].Name}</div>` : ''}
+                    </div>
+                </div>
+
+                ${contactHtml ? `
+                <div class="modal-section">
+                    <div class="modal-section-title"><i class="fas fa-address-book"></i> Contact Information</div>
+                    <div class="modal-detail-grid">${contactHtml}</div>
+                </div>` : ''}
+
+                ${experienceHtml ? `
+                <div class="modal-section">
+                    <div class="modal-section-title"><i class="fas fa-briefcase"></i> Experience & Licensing</div>
+                    <div class="modal-detail-grid">${experienceHtml}</div>
+                </div>` : ''}
+
+                ${membershipHtml ? `
+                <div class="modal-section">
+                    <div class="modal-section-title"><i class="fas fa-certificate"></i> Memberships & Designations</div>
+                    <div class="modal-tags">${membershipHtml}</div>
+                </div>` : ''}
+
+                ${groupsHtml ? `
+                <div class="modal-section">
+                    <div class="modal-section-title"><i class="fas fa-users"></i> Committees & Groups</div>
+                    <div class="modal-tags">${groupsHtml}</div>
+                </div>` : ''}
+
+                <div class="modal-section">
+                    <div class="modal-section-title"><i class="fas fa-home"></i> Active Listings</div>
+                    <div class="modal-listings-placeholder">
+                        <i class="fas fa-building"></i>
+                        Listings coming soon — check back for this agent's active properties.
+                    </div>
+                </div>
+
+                <div class="modal-actions">
+                    <a href="${realtorLink}" target="_blank" class="btn btn-primary">
+                        <i class="fas fa-external-link-alt" style="margin-right:0.4rem"></i> View on Realtor.com
+                    </a>
+                    <button class="btn-outline" onclick="closeAgentModal()">Close</button>
+                </div>
+            `;
+        }
+
+
+    </script>
+
+</body>
+
+</html>
