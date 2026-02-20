@@ -1,0 +1,597 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>2026 Event Photo Wall - Bonita Springs-Estero Realtors</title>
+
+    <!-- External Resources -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"
+        integrity="sha512-dyZ88n1Kis7J1gY9+jnuv6QylsHY2Rz+5PjqF3tU5hAnk3q1uI5wVzW+Z3G6CVJz4N97Z8vaUeQb+J6aQ1mX0g=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Oswald:wght@400;700&display=swap"
+        rel="stylesheet">
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+
+    <style>
+        /* Theme Variables - Swiss Modernism */
+        :root {
+            --ber-teal: #008080;
+            /* Vibrant Accent */
+            --ber-gold: #ffcb52;
+            /* Primary Accent (from Homepage) */
+            --ber-dark: #111111;
+            /* Deep Dark (from Homepage) */
+            --ber-light: #ffffff;
+            /* Stark White */
+            --ber-gray: #f7f7f7;
+            /* Subtle off-white for contrast */
+            --text-main: #111111;
+            --text-muted: #555555;
+        }
+
+        body {
+            font-family: 'Inter', system-ui, -apple-system, sans-serif;
+            background-color: var(--ber-gray);
+            color: var(--text-main);
+            padding-bottom: 80px;
+            margin: 0;
+            overflow-x: hidden;
+        }
+
+        /* Core Utility Classes */
+        .uppercase {
+            text-transform: uppercase;
+        }
+
+        .tracking-widest {
+            letter-spacing: 0.12em;
+        }
+
+        .tracking-wide {
+            letter-spacing: 0.08em;
+        }
+
+        .font-oswald {
+            font-family: 'Oswald', sans-serif;
+        }
+
+        .font-inter {
+            font-family: 'Inter', sans-serif;
+        }
+
+        /* Header Section - Swiss Style Block */
+        .photo-wall-header {
+            background-color: var(--ber-teal);
+            color: var(--ber-light);
+            padding: 80px 40px;
+            margin: 40px auto;
+            max-width: 1400px;
+            border-radius: 24px;
+            position: relative;
+            box-shadow: 0 18px 40px rgba(0, 0, 0, 0.12);
+            overflow: hidden;
+        }
+
+        @media (max-width: 768px) {
+            .photo-wall-header {
+                margin: 20px;
+                padding: 50px 20px;
+                border-radius: 16px;
+            }
+        }
+
+        /* Distinct Accent Bar (from Homepage2025.html) */
+        .photo-wall-header::before {
+            content: "";
+            position: absolute;
+            top: 40px;
+            bottom: 40px;
+            left: 0;
+            width: 8px;
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 0 4px 4px 0;
+        }
+
+        .photo-wall-header h1 {
+            font-family: 'Oswald', sans-serif;
+            font-size: clamp(2.5rem, 5vw, 4.5rem);
+            font-weight: 700;
+            text-transform: uppercase;
+            margin: 0 0 16px;
+            letter-spacing: 0.08em;
+            line-height: 1.1;
+        }
+
+        /* Small rule under header */
+        .header-rule {
+            width: 80px;
+            height: 4px;
+            border: 0;
+            background: var(--ber-gold);
+            margin: 0 0 24px;
+        }
+
+        .photo-wall-header p {
+            font-size: clamp(1.1rem, 2vw, 1.4rem);
+            max-width: 700px;
+            line-height: 1.6;
+            opacity: 0.95;
+            font-weight: 400;
+            margin: 0;
+        }
+
+        /* Event Navigation (Tabs) */
+        .event-nav-container {
+            max-width: 1400px;
+            margin: 0 auto 40px;
+            padding: 0 20px;
+        }
+
+        .event-tabs {
+            display: flex;
+            flex-wrap: nowrap;
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+            gap: 16px;
+            padding-bottom: 10px;
+            /* Scrollbar clearance */
+            scrollbar-width: none;
+            /* Firefox */
+        }
+
+        .event-tabs::-webkit-scrollbar {
+            display: none;
+            /* Chrome/Safari */
+        }
+
+        .tab-btn {
+            background: var(--ber-light);
+            color: var(--text-muted);
+            border: 2px solid #e0e0e0;
+            padding: 16px 32px;
+            border-radius: 999px;
+            /* Pill shape */
+            font-family: 'Inter', sans-serif;
+            font-weight: 600;
+            font-size: 1.1rem;
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+            cursor: pointer;
+            white-space: nowrap;
+            transition: all 0.2s ease;
+        }
+
+        .tab-btn:hover {
+            border-color: var(--ber-dark);
+            color: var(--ber-dark);
+        }
+
+        .tab-btn.active {
+            background: var(--ber-dark);
+            color: var(--ber-gold);
+            border-color: var(--ber-dark);
+        }
+
+        /* Event Section Container */
+        .event-section {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 20px;
+            display: none;
+            /* Hidden by default, toggled via JS */
+            animation: fadeIn 0.4s ease forwards;
+        }
+
+        .event-section.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Event Meta Information */
+        .event-meta {
+            background: var(--ber-light);
+            padding: 40px;
+            border-radius: 16px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.04);
+            margin-bottom: 40px;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            align-items: center;
+            border-left: 8px solid var(--ber-gold);
+        }
+
+        @media (max-width: 768px) {
+            .event-meta {
+                padding: 24px;
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 20px;
+            }
+        }
+
+        .event-info h2 {
+            font-family: 'Oswald', sans-serif;
+            color: var(--ber-dark);
+            font-size: clamp(2rem, 4vw, 3rem);
+            margin: 0 0 12px;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            line-height: 1.2;
+        }
+
+        .event-details {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 24px;
+            color: var(--text-muted);
+            font-weight: 600;
+            font-size: 1.15rem;
+        }
+
+        .event-details span {
+            display: flex;
+            align-items: center;
+        }
+
+        .event-details i {
+            color: var(--ber-teal);
+            margin-right: 10px;
+            font-size: 1.3rem;
+        }
+
+        /* Masonry Grid */
+        .masonry-grid {
+            column-count: 4;
+            column-gap: 24px;
+        }
+
+        @media (max-width: 1200px) {
+            .masonry-grid {
+                column-count: 3;
+            }
+        }
+
+        @media (max-width: 900px) {
+            .masonry-grid {
+                column-count: 2;
+            }
+        }
+
+        @media (max-width: 600px) {
+            .masonry-grid {
+                column-count: 1;
+            }
+        }
+
+        .masonry-item {
+            break-inside: avoid;
+            margin-bottom: 24px;
+            border-radius: 8px;
+            /* Sharper corners for modern look */
+            overflow: hidden;
+            background: var(--ber-light);
+            position: relative;
+            cursor: pointer;
+            /* Remove prominent box shadow for flatter look, add subtle border */
+            border: 1px solid rgba(0, 0, 0, 0.05);
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .masonry-item:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 12px 24px rgba(0, 0, 0, 0.1);
+        }
+
+        .masonry-item img {
+            width: 100%;
+            height: auto;
+            display: block;
+            transition: transform 0.4s ease;
+        }
+
+        .masonry-item:hover img {
+            transform: scale(1.02);
+        }
+
+        /* Overlay on hover */
+        .masonry-item::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(17, 17, 17, 0.4);
+            /* Darker overlay */
+            opacity: 0;
+            transition: opacity 0.2s ease;
+            pointer-events: none;
+        }
+
+        .masonry-item:hover::after {
+            opacity: 1;
+        }
+
+        .masonry-item .zoom-icon {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) scale(0.5);
+            color: var(--ber-light);
+            font-size: 40px;
+            opacity: 0;
+            transition: all 0.2s ease;
+            z-index: 2;
+        }
+
+        .masonry-item:hover .zoom-icon {
+            opacity: 1;
+            transform: translate(-50%, -50%) scale(1);
+        }
+
+        /* Modal for Image Viewing (Unchanged functionality, updated aesthetics) */
+        .modal-dialog.modal-xl {
+            width: 95%;
+            max-width: 1400px;
+            margin: 20px auto;
+        }
+
+        .modal-content {
+            background: transparent;
+            border: none;
+            box-shadow: none;
+        }
+
+        .modal-backdrop.in {
+            opacity: 0.9;
+            background-color: var(--ber-dark);
+        }
+
+        .modal-body {
+            padding: 0;
+            text-align: center;
+            position: relative;
+        }
+
+        #modalImage {
+            max-width: 100%;
+            max-height: 90vh;
+            border-radius: 4px;
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
+        }
+
+        .modal-close-btn {
+            position: absolute;
+            top: -40px;
+            right: 0;
+            color: var(--ber-light);
+            font-size: 36px;
+            cursor: pointer;
+            opacity: 0.7;
+            transition: opacity 0.2s;
+            z-index: 1060;
+        }
+
+        .modal-close-btn:hover {
+            opacity: 1;
+        }
+
+        /* Utility for missing events */
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+            background: var(--ber-light);
+            border-radius: 16px;
+            color: var(--text-muted);
+            font-size: 1.2rem;
+            border: 2px dashed #ddd;
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- Header -->
+    <header class="photo-wall-header">
+        <h1>2026 Event Photo Wall</h1>
+        <hr class="header-rule">
+        <p>Capturing the best moments of Bonita Springs-Estero Realtors throughout the year. Relive the connections,
+            learning, and fun.</p>
+    </header>
+
+    <!-- Event Navigation -->
+    <nav class="event-nav-container">
+        <div class="event-tabs" id="eventTabs">
+            <!-- Tabs generated by JS -->
+        </div>
+    </nav>
+
+    <!-- Main Content Area for Events -->
+    <main id="eventContentArea">
+        <!-- Event sections generated by JS -->
+    </main>
+
+    <!-- Image Modal -->
+    <div class="modal fade" id="imageModal" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog modal-xl modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-body">
+                    <i class="fas fa-times modal-close-btn" data-dismiss="modal"></i>
+                    <img src="" id="modalImage" alt="Event Photo">
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // --- Data Configuration ---
+        // In the future, you can add new events to this array to automatically generate new tabs and grids.
+        const eventsData = [
+            {
+                id: "feb-breakfast",
+                title: "February Membership Breakfast",
+                date: "February 13, 2026",
+                time: "8:30 AM - 10:30 AM (EST)",
+                baseUrl: "https://ber-events-photos.pages.dev/",
+                photos: [
+                    "Wix 7.png", "f & f 9.png", "f & f BER 8.png", "f & f BER-10.jpg",
+                    "f & f BER-11.jpg", "f & f BER-12.jpg", "f & f BER-13.jpg", "f & f BER-14.jpg",
+                    "f & f BER-15.jpg", "f & f BER-16.jpg", "f & f BER-17.jpg", "f & f BER-18.jpg",
+                    "f & f BER-19.jpg", "f & f BER-2.jpg", "f & f BER-20.jpg", "f & f BER-21.jpg",
+                    "f & f BER-22.jpg", "f & f BER-23.jpg", "f & f BER-24.jpg", "f & f BER-25.jpg",
+                    "f & f BER-26.jpg", "f & f BER-27.jpg", "f & f BER-28.jpg", "f & f BER-29.jpg",
+                    "f & f BER-30.jpg", "f & f BER-31.jpg", "f & f BER-32.jpg", "f & f BER-33.jpg",
+                    "f & f BER-34.jpg", "f & f BER-35.jpg", "f & f BER-36.jpg", "f & f BER-37.jpg",
+                    "f & f BER-38.jpg", "f & f BER-39.jpg", "f & f BER-4.jpg", "f & f BER-40.jpg",
+                    "f & f BER-41.jpg", "f & f BER-42.jpg", "f & f BER-43.jpg", "f & f BER-44.jpg",
+                    "f & f BER-45.jpg", "f & f BER-46.jpg", "f & f BER-47.jpg", "f & f BER-48.jpg",
+                    "f & f BER-49.jpg", "f & f BER-50.jpg", "f & f BER-51.jpg", "f & f BER-52.jpg",
+                    "f & f BER-53.jpg", "f & f BER-54.jpg", "f & f BER-55.jpg", "f & f BER-56.jpg",
+                    "f & f BER-57.jpg", "f & f BER-58.jpg", "f & f BER-59.jpg", "f & f BER-60.jpg",
+                    "f & f BER-61.jpg", "f & f BER-62.jpg", "f & f BER-64.jpg", "f & f BER-8.jpg",
+                    "f & f BER-9.jpg", "f &f BER 9.png"
+                ]
+            },
+            {
+                id: "placeholder-event",
+                title: "March Networking Mixer",
+                date: "March 20, 2026",
+                time: "5:00 PM - 7:00 PM (EST)",
+                baseUrl: "", // No URL yet
+                photos: []   // Empty array implies upcoming/no photos yet
+            }
+        ];
+
+        document.addEventListener("DOMContentLoaded", function () {
+            const tabsContainer = document.getElementById('eventTabs');
+            const contentArea = document.getElementById('eventContentArea');
+            const modalImage = document.getElementById('modalImage');
+
+            // --- Initialization ---
+            function init() {
+                eventsData.forEach((event, index) => {
+                    // 1. Create Tab Button
+                    const tabBtn = document.createElement('button');
+                    tabBtn.className = `tab-btn ${index === 0 ? 'active' : ''}`;
+                    tabBtn.dataset.target = event.id;
+                    tabBtn.textContent = event.title;
+
+                    tabBtn.addEventListener('click', () => switchTab(event.id));
+                    tabsContainer.appendChild(tabBtn);
+
+                    // 2. Create Event Section Content
+                    const section = document.createElement('section');
+                    section.className = `event-section ${index === 0 ? 'active' : ''}`;
+                    section.id = event.id;
+
+                    // Build Meta Info HTML
+                    const metaHtml = `
+            <div class="event-meta">
+              <div class="event-info">
+                <h2>${event.title}</h2>
+                <div class="event-details">
+                  <span><i class="far fa-calendar-alt"></i> ${event.date}</span>
+                  <span><i class="far fa-clock"></i> ${event.time}</span>
+                </div>
+              </div>
+            </div>
+          `;
+                    section.innerHTML = metaHtml;
+
+                    // Build Photo Grid
+                    if (event.photos && event.photos.length > 0) {
+                        const gridContainer = document.createElement('div');
+                        gridContainer.className = 'masonry-grid';
+
+                        // Randomize photos display order once
+                        const shuffledPhotos = [...event.photos].sort(() => 0.5 - Math.random());
+
+                        shuffledPhotos.forEach(fileName => {
+                            const imageUrl = event.baseUrl + encodeURIComponent(fileName);
+
+                            const itemDiv = document.createElement('div');
+                            itemDiv.className = 'masonry-item';
+
+                            const icon = document.createElement('i');
+                            icon.className = 'fas fa-search-plus zoom-icon';
+
+                            const img = document.createElement('img');
+                            img.src = imageUrl;
+                            img.alt = `${event.title} Photo`;
+                            img.loading = "lazy";
+
+                            itemDiv.appendChild(img);
+                            itemDiv.appendChild(icon);
+
+                            // Modal Binding
+                            itemDiv.addEventListener('click', function () {
+                                modalImage.src = imageUrl;
+                                $('#imageModal').modal('show');
+                            });
+
+                            gridContainer.appendChild(itemDiv);
+                        });
+                        section.appendChild(gridContainer);
+                    } else {
+                        // Empty State
+                        const emptyDiv = document.createElement('div');
+                        emptyDiv.className = 'empty-state';
+                        emptyDiv.innerHTML = '<i class="far fa-images" style="font-size: 3rem; margin-bottom: 15px; display: block; color: var(--ber-gold);"></i> Photos for this event are coming soon!';
+                        section.appendChild(emptyDiv);
+                    }
+
+                    contentArea.appendChild(section);
+                });
+            }
+
+            // --- Tab Switching Logic ---
+            function switchTab(targetId) {
+                // Update Tabs
+                const allTabs = document.querySelectorAll('.tab-btn');
+                allTabs.forEach(tab => {
+                    if (tab.dataset.target === targetId) {
+                        tab.classList.add('active');
+                    } else {
+                        tab.classList.remove('active');
+                    }
+                });
+
+                // Update Content Sections
+                const allSections = document.querySelectorAll('.event-section');
+                allSections.forEach(section => {
+                    if (section.id === targetId) {
+                        section.classList.add('active');
+                    } else {
+                        section.classList.remove('active');
+                    }
+                });
+            }
+
+            // Run Initialization
+            init();
+        });
+    </script>
+
+</body>
+
+</html>
