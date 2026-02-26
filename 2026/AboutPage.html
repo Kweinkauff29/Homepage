@@ -18,6 +18,10 @@
 <meta property="og:url" content="https://bonitaesterorealtors.com/about/">
 <meta property="og:image" content="https://bonitaesterorealtors.com/wp-content/uploads/2025/09/BER-Logo.png">
 <meta name="twitter:card" content="summary_large_image">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 </head>
 
 
@@ -60,19 +64,25 @@
   itemtype="https://schema.org/Organization">
   <style>
     .ber-about {
-      --ink: var(--wpex-text, #0b1220);
-      --bg: #fff;
-      --muted: var(--wpex-text-2, #5b6577);
-      --line: #e5e7eb;
+      /* Swiss-Minimalist Tokens */
+      --ink: #0B1220;
+      --bg: #FFFFFF;
+      --muted: #475569;
+      --line: rgba(15, 23, 42, 0.10);
       --brand: var(--wpex-hover-main-nav-link-color, #05AAE1);
       --brand-2: #FBAE24;
-      --radius: 18px;
-      --shadow: 0 10px 30px rgba(2, 29, 53, .08);
-      --max: 1100px;
+      --success-bg: rgba(5, 170, 225, 0.05);
+
+      --radius: 16px;
+      --radius-lg: 20px;
+      --shadow: 0 8px 24px rgba(15, 23, 42, 0.03);
+      --shadow-hover: 0 14px 40px rgba(15, 23, 42, 0.08);
+
+      --max: 1120px;
       --pad: clamp(16px, 3vw, 28px);
       background: var(--bg);
       color: var(--ink);
-      font-family: 'Open Sans', system-ui, -apple-system, Segoe UI, Roboto, 'Helvetica Neue', Arial, sans-serif
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
     }
 
     .vc_column_container {
@@ -107,10 +117,10 @@
       display: inline-flex;
       align-items: center;
       gap: .6rem;
-      font: 700 12px/1.1 'Open Sans', sans-serif;
+      font: 700 12px/1.1 'Inter', sans-serif;
       letter-spacing: .08em;
       text-transform: uppercase;
-      color: var(--brand-2)
+      color: var(--brand)
     }
 
     .ber-kicker svg {
@@ -140,11 +150,12 @@
     .ber-btn {
       appearance: none;
       border: none;
-      border-radius: 999px;
+      border-radius: 8px;
       padding: 12px 18px;
-      min-height: 44px;
-      font-weight: 800;
-      letter-spacing: .01em;
+      min-height: 48px;
+      font-weight: 600;
+      font-size: 1rem;
+      letter-spacing: 0;
       cursor: pointer;
       box-shadow: var(--shadow);
       transition: transform .15s ease, box-shadow .2s ease, background .2s ease;
@@ -157,8 +168,9 @@
     }
 
     .ber-btn:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 12px 35px rgba(2, 29, 53, .12)
+      transform: translateY(-1px);
+      box-shadow: var(--shadow-hover);
+      background: var(--brand-2);
     }
 
     .ber-btn:active {
@@ -177,14 +189,16 @@
     }
 
     .ber-btn--ghost {
-      background: transparent;
-      color: var(--brand);
-      border: 2px solid var(--brand);
-      box-shadow: none
+      background: var(--success-bg);
+      color: var(--ink);
+      border: 1px solid var(--line);
+      box-shadow: none;
     }
 
     .ber-btn--ghost:hover {
-      background: rgba(5, 170, 225, .08)
+      background: #E2E8F0;
+      border-color: var(--ink);
+      color: var(--ink);
     }
 
     .ber-stats {
@@ -213,8 +227,8 @@
     }
 
     .ber-stat .num {
-      font: 800 clamp(22px, 3vw, 32px)/1 'Open Sans', sans-serif;
-      color: #0a0f1a
+      font: 700 clamp(22px, 3vw, 32px)/1 'Inter', sans-serif;
+      color: var(--ink)
     }
 
     .ber-stat .label {
@@ -230,9 +244,9 @@
     }
 
     .ber-section h2 {
-      font: 800 clamp(22px, 3.2vw, 30px)/1.1 'Open Sans', sans-serif;
+      font: 700 clamp(22px, 3.2vw, 30px)/1.2 'Inter', sans-serif;
       margin: 0 0 8px;
-      color: var(--brand)
+      color: var(--ink)
     }
 
     .ber-section p.lead {
@@ -266,8 +280,8 @@
 
     .ber-card h3 {
       margin: 0;
-      font: 800 18px/1.25 'Open Sans', sans-serif;
-      color: #0a0f1a
+      font: 600 1.25rem/1.3 'Inter', sans-serif;
+      color: var(--ink)
     }
 
     .ber-card p {
@@ -276,10 +290,10 @@
     }
 
     .ber-icon {
-      width: 36px;
-      height: 36px;
+      width: 48px;
+      height: 48px;
       border-radius: 12px;
-      background: linear-gradient(135deg, var(--brand), var(--brand-2));
+      background: var(--success-bg);
       display: grid;
       place-items: center;
       transition: transform .2s ease
@@ -290,9 +304,9 @@
     }
 
     .ber-icon svg {
-      width: 20px;
-      height: 20px;
-      color: #fff
+      width: 24px;
+      height: 24px;
+      color: var(--brand)
     }
 
     .ber-split {
@@ -313,7 +327,8 @@
 
     .ber-pane h3 {
       margin: 0 0 6px;
-      color: #0a0f1a
+      color: var(--ink);
+      font-weight: 600;
     }
 
     .ber-pane p {
@@ -345,6 +360,7 @@
     .ber-person img {
       aspect-ratio: 1/1;
       object-fit: cover;
+      object-position: top;
       width: 100%;
       display: block;
       transition: transform .3s ease
@@ -749,8 +765,8 @@
 
     .service-wrap {
       display: grid;
-      grid-template-columns: 7fr 5fr;
-      gap: 18px;
+      grid-template-columns: 8fr 4fr;
+      gap: 24px;
       margin-top: 12px
     }
 
@@ -759,15 +775,16 @@
       margin: 0;
       padding: 0;
       display: grid;
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-      gap: 10px 18px
+      grid-template-columns: 1fr;
     }
 
     .area-line {
       display: flex;
-      gap: 8px;
+      justify-content: space-between;
+      padding: 8px 0;
+      border-bottom: 1px solid var(--line);
       flex-wrap: wrap;
-      align-items: center
+      align-items: center;
     }
 
     .area-name {
@@ -1162,48 +1179,91 @@
         <div class="col list">
           <h3>GEO Areas (SWFLAMLS)</h3>
           <ul class="geo-compact" role="list">
-            <li class="area-line"><span class="area-name">Alva</span> – <span class="chip">AL01</span> <span
-                class="chip">AL02</span></li>
-            <li class="area-line"><span class="area-name">Babcock Ranch</span> – <span class="chip">BR01</span></li>
-            <li class="area-line"><span class="area-name">Boca Grande</span> – <span class="chip">BG01</span></li>
-            <li class="area-line"><span class="area-name">Bonita Springs / Beach</span> – <span class="chip">BN01</span>
-              to <span class="chip">BN12</span></li>
-            <li class="area-line"><span class="area-name">Burnt Store</span> – <span class="chip">BS01</span></li>
-            <li class="area-line"><span class="area-name">Buckingham</span> – <span class="chip">BU01</span></li>
-            <li class="area-line"><span class="area-name">Cape Coral</span> – <span class="chip">CC11</span> to <span
-                class="chip">CC45</span></li>
-            <li class="area-line"><span class="area-name">Charlotte County</span> – <span class="chip">CH01</span></li>
-            <li class="area-line"><span class="area-name">Captiva / Upper Captiva</span> – <span
-                class="chip">CI01</span> <span class="chip">CI02</span></li>
-            <li class="area-line"><span class="area-name">Downtown Fort Myers</span> – <span class="chip">DT01</span>
+            <li class="area-line"><span class="area-name">Alva</span>
+              <div class="geo-chips"><span class="chip">AL01</span> <span class="chip">AL02</span></div>
             </li>
-            <li class="area-line"><span class="area-name">Estero / The Brooks</span> – <span class="chip">ES01</span> to
-              <span class="chip">ES05</span>
+            <li class="area-line"><span class="area-name">Babcock Ranch</span>
+              <div class="geo-chips"><span class="chip">BR01</span></div>
             </li>
-            <li class="area-line"><span class="area-name">Fort Myers Beach (Bodwitch to Black Island)</span> – <span
-                class="chip">FB01</span> to <span class="chip">FB07</span></li>
-            <li class="area-line"><span class="area-name">East Fort Myers</span> – <span class="chip">FE01</span> to
-              <span class="chip">FE07</span>
+            <li class="area-line"><span class="area-name">Boca Grande</span>
+              <div class="geo-chips"><span class="chip">BG01</span></div>
             </li>
-            <li class="area-line"><span class="area-name">Fort Myers (General + City Limits)</span> – <span
-                class="chip">FM01</span> to <span class="chip">FM22</span></li>
-            <li class="area-line"><span class="area-name">Gateway</span> – <span class="chip">GA01</span></li>
-            <li class="area-line"><span class="area-name">Glades County</span> – <span class="chip">GC01</span></li>
-            <li class="area-line"><span class="area-name">Hendry County (Central, NE, South)</span> – <span
-                class="chip">HD01</span> to <span class="chip">HD04</span></li>
-            <li class="area-line"><span class="area-name">Lehigh Acres (All Sections)</span> – <span
-                class="chip">LA01</span> to <span class="chip">LA08</span></li>
-            <li class="area-line"><span class="area-name">Marco Island</span> – <span class="chip">MI01</span></li>
-            <li class="area-line"><span class="area-name">Miromar Lakes</span> – <span class="chip">ML01</span></li>
-            <li class="area-line"><span class="area-name">Naples (All Regions)</span> – <span class="chip">NA01</span>
-              to <span class="chip">NA50</span></li>
-            <li class="area-line"><span class="area-name">North Fort Myers</span> – <span class="chip">FN01</span> to
-              <span class="chip">FN10</span>
+            <li class="area-line"><span class="area-name">Bonita Springs / Beach</span>
+              <div class="geo-chips"><span class="chip">BN01</span>
+                to <span class="chip">BN12</span></div>
             </li>
-            <li class="area-line"><span class="area-name">Outer Islands</span> – <span class="chip">OI01</span></li>
-            <li class="area-line"><span class="area-name">Pine Island / Matlacha</span> – <span class="chip">PI01</span>
-              to <span class="chip">PI03</span></li>
-            <li class="area-line"><span class="area-name">Sanibel Island</span> – <span class="chip">SI01</span></li>
+            <li class="area-line"><span class="area-name">Burnt Store</span>
+              <div class="geo-chips"><span class="chip">BS01</span></div>
+            </li>
+            <li class="area-line"><span class="area-name">Buckingham</span>
+              <div class="geo-chips"><span class="chip">BU01</span></div>
+            </li>
+            <li class="area-line"><span class="area-name">Cape Coral</span>
+              <div class="geo-chips"><span class="chip">CC11</span> to <span class="chip">CC45</span></div>
+            </li>
+            <li class="area-line"><span class="area-name">Charlotte County</span>
+              <div class="geo-chips"><span class="chip">CH01</span></div>
+            </li>
+            <li class="area-line"><span class="area-name">Captiva / Upper Captiva</span>
+              <div class="geo-chips"><span class="chip">CI01</span> <span class="chip">CI02</span></div>
+            </li>
+            <li class="area-line"><span class="area-name">Downtown Fort Myers</span>
+              <div class="geo-chips"><span class="chip">DT01</span>
+              </div>
+            </li>
+            <li class="area-line"><span class="area-name">Estero / The Brooks</span>
+              <div class="geo-chips"><span class="chip">ES01</span> to
+                <span class="chip">ES05</span>
+              </div>
+            </li>
+            <li class="area-line"><span class="area-name">Fort Myers Beach (Bodwitch to Black Island)</span>
+              <div class="geo-chips"><span class="chip">FB01</span> to <span class="chip">FB07</span></div>
+            </li>
+            <li class="area-line"><span class="area-name">East Fort Myers</span>
+              <div class="geo-chips"><span class="chip">FE01</span> to
+                <span class="chip">FE07</span>
+              </div>
+            </li>
+            <li class="area-line"><span class="area-name">Fort Myers (General + City Limits)</span>
+              <div class="geo-chips"><span class="chip">FM01</span> to <span class="chip">FM22</span></div>
+            </li>
+            <li class="area-line"><span class="area-name">Gateway</span>
+              <div class="geo-chips"><span class="chip">GA01</span></div>
+            </li>
+            <li class="area-line"><span class="area-name">Glades County</span>
+              <div class="geo-chips"><span class="chip">GC01</span></div>
+            </li>
+            <li class="area-line"><span class="area-name">Hendry County (Central, NE, South)</span>
+              <div class="geo-chips"><span class="chip">HD01</span> to <span class="chip">HD04</span></div>
+            </li>
+            <li class="area-line"><span class="area-name">Lehigh Acres (All Sections)</span>
+              <div class="geo-chips"><span class="chip">LA01</span> to <span class="chip">LA08</span></div>
+            </li>
+            <li class="area-line"><span class="area-name">Marco Island</span>
+              <div class="geo-chips"><span class="chip">MI01</span></div>
+            </li>
+            <li class="area-line"><span class="area-name">Miromar Lakes</span>
+              <div class="geo-chips"><span class="chip">ML01</span></div>
+            </li>
+            <li class="area-line"><span class="area-name">Naples (All Regions)</span>
+              <div class="geo-chips"><span class="chip">NA01</span>
+                to <span class="chip">NA50</span></div>
+            </li>
+            <li class="area-line"><span class="area-name">North Fort Myers</span>
+              <div class="geo-chips"><span class="chip">FN01</span> to
+                <span class="chip">FN10</span>
+              </div>
+            </li>
+            <li class="area-line"><span class="area-name">Outer Islands</span>
+              <div class="geo-chips"><span class="chip">OI01</span></div>
+            </li>
+            <li class="area-line"><span class="area-name">Pine Island / Matlacha</span>
+              <div class="geo-chips"><span class="chip">PI01</span>
+                to <span class="chip">PI03</span></div>
+            </li>
+            <li class="area-line"><span class="area-name">Sanibel Island</span>
+              <div class="geo-chips"><span class="chip">SI01</span></div>
+            </li>
           </ul>
         </div>
         <aside class="col map" aria-label="Coverage map">
@@ -1304,7 +1364,7 @@
       <div class="ber-team">
         <article class="ber-person">
           <img loading="lazy" decoding="async"
-            src="https://bonitaesterorealtors.com/wp-content/uploads/2018/11/meighan.jpg"
+            src="https://bonitaesterorealtors.com/wp-content/uploads/2026/02/Meighan-2026.jpg"
             alt="Headshot of Meighan Harris">
           <div class="meta">
             <div class="name">Meighan Harris</div>
@@ -1325,8 +1385,7 @@
         </article>
         <article class="ber-person">
           <img loading="lazy" decoding="async"
-            src="https://bonitaesterorealtors.com/wp-content/uploads/2022/02/Katie1-scaled-165x244.jpg"
-            alt="Headshot of Katie Malooly">
+            src="https://bonitaesterorealtors.com/wp-content/uploads/2026/02/Katie.png" alt="Headshot of Katie Malooly">
           <div class="meta">
             <div class="name">Katie Malooly</div>
             <div class="role">Director of Development &amp; Events · <a
@@ -1336,23 +1395,33 @@
         </article>
         <article class="ber-person">
           <img loading="lazy" decoding="async"
-            src="https://bonitaesterorealtors.com/wp-content/uploads/2022/02/Jenna-scaled-165x244.jpg"
+            src="https://bonitaesterorealtors.com/wp-content/uploads/2026/02/Jenna-2026.jpg"
             alt="Headshot of Jenna Ripley">
           <div class="meta">
             <div class="name">Jenna Ripley</div>
-            <div class="role">Membership Director &amp; Supra · <a
-                href="mailto:Membership@BERealtors.org">Membership@BERealtors.org</a> · <a
+            <div class="role">Director of Executive Operations · <a
+                href="mailto:operations@berealtors.org">operations@berealtors.org</a> · <a
                 href="tel:+12399926771;ext=1">(239) 992‑6771 ext. 1</a></div>
           </div>
         </article>
         <article class="ber-person">
           <img loading="lazy" decoding="async"
-            src="https://bonitaesterorealtors.com/wp-content/uploads/2025/09/Erica.jpg"
+            src="https://bonitaesterorealtors.com/wp-content/uploads/2026/02/Erica.png"
             alt="Headshot of Erica Bernhardt">
           <div class="meta">
             <div class="name">Erica Bernhardt</div>
             <div class="role">Director of MLS · <a href="mailto:MLS@BERealtors.org">MLS@BERealtors.org</a> · <a
                 href="tel:+12399926771;ext=2">(239) 992‑6771 ext. 2</a></div>
+          </div>
+        </article>
+        <article class="ber-person">
+          <img loading="lazy" decoding="async"
+            src="https://bonitaesterorealtors.com/wp-content/uploads/2026/02/Melodie.png"
+            alt="Headshot of Melodie Sanchez">
+          <div class="meta">
+            <div class="name">Melodie Sanchez</div>
+            <div class="role">Director of Member Services · <a
+                href="mailto:Membership@BERealtors.org">Membership@BERealtors.org</a></div>
           </div>
         </article>
       </div>
@@ -1367,27 +1436,26 @@
         <!-- Left column from your image -->
         <article class="ber-committee">
           <h3>Professional Development</h3>
-          <p class="chair">Chair: <strong>Sandy Wilder</strong></p>
+          <p class="chair">Chair: <strong>Jadyn Henderson</strong></p>
           <p class="desc">Develops and administers a well-balanced education program to meet members’ needs.</p>
         </article>
 
         <article class="ber-committee">
           <h3>Leadership Academy</h3>
-          <p class="chair">Chair: <strong>Danielle Damianov</strong></p>
-          <p class="cochair">Co-Chair: <strong>Corlin Tucker</strong></p>
+          <p class="chair">Chair: <strong>Mark True</strong></p>
           <p class="desc">Application & interview required (academy participation).</p>
         </article>
 
         <article class="ber-committee">
           <h3>REALTOR® Review</h3>
-          <p class="chair">Chair: <strong>Sarah Anstett</strong></p>
+          <p class="chair">Chair: <strong>Sandy Wilder</strong></p>
           <p class="desc">Provides content for the quarterly publication and assists with review and edits.</p>
 
         </article>
 
         <article class="ber-committee">
           <h3>MLS</h3>
-          <p class="chair">Chair: <strong>Jesse McGreevy</strong></p>
+          <p class="chair">Chair: <strong>Andy Brinkoetter</strong></p>
           <p class="desc">Vets MLS products/services and reviews CoreLogic Matrix functionality; recommends changes.</p>
 
         </article>
@@ -1410,7 +1478,7 @@
 
         <article class="ber-committee">
           <h3>Leadership Development</h3>
-          <p class="chair">Chair: <strong>Mark Ledbetter</strong></p>
+          <p class="chair">Chair: <strong>Adam Ruud</strong></p>
           <p class="desc">Plans Leadership Academy and nominations; leads strategic planning and annual leadership
             training.</p>
 
@@ -1426,7 +1494,7 @@
 
         <article class="ber-committee">
           <h3>Events</h3>
-          <p class="chair">Chair: <strong>Mark True</strong></p>
+          <p class="chair">Chair: <strong>Darlene Williams</strong></p>
           <p class="desc">Plans association events to drive engagement, charitable impact, and affiliate marketing
             opportunities.</p>
 
@@ -1449,15 +1517,14 @@
 
         <article class="ber-committee">
           <h3>Media</h3>
-          <p class="chair">Chair: <strong>Mike Hughes</strong></p>
+          <p class="chair">Chair: <strong>Peter West</strong></p>
           <p class="desc">Reviews market stats/trends and issues press releases for consumers and members.</p>
 
         </article>
 
         <article class="ber-committee">
-          <h3>REALTOR® Safety</h3>
-          <p class="chair">Chair: <strong>David Scott</strong></p>
-          <p class="desc">Creates programs and systems that educate members on REALTOR® safety.</p>
+          <h3>Advisory Council</h3>
+          <p class="chair">Chair: <strong>Kim Reers</strong></p>
 
         </article>
       </div>
