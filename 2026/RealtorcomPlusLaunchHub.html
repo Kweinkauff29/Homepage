@@ -1,0 +1,1228 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Realtor.com+ Launch Hub | Bonita Springs–Estero REALTORS®</title>
+    <meta name="description"
+        content="Join the Realtor.com+ kickoff, learn what’s included for BER members, and access training, FAQs, and support resources.">
+    <meta property="og:title" content="Realtor.com+ Launch Hub | Bonita Springs–Estero REALTORS®">
+    <meta property="og:description"
+        content="Join the Realtor.com+ kickoff, learn what’s included for BER members, and access training, FAQs, and support resources.">
+    <meta property="og:image"
+        content="https://bonitaesterorealtors.com/wp-content/uploads/2026/01/realtor-com-plus-hero.png">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <style>
+        /* Swiss-Minimalist Design System Tokens */
+        :root {
+            --ink: #0B1220;
+            --muted: #475569;
+            --surface: #FFFFFF;
+            --soft-surface: #F6F8FB;
+            --accent: #ce2628;
+            --accent-dark: #a81c1d;
+            --border: rgba(15, 23, 42, 0.10);
+            --success-bg: rgba(206, 38, 40, 0.05);
+
+            --max-width: 1120px;
+            --radius: 16px;
+            --radius-lg: 20px;
+            --shadow-sm: 0 2px 4px rgba(15, 23, 42, 0.02);
+            --shadow: 0 8px 24px rgba(15, 23, 42, 0.03);
+            --spacing-section-desktop: 80px;
+            --spacing-section-mobile: 48px;
+
+            /* Constants for URLs */
+            --url-growthzone: "https://bonitaspringsesterorealtorsfl.growthzoneapp.com/ap/Events/Register/wZFk7egTeCxCw";
+            --url-article: "https://bonitaesterorealtors.com/realtor-com-launches-bonita-springs-estero-mls-among-the-first-markets/";
+            --url-plus-learn: "https://www.realtor.com/plus-learn/";
+            --url-sign-in: "https://www.realtor.com/plus";
+            --url-support: "https://support.realtor.com/s/rdcplus";
+            --url-resource-hub: "{{BER_RESOURCE_HUB_URL}}";
+            --url-training-reg: "{{TRAINING_REG_URL}}";
+        }
+
+        /* Reset & Base HTML */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            color: var(--ink);
+            background-color: var(--surface);
+            line-height: 1.5;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        a {
+            color: var(--accent);
+            text-decoration: none;
+            transition: color 0.2s ease;
+        }
+
+        a:hover {
+            color: var(--accent-dark);
+        }
+
+        img {
+            max-width: 100%;
+            display: block;
+        }
+
+        ul,
+        ol {
+            list-style: none;
+        }
+
+        button {
+            font-family: inherit;
+            cursor: pointer;
+            border: none;
+            background: transparent;
+        }
+
+        /* Layout Primitives */
+        .container {
+            max-width: var(--max-width);
+            margin: 0 auto;
+            padding: 0 24px;
+        }
+
+        .section {
+            padding: var(--spacing-section-desktop) 0;
+        }
+
+        .text-center {
+            text-align: center;
+        }
+
+        /* Typography */
+        h1 {
+            font-size: 3.5rem;
+            font-weight: 700;
+            line-height: 1.1;
+            letter-spacing: -0.02em;
+            margin-bottom: 24px;
+        }
+
+        h2 {
+            font-size: 2.25rem;
+            font-weight: 600;
+            line-height: 1.2;
+            letter-spacing: -0.01em;
+            margin-bottom: 16px;
+        }
+
+        h3 {
+            font-size: 1.5rem;
+            font-weight: 600;
+            line-height: 1.3;
+            margin-bottom: 8px;
+        }
+
+        .lead {
+            font-size: 1.25rem;
+            color: var(--muted);
+            margin-bottom: 32px;
+        }
+
+        .subtext {
+            font-size: 0.875rem;
+            color: var(--muted);
+        }
+
+        /* Components - Buttons */
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 12px 24px;
+            border-radius: 8px;
+            /* Slightly tighter than cards */
+            font-weight: 600;
+            font-size: 1rem;
+            transition: all 0.2s ease;
+            min-height: 48px;
+        }
+
+        .btn-primary {
+            background-color: var(--accent);
+            color: #fff;
+        }
+
+        .btn-primary:hover {
+            background-color: var(--accent-dark);
+            color: #fff;
+            transform: translateY(-1px);
+        }
+
+        .btn-secondary {
+            background-color: var(--soft-surface);
+            color: var(--ink);
+            border: 1px solid var(--border);
+        }
+
+        .btn-secondary:hover {
+            background-color: #E2E8F0;
+            color: var(--ink);
+        }
+
+        .btn-outline {
+            border: 1px solid var(--border);
+            color: var(--ink);
+        }
+
+        .btn-outline:hover {
+            border-color: var(--ink);
+        }
+
+        /* Components - Chips */
+        .chip {
+            display: inline-flex;
+            align-items: center;
+            padding: 6px 16px;
+            border-radius: 9999px;
+            font-size: 0.875rem;
+            font-weight: 500;
+            background-color: var(--success-bg);
+            color: var(--accent-dark);
+            border: 1px solid rgba(206, 38, 40, 0.2);
+        }
+
+        /* Top Ribbon */
+        .announcement-ribbon {
+            background-color: var(--soft-surface);
+            border-bottom: 1px solid var(--border);
+            padding: 12px 24px;
+            font-size: 0.875rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .ribbon-content {
+            flex: 1;
+            text-align: center;
+            font-weight: 500;
+            color: var(--ink);
+        }
+
+        .ribbon-action {
+            font-weight: 600;
+        }
+
+        /* Sticky CTA Bar */
+        .sticky-cta {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(8px);
+            border-top: 1px solid var(--border);
+            padding: 16px 24px;
+            z-index: 90;
+            display: flex;
+            justify-content: center;
+            gap: 16px;
+            transform: translateY(100%);
+            transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .sticky-cta.visible {
+            transform: translateY(0);
+        }
+
+        /* Mini Nav */
+        .mini-nav {
+            display: flex;
+            justify-content: center;
+            gap: 32px;
+            padding: 24px 0;
+            border-bottom: 1px solid var(--border);
+            overflow-x: auto;
+            white-space: nowrap;
+        }
+
+        .mini-nav a {
+            font-weight: 500;
+            color: var(--muted);
+        }
+
+        .mini-nav a:hover {
+            color: var(--ink);
+        }
+
+        /* Hero Section */
+        .hero {
+            padding-top: 80px;
+            padding-bottom: 64px;
+            text-align: center;
+        }
+
+        .hero-content {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .hero-actions {
+            display: flex;
+            justify-content: center;
+            gap: 16px;
+            flex-wrap: wrap;
+            margin-bottom: 32px;
+        }
+
+        .hero-chips {
+            display: flex;
+            justify-content: center;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        .hero-image {
+            margin-top: 64px;
+            border-radius: var(--radius-lg);
+            overflow: hidden;
+            box-shadow: var(--shadow);
+            background-color: var(--soft-surface);
+            aspect-ratio: 21/9;
+            position: relative;
+        }
+
+        .hero-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        /* Cards */
+        .card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 32px;
+            box-shadow: var(--shadow-sm);
+            transition: box-shadow 0.2s ease, transform 0.2s ease;
+        }
+
+        .card:hover {
+            box-shadow: var(--shadow);
+            transform: translateY(-2px);
+        }
+
+        /* Event Card High Contrast */
+        .event-card {
+            background-color: var(--ink);
+            color: white;
+            text-align: left;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 40px;
+            border-radius: var(--radius-lg);
+            margin-top: 48px;
+            position: relative;
+            z-index: 10;
+            gap: 32px;
+        }
+
+        .event-details {
+            flex: 1;
+        }
+
+        .event-details h3 {
+            color: white;
+            font-size: 2rem;
+        }
+
+        .event-meta {
+            display: flex;
+            gap: 24px;
+            margin: 16px 0;
+            color: #94A3B8;
+            /* Muted light */
+            font-weight: 500;
+        }
+
+        .event-desc {
+            color: #CBD5E1;
+            margin-bottom: 0;
+        }
+
+        /* Grid Layouts */
+        .grid-3 {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 24px;
+        }
+
+        .grid-2 {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 48px;
+            align-items: center;
+        }
+
+        /* Features Grid */
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 24px;
+        }
+
+        .feature-card {
+            padding: 24px;
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            background: var(--surface);
+        }
+
+        .feature-icon {
+            margin-bottom: 16px;
+            color: var(--accent);
+        }
+
+        .feature-card h4 {
+            font-weight: 600;
+            margin-bottom: 8px;
+            font-size: 1.125rem;
+        }
+
+        .feature-card p {
+            color: var(--muted);
+            font-size: 0.9375rem;
+        }
+
+        /* Explainer Section */
+        .explainer-mock {
+            border-radius: var(--radius);
+            overflow: hidden;
+            box-shadow: var(--shadow);
+            background: var(--soft-surface);
+        }
+
+        /* Pillars */
+        .pillar-card {
+            text-align: center;
+        }
+
+        .pillar-icon {
+            width: 64px;
+            height: 64px;
+            margin: 0 auto 24px;
+            background: var(--success-bg);
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--accent-dark);
+        }
+
+        .pillar-card h3 {
+            font-size: 1.25rem;
+            font-weight: 600;
+        }
+
+        .pillar-card p {
+            color: var(--muted);
+        }
+
+        /* Steps */
+        .step-item {
+            display: flex;
+            gap: 24px;
+            align-items: flex-start;
+            margin-bottom: 32px;
+        }
+
+        .step-number {
+            flex-shrink: 0;
+            width: 48px;
+            height: 48px;
+            border-radius: 24px;
+            background: var(--accent);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 1.25rem;
+        }
+
+        .step-content h4 {
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin-bottom: 8px;
+            margin-top: 10px;
+        }
+
+        .elevator-pitch {
+            background: var(--soft-surface);
+            padding: 32px;
+            border-radius: var(--radius);
+            border-left: 4px solid var(--accent);
+            margin-top: 48px;
+        }
+
+        .elevator-pitch .label {
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: var(--accent);
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+
+        .elevator-pitch blockquote {
+            font-style: italic;
+            font-size: 1.125rem;
+            color: var(--ink);
+            line-height: 1.6;
+        }
+
+        /* Expandable FAQ */
+        .faq-item {
+            border-bottom: 1px solid var(--border);
+        }
+
+        .faq-question {
+            width: 100%;
+            text-align: left;
+            padding: 24px 0;
+            font-size: 1.125rem;
+            font-weight: 500;
+            color: var(--ink);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .faq-answer {
+            padding-bottom: 24px;
+            color: var(--muted);
+            display: none;
+            line-height: 1.6;
+        }
+
+        .faq-item.active .faq-answer {
+            display: block;
+        }
+
+        .faq-item.active .faq-chevron {
+            transform: rotate(180deg);
+        }
+
+        /* Share Kit */
+        .share-kit-list {
+            display: grid;
+            gap: 16px;
+        }
+
+        .share-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 16px;
+            background: var(--soft-surface);
+            border-radius: 8px;
+        }
+
+        .share-row strong {
+            font-size: 0.9375rem;
+        }
+
+        /* Footer */
+        footer {
+            background: var(--soft-surface);
+            padding: 64px 0 32px;
+            border-top: 1px solid var(--border);
+        }
+
+        .footer-flex {
+            display: flex;
+            justify-content: space-between;
+            gap: 48px;
+            margin-bottom: 48px;
+            flex-wrap: wrap;
+        }
+
+        .footer-col h4 {
+            font-size: 1rem;
+            font-weight: 600;
+            margin-bottom: 16px;
+        }
+
+        .footer-col a,
+        .footer-col p {
+            color: var(--muted);
+            font-size: 0.9375rem;
+            line-height: 2;
+        }
+
+        .legal-line {
+            text-align: center;
+            font-size: 0.75rem;
+            color: #94A3B8;
+            border-top: 1px solid var(--border);
+            padding-top: 32px;
+        }
+
+        /* Mobile Responsive */
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2.25rem;
+            }
+
+            h2 {
+                font-size: 1.75rem;
+            }
+
+            .section {
+                padding: var(--spacing-section-mobile) 0;
+            }
+
+            .grid-3,
+            .grid-2,
+            .feature-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .event-card {
+                flex-direction: column;
+                align-items: flex-start;
+                padding: 24px;
+                gap: 24px;
+                margin-top: 0;
+            }
+
+            .event-meta {
+                flex-direction: column;
+                gap: 8px;
+            }
+
+            .hero-actions {
+                flex-direction: column;
+                width: 100%;
+            }
+
+            .hero-actions .btn {
+                width: 100%;
+            }
+
+            .announcement-ribbon {
+                padding: 12px;
+                font-size: 0.8125rem;
+                flex-direction: column;
+                gap: 8px;
+                text-align: center;
+            }
+
+            .sticky-cta {
+                padding: 12px;
+                flex-direction: row;
+            }
+
+            .sticky-cta .btn {
+                flex: 1;
+                min-height: 44px;
+                padding: 10px;
+                font-size: 0.875rem;
+            }
+
+            .sticky-cta .desktop-only {
+                display: none;
+            }
+        }
+
+        /* Utiltiy */
+        .icon {
+            width: 20px;
+            height: 20px;
+        }
+
+        .icon-lg {
+            width: 32px;
+            height: 32px;
+        }
+    </style>
+</head>
+
+<body data-state="prelaunch"> <!-- States: prelaunch, launch, postlaunch -->
+
+    <!-- Top Announcement Ribbon -->
+    <div class="announcement-ribbon">
+        <div class="ribbon-content">
+            Realtor.com+ launches for BER on March 11 — Join the 1 PM ET kickoff.
+        </div>
+        <a href="https://bonitaspringsesterorealtorsfl.growthzoneapp.com/ap/Events/Register/wZFk7egTeCxCw"
+            target="_blank" class="ribbon-action">
+            Register Now &rarr;
+        </a>
+    </div>
+
+    <!-- Hero Section -->
+    <section class="hero container" id="hero">
+        <div class="hero-content">
+            <h1>Realtor.com+ is coming to BER.</h1>
+            <p class="lead">A protected, branded space to stay in sync with clients from click to close.</p>
+
+            <div class="hero-actions" id="hero-actions-container">
+                <!-- Rendered by JS Phase Toggles -->
+            </div>
+
+            <div class="hero-chips">
+                <span class="chip">Launch: March 11, 2026</span>
+                <span class="chip">Virtual kickoff: 1:00–2:00 PM ET</span>
+                <span class="chip">Included member benefit</span>
+            </div>
+        </div>
+
+        <div class="hero-image" style="aspect-ratio: auto; background-color: transparent; box-shadow: none;">
+            <a href="https://www.realtor.com/plus-agent" target="_blank">
+                <img src="https://bonitaesterorealtors.com/wp-content/uploads/2026/02/Marketing-kickoff-invite-series-email-banner-Banner.png"
+                    alt="Realtor.com+ Launch Banner" id="hero-img-placeholder"
+                    style="border-radius: var(--radius-lg); box-shadow: var(--shadow);">
+            </a>
+        </div>
+    </section>
+
+    <div class="sticky-cta" id="sticky-cta">
+        <a href="https://bonitaspringsesterorealtorsfl.growthzoneapp.com/ap/Events/Register/wZFk7egTeCxCw"
+            target="_blank" class="btn btn-primary">Register for Kickoff</a>
+        <a href="#faq" class="btn btn-secondary desktop-only">Support & FAQs</a>
+    </div>
+
+    <!-- Mini Nav -->
+    <nav class="mini-nav container">
+        <a href="#kickoff">Kickoff</a>
+        <a href="#what-it-is">What it is</a>
+        <a href="#how-it-works">How it works</a>
+        <a href="#training">Training</a>
+        <a href="#resources">Resources</a>
+        <a href="#faq">FAQ</a>
+    </nav>
+
+    <div class="container" id="kickoff">
+        <!-- Event At a Glance -->
+        <div class="event-card">
+            <div class="event-details">
+                <h3>Official Kickoff Webinar</h3>
+                <div class="event-meta">
+                    <span>📅 March 11, 2026</span>
+                    <span>⏰ 1:00 PM – 2:00 PM (ET)</span>
+                    <span>📍 Online Event</span>
+                </div>
+                <p class="event-desc">BER + Realtor.com will review the new benefit and how to get started.</p>
+            </div>
+            <div>
+                <a href="https://bonitaspringsesterorealtorsfl.growthzoneapp.com/ap/Events/Register/wZFk7egTeCxCw"
+                    target="_blank" class="btn btn-primary" style="background-color: white; color: var(--ink);">View
+                    Event & Register</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- CEO Announcement Video -->
+    <section class="section container" style="padding-top: 48px; padding-bottom: 0;">
+        <h2 class="text-center" style="margin-bottom: 24px;">An Announcement from Realtor.com</h2>
+        <div
+            style="border-radius: var(--radius-lg); overflow: hidden; box-shadow: var(--shadow); background: var(--soft-surface); aspect-ratio: 16/9;">
+            <iframe width="100%" height="100%" src="https://www.youtube.com/embed/jgywhxfOOvw"
+                title="Realtor.com+ Video Announcement" frameborder="0"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                allowfullscreen style="display: block;"></iframe>
+        </div>
+    </section>
+
+    <!-- 3 Pillars Section -->
+    <section class="section container">
+        <div class="grid-3">
+            <div class="card pillar-card">
+                <div class="pillar-icon">
+                    <!-- Icon: Connect -->
+                    <svg class="icon-lg" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                        xmlns="http://www.w3.org/2000/svg">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M17 20h5V4H2v16h5m4-4v4m-4-8h8m-8-4h8"></path>
+                    </svg>
+                </div>
+                <h3>Connect</h3>
+                <p>Build stronger client relationships in a branded experience.</p>
+            </div>
+            <div class="card pillar-card">
+                <div class="pillar-icon">
+                    <!-- Icon: Collaborate -->
+                    <svg class="icon-lg" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                        xmlns="http://www.w3.org/2000/svg">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M17 8h2a2 2 0 012 2v6a2 2 0 01-2 2h-2v4l-4-4H9a1.994 1.994 0 01-1.414-.586m0 0L11 14h4a2 2 0 002-2V6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2v4l.586-.586z">
+                        </path>
+                    </svg>
+                </div>
+                <h3>Collaborate</h3>
+                <p>Share listings, saved searches, and updates in real time.</p>
+            </div>
+            <div class="card pillar-card">
+                <div class="pillar-icon">
+                    <!-- Icon: Close -->
+                    <svg class="icon-lg" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                        xmlns="http://www.w3.org/2000/svg">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                    </svg>
+                </div>
+                <h3>Close</h3>
+                <p>Keep communication streamlined from search to closing.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- What is Realtor.com+ Section -->
+    <section class="section container" id="what-it-is">
+        <div class="grid-2">
+            <div>
+                <h2>What is Realtor.com+?</h2>
+                <p class="lead">Realtor.com+ is a collaboration platform that connects agents and clients in a unified
+                    experience.</p>
+                <ul style="margin-bottom: 24px; display: flex; flex-direction: column; gap: 16px;">
+                    <li style="display: flex; gap: 12px; align-items: flex-start;">
+                        <svg class="icon" style="color: var(--accent); margin-top: 4px;" fill="none"
+                            stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7">
+                            </path>
+                        </svg>
+                        <span>It brings searches, shared listings, and messages under one roof.</span>
+                    </li>
+                    <li style="display: flex; gap: 12px; align-items: flex-start;">
+                        <svg class="icon" style="color: var(--accent); margin-top: 4px;" fill="none"
+                            stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7">
+                            </path>
+                        </svg>
+                        <span>Designed to keep everyone in sync from first click to closing table.</span>
+                    </li>
+                </ul>
+                <div style="display: flex; gap: 16px; flex-wrap: wrap;">
+                    <a href="https://www.realtor.com/plus-learn/" target="_blank" class="btn btn-primary">Explore
+                        features</a>
+                    <a href="https://bonitaesterorealtors.com/realtor-com-launches-bonita-springs-estero-mls-among-the-first-markets/"
+                        target="_blank" class="btn btn-outline">Industry announcement</a>
+                </div>
+            </div>
+            <div class="explainer-mock">
+                <!-- Explainer Mock -->
+                <img src="https://www.realtor.com/industryrelations/wp-content/uploads/2026/02/21-Bonita-Springs-Estero-email-thumb.jpg"
+                    alt="Realtor.com+ interface preview" style="width: 100%; height: auto; display: block;">
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Grid -->
+    <section class="section container"
+        style="background-color: var(--soft-surface); border-radius: var(--radius-lg); padding: 64px 48px;">
+        <h2 class="text-center" style="margin-bottom: 48px;">Key Benefits for BER Members</h2>
+
+        <div class="feature-grid">
+            <div class="feature-card">
+                <svg class="feature-icon icon-lg" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z">
+                    </path>
+                </svg>
+                <h4>Protected &amp; branded space</h4>
+                <p>Your clients see you. No competing lead forms or other agent advertisements in their view.</p>
+            </div>
+            <div class="feature-card">
+                <svg class="feature-icon icon-lg" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+                </svg>
+                <h4>MLS-level search filters</h4>
+                <p>Advanced criteria and draw-on-map functionality directly tied to BER MLS data.</p>
+            </div>
+            <div class="feature-card">
+                <svg class="feature-icon icon-lg" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z">
+                    </path>
+                </svg>
+                <h4>Real-time client insights</h4>
+                <p>See their searches, saved properties, and views instantly to guide them better.</p>
+            </div>
+            <div class="feature-card">
+                <svg class="feature-icon icon-lg" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z">
+                    </path>
+                </svg>
+                <h4>In-app chat</h4>
+                <p>Message back and forth natively with clients and co-buyers easily.</p>
+            </div>
+            <div class="feature-card">
+                <svg class="feature-icon icon-lg" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z">
+                    </path>
+                </svg>
+                <h4>Touring requests</h4>
+                <p>Streamlines the showing workflow straight from their saved listings.</p>
+            </div>
+            <div class="feature-card">
+                <svg class="feature-icon icon-lg" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M12 18h.01M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z"></path>
+                </svg>
+                <h4>Mobile + desktop synced</h4>
+                <p>Work seamlessly anywhere, on any device, with data synced universally.</p>
+            </div>
+        </div>
+
+        <div style="margin-top: 32px; text-align: center;">
+            <span
+                style="display: inline-block; padding: 12px 24px; border: 1px dashed var(--border); border-radius: var(--radius); font-size: 0.875rem; color: var(--muted);">
+                <strong>Note:</strong> No changes to your membership benefits or dues are planned—this is an added
+                benefit.
+            </span>
+        </div>
+    </section>
+
+    <!-- How It Works & Where to Access -->
+    <section class="section container" id="how-it-works">
+        <div class="grid-2">
+            <!-- Steps -->
+            <div>
+                <h2>How it works</h2>
+                <div style="margin-top: 32px;">
+                    <div class="step-item">
+                        <div class="step-number">1</div>
+                        <div class="step-content">
+                            <h4>Invite your client from Realtor.com+</h4>
+                            <p class="subtext">Send them an invite directly through your new dashboard.</p>
+                        </div>
+                    </div>
+                    <div class="step-item">
+                        <div class="step-number">2</div>
+                        <div class="step-content">
+                            <h4>Client accepts &amp; logs in</h4>
+                            <p class="subtext">They accept using their own Realtor.com account credentials.</p>
+                        </div>
+                    </div>
+                    <div class="step-item">
+                        <div class="step-number">3</div>
+                        <div class="step-content">
+                            <h4>Experience upgraded</h4>
+                            <p class="subtext">Their experience upgrades into Realtor.com+—collaborate entirely in one
+                                place.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Elevator Pitch -->
+            <div>
+                <div class="elevator-pitch">
+                    <div class="label">Use this pitch with clients</div>
+                    <blockquote>
+                        "I've upgraded my home search tools with Realtor.com+. Accept my invitation so we can share
+                        listings, save searches, and chat directly in one private app with no distractions."
+                    </blockquote>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Access Paths -->
+    <section class="section container">
+        <h2 class="text-center" style="margin-bottom: 48px;">Where do I access it?</h2>
+        <div class="grid-3">
+            <div class="card text-center">
+                <h4 style="font-size: 1.125rem; font-weight: 600; margin-bottom: 8px;">From your MLS dashboard tile</h4>
+                <p class="subtext">Open Realtor.com+ directly from your MLS environment with one click.</p>
+            </div>
+            <div class="card text-center">
+                <h4 style="font-size: 1.125rem; font-weight: 600; margin-bottom: 8px;">On desktop web</h4>
+                <p class="subtext"><a href="https://www.realtor.com/plus" target="_blank">realtor.com/plus</a> — Sign in
+                    securely on your computer.</p>
+            </div>
+            <div class="card text-center">
+                <h4 style="font-size: 1.125rem; font-weight: 600; margin-bottom: 8px;">On mobile app</h4>
+                <p class="subtext">Use it on the go for live client activity &amp; collaboration from anywhere.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Training & Next Steps (Phase toggle logic target) -->
+    <section class="section container" id="training">
+        <div class="card"
+            style="text-align: center; padding: 64px 24px; background: linear-gradient(to bottom right, var(--surface), var(--soft-surface));">
+            <h2 id="training-header">Get ready for launch</h2>
+            <div id="training-content" style="max-width: 600px; margin: 0 auto 32px; color: var(--muted);">
+                <p>Register for the kickoff to see the workflow end-to-end.</p>
+                <p>Bookmark this hub—training registration will post here right after launch.</p>
+            </div>
+            <div id="training-actions" style="display: flex; gap: 16px; justify-content: center; flex-wrap: wrap;">
+                <!-- Filled by JS -->
+            </div>
+        </div>
+    </section>
+
+    <!-- Resources & FAQ Grid -->
+    <section class="section container" id="resources">
+        <div class="grid-2" style="align-items: flex-start;">
+            <!-- Resources Column -->
+            <div>
+                <h2 style="margin-bottom: 32px;">Links &amp; Resources</h2>
+
+                <h4 style="font-weight: 600; margin-bottom: 16px; color: var(--ink);">BER + Rollout</h4>
+                <ul style="display: flex; flex-direction: column; gap: 12px; margin-bottom: 32px;">
+                    <li><a href="https://bonitaesterorealtors.com/realtor-com-launches-bonita-springs-estero-mls-among-the-first-markets/"
+                            target="_blank">Partnership announcement article</a></li>
+                    <li><a href="https://bonitaspringsesterorealtorsfl.growthzoneapp.com/ap/Events/Register/wZFk7egTeCxCw"
+                            target="_blank">Kickoff registration (GrowthZone)</a></li>
+                </ul>
+
+                <h4 style="font-weight: 600; margin-bottom: 16px; color: var(--ink);">Realtor.com+ Product Help</h4>
+                <ul style="display: flex; flex-direction: column; gap: 12px;">
+                    <li><a href="https://www.realtor.com/plus-learn/" target="_blank">Realtor.com+ overview</a></li>
+                    <li><a href="https://www.realtor.com/plus" target="_blank">Sign-in / access</a></li>
+                    <li><a href="https://support.realtor.com/s/rdcplus" target="_blank">Knowledge Center / Support</a>
+                    </li>
+                </ul>
+            </div>
+
+            <!-- FAQ Accordion -->
+            <div id="faq">
+                <h2 style="margin-bottom: 32px;">Frequently Asked Questions</h2>
+
+                <div class="faq-item">
+                    <button class="faq-question">
+                        <span>Is Realtor.com+ included with my BER MLS subscription?</span>
+                        <svg class="faq-chevron icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                            style="transition: transform 0.2s;">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7">
+                            </path>
+                        </svg>
+                    </button>
+                    <div class="faq-answer">
+                        Yes, it is provided as an included member benefit with no changes to your current dues.
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <button class="faq-question">
+                        <span>Will my clients see other agents or lead forms?</span>
+                        <svg class="faq-chevron icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                            style="transition: transform 0.2s;">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7">
+                            </path>
+                        </svg>
+                    </button>
+                    <div class="faq-answer">
+                        No. Your clients get a protected, branded space where you are the sole point of contact.
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <button class="faq-question">
+                        <span>How do clients join?</span>
+                        <svg class="faq-chevron icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                            style="transition: transform 0.2s;">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7">
+                            </path>
+                        </svg>
+                    </button>
+                    <div class="faq-answer">
+                        You invite them from your dashboard. They accept the email invitation and log in using their
+                        normal Realtor.com credentials.
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <button class="faq-question">
+                        <span>Can I collaborate with a co-agent or team member?</span>
+                        <svg class="faq-chevron icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                            style="transition: transform 0.2s;">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7">
+                            </path>
+                        </svg>
+                    </button>
+                    <div class="faq-answer">
+                        Yes, the platform supports multi-party collaboration including co-buyers and co-agents.
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <button class="faq-question">
+                        <span>Where do I log in?</span>
+                        <svg class="faq-chevron icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                            style="transition: transform 0.2s;">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7">
+                            </path>
+                        </svg>
+                    </button>
+                    <div class="faq-answer">
+                        You can access it via the unified dashboard tile in your BER MLS environment or at
+                        realtor.com/plus.
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <button class="faq-question">
+                        <span>What support is available?</span>
+                        <svg class="faq-chevron icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                            style="transition: transform 0.2s;">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7">
+                            </path>
+                        </svg>
+                    </button>
+                    <div class="faq-answer">
+                        BER members have access to the Realtor.com+ Knowledge Center directly, and you can contact BER
+                        support locally at support@berealtors.org.
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-flex">
+                <div class="footer-col" style="max-width: 320px;">
+                    <h4>Questions?</h4>
+                    <p><strong>BER Support:</strong><br>
+                        <a href="mailto:support@berealtors.org">support@berealtors.org</a>
+                    </p>
+                    <p style="margin-top: 16px;"><strong>Event Contact:</strong><br>
+                        Erica Bernhardt • 239-992-6771<br>
+                        <a href="mailto:MLS@berealtors.org">MLS@berealtors.org</a>
+                    </p>
+                </div>
+
+                <div class="footer-col">
+                    <h4>Quick Links</h4>
+                    <ul style="display: flex; flex-direction: column; gap: 8px;">
+                        <li><a
+                                href="https://bonitaspringsesterorealtorsfl.growthzoneapp.com/ap/Events/Register/wZFk7egTeCxCw">Register
+                                for Kickoff</a></li>
+                        <li><a href="{{BER_RESOURCE_HUB_URL}}">Resources Hub</a></li>
+                        <li><a href="https://support.realtor.com/s/rdcplus">Knowledge Center</a></li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="legal-line">
+                Realtor.com®, Realtor.com+™, and related marks are trademarks of the National Association of REALTORS®
+                and are used with its permission.
+            </div>
+        </div>
+    </footer>
+
+    <!-- Scripts for Interactions -->
+    <script>
+        // FAQ Accordion Logic
+        document.querySelectorAll('.faq-question').forEach(button => {
+            button.addEventListener('click', () => {
+                const item = button.parentElement;
+                const isActive = item.classList.contains('active');
+
+                // Close all
+                document.querySelectorAll('.faq-item').forEach(faq => faq.classList.remove('active'));
+
+                // Toggle clicked
+                if (!isActive) {
+                    item.classList.add('active');
+                }
+            });
+        });
+
+        // Sticky CTA scroll detection
+        const stickyCta = document.getElementById('sticky-cta');
+        const heroSection = document.getElementById('hero');
+
+        window.addEventListener('scroll', () => {
+            const heroBottom = heroSection.getBoundingClientRect().bottom;
+            if (heroBottom < 0) {
+                stickyCta.classList.add('visible');
+            } else {
+                stickyCta.classList.remove('visible');
+            }
+        });
+
+        // Phase Routing logic
+        const state = document.body.getAttribute('data-state') || 'prelaunch';
+
+        // Configure components based on phase state
+        const configurePhase = (phase) => {
+            const heroContainer = document.getElementById('hero-actions-container');
+            const trainingHeader = document.getElementById('training-header');
+            const trainingContent = document.getElementById('training-content');
+            const trainingActions = document.getElementById('training-actions');
+
+            const articleLink = `<a href="https://bonitaesterorealtors.com/realtor-com-launches-bonita-springs-estero-mls-among-the-first-markets/" target="_blank" class="btn btn-secondary">Read the BER announcement</a>`;
+            const whatIsLink = `<a href="https://www.realtor.com/plus-learn/" target="_blank" class="btn btn-outline" style="border:none; text-decoration: underline;">What is Realtor.com+?</a>`;
+            const kickoffBtn = `<a href="https://bonitaspringsesterorealtorsfl.growthzoneapp.com/ap/Events/Register/wZFk7egTeCxCw" target="_blank" class="btn btn-primary">Register for the March 11 Kickoff</a>`;
+
+            if (phase === 'prelaunch') {
+                // Hero
+                heroContainer.innerHTML = `
+          ${kickoffBtn}
+          ${articleLink}
+          ${whatIsLink}
+        `;
+                // Training
+                trainingHeader.innerText = "Get ready for launch";
+                trainingContent.innerHTML = `
+          <ul style="list-style: disc; text-align: left; max-width: 480px; margin: 0 auto;">
+            <li style="margin-bottom: 8px;">Register for the kickoff to see the workflow end-to-end.</li>
+            <li>Bookmark this hub—training registration will post here right after launch.</li>
+          </ul>
+        `;
+                trainingActions.innerHTML = kickoffBtn;
+            }
+            else if (phase === 'launch') {
+                heroContainer.innerHTML = `
+          <a href="https://bonitaspringsesterorealtorsfl.growthzoneapp.com/ap/Events/Register/wZFk7egTeCxCw" target="_blank" class="btn btn-primary">Join live now</a>
+          ${articleLink}
+          ${whatIsLink}
+        `;
+                trainingHeader.innerText = "We are LIVE!";
+                trainingActions.innerHTML = `<a href="https://bonitaspringsesterorealtorsfl.growthzoneapp.com/ap/Events/Register/wZFk7egTeCxCw" target="_blank" class="btn btn-primary">Join live now</a>`;
+            }
+            else if (phase === 'postlaunch') {
+                heroContainer.innerHTML = `
+          <a href="{{TRAINING_REG_URL}}" target="_blank" class="btn btn-primary">Register for training sessions</a>
+          <a href="https://www.realtor.com/plus" target="_blank" class="btn btn-secondary">Open Realtor.com+</a>
+        `;
+                trainingHeader.innerText = "Start using Realtor.com+ & join training";
+                trainingContent.innerHTML = "";
+                trainingActions.innerHTML = `
+          <a href="{{TRAINING_REG_URL}}" target="_blank" class="btn btn-primary">Register for training sessions</a>
+          <a href="https://support.realtor.com/s/rdcplus" target="_blank" class="btn btn-outline">Support / FAQs</a>
+        `;
+            }
+        };
+
+        // Run configurator
+        configurePhase(state);
+    </script>
+</body>
+
+</html>
