@@ -322,55 +322,90 @@ async function handleLogsRequest(request, env) {
                 }
             } else {
 
-                const fullName = `${firstName.trim()} ${lastName.trim()}`;
-
-                // 1. Exact match
-                const { results: exactResults } = await db
-                    .prepare(
-                        "SELECT * FROM members WHERE full_name = ? COLLATE NOCASE LIMIT 1"
-                    )
-                    .bind(fullName)
-                    .all();
-
-                if (exactResults && exactResults.length) {
-                    member = exactResults[0];
-                    matchStatus = "matched_by_name";
-                } else {
-                    // 2. Prefix match (e.g. "Ursula Weinkauff" matches "Ursula Weinkauff PA")
-                    const prefixName = `${fullName}%`;
-                    const { results: prefixResults } = await db
-                        .prepare(
-                            "SELECT * FROM members WHERE full_name LIKE ? LIMIT 1"
-                        )
-                        .bind(prefixName)
-                        .all();
-
-                    if (prefixResults && prefixResults.length) {
-                        member = prefixResults[0];
-                        matchStatus = "matched_by_name_prefix";
-                    } else {
-                        // 3. Fallback: Contains match (for reverse cases or middle names)
-                        // Be careful not to match too broadly, so require length > 5
-                        if (fullName.length > 5) {
-                            const containsName = `%${fullName}%`;
-                            const { results: fuzzyResults } = await db
-                                .prepare(
-                                    "SELECT * FROM members WHERE full_name LIKE ? LIMIT 1"
-                                )
-                                .bind(containsName)
-                                .all();
-
-                            if (fuzzyResults && fuzzyResults.length) {
-                                member = fuzzyResults[0];
-                                matchStatus = "matched_by_name_fuzzy";
-                            } else {
-                                matchStatus = "name_not_found";
-                            }
-                        } else {
-                            matchStatus = "name_not_found";
-                        }
-                    }
+                // Normalize names for matching: support apostrophes (straight/curly),
+                // hyphens, accented characters, and extra whitespace.
+                function normalizeName(str) {
+                    if (!str) return "";
+                    return str
+                        .normalize("NFD")                          // decompose accents
+                        .replace(/[\u0300-\u036f]/g, "")           // strip diacritic marks
+                        .replace(/[\u2018\u2019\u02bc\u0060\u00b4]/g, "'") // curly/special → straight apostrophe
+                        .replace(/[\u2010-\u2015\u2212]/g, "-")   // various dashes → hyphen
+                        .replace(/\s+/g, " ")
+                        .trim();
                 }
+
+                const normFirst = normalizeName(firstName);
+                const normLast = normalizeName(lastName);
+                const fullName = `${normFirst} ${normLast}`;
+
+                // Helper: run a single-result DB search
+                async function tryQuery(sql, ...binds) {
+                    try {
+                        const { results } = await db.prepare(sql).bind(...binds).all();
+                        return (results && results.length) ? results[0] : null;
+                    } catch { return null; }
+                }
+
+                // 1. Exact match (case-insensitive)
+                member = await tryQuery(
+                    "SELECT * FROM members WHERE full_name = ? COLLATE NOCASE LIMIT 1",
+                    fullName
+                );
+                if (member) { matchStatus = "matched_by_name"; }
+
+                // 2. Prefix match ("Kelly O'Connell" → "Kelly O'Connell-Guzak")
+                if (!member) {
+                    member = await tryQuery(
+                        "SELECT * FROM members WHERE full_name LIKE ? COLLATE NOCASE LIMIT 1",
+                        `${fullName}%`
+                    );
+                    if (member) { matchStatus = "matched_by_name_prefix"; }
+                }
+
+                // 3. Contains match (handles reversed order, middle names)
+                if (!member && fullName.length > 5) {
+                    member = await tryQuery(
+                        "SELECT * FROM members WHERE full_name LIKE ? COLLATE NOCASE LIMIT 1",
+                        `%${fullName}%`
+                    );
+                    if (member) { matchStatus = "matched_by_name_fuzzy"; }
+                }
+
+                // 4. Apostrophe-insensitive: replace ' with _ (SQLite wildcard for any char)
+                //    Catches "O'Connell" stored as "O'Connell" or "O`Connell" etc.
+                if (!member && (normLast.includes("'") || normLast.includes("-"))) {
+                    const wildLast = normLast.replace(/['\-]/g, "_");
+                    const wildFull = `${normFirst} ${wildLast}`;
+                    member = await tryQuery(
+                        "SELECT * FROM members WHERE full_name LIKE ? COLLATE NOCASE LIMIT 1",
+                        `${wildFull}%`
+                    );
+                    if (member) { matchStatus = "matched_by_name_wildcard"; }
+                }
+
+                // 5. Last-name-only search scoped to first-name initial
+                //    e.g. find anyone whose full_name starts with "Kelly" and contains "O_Connell"
+                if (!member && normFirst.length >= 2 && normLast.length > 3) {
+                    const wildLast2 = normLast.replace(/['\-]/g, "_");
+                    member = await tryQuery(
+                        "SELECT * FROM members WHERE full_name LIKE ? AND full_name LIKE ? COLLATE NOCASE LIMIT 1",
+                        `${normFirst}%`, `%${wildLast2}%`
+                    );
+                    if (member) { matchStatus = "matched_by_parts"; }
+                }
+
+                // 6. Broad last-name-only fallback (last resort)
+                if (!member && normLast.length > 4) {
+                    const wildLast3 = normLast.replace(/['\-]/g, "_");
+                    member = await tryQuery(
+                        "SELECT * FROM members WHERE full_name LIKE ? COLLATE NOCASE LIMIT 1",
+                        `%${wildLast3}%`
+                    );
+                    if (member) { matchStatus = "matched_by_last_name"; }
+                }
+
+                if (!member) { matchStatus = "name_not_found"; }
             }
         } else {
             matchStatus = "db_not_configured";

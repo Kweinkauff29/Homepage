@@ -298,8 +298,27 @@
     padding: 10px;
     list-style: none;
     margin: 0;
-    display: none;
     z-index: 60;
+
+    /* Stickiness: Use opacity/visibility instead of display:none */
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+    transform: translateY(10px);
+    transition: opacity 0.2s ease, visibility 0.2s, transform 0.2s ease;
+    transition-delay: 0.12s;
+    /* Brief buffer so menu doesn't vanish instantly */
+  }
+
+  /* Hover Bridge: Fills the 12px gap so mouse doesn't "leave" the hover area */
+  .ber-submenu::after {
+    content: "";
+    position: absolute;
+    top: -15px;
+    left: 0;
+    right: 0;
+    height: 20px;
+    background: transparent;
   }
 
   .ber-submenu a {
@@ -327,12 +346,18 @@
     background: #fff;
     border-left: 1px solid var(--line, #e5e7eb);
     border-top: 1px solid var(--line, #e5e7eb);
-    transform: rotate(45deg)
+    transform: rotate(45deg);
+    z-index: 1;
   }
 
   @media (hover:hover) {
     .ber-menu>li:hover>.ber-submenu {
-      display: block
+      opacity: 1;
+      visibility: visible;
+      pointer-events: auto;
+      transform: translateY(0);
+      transition-delay: 0s;
+      /* Open instantly on hover */
     }
   }
 
@@ -401,7 +426,14 @@
       border: 1px solid var(--line, #e5e7eb);
       box-shadow: none;
       margin: 6px 0 10px;
-      border-radius: 12px
+      border-radius: 12px;
+
+      /* Reset desktop hover properties for mobile accordion */
+      opacity: 1;
+      visibility: visible;
+      pointer-events: auto;
+      transform: none;
+      transition: none;
     }
 
     .ber-submenu.is-open {
@@ -1003,8 +1035,11 @@
                   Rental</a></li>
               <li><a href="https://www.leegov.com/dhs/Documents/Housing/CDBG%20Application%2003.01.2023.pdf">Lee County
                   Homeownership Assistance</a></li>
-              <li><a href="https://www.flipsnack.com/759C5EAA9F7/nar-2024-member-guide/full-view.html">2024 NAR
+              <li><a
+                  href="https://bonitaesterorealtors.com/wp-content/uploads/2026/03/NAR_2026-MEMBER-GUIDE_8.5x11in_FINAL-DIGITAL.pdf">2026
+                  NAR
                   Membership Guide</a></li>
+              <li><a href="https://bonitaesterorealtors.com/ber-shorts-library/">Video Library</a></li>
               <li><a href="https://bonitaesterorealtors.com/ber-guided-walkthroughs/">BER Guided Walkthroughs</a></li>
             </ul>
           </li>
@@ -1852,6 +1887,36 @@
           "broker safety resources",
           "how to handle arbitration and complaints",
           "broker involvement program information"
+        ]
+      },
+      {
+        title: "2026 NAR Membership Guide",
+        category: "Resources",
+        url: "https://bonitaesterorealtors.com/wp-content/uploads/2026/03/NAR_2026-MEMBER-GUIDE_8.5x11in_FINAL-DIGITAL.pdf",
+        keywords: [
+          "nar member guide", "membership guide", "nar resources",
+          "member benefits", "association guide", "2026 NAR guide"
+        ],
+        questions: [
+          "where is the NAR member guide",
+          "download the 2026 NAR membership guide",
+          "NAR member benefits information",
+          "latest NAR association guide"
+        ]
+      },
+      {
+        title: "Video Library",
+        category: "Resources",
+        url: "https://bonitaesterorealtors.com/ber-shorts-library/",
+        keywords: [
+          "video library", "training videos", "tutorials",
+          "ber shorts", "recorded webinars", "how to videos"
+        ],
+        questions: [
+          "where is the video library",
+          "watch training videos",
+          "access ber shorts library",
+          "view recorded webinars and tutorials"
         ]
       },
       {
