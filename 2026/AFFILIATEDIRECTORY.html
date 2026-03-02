@@ -1,0 +1,1186 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Affiliate Directory - Bonita Springs-Estero Realtors</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
+        integrity="sha512-9usAa10IRO0HhonpyAIVpjrylPvoDwiPUiKdWk5t3PyolY1cOd4DSE0Ga+ri4AuTroPR5aQvXU9xC6qOPnzFeg=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <style>
+        :root {
+            --primary: #006aff;
+            --primary-hover: #005ce6;
+            --bg-color: #f9f9fb;
+            --card-bg: #ffffff;
+            --text-main: #2a2a33;
+            --text-secondary: #595966;
+            --border-color: #e5e5ea;
+            --shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+            --shadow-hover: 0 8px 16px rgba(0, 0, 0, 0.1);
+        }
+
+        .ber-directory {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            line-height: 1.5;
+        }
+
+        .ber-directory *,
+        .ber-directory *::before,
+        .ber-directory *::after {
+            box-sizing: border-box;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .controls {
+            margin-bottom: 3rem;
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            align-items: center;
+            text-align: center;
+        }
+
+        .controls h1 {
+            margin: 0 0 0.5rem 0;
+            font-size: 2rem;
+            font-weight: 700;
+        }
+
+        .controls p {
+            color: var(--text-secondary);
+            margin: 0;
+        }
+
+        .search-bar {
+            position: relative;
+            width: 100%;
+            max-width: 600px;
+            margin-top: 1.5rem;
+        }
+
+        .search-bar input {
+            width: 100%;
+            padding: 1rem 1rem 1rem 3rem;
+            font-size: 1rem;
+            border: 1px solid var(--border-color);
+            border-radius: 99px;
+            outline: none;
+            transition: border-color 0.2s, box-shadow 0.2s;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.02);
+        }
+
+        .search-bar input:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(0, 106, 255, 0.1);
+        }
+
+        .search-icon {
+            position: absolute;
+            left: 1.2rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #999;
+            pointer-events: none;
+        }
+
+        .status-line {
+            font-size: 0.875rem;
+            color: var(--text-secondary);
+            margin-top: 0.5rem;
+            min-height: 1.5rem;
+        }
+
+        .directory-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 1.5rem;
+            padding-bottom: 2rem;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(24px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .agent-card {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            overflow: hidden;
+            transition: transform 0.2s, box-shadow 0.2s;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            opacity: 0;
+            animation: fadeInUp 0.4s ease forwards;
+        }
+
+        .agent-card:hover {
+            transform: translateY(-4px);
+            box-shadow: var(--shadow-hover);
+            border-color: var(--primary);
+        }
+
+        .card-header {
+            padding: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            border-bottom: 1px solid #f0f0f5;
+        }
+
+        .avatar {
+            width: 80px;
+            height: 80px;
+            border-radius: 12px;
+            background-color: #f0f0f0;
+            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" fill="%23ccc" viewBox="0 0 24 24"><path d="M12 7V3H2v18h20V7H12zM6 19H4v-2h2v2zm0-4H4v-2h2v2zm0-4H4V9h2v2zm0-4H4V5h2v2zm4 12H8v-2h2v2zm0-4H8v-2h2v2zm0-4H8V9h2v2zm0-4H8V5h2v2zm10 12h-8v-2h2v-2h-2v-2h2v-2h-2V9h8v10zm-2-8h-2v2h2v-2zm0 4h-2v2h2v-2z"/></svg>');
+            background-size: 60%;
+            background-repeat: no-repeat;
+            background-position: center;
+            flex-shrink: 0;
+            border: 3px solid #fff;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+        }
+
+        .info {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .agent-name {
+            font-weight: 700;
+            font-size: 1.125rem;
+            margin: 0;
+            color: var(--text-main);
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .agent-office {
+            font-size: 0.825rem;
+            color: var(--text-secondary);
+            margin: 0.15rem 0 0 0;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .card-body {
+            padding: 1.25rem;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+        }
+
+        .detail-row {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .detail-row i {
+            width: 16px;
+            text-align: center;
+            flex-shrink: 0;
+            color: #999;
+        }
+
+        .category-badge {
+            background: #e8f0fe;
+            color: #1a56db;
+            padding: 0.2rem 0.6rem;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            display: inline-block;
+            margin-top: 0.4rem;
+        }
+
+        .contact-link {
+            color: var(--text-secondary);
+            text-decoration: none;
+            transition: color 0.2s;
+        }
+
+        .contact-link:hover {
+            color: var(--primary);
+            text-decoration: underline;
+        }
+
+        .card-actions {
+            padding: 1rem;
+            background-color: #fbfbfd;
+            border-top: 1px solid var(--border-color);
+            display: flex;
+            gap: 1rem;
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0.6rem 1rem;
+            border-radius: 6px;
+            font-size: 0.875rem;
+            font-weight: 600;
+            text-decoration: none;
+            cursor: pointer;
+            transition: all 0.2s;
+            flex: 1;
+        }
+
+        .btn-primary {
+            background-color: var(--primary);
+            color: #fff;
+            border: none;
+        }
+
+        .btn-primary:hover {
+            background-color: var(--primary-hover);
+        }
+
+        .pagination {
+            display: flex;
+            justify-content: center;
+            gap: 0.5rem;
+            margin-top: 2rem;
+        }
+
+        .page-btn {
+            padding: 0.5rem 1rem;
+            border: 1px solid var(--border-color);
+            background: #fff;
+            border-radius: 6px;
+            cursor: pointer;
+            color: var(--text-secondary);
+            font-weight: 600;
+            transition: all 0.2s;
+        }
+
+        .page-btn:hover:not(:disabled) {
+            border-color: var(--primary);
+            color: var(--primary);
+        }
+
+        .page-btn.active {
+            background-color: var(--primary);
+            color: #fff;
+            border-color: var(--primary);
+        }
+
+        .page-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .loading-container {
+            width: 100%;
+            max-width: 400px;
+            margin: 0 auto;
+            text-align: center;
+        }
+
+        .loading-bar-bg {
+            width: 100%;
+            height: 6px;
+            background: #eee;
+            border-radius: 3px;
+            overflow: hidden;
+            margin-bottom: 0.5rem;
+            position: relative;
+        }
+
+        .loading-bar-fill {
+            height: 100%;
+            background: var(--primary);
+            width: 0%;
+            transition: width 0.3s ease;
+        }
+
+        .skeleton {
+            background: #eee;
+            background: linear-gradient(90deg, #f0f0f0 25%, #fafafa 50%, #f0f0f0 75%);
+            background-size: 200% 100%;
+            animation: shimmer 1.5s infinite;
+        }
+
+        @keyframes shimmer {
+            0% {
+                background-position: 200% 0;
+            }
+
+            100% {
+                background-position: -200% 0;
+            }
+        }
+
+        .skeleton-card {
+            height: 280px;
+            border-radius: 12px;
+            background: #fff;
+            border: 1px solid var(--border-color);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .skeleton-card::before {
+            content: '';
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            width: 60px;
+            height: 60px;
+            border-radius: 8px;
+            background: #f0f0f0;
+        }
+
+        .skeleton-card::after {
+            content: '';
+            position: absolute;
+            top: 35px;
+            left: 100px;
+            right: 20px;
+            height: 16px;
+            background: #f0f0f0;
+            border-radius: 4px;
+        }
+
+        /* MODAL STYLES */
+        .modal-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.55);
+            backdrop-filter: blur(4px);
+            -webkit-backdrop-filter: blur(4px);
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity .25s ease;
+        }
+
+        .modal-overlay.open {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .modal-content {
+            background: #fff;
+            border-radius: 16px;
+            width: 96%;
+            max-width: 600px;
+            max-height: 90vh;
+            overflow-y: auto;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, .25);
+            transform: translateY(30px) scale(0.97);
+            transition: transform .3s ease;
+            position: relative;
+        }
+
+        .modal-overlay.open .modal-content {
+            transform: translateY(0) scale(1);
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            border: none;
+            background: rgba(0, 0, 0, .06);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.1rem;
+            color: #555;
+            transition: background .2s;
+            z-index: 2;
+        }
+
+        .modal-close:hover {
+            background: rgba(0, 0, 0, .12);
+        }
+
+        .modal-hero {
+            display: flex;
+            align-items: center;
+            gap: 1.25rem;
+            padding: 2rem 2rem 1.25rem;
+        }
+
+        .modal-avatar {
+            width: 100px;
+            height: 100px;
+            border-radius: 12px;
+            object-fit: contain;
+            border: 3px solid #fff;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, .12);
+            flex-shrink: 0;
+            background: #f0f0f0 url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" fill="%23ccc" viewBox="0 0 24 24"><path d="M12 7V3H2v18h20V7H12zM6 19H4v-2h2v2zm0-4H4v-2h2v2zm0-4H4V9h2v2zm0-4H4V5h2v2zm4 12H8v-2h2v2zm0-4H8v-2h2v2zm0-4H8V9h2v2zm0-4H8V5h2v2zm10 12h-8v-2h2v-2h-2v-2h2v-2h-2V9h8v10zm-2-8h-2v2h2v-2zm0 4h-2v2h2v-2z"/></svg>') center/50% no-repeat;
+        }
+
+        .modal-hero-info h2 {
+            margin: 0;
+            font-size: 1.5rem;
+            color: var(--text-main);
+        }
+
+        .modal-hero-info .office-label {
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+            margin-top: 0.15rem;
+        }
+
+        .modal-section {
+            padding: 0 2rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .modal-section-title {
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
+            color: #888;
+            font-weight: 700;
+            margin-bottom: 0.6rem;
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+        }
+
+        .modal-detail-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 0.6rem;
+        }
+
+        .modal-detail-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 0.5rem;
+            font-size: 0.875rem;
+            color: var(--text-secondary);
+        }
+
+        .modal-detail-item i {
+            color: var(--primary);
+            margin-top: 2px;
+            width: 16px;
+            flex-shrink: 0;
+            text-align: center;
+        }
+
+        .modal-detail-item a {
+            color: var(--text-secondary);
+            text-decoration: none;
+        }
+
+        .modal-detail-item a:hover {
+            color: var(--primary);
+            text-decoration: underline;
+        }
+
+        .modal-detail-item.full {
+            grid-column: 1 / -1;
+        }
+
+        .modal-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.4rem;
+        }
+
+        .modal-tag {
+            background: #f3f4f6;
+            color: #555;
+            padding: 0.25rem 0.65rem;
+            border-radius: 99px;
+            font-size: 0.78rem;
+            font-weight: 500;
+        }
+
+        .modal-actions {
+            padding: 1.25rem 2rem;
+            border-top: 1px solid var(--border-color);
+            display: flex;
+            gap: 0.75rem;
+        }
+
+        .modal-actions .btn {
+            flex: 1;
+            text-align: center;
+        }
+
+        /* Filter bar */
+        .filter-bar {
+            display: flex;
+            gap: 0.75rem;
+            flex-wrap: wrap;
+            justify-content: center;
+            margin-top: 0.75rem;
+            width: 100%;
+            max-width: 900px;
+        }
+
+        .dropdown-container {
+            position: relative;
+            flex: 1;
+            min-width: 200px;
+        }
+
+        .dropdown-input-wrapper {
+            position: relative;
+            display: flex;
+            align-items: center;
+        }
+
+        .dropdown-input {
+            width: 100%;
+            padding: 0.75rem 2.5rem 0.75rem 1rem;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            font-size: 0.95rem;
+            background: #fff;
+        }
+
+        .dropdown-arrow {
+            position: absolute;
+            right: 1rem;
+            pointer-events: none;
+            color: #999;
+            font-size: 0.8rem;
+        }
+
+        .dropdown-list {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            right: 0;
+            background: #fff;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            margin-top: 4px;
+            max-height: 300px;
+            overflow-y: auto;
+            z-index: 100;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            display: none;
+        }
+
+        .dropdown-list.open {
+            display: block;
+        }
+
+        .dropdown-item {
+            padding: 0.6rem 1rem;
+            cursor: pointer;
+            font-size: 0.9rem;
+            color: #444;
+        }
+
+        .dropdown-item:hover {
+            background: #f5f7fa;
+            color: var(--primary);
+        }
+
+        .modal-spinner {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 4rem 2rem;
+            gap: 1rem;
+        }
+
+        .modal-spinner::before {
+            content: '';
+            width: 36px;
+            height: 36px;
+            border: 3px solid #e5e5ea;
+            border-top-color: var(--primary);
+            border-radius: 50%;
+            animation: spin .7s linear infinite;
+        }
+
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        .category-tiles {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+            gap: 1.25rem;
+            width: 100%;
+            max-width: 1200px;
+            margin: 2rem 0;
+        }
+
+        .category-tile {
+            position: relative;
+            height: 120px;
+            border-radius: 12px;
+            overflow: hidden;
+            cursor: pointer;
+            transition: transform 0.3s, box-shadow 0.3s;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            background-size: cover;
+            background-position: center;
+        }
+
+        .category-tile:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+        }
+
+        .category-tile::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(to bottom, rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.7));
+            transition: background 0.3s;
+        }
+
+        .category-tile:hover::before {
+            background: linear-gradient(to bottom, rgba(0, 0, 0, 0.05), rgba(0, 0, 0, 0.6));
+        }
+
+        .category-tile.active {
+            outline: 3px solid var(--primary);
+            outline-offset: -3px;
+        }
+
+        .category-tile-label {
+            position: absolute;
+            bottom: 12px;
+            left: 12px;
+            right: 12px;
+            color: #fff;
+            font-weight: 700;
+            font-size: 0.95rem;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+            text-align: center;
+        }
+
+        @media (max-width: 1000px) {
+            .category-tiles {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+
+        @media (max-width: 600px) {
+            .category-tiles {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .modal-hero {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .modal-detail-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .filter-bar {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="ber-directory">
+        <div class="container">
+            <div class="controls">
+                <h1>Find an Affiliated Business Partner</h1>
+                <p>Support the local businesses that support our REALTOR® community.</p>
+
+                <div class="search-bar">
+                    <div class="search-icon"><i class="fas fa-search"></i></div>
+                    <input type="text" id="searchInput" placeholder="Search by company, service, or keyword..."
+                        disabled>
+                </div>
+
+                <div class="filter-bar" id="filterBar">
+                    <!-- Category Dropdown -->
+                    <div class="dropdown-container" id="dropdownCategory">
+                        <div class="dropdown-input-wrapper">
+                            <input type="text" id="filterCategoryInput" class="dropdown-input"
+                                placeholder="Select Service/Category..." autocomplete="off">
+                            <i class="fas fa-chevron-down dropdown-arrow"></i>
+                        </div>
+                        <div class="dropdown-list" id="categoryList"></div>
+                    </div>
+
+                    <!-- Language Dropdown -->
+                    <div class="dropdown-container" id="dropdownLang">
+                        <div class="dropdown-input-wrapper">
+                            <input type="text" id="filterLanguageInput" class="dropdown-input"
+                                placeholder="Select Language..." autocomplete="off">
+                            <i class="fas fa-chevron-down dropdown-arrow"></i>
+                        </div>
+                        <div class="dropdown-list" id="languageList"></div>
+                    </div>
+                </div>
+
+                <div class="category-tiles" id="categoryTiles">
+                    <div class="category-tile" onclick="selectTileCategory('Title Company', this)"
+                        style="background-image: url('images/tiles/title_company.png')">
+                        <div class="category-tile-label">Title Company</div>
+                    </div>
+                    <div class="category-tile" onclick="selectTileCategory('Mortgage', this)"
+                        style="background-image: url('images/tiles/mortgage.png')">
+                        <div class="category-tile-label">Mortgage</div>
+                    </div>
+                    <div class="category-tile" onclick="selectTileCategory('Home Inspector', this)"
+                        style="background-image: url('images/tiles/home_inspection.png')">
+                        <div class="category-tile-label">Home Inspection</div>
+                    </div>
+                    <div class="category-tile" onclick="selectTileCategory('Lawyer/Attorney', this)"
+                        style="background-image: url('images/tiles/lawyer.png')">
+                        <div class="category-tile-label">Lawyer/Attorney</div>
+                    </div>
+                    <div class="category-tile" onclick="selectTileCategory('Insurance', this)"
+                        style="background-image: url('images/tiles/insurance.png')">
+                        <div class="category-tile-label">Insurance</div>
+                    </div>
+                    <div class="category-tile" onclick="selectTileCategory('Photography & Media', this)"
+                        style="background-image: url('images/tiles/photography.png')">
+                        <div class="category-tile-label">Photography & Media</div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="loadingContainer" class="loading-container">
+                <div class="loading-bar-bg">
+                    <div id="loadingBar" class="loading-bar-fill"></div>
+                </div>
+                <div id="statusLine" class="status-line">Connecting to member database...</div>
+            </div>
+        </div>
+
+        <div id="directoryGrid" class="directory-grid">
+            <!-- Skeletons -->
+            <div class="skeleton-card skeleton"></div>
+            <div class="skeleton-card skeleton"></div>
+            <div class="skeleton-card skeleton"></div>
+            <div class="skeleton-card skeleton"></div>
+        </div>
+
+        <div id="pagination" class="pagination"></div>
+
+        <div
+            style="margin: 4rem 0; text-align: center; padding: 2rem; background: #fff; border-radius: 12px; border: 1px dashed #ddd;">
+            <h3>Interested in becoming an Affiliate?</h3>
+            <p style="color: #666; margin-bottom: 1.5rem;">Join our network of professional service providers and reach
+                over 1,000 local REALTORS®.</p>
+            <a href="mailto:membership@bonitaesterorealtors.com" class="btn btn-primary"
+                style="max-width: 250px; margin: 0 auto;">Contact Membership</a>
+        </div>
+    </div>
+
+    <!-- Modal -->
+    <div class="modal-overlay" id="agentModal">
+        <div class="modal-content">
+            <button class="modal-close" id="modalClose">&times;</button>
+            <div id="modalBody"></div>
+        </div>
+    </div>
+
+    <script>
+        (function () {
+            const apiKey = 'cR1djHVMkndNjLbwXyhDyOV7dWPJ6TnufYtcdOHc';
+            const BASE_URL = 'https://bonitaspringsesterorealtorsfl.growthzoneapp.com';
+            const CONTACTS_BASE_URL = `${BASE_URL}/api/contacts`;
+            const ITEMS_PER_PAGE = 50;
+
+            // Affiliate Type IDs
+            const AFFILIATE_TYPE_IDS = [10172, 10173, 10503, 23411, 56858, 56859, 56861, 56862, 56863];
+
+            const searchInput = document.getElementById('searchInput');
+            const directoryGrid = document.getElementById('directoryGrid');
+            const statusLine = document.getElementById('statusLine');
+            const loadingBar = document.getElementById('loadingBar');
+            const paginationDiv = document.getElementById('pagination');
+
+            const filterCategoryInput = document.getElementById('filterCategoryInput');
+            const filterCategoryList = document.getElementById('categoryList');
+            const filterLanguageInput = document.getElementById('filterLanguageInput');
+            const filterLanguageList = document.getElementById('languageList');
+
+            let allContacts = [];
+            let displayedContacts = [];
+            let currentPage = 1;
+
+            document.addEventListener('DOMContentLoaded', async () => {
+                try {
+                    const contacts = await fetchAffiliates();
+                    allContacts = randomize(contacts);
+                    displayedContacts = allContacts;
+
+                    statusLine.textContent = `Showing ${allContacts.length} business partners.`;
+                    searchInput.disabled = false;
+
+                    populateFilters(allContacts);
+                    renderPage(1);
+
+                    searchInput.addEventListener('input', applyFilters);
+                    setupDropdown(filterCategoryInput, filterCategoryList);
+                    setupDropdown(filterLanguageInput, filterLanguageList);
+
+                    // Background Indexing for Categories
+                    setTimeout(() => indexCategories(), 1000);
+
+                } catch (err) {
+                    statusLine.textContent = 'Error loading directory.';
+                    console.error(err);
+                }
+            });
+
+            async function fetchAffiliateIds() {
+                const ids = new Set();
+                const promises = AFFILIATE_TYPE_IDS.map(async (typeId) => {
+                    let skip = 0;
+                    while (true) {
+                        const url = `${BASE_URL}/api/memberships/all?$skip=${skip}&$top=2000`;
+                        const res = await fetch(url, {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json', 'Authorization': 'ApiKey ' + apiKey },
+                            body: JSON.stringify({ MembershipTypeId: typeId })
+                        });
+                        if (!res.ok) break;
+                        const data = await res.json();
+                        const results = data.Results || [];
+                        if (results.length === 0) break;
+                        results.forEach(m => { if (m.Status === 'Active') ids.add(m.ContactId); });
+                        skip += results.length;
+                        if (skip >= (data.TotalRecordAvailable || 0)) break;
+                    }
+                });
+                await Promise.all(promises);
+                return ids;
+            }
+
+            async function fetchAffiliates() {
+                statusLine.textContent = 'Loading memberships...';
+                const affiliateIds = await fetchAffiliateIds();
+                statusLine.textContent = `Found ${affiliateIds.size} active affiliates. Loading details...`;
+
+                let all = [];
+                let skip = 0;
+                while (true) {
+                    const res = await fetch(`${CONTACTS_BASE_URL}?$skip=${skip}&$top=5000`, {
+                        headers: { 'Authorization': 'ApiKey ' + apiKey }
+                    });
+                    if (!res.ok) break;
+                    const data = await res.json();
+                    const results = data.Results || [];
+                    if (results.length === 0) break;
+                    all = all.concat(results.filter(c => affiliateIds.has(c.ContactId) && c.Status === 'Active'));
+                    skip += data.Results.length;
+                    if (skip >= data.TotalRecordAvailable) break;
+                }
+                return all;
+            }
+
+            function randomize(arr) {
+                return arr.map(a => ({ ...a, _r: Math.random() })).sort((a, b) => a._r - b._r);
+            }
+
+            async function indexCategories() {
+                const CACHE_KEY = 'AFFILIATE_META_V2';
+                const stored = localStorage.getItem(CACHE_KEY);
+                let cache = stored ? JSON.parse(stored).data : {};
+
+                const toIndex = allContacts.filter(c => !cache[c.ContactId]);
+                if (toIndex.length === 0) {
+                    applyCache(cache);
+                    return;
+                }
+
+                console.log(`Indexing ${toIndex.length} categories...`);
+                for (let i = 0; i < toIndex.length; i += 5) {
+                    const batch = toIndex.slice(i, i + 5);
+                    await Promise.all(batch.map(async c => {
+                        try {
+                            const [orgRes, moreRes] = await Promise.all([
+                                fetch(`${BASE_URL}/api/contacts/OrgGeneral/${c.ContactId}`, { headers: { 'Authorization': 'ApiKey ' + apiKey } }),
+                                fetch(`${BASE_URL}/api/contacts/${c.ContactId}/moreinfo`, { headers: { 'Authorization': 'ApiKey ' + apiKey } })
+                            ]);
+                            const org = await orgRes.json();
+                            const more = await moreRes.json();
+
+                            let finalCats = [];
+                            if (org && org.Categories) {
+                                org.Categories.forEach(cat => {
+                                    const ln = cat.CategoryListName || '';
+                                    const n = cat.Name || '';
+                                    if (n) {
+                                        n.split(';').map(s => s.trim()).forEach(s => {
+                                            if (s && !['Board only Affiliate', 'Affiliate'].includes(s)) {
+                                                finalCats.push(s);
+                                            }
+                                        });
+                                    } else if (ln && !['Business Type', 'Business Category', 'Affiliate', 'Board only Affiliate'].includes(ln)) {
+                                        finalCats.push(ln);
+                                    }
+                                });
+                            }
+                            if (finalCats.length === 0) finalCats = ['Affiliate Member'];
+
+                            cache[c.ContactId] = {
+                                Categories: [...new Set(finalCats)],
+                                Languages: more?.Fields?.find(f => f.DisplayName === 'Languages Spoken')?.Value || ''
+                            };
+                        } catch (e) { }
+                    }));
+                    if (i % 25 === 0) {
+                        localStorage.setItem(CACHE_KEY, JSON.stringify({ timestamp: Date.now(), data: cache }));
+                        applyCache(cache);
+                    }
+                    await new Promise(r => setTimeout(r, 200));
+                }
+                localStorage.setItem(CACHE_KEY, JSON.stringify({ timestamp: Date.now(), data: cache }));
+                applyCache(cache);
+            }
+
+            function applyCache(cache) {
+                allContacts.forEach(c => {
+                    if (cache[c.ContactId]) {
+                        c._categories = cache[c.ContactId].Categories || [];
+                        c._languages = cache[c.ContactId].Languages || '';
+                    }
+                });
+                populateFilters(allContacts);
+            }
+
+            function populateFilters(contacts) {
+                const cats = new Set();
+                const langs = new Set();
+                contacts.forEach(c => {
+                    (c._categories || []).forEach(cat => cats.add(cat));
+                    if (c._languages) c._languages.split(',').forEach(l => langs.add(l.trim()));
+                });
+
+                buildDropdown(filterCategoryList, filterCategoryInput, cats);
+                buildDropdown(filterLanguageList, filterLanguageInput, langs);
+            }
+
+            function buildDropdown(listEl, inputEl, set) {
+                listEl.innerHTML = '<div class="dropdown-item">All</div>';
+                [...set].sort().forEach(val => {
+                    const div = document.createElement('div');
+                    div.className = 'dropdown-item';
+                    div.textContent = val;
+                    div.onclick = () => { inputEl.value = val; listEl.classList.remove('open'); applyFilters(); };
+                    listEl.appendChild(div);
+                });
+                listEl.firstChild.onclick = () => { inputEl.value = ''; listEl.classList.remove('open'); applyFilters(); };
+            }
+
+            function setupDropdown(input, list) {
+                input.addEventListener('focus', () => {
+                    list.classList.add('open');
+                    const term = input.value.toLowerCase();
+                    Array.from(list.children).forEach(child => {
+                        child.style.display = child.textContent.toLowerCase().includes(term) || child.textContent === 'All' ? 'block' : 'none';
+                    });
+                });
+                input.addEventListener('input', () => {
+                    const term = input.value.toLowerCase();
+                    Array.from(list.children).forEach(child => {
+                        child.style.display = child.textContent.toLowerCase().includes(term) || child.textContent === 'All' ? 'block' : 'none';
+                    });
+                    applyFilters();
+                });
+                document.addEventListener('click', (e) => {
+                    if (!e.target.closest('.dropdown-container')) list.classList.remove('open');
+                });
+            }
+
+            window.selectTileCategory = (category, element) => {
+                const tiles = document.querySelectorAll('.category-tile');
+                const wasActive = element.classList.contains('active');
+
+                tiles.forEach(t => t.classList.remove('active'));
+
+                if (wasActive) {
+                    filterCategoryInput.value = '';
+                } else {
+                    element.classList.add('active');
+                    filterCategoryInput.value = category;
+                }
+
+                // Clear text search when selecting a tile for better UX
+                searchInput.value = '';
+                filterCategoryList.classList.remove('open');
+
+                applyFilters();
+            };
+
+            function applyFilters() {
+                const term = searchInput.value.toLowerCase();
+                const cat = filterCategoryInput.value.toLowerCase();
+                const lang = filterLanguageInput.value.toLowerCase();
+
+                // Sync tile state with dropdown if changed manually
+                const tiles = document.querySelectorAll('.category-tile');
+                tiles.forEach(t => {
+                    if (t.querySelector('.category-tile-label').textContent.toLowerCase() === cat) {
+                        t.classList.add('active');
+                    } else {
+                        t.classList.remove('active');
+                    }
+                });
+
+                displayedContacts = allContacts.filter(c => {
+                    if (term && !c.Name.toLowerCase().includes(term) && !(c.PrimaryContact || '').toLowerCase().includes(term)) return false;
+                    if (cat && !(c._categories || []).some(v => v.toLowerCase() === cat)) return false;
+                    if (lang && !(c._languages || '').toLowerCase().includes(lang)) return false;
+                    return true;
+                });
+                renderPage(1);
+            }
+
+            function renderPage(page) {
+                currentPage = page;
+                const start = (page - 1) * ITEMS_PER_PAGE;
+                const slice = displayedContacts.slice(start, start + ITEMS_PER_PAGE);
+
+                loadingBar.style.width = '100%';
+                document.getElementById('loadingContainer').style.display = 'none';
+
+                directoryGrid.innerHTML = '';
+                slice.forEach((c, i) => {
+                    const card = document.createElement('div');
+                    card.className = 'agent-card';
+                    card.style.animationDelay = `${i * 30}ms`;
+
+                    const categories = (c._categories && c._categories.length) ? c._categories : ['Affiliate Member'];
+                    const catHtml = categories.map(cat => `<div class="category-badge">${cat}</div>`).join(' ');
+
+                    card.innerHTML = `
+                        <div class="card-header">
+                            <div class="avatar">${c.ImageUrl ? `<img src="${c.ImageUrl}" alt="${c.Name}">` : ''}</div>
+                            <div class="info">
+                                <h3 class="agent-name">${c.Name}</h3>
+                                <div class="category-list">${catHtml}</div>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <div class="detail-row"><i class="fas fa-map-marker-alt"></i><span>${c.City || 'Bonita Springs'}, ${c.State || 'FL'}</span></div>
+                            ${c.Phone ? `<div class="detail-row"><i class="fas fa-phone"></i><a href="tel:${c.Phone}" class="contact-link">${c.Phone}</a></div>` : ''}
+                            ${c.EmailAddress ? `<div class="detail-row"><i class="fas fa-envelope"></i><a href="mailto:${c.EmailAddress}" class="contact-link">${c.EmailAddress}</a></div>` : ''}
+                        </div>
+                        <div class="card-actions">
+                            <button class="btn btn-primary" onclick="window.openModal(${c.ContactId})">View Details</button>
+                        </div>
+                    `;
+                    directoryGrid.appendChild(card);
+                });
+                renderPagination(Math.ceil(displayedContacts.length / ITEMS_PER_PAGE));
+            }
+
+            function renderPagination(total) {
+                paginationDiv.innerHTML = '';
+                if (total <= 1) return;
+                for (let i = 1; i <= total; i++) {
+                    const btn = document.createElement('button');
+                    btn.className = `page-btn ${i === currentPage ? 'active' : ''}`;
+                    btn.textContent = i;
+                    btn.onclick = () => { window.scrollTo(0, 0); renderPage(i); };
+                    paginationDiv.appendChild(btn);
+                }
+            }
+
+            // Modal Logic
+            window.openModal = async (id) => {
+                const overlay = document.getElementById('agentModal');
+                const body = document.getElementById('modalBody');
+                overlay.classList.add('open');
+                document.body.style.overflow = 'hidden';
+                body.innerHTML = '<div class="modal-spinner"></div>';
+
+                const basic = allContacts.find(c => c.ContactId === id);
+                try {
+                    const [orgRes, moreRes] = await Promise.all([
+                        fetch(`${BASE_URL}/api/contacts/OrgGeneral/${id}`, { headers: { 'Authorization': 'ApiKey ' + apiKey } }),
+                        fetch(`${BASE_URL}/api/contacts/${id}/moreinfo`, { headers: { 'Authorization': 'ApiKey ' + apiKey } })
+                    ]);
+                    const org = await orgRes.json();
+                    const more = await moreRes.json();
+                    const bio = more?.AddlInfo?.Bio || '';
+                    const cats = (org.Categories || []).map(cat => cat.CategoryListName || cat.Name).filter(n => n && n !== 'Board only Affiliate');
+
+                    body.innerHTML = `
+                        <div class="modal-hero">
+                            <div class="modal-avatar">${basic.ImageUrl ? `<img src="${basic.ImageUrl}" alt="${basic.Name}" style="width:100%;height:100%;object-fit:contain;">` : ''}</div>
+                            <div class="modal-hero-info">
+                                <h2>${basic.Name}</h2>
+                                <div class="office-label">${cats.join(' · ') || 'Affiliate Partner'}</div>
+                            </div>
+                        </div>
+                        ${bio ? `<div class="modal-section"><div class="modal-section-title">About</div><div class="modal-bio">${bio}</div></div>` : ''}
+                        <div class="modal-section">
+                            <div class="modal-section-title">Contact Information</div>
+                            <div class="modal-detail-grid">
+                                ${basic.Phone ? `<div class="modal-detail-item"><i class="fas fa-phone"></i><a href="tel:${basic.Phone}">${basic.Phone}</a></div>` : ''}
+                                ${basic.EmailAddress ? `<div class="modal-detail-item"><i class="fas fa-envelope"></i><a href="mailto:${basic.EmailAddress}">${basic.EmailAddress}</a></div>` : ''}
+                                ${basic.Website ? `<div class="modal-detail-item full"><i class="fas fa-globe"></i><a href="${basic.Website.startsWith('http') ? basic.Website : 'https://' + basic.Website}" target="_blank">${basic.Website}</a></div>` : ''}
+                            </div>
+                        </div>
+                        <div class="modal-actions">
+                            <a href="mailto:${basic.EmailAddress}" class="btn btn-primary">Send Message</a>
+                            <button class="btn-outline" onclick="document.getElementById('agentModal').classList.remove('open'); document.body.style.overflow='';">Close</button>
+                        </div>
+                    `;
+                } catch (e) { body.innerHTML = 'Error loading details.'; }
+            };
+
+            document.getElementById('modalClose').onclick = () => {
+                document.getElementById('agentModal').classList.remove('open');
+                document.body.style.overflow = '';
+            };
+        })();
+    </script>
+</body>
+
+</html>
