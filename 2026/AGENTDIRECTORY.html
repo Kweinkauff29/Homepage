@@ -1,0 +1,2297 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Agent Directory - Bonita Springs-Estero Realtors</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
+        integrity="sha512-9usAa10IRO0HhonpyAIVpjrylPvoDwiPUiKdWk5t3PyolY1cOd4DSE0Ga+ri4AuTroPR5aQvXU9xC6qOPnzFeg=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <style>
+        :root {
+            --primary: #006aff;
+            --primary-hover: #005ce6;
+            --bg-color: #f9f9fb;
+            --card-bg: #ffffff;
+            --text-main: #2a2a33;
+            --text-secondary: #595966;
+            --border-color: #e5e5ea;
+            --shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+            --shadow-hover: 0 8px 16px rgba(0, 0, 0, 0.1);
+        }
+
+        .ber-directory {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            line-height: 1.5;
+        }
+
+        .ber-directory *,
+        .ber-directory *::before,
+        .ber-directory *::after {
+            box-sizing: border-box;
+        }
+
+
+        /* Main Container */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        /* Controls / Search */
+        .controls {
+            margin-bottom: 3rem;
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            align-items: center;
+            text-align: center;
+        }
+
+        .controls h1 {
+            margin: 0 0 0.5rem 0;
+            font-size: 2rem;
+            font-weight: 700;
+        }
+
+        .controls p {
+            color: var(--text-secondary);
+            margin: 0;
+        }
+
+        .search-bar {
+            position: relative;
+            width: 100%;
+            max-width: 600px;
+            margin-top: 1.5rem;
+        }
+
+        .search-bar input {
+            width: 100%;
+            padding: 1rem 1rem 1rem 3rem;
+            font-size: 1rem;
+            border: 1px solid var(--border-color);
+            border-radius: 99px;
+            outline: none;
+            transition: border-color 0.2s, box-shadow 0.2s;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.02);
+        }
+
+        .search-bar input:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(0, 106, 255, 0.1);
+        }
+
+        .search-icon {
+            position: absolute;
+            left: 1.2rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #999;
+            pointer-events: none;
+        }
+
+        .status-line {
+            font-size: 0.875rem;
+            color: var(--text-secondary);
+            margin-top: 0.5rem;
+            min-height: 1.5rem;
+        }
+
+        /* Grid */
+        .directory-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 1.5rem;
+            padding-bottom: 2rem;
+        }
+
+        /* Card entrance animation */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(24px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Agent Card */
+        .agent-card {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            overflow: hidden;
+            transition: transform 0.2s, box-shadow 0.2s;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            opacity: 0;
+            animation: fadeInUp 0.4s ease forwards;
+        }
+
+        .agent-card:hover {
+            transform: translateY(-4px);
+            box-shadow: var(--shadow-hover);
+            border-color: var(--primary);
+        }
+
+        .card-header {
+            padding: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            border-bottom: 1px solid #f0f0f5;
+        }
+
+        .avatar {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background-color: #f0f0f0;
+            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" fill="%23ccc" viewBox="0 0 24 24"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>');
+            background-size: cover;
+            background-position: center;
+            flex-shrink: 0;
+            border: 3px solid #fff;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .info {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .agent-name {
+            font-weight: 700;
+            font-size: 1.125rem;
+            margin: 0;
+            color: var(--text-main);
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .agent-office {
+            font-size: 0.825rem;
+            color: var(--text-secondary);
+            margin: 0.15rem 0 0 0;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .card-body {
+            padding: 1.25rem;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+        }
+
+        .detail-row {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .detail-row i {
+            width: 16px;
+            text-align: center;
+            flex-shrink: 0;
+            color: #999;
+        }
+
+        .company-name {
+            font-weight: 600;
+            color: #333;
+        }
+
+        .contact-link {
+            color: var(--text-secondary);
+            text-decoration: none;
+            transition: color 0.2s;
+        }
+
+        .contact-link:hover {
+            color: var(--primary);
+            text-decoration: underline;
+        }
+
+        .card-actions {
+            padding: 1rem;
+            background-color: #fbfbfd;
+            border-top: 1px solid var(--border-color);
+            display: flex;
+            gap: 1rem;
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0.6rem 1rem;
+            border-radius: 6px;
+            font-size: 0.875rem;
+            font-weight: 600;
+            text-decoration: none;
+            cursor: pointer;
+            transition: all 0.2s;
+            flex: 1;
+        }
+
+        .btn-primary {
+            background-color: var(--primary);
+            color: #fff;
+            border: none;
+        }
+
+        .btn-primary:hover {
+            background-color: var(--primary-hover);
+        }
+
+        /* Pagination */
+        .pagination {
+            display: flex;
+            justify-content: center;
+            gap: 0.5rem;
+            margin-top: 2rem;
+        }
+
+        .page-btn {
+            padding: 0.5rem 1rem;
+            border: 1px solid var(--border-color);
+            background: #fff;
+            border-radius: 6px;
+            cursor: pointer;
+            color: var(--text-secondary);
+            font-weight: 600;
+            transition: all 0.2s;
+        }
+
+        .page-btn:hover:not(:disabled) {
+            border-color: var(--primary);
+            color: var(--primary);
+        }
+
+        .page-btn.active {
+            background-color: var(--primary);
+            color: #fff;
+            border-color: var(--primary);
+        }
+
+        .page-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        /* Loading - Progress Bar */
+        .loading-container {
+            width: 100%;
+            max-width: 400px;
+            margin: 0 auto;
+            text-align: center;
+        }
+
+        .loading-bar-bg {
+            width: 100%;
+            height: 6px;
+            background: #eee;
+            border-radius: 3px;
+            overflow: hidden;
+            margin-bottom: 0.5rem;
+            position: relative;
+        }
+
+        .loading-bar-fill {
+            height: 100%;
+            background: var(--primary);
+            width: 0%;
+            transition: width 0.3s ease;
+        }
+
+        /* Loading Skeleton */
+        .skeleton {
+            background: #eee;
+            background: linear-gradient(90deg, #f0f0f0 25%, #fafafa 50%, #f0f0f0 75%);
+            background-size: 200% 100%;
+            animation: shimmer 1.5s infinite;
+        }
+
+        @keyframes shimmer {
+            0% {
+                background-position: 200% 0;
+            }
+
+            100% {
+                background-position: -200% 0;
+            }
+        }
+
+        .skeleton-card {
+            height: 280px;
+            border-radius: 12px;
+            background: #fff;
+            border: 1px solid var(--border-color);
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* Inner skeleton structure for cards */
+        .skeleton-card::before {
+            content: '';
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: #f0f0f0;
+        }
+
+        .skeleton-card::after {
+            content: '';
+            position: absolute;
+            top: 35px;
+            left: 100px;
+            right: 20px;
+            height: 16px;
+            background: #f0f0f0;
+            border-radius: 4px;
+        }
+
+        /* ====== MODAL STYLES ====== */
+        .modal-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.55);
+            backdrop-filter: blur(4px);
+            -webkit-backdrop-filter: blur(4px);
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity .25s ease;
+        }
+
+        .modal-overlay.open {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .modal-content {
+            background: #fff;
+            border-radius: 16px;
+            width: 96%;
+            max-width: 680px;
+            max-height: 90vh;
+            overflow-y: auto;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, .25);
+            transform: translateY(30px) scale(0.97);
+            transition: transform .3s ease;
+            position: relative;
+        }
+
+        .modal-overlay.open .modal-content {
+            transform: translateY(0) scale(1);
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            border: none;
+            background: rgba(0, 0, 0, .06);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.1rem;
+            color: #555;
+            transition: background .2s;
+            z-index: 2;
+        }
+
+        .modal-close:hover {
+            background: rgba(0, 0, 0, .12);
+        }
+
+        .modal-hero {
+            display: flex;
+            align-items: center;
+            gap: 1.25rem;
+            padding: 2rem 2rem 1.25rem;
+        }
+
+        .modal-avatar {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 3px solid #fff;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, .12);
+            flex-shrink: 0;
+            background: #f0f0f0 url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" fill="%23ccc" viewBox="0 0 24 24"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>') center/60% no-repeat;
+        }
+
+        .modal-hero-info h2 {
+            margin: 0;
+            font-size: 1.5rem;
+            color: var(--text-main);
+        }
+
+        .modal-hero-info .office-label {
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+            margin-top: 0.15rem;
+        }
+
+        .modal-hero-info .membership-badge {
+            display: inline-block;
+            background: #e8f0fe;
+            color: #1a56db;
+            padding: 0.2rem 0.6rem;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            margin-top: 0.5rem;
+        }
+
+        .modal-section {
+            padding: 0 2rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .modal-section-title {
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
+            color: #888;
+            font-weight: 700;
+            margin-bottom: 0.6rem;
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+        }
+
+        .modal-section-title i {
+            font-size: 0.8rem;
+        }
+
+        .modal-detail-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 0.6rem;
+        }
+
+        .modal-detail-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 0.5rem;
+            font-size: 0.875rem;
+            color: var(--text-secondary);
+        }
+
+        .modal-detail-item i {
+            color: var(--primary);
+            margin-top: 2px;
+            width: 16px;
+            flex-shrink: 0;
+            text-align: center;
+        }
+
+        .modal-detail-item a {
+            color: var(--text-secondary);
+            text-decoration: none;
+        }
+
+        .modal-detail-item a:hover {
+            color: var(--primary);
+            text-decoration: underline;
+        }
+
+        .modal-detail-item.full {
+            grid-column: 1 / -1;
+        }
+
+        .modal-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.4rem;
+        }
+
+        .modal-tag {
+            background: #f3f4f6;
+            color: #555;
+            padding: 0.25rem 0.65rem;
+            border-radius: 99px;
+            font-size: 0.78rem;
+            font-weight: 500;
+        }
+
+        .modal-listings-placeholder {
+            background: #f8f9fb;
+            border: 2px dashed var(--border-color);
+            border-radius: 10px;
+            padding: 2rem;
+            text-align: center;
+            color: #999;
+            font-size: 0.9rem;
+        }
+
+        .modal-listings-placeholder i {
+            font-size: 1.5rem;
+            display: block;
+            margin-bottom: 0.5rem;
+            color: #ccc;
+        }
+
+        .modal-actions {
+            padding: 1.25rem 2rem;
+            border-top: 1px solid var(--border-color);
+            display: flex;
+            gap: 0.75rem;
+        }
+
+        .modal-actions .btn {
+            flex: 1;
+            text-align: center;
+        }
+
+        .btn-outline {
+            background: transparent;
+            border: 2px solid var(--primary);
+            color: var(--primary);
+            padding: 0.55rem 1rem;
+            border-radius: 6px;
+            font-size: 0.875rem;
+            font-weight: 600;
+            text-decoration: none;
+            cursor: pointer;
+            transition: all .2s;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .btn-outline:hover {
+            background: var(--primary);
+            color: #fff;
+        }
+
+        /* Modal loading spinner */
+        .modal-spinner {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 4rem 2rem;
+            gap: 1rem;
+        }
+
+        .modal-spinner::before {
+            content: '';
+            width: 36px;
+            height: 36px;
+            border: 3px solid #e5e5ea;
+            border-top-color: var(--primary);
+            border-radius: 50%;
+            animation: spin .7s linear infinite;
+        }
+
+        /* Agent Listings in Modal */
+        .modal-listings-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+            gap: 1rem;
+            margin-top: 0.5rem;
+        }
+
+        .modal-listing-card {
+            background: #fff;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            overflow: hidden;
+            transition: transform 0.2s;
+            cursor: pointer;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .modal-listing-card:hover {
+            transform: translateY(-2px);
+            border-color: var(--primary);
+        }
+
+        .modal-listing-img {
+            width: 100%;
+            height: 90px;
+            object-fit: cover;
+            background: #eee;
+        }
+
+        .modal-listing-info {
+            padding: 0.5rem;
+            font-size: 0.75rem;
+        }
+
+        .modal-listing-price {
+            font-weight: 700;
+            color: var(--text-main);
+        }
+
+        .modal-listing-addr {
+            color: var(--text-secondary);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            margin-top: 2px;
+        }
+
+        .modal-listing-status {
+            display: inline-block;
+            padding: 2px 4px;
+            border-radius: 3px;
+            font-size: 0.65rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            margin-top: 4px;
+        }
+
+        .status-active {
+            background: #ecfdf5;
+            color: #059669;
+        }
+
+        .status-closed {
+            background: #fef2f2;
+            color: #dc2626;
+        }
+
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        /* Filter bar */
+        .filter-bar {
+            display: flex;
+            gap: 0.75rem;
+            flex-wrap: wrap;
+            justify-content: center;
+            margin-top: 0.75rem;
+            width: 100%;
+            max-width: 700px;
+        }
+
+        .filter-select {
+            flex: 1;
+            min-width: 160px;
+            padding: 0.6rem 0.85rem;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            font-size: 0.875rem;
+            color: var(--text-main);
+            background: #fff;
+            cursor: pointer;
+            outline: none;
+            transition: border-color .2s;
+        }
+
+        .filter-select:focus {
+            border-color: var(--primary);
+        }
+
+        /* Allow dropdowns to wrap gracefully on smaller screens */
+        .dropdown-container {
+            flex: 1;
+            min-width: 160px;
+            position: relative;
+        }
+
+        /* Designation badge (gold) */
+        .designation-badge {
+            display: inline-block;
+            background: linear-gradient(135deg, #fef3c7, #fde68a);
+            color: #92400e;
+            padding: 0.15rem 0.55rem;
+            border-radius: 4px;
+            font-size: 0.7rem;
+            font-weight: 700;
+            letter-spacing: 0.03em;
+            margin-left: 0.35rem;
+            vertical-align: middle;
+        }
+
+        /* Bio section in modal */
+        .modal-bio {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            line-height: 1.65;
+        }
+
+        /* Contact Me button */
+        .btn-contact {
+            background: #16a34a;
+            color: #fff;
+            border: none;
+            padding: 0.55rem 1rem;
+            border-radius: 6px;
+            font-size: 0.875rem;
+            font-weight: 600;
+            text-decoration: none;
+            cursor: pointer;
+            transition: all .2s;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .btn-contact:hover {
+            background: #15803d;
+        }
+
+        /* Languages pills */
+        .modal-lang-tag {
+            background: #ecfdf5;
+            color: #065f46;
+            padding: 0.2rem 0.6rem;
+            border-radius: 99px;
+            font-size: 0.78rem;
+            font-weight: 600;
+        }
+
+        @media (max-width: 600px) {
+            .modal-hero {
+                flex-direction: column;
+                text-align: center;
+                padding: 1.5rem 1.25rem 1rem;
+            }
+
+            .modal-section {
+                padding: 0 1.25rem;
+            }
+
+            .modal-detail-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .modal-actions {
+                padding: 1rem 1.25rem;
+            }
+
+            .filter-bar {
+                flex-direction: column;
+            }
+        }
+
+        /* New Badge Styles */
+        .designation-badge.highlighted {
+            background: #e3f2fd;
+            color: #1565c0;
+            border: 1px solid #bbdefb;
+            font-weight: 600;
+        }
+
+        .designation-badge.rpac-badge {
+            background: #fff8e1;
+            color: #f57f17;
+            border: 1px solid #ffecb3;
+            font-weight: 600;
+        }
+
+        /* Hybrid Dropdown */
+        .dropdown-container {
+            position: relative;
+            flex: 1;
+        }
+
+        .dropdown-input-wrapper {
+            position: relative;
+            display: flex;
+            align-items: center;
+        }
+
+        .dropdown-input {
+            width: 100%;
+            padding: 0.75rem 2.5rem 0.75rem 1rem;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            font-size: 0.95rem;
+            transition: border-color 0.2s, box-shadow 0.2s;
+            background: #fff;
+        }
+
+        .dropdown-arrow {
+            position: absolute;
+            right: 1rem;
+            pointer-events: none;
+            color: #999;
+            font-size: 0.8rem;
+        }
+
+        .dropdown-list {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            right: 0;
+            background: #fff;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            margin-top: 4px;
+            max-height: 300px;
+            overflow-y: auto;
+            z-index: 100;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            display: none;
+        }
+
+        .dropdown-list.open {
+            display: block;
+        }
+
+        .dropdown-item {
+            padding: 0.6rem 1rem;
+            cursor: pointer;
+            font-size: 0.9rem;
+            color: #444;
+            transition: background 0.1s;
+        }
+
+        .dropdown-item:hover,
+        .dropdown-item.highlighted {
+            background: #f5f7fa;
+            color: var(--primary);
+        }
+
+        .modal-lang-tag {
+            display: inline-flex;
+            align-items: center;
+            background: #f5f5f5;
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            color: #444;
+            border: 1px solid #eee;
+        }
+
+        /* Missing Agent Section */
+        .missing-agent-section {
+            background: #f8f9fa;
+            border: 1px dashed var(--border-color);
+            border-radius: 12px;
+            padding: 2rem;
+            margin: 3rem 0;
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+        }
+
+        .missing-icon {
+            width: 50px;
+            height: 50px;
+            background: #e3f2fd;
+            color: var(--primary);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.25rem;
+            flex-shrink: 0;
+        }
+
+        .missing-content h3 {
+            margin: 0 0 0.5rem 0;
+            font-size: 1.1rem;
+            color: var(--text-main);
+        }
+
+        .missing-content p {
+            margin: 0 0 1rem 0;
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+            line-height: 1.5;
+        }
+
+        .btn-missing {
+            display: inline-block;
+            background: var(--primary);
+            color: #fff;
+            padding: 0.6rem 1.2rem;
+            border-radius: 6px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.9rem;
+            transition: background 0.2s;
+        }
+
+        .btn-missing:hover {
+            opacity: 0.9;
+        }
+
+        @media (max-width: 768px) {
+            .missing-agent-section {
+                flex-direction: column;
+                text-align: center;
+                padding: 1.5rem;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="ber-directory">
+        <div class="container">
+
+            <div class="controls">
+                <h1>Find a REALTOR®</h1>
+                <p>Search our directory of trusted Bonita Springs-Estero REALTORS®.</p>
+
+                <div class="search-bar">
+                    <div class="search-icon">
+                        <i class="fas fa-search"></i>
+                    </div>
+                    <input type="text" id="searchInput" placeholder="Search by name, office, or city..." disabled>
+                </div>
+                <div class="filter-bar" id="filterBar">
+                    <!-- Office Dropdown -->
+                    <div class="dropdown-container" id="dropdownOffice">
+                        <div class="dropdown-input-wrapper">
+                            <input type="text" id="filterOfficeInput" class="dropdown-input"
+                                placeholder="Select Office..." autocomplete="off">
+                            <i class="fas fa-chevron-down dropdown-arrow"></i>
+                        </div>
+                        <div class="dropdown-list" id="officeList"></div>
+                    </div>
+
+                    <!-- Area Dropdown -->
+                    <div class="dropdown-container" id="dropdownArea">
+                        <div class="dropdown-input-wrapper">
+                            <input type="text" id="filterAreaInput" class="dropdown-input" placeholder="Select Area..."
+                                autocomplete="off">
+                            <i class="fas fa-chevron-down dropdown-arrow"></i>
+                        </div>
+                        <div class="dropdown-list" id="areaList"></div>
+                    </div>
+
+                    <!-- Language Dropdown -->
+                    <div class="dropdown-container" id="dropdownLang">
+                        <div class="dropdown-input-wrapper">
+                            <input type="text" id="filterLanguageInput" class="dropdown-input"
+                                placeholder="Select Language..." autocomplete="off">
+                            <i class="fas fa-chevron-down dropdown-arrow"></i>
+                        </div>
+                        <div class="dropdown-list" id="languageList"></div>
+                    </div>
+
+                    <!-- Committee Dropdown -->
+                    <div class="dropdown-container" id="dropdownCommittee">
+                        <div class="dropdown-input-wrapper">
+                            <input type="text" id="filterCommitteeInput" class="dropdown-input"
+                                placeholder="Committees / Groups..." autocomplete="off">
+                            <i class="fas fa-chevron-down dropdown-arrow"></i>
+                        </div>
+                        <div class="dropdown-list" id="committeeList"></div>
+                    </div>
+
+                </div>
+            </div>
+            <!-- Loading & Status -->
+            <div id="loadingContainer" class="loading-container">
+                <div class="loading-bar-bg">
+                    <div id="loadingBar" class="loading-bar-fill"></div>
+                </div>
+                <div id="statusLine" class="status-line">Connecting to member database...</div>
+            </div>
+        </div>
+
+        <div id="directoryGrid" class="directory-grid">
+            <!-- Skeletons specific to initial load -->
+            <div class="skeleton-card skeleton"></div>
+            <div class="skeleton-card skeleton"></div>
+            <div class="skeleton-card skeleton"></div>
+            <div class="skeleton-card skeleton"></div>
+            <div class="skeleton-card skeleton"></div>
+            <div class="skeleton-card skeleton"></div>
+            <div class="skeleton-card skeleton"></div>
+            <div class="skeleton-card skeleton"></div>
+        </div>
+
+        <div id="pagination" class="pagination"></div>
+
+        <div class="missing-agent-section">
+            <div class="missing-icon"><i class="fas fa-user-edit"></i></div>
+            <div class="missing-content">
+                <h3>Don't see your profile?</h3>
+                <p>Your profile might not be fully complete in our system. Please log in to the Member Portal to ensure
+                    your contact details, photo, and preferences are up to date.</p>
+                <a href="https://members.bonitaesterorealtors.com/MIC/Login" target="_blank" class="btn-missing">Go to
+                    Member Portal</a>
+            </div>
+        </div>
+
+    </div>
+
+    <footer class="directory-footer">
+        <div class="container">
+            <p>All profiles shown are in randomized order per page load. All data is provided via our GrowthZone AMS
+                system.</p>
+        </div>
+    </footer>
+
+    <!-- Agent Detail Modal -->
+    <div class="modal-overlay" id="agentModal">
+        <div class="modal-content">
+            <button class="modal-close" id="modalClose" aria-label="Close">&times;</button>
+            <div id="modalBody">
+                <div class="modal-spinner">Loading agent details...</div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        (function () {
+            // ------------------------------------------------------------------------
+            // CONFIGURATION
+            // ------------------------------------------------------------------------
+            const apiKey = 'cR1djHVMkndNjLbwXyhDyOV7dWPJ6TnufYtcdOHc';
+            const BASE_URL = 'https://bonitaspringsesterorealtorsfl.growthzoneapp.com';
+            const CONTACTS_BASE_URL = `${BASE_URL}/api/contacts`;
+            const PAGE_SIZE_FALLBACK = 100;
+            const ITEMS_PER_PAGE = 50; // Per user request
+
+            // DOM Elements
+            const searchInput = document.getElementById('searchInput');
+            const directoryGrid = document.getElementById('directoryGrid');
+            const statusLine = document.getElementById('statusLine');
+            const loadingBar = document.getElementById('loadingBar');
+
+            // Loading Messages
+            const loadingMessages = [
+                "Connecting to member database...",
+                "Finding your perfect agent...",
+                "Accessing local experts...",
+                "Loading professional profiles...",
+                "Almost there..."
+            ];
+            let msgIdx = 0;
+            const msgInterval = setInterval(() => {
+                msgIdx = (msgIdx + 1) % loadingMessages.length;
+                statusLine.textContent = loadingMessages[msgIdx];
+            }, 800);
+
+            // Progress Bar Simulation
+            let progress = 0;
+            const progressInterval = setInterval(() => {
+                progress += Math.random() * 15;
+                if (progress > 90) progress = 90;
+                loadingBar.style.width = progress + '%';
+            }, 300);
+
+            const paginationDiv = document.getElementById('pagination');
+            const filterOfficeInput = document.getElementById('filterOfficeInput');
+            const filterOfficeList = document.getElementById('officeList');
+            const filterAreaInput = document.getElementById('filterAreaInput');
+            const filterAreaList = document.getElementById('areaList');
+            const filterLanguageInput = document.getElementById('filterLanguageInput');
+            const filterLanguageList = document.getElementById('languageList');
+            const filterCommitteeInput = document.getElementById('filterCommitteeInput');
+            const filterCommitteeList = document.getElementById('committeeList');
+
+            // Initialize Dropdowns
+            setupDropdown(filterOfficeInput, filterOfficeList);
+            setupDropdown(filterAreaInput, filterAreaList);
+            setupDropdown(filterLanguageInput, filterLanguageList);
+            setupDropdown(filterCommitteeInput, filterCommitteeList);
+
+            // Initial Skeletons
+            directoryGrid.innerHTML = Array(12).fill('<div class="skeleton-card skeleton"></div>').join('');
+            let allContacts = [];
+            let displayedContacts = [];
+            let searchDebounceHandle = null;
+            let currentPage = 1;
+
+            // Cache: contactId → initial licensing date (for experience filter)
+            const experienceMap = {};
+
+            // ------------------------------------------------------------------------
+            // INITIALIZATION
+            // ------------------------------------------------------------------------
+            document.addEventListener('DOMContentLoaded', async () => {
+                try {
+                    // Fetch contacts
+                    const activeContacts = await fetchAllContactsActiveIndividuals();
+
+                    // Deduplicate logic
+                    const seenIds = new Set();
+                    const uniqueContacts = [];
+                    for (const c of activeContacts) {
+                        if (!seenIds.has(c.ContactId)) {
+                            seenIds.add(c.ContactId);
+                            uniqueContacts.push(c);
+                        }
+                    }
+
+                    // Prioritize & randomize
+                    allContacts = prioritizeAndRandomize(uniqueContacts);
+                    displayedContacts = allContacts;
+
+                    statusLine.textContent = `Showing ${allContacts.length.toLocaleString()} active agents.`;
+                    searchInput.disabled = false;
+                    searchInput.focus();
+
+                    // Populate filter dropdowns
+                    populateDirectoryFilters(allContacts);
+
+                    renderBerDirectoryPage(1);
+
+                    // Setup Search + Filters
+                    searchInput.addEventListener('input', applyDirectoryFilters);
+                    filterOfficeInput.addEventListener('input', applyDirectoryFilters);
+                    filterAreaInput.addEventListener('input', applyDirectoryFilters);
+                    filterLanguageInput.addEventListener('input', applyDirectoryFilters);
+                    filterCommitteeInput.addEventListener('input', applyDirectoryFilters);
+
+                    // Start background metadata indexer (non-blocking)
+                    setTimeout(() => indexAgentMetadata(), 1500);
+
+                } catch (err) {
+                    statusLine.textContent = 'Error loading directory. Please try again.';
+                    console.error('Directory fetch error', err);
+                    loadingBar.style.backgroundColor = '#ff5252';
+                }
+            });
+
+            // ------------------------------------------------------------------------
+            // API FETCHING  (optimised: $top=5000 bulk loads + membership-based realtor filtering)
+            // ------------------------------------------------------------------------
+
+            // REALTOR® membership type IDs from /api/memberships/types
+            const REALTOR_TYPE_IDS = [
+                10122,  // Primary REALTOR®
+                10138,  // Designated REALTOR®
+                10139,  // Secondary REALTOR®
+                10140,  // Secondary Designated REALTOR®
+                10165,  // REALTOR® - Out of State
+                34117   // Secondary Designated Realtor-Out of State
+            ];
+
+            /**
+             * Fetch active REALTOR® ContactIds from the memberships endpoint.
+             * Returns a Set of ContactIds that hold an active REALTOR® membership.
+             */
+            async function fetchRealtorContactIds() {
+                const ids = new Set();
+                const MEMBERSHIPS_URL = `${BASE_URL}/api/memberships/all`;
+
+                // Fetch each realtor membership type
+                const promises = REALTOR_TYPE_IDS.map(async (typeId) => {
+                    let skip = 0;
+                    while (true) {
+                        const url = `${MEMBERSHIPS_URL}?$skip=${skip}&$top=2000`;
+                        const res = await fetch(url, {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                                'Authorization': 'ApiKey ' + apiKey
+                            },
+                            body: JSON.stringify({ MembershipTypeId: typeId })
+                        });
+                        if (!res.ok) break;
+                        const data = await res.json();
+                        const results = data.Results || [];
+                        if (results.length === 0) break;
+
+                        results.forEach(m => {
+                            if (m.Status === 'Active') ids.add(m.ContactId);
+                        });
+
+                        skip += results.length;
+                        if (skip >= (data.TotalRecordAvailable || 0)) break;
+                    }
+                });
+
+                await Promise.all(promises);
+                return ids;
+            }
+
+            /**
+             * Fetch ALL contacts using $top=5000 for speed, then cross-reference
+             * against the REALTOR® membership set.
+             */
+            async function fetchAllContactsActiveIndividuals() {
+                // Step 1 — Fetch realtor membership ContactIds in parallel with contacts
+                statusLine.textContent = 'Loading membership data...';
+                const [realtorIds] = await Promise.all([fetchRealtorContactIds()]);
+                statusLine.textContent = `Found ${realtorIds.size.toLocaleString()} active REALTOR® memberships. Loading contacts...`;
+
+                // Step 2 — Bulk-load all contacts (3 requests for ~10800 records)
+                let all = [];
+                let skip = 0;
+                const PAGE = 5000;
+                let totalAvailable = null;
+
+                while (true) {
+                    const url = `${CONTACTS_BASE_URL}?$skip=${skip}&$top=${PAGE}`;
+                    try {
+                        const res = await fetch(url, {
+                            headers: {
+                                'Content-Type': 'application/json',
+                                'Authorization': 'ApiKey ' + apiKey
+                            }
+                        });
+                        if (!res.ok) throw new Error(`API ${res.status}`);
+
+                        const data = await res.json();
+                        const results = data.Results || [];
+
+                        if (totalAvailable === null) totalAvailable = data.TotalRecordAvailable || 0;
+                        if (results.length === 0) break;
+
+                        all = all.concat(results);
+                        skip += results.length;
+
+                        statusLine.textContent =
+                            `Loading... ${all.length.toLocaleString()} of ${totalAvailable.toLocaleString()} contacts fetched.`;
+
+                        if (skip >= totalAvailable) break;
+                    } catch (e) {
+                        console.error('Fetch error at skip=' + skip, e);
+                        break;
+                    }
+                }
+
+                // Step 3 — Filter: Active + Individual + Name + is a REALTOR®
+                return all.filter(c =>
+                    c.Status === 'Active' &&
+                    c.SystemContactTypeId === 1 &&
+                    c.Name &&
+                    realtorIds.has(c.ContactId)
+                );
+            }
+
+            // ------------------------------------------------------------------------
+            // PRIORITIZATION & RANDOMIZATION
+            // ------------------------------------------------------------------------
+            function prioritizeAndRandomize(contacts) {
+                // Scoring: Photo (50pts) + Phone (10pts) + Email (10pts)
+                // Tie-breaker: Random
+                const scored = contacts.map(c => {
+                    let score = 0;
+                    if (c.ImageUrl) score += 50;
+                    if (c.Phone) score += 10;
+                    if (c.EmailAddress) score += 10;
+                    // Awards logic could go here if available in list view
+                    return { ...c, _score: score, _random: Math.random() };
+                });
+
+                // Sort by Score DESC, then Random
+                return scored.sort((a, b) => {
+                    if (b._score !== a._score) {
+                        return b._score - a._score; // Higher score first
+                    }
+                    return a._random - b._random; // Randomize within tier
+                });
+            }
+
+
+            // ------------------------------------------------------------------------
+            // DATA NORMALIZATION HELPERS
+            // ------------------------------------------------------------------------
+            function standardizeOfficeName(contact) {
+                let name = contact.PrimaryContact || contact.CompanyName || "Local Real Estate Office";
+                name = name.trim().toLowerCase().replace(/\b\w/g, c => c.toUpperCase());
+
+                // Fix common capitalization artifacts
+                name = name.replace(/\bLlc\b/g, 'LLC')
+                    .replace(/\bInc\b/g, 'Inc.')
+                    .replace(/\bInc\.\.\b/g, 'Inc.') // in case it was already Inc.
+                    .replace(/\.Com\b/g, '.com');
+
+                // Specific hardcoded fixes for known messy agent data
+                if (name.includes("Domainrealty.com Llc") || name.includes("Domain Realty.com Llc")) {
+                    name = "DomainRealty.com LLC";
+                }
+                if (name.trim() === "Domain Realty") {
+                    name = "DomainRealty.com LLC";
+                }
+
+                return name;
+            }
+
+            function standardizeAreaName(contact) {
+                if (!contact.City || !contact.City.trim()) return "Southwest Florida";
+                let city = contact.City.trim().toLowerCase().replace(/\b\w/g, c => c.toUpperCase());
+
+                // Strip redundant state and zip codes if they're already in the City field from GrowthZone
+                city = city.replace(/,?\s*Fl\b/i, '').replace(/,?\s*Florida\b/i, '').trim();
+                city = city.replace(/\d{4,5}/g, '').trim(); // Remove random zip codes
+                city = city.replace(/,+$/, '').trim(); // Remove trailing commas
+
+                if (!city || city === ',') return "Southwest Florida";
+
+                // Normalize "Ft Myers" mapped to "Fort Myers"
+                if (city.match(/^Ft\.?\s+Myers/i)) {
+                    city = "Fort Myers";
+                }
+                if (city.match(/^N\.?\s+Ft\.?\s+Myers/i) || city.match(/^N\s+Fort\s+Myers/i)) {
+                    city = "North Fort Myers";
+                }
+                if (city.match(/^Ft\.?\s+Lauderdale/i)) {
+                    city = "Fort Lauderdale";
+                }
+                if (city.match(/^Bonita\s+Spring\b/i)) {
+                    city = "Bonita Springs";
+                }
+
+                let state = (contact.State || "FL").trim().toUpperCase();
+                return `${city}, ${state}`;
+            }
+
+            // ------------------------------------------------------------------------
+            // FILTER POPULATION
+            // ------------------------------------------------------------------------
+            function populateDirectoryFilters(contacts) {
+                const offices = new Set();
+                const areas = new Set();
+                const committees = new Set();
+
+                // Whitelist of valid Florida cities (covers SWFL and major FL cities)
+                const validFLCities = [
+                    "Alva", "Ave Maria", "Babcock Ranch", "Boca Raton", "Bokeelia", "Bonita Springs", "Bradenton",
+                    "Cape Coral", "Captiva", "Clearwater", "Coral Gables", "Englewood", "Estero", "Everglades City",
+                    "Fort Lauderdale", "Fort Myers", "Fort Myers Beach", "Hollywood", "Immokalee", "Labelle",
+                    "Lehigh Acres", "Marco Island", "Matlacha", "Miami", "Miromar Lakes", "Naples", "North Port",
+                    "North Fort Myers", "Orlando", "Plantation", "Pompano Beach", "Port Charlotte",
+                    "Punta Gorda", "Sanibel", "Sarasota", "St James City", "St. Petersburg", "Tampa", "Venice", "West Palm Beach"
+                ];
+
+                contacts.forEach(c => {
+                    offices.add(standardizeOfficeName(c));
+
+                    const area = standardizeAreaName(c);
+                    // Only include actual Florida cities in the dropdown (exclude generic fallback and out-of-state)
+                    if (area.endsWith(", FL")) {
+                        const cityName = area.replace(", FL", "");
+                        // Only add to dropdown if it's explicitly a known FL city, to filter out GrowthZone artifacts like 'Chicago, FL'
+                        if (validFLCities.includes(cityName)) {
+                            areas.add(area);
+                        }
+                    }
+
+                    if (c.Committees) {
+                        c.Committees.forEach(com => committees.add(com));
+                    }
+                });
+
+                // Helper to build list
+                const buildList = (set, listEl, inputEl) => {
+                    listEl.innerHTML = '';
+                    // Add "All" option
+                    const allDiv = document.createElement('div');
+                    allDiv.className = 'dropdown-item';
+                    allDiv.textContent = 'All';
+                    allDiv.onclick = () => {
+                        inputEl.value = '';
+                        listEl.classList.remove('open');
+                        applyDirectoryFilters();
+                    };
+                    listEl.appendChild(allDiv);
+
+                    [...set].sort().forEach(item => {
+                        const div = document.createElement('div');
+                        div.className = 'dropdown-item';
+                        div.textContent = item;
+                        div.onclick = () => {
+                            inputEl.value = item;
+                            listEl.classList.remove('open');
+                            applyDirectoryFilters();
+                        };
+                        listEl.appendChild(div);
+                    });
+                };
+
+                buildList(offices, filterOfficeList, filterOfficeInput);
+                buildList(areas, filterAreaList, filterAreaInput);
+                buildList(committees, filterCommitteeList, filterCommitteeInput);
+
+                // Language list (Hardcoded as data is not available in list view, but could also extract from cache eventually)
+                filterLanguageList.innerHTML = '';
+                const allLang = document.createElement('div');
+                allLang.className = 'dropdown-item';
+                allLang.textContent = 'All';
+                allLang.onclick = () => {
+                    filterLanguageInput.value = '';
+                    filterLanguageList.classList.remove('open');
+                    applyDirectoryFilters();
+                };
+                filterLanguageList.appendChild(allLang);
+
+                const commonLangs = [
+                    'Spanish', 'German', 'French', 'Italian', 'Portuguese', 'Russian', 'Mandarin',
+                    'Polish', 'Dutch', 'Arabic', 'Chinese', 'Creole'
+                ].sort();
+
+                // If any dynamically cached languages exist, add them to commonLangs
+                contacts.forEach(c => {
+                    if (c.Languages) {
+                        c.Languages.split(',').map(l => l.trim()).filter(Boolean).forEach(l => {
+                            if (!commonLangs.includes(l)) commonLangs.push(l);
+                        });
+                    }
+                });
+                commonLangs.sort();
+
+                commonLangs.forEach(l => {
+                    const div = document.createElement('div');
+                    div.className = 'dropdown-item';
+                    div.textContent = l;
+                    div.onclick = () => {
+                        filterLanguageInput.value = l;
+                        filterLanguageList.classList.remove('open');
+                        applyDirectoryFilters();
+                    };
+                    filterLanguageList.appendChild(div);
+                });
+
+                filterOfficeInput.disabled = false;
+                filterAreaInput.disabled = false;
+                filterLanguageInput.disabled = false;
+                filterCommitteeInput.disabled = false;
+            }
+
+            // ------------------------------------------------------------------------
+            // COMBINED SEARCH + FILTER LOGIC
+            // ------------------------------------------------------------------------
+            // Filter the dropdown list based on input
+            function filterDropdownItems(input, list) {
+                const term = input.value.toLowerCase();
+                const items = list.querySelectorAll('.dropdown-item');
+                let hasVisible = false;
+                items.forEach(item => {
+                    const txt = item.textContent.toLowerCase();
+                    if (txt.includes(term) || txt === 'all') {
+                        item.style.display = 'block';
+                        hasVisible = true;
+                    } else {
+                        item.style.display = 'none';
+                    }
+                });
+                if (hasVisible) list.classList.add('open');
+                else list.classList.remove('open');
+            }
+
+            function setupDropdown(input, list) {
+                // Open on focus/click
+                input.addEventListener('focus', () => {
+                    list.classList.add('open');
+                    filterDropdownItems(input, list);
+                });
+                input.addEventListener('click', () => {
+                    list.classList.add('open');
+                    filterDropdownItems(input, list);
+                });
+                // Filter on type
+                input.addEventListener('input', () => {
+                    filterDropdownItems(input, list);
+                    applyDirectoryFilters(); // Also trigger main grid filter
+                });
+            }
+
+            // Close dropdowns when clicking outside
+            document.addEventListener('click', (e) => {
+                if (!e.target.closest('.dropdown-container')) {
+                    document.querySelectorAll('.dropdown-list').forEach(l => l.classList.remove('open'));
+                }
+            });
+
+            function applyDirectoryFilters() {
+                clearTimeout(searchDebounceHandle);
+                searchDebounceHandle = setTimeout(() => {
+                    const term = searchInput.value.trim().toLowerCase();
+                    const officeVal = filterOfficeInput.value.trim().toLowerCase();
+                    const areaVal = filterAreaInput.value.trim().toLowerCase();
+                    const langVal = filterLanguageInput.value.trim().toLowerCase();
+                    const commVal = filterCommitteeInput.value.trim().toLowerCase();
+
+                    displayedContacts = allContacts.filter(c => {
+                        // Text search
+                        if (term) {
+                            const nameMatch = c.Name && c.Name.toLowerCase().includes(term);
+                            const cityMatch = c.City && c.City.toLowerCase().includes(term);
+                            const companyMatch = (c.PrimaryContact || '').toLowerCase().includes(term);
+                            if (!nameMatch && !cityMatch && !companyMatch) return false;
+                        }
+                        // Office filter
+                        if (officeVal && officeVal !== 'all') {
+                            if (standardizeOfficeName(c).toLowerCase() !== officeVal) return false;
+                        }
+                        // Area filter
+                        if (areaVal && areaVal !== 'all') {
+                            if (standardizeAreaName(c).toLowerCase() !== areaVal) return false;
+                        }
+                        // Language filter
+                        if (langVal && langVal !== 'all') {
+                            // Check indexed languages
+                            const contactLangs = (c.Languages || '').toLowerCase();
+                            if (!contactLangs.includes(langVal)) return false;
+                        }
+                        // Committee filter
+                        if (commVal && commVal !== 'all') {
+                            if (!c.Committees || !c.Committees.some(com => com.toLowerCase() === commVal)) return false;
+                        }
+                        return true;
+                    });
+
+                    currentPage = 1;
+                    if (typeof renderPagination === 'function') {
+                        renderPagination();
+                        renderBerDirectoryGrid(paginate(displayedContacts));
+                    } else {
+                        renderBerDirectoryPage(1);
+                    }
+
+                    // Update status line
+                    const parts = [];
+                    if (term) parts.push(`"${term}"`);
+                    if (officeVal && officeVal !== 'all') parts.push(officeVal);
+                    if (areaVal && areaVal !== 'all') parts.push(areaVal);
+                    if (langVal && langVal !== 'all') parts.push(langVal);
+                    if (commVal && commVal !== 'all') parts.push(commVal);
+
+                    if (parts.length) {
+                        statusLine.textContent = `Found ${displayedContacts.length} matches` + (parts.length ? ` (${parts.join(' · ')})` : '');
+                    } else {
+                        statusLine.textContent = `Showing ${allContacts.length.toLocaleString()} active agents.`;
+                    }
+                }, 300);
+            }
+
+            // ------------------------------------------------------------------------
+            // RENDERING & PAGINATION
+            // ------------------------------------------------------------------------
+            function renderBerDirectoryPage(page) {
+                const start = (page - 1) * ITEMS_PER_PAGE;
+                const end = start + ITEMS_PER_PAGE;
+                const slice = displayedContacts.slice(start, end);
+
+                renderBerDirectoryGrid(slice);
+                renderBerDirectoryPagination(page, Math.ceil(displayedContacts.length / ITEMS_PER_PAGE));
+            }
+
+            function renderBerDirectoryPagination(current, total) {
+                paginationDiv.innerHTML = '';
+                if (total <= 1) return;
+
+                // Previous
+                const prevBtn = document.createElement('button');
+                prevBtn.className = 'page-btn';
+                prevBtn.innerHTML = '<i class="fas fa-chevron-left"></i>';
+                prevBtn.disabled = current === 1;
+                prevBtn.onclick = () => { currentPage--; renderBerDirectoryPage(currentPage); window.scrollTo(0, 0); };
+                paginationDiv.appendChild(prevBtn);
+
+                // Page Numbers logic (simplified: show current, first, last, neighbors)
+                let startPage = Math.max(1, current - 2);
+                let endPage = Math.min(total, current + 2);
+
+                if (startPage > 1) {
+                    const firstBtn = createPageBtn(1, current);
+                    paginationDiv.appendChild(firstBtn);
+                    if (startPage > 2) {
+                        const ellipsis = document.createElement('span');
+                        ellipsis.textContent = '...';
+                        ellipsis.style.padding = '0.5rem';
+                        paginationDiv.appendChild(ellipsis);
+                    }
+                }
+
+                for (let i = startPage; i <= endPage; i++) {
+                    paginationDiv.appendChild(createPageBtn(i, current));
+                }
+
+                if (endPage < total) {
+                    if (endPage < total - 1) {
+                        const ellipsis = document.createElement('span');
+                        ellipsis.textContent = '...';
+                        ellipsis.style.padding = '0.5rem';
+                        paginationDiv.appendChild(ellipsis);
+                    }
+                    const lastBtn = createPageBtn(total, current);
+                    paginationDiv.appendChild(lastBtn);
+                }
+
+                // Next
+                const nextBtn = document.createElement('button');
+                nextBtn.className = 'page-btn';
+                nextBtn.innerHTML = '<i class="fas fa-chevron-right"></i>';
+                nextBtn.disabled = current === total;
+                nextBtn.onclick = () => { currentPage++; renderBerDirectoryPage(currentPage); window.scrollTo(0, 0); };
+                paginationDiv.appendChild(nextBtn);
+            }
+
+            function createPageBtn(i, current) {
+                const btn = document.createElement('button');
+                btn.className = `page-btn ${i === current ? 'active' : ''}`;
+                btn.textContent = i;
+                btn.onclick = () => { currentPage = i; renderBerDirectoryPage(i); window.scrollTo(0, 0); };
+                return btn;
+            }
+
+            // ------------------------------------------------------------------------
+            // BACKGROUND METADATA INDEXER (Languages, Designations, Committees)
+            // ------------------------------------------------------------------------
+            async function indexAgentMetadata() {
+                const CACHE_KEY = 'BER_META_INDEX_V2';
+                const now = Date.now();
+                const CACHE_DURATION = 24 * 60 * 60 * 1000; // 24 hours
+
+                // 1. Load from Cache
+                let cachedData = {};
+                try {
+                    const stored = localStorage.getItem(CACHE_KEY);
+                    if (stored) {
+                        const parsed = JSON.parse(stored);
+                        if (now - parsed.timestamp < CACHE_DURATION) {
+                            cachedData = parsed.data || {};
+                            // Apply cached metadata immediately
+                            let updatedCount = 0;
+                            allContacts.forEach(c => {
+                                if (cachedData[c.ContactId]) {
+                                    c.Languages = cachedData[c.ContactId].Languages || '';
+                                    c.Designations = cachedData[c.ContactId].Designations || [];
+                                    c.Committees = cachedData[c.ContactId].Committees || [];
+                                    updatedCount++;
+                                }
+                            });
+                            console.log(`Loaded ${updatedCount} metadata records from cache.`);
+                            populateDirectoryFilters(allContacts); // Re-populate dropdown
+                            return; // Skip fetching if valid cache exists
+                        }
+                    }
+                } catch (e) {
+                    console.warn('Cache read error', e);
+                }
+
+                // 2. Identify Agents needing indexing
+                // We index agents who don't have the new metadata object set
+                const toIndex = allContacts.filter(c => !cachedData[c.ContactId]);
+                if (toIndex.length === 0) return;
+
+                console.log(`Starting background indexing for ${toIndex.length} agents...`);
+                statusLine.innerHTML += ' <span style="font-size:0.8em; opacity:0.75">(Indexing filters...)</span>';
+
+                // 3. Batch Fetch
+                const BATCH_SIZE = 5;
+                const DELAY_MS = 200;
+
+                // Helper for delay
+                const wait = ms => new Promise(r => setTimeout(r, ms));
+
+                for (let i = 0; i < toIndex.length; i += BATCH_SIZE) {
+                    const batch = toIndex.slice(i, i + BATCH_SIZE);
+
+                    try {
+                        const promises = batch.map(async c => {
+                            try {
+                                const [moreinfoRes, orgRes] = await Promise.all([
+                                    fetch(`${BASE_URL}/api/contacts/${c.ContactId}/moreinfo`, {
+                                        headers: { 'Authorization': 'ApiKey ' + apiKey }
+                                    }).catch(() => null),
+                                    fetch(`${BASE_URL}/api/contacts/OrgGeneral/${c.ContactId}`, {
+                                        headers: { 'Authorization': 'ApiKey ' + apiKey }
+                                    }).catch(() => null)
+                                ]);
+
+                                const moreinfo = moreinfoRes && moreinfoRes.ok ? await moreinfoRes.json() : null;
+                                const orgGeneral = orgRes && orgRes.ok ? await orgRes.json() : null;
+
+                                let langVal = '';
+                                let desigs = [];
+                                let comms = [];
+
+                                // Parse moreinfo
+                                if (moreinfo && moreinfo.Fields) {
+                                    const langField = moreinfo.Fields.find(f => f.Id === 15028967 || (f.DisplayName && f.DisplayName === 'Languages Spoken'));
+                                    if (langField && langField.Value) langVal = langField.Value.trim();
+
+                                    // Sometimes designations are also in custom fields
+                                    const desigField = moreinfo.Fields.find(f => f.DisplayName === 'Designations');
+                                    if (desigField && desigField.Value) {
+                                        desigs = desigs.concat(desigField.Value.split(',').map(s => s.trim()).filter(Boolean));
+                                    }
+                                }
+
+                                // Parse OrgGeneral
+                                if (orgGeneral) {
+                                    const EXCLUDED_MEMBERSHIPS = ['individual mls', 'supra ekey', 'supra key'];
+                                    const memberships = (orgGeneral.Memberships || [])
+                                        .filter(m => m.MembershipStatusTypeId === 2)
+                                        .filter(m => !EXCLUDED_MEMBERSHIPS.some(ex => (m.Name || '').toLowerCase().includes(ex)));
+
+                                    const groups = (orgGeneral.Groups || []).filter(g => g.IsPublicViewable !== false);
+
+                                    // Extract Designations from memberships
+                                    const orgDesigs = memberships.filter(m => (m.Name || '').toLowerCase().includes('designated')).map(m => m.Name);
+                                    desigs = [...new Set([...desigs, ...orgDesigs])];
+
+                                    const rpac = memberships
+                                        .filter(m => {
+                                            const n = (m.Name || '').toLowerCase();
+                                            return n.includes('rpac') || n.includes('investor');
+                                        })
+                                        .map(m => m.Name);
+                                    desigs = [...new Set([...desigs, ...rpac])];
+
+                                    // Extract Committees from groups
+                                    const meaningfulGroups = groups.filter(g => {
+                                        const n = (g.Name || '').toLowerCase();
+                                        return !n.includes('automation') && !n.includes('invoice') && !n.includes('audit')
+                                            && !n.includes('license expir') && !n.includes('supra users');
+                                    });
+                                    comms = meaningfulGroups.map(g => g.Name);
+                                }
+
+                                const metadata = { Languages: langVal, Designations: desigs, Committees: comms };
+                                c.Languages = langVal;
+                                c.Designations = desigs;
+                                c.Committees = comms;
+                                cachedData[c.ContactId] = metadata;
+
+                                return true;
+                            } catch (e) {
+                                return false;
+                            }
+                        });
+
+                        await Promise.all(promises);
+
+                        // Save progress every few batches (optional, but safer)
+                        if (i % 20 === 0) {
+                            localStorage.setItem(CACHE_KEY, JSON.stringify({ timestamp: now, data: cachedData }));
+                            populateDirectoryFilters(allContacts); // Update dropdown dynamically
+                        }
+
+                        await wait(DELAY_MS); // Be nice to API
+
+                    } catch (err) {
+                        console.error('Indexing batch error', err);
+                    }
+                }
+
+                // 4. Final Save
+                localStorage.setItem(CACHE_KEY, JSON.stringify({ timestamp: now, data: cachedData }));
+                console.log('Metadata indexing complete.');
+                statusLine.innerHTML = statusLine.innerHTML.replace(' <span style="font-size:0.8em; opacity:0.75">(Indexing filters...)</span>', '');
+
+                // Final re-populate
+                populateDirectoryFilters(allContacts);
+            }
+
+            function renderBerDirectoryGrid(contacts) {
+                // Stop loading animation if running
+                if (msgInterval) clearInterval(msgInterval);
+                if (progressInterval) clearInterval(progressInterval);
+                loadingBar.style.width = '100%';
+                setTimeout(() => {
+                    document.getElementById('loadingContainer').style.display = 'none';
+                }, 500);
+
+                directoryGrid.innerHTML = '';
+
+                if (contacts.length === 0) {
+                    directoryGrid.innerHTML = '<div style="grid-column: 1/-1; text-align: center; color: #777; padding: 2rem;">No agents found matching your search.</div>';
+                    return;
+                }
+
+                const fragment = document.createDocumentFragment();
+
+                contacts.forEach((contact, idx) => {
+                    const card = document.createElement('div');
+                    card.className = 'agent-card';
+                    card.style.animationDelay = `${idx * 40}ms`;
+
+                    const companyName = standardizeOfficeName(contact);
+                    const cityState = standardizeAreaName(contact);
+
+                    const phone = contact.Phone || "";
+                    const email = contact.EmailAddress || "";
+                    const photoUrl = contact.ImageUrl;
+
+                    let avatarHtml;
+                    if (photoUrl) {
+                        avatarHtml = `<div class="avatar"><img src="${photoUrl}" alt="${contact.Name}"></div>`;
+                    } else {
+                        avatarHtml = `<div class="avatar"></div>`;
+                    }
+
+                    card.innerHTML = `
+                <div class="card-header">
+                    ${avatarHtml}
+                    <div class="info">
+                        <h3 class="agent-name">${contact.FirstName || ''} ${contact.LastName || contact.Name}</h3>
+                        <div class="agent-office" title="${companyName}">${companyName}</div>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div class="detail-row">
+                        <i class="fas fa-map-marker-alt"></i>
+                        <span>${cityState}</span>
+                    </div>
+                    ${phone ? `
+                    <div class="detail-row">
+                        <i class="fas fa-phone"></i>
+                        <a href="tel:${phone}" class="contact-link">${phone}</a>
+                    </div>` : ''}
+                    ${email ? `
+                    <div class="detail-row" title="${email}">
+                        <i class="fas fa-envelope"></i>
+                        <a href="mailto:${email}" class="contact-link">${email}</a>
+                    </div>` : ''}
+                </div>
+                <div class="card-actions">
+                    <button class="btn btn-primary" onclick="openBerAgentModal(${contact.ContactId})">
+                        <i class="fas fa-user" style="margin-right:0.4rem"></i> More Details
+                    </button>
+                </div>
+            `;
+                    fragment.appendChild(card);
+                });
+
+                directoryGrid.appendChild(fragment);
+            }
+
+            function constructRealtorLink(contact) {
+                // If GrowthZone provides the AccountNumber (NRDS ID), use the exact profile lookup URL
+                if (contact.AccountNumber) {
+                    return `https://www.realtor.com/realestateagents/agent?nrdsid=${contact.AccountNumber}&ref=nar`;
+                }
+
+                // Fallback: Guess the URL based on name and city
+                const baseSearch = "https://www.realtor.com/realestateagents/";
+                // Slug is typically: firstname-lastname_city_state
+                // Ensure we handle spaces in city names correctly (replace with dashes)
+
+                const clean = (str) => (str || "").toLowerCase().trim().replace(/[^a-z0-9]+/g, '-');
+
+                let fname = clean(contact.FirstName);
+                let lname = clean(contact.LastName);
+
+                if (!fname || !lname) {
+                    const parts = (contact.Name || "").split(' ');
+                    if (parts.length >= 2) {
+                        fname = clean(parts[0]);
+                        lname = clean(parts[parts.length - 1]);
+                    } else {
+                        fname = clean(contact.Name); // Fallback
+                        lname = "agent";
+                    }
+                }
+
+                const city = clean(contact.City || "estero");
+                const state = clean(contact.State || "fl");
+
+                // Realtor.com format: firstname-lastname_city_state
+                // Example: kevin-weinkauff_estero_fl
+                return `${baseSearch}${fname}-${lname}_${city}_${state}`;
+            }
+
+
+            // ----------------------------------------------------------------
+            // MODAL SYSTEM
+            // ----------------------------------------------------------------
+            const agentModal = document.getElementById('agentModal');
+            const modalBody = document.getElementById('modalBody');
+            const modalCloseBtn = document.getElementById('modalClose');
+
+            // Cache for detail data so we don't refetch
+            const detailCache = {};
+
+            function closeBerAgentModal() {
+                agentModal.classList.remove('open');
+                document.body.style.overflow = '';
+            }
+
+            modalCloseBtn.addEventListener('click', closeBerAgentModal);
+            agentModal.addEventListener('click', e => {
+                if (e.target === agentModal) closeBerAgentModal();
+            });
+            document.addEventListener('keydown', e => {
+                if (e.key === 'Escape') closeBerAgentModal();
+            });
+
+            async function openBerAgentModal(contactId) {
+                // Open immediately with spinner
+                agentModal.classList.add('open');
+                document.body.style.overflow = 'hidden';
+                modalBody.innerHTML = '<div class="modal-spinner">Loading agent details...</div>';
+
+                const basic = allContacts.find(c => c.ContactId === contactId) || {};
+
+                try {
+                    let detail, moreinfo;
+                    if (detailCache[contactId]) {
+                        detail = detailCache[contactId].detail;
+                        moreinfo = detailCache[contactId].moreinfo;
+                    } else {
+                        // Fetch OrgGeneral and moreinfo in parallel
+                        const [detailRes, moreinfoRes] = await Promise.all([
+                            fetch(`${BASE_URL}/api/contacts/OrgGeneral/${contactId}`, {
+                                headers: { 'Authorization': 'ApiKey ' + apiKey }
+                            }),
+                            fetch(`${BASE_URL}/api/contacts/${contactId}/moreinfo`, {
+                                headers: { 'Authorization': 'ApiKey ' + apiKey }
+                            }).catch(() => null)
+                        ]);
+                        detail = detailRes.ok ? await detailRes.json() : null;
+                        moreinfo = (moreinfoRes && moreinfoRes.ok) ? await moreinfoRes.json() : null;
+
+                        // DEBUG: Log moreinfo to find Language field
+                        if (moreinfo) {
+                            console.log(`MoreInfo for ${basic.Name}:`, moreinfo);
+                            if (moreinfo.Fields) {
+                                const langField = moreinfo.Fields.find(f => f.DisplayName && f.DisplayName.includes('Language'));
+                                console.log('Found Language Field?', langField);
+                            }
+                        }
+
+                        detailCache[contactId] = { detail, moreinfo };
+
+                        // Cache experience years for filter
+                        if (moreinfo) {
+                            const fields = moreinfo.Fields || [];
+                            const licDateField = fields.find(f => f.DisplayName === 'Initial Licensing Date' && f.Value);
+                            if (licDateField) {
+                                const licDate = new Date(licDateField.Value);
+                                const years = Math.floor((Date.now() - licDate.getTime()) / (365.25 * 24 * 60 * 60 * 1000));
+                                experienceMap[contactId] = years;
+                            }
+                        }
+                    }
+                    renderBerAgentModal(basic, detail, moreinfo, contactId);
+                } catch (err) {
+                    console.error('Detail fetch error', err);
+                    renderBerAgentModal(basic, null, null, contactId);
+                }
+            }
+
+            function renderBerAgentModal(basic, detail, moreinfo, contactId) {
+                const name = basic.FirstName
+                    ? `${basic.FirstName} ${basic.LastName || ''}`
+                    : (basic.Name || detail?.ContactDisplayName || 'Agent');
+                const officeName = basic.PrimaryContact || basic.CompanyName || 'Local Real Estate Office';
+                const photoUrl = basic.ImageUrl || '';
+                const realtorLink = constructRealtorLink(basic);
+
+                // === Extract detail data ===
+                const contactInfos = detail?.ContactInfos || [];
+                const phones = contactInfos.filter(ci => ci.Type === 2);
+                const emails = contactInfos.filter(ci => ci.Type === 1);
+                // addresses (mailing info) removed for security
+                const webAddresses = contactInfos.filter(ci => ci.Type === 4);
+
+                const experiences = detail?.ContactExperiences || [];
+                const EXCLUDED_MEMBERSHIPS = ['individual mls', 'supra ekey', 'supra key'];
+                const memberships = (detail?.Memberships || [])
+                    .filter(m => m.MembershipStatusTypeId === 2)
+                    .filter(m => !EXCLUDED_MEMBERSHIPS.some(ex => (m.Name || '').toLowerCase().includes(ex)));
+                const groups = (detail?.Groups || []).filter(g => g.IsPublicViewable !== false);
+                const title = detail?.Title || '';
+
+                // === Moreinfo custom fields === 
+                const moreinfoFields = moreinfo?.Fields || [];
+                const getField = name => {
+                    const f = moreinfoFields.find(fld =>
+                        fld.DisplayName === name && fld.Value && fld.Value.trim());
+                    return f ? f.Value.trim() : '';
+                };
+                const bio = moreinfo?.AddlInfo?.Bio || '';
+                const languages = getField('Languages Spoken');
+                const areaExpertise = getField('Area of Expertise');
+                const neighborhoodExpertise = getField('Neighborhood of Expertise');
+                const licenseNumber = getField('License Number');
+                const licenseType = getField('License Type');
+                const initialLicDate = getField('Initial Licensing Date');
+
+                // Calculate years of experience (removed from display per user request, kept for logic if needed)
+                // (Code removed)
+
+                // Designations Highlighting
+                const designations = memberships.filter(m => (m.Name || '').toLowerCase().includes('designated'));
+                const rpac = memberships.filter(m => {
+                    const n = (m.Name || '').toLowerCase();
+                    return n.includes('rpac') || n.includes('investor');
+                });
+
+                // Build designation badges
+                let designationBadges = '';
+                designations.forEach(d => {
+                    designationBadges += `<span class="designation-badge highlighted">${d.Name}</span>`;
+                });
+                // RPAC badges
+                rpac.forEach(r => {
+                    designationBadges += `<span class="designation-badge rpac-badge"><i class="fas fa-star"></i> ${r.Name}</span>`;
+                });
+
+                const primaryMembership = memberships.find(m => (m.Name || '').toLowerCase().includes('primary'));
+
+                const emailForContact = emails.length ? emails[0].Value : (basic.EmailAddress || '');
+                const contactSubject = encodeURIComponent(`Inquiry from BER Agent Directory – ${name}`);
+                const contactBody = encodeURIComponent(`Hi ${basic.FirstName || name},\n\nI found your profile on the Bonita Springs–Estero REALTORS® Agent Directory and would like to connect.\n\nThank you!`);
+
+                let contactHtml = '';
+                phones.forEach(p => {
+                    contactHtml += `<div class="modal-detail-item"><i class="fas fa-phone"></i><span>${p.TypeName}: <a href="tel:${p.Value}">${p.Value}</a></span></div>`;
+                });
+                emails.forEach(e => {
+                    contactHtml += `<div class="modal-detail-item"><i class="fas fa-envelope"></i><span><a href="mailto:${e.Value}">${e.Value}</a></span></div>`;
+                });
+                webAddresses.forEach(w => {
+                    const url = w.Value.startsWith('http') ? w.Value : 'https://' + w.Value;
+                    contactHtml += `<div class="modal-detail-item full"><i class="fas fa-globe"></i><span><a href="${url}" target="_blank">${w.Value}</a></span></div>`;
+                });
+                if (!contactHtml && (basic.Phone || basic.EmailAddress)) {
+                    if (basic.Phone) contactHtml += `<div class="modal-detail-item"><i class="fas fa-phone"></i><span><a href="tel:${basic.Phone}">${basic.Phone}</a></span></div>`;
+                    if (basic.EmailAddress) contactHtml += `<div class="modal-detail-item"><i class="fas fa-envelope"></i><span><a href="mailto:${basic.EmailAddress}">${basic.EmailAddress}</a></span></div>`;
+                }
+
+                // License & Experience Section
+                let experienceHtml = '';
+                if (licenseNumber || licenseType || initialLicDate) {
+                    const parts = [];
+                    if (licenseType) parts.push(`<strong>${licenseType}</strong>`);
+                    if (licenseNumber) parts.push(`DBPR #${licenseNumber}`);
+                    if (initialLicDate) {
+                        const d = new Date(initialLicDate);
+                        parts.push(`Licensed since ${d.toLocaleDateString()}`);
+                    }
+                    experienceHtml += `<div class="modal-detail-item full"><i class="fas fa-id-badge"></i><span>${parts.join(' · ')}</span></div>`;
+                }
+                experiences.forEach(exp => {
+                    const parts = [];
+                    if (exp.RoleOrPosition) parts.push(`<strong>${exp.RoleOrPosition}</strong>`);
+                    if (exp.EmployerSchoolOrg && exp.EmployerSchoolOrg !== 'DBPR') parts.push(`at ${exp.EmployerSchoolOrg}`);
+                    if (parts.length) {
+                        experienceHtml += `<div class="modal-detail-item full"><i class="fas fa-briefcase"></i><span>${parts.join(' · ')}</span></div>`;
+                    }
+                });
+                if (areaExpertise) {
+                    experienceHtml += `<div class="modal-detail-item full"><i class="fas fa-compass"></i><span>Expertise: <strong>${areaExpertise}</strong></span></div>`;
+                }
+                if (neighborhoodExpertise) {
+                    experienceHtml += `<div class="modal-detail-item full"><i class="fas fa-map"></i><span>Neighborhood: <strong>${neighborhoodExpertise}</strong></span></div>`;
+                }
+
+                // Memberships (exclude designations/RPAC if they are shown as badges? or keep them)
+                // Let's filter out RPAC from the general list if we show badges
+                const filteredMemberships = memberships.filter(m => {
+                    const n = (m.Name || '').toLowerCase();
+                    return !n.includes('designated') && !n.includes('rpac') && !n.includes('investor');
+                });
+
+                let membershipHtml = '';
+                filteredMemberships.forEach(m => {
+                    const duration = m.SummaryDescription ? ` · ${m.SummaryDescription}` : '';
+                    membershipHtml += `<span class="modal-tag">${m.Name}${duration} at BER</span>`;
+                });
+
+                let groupsHtml = '';
+                const meaningfulGroups = groups.filter(g => {
+                    const n = (g.Name || '').toLowerCase();
+                    return !n.includes('automation') && !n.includes('invoice') && !n.includes('audit')
+                        && !n.includes('license expir') && !n.includes('supra users');
+                });
+                meaningfulGroups.forEach(g => {
+                    groupsHtml += `<span class="modal-tag">${g.Name}</span>`;
+                });
+
+                let languagesHtml = '';
+                if (languages) {
+                    languages.split(',').map(l => l.trim()).filter(Boolean).forEach(lang => {
+                        languagesHtml += `<span class="modal-lang-tag"><i class="fas fa-language" style="margin-right:0.25rem"></i>${lang}</span> `;
+                    });
+                }
+
+                modalBody.innerHTML = `
+                <div class="modal-hero">
+                    ${photoUrl ? `<img class="modal-avatar" src="${photoUrl}" alt="${name}">` : `<div class="modal-avatar"></div>`}
+                    <div class="modal-hero-info">
+                        <h2>${name}${designationBadges}</h2>
+                        <div class="office-label">${officeName}${title ? ' · ' + title : ''}</div>
+                        ${primaryMembership ? `<div class="membership-badge">${primaryMembership.Name}</div>` : ''}
+                    </div>
+                </div>
+
+                ${bio ? `
+                <div class="modal-section">
+                    <div class="modal-section-title"><i class="fas fa-quote-left"></i> About</div>
+                    <div class="modal-bio">${bio}</div>
+                </div>` : ''}
+
+                ${languagesHtml ? `
+                <div class="modal-section">
+                    <div class="modal-section-title"><i class="fas fa-globe-americas"></i> Languages</div>
+                    <div class="modal-tags">${languagesHtml}</div>
+                </div>` : ''}
+
+                ${contactHtml ? `
+                <div class="modal-section">
+                    <div class="modal-section-title"><i class="fas fa-address-book"></i> Contact Information</div>
+                    <div class="modal-detail-grid">${contactHtml}</div>
+                </div>` : ''}
+
+                ${experienceHtml ? `
+                <div class="modal-section">
+                    <div class="modal-section-title"><i class="fas fa-briefcase"></i> Experience & Licensing</div>
+                    <div class="modal-detail-grid">${experienceHtml}</div>
+                </div>` : ''}
+
+                ${membershipHtml ? `
+                <div class="modal-section">
+                    <div class="modal-section-title"><i class="fas fa-certificate"></i> Memberships at BER</div>
+                    <div class="modal-tags">${membershipHtml}</div>
+                </div>` : ''}
+
+                ${groupsHtml ? `
+                <div class="modal-section">
+                    <div class="modal-section-title"><i class="fas fa-users"></i> Committees & Groups</div>
+                    <div class="modal-tags">${groupsHtml}</div>
+                </div>` : ''}
+
+                <div class="modal-section">
+                    <div class="modal-section-title"><i class="fas fa-home"></i> Agent Listings <span id="listingsCount" style="margin-left: auto; opacity: 0.7; text-transform: none;"></span></div>
+                    <div id="modalListingsContent">
+                        <div class="modal-listings-placeholder">
+                            <i class="fas fa-spinner fa-spin"></i>
+                            Loading listings...
+                        </div>
+                    </div>
+                </div>
+
+                <div class="modal-actions">
+                    ${emailForContact ? `
+                    <a href="mailto:${emailForContact}?subject=${contactSubject}&body=${contactBody}" class="btn btn-contact">
+                        <i class="fas fa-paper-plane" style="margin-right:0.4rem"></i> Contact Me
+                    </a>` : ''}
+                    <a href="${realtorLink}" target="_blank" class="btn btn-primary">
+                        <i class="fas fa-external-link-alt" style="margin-right:0.4rem"></i> View on Realtor.com
+                    </a>
+                    <button class="btn-outline" onclick="closeBerAgentModal()">Close</button>
+                </div>
+            `;
+
+                fetchAgentListings(emailForContact, licenseNumber, contactId);
+                trackProfileClick(contactId, name);
+            }
+
+            async function fetchAgentListings(email, license, contactId) {
+                const listingsContainer = document.getElementById('modalListingsContent');
+                const countSpan = document.getElementById('listingsCount');
+                const API_BASE = 'https://listingsworker.bonitaspringsrealtors.workers.dev/api/v2/OData/bsaor';
+
+                try {
+                    let memberKey = null;
+                    let filter = '';
+                    if (email) filter = `MemberEmail eq '${email}'`;
+                    else if (license) filter = `MemberStateLicense eq '${license}'`;
+
+                    if (filter) {
+                        const memberRes = await fetch(`${API_BASE}/Member?$filter=${encodeURIComponent(filter)}&$select=MemberKey`);
+                        const memberData = await memberRes.json();
+                        if (memberData.value && memberData.value.length > 0) {
+                            memberKey = memberData.value[0].MemberKey;
+                        }
+                    }
+
+                    if (!memberKey) {
+                        listingsContainer.innerHTML = '<div class="modal-listings-placeholder">No MLS profile linked to this contact.</div>';
+                        return;
+                    }
+
+                    const twoYearsAgo = new Date();
+                    twoYearsAgo.setFullYear(twoYearsAgo.getFullYear() - 2);
+                    const dateStr = twoYearsAgo.toISOString().split('T')[0];
+
+                    const listingsFilter = `(ListAgentKey eq '${memberKey}') and (StandardStatus eq 'Active' or (StandardStatus eq 'Closed' and CloseDate ge ${dateStr}))`;
+                    const listingsRes = await fetch(`${API_BASE}/Property?$filter=${encodeURIComponent(listingsFilter)}&$select=ListingId,UnparsedAddress,ListPrice,ClosePrice,StandardStatus,Media&$orderby=StandardStatus asc,CloseDate desc&$top=10`);
+                    const listingsData = await listingsRes.json();
+                    const listings = listingsData.value || [];
+
+                    if (listings.length === 0) {
+                        listingsContainer.innerHTML = '<div class="modal-listings-placeholder">No recent listings found for this agent.</div>';
+                        return;
+                    }
+
+                    countSpan.textContent = `(${listings.length} items)`;
+
+                    let html = '<div class="modal-listings-grid">';
+                    listings.forEach(l => {
+                        const isClosed = l.StandardStatus === 'Closed';
+                        const price = isClosed ? (l.ClosePrice || l.ListPrice) : l.ListPrice;
+                        const photo = (l.Media && l.Media.length > 0) ? l.Media[0].MediaURL : '';
+
+                        html += `
+                                <div class="modal-listing-card" onclick="window.open('https://bonitaspringsesterolifestyles.com/home-search/?mls=${l.ListingId}', '_blank')">
+                                    <img src="${photo}" class="modal-listing-img" onerror="this.src='https://placehold.co/400x300?text=No+Photo'">
+                                    <div class="modal-listing-info">
+                                        <div class="modal-listing-price">$${Number(price).toLocaleString()}</div>
+                                        <div class="modal-listing-addr">${l.UnparsedAddress || 'Unknown Address'}</div>
+                                        <span class="modal-listing-status status-${l.StandardStatus.toLowerCase()}">${l.StandardStatus}</span>
+                                    </div>
+                                </div>
+                            `;
+                    });
+                    html += '</div>';
+                    listingsContainer.innerHTML = html;
+
+                } catch (err) {
+                    console.error('Error fetching listings:', err);
+                    listingsContainer.innerHTML = '<div class="modal-listings-placeholder">Error loading listings.</div>';
+                }
+            }
+
+            function trackProfileClick(contactId, name) {
+                const ANALYTICS_URL = 'https://ber-analytics.kevinweinkauff.workers.dev/click';
+                fetch(`${ANALYTICS_URL}/${contactId}`, {
+                    method: 'POST',
+                    mode: 'no-cors'
+                }).catch(() => { });
+            }
+
+            window.openBerAgentModal = openBerAgentModal;
+            window.closeBerAgentModal = closeBerAgentModal;
+
+        })();
+    </script>
+
+    </div> <!-- End .ber-directory -->
+</body>
+
+</html>
