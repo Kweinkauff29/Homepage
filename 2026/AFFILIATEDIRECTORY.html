@@ -10,8 +10,19 @@
         crossorigin="anonymous" referrerpolicy="no-referrer" />
     <style>
         :root {
-            --primary: #006aff;
-            --primary-hover: #005ce6;
+            --primary: #1e3a8a;
+            --primary-hover: #1e40af;
+            --secondary: #64748b;
+            --secondary-hover: #475569;
+            --bg: #f8fafc;
+            --border: #e2e8f0;
+
+            /* Sponsor Accents */
+            --diamond-bg: linear-gradient(90deg, #00c2b7, #13a1ff);
+            --platinum-bg: linear-gradient(90deg, #00a1ff, #6fffe0);
+            --gold-bg: #f2c200;
+            --silver-bg: #c3ccd9;
+            --photo-bg: #2d3748;
             --bg-color: #f9f9fb;
             --card-bg: #ffffff;
             --text-main: #2a2a33;
@@ -157,6 +168,7 @@
             flex-shrink: 0;
             border: 3px solid #fff;
             box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            border-color: #cbd5e1;
             position: relative;
             overflow: hidden;
         }
@@ -165,6 +177,45 @@
             width: 100%;
             height: 100%;
             object-fit: contain;
+        }
+
+        /* Sponsor Badges */
+        .sponsor-badge {
+            display: inline-flex;
+            align-items: center;
+            padding: 4px 10px;
+            border-radius: 9999px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: #fff;
+            margin-bottom: 0.75rem;
+            width: fit-content;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .sponsor-diamond {
+            background: var(--diamond-bg);
+        }
+
+        .sponsor-platinum {
+            background: var(--platinum-bg);
+            color: #021a3f;
+        }
+
+        .sponsor-gold {
+            background: var(--gold-bg);
+            color: #4a3500;
+        }
+
+        .sponsor-silver {
+            background: var(--silver-bg);
+            color: #404552;
+        }
+
+        .sponsor-photo {
+            background: var(--photo-bg);
         }
 
         .info {
@@ -762,345 +813,480 @@
                 </div>
 
                 <div class="category-tiles" id="categoryTiles">
-                    <div class="category-tile" onclick="selectTileCategory('Title Company', this)"
-                        style="background-image: url('images/tiles/title_company.png')">
-                        <div class="category-tile-label">Title Company</div>
+                    <div class="category-tile" onclick="selectTileCategory('Title & Escrow', this)"
+                        style="background-image: url('https://images.unsplash.com/photo-1556156653-e5a7c69cc263?auto=format&fit=crop&q=80&w=600')">
+                        <div class="category-tile-label">Title & Escrow</div>
                     </div>
-                    <div class="category-tile" onclick="selectTileCategory('Mortgage', this)"
-                        style="background-image: url('images/tiles/mortgage.png')">
-                        <div class="category-tile-label">Mortgage</div>
+                    <div class="category-tile" onclick="selectTileCategory('Mortgage & Finance', this)"
+                        style="background-image: url('https://images.unsplash.com/photo-1554224155-8d04cb21cd6c?auto=format&fit=crop&q=80&w=600')">
+                        <div class="category-tile-label">Mortgage & Finance</div>
                     </div>
-                    <div class="category-tile" onclick="selectTileCategory('Home Inspector', this)"
-                        style="background-image: url('images/tiles/home_inspection.png')">
-                        <div class="category-tile-label">Home Inspection</div>
-                    </div>
-                    <div class="category-tile" onclick="selectTileCategory('Lawyer/Attorney', this)"
-                        style="background-image: url('images/tiles/lawyer.png')">
-                        <div class="category-tile-label">Lawyer/Attorney</div>
+                    <div class="category-tile" onclick="selectTileCategory('Legal', this)"
+                        style="background-image: url('https://images.unsplash.com/photo-1589829085413-56de8ae18c73?auto=format&fit=crop&q=80&w=600')">
+                        <div class="category-tile-label">Legal</div>
                     </div>
                     <div class="category-tile" onclick="selectTileCategory('Insurance', this)"
-                        style="background-image: url('images/tiles/insurance.png')">
+                        style="background-image: url('https://images.unsplash.com/photo-1450101499163-c8848c66ca85?auto=format&fit=crop&q=80&w=600')">
                         <div class="category-tile-label">Insurance</div>
                     </div>
-                    <div class="category-tile" onclick="selectTileCategory('Photography & Media', this)"
-                        style="background-image: url('images/tiles/photography.png')">
-                        <div class="category-tile-label">Photography & Media</div>
+                    <div class="category-tile" onclick="selectTileCategory('Property Inspections', this)"
+                        style="background-image: url('https://images.unsplash.com/photo-1582268611958-ebfd161ef9cf?auto=format&fit=crop&q=80&w=600')">
+                        <div class="category-tile-label">Property Inspections</div>
+                    </div>
+                    <div class="category-tile" onclick="selectTileCategory('Construction & Roofing', this)"
+                        style="background-image: url('https://images.unsplash.com/photo-1503387762-592deb58ef4e?auto=format&fit=crop&q=80&w=600')">
+                        <div class="category-tile-label">Construction & Roofing</div>
+                    </div>
+                    <div class="category-tile" onclick="selectTileCategory('Home Maintenance', this)"
+                        style="background-image: url('https://images.unsplash.com/photo-1581094794329-c8112a89af12?auto=format&fit=crop&q=80&w=600')">
+                        <div class="category-tile-label">Home Maintenance</div>
+                    </div>
+                    <div class="category-tile" onclick="selectTileCategory('Moving & Interiors', this)"
+                        style="background-image: url('https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&q=80&w=600')">
+                        <div class="category-tile-label">Moving & Interiors</div>
+                    </div>
+                    <div class="category-tile" onclick="selectTileCategory('Marketing & Technology', this)"
+                        style="background-image: url('https://images.unsplash.com/photo-1451187580459-43490279c0fa?auto=format&fit=crop&q=80&w=600')">
+                        <div class="category-tile-label">Marketing & Technology</div>
+                    </div>
+                    <div class="category-tile" onclick="selectTileCategory('Lifestyle & Property', this)"
+                        style="background-image: url('https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?auto=format&fit=crop&q=80&w=600')">
+                        <div class="category-tile-label">Lifestyle & Property</div>
                     </div>
                 </div>
-            </div>
 
-            <div id="loadingContainer" class="loading-container">
-                <div class="loading-bar-bg">
-                    <div id="loadingBar" class="loading-bar-fill"></div>
+                <div id="loadingContainer" class="loading-container">
+                    <div class="loading-bar-bg">
+                        <div id="loadingBar" class="loading-bar-fill"></div>
+                    </div>
+                    <div id="statusLine" class="status-line">Connecting to member database...</div>
                 </div>
-                <div id="statusLine" class="status-line">Connecting to member database...</div>
+            </div>
+
+            <div id="directoryGrid" class="directory-grid">
+                <!-- Skeletons -->
+                <div class="skeleton-card skeleton"></div>
+                <div class="skeleton-card skeleton"></div>
+                <div class="skeleton-card skeleton"></div>
+                <div class="skeleton-card skeleton"></div>
+            </div>
+
+            <div id="pagination" class="pagination"></div>
+
+            <div
+                style="margin: 4rem 0; text-align: center; padding: 2rem; background: #fff; border-radius: 12px; border: 1px dashed #ddd;">
+                <h3>Interested in becoming an Affiliate?</h3>
+                <p style="color: #666; margin-bottom: 1.5rem;">Join our network of professional service providers and
+                    reach
+                    over 1,000 local REALTORS®.</p>
+                <a href="mailto:membership@bonitaesterorealtors.com" class="btn btn-primary"
+                    style="max-width: 250px; margin: 0 auto;">Contact Membership</a>
             </div>
         </div>
 
-        <div id="directoryGrid" class="directory-grid">
-            <!-- Skeletons -->
-            <div class="skeleton-card skeleton"></div>
-            <div class="skeleton-card skeleton"></div>
-            <div class="skeleton-card skeleton"></div>
-            <div class="skeleton-card skeleton"></div>
+        <!-- Modal -->
+        <div class="modal-overlay" id="agentModal">
+            <div class="modal-content">
+                <button class="modal-close" id="modalClose">&times;</button>
+                <div id="modalBody"></div>
+            </div>
         </div>
 
-        <div id="pagination" class="pagination"></div>
+        <script>
+            (function () {
+                const apiKey = 'cR1djHVMkndNjLbwXyhDyOV7dWPJ6TnufYtcdOHc';
+                const BASE_URL = 'https://bonitaspringsesterorealtorsfl.growthzoneapp.com';
+                const CONTACTS_BASE_URL = `${BASE_URL}/api/contacts`;
+                const ITEMS_PER_PAGE = 50;
 
-        <div
-            style="margin: 4rem 0; text-align: center; padding: 2rem; background: #fff; border-radius: 12px; border: 1px dashed #ddd;">
-            <h3>Interested in becoming an Affiliate?</h3>
-            <p style="color: #666; margin-bottom: 1.5rem;">Join our network of professional service providers and reach
-                over 1,000 local REALTORS®.</p>
-            <a href="mailto:membership@bonitaesterorealtors.com" class="btn btn-primary"
-                style="max-width: 250px; margin: 0 auto;">Contact Membership</a>
-        </div>
-    </div>
+                // Affiliate Type IDs
+                const AFFILIATE_TYPE_IDS = [10172, 10173, 10503, 23411, 56858, 56859, 56861, 56862, 56863];
 
-    <!-- Modal -->
-    <div class="modal-overlay" id="agentModal">
-        <div class="modal-content">
-            <button class="modal-close" id="modalClose">&times;</button>
-            <div id="modalBody"></div>
-        </div>
-    </div>
+                const searchInput = document.getElementById('searchInput');
+                const directoryGrid = document.getElementById('directoryGrid');
+                const statusLine = document.getElementById('statusLine');
+                const loadingBar = document.getElementById('loadingBar');
+                const paginationDiv = document.getElementById('pagination');
 
-    <script>
-        (function () {
-            const apiKey = 'cR1djHVMkndNjLbwXyhDyOV7dWPJ6TnufYtcdOHc';
-            const BASE_URL = 'https://bonitaspringsesterorealtorsfl.growthzoneapp.com';
-            const CONTACTS_BASE_URL = `${BASE_URL}/api/contacts`;
-            const ITEMS_PER_PAGE = 50;
+                const filterCategoryInput = document.getElementById('filterCategoryInput');
+                const filterCategoryList = document.getElementById('categoryList');
+                const filterLanguageInput = document.getElementById('filterLanguageInput');
+                const filterLanguageList = document.getElementById('languageList');
 
-            // Affiliate Type IDs
-            const AFFILIATE_TYPE_IDS = [10172, 10173, 10503, 23411, 56858, 56859, 56861, 56862, 56863];
+                let allContacts = [];
+                let displayedContacts = [];
+                let currentPage = 1;
 
-            const searchInput = document.getElementById('searchInput');
-            const directoryGrid = document.getElementById('directoryGrid');
-            const statusLine = document.getElementById('statusLine');
-            const loadingBar = document.getElementById('loadingBar');
-            const paginationDiv = document.getElementById('pagination');
+                document.addEventListener('DOMContentLoaded', async () => {
+                    try {
+                        const contacts = await fetchAffiliates();
+                        allContacts = sortAndPrioritizeContacts(contacts);
+                        displayedContacts = allContacts;
 
-            const filterCategoryInput = document.getElementById('filterCategoryInput');
-            const filterCategoryList = document.getElementById('categoryList');
-            const filterLanguageInput = document.getElementById('filterLanguageInput');
-            const filterLanguageList = document.getElementById('languageList');
+                        statusLine.textContent = `Showing ${allContacts.length} business partners.`;
+                        searchInput.disabled = false;
 
-            let allContacts = [];
-            let displayedContacts = [];
-            let currentPage = 1;
+                        populateFilters(allContacts);
+                        renderPage(1);
 
-            document.addEventListener('DOMContentLoaded', async () => {
-                try {
-                    const contacts = await fetchAffiliates();
-                    allContacts = randomize(contacts);
-                    displayedContacts = allContacts;
+                        searchInput.addEventListener('input', applyFilters);
+                        setupDropdown(filterCategoryInput, filterCategoryList);
+                        setupDropdown(filterLanguageInput, filterLanguageList);
 
-                    statusLine.textContent = `Showing ${allContacts.length} business partners.`;
-                    searchInput.disabled = false;
+                        // Background Indexing for Categories
+                        setTimeout(() => indexCategories(), 1000);
 
-                    populateFilters(allContacts);
-                    renderPage(1);
+                    } catch (err) {
+                        statusLine.textContent = 'Error loading directory.';
+                        console.error(err);
+                    }
+                });
 
-                    searchInput.addEventListener('input', applyFilters);
-                    setupDropdown(filterCategoryInput, filterCategoryList);
-                    setupDropdown(filterLanguageInput, filterLanguageList);
-
-                    // Background Indexing for Categories
-                    setTimeout(() => indexCategories(), 1000);
-
-                } catch (err) {
-                    statusLine.textContent = 'Error loading directory.';
-                    console.error(err);
+                async function fetchAffiliateIds() {
+                    const ids = new Set();
+                    const promises = AFFILIATE_TYPE_IDS.map(async (typeId) => {
+                        let skip = 0;
+                        while (true) {
+                            const url = `${BASE_URL}/api/memberships/all?$skip=${skip}&$top=2000`;
+                            const res = await fetch(url, {
+                                method: 'POST',
+                                headers: { 'Content-Type': 'application/json', 'Authorization': 'ApiKey ' + apiKey },
+                                body: JSON.stringify({ MembershipTypeId: typeId })
+                            });
+                            if (!res.ok) break;
+                            const data = await res.json();
+                            const results = data.Results || [];
+                            if (results.length === 0) break;
+                            results.forEach(m => { if (m.Status === 'Active') ids.add(m.ContactId); });
+                            skip += results.length;
+                            if (skip >= (data.TotalRecordAvailable || 0)) break;
+                        }
+                    });
+                    await Promise.all(promises);
+                    return ids;
                 }
-            });
 
-            async function fetchAffiliateIds() {
-                const ids = new Set();
-                const promises = AFFILIATE_TYPE_IDS.map(async (typeId) => {
+                async function fetchAffiliates() {
+                    statusLine.textContent = 'Loading memberships...';
+                    const affiliateIds = await fetchAffiliateIds();
+                    statusLine.textContent = `Found ${affiliateIds.size} active affiliates. Loading details...`;
+
+                    let all = [];
                     let skip = 0;
                     while (true) {
-                        const url = `${BASE_URL}/api/memberships/all?$skip=${skip}&$top=2000`;
-                        const res = await fetch(url, {
-                            method: 'POST',
-                            headers: { 'Content-Type': 'application/json', 'Authorization': 'ApiKey ' + apiKey },
-                            body: JSON.stringify({ MembershipTypeId: typeId })
+                        const res = await fetch(`${CONTACTS_BASE_URL}?$skip=${skip}&$top=5000`, {
+                            headers: { 'Authorization': 'ApiKey ' + apiKey }
                         });
                         if (!res.ok) break;
                         const data = await res.json();
                         const results = data.Results || [];
                         if (results.length === 0) break;
-                        results.forEach(m => { if (m.Status === 'Active') ids.add(m.ContactId); });
-                        skip += results.length;
-                        if (skip >= (data.TotalRecordAvailable || 0)) break;
+                        all = all.concat(results.filter(c => affiliateIds.has(c.ContactId) && c.Status === 'Active'));
+                        skip += data.Results.length;
+                        if (skip >= data.TotalRecordAvailable) break;
                     }
-                });
-                await Promise.all(promises);
-                return ids;
-            }
+                    return all;
+                }
 
-            async function fetchAffiliates() {
-                statusLine.textContent = 'Loading memberships...';
-                const affiliateIds = await fetchAffiliateIds();
-                statusLine.textContent = `Found ${affiliateIds.size} active affiliates. Loading details...`;
+                const SPONSORS = [
+                    { match: ["saad", "state insurance", "movement mortgage", "chapman insurance", "weidenmiller"], type: "diamond", label: "Diamond Partner", class: "sponsor-diamond", weight: 5 },
+                    { match: ["cottrell", "housemaster"], type: "platinum", label: "Platinum Partner", class: "sponsor-platinum", weight: 4 },
+                    { match: ["premium mortgage", "lane insurance"], type: "gold", label: "Gold Partner", class: "sponsor-gold", weight: 3 },
+                    { match: ["hilton moving", "lower mortgage", "revolution mortgage"], type: "silver", label: "Silver Partner", class: "sponsor-silver", weight: 2 },
+                    { match: ["frame & form", "frame form", "frame and form"], type: "photo", label: "Photography Partner", class: "sponsor-photo", weight: 1 }
+                ];
 
-                let all = [];
-                let skip = 0;
-                while (true) {
-                    const res = await fetch(`${CONTACTS_BASE_URL}?$skip=${skip}&$top=5000`, {
-                        headers: { 'Authorization': 'ApiKey ' + apiKey }
+                function determineSponsor(name) {
+                    if (!name) return null;
+                    const lowerName = name.toLowerCase();
+                    for (const tier of SPONSORS) {
+                        if (tier.match.some(m => lowerName.includes(m))) {
+                            return tier;
+                        }
+                    }
+                    return null;
+                }
+
+                function sortAndPrioritizeContacts(arr) {
+                    // First, tag everyone with their score and a random tiebreaker
+                    const scored = arr.map(c => {
+                        let score = 0;
+                        const sponsor = determineSponsor(c.Name);
+
+                        if (sponsor) {
+                            score = 100 + sponsor.weight; // Sponsors get 100+ weight
+                            c._sponsor = sponsor;
+                        } else if (c.ImageUrl) {
+                            score = 50; // Regular with photo
+                        } else {
+                            score = 10; // Regular without photo
+                        }
+
+                        return { ...c, _score: score, _r: Math.random() };
                     });
-                    if (!res.ok) break;
-                    const data = await res.json();
-                    const results = data.Results || [];
-                    if (results.length === 0) break;
-                    all = all.concat(results.filter(c => affiliateIds.has(c.ContactId) && c.Status === 'Active'));
-                    skip += data.Results.length;
-                    if (skip >= data.TotalRecordAvailable) break;
+
+                    // Sort descending by score, descending by random tiebreaker
+                    return scored.sort((a, b) => {
+                        if (b._score !== a._score) return b._score - a._score;
+                        return b._r - a._r;
+                    });
                 }
-                return all;
-            }
 
-            function randomize(arr) {
-                return arr.map(a => ({ ...a, _r: Math.random() })).sort((a, b) => a._r - b._r);
-            }
+                async function indexCategories() {
+                    const CACHE_KEY = 'AFFILIATE_META_V6';
+                    const stored = localStorage.getItem(CACHE_KEY);
+                    let cache = stored ? JSON.parse(stored).data : {};
 
-            async function indexCategories() {
-                const CACHE_KEY = 'AFFILIATE_META_V2';
-                const stored = localStorage.getItem(CACHE_KEY);
-                let cache = stored ? JSON.parse(stored).data : {};
+                    const toIndex = allContacts.filter(c => !cache[c.ContactId]);
+                    if (toIndex.length === 0) {
+                        applyCache(cache);
+                        return;
+                    }
 
-                const toIndex = allContacts.filter(c => !cache[c.ContactId]);
-                if (toIndex.length === 0) {
+                    console.log(`Indexing ${toIndex.length} categories...`);
+                    for (let i = 0; i < toIndex.length; i += 5) {
+                        const batch = toIndex.slice(i, i + 5);
+                        await Promise.all(batch.map(async c => {
+                            try {
+                                const [orgRes, moreRes] = await Promise.all([
+                                    fetch(`${BASE_URL}/api/contacts/OrgGeneral/${c.ContactId}`, { headers: { 'Authorization': 'ApiKey ' + apiKey } }),
+                                    fetch(`${BASE_URL}/api/contacts/${c.ContactId}/moreinfo`, { headers: { 'Authorization': 'ApiKey ' + apiKey } })
+                                ]);
+                                const org = await orgRes.json();
+                                const more = await moreRes.json();
+
+                                let finalCats = [];
+                                if (org && org.Categories) {
+                                    org.Categories.forEach(cat => {
+                                        const ln = cat.CategoryListName || '';
+                                        const n = cat.Name || '';
+                                        const filterOut = ['Business Type', 'Business Category', 'Affiliate', 'Board only Affiliate', 'Affiliate Member'];
+
+                                        if (n) {
+                                            n.split(';').map(s => s.trim()).forEach(s => {
+                                                if (s && !filterOut.includes(s)) finalCats.push(s);
+                                            });
+                                        } else if (ln && !filterOut.includes(ln)) {
+                                            finalCats.push(ln);
+                                        }
+                                    });
+                                }
+
+                                cache[c.ContactId] = {
+                                    Categories: [...new Set(finalCats)],
+                                    Languages: more?.Fields?.find(f => f.DisplayName === 'Languages Spoken')?.Value || ''
+                                };
+                            } catch (e) { }
+                        }));
+                        if (i % 25 === 0) {
+                            localStorage.setItem(CACHE_KEY, JSON.stringify({ timestamp: Date.now(), data: cache }));
+                            applyCache(cache);
+                        }
+                        await new Promise(r => setTimeout(r, 200));
+                    }
+                    localStorage.setItem(CACHE_KEY, JSON.stringify({ timestamp: Date.now(), data: cache }));
                     applyCache(cache);
-                    return;
                 }
 
-                console.log(`Indexing ${toIndex.length} categories...`);
-                for (let i = 0; i < toIndex.length; i += 5) {
-                    const batch = toIndex.slice(i, i + 5);
-                    await Promise.all(batch.map(async c => {
-                        try {
-                            const [orgRes, moreRes] = await Promise.all([
-                                fetch(`${BASE_URL}/api/contacts/OrgGeneral/${c.ContactId}`, { headers: { 'Authorization': 'ApiKey ' + apiKey } }),
-                                fetch(`${BASE_URL}/api/contacts/${c.ContactId}/moreinfo`, { headers: { 'Authorization': 'ApiKey ' + apiKey } })
-                            ]);
-                            const org = await orgRes.json();
-                            const more = await moreRes.json();
+                const META_CATEGORIES = {
+                    "Title & Escrow": ["Title Company", "Transaction Services", "Association Only"],
+                    "Mortgage & Finance": ["Mortgage Lender", "Bank", "Accountant", "Wealth Management"],
+                    "Legal": ["Lawyer/Attorney"],
+                    "Insurance": ["Insurance"],
+                    "Property Inspections": ["Home Inspector", "Appraisers", "Mold/Radon"],
+                    "Construction & Roofing": ["Construction", "Contractor", "Home Builder", "Renovation", "Roofing", "Windows/Shutters"],
+                    "Home Maintenance": ["Air Conditioning", "Plumbing", "Painter", "Exterminators", "Disinfecting/Odor Removal"],
+                    "Moving & Interiors": ["Moving/Packing", "Home Furnishings", "Appliances"],
+                    "Marketing & Technology": ["Photography/Drone", "Marketing/Advertising", "Internet Solutions", "Wifi", "Coaching", "Real Estate Schools"],
+                    "Lifestyle & Property": ["Rentals", "Vacation Rentals", "Country Clubs", "Home Watch"]
+                };
 
-                            let finalCats = [];
-                            if (org && org.Categories) {
-                                org.Categories.forEach(cat => {
-                                    const ln = cat.CategoryListName || '';
-                                    const n = cat.Name || '';
-                                    if (n) {
-                                        n.split(';').map(s => s.trim()).forEach(s => {
-                                            if (s && !['Board only Affiliate', 'Affiliate'].includes(s)) {
-                                                finalCats.push(s);
-                                            }
-                                        });
-                                    } else if (ln && !['Business Type', 'Business Category', 'Affiliate', 'Board only Affiliate'].includes(ln)) {
-                                        finalCats.push(ln);
+                const SPONSOR_CATEGORY_OVERRIDES = {
+                    "Law Office of Sam Saad III": ["Legal"],
+                    "Samuel Saad III": ["Legal"],
+                    "Woods, Weidenmiller, Michetti & Rudnick, LLP": ["Legal"],
+                    "State Insurance USA": ["Insurance"],
+                    "Chapman Insurance Group": ["Insurance"],
+                    "Lane Insurance Group": ["Insurance"],
+                    "Sunrise Insurance Group": ["Insurance"],
+                    "John Galt Insurance": ["Insurance"],
+
+                    "Cottrell Title": ["Title & Escrow"],
+                    "Venture Title Services": ["Title & Escrow"],
+                    "First Source Title": ["Title & Escrow"],
+                    "Heights Title Services": ["Title & Escrow"],
+
+                    "Movement Mortgage": ["Mortgage & Finance"],
+                    "Premium Mortgage Corporation": ["Mortgage & Finance"],
+                    "Revolution Mortgage": ["Mortgage & Finance"],
+                    "Lower Mortgage": ["Mortgage & Finance"],
+                    "Motto Mortgage": ["Mortgage & Finance"],
+                    "BREH Funding": ["Mortgage & Finance"],
+
+                    "Hilton Moving & Storage LLC": ["Moving & Interiors"],
+
+                    "HouseMaster": ["Property Inspections"],
+                    "HouseMaster Home Inspections": ["Property Inspections"],
+                    "Joe the Home Pro": ["Property Inspections"],
+                    "239 Inspection Services": ["Property Inspections"],
+
+                    "Hughes Exterminators": ["Home Maintenance"],
+
+                    "Frame & Form Studio": ["Marketing & Technology"]
+                };
+
+                function applyCache(cache) {
+                    allContacts.forEach(c => {
+                        if (cache[c.ContactId]) {
+                            const originalCats = cache[c.ContactId].Categories || [];
+                            let metaCats = new Set();
+
+                            // First check if this specific company has a hardcoded override to prevent category spamming
+                            let overrideApplied = false;
+                            for (const [orgName, overrideCats] of Object.entries(SPONSOR_CATEGORY_OVERRIDES)) {
+                                if (c.Name.includes(orgName) || (c.PrimaryOrganizationName && c.PrimaryOrganizationName.includes(orgName))) {
+                                    overrideCats.forEach(cat => metaCats.add(cat));
+                                    overrideApplied = true;
+                                    break;
+                                }
+                            }
+
+                            if (!overrideApplied) {
+                                originalCats.forEach(cat => {
+                                    let foundMeta = false;
+                                    for (const [meta, specificGroup] of Object.entries(META_CATEGORIES)) {
+                                        if (specificGroup.includes(cat)) {
+                                            metaCats.add(meta);
+                                            foundMeta = true;
+                                            break;
+                                        }
+                                    }
+                                    if (!foundMeta) {
+                                        // Make best effort to group any unknown or custom categories added later
+                                        if (cat.includes('Inspection')) metaCats.add('Property Inspections');
+                                        else metaCats.add('Lifestyle & Property');
                                     }
                                 });
                             }
-                            if (finalCats.length === 0) finalCats = ['Affiliate Member'];
 
-                            cache[c.ContactId] = {
-                                Categories: [...new Set(finalCats)],
-                                Languages: more?.Fields?.find(f => f.DisplayName === 'Languages Spoken')?.Value || ''
-                            };
-                        } catch (e) { }
-                    }));
-                    if (i % 25 === 0) {
-                        localStorage.setItem(CACHE_KEY, JSON.stringify({ timestamp: Date.now(), data: cache }));
-                        applyCache(cache);
-                    }
-                    await new Promise(r => setTimeout(r, 200));
-                }
-                localStorage.setItem(CACHE_KEY, JSON.stringify({ timestamp: Date.now(), data: cache }));
-                applyCache(cache);
-            }
-
-            function applyCache(cache) {
-                allContacts.forEach(c => {
-                    if (cache[c.ContactId]) {
-                        c._categories = cache[c.ContactId].Categories || [];
-                        c._languages = cache[c.ContactId].Languages || '';
-                    }
-                });
-                populateFilters(allContacts);
-            }
-
-            function populateFilters(contacts) {
-                const cats = new Set();
-                const langs = new Set();
-                contacts.forEach(c => {
-                    (c._categories || []).forEach(cat => cats.add(cat));
-                    if (c._languages) c._languages.split(',').forEach(l => langs.add(l.trim()));
-                });
-
-                buildDropdown(filterCategoryList, filterCategoryInput, cats);
-                buildDropdown(filterLanguageList, filterLanguageInput, langs);
-            }
-
-            function buildDropdown(listEl, inputEl, set) {
-                listEl.innerHTML = '<div class="dropdown-item">All</div>';
-                [...set].sort().forEach(val => {
-                    const div = document.createElement('div');
-                    div.className = 'dropdown-item';
-                    div.textContent = val;
-                    div.onclick = () => { inputEl.value = val; listEl.classList.remove('open'); applyFilters(); };
-                    listEl.appendChild(div);
-                });
-                listEl.firstChild.onclick = () => { inputEl.value = ''; listEl.classList.remove('open'); applyFilters(); };
-            }
-
-            function setupDropdown(input, list) {
-                input.addEventListener('focus', () => {
-                    list.classList.add('open');
-                    const term = input.value.toLowerCase();
-                    Array.from(list.children).forEach(child => {
-                        child.style.display = child.textContent.toLowerCase().includes(term) || child.textContent === 'All' ? 'block' : 'none';
+                            c._categories = [...metaCats];
+                            c._languages = cache[c.ContactId].Languages || '';
+                        }
                     });
-                });
-                input.addEventListener('input', () => {
-                    const term = input.value.toLowerCase();
-                    Array.from(list.children).forEach(child => {
-                        child.style.display = child.textContent.toLowerCase().includes(term) || child.textContent === 'All' ? 'block' : 'none';
-                    });
-                    applyFilters();
-                });
-                document.addEventListener('click', (e) => {
-                    if (!e.target.closest('.dropdown-container')) list.classList.remove('open');
-                });
-            }
-
-            window.selectTileCategory = (category, element) => {
-                const tiles = document.querySelectorAll('.category-tile');
-                const wasActive = element.classList.contains('active');
-
-                tiles.forEach(t => t.classList.remove('active'));
-
-                if (wasActive) {
-                    filterCategoryInput.value = '';
-                } else {
-                    element.classList.add('active');
-                    filterCategoryInput.value = category;
+                    populateFilters(allContacts);
                 }
 
-                // Clear text search when selecting a tile for better UX
-                searchInput.value = '';
-                filterCategoryList.classList.remove('open');
+                function populateFilters(contacts) {
+                    const cats = new Set();
+                    const langs = new Set();
+                    contacts.forEach(c => {
+                        (c._categories || []).forEach(cat => cats.add(cat));
+                        if (c._languages) c._languages.split(',').forEach(l => langs.add(l.trim()));
+                    });
 
-                applyFilters();
-            };
+                    buildDropdown(filterCategoryList, filterCategoryInput, cats);
+                    buildDropdown(filterLanguageList, filterLanguageInput, langs);
+                }
 
-            function applyFilters() {
-                const term = searchInput.value.toLowerCase();
-                const cat = filterCategoryInput.value.toLowerCase();
-                const lang = filterLanguageInput.value.toLowerCase();
+                function buildDropdown(listEl, inputEl, set) {
+                    listEl.innerHTML = '<div class="dropdown-item">All</div>';
+                    [...set].sort().forEach(val => {
+                        const div = document.createElement('div');
+                        div.className = 'dropdown-item';
+                        div.textContent = val;
+                        div.onclick = () => { inputEl.value = val; listEl.classList.remove('open'); applyFilters(); };
+                        listEl.appendChild(div);
+                    });
+                    listEl.firstChild.onclick = () => { inputEl.value = ''; listEl.classList.remove('open'); applyFilters(); };
+                }
 
-                // Sync tile state with dropdown if changed manually
-                const tiles = document.querySelectorAll('.category-tile');
-                tiles.forEach(t => {
-                    if (t.querySelector('.category-tile-label').textContent.toLowerCase() === cat) {
-                        t.classList.add('active');
+                function setupDropdown(input, list) {
+                    input.addEventListener('focus', () => {
+                        list.classList.add('open');
+                        const term = input.value.toLowerCase();
+                        Array.from(list.children).forEach(child => {
+                            child.style.display = child.textContent.toLowerCase().includes(term) || child.textContent === 'All' ? 'block' : 'none';
+                        });
+                    });
+                    input.addEventListener('input', () => {
+                        const term = input.value.toLowerCase();
+                        Array.from(list.children).forEach(child => {
+                            child.style.display = child.textContent.toLowerCase().includes(term) || child.textContent === 'All' ? 'block' : 'none';
+                        });
+                        applyFilters();
+                    });
+                    document.addEventListener('click', (e) => {
+                        if (!e.target.closest('.dropdown-container')) list.classList.remove('open');
+                    });
+                }
+
+                window.selectTileCategory = (category, element) => {
+                    const tiles = document.querySelectorAll('.category-tile');
+                    const wasActive = element.classList.contains('active');
+
+                    tiles.forEach(t => t.classList.remove('active'));
+
+                    if (wasActive) {
+                        filterCategoryInput.value = '';
                     } else {
-                        t.classList.remove('active');
+                        element.classList.add('active');
+                        filterCategoryInput.value = category;
                     }
-                });
 
-                displayedContacts = allContacts.filter(c => {
-                    if (term && !c.Name.toLowerCase().includes(term) && !(c.PrimaryContact || '').toLowerCase().includes(term)) return false;
-                    if (cat && !(c._categories || []).some(v => v.toLowerCase() === cat)) return false;
-                    if (lang && !(c._languages || '').toLowerCase().includes(lang)) return false;
-                    return true;
-                });
-                renderPage(1);
-            }
+                    // Clear text search when selecting a tile for better UX
+                    searchInput.value = '';
+                    filterCategoryList.classList.remove('open');
 
-            function renderPage(page) {
-                currentPage = page;
-                const start = (page - 1) * ITEMS_PER_PAGE;
-                const slice = displayedContacts.slice(start, start + ITEMS_PER_PAGE);
+                    applyFilters();
+                };
 
-                loadingBar.style.width = '100%';
-                document.getElementById('loadingContainer').style.display = 'none';
+                function applyFilters() {
+                    const term = searchInput.value.toLowerCase();
+                    const cat = filterCategoryInput.value.toLowerCase();
+                    const lang = filterLanguageInput.value.toLowerCase();
 
-                directoryGrid.innerHTML = '';
-                slice.forEach((c, i) => {
-                    const card = document.createElement('div');
-                    card.className = 'agent-card';
-                    card.style.animationDelay = `${i * 30}ms`;
+                    // Sync tile state with dropdown if changed manually
+                    const tiles = document.querySelectorAll('.category-tile');
+                    tiles.forEach(t => {
+                        if (t.querySelector('.category-tile-label').textContent.toLowerCase() === cat) {
+                            t.classList.add('active');
+                        } else {
+                            t.classList.remove('active');
+                        }
+                    });
 
-                    const categories = (c._categories && c._categories.length) ? c._categories : ['Affiliate Member'];
-                    const catHtml = categories.map(cat => `<div class="category-badge">${cat}</div>`).join(' ');
+                    displayedContacts = allContacts.filter(c => {
+                        if (term && !c.Name.toLowerCase().includes(term) && !(c.PrimaryContact || '').toLowerCase().includes(term)) return false;
+                        if (cat && !(c._categories || []).some(v => v.toLowerCase() === cat)) return false;
+                        if (lang && !(c._languages || '').toLowerCase().includes(lang)) return false;
+                        return true;
+                    });
+                    renderPage(1);
+                }
 
-                    card.innerHTML = `
+                function renderPage(page) {
+                    currentPage = page;
+                    const start = (page - 1) * ITEMS_PER_PAGE;
+                    const slice = displayedContacts.slice(start, start + ITEMS_PER_PAGE);
+
+                    loadingBar.style.width = '100%';
+                    document.getElementById('loadingContainer').style.display = 'none';
+
+                    directoryGrid.innerHTML = '';
+                    slice.forEach((c, i) => {
+                        const card = document.createElement('div');
+                        card.className = 'agent-card';
+                        card.style.animationDelay = `${i * 30}ms`;
+
+                        const categories = (c._categories && c._categories.length) ? c._categories : [];
+                        const catHtml = categories.map(cat => `<div class="category-badge">${cat}</div>`).join(' ');
+                        const badgeHtml = c._sponsor ? `<div class="sponsor-badge ${c._sponsor.class}">${c._sponsor.label}</div>` : '';
+
+                        card.innerHTML = `
                         <div class="card-header">
                             <div class="avatar">${c.ImageUrl ? `<img src="${c.ImageUrl}" alt="${c.Name}">` : ''}</div>
                             <div class="info">
+                                ${badgeHtml}
                                 <h3 class="agent-name">${c.Name}</h3>
                                 <div class="category-list">${catHtml}</div>
                             </div>
@@ -1114,51 +1300,116 @@
                             <button class="btn btn-primary" onclick="window.openModal(${c.ContactId})">View Details</button>
                         </div>
                     `;
-                    directoryGrid.appendChild(card);
-                });
-                renderPagination(Math.ceil(displayedContacts.length / ITEMS_PER_PAGE));
-            }
-
-            function renderPagination(total) {
-                paginationDiv.innerHTML = '';
-                if (total <= 1) return;
-                for (let i = 1; i <= total; i++) {
-                    const btn = document.createElement('button');
-                    btn.className = `page-btn ${i === currentPage ? 'active' : ''}`;
-                    btn.textContent = i;
-                    btn.onclick = () => { window.scrollTo(0, 0); renderPage(i); };
-                    paginationDiv.appendChild(btn);
+                        directoryGrid.appendChild(card);
+                    });
+                    renderPagination(Math.ceil(displayedContacts.length / ITEMS_PER_PAGE));
                 }
-            }
 
-            // Modal Logic
-            window.openModal = async (id) => {
-                const overlay = document.getElementById('agentModal');
-                const body = document.getElementById('modalBody');
-                overlay.classList.add('open');
-                document.body.style.overflow = 'hidden';
-                body.innerHTML = '<div class="modal-spinner"></div>';
+                function renderPagination(total) {
+                    paginationDiv.innerHTML = '';
+                    if (total <= 1) return;
+                    for (let i = 1; i <= total; i++) {
+                        const btn = document.createElement('button');
+                        btn.className = `page-btn ${i === currentPage ? 'active' : ''}`;
+                        btn.textContent = i;
+                        btn.onclick = () => { window.scrollTo(0, 0); renderPage(i); };
+                        paginationDiv.appendChild(btn);
+                    }
+                }
 
-                const basic = allContacts.find(c => c.ContactId === id);
-                try {
-                    const [orgRes, moreRes] = await Promise.all([
-                        fetch(`${BASE_URL}/api/contacts/OrgGeneral/${id}`, { headers: { 'Authorization': 'ApiKey ' + apiKey } }),
-                        fetch(`${BASE_URL}/api/contacts/${id}/moreinfo`, { headers: { 'Authorization': 'ApiKey ' + apiKey } })
-                    ]);
-                    const org = await orgRes.json();
-                    const more = await moreRes.json();
-                    const bio = more?.AddlInfo?.Bio || '';
-                    const cats = (org.Categories || []).map(cat => cat.CategoryListName || cat.Name).filter(n => n && n !== 'Board only Affiliate');
+                // Modal Logic
+                window.openModal = async (id) => {
+                    const overlay = document.getElementById('agentModal');
+                    const body = document.getElementById('modalBody');
+                    overlay.classList.add('open');
+                    document.body.style.overflow = 'hidden';
+                    body.innerHTML = '<div class="modal-spinner"></div>';
 
-                    body.innerHTML = `
+                    const basic = allContacts.find(c => c.ContactId === id);
+                    try {
+                        const [orgRes, moreRes] = await Promise.all([
+                            fetch(`${BASE_URL}/api/contacts/OrgGeneral/${id}`, { headers: { 'Authorization': 'ApiKey ' + apiKey } }),
+                            fetch(`${BASE_URL}/api/contacts/${id}/moreinfo`, { headers: { 'Authorization': 'ApiKey ' + apiKey } })
+                        ]);
+                        const org = await orgRes.json();
+                        const more = await moreRes.json();
+                        const bio = more?.AddlInfo?.Bio || '';
+                        const cats = (org.Categories || []).map(cat => cat.CategoryListName || cat.Name).filter(n => {
+                            const bad = ['Board only Affiliate', 'Business Type', 'Business Category', 'Affiliate', 'Affiliate Member'];
+                            return n && !bad.includes(n);
+                        });
+
+                        const badgeHtml = basic._sponsor ? `<div class="sponsor-badge ${basic._sponsor.class}" style="margin-bottom:0.5rem;">${basic._sponsor.label}</div>` : '';
+
+                        let affiliatedHtml = '';
+                        const ind = allContacts.filter(c => {
+                            if (c.ContactId === id) return false;
+                            if (c.PrimaryOrganizationId && c.PrimaryOrganizationId === basic.ContactId) return true;
+                            if (c.PrimaryOrganizationName) {
+                                const org = c.PrimaryOrganizationName.toLowerCase();
+                                const bas = basic.Name.toLowerCase();
+                                if (org === bas || org.includes(bas) || bas.includes(org)) return true;
+                            }
+                            if (basic.Phone && c.Phone && basic.Phone === c.Phone) return true;
+                            return false;
+                        });
+
+                        if (basic.PrimaryContact || ind.length > 0) {
+                            affiliatedHtml = `<div class="modal-section"><div class="modal-section-title">Affiliated Professionals</div><div class="directory-grid" style="grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); margin-top: 1rem;">`;
+
+                            const renderMiniCard = (person, role) => {
+                                const badge = role ? `<div class="sponsor-badge" style="background:var(--secondary);margin-bottom:0.5rem;font-size:0.75rem;">${role}</div>` : '';
+
+                                // Inherit basic categories if person has none
+                                let catArray = person._categories && person._categories.length > 0 ? person._categories : basic._categories;
+                                const catsList = catArray ? catArray.map(c => `<div class="category-badge">${c}</div>`).join(' ') : '';
+
+                                return `
+                                <div class="agent-card" style="animation: none; opacity: 1; transform: none; min-width: 250px;">
+                                    <div class="card-header" style="flex: 1;">
+                                        <div class="avatar">${person.ImageUrl ? `<img src="${person.ImageUrl}" alt="${person.Name}">` : ''}</div>
+                                        <div class="info">
+                                            ${badge}
+                                            <h3 class="agent-name" style="font-size:1.1rem;margin-bottom:0.5rem;">${person.Name}</h3>
+                                            <div class="category-list">${catsList}</div>
+                                        </div>
+                                    </div>
+                                    <a href="javascript:void(0)" onclick="window.openModal(${person.ContactId || id})" class="btn" style="width:100%; border-radius: 0 0 12px 12px; background: #f0f0f0; color: #333; transition: background 0.2s;">View Details</a>
+                                </div>
+                            `;
+                            };
+
+                            if (basic.PrimaryContact) {
+                                // Try to find the primary contact in the individuals list to get their image/phone, otherwise mock a basic card
+                                const pMatch = ind.find(p => p.Name.toLowerCase() === basic.PrimaryContact.toLowerCase());
+                                if (pMatch) {
+                                    affiliatedHtml += renderMiniCard(pMatch, 'Primary Contact');
+                                } else {
+                                    affiliatedHtml += renderMiniCard({ Name: basic.PrimaryContact }, 'Primary Contact');
+                                }
+                            }
+
+                            ind.forEach(person => {
+                                if (person.Name !== basic.PrimaryContact) {
+                                    affiliatedHtml += renderMiniCard(person, '');
+                                }
+                            });
+                            affiliatedHtml += `</div></div>`;
+                        }
+
+                        body.innerHTML = `
                         <div class="modal-hero">
                             <div class="modal-avatar">${basic.ImageUrl ? `<img src="${basic.ImageUrl}" alt="${basic.Name}" style="width:100%;height:100%;object-fit:contain;">` : ''}</div>
                             <div class="modal-hero-info">
+                                ${badgeHtml}
                                 <h2>${basic.Name}</h2>
-                                <div class="office-label">${cats.join(' · ') || 'Affiliate Partner'}</div>
+                                <div class="office-label">${cats.join(' · ')}</div>
                             </div>
                         </div>
                         ${bio ? `<div class="modal-section"><div class="modal-section-title">About</div><div class="modal-bio">${bio}</div></div>` : ''}
+                        
+                        ${affiliatedHtml}
+
                         <div class="modal-section">
                             <div class="modal-section-title">Contact Information</div>
                             <div class="modal-detail-grid">
@@ -1172,15 +1423,15 @@
                             <button class="btn-outline" onclick="document.getElementById('agentModal').classList.remove('open'); document.body.style.overflow='';">Close</button>
                         </div>
                     `;
-                } catch (e) { body.innerHTML = 'Error loading details.'; }
-            };
+                    } catch (e) { body.innerHTML = 'Error loading details.'; }
+                };
 
-            document.getElementById('modalClose').onclick = () => {
-                document.getElementById('agentModal').classList.remove('open');
-                document.body.style.overflow = '';
-            };
-        })();
-    </script>
+                document.getElementById('modalClose').onclick = () => {
+                    document.getElementById('agentModal').classList.remove('open');
+                    document.body.style.overflow = '';
+                };
+            })();
+        </script>
 </body>
 
 </html>
