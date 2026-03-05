@@ -2891,6 +2891,12 @@ export default {
                     };
 
                     if (cols.length >= 5) {
+                        // Parse expiration date from status_expires (e.g. "Current,Active | 09/30/2026")
+                        const rawStatus = cleanText(cols[4]);
+                        let expirationDate = null;
+                        const dateMatch = rawStatus.match(/(\d{1,2}\/\d{1,2}\/\d{4})/);
+                        if (dateMatch) expirationDate = dateMatch[1];
+
                         return json({
                             valid: true,
                             license: clean,
@@ -2898,8 +2904,9 @@ export default {
                             details: {
                                 name: cleanText(cols[1]),
                                 type: cleanText(cols[0]),
-                                status_expires: cleanText(cols[4]),
-                                number_rank: cleanText(cols[3])
+                                status_expires: rawStatus,
+                                number_rank: cleanText(cols[3]),
+                                expiration_date: expirationDate
                             }
                         });
                     }

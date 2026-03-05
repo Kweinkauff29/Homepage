@@ -21,7 +21,9 @@
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link
+  href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Space+Mono:ital,wght@0,400;0,700;1,400;1,700&display=swap"
+  rel="stylesheet">
 </head>
 
 
@@ -65,24 +67,31 @@
   <style>
     .ber-about {
       /* Swiss-Minimalist Tokens */
-      --ink: #0B1220;
-      --bg: #FFFFFF;
-      --muted: #475569;
-      --line: rgba(15, 23, 42, 0.10);
-      --brand: var(--wpex-hover-main-nav-link-color, #05AAE1);
-      --brand-2: #FBAE24;
+      --ink: #000000;
+      --bg: #FAFAFA;
+      --muted: #666666;
+      --line: #000000;
+      /* Harsh black lines for Swiss grid */
+      --brand: #05AAE1;
+      --brand-2: #FF0055;
+      /* Magenta signal color */
+      --brand-3: #E6FA05;
+      /* Acid green/yellow */
       --success-bg: rgba(5, 170, 225, 0.05);
 
-      --radius: 16px;
-      --radius-lg: 20px;
-      --shadow: 0 8px 24px rgba(15, 23, 42, 0.03);
-      --shadow-hover: 0 14px 40px rgba(15, 23, 42, 0.08);
+      --radius: 0px;
+      /* Sharp corners for UI */
+      --radius-lg: 0px;
+      --shadow: 4px 4px 0 rgba(0, 0, 0, 0.08);
+      /* Harsh shadow */
+      --shadow-hover: 8px 8px 0 rgba(0, 0, 0, 0.15);
 
       --max: 1120px;
       --pad: clamp(16px, 3vw, 28px);
       background: var(--bg);
       color: var(--ink);
       font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      --font-mono: 'Space Mono', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
     }
 
     .vc_column_container {
@@ -218,25 +227,69 @@
       gap: 6px;
       place-items: start;
       min-height: 110px;
-      transition: transform .2s ease, box-shadow .2s ease
+      transition: transform .2s ease, box-shadow .2s ease;
+      position: relative;
+    }
+
+    /* Swiss corner brackets */
+    .ber-stat::before,
+    .ber-stat::after,
+    .ber-card::before,
+    .ber-card::after,
+    .ber-person::before,
+    .ber-person::after,
+    .ber-committee::before,
+    .ber-committee::after {
+      content: '';
+      position: absolute;
+      width: 8px;
+      height: 8px;
+      border: 1px solid transparent;
+      pointer-events: none;
+    }
+
+    .ber-stat::before,
+    .ber-card::before,
+    .ber-person::before,
+    .ber-committee::before {
+      top: -1px;
+      left: -1px;
+      border-top-color: var(--brand-2);
+      border-left-color: var(--brand-2);
+    }
+
+    .ber-stat::after,
+    .ber-card::after,
+    .ber-person::after,
+    .ber-committee::after {
+      bottom: -1px;
+      right: -1px;
+      border-bottom-color: var(--brand-2);
+      border-right-color: var(--brand-2);
     }
 
     .ber-stat:hover {
-      transform: translateY(-3px);
-      box-shadow: 0 14px 40px rgba(2, 29, 53, .12)
+      transform: translateY(-3px) translate(-3px, -3px);
+      box-shadow: var(--shadow-hover);
     }
 
     .ber-stat .num {
-      font: 700 clamp(22px, 3vw, 32px)/1 'Inter', sans-serif;
-      color: var(--ink)
+      font: 800 clamp(32px, 5vw, 54px)/1 'Inter', sans-serif;
+      color: var(--ink);
+      letter-spacing: -0.05em;
+      margin-left: auto;
+      /* Right alignment for big anchor numeral */
     }
 
     .ber-stat .label {
       color: var(--muted);
       font-weight: 700;
-      font-size: 12px;
-      letter-spacing: .06em;
-      text-transform: uppercase
+      font-size: 11px;
+      font-family: var(--font-mono);
+      /* Monospace microtype */
+      letter-spacing: .1em;
+      text-transform: uppercase;
+      margin-top: auto;
     }
 
     .ber-section {
@@ -266,16 +319,34 @@
       background: #fff;
       border: 1px solid var(--line);
       border-radius: var(--radius);
-      padding: 18px;
+      padding: 40px 24px 24px 24px;
+      /* Generous top padding to clear the top-left label */
       box-shadow: var(--shadow);
       display: grid;
-      gap: 10px;
-      transition: transform .2s ease, box-shadow .2s ease
+      gap: 12px;
+      transition: transform .2s ease, box-shadow .2s ease;
+      position: relative;
+    }
+
+    /* Micro label */
+    .ber-card::before {
+      content: '// MODULE';
+      position: absolute;
+      top: 10px;
+      left: 16px;
+      /* Moved to left and given breathing room */
+      font-family: var(--font-mono);
+      font-size: 9px;
+      color: var(--muted);
+      border: none;
+      width: auto;
+      height: auto;
+      letter-spacing: 0.1em;
     }
 
     .ber-card:hover {
-      transform: translateY(-3px);
-      box-shadow: 0 14px 40px rgba(2, 29, 53, .12)
+      transform: translateY(-3px) translate(-3px, -3px);
+      box-shadow: var(--shadow-hover);
     }
 
     .ber-card h3 {
@@ -346,15 +417,16 @@
     .ber-person {
       background: #fff;
       border: 1px solid var(--line);
-      border-radius: 16px;
+      border-radius: var(--radius);
       overflow: hidden;
       box-shadow: var(--shadow);
-      transition: transform .2s ease, box-shadow .2s ease
+      transition: transform .2s ease, box-shadow .2s ease;
+      position: relative;
     }
 
     .ber-person:hover {
-      transform: translateY(-4px);
-      box-shadow: 0 16px 45px rgba(2, 29, 53, .14)
+      transform: translateY(-4px) translate(-4px, -4px);
+      box-shadow: var(--shadow-hover);
     }
 
     .ber-person img {
@@ -363,25 +435,32 @@
       object-position: top;
       width: 100%;
       display: block;
-      transition: transform .3s ease
+      transition: transform .3s ease;
     }
 
     .ber-person:hover img {
-      transform: scale(1.03)
+      transform: scale(1.03);
     }
 
     .ber-person .meta {
-      padding: 12px
+      padding: 16px;
+      border-top: 1px solid var(--line);
     }
 
     .ber-person .name {
       font-weight: 800;
-      font-size: 18px
+      font-size: 18px;
+      text-transform: uppercase;
+      letter-spacing: .02em;
     }
 
     .ber-person .role {
-      font-size: 14px;
-      line-height: 1.5
+      font-size: 11px;
+      font-family: var(--font-mono);
+      text-transform: uppercase;
+      line-height: 1.5;
+      margin-top: 6px;
+      color: var(--muted);
     }
 
     .ber-person .role a {
@@ -484,8 +563,8 @@
     .ber-faq details {
       background: #fff;
       border: 1px solid var(--line);
-      border-radius: 14px;
-      padding: 12px 14px;
+      border-radius: var(--radius);
+      padding: 40px 24px 24px 24px;
       transition: box-shadow .2s ease
     }
 
@@ -504,7 +583,8 @@
     }
 
     .ber-faq p {
-      margin: 8px 0 0;
+      margin: 12px 0 0;
+      /* Add slight breathing room above paragraphs */
       color: var(--muted)
     }
 
@@ -937,16 +1017,33 @@
       background: #fff;
       border: 1px solid var(--line);
       border-radius: var(--radius);
-      padding: 16px;
+      padding: 38px 24px 24px 24px;
+      /* Generous top padding for label */
       box-shadow: var(--shadow);
       display: grid;
       gap: 6px;
       transition: transform .2s ease, box-shadow .2s ease;
+      position: relative;
+    }
+
+    .ber-committee::before {
+      content: '// CHAIR_INFO';
+      position: absolute;
+      top: 10px;
+      left: 16px;
+      /* Match card label placement */
+      font-family: var(--font-mono);
+      font-size: 9px;
+      color: var(--muted);
+      border: none;
+      width: auto;
+      height: auto;
+      letter-spacing: 0.1em;
     }
 
     .ber-committee:hover {
-      transform: translateY(-3px);
-      box-shadow: 0 14px 40px rgba(2, 29, 53, .12);
+      transform: translateY(-3px) translate(-3px, -3px);
+      box-shadow: var(--shadow-hover);
     }
 
     .ber-committee h3 {
@@ -963,21 +1060,45 @@
 
     /* Core Values chips */
     .ber-values {
+      list-style: none;
+      padding: 0;
+      margin: 10px 0 0;
       display: flex;
       flex-wrap: wrap;
-      gap: 8px;
-      margin-top: 10px
+      gap: 12px;
+      /* Ensure visible gaps */
+    }
+
+    .ber-values li {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+    }
+
+    .ber-values li::marker {
+      content: '';
+    }
+
+    .ber-values li::before {
+      content: none !important;
     }
 
     .ber-value {
       background: rgba(5, 170, 225, .08);
       border: 1px solid var(--line);
       color: #0b1220;
-      border-radius: 999px;
-      padding: 6px 12px;
+      border-radius: 0px;
+      /* Sharp corners */
+      padding: 6px 14px !important;
+      /* Force padding overrides */
+      margin: 2px;
+      /* Force minimum margin if gap fails */
       font-weight: 800;
       letter-spacing: .02em;
-      transition: transform .15s ease, background .15s ease
+      transition: transform .15s ease, background .15s ease;
+      display: inline-flex;
+      align-items: center;
+      line-height: 1.3;
     }
 
     .ber-value:hover {
@@ -986,12 +1107,12 @@
     }
 
     .ber-values--compact {
-      gap: 6px;
+      gap: 8px;
       margin-top: 8px
     }
 
     .ber-values--compact .ber-value {
-      padding: 4px 10px;
+      padding: 4px 10px !important;
       font-weight: 700;
       font-size: 12px
     }
@@ -1001,57 +1122,6 @@
       margin-top: 2px;
       color: var(--muted);
       font-size: 14px
-    }
-
-
-    /* Fix Core Values list bullets/spacing */
-    .ber-values {
-      list-style: none;
-      padding: 0;
-      margin: 10px 0 0;
-      display: flex;
-      flex-wrap: wrap;
-      gap: 8px
-    }
-
-    .ber-values li {
-      list-style: none;
-      margin: 0;
-      padding: 0
-    }
-
-    /* Kill theme-injected markers/separators */
-    .ber-values li::marker {
-      content: ''
-    }
-
-    .ber-values li::before {
-      content: none !important
-    }
-
-    /* Tidy chip sizing/alignment */
-    .ber-value {
-      display: inline-flex;
-      align-items: center;
-      border-radius: 999px;
-      padding: 6px 12px;
-      font-weight: 800;
-      font-size: 14px;
-      line-height: 1.2;
-      background: rgba(5, 170, 225, .08);
-      border: 1px solid var(--line);
-      color: #0b1220
-    }
-
-    .ber-values--compact {
-      gap: 6px;
-      margin-top: 8px
-    }
-
-    .ber-values--compact .ber-value {
-      padding: 4px 10px;
-      font-weight: 700;
-      font-size: 12px
     }
   </style>
 
@@ -1369,7 +1439,7 @@
           <div class="meta">
             <div class="name">Meighan Harris</div>
             <div class="role">Chief Executive Officer · <a href="mailto:CEO@BERealtors.org">CEO@BERealtors.org</a> · <a
-                href="tel:+12399926771;ext=5">(239) 992‑6771 ext. 5</a></div>
+                href="tel:+12399926771;ext=6">(239) 992‑6771 ext. 6</a></div>
           </div>
         </article>
         <article class="ber-person">
@@ -1379,8 +1449,8 @@
           <div class="meta">
             <div class="name">Kevin Weinkauff</div>
             <div class="role">Communications &amp; Technology · <a
-                href="mailto:Tech@BERealtors.org">Tech@BERealtors.org</a> · <a href="tel:+12399926771;ext=9">(239)
-                992‑6771 ext. 9</a></div>
+                href="mailto:Tech@BERealtors.org">Tech@BERealtors.org</a> · <a href="tel:+12399926771;ext=4">(239)
+                992‑6771 ext. 4</a></div>
           </div>
         </article>
         <article class="ber-person">
@@ -1389,8 +1459,8 @@
           <div class="meta">
             <div class="name">Katie Malooly</div>
             <div class="role">Director of Development &amp; Events · <a
-                href="mailto:Events@BERealtors.org">Events@BERealtors.org</a> · <a href="tel:+12399926771;ext=8">(239)
-                992‑6771 ext. 8</a></div>
+                href="mailto:Events@BERealtors.org">Events@BERealtors.org</a> · <a href="tel:+12399926771;ext=2">(239)
+                992‑6771 ext. 2</a></div>
           </div>
         </article>
         <article class="ber-person">
@@ -1401,7 +1471,7 @@
             <div class="name">Jenna Ripley</div>
             <div class="role">Director of Executive Operations · <a
                 href="mailto:operations@berealtors.org">operations@berealtors.org</a> · <a
-                href="tel:+12399926771;ext=1">(239) 992‑6771 ext. 1</a></div>
+                href="tel:+12399926771;ext=5">(239) 992‑6771 ext. 5</a></div>
           </div>
         </article>
         <article class="ber-person">
@@ -1411,7 +1481,7 @@
           <div class="meta">
             <div class="name">Erica Bernhardt</div>
             <div class="role">Director of MLS · <a href="mailto:MLS@BERealtors.org">MLS@BERealtors.org</a> · <a
-                href="tel:+12399926771;ext=2">(239) 992‑6771 ext. 2</a></div>
+                href="tel:+12399926771;ext=3">(239) 992‑6771 ext. 3</a></div>
           </div>
         </article>
         <article class="ber-person">
@@ -1421,7 +1491,8 @@
           <div class="meta">
             <div class="name">Melodie Sanchez</div>
             <div class="role">Director of Member Services · <a
-                href="mailto:Membership@BERealtors.org">Membership@BERealtors.org</a></div>
+                href="mailto:Membership@BERealtors.org">Membership@BERealtors.org</a> · <a
+                href="tel:+12399926771;ext=1">(239) 992‑6771 ext. 1</a></div>
           </div>
         </article>
       </div>

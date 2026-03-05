@@ -1,0 +1,1324 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Affiliate Directory - Bonita Springs-Estero Realtors</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
+        integrity="sha512-9usAa10IRO0HhonpyAIVpjrylPvoDwiPUiKdWk5t3PyolY1cOd4DSE0Ga+ri4AuTroPR5aQvXU9xC6qOPnzFeg=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <!-- Flatpickr for Modern Date Range Filtering -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+
+    <style>
+        :root {
+            --primary: #1e3a8a;
+            --primary-hover: #1e40af;
+            --secondary: #64748b;
+            --secondary-hover: #475569;
+            --bg: #f8fafc;
+            --border: #e2e8f0;
+
+            /* Sponsor Accents */
+            --diamond-bg: linear-gradient(90deg, #00c2b7, #13a1ff);
+            --platinum-bg: linear-gradient(90deg, #00a1ff, #6fffe0);
+            --gold-bg: #f2c200;
+            --silver-bg: #c3ccd9;
+            --photo-bg: #2d3748;
+            --bg-color: #f9f9fb;
+            --card-bg: #ffffff;
+            --text-main: #2a2a33;
+            --text-secondary: #595966;
+            --border-color: #e5e5ea;
+            --shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+            --shadow-hover: 0 8px 16px rgba(0, 0, 0, 0.1);
+        }
+
+        .ber-directory {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            line-height: 1.5;
+        }
+
+        .ber-directory *,
+        .ber-directory *::before,
+        .ber-directory *::after {
+            box-sizing: border-box;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .controls {
+            margin-bottom: 3rem;
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            align-items: center;
+            text-align: center;
+        }
+
+        .controls h1 {
+            margin: 0 0 0.5rem 0;
+            font-size: 2rem;
+            font-weight: 700;
+        }
+
+        .controls p {
+            color: var(--text-secondary);
+            margin: 0;
+        }
+
+        .search-bar {
+            position: relative;
+            width: 100%;
+            max-width: 600px;
+            margin-top: 1.5rem;
+        }
+
+        .search-bar input {
+            width: 100%;
+            padding: 1rem 1rem 1rem 3rem;
+            font-size: 1rem;
+            border: 1px solid var(--border-color);
+            border-radius: 99px;
+            outline: none;
+            transition: border-color 0.2s, box-shadow 0.2s;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.02);
+        }
+
+        .search-bar input:focus {
+            border-color: var(--primary);
+        }
+
+        .search-icon {
+            position: absolute;
+            left: 1.2rem;
+        }
+
+        /* ===== SWISS-TECH INTERFACE REALISM CORE ===== */
+        :root {
+            --swiss-bg: #f8f9fa;
+            --swiss-text: #1a1a1a;
+            --swiss-light: #8a8a8a;
+            --swiss-grid: rgba(0, 0, 0, 0.08);
+
+            /* Neon Access Colors */
+            --accent-yellow: #facc15;
+            --accent-cyan: #06b6d4;
+            --accent-magenta: #ec4899;
+            --accent-alert: #f43f5e;
+
+            --font-display: 'Oswald', 'Inter', system-ui, -apple-system, sans-serif;
+            --font-body: 'Inter', system-ui, -apple-system, sans-serif;
+            --font-mono: 'Fira Code', 'Courier New', Courier, monospace;
+        }
+
+        body {
+            background-color: var(--swiss-bg);
+            color: var(--swiss-text);
+            font-family: var(--font-body);
+        }
+
+        .swiss-container {
+            max-width: 1300px;
+            margin: 40px auto;
+            padding: 0 24px;
+            position: relative;
+        }
+
+        /* Technical Header Area */
+        .swiss-header {
+            border-bottom: 2px solid var(--swiss-text);
+            padding-bottom: 20px;
+            margin-bottom: 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+            position: relative;
+        }
+
+        /* Schematic corner bracket */
+        .swiss-header::before {
+            content: '';
+            position: absolute;
+            top: -15px;
+            left: -15px;
+            width: 20px;
+            height: 20px;
+            border-top: 2px solid var(--swiss-text);
+            border-left: 2px solid var(--swiss-text);
+        }
+
+        .swiss-title-group {
+            max-width: 60%;
+        }
+
+        .swiss-h1 {
+            font-family: var(--font-display);
+            font-size: 4rem;
+            line-height: 0.9;
+            text-transform: uppercase;
+            letter-spacing: -0.02em;
+            margin: 0 0 10px 0;
+            color: var(--swiss-text);
+        }
+
+        .swiss-subtitle {
+            font-family: var(--font-mono);
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: var(--swiss-light);
+            margin: 0;
+        }
+
+        /* Filter Controls */
+        .swiss-controls {
+            display: flex;
+            gap: 16px;
+            align-items: center;
+            flex-wrap: wrap;
+            /* Support smaller screens */
+        }
+
+        .swiss-search {
+            font-family: var(--font-mono);
+            font-size: 0.9rem;
+            padding: 12px 16px;
+            border: 1px solid var(--swiss-grid);
+            background: transparent;
+            color: var(--swiss-text);
+            width: 250px;
+            border-radius: 0;
+            transition: all 0.2s;
+        }
+
+        /* Date Range Picker Styling */
+        .swiss-date {
+            font-family: var(--font-mono);
+            font-size: 0.9rem;
+            padding: 12px 16px;
+            border: 1px solid var(--swiss-grid);
+            background: #fff;
+            color: var(--swiss-text);
+            width: 220px;
+            border-radius: 0;
+            cursor: pointer;
+            text-align: center;
+        }
+
+        .swiss-date::placeholder {
+            color: var(--swiss-light);
+        }
+
+        /* Custom Toggle Switch for CE */
+        .swiss-toggle-wrapper {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-family: var(--font-mono);
+            font-size: 0.85rem;
+            font-weight: bold;
+            color: var(--swiss-text);
+            cursor: pointer;
+        }
+
+        .swiss-toggle {
+            position: relative;
+            display: inline-block;
+            width: 44px;
+            height: 24px;
+        }
+
+        .swiss-toggle input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .swiss-slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #fff;
+            border: 2px solid var(--swiss-grid);
+            transition: .3s;
+        }
+
+        .swiss-slider:before {
+            position: absolute;
+            content: "";
+            height: 14px;
+            width: 14px;
+            left: 3px;
+            bottom: 3px;
+            background-color: var(--swiss-light);
+            transition: .3s;
+        }
+
+        input:checked+.swiss-slider {
+            border-color: var(--swiss-text);
+            background-color: var(--swiss-text);
+        }
+
+        input:checked+.swiss-slider:before {
+            transform: translateX(20px);
+            background-color: #fff;
+        }
+
+        /* Flatpickr Custom Swiss Theme Overrides */
+        .flatpickr-calendar {
+            font-family: var(--font-body);
+            border-radius: 0 !important;
+            border: 1px solid var(--swiss-text) !important;
+            box-shadow: 4px 4px 0 rgba(0, 0, 0, 0.1) !important;
+        }
+
+        .flatpickr-day.selected,
+        .flatpickr-day.startRange,
+        .flatpickr-day.endRange,
+        .flatpickr-day.selected.inRange,
+        .flatpickr-day.startRange.inRange,
+        .flatpickr-day.endRange.inRange,
+        .flatpickr-day.selected:focus,
+        .flatpickr-day.startRange:focus,
+        .flatpickr-day.endRange:focus,
+        .flatpickr-day.selected:hover,
+        .flatpickr-day.startRange:hover,
+        .flatpickr-day.endRange:hover,
+        .flatpickr-day.selected.prevMonthDay,
+        .flatpickr-day.startRange.prevMonthDay,
+        .flatpickr-day.endRange.prevMonthDay,
+        .flatpickr-day.selected.nextMonthDay,
+        .flatpickr-day.startRange.nextMonthDay,
+        .flatpickr-day.endRange.nextMonthDay {
+            background: var(--swiss-text) !important;
+            border-color: var(--swiss-text) !important;
+        }
+
+        .swiss-search:focus {
+            outline: none;
+            border-color: var(--swiss-text);
+            background: #fff;
+        }
+
+        /* Status Bar (Microtext) */
+        .swiss-status {
+            font-family: var(--font-mono);
+            font-size: 0.75rem;
+            color: var(--swiss-light);
+            display: flex;
+            justify-content: space-between;
+            border-bottom: 1px solid var(--swiss-grid);
+            padding-bottom: 8px;
+            margin-bottom: 24px;
+            text-transform: uppercase;
+        }
+
+        .swiss-status-glitch {
+            color: var(--accent-magenta);
+            animation: pulse-op 2s infinite;
+        }
+
+        @keyframes pulse-op {
+
+            0%,
+            100% {
+                opacity: 1;
+            }
+
+            50% {
+                opacity: 0.5;
+            }
+        }
+
+        /* Modular Grid */
+        .swiss-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(380px, 1fr));
+            gap: 32px;
+            position: relative;
+        }
+
+        /* Class Card: The Swiss Grid Object */
+        .swiss-card {
+            background: #fff;
+            border: 1px solid var(--swiss-grid);
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            transition: transform 0.2s, box-shadow 0.2s;
+            overflow: hidden;
+            /* Intentional CRT texture bleed */
+            box-shadow: inset 0 0 40px rgba(0, 0, 0, 0.02);
+            padding: 24px;
+        }
+
+        .swiss-card:hover {
+            transform: translateY(-4px);
+            border-color: var(--swiss-text);
+            box-shadow: 4px 4px 0 var(--swiss-text);
+        }
+
+        /* Corner Marks */
+        .swiss-card::before,
+        .swiss-card::after {
+            content: '';
+            position: absolute;
+            width: 10px;
+            height: 10px;
+            border: 1px solid var(--swiss-light);
+            pointer-events: none;
+        }
+
+        .swiss-card::before {
+            top: 8px;
+            left: 8px;
+            border-right: 0;
+            border-bottom: 0;
+        }
+
+        .swiss-card::after {
+            bottom: 8px;
+            right: 8px;
+            border-left: 0;
+            border-top: 0;
+        }
+
+        /* Card Anchor Numeral */
+        .card-numeral {
+            position: absolute;
+            top: -15px;
+            right: -10px;
+            font-family: var(--font-display);
+            font-size: 8rem;
+            font-weight: 700;
+            line-height: 1;
+            color: var(--swiss-grid);
+            z-index: 0;
+            pointer-events: none;
+            user-select: none;
+        }
+
+        /* Card Content Group */
+        .card-content {
+            position: relative;
+            z-index: 1;
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .card-meta-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 16px;
+            border-bottom: 1px solid var(--swiss-grid);
+            padding-bottom: 12px;
+        }
+
+        .card-barcode {
+            font-family: 'Libre Barcode 39 Text', var(--font-mono);
+            font-size: 1.5rem;
+            color: var(--swiss-text);
+            line-height: 0.5;
+            letter-spacing: -1px;
+        }
+
+        .card-label-badge {
+            background: var(--swiss-text);
+            color: #fff;
+            font-family: var(--font-mono);
+            font-size: 0.65rem;
+            padding: 4px 8px;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .card-title {
+            font-family: var(--font-body);
+            font-weight: 700;
+            font-size: 1.25rem;
+            line-height: 1.3;
+            color: var(--swiss-text);
+            margin: 0 0 16px 0;
+        }
+
+        .card-flyer-box {
+            width: 100%;
+            height: 160px;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            border: 1px solid var(--swiss-grid);
+            position: relative;
+            background: transparent;
+        }
+
+        .card-flyer-box img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            /* Mild halftone/CRT desaturation to match aesthetic unless hovered */
+            filter: grayscale(40%) contrast(1.1);
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .swiss-card:hover .card-flyer-box img {
+            filter: grayscale(0%) contrast(1);
+            transform: scale(1.05);
+        }
+
+        .card-flyer-empty {
+            width: 100%;
+            height: 100%;
+            background: var(--swiss-grid);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: var(--font-mono);
+            font-size: 0.7rem;
+            color: var(--swiss-light);
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            opacity: 0.6;
+        }
+
+        /* Micro Data List */
+        .card-data-list {
+            margin: 0 0 24px 0;
+            padding: 0;
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .card-data-row {
+            display: flex;
+            justify-content: space-between;
+            font-family: var(--font-mono);
+            font-size: 0.75rem;
+            border-bottom: 1px dotted var(--swiss-grid);
+            padding-bottom: 4px;
+        }
+
+        .data-key {
+            color: var(--swiss-light);
+            text-transform: uppercase;
+        }
+
+        .data-val {
+            color: var(--swiss-text);
+            font-weight: 600;
+            text-align: right;
+            max-width: 60%;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        /* Footer Action Bar */
+        .card-footer-flex {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: auto;
+            border-top: 2px solid var(--swiss-text);
+            padding-top: 16px;
+        }
+
+        .btn-swiss {
+            background: transparent;
+            border: 1px solid var(--swiss-text);
+            font-family: var(--font-mono);
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            padding: 8px 16px;
+            cursor: pointer;
+            transition: all 0.2s;
+            color: var(--swiss-text);
+            text-decoration: none;
+        }
+
+        .btn-swiss:hover {
+            background: var(--swiss-text);
+            color: #fff;
+        }
+
+        .btn-swiss-primary {
+            background: var(--accent-yellow);
+            border-color: var(--accent-yellow);
+            color: #000;
+            font-weight: 700;
+        }
+
+        .btn-swiss-primary:hover {
+            background: #000;
+            border-color: #000;
+            color: var(--accent-yellow);
+        }
+
+        /* Swiss Detail Modal */
+        .swiss-modal-overlay {
+            position: fixed;
+            inset: 0;
+            width: 100vw;
+            height: 100vh;
+            background: rgba(0, 0, 0, 0.85);
+            /* Glitchy scanline background for modal overlay */
+            background-image: repeating-linear-gradient(transparent, transparent 2px, rgba(0, 0, 0, 0.9) 2px, rgba(0, 0, 0, 0.9) 4px);
+            z-index: 9990;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s;
+            padding: 20px;
+        }
+
+        .swiss-modal-overlay.open {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .swiss-modal {
+            background: #fff;
+            width: 100%;
+            max-width: 800px;
+            max-height: 90vh;
+            border: 4px solid var(--accent-cyan);
+            box-shadow: 20px 20px 0 rgba(6, 182, 212, 0.2);
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            transform: scale(0.98);
+            transition: transform 0.3s;
+        }
+
+        .swiss-modal-overlay.open .swiss-modal {
+            transform: scale(1);
+        }
+
+        .modal-header-swiss {
+            background: #000;
+            color: var(--accent-cyan);
+            font-family: var(--font-mono);
+            font-size: 0.85rem;
+            padding: 12px 24px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            border-bottom: 2px solid var(--accent-cyan);
+        }
+
+        .modal-close-swiss {
+            background: transparent;
+            border: none;
+            color: #fff;
+            font-size: 1.5rem;
+            cursor: pointer;
+            line-height: 1;
+            padding: 0;
+        }
+
+        .modal-close-swiss:hover {
+            color: var(--accent-alert);
+        }
+
+        .modal-body-swiss {
+            padding: 40px;
+            overflow-y: auto;
+            position: relative;
+        }
+
+        .modal-body-swiss::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: radial-gradient(circle at center, transparent 0%, rgba(0, 0, 0, 0.03) 100%);
+            pointer-events: none;
+        }
+
+        .m-title {
+            font-family: var(--font-display);
+            font-size: 2.5rem;
+            line-height: 1.1;
+            text-transform: uppercase;
+            margin: 0 0 24px 0;
+        }
+
+        .m-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 32px;
+            margin-bottom: 32px;
+        }
+
+        .m-section {
+            border-top: 2px solid var(--swiss-text);
+            padding-top: 16px;
+        }
+
+        .m-label {
+            font-family: var(--font-mono);
+            font-size: 0.75rem;
+            color: var(--swiss-light);
+            text-transform: uppercase;
+            margin-bottom: 8px;
+            display: block;
+        }
+
+        .m-value {
+            font-family: var(--font-body);
+            font-size: 1.1rem;
+            font-weight: 500;
+            color: var(--swiss-text);
+            margin: 0;
+        }
+
+        .m-description {
+            font-family: var(--font-body);
+            font-size: 1rem;
+            line-height: 1.6;
+            color: var(--swiss-text);
+            border-top: 1px dotted var(--swiss-grid);
+            padding-top: 24px;
+        }
+
+        .m-description p {
+            margin-top: 0;
+        }
+
+        .m-footer {
+            background: #f8f9fa;
+            border-top: 2px solid var(--swiss-grid);
+            padding: 24px 40px;
+            display: flex;
+            justify-content: flex-end;
+            gap: 16px;
+        }
+
+        /* Loading Animation (Terminal Style) */
+        .terminal-loader {
+            font-family: var(--font-mono);
+            font-size: 0.9rem;
+            color: var(--swiss-light);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .terminal-loader::after {
+            content: '[]';
+            animation: terminal-spin 1s steps(4) infinite;
+        }
+
+        @keyframes terminal-spin {
+            0% {
+                content: '[/]'
+            }
+
+            25% {
+                content: '[-]'
+            }
+
+            50% {
+                content: '[\\]'
+            }
+
+            75% {
+                content: '[|]'
+            }
+        }
+
+        @media (max-width: 900px) {
+            .swiss-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 24px;
+            }
+
+            .swiss-title-group {
+                max-width: 100%;
+            }
+
+            .swiss-search,
+            .swiss-date {
+                width: 100%;
+            }
+
+            .swiss-toggle-wrapper {
+                width: 100%;
+                justify-content: flex-start;
+            }
+
+            .m-grid {
+                grid-template-columns: 1fr;
+                gap: 16px;
+            }
+
+            .swiss-h1 {
+                font-size: 2.5rem;
+            }
+
+            .card-numeral {
+                font-size: 6rem;
+                right: -5px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="swiss-container">
+        <!-- Swiss Header Bar -->
+        <div class="swiss-header" id="eduTop">
+            <div class="swiss-title-group">
+                <h1 class="swiss-h1">EDUCATION</h1>
+                <p class="swiss-subtitle">[SYS: LIVE CLASS CATALOG] MODULE REVISION 1.0</p>
+            </div>
+
+            <div class="swiss-controls">
+                <input type="text" id="searchInput" class="swiss-search" placeholder="QUERY NAME OR DESC..."
+                    autocomplete="off">
+                <input type="text" id="dateFilter" class="swiss-date" placeholder="SELECT DATE RANGE">
+
+                <label class="swiss-toggle-wrapper">
+                    <div class="swiss-toggle">
+                        <input type="checkbox" id="ceToggle">
+                        <span class="swiss-slider"></span>
+                    </div>
+                    CE CREDITS ONLY
+                </label>
+            </div>
+        </div>
+
+        <!-- Terminal Status Bar -->
+        <div class="swiss-status">
+            <span id="sysStatus">INITIALIZING CONNECTION TO GZ-DATACENTER...</span>
+            <span class="swiss-status-glitch">DATASTREAM LINK: OFFLINE</span>
+        </div>
+
+        <div class="swiss-grid" id="eventsGrid">
+            <!-- Event cards inject here -->
+        </div>
+
+        <!-- Detail Navigation Button -->
+        <div style="margin-top: 40px; text-align: center;">
+            <a href="mailto:education@bonitaesterorealtors.com" class="btn-swiss">CONTACT INSTRUCTOR RELATIONS_</a>
+        </div>
+    </div>
+
+    <!-- Swiss Detail Modal -->
+    <div class="swiss-modal-overlay" id="eventModal">
+        <div class="swiss-modal">
+            <div class="modal-header-swiss">
+                <span>[LOG] CLASS_DETAILS.DAT / ACCESS GRANTED</span>
+                <button class="modal-close-swiss" id="modalClose">&times;</button>
+            </div>
+            <div class="modal-body-swiss" id="modalBody">
+                <div class="terminal-loader">FETCHING REMOTE DATABLOCK</div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const API_KEY = 'cR1djHVMkndNjLbwXyhDyOV7dWPJ6TnufYtcdOHc';
+        const BASE_URL = 'https://bonitaspringsesterorealtorsfl.growthzoneapp.com';
+
+        const eventsGrid = document.getElementById('eventsGrid');
+        const sysStatus = document.getElementById('sysStatus');
+        const linkStatus = document.querySelector('.swiss-status-glitch');
+
+        // Filter Controls
+        const searchInput = document.getElementById('searchInput');
+        const dateFilter = document.getElementById('dateFilter');
+        const ceToggle = document.getElementById('ceToggle');
+
+        // Modal Elements
+        const modal = document.getElementById('eventModal');
+        const modalClose = document.getElementById('modalClose');
+        const modalBody = document.getElementById('modalBody');
+
+        let allEvents = [];
+        let knownClasses = [];
+
+        document.addEventListener('DOMContentLoaded', async () => {
+            try {
+                sysStatus.textContent = "SYNCHRONIZING SECURE EVENT FEED...";
+
+                let allFetched = false;
+                let skip = 0;
+                // Get exact current time for precise filtering
+                const now = new Date();
+
+                while (!allFetched) {
+                    const res = await fetch(`${BASE_URL}/api/events/all?$orderby=StartDate%20desc&$top=100&$skip=${skip}`, {
+                        headers: { 'Authorization': `ApiKey ${API_KEY}` }
+                    });
+
+                    if (!res.ok) throw new Error("API Connection Failed");
+
+                    const data = await res.json();
+                    const results = data.Results || [];
+
+                    if (results.length === 0) {
+                        allFetched = true;
+                        break;
+                    }
+
+                    let breakLoop = false;
+                    for (const e of results) {
+                        const evDate = new Date(e.StartDate);
+                        if (evDate >= now) {
+                            allEvents.push(e);
+                        } else {
+                            // Since we are fetching descending, once we hit a past event, all the rest are also in the past
+                            breakLoop = true;
+                            break;
+                        }
+                    }
+
+                    if (breakLoop) {
+                        allFetched = true;
+                    } else {
+                        skip += 100;
+                    }
+                }
+
+                // Sort by nearest upcoming date (today -> future) ascending
+                allEvents.sort((a, b) => new Date(a.StartDate) - new Date(b.StartDate));
+
+                knownClasses = [];
+                let unknownEvents = [];
+
+                allEvents.forEach(ev => {
+                    const catStatus = localStorage.getItem('BER_EDU_CATEGORY_' + ev.EventId);
+                    if (catStatus === 'CLASS') {
+                        knownClasses.push(ev);
+                    } else if (catStatus !== 'NON_CLASS') {
+                        unknownEvents.push(ev);
+                    }
+                });
+
+                linkStatus.textContent = "DATASTREAM LINK: SECURE";
+                linkStatus.style.color = "var(--accent-cyan)";
+                linkStatus.style.animation = "none";
+
+                sysStatus.textContent = `SYSTEM ACTIVE: ${knownClasses.length} UPCOMING CLASSES VERIFIED.`;
+                if (unknownEvents.length > 0) {
+                    sysStatus.innerHTML += ` <span style="color:var(--accent-magenta);">[SCANNING ${unknownEvents.length} NEW METADATA BLOCKS...]</span>`;
+                }
+
+                renderGrid(knownClasses);
+
+                // Start background metadata and flyer scanner
+                setTimeout(() => { backgroundMetadataIndexer(knownClasses, unknownEvents); }, 500);
+
+                // Initialize Flatpickr Date Range
+                let fpInstance = flatpickr(dateFilter, {
+                    mode: "range",
+                    dateFormat: "Y-m-d",
+                    onChange: applyFilters
+                });
+
+                // Attach centralized filter logic to controls
+                searchInput.addEventListener('input', applyFilters);
+                ceToggle.addEventListener('change', applyFilters);
+
+            } catch (err) {
+                console.error(err);
+                sysStatus.textContent = "SYS_ERROR: FAILURE TO FETCH EVENTS.";
+                linkStatus.textContent = "CRITICAL / OFFLINE";
+            }
+        });
+
+        // Unified Filter Engine checks Text, Date, and CE Status simultaneously
+        function applyFilters() {
+            const q = searchInput.value.toLowerCase();
+            const ceOnly = ceToggle.checked;
+
+            // Extract selected date range from flatpickr
+            let selStart = null;
+            let selEnd = null;
+            const dates = document.getElementById('dateFilter')._flatpickr?.selectedDates || [];
+            if (dates.length > 0) {
+                selStart = dates[0];
+                selStart.setHours(0, 0, 0, 0);
+                if (dates.length === 2) {
+                    selEnd = dates[1];
+                    selEnd.setHours(23, 59, 59, 999);
+                } else {
+                    // Single day selected
+                    selEnd = new Date(selStart);
+                    selEnd.setHours(23, 59, 59, 999);
+                }
+            }
+
+            const filteredList = knownClasses.filter(ev => {
+                // 1. Text Query
+                const matchText = !q || (ev.Name && ev.Name.toLowerCase().includes(q)) || (ev.Description && ev.Description.toLowerCase().includes(q));
+
+                // 2. CE Credit Filter (Evaluated via Category cache OR standard title regex)
+                let hasCE = false;
+                if (ceOnly) {
+                    const ceMatch = ev.Name ? ev.Name.match(/(\d+)\s*(?:\*|Hr\s*)?CE/i) : null;
+                    hasCE = !!ceMatch || (ev.Name && /CE\b/.test(ev.Name));
+                    // Check detailed category cache if strictly CE required and name regex fails
+                    if (!hasCE) {
+                        const catStr = localStorage.getItem('BER_EDU_CATEGORY_' + ev.EventId);
+                        // Since our MetadataIndex strictly looks for "CE Credit" OR "General Ed", 
+                        // if we wanted super strict CE only without Gen Ed, we'd need a separate CE flag.
+                        // For now, if the user explicitly created a "CE Credits Only" toggle, we regex the name strongly 
+                        // as most BER classes explicitly list "3CE" etc, in the Title.
+                        // But we also trust the Event Categories if we can dynamically evaluate it later.
+
+                        // We will rely on the ceAmount calculation used in renderGrid:
+                        const ceExtracted = ceMatch ? true : (ev.Name && /CE\b/.test(ev.Name));
+                        hasCE = ceExtracted;
+
+                        // If we want to strictly rely on category data (e.g. from the async loop) we could cache a 'CE=true' flag.
+                        // But since we want to run this instantly, trusting the title regex gives the 90% solution immediately.
+                    }
+                }
+                const matchCE = !ceOnly || hasCE;
+
+                // 3. Date Range
+                let matchDate = true;
+                if (selStart && selEnd) {
+                    const evStart = new Date(ev.StartDate);
+                    matchDate = (evStart >= selStart && evStart <= selEnd);
+                }
+
+                return matchText && matchCE && matchDate;
+            });
+
+            renderGrid(filteredList);
+        }
+
+        function renderGrid(eventsArr) {
+            eventsGrid.innerHTML = '';
+
+            if (eventsArr.length === 0) {
+                eventsGrid.innerHTML = `<div style="grid-column: 1/-1; padding: 40px; border: 1px dashed var(--swiss-light); font-family: var(--font-mono); color: var(--swiss-light); text-align: center;">SYS_MESSAGE: NO MATCHING RECORDS FOUND IN DATABASE.</div>`;
+                return;
+            }
+
+            eventsArr.forEach(ev => {
+                const start = new Date(ev.StartDate);
+                const dayNum = start.getDate().toString().padStart(2, '0');
+                const monthName = start.toLocaleString('default', { month: 'short' }).toUpperCase();
+                const timeStr = start.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+
+                // Truncate long names slightly to fit standard card size
+                let shortName = ev.Name || "UNDEFINED_EVENT";
+                if (shortName.length > 55) shortName = shortName.substring(0, 52) + '...';
+
+                // Extract flyer from EventLogoUrl, Description HTML fallback, or Cache
+                let flyerURL = ev.EventLogoUrl || "";
+                if (!flyerURL && ev.Description) {
+                    const imgMatch = ev.Description.match(/<img[^>]+src=["']([^"']+)["']/i);
+                    if (imgMatch) flyerURL = imgMatch[1];
+                }
+                if (!flyerURL) {
+                    const cached = localStorage.getItem('BER_EDU_FLYER_' + ev.EventId);
+                    if (cached && cached !== "NO_MEDIA") {
+                        flyerURL = cached;
+                        ev.EventLogoUrl = flyerURL; // save to memory for subsequent renders
+                    }
+                }
+
+                const flyerHTML = flyerURL
+                    ? `<img src="${flyerURL}" alt="Event Flyer">`
+                    : `<div class="card-flyer-empty" id="flyer-tgt-${ev.EventId}">[NO_MEDIA_FOUND]</div>`;
+
+                // Extract CE Credits from title if possible (e.g. 3CE, 14 Hr CE)
+                let ceAmount = "NO";
+                const ceMatch = ev.Name ? ev.Name.match(/(\d+)\s*(?:\*|Hr\s*)?CE/i) : null;
+                if (ceMatch) {
+                    ceAmount = ceMatch[1] + " Hours";
+                } else if (ev.Name && /CE\b/.test(ev.Name)) {
+                    ceAmount = "YES";
+                }
+
+                // Format Status
+                let statusText = "OPEN FOR REGISTRATION";
+                let statusColor = "var(--accent-cyan)";
+                if (ev.EventStatus) {
+                    const s = ev.EventStatus.toUpperCase();
+                    if (s.includes('CANCEL')) {
+                        statusText = 'CANCELED';
+                        statusColor = "var(--accent-alert)";
+                    } else if (s.includes('CLOSED') || s.includes('FULL') || s.includes('COMPLETED')) {
+                        statusText = 'CLOSED';
+                        statusColor = "var(--swiss-light)";
+                    }
+                }
+
+                const card = document.createElement('div');
+                card.className = 'swiss-card';
+                card.innerHTML = `
+                    <div class="card-numeral" style="font-size: 8rem; color: var(--swiss-light); opacity: 0.05; position: absolute; top: -20px; left: -10px; z-index: 0;">${dayNum}</div>
+                    <div class="card-content" style="position: relative; z-index: 1;">
+                        <div class="card-meta-top" style="display: flex; align-items: center; gap: 8px;">
+                            <span style="font-size: 1.5rem; font-weight: 800; line-height: 1;">${dayNum}</span>
+                            <span class="card-label-badge">${monthName} SCHEDULE</span>
+                        </div>
+
+                        <h3 class="card-title">${shortName}</h3>
+
+                        <div class="card-flyer-box">
+                            ${flyerHTML}
+                        </div>
+
+                        <ul class="card-data-list">
+                            <li class="card-data-row">
+                                <span class="data-key">// DATE_INIT</span>
+                                <span class="data-val">${start.toLocaleDateString()}</span>
+                            </li>
+                            <li class="card-data-row">
+                                <span class="data-key">// START_T</span>
+                                <span class="data-val">${timeStr}</span>
+                            </li>
+                            <li class="card-data-row">
+                                <span class="data-key">// STATUS</span>
+                                <span class="data-val" style="color: ${statusColor}; font-weight:bold;">${statusText}</span>
+                            </li>
+                            <li class="card-data-row">
+                                <span class="data-key">// CE_CREDIT</span>
+                                <span class="data-val">${ceAmount}</span>
+                            </li>
+                        </ul>
+
+                        <div class="card-footer-flex">
+                            <button class="btn-swiss" onclick="openDetails(${ev.EventId})">+ DETAILS</button>
+                            <a href="${ev.PublicUrl}" target="_blank" class="btn-swiss btn-swiss-primary">REGISTER_</a>
+                        </div>
+                    </div>
+                `;
+                eventsGrid.appendChild(card);
+            });
+        }
+
+        // Detail Modal Fetcher
+        async function openDetails(eventId) {
+            const evInfo = allEvents.find(e => e.EventId === eventId);
+            const publicUrl = evInfo ? evInfo.PublicUrl : "#";
+            const bulkDate = evInfo ? new Date(evInfo.StartDate) : null;
+
+            modal.classList.add('open');
+            modalBody.innerHTML = `<div class="terminal-loader">FETCHING REMOTE DATABLOCK: ${eventId}</div>`;
+            document.body.style.overflow = 'hidden';
+
+            try {
+                const res = await fetch(`${BASE_URL}/api/events/${eventId}`, {
+                    headers: { 'Authorization': `ApiKey ${API_KEY}` }
+                });
+                if (!res.ok) throw new Error("Failed to load details");
+
+                const detail = await res.json();
+
+                // Correcting for API date inconsistency (Trust bulk data if detail seems wrong/today)
+                let start = new Date(detail.StartDateTime);
+                if (bulkDate && start.toDateString() !== bulkDate.toDateString()) {
+                    start = bulkDate;
+                }
+
+                let locType = "IN-PERSON PHYSICAL";
+                if (detail.ZoomConfigured || detail.GoToWebinarConfigured) locType = "DIGITAL REMOTE / ZOOM";
+
+                // Extract Instructor from ContactName OR regex from Description
+                let instructor = detail.ContactName || "B.E.R. FACULTY";
+                if (!detail.ContactName && detail.Description) {
+                    const instMatch = detail.Description.match(/Instructor:\s*([^<]+)/i);
+                    if (instMatch) instructor = instMatch[1].trim();
+                }
+
+                const descHTML = detail.Description
+                    ? `<div class="m-description">${detail.Description}</div>`
+                    : '';
+
+                modalBody.innerHTML = `
+                    <h2 class="m-title">${detail.Name || evInfo?.Name}</h2>
+                    
+                    <div class="m-grid">
+                        <div class="m-section">
+                            <span class="m-label">[// LOCATION_NODE]</span>
+                            <p class="m-value">${detail.LocationName || locType}</p>
+                            ${detail.Address1 ? `<p style="font-family:var(--font-mono); font-size:0.8rem; color:var(--swiss-light); margin:4px 0 0;">${detail.Address1}<br>${detail.City || ''}, ${detail.StateProvince || ''} ${detail.PostalCode || ''}</p>` : ''}
+                        </div>
+                        
+                        <div class="m-section">
+                            <span class="m-label">[// TIMETABLE]</span>
+                            <p class="m-value">${start.toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}</p>
+                            <p style="font-family:var(--font-mono); font-size:0.8rem; color:var(--swiss-light); margin:4px 0 0;">${detail.HoursDescription || start.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</p>
+                        </div>
+
+                        <div class="m-section">
+                            <span class="m-label">[// INSTRUCTOR_ID]</span>
+                            <p class="m-value">${instructor}</p>
+                        </div>
+
+                        <div class="m-section">
+                            <span class="m-label">[// CREDITS]</span>
+                            <p class="m-value">${detail.CategoryItems?.filter(c => c.IsSelected).map(c => c.Name).join(', ') || 'GENERAL_ED'}</p>
+                        </div>
+                    </div>
+
+                    ${descHTML}
+                    
+                    <div class="m-footer">
+                        <button class="btn-swiss" onclick="closeModal()">CANCEL_</button>
+                        <a href="${publicUrl}" class="btn-swiss btn-swiss-primary" target="_blank">INITIATE REGISTRATION</a>
+                    </div>
+                `;
+
+            } catch (err) {
+                console.error(err);
+                modalBody.innerHTML = `<div style="color:var(--accent-alert); font-family:var(--font-mono);">[CRITICAL] Error downloading datablock. Link failed.</div>`;
+            }
+        }
+
+        function closeModal() {
+            modal.classList.remove('open');
+            document.body.style.overflow = '';
+        }
+
+        modalClose.addEventListener('click', closeModal);
+        modal.addEventListener('click', e => {
+            if (e.target === modal) closeModal();
+        });
+        document.addEventListener('keydown', e => {
+            if (e.key === 'Escape' && modal.classList.contains('open')) closeModal();
+        });
+
+        // Background fetcher to resolve Category filters and full descriptions
+        async function backgroundMetadataIndexer(verifiedList, unknownList) {
+            const searchInputEl = document.getElementById('searchInput');
+
+            // 1. Process unknown events to verify if they are classes
+            for (const ev of unknownList) {
+                try {
+                    const res = await fetch(`${BASE_URL}/api/events/${ev.EventId}`, {
+                        headers: { 'Authorization': `ApiKey ${API_KEY}` }
+                    });
+                    if (res.ok) {
+                        const detail = await res.json();
+
+                        // Check Category
+                        const isCE = detail.CategoryItems?.some(c => c.Name === 'CE Credit' && c.IsSelected);
+                        const isGenEd = detail.CategoryItems?.some(c => c.Name === 'General Education' && c.IsSelected);
+                        const isClass = isCE || isGenEd;
+
+                        // Cache flyer while we have the detail payload
+                        let foundUrl = detail.EventLogoUrl || "";
+                        if (!foundUrl && detail.Description) {
+                            const imgMatch = detail.Description.match(/<img[^>]+src=["']([^"']+)["']/i);
+                            if (imgMatch) foundUrl = imgMatch[1];
+                        }
+
+                        if (foundUrl) {
+                            localStorage.setItem('BER_EDU_FLYER_' + ev.EventId, foundUrl);
+                            ev.EventLogoUrl = foundUrl; // attach memory
+                        } else {
+                            localStorage.setItem('BER_EDU_FLYER_' + ev.EventId, "NO_MEDIA");
+                        }
+
+                        if (isClass) {
+                            localStorage.setItem('BER_EDU_CATEGORY_' + ev.EventId, 'CLASS');
+                            verifiedList.push(ev);
+
+                            // Keep list sorted chronologically
+                            verifiedList.sort((a, b) => new Date(a.StartDate) - new Date(b.StartDate));
+
+                            // Re-render only if the new item matches the active filters
+                            applyFilters();
+
+                            const remaining = unknownList.length - unknownList.indexOf(ev) - 1;
+                            sysStatus.innerHTML = `SYSTEM ACTIVE: ${verifiedList.length} UPCOMING CLASSES VERIFIED. <span style="color:var(--accent-magenta);">[SCANNING ${remaining} REMAINING BLOCKS...]</span>`;
+                        } else {
+                            localStorage.setItem('BER_EDU_CATEGORY_' + ev.EventId, 'NON_CLASS');
+                            const remaining = unknownList.length - unknownList.indexOf(ev) - 1;
+                            sysStatus.innerHTML = `SYSTEM ACTIVE: ${verifiedList.length} UPCOMING CLASSES VERIFIED. <span style="color:var(--accent-magenta);">[SCANNING ${remaining} REMAINING BLOCKS...]</span>`;
+                        }
+                    }
+                } catch (e) {
+                    // silently handle background errors
+                }
+                await new Promise(r => setTimeout(r, 200));
+            }
+
+            sysStatus.textContent = `SYSTEM ACTIVE: ${verifiedList.length} UPCOMING CLASSES VERIFIED.`;
+
+            // 2. Process old verified classes that might be missing flyer cache
+            for (const ev of verifiedList) {
+                let knownUrl = ev.EventLogoUrl || "";
+                if (!knownUrl && ev.Description) {
+                    const imgMatch = ev.Description.match(/<img[^>]+src=["']([^"']+)["']/i);
+                    if (imgMatch) knownUrl = imgMatch[1];
+                }
+
+                if (!knownUrl) {
+                    const cacheStr = localStorage.getItem('BER_EDU_FLYER_' + ev.EventId);
+                    if (cacheStr === "NO_MEDIA") continue;
+                    else if (cacheStr) knownUrl = cacheStr;
+                }
+
+                if (!knownUrl) {
+                    try {
+                        const res = await fetch(`${BASE_URL}/api/events/${ev.EventId}`, {
+                            headers: { 'Authorization': `ApiKey ${API_KEY}` }
+                        });
+                        if (res.ok) {
+                            const detail = await res.json();
+                            let foundUrl = detail.EventLogoUrl || "";
+                            if (!foundUrl && detail.Description) {
+                                const imgMatch = detail.Description.match(/<img[^>]+src=["']([^"']+)["']/i);
+                                if (imgMatch) foundUrl = imgMatch[1];
+                            }
+
+                            if (foundUrl) {
+                                localStorage.setItem('BER_EDU_FLYER_' + ev.EventId, foundUrl);
+                                knownUrl = foundUrl;
+                                ev.EventLogoUrl = foundUrl;
+                            } else {
+                                localStorage.setItem('BER_EDU_FLYER_' + ev.EventId, "NO_MEDIA");
+                            }
+                        }
+                    } catch (e) { }
+                    await new Promise(r => setTimeout(r, 200));
+                }
+
+                if (knownUrl) {
+                    const tgt = document.getElementById(`flyer-tgt-${ev.EventId}`);
+                    if (tgt) {
+                        tgt.outerHTML = `<img src="${knownUrl}" alt="Event Flyer" style="opacity: 0; animation: fadeUp 1s cubic-bezier(0.16, 1, 0.3, 1) forwards;">`;
+                    }
+                }
+            }
+        }
+    </script>
+</body>
+
+</html>
