@@ -531,6 +531,45 @@
             text-overflow: ellipsis;
         }
 
+        /* Graphic Realism CE Badge */
+        .ce-credit-badge {
+            position: absolute;
+            bottom: 0;
+            right: 0;
+            background: var(--accent-cyan);
+            color: #000;
+            font-family: var(--font-mono);
+            font-size: 1rem;
+            font-weight: 800;
+            padding: 6px 12px;
+            border-top: 2px solid #000;
+            border-left: 2px solid #000;
+            z-index: 10;
+        }
+
+        /* Hybrid Media Container */
+        .hybrid-media {
+            display: flex;
+            width: 100%;
+            height: 100%;
+            align-items: center;
+            justify-content: center;
+            background: var(--swiss-bg);
+        }
+
+        .hybrid-media img {
+            width: 40%;
+            max-height: 80%;
+            object-fit: contain;
+        }
+
+        .hybrid-divider {
+            color: var(--swiss-light);
+            font-family: var(--font-display);
+            font-size: 2rem;
+            margin: 0 16px;
+        }
+
         /* Footer Action Bar */
         .card-footer-flex {
             display: flex;
@@ -1035,6 +1074,20 @@
                 let shortName = ev.Name || "UNDEFINED_EVENT";
                 if (shortName.length > 55) shortName = shortName.substring(0, 52) + '...';
 
+                // Extract CE Credits from title if possible (e.g. 3CE, 14 Hr CE)
+                let ceAmount = "NO";
+                let ceText = "";
+                const ceMatch = ev.Name ? ev.Name.match(/(\d+)\s*(?:\*|Hr\s*)?CE/i) : null;
+                if (ceMatch) {
+                    ceAmount = ceMatch[1] + " Hours";
+                    ceText = ceMatch[1] + " CE";
+                } else if (ev.Name && /CE\b/.test(ev.Name)) {
+                    ceAmount = "YES";
+                    ceText = "CE Credit";
+                }
+
+                const ceBadgeHTML = ceAmount !== "NO" ? `<div class="ce-credit-badge">${ceText}</div>` : '';
+
                 // Extract flyer from EventLogoUrl, Description HTML fallback, or Cache
                 let flyerURL = ev.EventLogoUrl || "";
                 if (!flyerURL && ev.Description) {
@@ -1049,17 +1102,33 @@
                     }
                 }
 
-                const flyerHTML = flyerURL
-                    ? `<img src="${flyerURL}" alt="Event Flyer">`
-                    : `<div class="card-flyer-empty" id="flyer-tgt-${ev.EventId}">[NO_MEDIA_FOUND]</div>`;
+                // If the API provided a generic placeholder, clear it so our intelligent Zoom/Hybrid fallback can trigger if needed
+                if (flyerURL && (flyerURL.includes('BER-Logo') || flyerURL.includes('default') || flyerURL.includes('placeholder'))) {
+                    flyerURL = "";
+                }
 
-                // Extract CE Credits from title if possible (e.g. 3CE, 14 Hr CE)
-                let ceAmount = "NO";
-                const ceMatch = ev.Name ? ev.Name.match(/(\d+)\s*(?:\*|Hr\s*)?CE/i) : null;
-                if (ceMatch) {
-                    ceAmount = ceMatch[1] + " Hours";
-                } else if (ev.Name && /CE\b/.test(ev.Name)) {
-                    ceAmount = "YES";
+                let flyerHTML = '';
+                if (flyerURL) {
+                    flyerHTML = `<img src="${flyerURL}" alt="Event Flyer">${ceBadgeHTML}`;
+                } else {
+                    // Apply media fallback logic based on location and title
+                    const loc = (ev.Location || ev.LocationName || "").toLowerCase();
+                    const title = (ev.Name || "").toLowerCase();
+                    const isOnline = loc.includes('zoom') || loc.includes('online') || loc.includes('webinar') || title.includes('zoom') || title.includes('online') || title.includes('webinar');
+                    const isHybrid = isOnline && (loc.includes('hybrid') || loc.includes('both') || loc.includes('in-person') || title.includes('hybrid'));
+
+                    const berLogo = 'https://bonitaesterorealtors.com/wp-content/uploads/2025/12/BER-Logo.png';
+                    const zoomLogo = 'https://1000logos.net/wp-content/uploads/2021/06/Zoom-Logo-2014.png';
+
+                    if (isHybrid) {
+                        flyerHTML = `<div class="hybrid-media"><img src="${berLogo}" alt="BER" style="object-fit:contain !important; max-width:35%; max-height:80%; box-sizing:border-box;"><div class="hybrid-divider">//</div><img src="${zoomLogo}" alt="Zoom" style="object-fit:contain !important; max-width:40%; max-height:80%; box-sizing:border-box;"></div>`;
+                    } else if (isOnline) {
+                        flyerHTML = `<img src="${zoomLogo}" alt="Zoom" style="object-fit:contain !important; padding:40px; background:var(--swiss-grid); width:100%; height:100%; box-sizing:border-box;">`;
+                    } else {
+                        flyerHTML = `<img src="${berLogo}" alt="BER" style="object-fit:contain !important; padding:30px; background:var(--swiss-grid); width:100%; height:100%; box-sizing:border-box;">`;
+                    }
+
+                    flyerHTML = `<div id="flyer-tgt-${ev.EventId}" style="width:100%; height:100%; display:flex; justify-content:center; align-items:center; overflow:hidden;">${flyerHTML}${ceBadgeHTML}</div>`;
                 }
 
                 // Format Status
@@ -1094,11 +1163,11 @@
 
                         <ul class="card-data-list">
                             <li class="card-data-row">
-                                <span class="data-key">// DATE_INIT</span>
+                                <span class="data-key">// DATE</span>
                                 <span class="data-val">${start.toLocaleDateString()}</span>
                             </li>
                             <li class="card-data-row">
-                                <span class="data-key">// START_T</span>
+                                <span class="data-key">// START_TIME</span>
                                 <span class="data-val">${timeStr}</span>
                             </li>
                             <li class="card-data-row">
@@ -1155,9 +1224,37 @@
                     if (instMatch) instructor = instMatch[1].trim();
                 }
 
+                // Append Google Maps embed for physical addresses
+                let mapEmbedHTML = '';
+                if (!detail.ZoomConfigured && !detail.GoToWebinarConfigured) {
+                    const fallbackAddr = '25300 Bernwood Dr, Bonita Springs, FL 34135';
+                    const fallbackName = 'Bonita Springs Estero Realtors';
+                    let queryStr = '';
+
+                    if (detail.Address1) {
+                        queryStr = `${detail.LocationName ? detail.LocationName + ' ' : ''}${detail.Address1}, ${detail.City}, ${detail.StateProvince} ${detail.PostalCode}`;
+                    } else if (locType === "IN-PERSON PHYSICAL") {
+                        queryStr = `${fallbackName} ${fallbackAddr}`;
+                    }
+
+                    if (queryStr) {
+                        const mapQuery = encodeURIComponent(queryStr);
+                        mapEmbedHTML = `
+                        <div style="border: 2px solid var(--swiss-text); margin-bottom: 24px; background: var(--swiss-grid); padding: 4px;">
+                            <iframe
+                                width="100%"
+                                height="250"
+                                style="border:0;"
+                                allowfullscreen
+                                src="https://maps.google.com/maps?q=${mapQuery}&t=&z=15&ie=UTF8&iwloc=&output=embed">
+                            </iframe>
+                        </div>`;
+                    }
+                }
+
                 const descHTML = detail.Description
-                    ? `<div class="m-description">${detail.Description}</div>`
-                    : '';
+                    ? `<div class="m-description">${mapEmbedHTML}${detail.Description}</div>`
+                    : (mapEmbedHTML ? `<div class="m-description">${mapEmbedHTML}</div>` : '');
 
                 modalBody.innerHTML = `
                     <h2 class="m-title">${detail.Name || evInfo?.Name}</h2>
@@ -1238,6 +1335,11 @@
                             if (imgMatch) foundUrl = imgMatch[1];
                         }
 
+                        // Ignore generic placeholders so the frontend UI can process Zoom/Hybrid fallbacks cleanly
+                        if (foundUrl && (foundUrl.includes('BER-Logo') || foundUrl.includes('default') || foundUrl.includes('placeholder'))) {
+                            foundUrl = "";
+                        }
+
                         if (foundUrl) {
                             localStorage.setItem('BER_EDU_FLYER_' + ev.EventId, foundUrl);
                             ev.EventLogoUrl = foundUrl; // attach memory
@@ -1298,6 +1400,10 @@
                                 if (imgMatch) foundUrl = imgMatch[1];
                             }
 
+                            if (foundUrl && (foundUrl.includes('BER-Logo') || foundUrl.includes('default') || foundUrl.includes('placeholder'))) {
+                                foundUrl = "";
+                            }
+
                             if (foundUrl) {
                                 localStorage.setItem('BER_EDU_FLYER_' + ev.EventId, foundUrl);
                                 knownUrl = foundUrl;
@@ -1313,7 +1419,10 @@
                 if (knownUrl) {
                     const tgt = document.getElementById(`flyer-tgt-${ev.EventId}`);
                     if (tgt) {
-                        tgt.outerHTML = `<img src="${knownUrl}" alt="Event Flyer" style="opacity: 0; animation: fadeUp 1s cubic-bezier(0.16, 1, 0.3, 1) forwards;">`;
+                        const badge = tgt.querySelector('.ce-credit-badge');
+                        const badgeHTML = badge ? badge.outerHTML : '';
+
+                        tgt.outerHTML = `<img src="${knownUrl}" alt="Event Flyer" style="width:100%; height:100%; object-fit:cover; opacity: 0; animation: fadeUp 1s cubic-bezier(0.16, 1, 0.3, 1) forwards;">${badgeHTML}`;
                     }
                 }
             }

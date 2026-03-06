@@ -685,6 +685,8 @@
                 <div>
                     <button class="btn btn-success btn-sm" id="btnDownloadCsv" onclick="downloadGZCsv()"><i
                             class="fas fa-file-csv"></i> Download GrowthZone CSV</button>
+                    <button class="btn btn-primary btn-sm" onclick="runBot()" style="margin-left:8px"><i
+                            class="fas fa-robot"></i> Run Automation Bot</button>
                 </div>
             </div>
             <div class="card-body">
@@ -774,7 +776,7 @@
             };
             window.goToStep3 = function () {
                 const outdated = results.filter(r => r.status === 'outdated');
-                if (outdated.length === 0) { alert('No outdated licenses to update.'); return }
+                // Removed block: allow access even if 0 outdated licenses are found
                 setStep(3);
                 document.getElementById('step2Panel').classList.add('hidden');
                 document.getElementById('step3Panel').classList.remove('hidden');
@@ -998,7 +1000,8 @@
     <span><span class="dot" style="background:var(--danger)"></span> ${c.notfound} Not Found</span>
     <span><span class="dot" style="background:#666"></span> ${c.error} Error</span>`;
 
-                document.getElementById('btnGoStep3').style.display = c.outdated > 0 ? '' : 'none';
+                // Always allow the user to go to Step 3 to access the bot
+                document.getElementById('btnGoStep3').style.display = '';
 
                 const order = { outdated: 0, notfound: 1, error: 2, newer: 3, match: 4 };
                 const sorted = [...results].sort((a, b) => (order[a.status] || 9) - (order[b.status] || 9));
@@ -1120,11 +1123,14 @@
                 bar('bar3', 100);
 
                 // Trigger Download
+                const fileName = `GrowthZone_License_Updates_${new Date().toISOString().slice(0, 10)}.csv`;
+                window.latestDownloadedCsvPath = `/Users/kevinweinkauff/Downloads/${fileName}`; // Assume default Mac Downloads folder
+
                 const blob = new Blob([csv], { type: 'text/csv' });
                 const url = URL.createObjectURL(blob);
                 const a = document.createElement('a');
                 a.href = url;
-                a.download = `GrowthZone_License_Updates_${new Date().toISOString().slice(0, 10)}.csv`;
+                a.download = fileName;
                 document.body.appendChild(a);
                 a.click();
                 document.body.removeChild(a);
@@ -1144,6 +1150,32 @@
                 a.href = URL.createObjectURL(new Blob([csv], { type: 'text/csv' }));
                 a.download = `license_check_${new Date().toISOString().split('T')[0]}.csv`;
                 a.click();
+            };
+
+            // ── RUN BOT ──
+            window.runBot = async function () {
+                if (!window.latestDownloadedCsvPath) {
+                    alert("Please download the GrowthZone CSV first so the bot knows what file to process!");
+                    return;
+                }
+
+                if (!confirm(`This will trigger the local Puppeteer automation bot to update GrowthZone profiles based on the CSV in your Downloads folder.\\n\\nYou MUST have 'node server.js' running in the terminal.\\n\\nContinue?`)) return;
+
+                try {
+                    const res = await fetch('http://localhost:3001/run-updater', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ csvPath: window.latestDownloadedCsvPath })
+                    });
+                    const data = await res.json();
+                    if (res.ok) {
+                        alert(data.message + '\\n\\nSwitch to your terminal to view progress, and do not touch the mouse/keyboard while the Chrome window is open!');
+                    } else {
+                        alert('Error: ' + data.error);
+                    }
+                } catch (e) {
+                    alert('❌ Could not connect to the local bot server!\\n\\nPlease open a terminal, cd into Homepage/2026/gz-updater-bot, and run:\\nnode server.js');
+                }
             };
         })();
     </script>
