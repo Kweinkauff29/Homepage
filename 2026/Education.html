@@ -835,7 +835,6 @@
         <div class="swiss-header" id="eduTop">
             <div class="swiss-title-group">
                 <h1 class="swiss-h1">EDUCATION</h1>
-                <p class="swiss-subtitle">[SYS: LIVE CLASS CATALOG] MODULE REVISION 1.0</p>
             </div>
 
             <div class="swiss-controls">
@@ -873,7 +872,7 @@
     <div class="swiss-modal-overlay" id="eventModal">
         <div class="swiss-modal">
             <div class="modal-header-swiss">
-                <span>[LOG] CLASS_DETAILS.DAT / ACCESS GRANTED</span>
+                <span>[LOG] CLASS_DETAILS</span>
                 <button class="modal-close-swiss" id="modalClose">&times;</button>
             </div>
             <div class="modal-body-swiss" id="modalBody">
@@ -1261,7 +1260,7 @@
                     
                     <div class="m-grid">
                         <div class="m-section">
-                            <span class="m-label">[// LOCATION_NODE]</span>
+                            <span class="m-label">[// LOCATION]</span>
                             <p class="m-value">${detail.LocationName || locType}</p>
                             ${detail.Address1 ? `<p style="font-family:var(--font-mono); font-size:0.8rem; color:var(--swiss-light); margin:4px 0 0;">${detail.Address1}<br>${detail.City || ''}, ${detail.StateProvince || ''} ${detail.PostalCode || ''}</p>` : ''}
                         </div>
@@ -1287,7 +1286,7 @@
                     
                     <div class="m-footer">
                         <button class="btn-swiss" onclick="closeModal()">CANCEL_</button>
-                        <a href="${publicUrl}" class="btn-swiss btn-swiss-primary" target="_blank">INITIATE REGISTRATION</a>
+                        <a href="${publicUrl}" class="btn-swiss btn-swiss-primary" target="_blank">REGISTRATION_</a>
                     </div>
                 `;
 
