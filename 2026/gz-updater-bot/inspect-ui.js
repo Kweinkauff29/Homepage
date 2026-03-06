@@ -14,11 +14,20 @@ require('dotenv').config();
     console.log('You have 60 seconds to log in and navigate to Kevin Weinkauff\'s profile...');
     console.log('Or click this link in the browser: https://bonitaspringsesterorealtorsfl.growthzoneapp.com/a#/ContactInfo/4159518/ContactOverview');
     await new Promise(r => setTimeout(r, 60000));
+    console.log('Dumping HTML of all frames...');
+    const frames = page.frames();
+    for (let i = 0; i < frames.length; i++) {
+        const frameUrl = frames[i].url();
+        console.log(`Dumping frame ${i}: ${frameUrl}`);
+        try {
+            const html = await frames[i].content();
+            fs.writeFileSync(`frame-${i}.html`, html);
+        } catch (e) {
+            console.log(`Error dumping frame ${i}: ${e.message}`);
+        }
+    }
 
-    console.log('Dumping HTML of the current page...');
-    const html = await page.content();
-    fs.writeFileSync('profile.html', html);
-
-    console.log('Done. Saved to profile.html');
+    console.log('Done framing. Saving screenshot...');
+    await page.screenshot({ path: 'profile.png', fullPage: true });
     await browser.close();
 })();

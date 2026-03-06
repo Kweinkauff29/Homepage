@@ -1,0 +1,171 @@
+const puppeteer = require('puppeteer');
+const fs = require('fs');
+const csv = require('csv-parser');
+require('dotenv').config();
+
+const results = [];
+// For testing purposes, we'll just test your ContactId: 4159518
+const testContacts = [
+    {
+        'ContactId': '4159518',
+        'Name': 'Kevin Weinkauff',
+        'License Number': 'SL3360322',
+        'License Type': 'SL',
+        'License Expiration Date': '03/31/2026'
+    }
+];
+
+async function updateGrowthZoneLicense(page, contact) {
+    const profileUrl = `https://bonitaspringsesterorealtorsfl.growthzoneapp.com/a#/ContactInfo/${contact.ContactId}/ContactOverview`;
+    console.log(`\nNavigating to ${contact.Name} profile: ${profileUrl}`);
+    await page.goto(profileUrl, { waitUntil: 'domcontentloaded' });
+
+    console.log(`Waiting for Professional widget to load inside iframes...`);
+    let targetFrame = null;
+    let licenseRowFound = false;
+
+    const startTime = Date.now();
+    while (!licenseRowFound && (Date.now() - startTime) < 20000) {
+        for (const frame of page.frames()) {
+            try {
+                const found = await frame.evaluate(() => {
+                    const rows = document.querySelectorAll('.widget-row');
+                    for (let row of rows) {
+                        const text = row.innerText;
+                        if (text.includes('License') && text.includes('DBPR')) {
+                            return true;
+                        }
+                    }
+                    return false;
+                });
+                if (found) {
+                    targetFrame = frame;
+                    licenseRowFound = true;
+                    break;
+                }
+            } catch (e) { } // Ignore cross-origin frame errors
+        }
+        if (!licenseRowFound) await new Promise(r => setTimeout(r, 1000));
+    }
+
+    if (!targetFrame) {
+        throw new Error('Could not find the Professional widget containing the License inside any iframe.');
+    }
+
+    console.log(`Finding Edit button for License in frame: ${targetFrame.url()}`);
+    // Click the Edit button on the License row within the identified frame
+    await targetFrame.evaluate(() => {
+        const rows = document.querySelectorAll('.widget-row');
+        for (let row of rows) {
+            const text = row.innerText;
+            if (text.includes('License') && text.includes('DBPR')) {
+                const editBtn = row.querySelector('.fal.fa-pen.edit-dialog');
+                if (editBtn) {
+                    editBtn.click();
+                    return true;
+                }
+            }
+        }
+    });
+
+    console.log('Waiting for Edit Modal to appear...');
+    // The modal fieldset id="License"
+    const modalSelector = 'fieldset#License';
+    await targetFrame.waitForSelector(modalSelector, { visible: true, timeout: 5000 });
+
+    // Use the datetime attribute to find the correct date input
+    const dateInputSelector = 'div[datetime="vm.model.License.EndDate"] input.form-control';
+    await targetFrame.waitForSelector(dateInputSelector, { visible: true });
+
+    console.log(`Setting new expiration date to: ${contact['License Expiration Date']}`);
+    await targetFrame.click(dateInputSelector);
+    await new Promise(r => setTimeout(r, 200));
+
+    // 1. Force clear via DOM and dispatch Angular events
+    await targetFrame.evaluate((selector) => {
+        const input = document.querySelector(selector);
+        if (input) {
+            input.value = '';
+            input.dispatchEvent(new Event('input', { bubbles: true }));
+            input.dispatchEvent(new Event('change', { bubbles: true }));
+        }
+    }, dateInputSelector);
+
+    // 2. Aggressively spam Backspace and Delete to defeat input masks
+    for (let i = 0; i < 20; i++) {
+        await page.keyboard.press('ArrowRight'); // move to end
+    }
+    for (let i = 0; i < 20; i++) {
+        await page.keyboard.press('Backspace');
+        await page.keyboard.press('Delete');
+        await new Promise(r => setTimeout(r, 20)); // tiny pause
+    }
+
+    await new Promise(r => setTimeout(r, 500));
+
+    console.log('Typing new date...');
+    await targetFrame.type(dateInputSelector, contact['License Expiration Date'], { delay: 100 });
+
+    console.log('Clicking Done...');
+    // Find the Done button by matching its text inside the modal-footer
+    await targetFrame.evaluate(() => {
+        const buttons = document.querySelectorAll('.modal-footer button');
+        for (let btn of buttons) {
+            if (btn.innerText.trim() === 'Done') {
+                btn.click();
+                return;
+            }
+        }
+    });
+
+    // Wait for the modal to disappear
+    await targetFrame.waitForSelector(modalSelector, { hidden: true, timeout: 5000 });
+    console.log(`Successfully updated ${contact.Name}`);
+}
+
+(async () => {
+    console.log('Launching browser (visible mode for testing)...');
+    const browser = await puppeteer.launch({ headless: false, defaultViewport: null, args: ['--start-maximized'] });
+    const page = await browser.newPage();
+
+    console.log('Navigating to login...');
+    await page.goto('https://growthzoneapp.com/auth?ReturnUrl=%2fa', { waitUntil: 'domcontentloaded' });
+
+    console.log('Entering username...');
+    await page.waitForSelector('#check-user-name-field', { visible: true });
+    await page.type('#check-user-name-field', 'kevin@bonitaesterorealtors.com', { delay: 50 });
+
+    console.log('Clicking Next and waiting for redirect...');
+    await Promise.all([
+        page.waitForNavigation({ waitUntil: 'networkidle2' }),
+        page.click('#check-user-name-button')
+    ]);
+
+    console.log('Entering password...');
+    await page.waitForSelector('#password', { visible: true });
+    await page.type('#password', 'Goalie29', { delay: 50 });
+
+    console.log('Clicking Submit and waiting for Dashboard load...');
+    await Promise.all([
+        page.waitForNavigation({ waitUntil: 'domcontentloaded' }),
+        page.click('button.blue.button')
+    ]);
+
+    console.log('Waiting 15 seconds for GrowthZone to fully log in and load dashboard...');
+    await new Promise(r => setTimeout(r, 15000));
+
+    console.log('\n--- Starting Updates ---');
+    for (const contact of testContacts) {
+        try {
+            await updateGrowthZoneLicense(page, contact);
+            // Brief pause between contacts
+            await new Promise(r => setTimeout(r, 2000));
+        } catch (err) {
+            console.error(`Failed to update ${contact.Name}: ${err.message}`);
+        }
+    }
+
+    console.log('Updates complete! Keeping browser open for 10 seconds to verify...');
+    await new Promise(r => setTimeout(r, 10000));
+    await browser.close();
+})();
