@@ -1,0 +1,15 @@
+name = "gz-realestate-proxy"
+main = "gz-realestate-proxy.js"
+compatibility_date = "2024-01-01"
+
+[vars]
+GZ_BASE_URL = "https://bonitaspringsesterorealtorsfl.growthzoneapp.com"
+
+[[d1_databases]]
+binding = "D1_DB"
+database_name = "gz_cache"
+database_id = "0d2676ee-02f1-4e09-952b-464c39612737"
+
+# Daily sync at 5am UTC (12am EST)
+[triggers]
+crons = ["0 5 * * *"]

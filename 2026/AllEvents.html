@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Education & Classes - Bonita Springs-Estero Realtors</title>
+    <title>All Events - Bonita Springs-Estero Realtors</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
         integrity="sha512-9usAa10IRO0HhonpyAIVpjrylPvoDwiPUiKdWk5t3PyolY1cOd4DSE0Ga+ri4AuTroPR5aQvXU9xC6qOPnzFeg=="
         crossorigin="anonymous" referrerpolicy="no-referrer" />
@@ -224,12 +224,12 @@
             display: flex;
             align-items: center;
             gap: 12px;
-            cursor: pointer;
-            margin-left: 8px;
             font-family: var(--font-mono);
             font-size: 0.85rem;
             font-weight: bold;
             color: var(--swiss-text);
+            cursor: pointer;
+            margin-left: 8px;
         }
 
         .swiss-toggle {
@@ -884,29 +884,21 @@
         <!-- Swiss Header Bar -->
         <div class="swiss-header" id="eduTop">
             <div class="swiss-title-group">
-                <h1 class="swiss-h1">EDUCATION</h1>
+                <h1 class="swiss-h1">ALL EVENTS</h1>
             </div>
 
             <!-- Calendar Navigation -->
             <nav class="swiss-nav">
-                <a href="https://bonitaesterorealtors.com/upcoming-education/" class="active">EDUCATION</a>
+                <a href="https://bonitaesterorealtors.com/upcoming-education/">EDUCATION</a>
                 <a href="https://bonitaesterorealtors.com/upcoming-events/">EVENTS</a>
                 <a href="https://bonitaesterorealtors.com/committee-meetings/">COMMITTEES</a>
-                <a href="https://bonitaesterorealtors.com/all-upcoming-events/">ALL EVENTS</a>
+                <a href="https://bonitaesterorealtors.com/all-upcoming-events/" class="active">ALL EVENTS</a>
             </nav>
 
             <div class="swiss-controls">
                 <input type="text" id="searchInput" class="swiss-search" placeholder="QUERY NAME OR DESC..."
                     autocomplete="off">
                 <input type="text" id="dateFilter" class="swiss-date" placeholder="SELECT DATE RANGE">
-
-                <label class="swiss-toggle-wrapper">
-                    <div class="swiss-toggle">
-                        <input type="checkbox" id="ceToggle">
-                        <span class="swiss-slider"></span>
-                    </div>
-                    CE CREDITS ONLY
-                </label>
             </div>
         </div>
 
@@ -922,7 +914,7 @@
 
         <!-- Detail Navigation Button -->
         <div style="margin-top: 40px; text-align: center;">
-            <a href="mailto:education@bonitaesterorealtors.com" class="btn-swiss">CONTACT INSTRUCTOR RELATIONS_</a>
+            <a href="mailto:info@bonitaesterorealtors.com" class="btn-swiss">CONTACT B.E.R._</a>
         </div>
     </div>
 
@@ -930,7 +922,7 @@
     <div class="swiss-modal-overlay" id="eventModal">
         <div class="swiss-modal">
             <div class="modal-header-swiss">
-                <span>[LOG] CLASS_DETAILS</span>
+                <span>[LOG] EVENT_DETAILS</span>
                 <button class="modal-close-swiss" id="modalClose">&times;</button>
             </div>
             <div class="modal-body-swiss" id="modalBody">
@@ -966,7 +958,6 @@
                 // Get exact current time for precise filtering
                 const now = new Date();
 
-                // Fetch full cached payload exactly once
                 const res = await fetch(`${BASE_URL}/events/all?enriched=true`);
                 if (!res.ok) throw new Error("API Connection Failed");
 
@@ -983,13 +974,15 @@
                 // Sort by nearest upcoming date (today -> future) ascending
                 allEvents.sort((a, b) => new Date(a.StartDate) - new Date(b.StartDate));
 
-                knownClasses = allEvents.filter(ev => ev.IsClass);
+                // Combined view: show ALL future events, no filtering
+                knownClasses = [...allEvents];
+                let unknownEvents = [];
 
                 linkStatus.textContent = "DATASTREAM LINK: SECURE";
                 linkStatus.style.color = "var(--accent-cyan)";
                 linkStatus.style.animation = "none";
 
-                sysStatus.textContent = `SYSTEM ACTIVE: ${knownClasses.length} UPCOMING CLASSES LOADED.`;
+                sysStatus.textContent = `SYSTEM ACTIVE: ${knownClasses.length} UPCOMING EVENTS LOADED.`;
 
                 renderGrid(knownClasses);
 
@@ -1002,7 +995,7 @@
 
                 // Attach centralized filter logic to controls
                 searchInput.addEventListener('input', applyFilters);
-                ceToggle.addEventListener('change', applyFilters);
+                dateFilter.addEventListener('change', applyFilters);
 
             } catch (err) {
                 console.error(err);
@@ -1013,8 +1006,7 @@
 
         // Unified Filter Engine checks Text, Date, and CE Status simultaneously
         function applyFilters() {
-            const q = searchInput.value.toLowerCase();
-            const ceOnly = ceToggle.checked;
+            const query = searchInput.value.toLowerCase();
 
             // Extract selected date range from flatpickr
             let selStart = null;
@@ -1035,40 +1027,17 @@
 
             const filteredList = knownClasses.filter(ev => {
                 // 1. Text Query
-                const matchText = !q || (ev.Name && ev.Name.toLowerCase().includes(q)) || (ev.Description && ev.Description.toLowerCase().includes(q));
-
-                // 2. CE Credit Filter (Evaluated via Category cache OR standard title regex)
-                let hasCE = false;
-                if (ceOnly) {
-                    const ceMatch = ev.Name ? ev.Name.match(/(\d+)\s*(?:\*|Hr\s*)?CE/i) : null;
-                    hasCE = !!ceMatch || (ev.Name && /CE\b/.test(ev.Name));
-                    // Check detailed category cache if strictly CE required and name regex fails
-                    if (!hasCE) {
-                        const catStr = localStorage.getItem('BER_EDU_CATEGORY_' + ev.EventId);
-                        // Since our MetadataIndex strictly looks for "CE Credit" OR "General Ed", 
-                        // if we wanted super strict CE only without Gen Ed, we'd need a separate CE flag.
-                        // For now, if the user explicitly created a "CE Credits Only" toggle, we regex the name strongly 
-                        // as most BER classes explicitly list "3CE" etc, in the Title.
-                        // But we also trust the Event Categories if we can dynamically evaluate it later.
-
-                        // We will rely on the ceAmount calculation used in renderGrid:
-                        const ceExtracted = ceMatch ? true : (ev.Name && /CE\b/.test(ev.Name));
-                        hasCE = ceExtracted;
-
-                        // If we want to strictly rely on category data (e.g. from the async loop) we could cache a 'CE=true' flag.
-                        // But since we want to run this instantly, trusting the title regex gives the 90% solution immediately.
-                    }
-                }
-                const matchCE = !ceOnly || hasCE;
+                const matchesQuery = !query || (ev.Name && ev.Name.toLowerCase().includes(query)) ||
+                    (ev.Description && ev.Description.toLowerCase().includes(query));
 
                 // 3. Date Range
-                let matchDate = true;
+                let matchesDate = true;
                 if (selStart && selEnd) {
                     const evStart = new Date(ev.StartDate);
-                    matchDate = (evStart >= selStart && evStart <= selEnd);
+                    matchesDate = (evStart >= selStart && evStart <= selEnd);
                 }
 
-                return matchText && matchCE && matchDate;
+                return matchesDate && matchesQuery;
             });
 
             renderGrid(filteredList);
@@ -1092,19 +1061,8 @@
                 let shortName = ev.Name || "UNDEFINED_EVENT";
                 if (shortName.length > 55) shortName = shortName.substring(0, 52) + '...';
 
-                // Extract CE Credits from title if possible (e.g. 3CE, 14 Hr CE)
-                let ceAmount = "NO";
-                let ceText = "";
-                const ceMatch = ev.Name ? ev.Name.match(/(\d+)\s*(?:\*|Hr\s*)?CE/i) : null;
-                if (ceMatch) {
-                    ceAmount = ceMatch[1] + " Hours";
-                    ceText = ceMatch[1] + " CE";
-                } else if (ev.Name && /CE\b/.test(ev.Name)) {
-                    ceAmount = "YES";
-                    ceText = "CE Credit";
-                }
-
-                const ceBadgeHTML = ceAmount !== "NO" ? `<div class="ce-credit-badge">${ceText}</div>` : '';
+                // CE credit extraction removed per user request
+                const ceBadgeHTML = '';
 
                 // Extract flyer from Enriched URL, EventLogoUrl, Description HTML fallback, or Cache
                 let flyerURL = ev.EnrichedFlyerUrl || ev.EventLogoUrl || "";
@@ -1190,10 +1148,7 @@
                                 <span class="data-key">// STATUS</span>
                                 <span class="data-val" style="color: ${statusColor}; font-weight:bold;">${statusText}</span>
                             </li>
-                            <li class="card-data-row">
-                                <span class="data-key">// CE_CREDIT</span>
-                                <span class="data-val">${ceAmount}</span>
-                            </li>
+                            <!-- CE toggle removed per user request -->
                         </ul>
 
                         <div class="card-footer-flex">
@@ -1347,6 +1302,8 @@
         document.addEventListener('keydown', e => {
             if (e.key === 'Escape' && modal.classList.contains('open')) closeModal();
         });
+
+        // Legacy backgroundMetadataIndexer removed as logic is now handled server-side in the Cloudflare Worker.
     </script>
 </body>
 
