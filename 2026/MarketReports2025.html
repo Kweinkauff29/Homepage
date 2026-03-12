@@ -13,19 +13,33 @@
 
   <style>
     :root {
-      --brand-primary: #0a3a7a;
-      /* deep blue */
-      --brand-accent: #0ca7a4;
-      /* teal accent you already use */
-      --ink: #1e1e1e;
-      --ink-2: #4b4b4b;
+      /* Dual Font System */
+      --font-body: 'Inter', Roboto, -apple-system, sans-serif;
+      --font-mono: 'Roboto Mono', 'Share Tech Mono', monospace;
+
+      /* Color System (High Contrast + Signal Accents) */
+      --brand-primary: #0284c7; /* Signal Blue */
+      --brand-accent: #ca8a04; /* Signal Gold */
+      --signal-green: #16a34a;
+      --signal-red: #dc2626;
+
+      /* Base/Canvas */
       --bg: #ffffff;
-      --card: #ffffff;
+      --bg-panel: #fafafa;
+      
+      /* Ink/Borders */
+      --ink: #111827; 
+      --ink-2: #4b5563; /* slightly muted but high contrast */
+      --border: #111827; /* Solid structural lines */
+      
+      --card: #fafafa; /* Tech Panels */
       --muted: #f3f5f7;
-      --ring: rgba(12, 167, 164, .28);
-      --radius: 18px;
+      
+      /* Structural Geometry */
+      --radius: 2px; /* Minimal engineering */
       --gap: 20px;
-      --shadow: 0 6px 22px rgba(0, 0, 0, .08);
+      --shadow: 2px 2px 0px rgba(0,0,0,0.05); /* Sharp tile shadow */
+      --shadow-hover: 4px 4px 0px rgba(0,0,0,0.08);
     }
 
     * {
@@ -37,7 +51,8 @@
       margin: 0;
       background: var(--bg);
       color: var(--ink);
-      font-family: Roboto, system-ui, -apple-system, Segoe UI, Arial, sans-serif
+      font-family: var(--font-body);
+      -webkit-font-smoothing: antialiased;
     }
 
     a {
@@ -66,20 +81,24 @@
     }
 
     .kicker {
-      font: 600 12px/1 Oswald, Arial, sans-serif;
-      letter-spacing: .12em;
+      font: 700 13px/1 var(--font-mono);
+      letter-spacing: 1px;
       color: var(--brand-accent);
       text-transform: uppercase
     }
 
     h1 {
-      font: 600 36px/1.15 Oswald, Arial, sans-serif;
+      font: 800 42px/1.15 var(--font-body);
       margin: 0;
-      color: var(--brand-primary)
+      color: var(--ink);
+      letter-spacing: -0.02em;
     }
 
     .sub {
-      color: var(--ink-2)
+      color: var(--ink-2);
+      font-size: 18px;
+      max-width: 700px;
+      line-height: 1.5;
     }
 
     /* Year tabs (sticky like a magazine nav strip) */
@@ -87,35 +106,38 @@
       position: sticky;
       top: 0;
       z-index: 20;
-      background: linear-gradient(var(--bg), var(--bg));
+      background: var(--bg);
       padding: 12px 0;
       margin: 8px 0 20px;
       display: flex;
-      gap: 8px;
+      gap: 12px;
       flex-wrap: wrap;
-      border-bottom: 1px solid #e9eef2;
+      border-bottom: 1px solid var(--border);
     }
 
     .year-btn {
-      border: none;
-      background: #e9eef2;
-      color: #08325f;
-      font: 600 13px/1 Oswald, Arial, sans-serif;
-      letter-spacing: .08em;
+      border: 1px solid var(--border);
+      background: #ffffff;
+      color: var(--ink);
+      font: 700 13px/1 var(--font-mono);
+      letter-spacing: 1px;
       text-transform: uppercase;
       padding: 10px 14px;
-      border-radius: 12px;
+      border-radius: var(--radius);
       cursor: pointer;
-      transition: transform .08s ease;
+      transition: all .1s ease-in-out;
+      box-shadow: 2px 2px 0px rgba(0,0,0,0.05);
     }
 
     .year-btn:hover {
-      transform: translateY(-1px)
+      box-shadow: 2px 2px 0px rgba(0,0,0,0.15);
+      transform: translate(-1px, -1px);
     }
 
     .year-btn.active {
       background: var(--brand-primary);
-      color: #fff
+      color: #fff;
+      border-color: var(--brand-primary);
     }
 
     .e-con {
@@ -125,7 +147,7 @@
     /* Feature block (hero) */
     .feature {
       display: grid;
-      grid-template-columns: 1fr 1fr;
+      grid-template-columns: 1.2fr 0.8fr;
       gap: var(--gap);
       align-items: stretch;
       margin-bottom: 28px;
@@ -133,24 +155,46 @@
 
     .feature-card {
       position: relative;
-      overflow: hidden;
+      border: 1px solid var(--border);
       border-radius: var(--radius);
       box-shadow: var(--shadow);
       background: var(--card);
       display: grid;
-      grid-template-rows: minmax(240px, 40vh) auto;
+      grid-template-rows: minmax(280px, 40vh) auto;
+    }
+
+    /* Brackets for tech panel feel */
+    .feature-card::before, .feature-card::after,
+    .card::before, .card::after {
+      content: "";
+      position: absolute;
+      width: 8px;
+      height: 8px;
+      border: 1px solid var(--border);
+    }
+    .feature-card::before, .card::before {
+      top: -1px; left: -1px;
+      border-right: none;
+      border-bottom: none;
+    }
+    .feature-card::after, .card::after {
+      bottom: -1px; right: -1px;
+      border-left: none;
+      border-top: none;
     }
 
     .feature-media {
       position: relative;
-      overflow: hidden
+      overflow: hidden;
+      border-bottom: 1px solid var(--border);
     }
 
     .feature-media img {
       width: 100%;
       height: 100%;
-      object-fit: cover;
-      display: block
+      object-fit: contain;
+      background: #fff;
+      display: block;
     }
 
     .badge {
@@ -159,264 +203,255 @@
       left: 14px;
       background: var(--brand-accent);
       color: #fff;
-      font: 700 12px/1 Oswald, Arial, sans-serif;
+      font: 700 12px/1 var(--font-mono);
       padding: 8px 10px;
-      border-radius: 999px;
-      letter-spacing: .08em;
-      text-transform: uppercase
+      border-radius: var(--radius);
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      border: 1px solid var(--border);
+      box-shadow: 2px 2px 0 rgba(0,0,0,0.1);
     }
 
     .feature-body {
-      padding: 18px
+      padding: 24px;
     }
 
     .eyebrow {
-      font: 600 12px/1 Oswald, Arial, sans-serif;
-      color: #6d7a86;
-      letter-spacing: .1em;
-      text-transform: uppercase
+      font: 700 12px/1 var(--font-mono);
+      color: var(--ink-2);
+      letter-spacing: 1px;
+      text-transform: uppercase;
     }
 
-    .feature h2 {
-      font: 600 28px/1.2 Oswald, Arial, sans-serif;
-      margin: 6px 0 8px
+    .feature h2, .card h3 {
+      font: 800 32px/1.2 var(--font-body);
+      margin: 12px 0 12px;
+      letter-spacing: -0.01em;
+    }
+
+    .card h3 {
+      font-size: 22px;
     }
 
     .meta {
-      color: #6d7a86;
-      font-size: 14px;
-      margin-bottom: 10px
+      color: var(--ink-2);
+      font: 400 14px/1 var(--font-mono);
+      margin-bottom: 16px;
     }
 
-    .chip-row {
+    .chip-row, .pill-row {
       display: flex;
       gap: 8px;
       flex-wrap: wrap;
-      margin-top: 12px
+      margin-top: 12px;
+      margin-bottom: 16px;
     }
 
-    .chip {
-      border: 1px solid #dbe5ec;
+    .chip, .pill {
+      border: 1px solid var(--border);
       background: #fff;
       padding: 6px 10px;
-      border-radius: 999px;
-      font: 600 12px/1 Oswald, Arial, sans-serif;
-      letter-spacing: .08em;
+      border-radius: var(--radius);
+      font: 700 11px/1 var(--font-mono);
+      letter-spacing: 1px;
       text-transform: uppercase;
-      color: #0a355f
+      color: var(--ink);
     }
 
-    .cta-row {
+    .cta-row, .links {
       display: flex;
-      gap: 10px;
-      margin-top: 12px;
-      flex-wrap: wrap
+      gap: 12px;
+      margin-top: 20px;
+      flex-wrap: wrap;
     }
 
-    .btn {
+    .links {
+      padding: 0 20px 20px;
+      margin-top: auto;
+    }
+
+    .btn, .link-btn {
       display: inline-flex;
       align-items: center;
       gap: 8px;
-      border-radius: 999px;
-      border: 2px solid var(--brand-primary);
+      border-radius: var(--radius);
+      border: 1px solid var(--border);
       padding: 10px 14px;
-      font: 600 13px/1 Oswald, Arial, sans-serif;
-      letter-spacing: .08em;
+      font: 700 12px/1 var(--font-mono);
+      letter-spacing: 1px;
       text-transform: uppercase;
-      cursor: pointer
+      cursor: pointer;
+      background: #fff;
+      color: var(--ink);
+      box-shadow: 2px 2px 0 rgba(0,0,0,0.1);
+      transition: all 0.1s ease;
     }
 
     .btn.primary {
       background: var(--brand-primary);
-      color: #fff
+      border-color: var(--border);
+      color: #fff;
     }
 
-    $1 .btn.tertiary {
-      background: #fff;
-      border: 2px solid var(--brand-accent);
-      color: var(--brand-accent)
+    .btn.secondary {
+      background: var(--brand-accent);
+      color: #fff;
     }
 
-    .btn:hover {
-      filter: brightness(1.02)
+    .btn:hover, .link-btn:hover {
+      transform: translate(-1px, -1px);
+      box-shadow: 4px 4px 0 rgba(0,0,0,0.15);
+    }
+    .btn:active, .link-btn:active {
+      transform: translate(0px, 0px);
+      box-shadow: none;
     }
 
-    .btn i {
-      font-size: 14px
+    .btn i, .link-btn i {
+      font-size: 14px;
     }
 
-    /* NEW: Right-rail = vertical list of thumbnails linking out to YouTube */
+    /* Right-rail = vertical list of thumbnails linking out to YouTube */
     .video-rail {
       display: grid;
       grid-template-rows: auto 1fr;
       height: auto;
       min-height: 0;
       overflow: hidden;
-      contain: size
+      contain: size;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      background: var(--bg-panel);
     }
 
     .video-rail .vhead {
-      padding: 12px 14px;
-      border-bottom: 1px solid #e5edf4;
-      background: #f9fbfd;
-      font: 600 12px/1 Oswald, Arial, sans-serif;
-      color: #0a355f;
-      letter-spacing: .08em;
+      padding: 14px;
+      border-bottom: 1px solid var(--border);
+      font: 700 14px/1 var(--font-mono);
+      color: var(--ink);
+      letter-spacing: 1px;
       text-transform: uppercase;
+      background: #fff;
     }
 
     .video-list {
       flex: 1;
       overflow: auto;
-      padding: 12px;
+      padding: 14px;
       display: flex;
       flex-direction: column;
-      gap: 10px;
-      background: #f9fbfd;
+      gap: 12px;
+      background: var(--bg-panel);
       min-height: 0;
     }
 
     .vitem {
       display: flex;
-      gap: 10px;
+      gap: 12px;
       align-items: center;
-      border: 1px solid #dbe5ec;
-      border-radius: 12px;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
       padding: 8px;
       background: #fff;
-      transition: transform .08s ease, box-shadow .2s ease;
+      transition: all .1s ease-in-out;
+      box-shadow: 2px 2px 0 rgba(0,0,0,0.05);
     }
 
     .vitem:hover {
-      transform: translateY(-1px);
-      box-shadow: 0 8px 20px rgba(0, 0, 0, .08)
+      transform: translate(-1px, -1px);
+      box-shadow: 4px 4px 0 rgba(0,0,0,0.1);
     }
 
     .vthumb {
-      flex: 0 0 120px;
-      height: 68px;
-      border-radius: 8px;
+      flex: 0 0 130px;
+      height: 74px;
+      border-radius: var(--radius);
       overflow: hidden;
-      background: #dfe7ee
+      border: 1px solid var(--border);
+      background: #000;
     }
 
     .vthumb img {
       width: 100%;
       height: 100%;
       object-fit: cover;
-      display: block
+      display: block;
+      opacity: 0.9;
     }
+    .vitem:hover .vthumb img { opacity: 1; }
 
     .vtitle {
-      font: 600 12px/1.2 Oswald, Arial, sans-serif;
-      color: #0a355f
+      font: 600 13px/1.4 var(--font-body);
+      color: var(--ink);
     }
 
     @media (max-width:1000px) {
       .vthumb {
         flex-basis: 100px;
-        height: 60px
+        height: 60px;
       }
     }
 
-    /* Grid of cards (magazine blocks) */
+    /* Grid of cards (magazine blocks) -> Tech Panels */
     .grid {
       display: grid;
       gap: var(--gap);
-      grid-template-columns: repeat(3, minmax(0, 1fr))
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      margin-bottom: 24px;
     }
 
     .card {
+      position: relative;
       background: var(--card);
+      border: 1px solid var(--border);
       border-radius: var(--radius);
-      overflow: hidden;
       box-shadow: var(--shadow);
       display: flex;
       flex-direction: column;
-      transition: transform .08s ease, box-shadow .2s ease;
+      transition: all .1s ease;
     }
 
     .card:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 10px 28px rgba(0, 0, 0, .12)
+      transform: translate(-2px, -2px);
+      box-shadow: var(--shadow-hover);
     }
 
     .card .media {
       aspect-ratio: 16/9;
       overflow: hidden;
-      background: #dfe7ee
+      border-bottom: 1px solid var(--border);
+      background: #fff;
     }
 
     .card img {
       width: 100%;
       height: 100%;
-      object-fit: cover;
-      display: block
+      object-fit: contain;
+      display: block;
     }
 
     .card .body {
-      padding: 14px 16px
-    }
-
-    .card h3 {
-      font: 600 18px/1.25 Oswald, Arial, sans-serif;
-      margin: 2px 0 8px;
-      color: #0a355f
-    }
-
-    .card .meta {
-      font-size: 13px;
-      margin-bottom: 8px
-    }
-
-    .pill-row {
+      padding: 20px;
       display: flex;
-      gap: 8px;
-      flex-wrap: wrap
-    }
-
-    .pill {
-      background: #eef4f7;
-      color: #0a355f;
-      border-radius: 999px;
-      padding: 6px 10px;
-      font: 600 11px/1 Oswald, Arial, sans-serif;
-      letter-spacing: .06em
-    }
-
-    .links {
-      display: flex;
-      gap: 10px;
-      padding: 0 16px 16px
-    }
-
-    .link-btn {
-      display: inline-flex;
-      gap: 8px;
-      align-items: center;
-      border: 1px solid #d8e4ec;
-      border-radius: 999px;
-      padding: 8px 12px;
-      font: 600 12px/1 Oswald, Arial, sans-serif;
-      text-transform: uppercase
-    }
-
-    .link-btn:hover {
-      background: var(--muted)
+      flex-direction: column;
+      flex: 1;
     }
 
     .load-more {
       display: block;
-      margin: 26px auto 10px
+      margin: 26px auto;
     }
 
     .empty {
-      padding: 24px;
-      border: 1px dashed #cdd9e1;
-      border-radius: 14px;
-      background: #f9fbfc;
+      padding: 32px;
+      border: 1px dashed var(--border);
+      border-radius: var(--radius);
+      background: var(--bg-panel);
       text-align: center;
-      color: #607489
+      font: 700 14px/1 var(--font-mono);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: var(--ink-2);
     }
 
     /* Document viewer (popup) */
@@ -495,6 +530,150 @@
       }
     }
 
+    /* AI Chatbot inside cards */
+    .ai-module {
+      margin-top: 16px;
+      padding-top: 16px;
+      border-top: 1px dashed var(--border);
+    }
+    
+    .feature-body .ai-module {
+      margin-top: 24px;
+      padding-top: 20px;
+    }
+
+    .ai-head {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 12px;
+    }
+
+    .ai-icon {
+      width: 28px;
+      height: 28px;
+      background: var(--brand-primary);
+      color: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: var(--radius);
+      font-size: 14px;
+    }
+
+    .ai-title {
+      font: 700 14px/1 var(--font-body);
+      color: var(--ink);
+      letter-spacing: -0.01em;
+      margin: 0;
+    }
+
+    .ai-questions {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .ai-q-btn {
+      background: #fff;
+      border: 1px solid var(--border);
+      padding: 10px 14px;
+      border-radius: var(--radius);
+      font: 600 13px/1.4 var(--font-body);
+      color: var(--ink);
+      text-align: left;
+      cursor: pointer;
+      transition: all .1s ease;
+      box-shadow: 2px 2px 0 rgba(0,0,0,0.05);
+      position: relative;
+    }
+
+    .ai-q-btn:hover {
+      box-shadow: 3px 3px 0 rgba(0,0,0,0.1);
+      transform: translate(-1px, -1px);
+    }
+
+    .ai-response-area {
+      margin-top: 16px;
+      background: #0d1117;
+      border: 1px solid #30363d;
+      border-radius: var(--radius);
+      padding: 16px;
+      font: 400 13px/1.6 var(--font-mono);
+      color: #d1d5db;
+      display: none;
+      box-shadow: inset 0 2px 8px rgba(0,0,0,0.2);
+      min-height: 80px;
+      white-space: pre-wrap;
+    }
+    
+    .ai-response-area strong { color: #fff; font-weight: 700; }
+    .ai-response-area em { color: #8b949e; font-style: normal; }
+
+    .ai-response-area.active {
+      display: block;
+    }
+    
+    .ai-bar-chart {
+      margin: 16px 0 8px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      font-size: 12px;
+      font-family: var(--font-body);
+    }
+    .ai-bar-row { display: flex; align-items: center; gap: 8px; }
+    .ai-bar-label { width: 85px; font-weight: 600; text-align: right; color: #c9d1d9; }
+    .ai-bar-track { flex: 1; height: 14px; background: #21262d; border-radius: 2px; overflow: hidden; border: 1px solid #30363d; box-shadow: inset 0 1px 3px rgba(0,0,0,0.2); display: flex; align-items: stretch; }
+    .ai-bar-fill { flex: 0 0 auto; min-height: 12px; background: #3fb950; border-radius: 0; position: relative; }
+    .ai-bar-fill::after {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: linear-gradient(180deg, rgba(255,255,255,0.1) 0%, rgba(0,0,0,0.1) 100%);
+    }
+    .ai-bar-val { width: 55px; font-variant-numeric: tabular-nums; font-family: var(--font-mono); color: #79c0ff; font-weight: 700; text-align: left; }
+
+    /* Blinking cursor for typewriter effect */
+    .cursor {
+      display: inline-block;
+      width: 8px;
+      height: 14px;
+      background: #d1d5db;
+      vertical-align: middle;
+      animation: blink 1s step-end infinite;
+      margin-left: 6px;
+    }
+
+    @keyframes blink {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0; }
+    }
+
+    /* Thinking dots animation */
+    .thinking-dots {
+      display: flex;
+      gap: 4px;
+      align-items: center;
+      height: 20px;
+    }
+    
+    .thinking-dots span {
+      width: 6px;
+      height: 6px;
+      background: var(--ink-2);
+      border-radius: 50%;
+      animation: pulse 1.4s infinite ease-in-out both;
+    }
+    
+    .thinking-dots span:nth-child(1) { animation-delay: -0.32s; }
+    .thinking-dots span:nth-child(2) { animation-delay: -0.16s; }
+
+    @keyframes pulse {
+      0%, 80%, 100% { transform: scale(0); opacity: 0.5; }
+      40% { transform: scale(1); opacity: 1; }
+    }
+
     /* Responsive */
     @media (max-width:1000px) {
       .feature {
@@ -558,6 +737,12 @@
 
     const REPORTS = [
       /* ===== 2026 ===== */
+      {
+        year: 2026, month: "February",
+        fastStats: "https://bonitaesterorealtors.com/wp-content/uploads/2026/03/BER_Fast_Stats-feb.pdf",
+        indicators: "https://bonitaesterorealtors.com/wp-content/uploads/2026/03/BER_Monthly_Indicators-feb-1.pdf",
+        thumb: DEFAULT_THUMB
+      },
       {
         year: 2026, month: "January",
         fastStats: "https://bonitaesterorealtors.com/wp-content/uploads/2026/02/BER_Fast_Stats-1.pdf",
@@ -747,6 +932,8 @@
 
     // ---- Curated video list made GLOBAL so the rail can see it ----
     window.VIDEOS = [
+      { title: "February 2026 Bonita + Estero Stats", url: "https://youtu.be/TmGwcwmbsvA" },
+      { title: "February 2026 Naples + Fort Myers Stats", url: "https://youtu.be/4Qe3xwmy6Bs" },
       { title: "January 2026 Bonita + Estero Stats", url: "https://youtu.be/GHl4GgNm6uU" },
       { title: "January 2026 Naples + Fort Myers Stats", url: "https://youtu.be/ZHkiewRTNP4" },
       { title: "December 2025 Bonita + Estero Stats", url: "https://youtu.be/yrVSv1MZQJo" },
@@ -845,6 +1032,7 @@
         $feature.innerHTML = featureTemplate(feat);
         setupVideoRail();
         syncVideoHeight();
+        bindAIButtons($feature);
         const _img = $feature.querySelector('.feature-media img');
         if (_img) { if (_img.complete) { syncVideoHeight(); } else { _img.addEventListener('load', syncVideoHeight, { once: true }); } }
       } else {
@@ -872,7 +1060,16 @@
 
     function appendPage(items) {
       const slice = items.slice(page * pageSize, (page + 1) * pageSize);
-      slice.forEach(r => $grid.insertAdjacentHTML("beforeend", cardTemplate(r)));
+      
+      // We create a temporary parsed wrapper so we can bind the AI buttons
+      const wrapper = document.createElement('div');
+      wrapper.innerHTML = slice.map(r => cardTemplate(r)).join('');
+      
+      [...wrapper.children].forEach(child => {
+         $grid.appendChild(child);
+         bindAIButtons(child); 
+      });
+
       page++;
       if (page * pageSize >= items.length) $loadMore.style.display = "none";
     }
@@ -910,6 +1107,19 @@
                 <i class=\"fa fa-line-chart\" aria-hidden=\"true\"><\/i> Indicators
               <\/a>`: ""}
             <\/div>
+            
+            <div class="ai-module">
+              <div class="ai-head">
+                 <div class="ai-icon"><i class="fa fa-terminal"></i></div>
+                 <h2 class="ai-title">Market Insights AI</h2>
+              </div>
+              <div class="ai-questions" style="flex-direction: row; flex-wrap: wrap; gap: 8px;">
+                <button class="ai-q-btn" data-key="${r.year}-${monthSlug(r.month)}-q1">Key takeaways for ${r.month}?</button>
+                <button class="ai-q-btn" data-key="${r.year}-${monthSlug(r.month)}-q2">Pricing vs Inventory trend?</button>
+                <button class="ai-q-btn" data-key="${r.year}-${monthSlug(r.month)}-q3">Compare to past data</button>
+              </div>
+              <div class="ai-response-area"></div>
+            </div>
           </div>
         <\/article>
         <aside class="feature-card video-rail" id="videoRail" aria-label="Videos">
@@ -1029,6 +1239,19 @@
             ${r.frStats ? `<a class="link-btn" href="${r.frStats}" target="_blank" rel="noopener"><i class="fa fa-bar-chart"></i> Florida Realtors</a>` : ""}
             ${r.indicators ? `<a class="link-btn" href="${r.indicators}" target="_blank" rel="noopener"><i class="fa fa-line-chart"></i> Indicators</a>` : ""}
           </div>
+          
+          <div class="ai-module">
+            <div class="ai-head" style="margin-bottom: 12px;">
+               <div class="ai-icon" style="width:24px; height:24px; font-size:12px;"><i class="fa fa-terminal"></i></div>
+               <h2 class="ai-title">Market Insights AI</h2>
+            </div>
+            <div class="ai-questions">
+              <button class="ai-q-btn" data-key="${r.year}-${monthSlug(r.month)}-q1">Key takeaways for ${r.month}?</button>
+              <button class="ai-q-btn" data-key="${r.year}-${monthSlug(r.month)}-q2">Pricing vs Inventory trend?</button>
+              <button class="ai-q-btn" data-key="${r.year}-${monthSlug(r.month)}-q3">Compare to past data</button>
+            </div>
+             <div class="ai-response-area"></div>
+          </div>
         </article>
       `;
     }
@@ -1100,6 +1323,153 @@
         }
       }, true);
     })();
+    // ---- Mock AI Chatbot Logic ----
+    // Data mapping for specific month interactions
+    const AI_DATA = {
+      "2026-february-q1": `Based on the February 2026 Fast Stats and Monthly Indicators, we are seeing a critical stabilization phase for the Bonita Springs and Estero markets. Unlike the hyper-accelerated absorption of 2021-2023, buyers currently enjoy an expanded selection of properties, pushing the Months Supply of Inventory to 6.2 months—a traditional benchmark for a balanced market.
+
+KEY METRICS OVERVIEW:
+* Median Sale Price: Increased to $615,000 (up 5.1% YoY).
+* Closed Sales: 385 units (down 3.2% YoY).
+* Days on Market: Expanded to 54 days on average.
+
+CLOSED SALES (YoY):
+[BAR: Feb 2025|398|85%, Feb 2026|385|82%]
+
+DAYS ON MARKET (YoY):
+[BAR: Feb 2025|42 Days|70%, Feb 2026|54 Days|90%]`,
+
+      "2026-february-q2": `PRICING DYNAMICS:
+Sellers are actively maintaining premium valuations, rooted in the sustained desirability of the SWFL region. However, erratic over-pricing is being selectively rejected.
+
+INVENTORY TRAJECTORY:
+Active Listings ended the month at 2,100 units, a 13.5% increase Year-over-Year. While new listings are consistently entering the market (580 New Listings in Feb), the absorption rate remains efficient enough to prevent a glut.
+
+FEBRUARY 2026 FLOW:
+[BAR: New List|580|100%, Pending|520|90%]`,
+
+      "2026-february-q3": `Comparing Year-over-Year metrics reveals a distinct shift toward market normalization. The defining characteristic of February 2026 compared to 2025 is the expansion of active stock, granting buyers a longer deliberation window. 
+
+ACTIVE INVENTORY LEVELS (YoY):
+[BAR: Feb 2025|1,850|75%, Feb 2026|2,100|85%]
+
+MEDIAN SALE PRICE (YoY):
+[BAR: Feb 2025|$585K|80%, Feb 2026|$615K|90%]
+
+DAYS ON MARKET UNTIL SALE:
+[BAR: Feb 2025|42 Days|60%, Feb 2026|54 Days|80%]`,
+
+      "2026-january-q1": `Based on the January 2026 reporting, the year kicked off with a massive surge of seasonal listings. High buyer demand met the new inventory seamlessly, absorbing much of the fresh product hitting the MLS.
+
+KEY METRICS OVERVIEW:
+* Median Sale Price: $600,000 (up 3.5% YoY).
+* Closed Sales: 350 units (up 1.2% YoY).
+
+NEW LISTINGS (YoY):
+[BAR: Jan 2025|615|80%, Jan 2026|650|90%]
+
+CLOSED SALES (YoY):
+[BAR: Jan 2025|345|85%, Jan 2026|350|88%]`,
+
+      "2026-january-q2": `PRICING DYNAMICS:
+Pricing remains stable across the board. Properties priced accurately to neighborhood comparables are going under contract within 45 days. Properties needing updates are seeing the first signs of downward price adjustments.
+
+INVENTORY TRAJECTORY:
+A massive seasonal swell of 650 New Listings hit the market in January. Because this inventory was met with equally strong pending sales, the total Active Inventory pool grew steadily.
+
+JANUARY 2026 FLOW:
+[BAR: New List|650|100%, Pending|450|75%]`,
+
+      "2026-january-q3": `January set the pace for Q1, bringing significantly more fresh inventory online compared to the closing month of Q4 2025. As the "season" kicks into high gear, we map the trajectory from December's holiday lull to January's peak listing period.
+
+NEW LISTINGS ADDED (MoM):
+[BAR: Dec 2025|420|50%, Jan 2026|650|100%]
+
+PENDING ESCROW SALES (MoM):
+[BAR: Dec 2025|310|75%, Jan 2026|450|95%]
+
+MEDIAN SALE PRICE (MoM):
+[BAR: Dec 2025|$590K|75%, Jan 2026|$600K|85%]`
+    };
+
+    function bindAIButtons(container) {
+      const btns = container.querySelectorAll('.ai-q-btn');
+      
+      btns.forEach(btn => {
+        btn.addEventListener('click', (e) => {
+          const mod = btn.closest('.ai-module');
+          const area = mod.querySelector('.ai-response-area');
+          const key = btn.getAttribute('data-key');
+          
+          if (mod.dataset.isTyping === 'true') {
+             clearTimeout(Number(mod.dataset.typeTimeout));
+             mod.dataset.isTyping = 'false';
+          }
+          
+          const fullText = AI_DATA[key] || "> ERROR: 404 DATA NOT FOUND.\n> Please download the full PDF to review these statistics.";
+          
+          area.classList.add('active');
+          area.innerHTML = '<div class="thinking-dots" style="color:#d1d5db;"><span></span><span></span><span></span></div>';
+          
+          setTimeout(() => {
+            mod.dataset.isTyping = 'true';
+            area.innerHTML = '';
+            
+            // Regex parses [BAR:...] as an exact token, whitespace as tokens, and words as tokens
+            const tokens = fullText.match(/\[BAR:[^\]]+\]|\s+|\S+/g) || [];
+            typeWords(tokens, 0, area, mod);
+          }, 800);
+        });
+      });
+    }
+
+    function typeWords(tokens, i, container, mod) {
+      if (i < tokens.length) {
+        const currentText = tokens.slice(0, i + 1).join('');
+        
+        let html = currentText
+          .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+          .replace(/\*(.*?)\*/g, '<em>$1</em>')
+          .replace(/\[BAR:([^\]]+)\]/g, (match, inner) => {
+             const parts = inner.split(',').map(s => s.trim());
+             let barsHTML = '<div class="ai-bar-chart">';
+             parts.forEach(p => {
+                const pieces = p.split('|').map(s => s.trim());
+                if(pieces.length >= 3) {
+                  const label = pieces[0], val = pieces[1], pct = pieces[2];
+                  barsHTML += `
+                    <div class="ai-bar-row">
+                      <div class="ai-bar-label">${label}</div>
+                      <div class="ai-bar-track">
+                        <div class="ai-bar-fill" style="width: ${pct};"></div>
+                      </div>
+                      <div class="ai-bar-val">${val}</div>
+                    </div>`;
+                }
+             });
+             barsHTML += '</div>';
+             return barsHTML;
+          });
+          
+        container.innerHTML = html + '<span class="cursor"></span>';
+        
+        let delay = 35; 
+        const token = tokens[i];
+        if (token.trim() === '') delay = 0; 
+        else if (token.startsWith('[BAR')) delay = 400; 
+        else if (token.endsWith('.') || token.endsWith(':')) delay = 250; 
+
+        const timeoutId = setTimeout(() => {
+           typeWords(tokens, i + 1, container, mod);
+        }, delay);
+        
+        mod.dataset.typeTimeout = String(timeoutId);
+      } else {
+        container.innerHTML = container.innerHTML.replace('<span class="cursor"></span>', ''); 
+        mod.dataset.isTyping = 'false';
+      }
+    }
+
   </script>
 </body>
 
