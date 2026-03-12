@@ -1,1570 +1,843 @@
-<html lang="en" dir="ltr">
-  <head>
-    <meta charset="utf-8">
-    <title>Bonita Springs-Estero Realtors</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Lobster&display=swap" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap" rel="stylesheet">
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Cabin:ital@1&display=swap" rel="stylesheet">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Fascinate&display=swap" rel="stylesheet">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Oswald&display=swap" rel="stylesheet">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Righteous&display=swap" rel="stylesheet">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet"/>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Roboto&display=swap" rel="stylesheet">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400..700&family=Poppins&family=Ubuntu:wght@500&display=swap" rel="stylesheet">
+<!DOCTYPE html>
+<html lang="en">
 
-  </head>
-  <body>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>B.E.R. Home Foundation — Members Helping Members</title>
+  <meta name="description" content="The B.E.R. Home Foundation supports Bonita Springs-Estero REALTORS® members and their families during times of crisis through confidential financial assistance." />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
 
-    <style media="screen">
-  a {
-    color: black;
-  }
-  p {
-    margin: 0;
-  }
-
-  .statsplus {
-    max-width: 1300px;
-    margin: auto !important;
-  }
-
-  .carousel {
-  position: relative;
-  width: 100%;
-  max-width: 80%;
-  margin: auto;
-  overflow: hidden;
-}
-
-.show {
-  display: flex;
-}
-
-.carousel .sponsor-group {
-  display: none;
-  text-align: center;
-}
-
-.carousel .sponsor-group.show {
-  display: flex !important; /* Display the active category as a flex container */
-    flex-direction: row; /* Align children in a row */
-    justify-content: space-around; /* Adjusts the spacing between items */
-    align-items: center; /* Aligns items vertically */
-    margin: auto;
-}
-
-.carousel img {
-  margin: 10px;
-  width: 100px; /* Set a fixed width */
-  height: auto; /* Set a fixed height */
-  max-height: 140px;
-  object-fit: contain;
-  opacity: 0;
-  transition: opacity 1s ease-in-out;
-  z-index: -99999;
-}
-
-.carousel p {
-  font-family: "Poppins", sans-serif;
-  font-weight: 400;
-  font-style: normal;
-  font-size: 3rem;
-}
-
-.carousel img.show {
-  opacity: 1;
-  width: 95%;
-  object-fit: contain;
-}
-
-  #head-background {
-    z-index: 997;
-    margin: -134px 0 -40px 0;
-    box-shadow: black 0px 0px 14px;
-    width: 101%;
-    position: fixed;
-    height: 130px;
-    background-color: white;
-  }
-
-  .important-links {
-    background-image: url("https://www.bonitaesterorealtors.com/wp-content/uploads/2022/10/Untitled-design-10.png");
-    background-size: cover;
-    margin: 60px 0 100px 0;
-  }
-  .contain-head {
-    width: 100%;
-    margin: -96px 0;
-    background-color: white;
-    box-shadow: 0px -30px 67px grey;
-  }
-
-  #toprow {
-    margin: 0px 5% 0px 5% !important;
-  }
-
-  #welcome-text {
-    font-size: 16px;
-  }
-
-  #welcome-head {
-    font-family: Oswald, sans-serif;
-    font-size: 46px
-  }
-
-  #MLS {
-    background-image: url("https://www.bonitaesterorealtors.com/wp-content/uploads/2022/10/backorange.png");
-    margin: -60px 0;
-    height: 250px;
-    width: auto;
-    background-size: cover;
-    border-radius: 15px 0px 0px 15px;
-  }
-
-  #MLS:hover {
-    font-size: 50px;
-    cursor: pointer;
-  }
-
-  #about:hover {
-    cursor: pointer;
-  }
-
-  #MP {
-    background-color: #ffdfa7;
-    margin: -60px 0;
-    height: 250px;
-    width: auto;
-    background-image: url("https://www.bonitaesterorealtors.com/wp-content/uploads/2022/10/backoranges.png");
-    background-size: cover;
-  }
-  #MP:hover {
-    font-size: 50px;
-    cursor: pointer;
-  }
-
-  #Events {
-    background-color: #ffce75;
-    margin: -60px 0;
-    height: 250px;
-    width: auto;
-    background-image: url("https://www.bonitaesterorealtors.com/wp-content/uploads/2022/10/backoranges-1.png");
-    background-size: cover;
-  }
-  #Events:hover {
-    font-size: 50px;
-    cursor: pointer;
-  }
-
-  #Join {
-    background-color: #fff3dd;
-    margin: -60px 0;
-    color: #ffc235;
-    height: 250px;
-    width: auto;
-    border-radius: 0px 15px 15px 0px;
-    background-image: url("https://www.bonitaesterorealtors.com/wp-content/uploads/2022/10/backoranges-2.png");
-    background-size: cover;
-  }
-  #Join:hover {
-    font-size: 50px;
-    cursor: pointer;
-  }
-
-  .res-img {
-    width: 80%;
-    height: auto;
-    border-radius: 15px 15px 15px 15px;
-    margin: auto;
-  }
-
-  .res-img:hover {
-  }
-
-  #diamond {
-    width: 95%;
-  }
-
-  #platinum {
-    width: 90%;
-  }
-
-  #gold {
-    width: 50%;
-  }
-
-  #silver {
-    width: 50%;
-  }
-
-  #bronze {
-    width: 90%;
-  }
-
-  #Jointext {
-    color: #ffc235;
-    border-top: #ffc235 solid 2px;
-    border-bottom: #ffc235 solid 2px;
-    text-align: center;
-    font-size: 40px;
-    font-family: 'Roboto', sans-serif;
-    padding: 10px 0 10px 0;
-    line-height: 4rem;
-  }
-
-  #vid1 {
-    width: 100%;
-    max-height: 650px;
-    object-fit: cover;
-    margin: 0 0 -21px 0;
-  }
-
-  #vid2 {
-    width: 100%;
-    max-height: 650px;
-    object-fit: cover;
-    margin: 0 0 -21px 0;
-  }
-
-  #vid3 {
-    width: 100%;
-    max-height: 650px;
-    object-fit: cover;
-    margin: 0 0 -21px 0;
-  }
-
-  #vid4 {
-    width: 100%;
-    max-height: 650px;
-    object-fit: cover;
-    margin: 0 0 -21px 0;
-  }
-
-  #vid5 {
-    width: 100%;
-    max-height: 650px;
-    object-fit: cover;
-    margin: 0 0 -21px 0;
-  }
-
-  .welcome {
-    max-width: 1300px;
-    border-radius: 20px;
-    background-color: teal;
-    display: flex;
-    text-align: center;
-    color: white;
-    padding: 50px 50px 50px 49px;
-    margin: -225px auto auto auto;
-    display: block;
-  }
-
-  .col-sm {
-    margin: auto;
-  }
-
-  .sponsor-label {
-    max-width: 300px !important;
-    object-fit: contain;
-  }
-
-  .box {
-
-  }
-  .col-sm-6 {
-    margin: auto;
-  }
-  .col-sm h3 {
-    font-size: 20px;
-  }
-
-  .col-sm-3 {
-    height: 300px;
-  }
-
-  .vc_column_container>.vc_column-inner {
-    padding-left: 0;
-    padding-right: 0;
-  }
-  #forewarn {
-    object-fit: contain;
-    margin: auto auto auto auto;
-  }
-  #MUA {
-    object-fit: contain;
-    margin: auto auto auto auto;
-  }
-  #img1 {
-    max-height: 500px;
-    margin: auto;
-  }
-  h4 {
-    font-size: 28px;
-    font-weight: 700;
-  }
-  .article-img {
-    object-fit: cover;
-    width: 430px;
-    height: 260px;
-  }
-
-  #outside-contain {
-    margin: 0 3% auto 3%;
-  }
-
-  #bottom-contain {
-    background-color: white;
-  }
-
-  .video-contain {
-    width: 100%;
-    background-color: grey;
-    object-fit: contain;
-    margin: 260px 0 0 0;
-    position: relative;
-  }
-  #display1 {
-    max-height: 600px;
-    display: flex;
-    margin: auto;
-  }
-  #display2 {
-    max-height: 600px;
-    display: flex;
-    margin: auto;
-  }
-  #display3 {
-    max-height: 600px;
-    display: flex;
-    margin: auto;
-  }
-  #display4 {
-    max-height: 600px;
-    display: flex;
-    margin: auto;
-  }
-  #display5 {
-    max-height: 600px;
-    display: flex;
-    margin: auto;
-  }
-  .col-sm-5 {
-    padding-left: 0;
-    padding-right: 0;
-  }
-  #logo {
-    width: 130px;
-    margin: 10px auto 10px auto;
-  }
-  #MLSlogo {
-    width: 90%;
-    display: flex;
-    margin: 20px auto;
-  }
-  #MPlogo {
-    width: 47%;
-    display: flex;
-    margin: 15px auto;
-  }
-  @keyframes growlogo2 {
-    0% {
-      width: 200px;
+  <style>
+    /* ─── Design Tokens ─── */
+    :root {
+      --ink: #0f172a;
+      --muted: #64748b;
+      --accent: #0891b2;
+      --accent-warm: #06b6d4;
+      --accent-soft: #ecfeff;
+      --signal-yellow: #facc15;
+      --signal-green: #22c55e;
+      --border: #e2e8f0;
+      --bg: #f8fafc;
+      --panel-bg: #ffffff;
+      --radius-lg: 14px;
+      --radius-md: 10px;
+      --shadow-soft: 0 1px 3px rgba(0,0,0,0.06), 0 8px 24px rgba(0,0,0,0.06);
+      --font-grotesk: 'Inter', system-ui, -apple-system, sans-serif;
+      --font-mono: 'JetBrains Mono', 'SF Mono', 'Fira Code', monospace;
     }
-    100% {
-      width: 210px;
-    }
-  }
 
-  @keyframes growlogo {
-    0% {
-      width: 90%;
-    }
-    100% {
-      width: 100%;
-    }
-  }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-  @keyframes growlogo3 {
-    0% {
-      width: 47%;
+    body {
+      font-family: var(--font-grotesk);
+      color: var(--ink);
+      background: var(--bg);
+      -webkit-font-smoothing: antialiased;
+      line-height: 1.6;
     }
-    100% {
-      width: 55%;
-    }
-  }
 
-  #MLSlogo:hover {
-    animation: growlogo linear .5s;
-    width: 100%;
-    opacity: .9;
-  }
-  #MPlogo:hover {
-    animation: growlogo3 linear .5s;
-    width: 55%;
-    opacity: .9;
-  }
-  #heading {
-    max-width: 1100px;
-    margin: -1px auto !important;
-    width: 100%;
-    z-index: 998;
-    background-color: white;
-    display: flex;
-  }
-  #forewarn-back {
-    background-color: white;
-    width: 430px;
-    margin-right: 14px;
-  }
-  .subtitle {
-    font-size: 26px;
-    margin: 0;
-  }
-  .resrow {
-    text-align: center;
-    font-size: 44px;
-    color: #008080;
-    font-family: 'Oswald', sans-serif;
-    margin: 40px auto;
-  }
-  #socials {
-    margin: 5px auto;
-    justify-content: center;
-  }
-  .col-sm-7 h4 {
-    margin: 10px auto 0 auto;
-  }
-  .col-sm-7 p {
-    font-size: 12px;
-  }
-  .toplinks {
-    color: white;
-  }
-  .toplinks:hover {
-    textdecoration: underline;
-    color: #0ca7a4;
-  }
-  .media-container {
-    max-width: 1185px;
-    margin: auto;
-  }
-  .head-image {
-    width: 100%;
-  }
-  .row {
-    margin: 0;
-    display: flex;
-  }
+    /* ─── Utility ─── */
+    .mono { font-family: var(--font-mono); }
+    .uppercase { text-transform: uppercase; }
+    .tracking-wide { letter-spacing: 0.08em; }
+    .tracking-tight { letter-spacing: -0.02em; }
 
-  #site-header-sticky-wrapper.is-sticky #site-header-inner {
-    display: none !important;
-    z-index: 999;
-}
-  .news-row {
-    background-color: #f2f2f2;
-    margin: 10px 5% 10px 5% !important;
-    box-shadow: 0px 20px 29px -27px grey;
-  }
-  #abovehead {
-    background-image: linear-gradient( to right, #77d9d9, #02aae1);
-    z-index: 999;
-    position: fixed;
-    width: 101%;
-    margin: -174px 0;
-  }
-  .btn {
-    border-radius: 40px;
-  }
-  #toptext {
-    color: white;
-    text-align: center;
-  }
-  .m-1:hover {
-    cusor: pointer;
-    background-color: #0ca7a4 !important;
-  }
-  .italics {
-    font-style: italic;
-  }
-  #biglinks {
-    max-width: 1100px;
-    margin: auto !important;
-    height: 350px;
-  }
-  h1 {
-    font-size: 50px;
-    margin: 10px 5% auto 5%;
-    font-family: 'Righteous', cursive;
-    color: white;
-  }
-  body {
-    width: 100%;
-    align-items: center;
-  }
-  .col-sm-2 h3 {
-    margin: 72px auto;
-    text-align: center;
-    font-size: 18px;
-  }
-  .col-sm-2 h3:hover {
-    cursor: pointer;
-    text-decoration: underline;
-  }
-  .col-sm-1 h3 {
-    margin: 60px auto;
-    text-align: center;
-  }
+    /* ─── Main container ─── */
+    .page-wrap {
+      max-width: 1280px;
+      margin: 0 auto;
+      padding: 0 1.25rem 4rem;
+    }
 
-  #MLStext {
-    border-top: white solid 2px;
-    border-bottom: white solid 2px;
-    text-align: center;
-    color: white;
-    font-size: 40px;
-    font-family: 'Roboto', sans-serif;
-    padding: 10px 0 10px 0;
-    line-height: 4rem;
-  }
-
-  #Eventtext {
-    border-top: white solid 2px;
-    border-bottom: white solid 2px;
-    text-align: center;
-    color: white;
-    font-size: 30px;
-    font-family: 'Roboto', sans-serif;
-    padding: 10px 0 10px 0;
-    line-height: 4rem;
-  }
-
-  #text {
-    padding: 0;
-  }
-  #about-hover {
-    display: none;
-    position: absolute;
-    width: 150px;
-    background-color: white;
-    padding: 0px 10px 10px 10px;
-    margin: -10px 0 0 0px;
-    border-top: 1rem solid lightsteelblue;
-    box-shadow: rgb(0 0 0 / 15%) 0px 1px 20px;
-    z-index: 999;
-  }
-  #about-hover p {
-    font-size: 14px;
-    margin: 15px 0 5px 0;
-    font-weight: 500;
-  }
-  #resources-hover {
-    display: none;
-    position: absolute;
-    width: 200px;
-    background-color: white;
-    padding: 15px 10px 10px 10px;
-    margin: -10px 0 0 0px;
-    border-top: 1rem solid lightsteelblue;
-    box-shadow: rgb(0 0 0 / 15%) 0px 1px 20px;
-    z-index: 999;
-  }
-
-  #resources:hover {
-    cursor: pointer;
-  }
-
-  #newsandevents:hover {
-    cursor: pointer;
-  }
-
-  #membership:hover {
-    cursor: pointer;
-  }
-
-  #education:hover {
-    cursor: pointer;
-  }
-
-  .res-head {
-    text-align: center;
-    font-size: 16px;
-  }
-
-  #membership-tools:hover {
-    cursor: pointer;
-  }
-
-  #resources-hover p {
-    font-size: 14px;
-    margin: 15px 0 5px 0;
-    font-weight: 500;
-  }
-  .br-mobile {
-    display: none;
-  }
-
-  #mainSection {
-    margin: 270px auto 0 auto;
-    padding-bottom: 30px;
-  }
-
-  #membership-hover {
-    display: none;
-    position: absolute;
-    width: 120px;
-    background-color: white;
-    padding: 20px 10px 10px 10px;
-    margin: -10px 11px 0 0px;
-    border-top: 1rem solid lightsteelblue;
-    box-shadow: rgb(0 0 0 / 15%) 0px 1px 20px;
-    z-index: 999;
-  }
-  #membership-hover p {
-    font-size: 14px;
-    margin: 15px 0 5px 0;
-    font-weight: 500;
-  }
-
-  #textArea {
-    display: flex;
-    margin: auto;
-    justify-content: center;
-    align-items: center;
-  }
-
-  #news-hover {
-    display: none;
-    position: absolute;
-    width: 200px;
-    background-color: white;
-    padding: 0 10px 10px 10px;
-    margin: -10px 0 0 0px;
-    border-top: 1rem solid lightsteelblue;
-    box-shadow: rgb(0 0 0 / 15%) 0px 1px 20px;
-  }
-  #membershiptools-hover {
-    display: none;
-    position: absolute;
-    width: 230px;
-    background-color: white;
-    padding: 20px 10px 10px 10px;
-    margin: -10px 11px 0 0px;
-    border-top: 1rem solid lightsteelblue;
-    box-shadow: rgb(0 0 0 / 15%) 0px 1px 20px;
-    z-index: 999;
-  }
-  #membershiptools-hover p {
-    font-size: 14px;
-    margin: 15px 0 5px 0;
-    font-weight: 500;
-  }
-  #news-hover p {
-    font-size: 14px;
-    margin: 15px 0 5px 0;
-    font-weight: 500;
-  }
-  @media only screen and (max-width: 1200px) {
-    .statsplus {
-      display: grid;
-    }
-    .col-sm-4 {
-      display: inline-flex;
-      margin: auto;
-      width: 100%;
-    }
-    .res-img {
-      width: auto;
-      height: 160px;
-      margin: auto 0 auto 10px;    }
-    .res-img:hover {
-      animation: none;
-    }
-    .col-sm-8 {
-      width: 100%;
-    }
-    }
-  @media only screen and (max-width: 1130px) {
-    #Eventtext {
-      font-size: 24px;
-    }
-    #MLStext {
-      font-size: 30px;
-    }
-    }
-  @media only screen and (max-width: 1145px) {
-    .article-img {
-      width: 370px;
-    }
-    #forwarn-back {
-      width: none;
-      margin: auto;
-    }
-  }
-
-  @media only screen and (max-width: 960px) {
-    .col-sm h3 {
-      font-size: 16px;
-    }
-  }
-  @media only screen and (max-width: 940px) {
-    .col-sm-7 {
-      padding-left: 35px;
-    }
-  }
-  @media only screen and (max-width: 910px) {
-    .col-sm-7 {
-      padding-left: 50px;
-    }
-  }
-  @media only screen and (max-width: 880px) {
-    .col-sm-7 {
-      padding-left: 70px;
-    }
-  }
-  @media only screen and (max-width: 830px) {
-    .col-sm-7 {
-      padding-left: 85px;
-    }
-  }
-
-  @media only screen and (max-width: 768px) {
-    .col-sm-7 {
-      padding-left: 100px;
-    }
-    #mainSection {
-      margin: 88px auto 0 auto;
-    }
-    #BHFphoto {
-      display: none;
-    }
-    #textArea {
-      display: block;
-      margin: auto 5%;
-    }
-    .col-sm- h3 {
-      font-size: 12px;
-    }
-    #heading {
-      display: grid !important;
-      margin: -95px 20px 24px 20px !important;
-    }
-    #logo-contain {
-      display: none;
-    }
-    #head-background {
-      height: 200px;
-      margin: 93px 0 -40px -20px;
-      width: 103%;
-      position: absolute;
-      opacity: 1 !important;
-      display: none;
-    }
-    #resrow {
-      display: none;
-    }
-    #biglinks {
-      display: block;
-      height: 920px;
-    }
-    #about-hover {
-      display: contents;
-    }
-    .video-contain {
-      margin: 293px 0 0 0;
-    }
-    #MLS {
-      border-radius: 15px 15px 0px 0px;
-    }
-    #Join {
-      border-radius: 0px 0px 15px 15px;
-
-    }
-    #abovehead {
-      margin: 87px 0 0 0;
+    /* ─── HERO ─── */
+    .hero {
       position: relative;
-      display: none;
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+      padding: 56px 40px 48px;
+      margin: 1.5rem 0 2.5rem;
+      min-height: 320px;
+      display: flex;
+      align-items: flex-end;
     }
 
-    #content-wrap {
-      padding: 0 !important;
+    .hero::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(circle at 0% 0%, rgba(34,211,238,0.5), transparent 55%),
+        radial-gradient(circle at 100% 100%, rgba(8,145,178,0.4), transparent 55%),
+        linear-gradient(135deg, #0b1724, #042f43);
+      z-index: 0;
     }
 
-  }
-
-  @media only screen and (max-width: 768px) {
-    .col-sm-8 {
-      display: none;
+    /* Grid overlay */
+    .hero .grid-overlay {
+      position: absolute;
+      inset: 0;
+      z-index: 1;
+      background:
+        linear-gradient(90deg, rgba(148,163,184,0.07) 1px, transparent 1px),
+        linear-gradient(0deg, rgba(148,163,184,0.07) 1px, transparent 1px);
+      background-size: 48px 48px;
+      pointer-events: none;
     }
-    .col-sm-4 {
+
+    /* CRT scanlines */
+    .hero .scanlines {
+      position: absolute;
+      inset: 0;
+      z-index: 2;
+      background: repeating-linear-gradient(
+        0deg,
+        transparent, transparent 2px,
+        rgba(0,0,0,0.04) 2px, rgba(0,0,0,0.04) 4px
+      );
+      pointer-events: none;
+    }
+
+    /* Corner brackets */
+    .hero .corner-tl, .hero .corner-tr, .hero .corner-bl, .hero .corner-br {
+      position: absolute;
+      width: 24px;
+      height: 24px;
+      z-index: 3;
+      pointer-events: none;
+    }
+    .hero .corner-tl { top: 12px; left: 12px; border-top: 2px solid rgba(250,204,21,0.5); border-left: 2px solid rgba(250,204,21,0.5); }
+    .hero .corner-tr { top: 12px; right: 12px; border-top: 2px solid rgba(250,204,21,0.5); border-right: 2px solid rgba(250,204,21,0.5); }
+    .hero .corner-bl { bottom: 12px; left: 12px; border-bottom: 2px solid rgba(250,204,21,0.5); border-left: 2px solid rgba(250,204,21,0.5); }
+    .hero .corner-br { bottom: 12px; right: 12px; border-bottom: 2px solid rgba(250,204,21,0.5); border-right: 2px solid rgba(250,204,21,0.5); }
+
+    .hero-content {
+      position: relative;
+      z-index: 4;
+      display: flex;
+      align-items: center;
+      gap: 2rem;
+      width: 100%;
+    }
+
+    /* Logo anchor */
+    .hero-logo-contain {
+      flex-shrink: 0;
+      width: clamp(140px, 20vw, 240px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .hero-logo-contain img {
+      width: 100%;
+      height: auto;
+      object-fit: contain;
+      filter: drop-shadow(0 0 20px rgba(0,0,0,0.3));
+    }
+
+    .hero-text {
+      flex: 1;
+    }
+
+    .hero-micro {
+      font-family: var(--font-mono);
+      font-size: 0.65rem;
+      color: rgba(224,242,254,0.5);
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      margin-bottom: 6px;
+    }
+
+    .hero-title {
+      font-size: clamp(1.6rem, 3.5vw, 2.4rem);
+      font-weight: 800;
+      color: #e0f2fe;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      margin-bottom: 4px;
+    }
+
+    .hero-subtitle {
+      font-size: clamp(0.9rem, 1.8vw, 1.15rem);
+      color: rgba(224,242,254,0.75);
+      font-weight: 500;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+    }
+
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      margin-top: 12px;
+      padding: 4px 12px;
+      border-radius: 999px;
+      background: rgba(250,204,21,0.15);
+      border: 1px solid rgba(250,204,21,0.25);
+      font-family: var(--font-mono);
+      font-size: 0.68rem;
+      color: var(--signal-yellow);
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+    }
+
+    .hero-badge .dot {
+      width: 6px; height: 6px;
+      border-radius: 50%;
+      background: var(--signal-green);
+      animation: pulse-dot 2s ease-in-out infinite;
+    }
+
+    @keyframes pulse-dot {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.3; }
+    }
+
+    @media (max-width: 600px) {
+      .hero {
+        padding: 32px 20px 28px;
+        min-height: 240px;
+        align-items: center;
+      }
+      .hero-index { display: none; }
+    }
+
+    /* ─── Section panels ─── */
+    .panel {
+      background: var(--panel-bg);
+      border-radius: var(--radius-lg);
+      padding: 1.75rem 1.6rem 1.9rem;
+      box-shadow: var(--shadow-soft);
+      border: 1px solid var(--border);
+      position: relative;
+      margin-bottom: 1.75rem;
+    }
+
+    /* Corner registration marks */
+    .panel::before {
+      content: '';
+      position: absolute;
+      top: 6px; left: 6px;
+      width: 10px; height: 10px;
+      border-top: 1px solid rgba(100,116,139,0.2);
+      border-left: 1px solid rgba(100,116,139,0.2);
+      pointer-events: none;
+    }
+    .panel::after {
+      content: '';
+      position: absolute;
+      bottom: 6px; right: 6px;
+      width: 10px; height: 10px;
+      border-bottom: 1px solid rgba(100,116,139,0.2);
+      border-right: 1px solid rgba(100,116,139,0.2);
+      pointer-events: none;
+    }
+
+    @media (max-width: 600px) {
+      .panel {
+        padding: 1.4rem 1.2rem 1.6rem;
+        border-radius: 10px;
+      }
+    }
+
+    /* Section titles */
+    .section-title {
+      font-size: 1.15rem;
+      font-weight: 800;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: var(--ink);
+      margin: 0 0 1.25rem;
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+    }
+
+    .section-title::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: linear-gradient(90deg, var(--border), transparent);
+    }
+
+    .section-title .title-idx {
+      font-family: var(--font-mono);
+      font-size: 0.65rem;
+      opacity: 0.4;
+      letter-spacing: 0.1em;
+    }
+
+    /* ─── Two-column layout ─── */
+    .two-col {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.5rem;
+      align-items: start;
+      margin-bottom: 25px;
+    }
+
+    .two-col > .panel { margin-bottom: 0; }
+
+    @media (max-width: 860px) {
+      .two-col { grid-template-columns: 1fr; }
+    }
+
+    /* ─── Content typography ─── */
+    .panel p {
+      font-size: 0.9rem;
+      color: var(--muted);
+      line-height: 1.7;
+      margin-bottom: 0.75rem;
+    }
+
+    .panel ul {
+      list-style: none;
+      padding: 0;
+      margin: 0.75rem 0;
+    }
+
+    .panel ul li {
+      position: relative;
+      padding-left: 1.2rem;
+      font-size: 0.88rem;
+      color: var(--muted);
+      line-height: 1.7;
+      margin-bottom: 0.4rem;
+    }
+
+    .panel ul li::before {
+      content: '›';
+      position: absolute;
+      left: 0;
+      color: var(--accent);
+      font-weight: 700;
+      font-size: 1.1rem;
+      line-height: 1.5;
+    }
+
+    .highlight-box {
+      margin: 1rem 0;
+      padding: 14px 16px;
+      border-radius: var(--radius-md);
+      background: var(--accent-soft);
+      border-left: 3px solid var(--accent);
+    }
+
+    .highlight-box p {
+      color: #0e7490;
+      font-size: 0.84rem;
+      margin: 0;
+    }
+
+    .stats-row {
+      display: flex;
+      gap: 1rem;
+      margin: 1rem 0;
+      flex-wrap: wrap;
+    }
+
+    .stat-chip {
+      display: flex;
+      flex-direction: column;
+      padding: 10px 16px;
+      border-radius: var(--radius-md);
+      border: 1px solid var(--border);
+      background: #fafafa;
+      flex: 1;
+      min-width: 130px;
+    }
+
+    .stat-chip .stat-val {
+      font-family: var(--font-mono);
+      font-size: 1.3rem;
+      font-weight: 700;
+      color: var(--accent);
+      letter-spacing: -0.02em;
+    }
+
+    .stat-chip .stat-label {
+      font-family: var(--font-mono);
+      font-size: 0.62rem;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      margin-top: 2px;
+    }
+
+    /* ─── CTA Buttons ─── */
+    .cta-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.6rem 1.4rem;
+      border-radius: 999px;
+      border: none;
+      background: var(--accent);
+      color: #fff;
+      font-family: var(--font-grotesk);
+      font-size: 0.88rem;
+      font-weight: 600;
+      text-decoration: none;
+      cursor: pointer;
+      transition: all 140ms ease;
+      box-shadow: 0 4px 14px rgba(8,145,178,0.25);
+    }
+
+    .cta-btn:hover {
+      background: #0e7490;
+      transform: translateY(-1px);
+      box-shadow: 0 6px 18px rgba(8,145,178,0.35);
+    }
+
+    .cta-btn:active { transform: translateY(0); }
+
+    .cta-btn .chevron {
+      font-size: 0.9rem;
+      transition: transform 140ms ease;
+    }
+
+    .cta-btn:hover .chevron { transform: translate(2px, -1px); }
+
+    .cta-btn-outline {
+      background: transparent;
+      color: var(--accent);
+      border: 1.5px solid var(--accent);
+      box-shadow: none;
+    }
+
+    .cta-btn-outline:hover {
+      background: var(--accent-soft);
+      box-shadow: none;
+      transform: translateY(-1px);
+    }
+
+    .cta-row {
+      display: flex;
+      gap: 0.75rem;
+      flex-wrap: wrap;
+      margin-top: 1.25rem;
+    }
+
+    /* ─── Join bar ─── */
+    .join-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1.5rem;
+      flex-wrap: wrap;
+    }
+
+    .join-bar-text h3 {
+      font-size: 1rem;
+      font-weight: 700;
+      margin-bottom: 2px;
+    }
+
+    .join-bar-text p {
+      font-size: 0.82rem;
+      color: var(--muted);
+      margin: 0;
+    }
+
+    /* ─── Directors grid ─── */
+    .directors-section { margin-top: 0.5rem; }
+
+    .directors-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 1.25rem;
+      margin-top: 1.5rem;
+    }
+
+    @media (max-width: 960px) {
+      .directors-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+
+    @media (max-width: 500px) {
+      .directors-grid { grid-template-columns: 1fr; max-width: 340px; margin-left: auto; margin-right: auto; }
+    }
+
+    .director-card {
+      background: var(--panel-bg);
+      border-radius: var(--radius-lg);
+      border: 1px solid var(--border);
+      overflow: hidden;
+      transition: transform 160ms ease, box-shadow 160ms ease, border-color 160ms ease;
+      position: relative;
+    }
+
+    .director-card::before {
+      content: '';
+      position: absolute;
+      top: 5px; left: 5px;
+      width: 8px; height: 8px;
+      border-top: 1px solid rgba(100,116,139,0.18);
+      border-left: 1px solid rgba(100,116,139,0.18);
+      pointer-events: none;
+      z-index: 2;
+    }
+
+    .director-card::after {
+      content: '';
+      position: absolute;
+      bottom: 5px; right: 5px;
+      width: 8px; height: 8px;
+      border-bottom: 1px solid rgba(100,116,139,0.18);
+      border-right: 1px solid rgba(100,116,139,0.18);
+      pointer-events: none;
+      z-index: 2;
+    }
+
+    .director-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 12px 32px rgba(0,0,0,0.1);
+      border-color: var(--accent);
+    }
+
+    .director-photo-wrap {
+      width: 100%;
+      aspect-ratio: 1 / 1;
+      overflow: hidden;
+      background: linear-gradient(135deg, #e2e8f0, #f1f5f9);
+      position: relative;
+    }
+
+    .director-photo-wrap img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
       display: block;
+      transition: transform 400ms ease;
     }
-    .res-img {
-      margin: auto;
-    }
-    #resrow {
-      display: block;
-    }
-  }
-  @media only screen and (max-width: 930px) {
-    .col-sm h3 {
-      font-size: 16px;
-    }
-  }
-    @media only screen and (max-width: 850px) {
-        #heading {
-          margin: auto 20px auto 20px;
-        }
-        .col-sm-2 h3 {
-          font-size: 14px;
-        }
-        #logo {
-          margin: 30px auto 10px auto
-        }
-      }
-  @media only screen and (max-width: 768px) {
-      #exception {
-        background-color: #f2f2f2 !important;
-        margin: auto 5% 30px 5%;
-      }
-      .article-img {
-        width: -webkit-fill-available !important;
-        margin: auto !important;
-        display: flex !important;
-        color: black;
-      }
-      #MUA {
-        width: -webkit-fill-available !important;
-        margin: auto !important;
-        display: flex !important;
-        color: #f2f2f2 !important;
-      }
-      #socials {
-        display: flex;
-        justify-content: center;
-      }
-      .m-1 {
-        width: 43px !important;
-        margin: 0 2px 0 0;
-      }
-      .br-mobile {
-        display: block;
-      }
-      .col-sm-5 {
-        background-color: dimgrey;
-      }
-      .col-sm-7 {
-        padding-left: 15px;
-        padding-right: 15px;
-        margin: auto auto 10px auto;
-        text-align: center;
-      }
-      .btn {
-        width: 100%;
-      }
-      #split {
-        display: inline;
-      }
-      #spacer {
-        height: 300px;
-        width: auto;
-        opacity: 0;
-        background-color: rgba(0,0,0,0);
-        margin: 100px auto;
-        display: relative;
-      }
-      .col-xs-8 {
-        margin: auto auto 15px;
-        width: auto;
-      }
-      .col-sm h3 {
-        text-align: center;
-        font-size: 22px;
-      }
-      .col-sm p {
-        text-align: center;
-      }
-      #MLSlogo {
-        display: none;
-      }
-      #MPlogo {
-        display: none;
-      }
-      #heading {
-        display: flex;
-      }
-      #logo {
-        width: 45%;
-      }
-      #about-hover {
-        display: none;
-        position: fixed;
-        background-color: white;
-        padding: 15px 10px 10px 10px;
-        margin: -10px 0 0 -10px;
-        border-top: 1px lightsteelblue;
-      }
-      #membership-hover {
-        display: none;
-        position: fixed;
-        background-color: white;
-        padding: 15px 10px 10px 10px;
-        margin: -70px 0 0 -15px;
-      }
-      #news-hover {
-        display: none;
-        position: fixed;
-        background-color: white;
-        padding: 15px 10px 10px 10px;
-        margin: -75px 0 0 0px;
-        border-top: 1px lightsteelblue;
-      }
-    }
-    @media only screen and (max-width: 620px) {
-      #logo {
-        display: none;
-      }
-      #logo-contain {
-        display: none;
-      }
-      .col-sm-2 h3 {
-        font-size: 12px;
-      }
-      }
-      @media only screen and (max-width: 510px) {
-        }
-</style>
 
-<body onscroll="scrollFunc()">
-  <!--Heading Row-->
-  <div class="contain-head">
-    <div id="abovehead">
-      <div class="row" id="toprow">
-        <div class="col-sm-6">
-          <p id="toptext"><i class="fa fa-phone"></i> Phone: <a href="tel:+12399926771" class="toplinks">(239) 992-6771</a> | <i class="fa fa-envelope"></i> Email: <a href="mailto:ticketsupport.berealtors@mailticketing.teamswork.app" class="toplinks">ticketsupport.berealtors@mailticketing.teamswork.app</a></p>
+    .director-card:hover .director-photo-wrap img {
+      transform: scale(1.04);
+    }
+
+    /* Scanlines removed per user request */
+
+    .director-info {
+      padding: 14px 14px 16px;
+    }
+
+    .director-role {
+      font-family: var(--font-mono);
+      font-size: 0.62rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--accent);
+      margin-bottom: 3px;
+    }
+
+    .director-name {
+      font-size: 0.95rem;
+      font-weight: 700;
+      color: var(--ink);
+      margin-bottom: 4px;
+      letter-spacing: -0.01em;
+    }
+
+    .director-term {
+      font-family: var(--font-mono);
+      font-size: 0.6rem;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+
+    /* ─── PDF Viewer ─── */
+    #pdfViewer {
+      max-height: 0;
+      overflow: hidden;
+      opacity: 0;
+      transition: opacity 0.5s ease, max-height 0.5s ease;
+      text-align: center;
+      margin-top: 1rem;
+    }
+
+    #pdfViewer.visible {
+      max-height: 1000px;
+      opacity: 1;
+    }
+
+    #pdfViewer iframe {
+      width: 100%;
+      height: 800px;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      opacity: 0;
+      transition: opacity 0.5s ease;
+    }
+
+    #pdfViewer.visible iframe {
+      opacity: 1;
+    }
+
+    /* ─── Footer micro ─── */
+    .page-footer {
+      text-align: center;
+      padding: 2rem 0 1rem;
+      font-family: var(--font-mono);
+      font-size: 0.6rem;
+      color: rgba(100,116,139,0.4);
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+    }
+
+    /* ─── Fade-up animations ─── */
+    @keyframes fade-up {
+      from { opacity: 0; transform: translateY(18px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    @media (prefers-reduced-motion: no-preference) {
+      .anim { opacity: 0; transform: translateY(18px); animation: fade-up 650ms ease-out forwards; }
+      .anim-d1 { animation-delay: 0.08s; }
+      .anim-d2 { animation-delay: 0.16s; }
+      .anim-d3 { animation-delay: 0.24s; }
+      .anim-d4 { animation-delay: 0.32s; }
+      .anim-d5 { animation-delay: 0.40s; }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="page-wrap">
+
+    <!-- ═══════════════ HERO ═══════════════ -->
+    <div class="hero anim">
+      <div class="grid-overlay"></div>
+      <div class="scanlines"></div>
+      <div class="corner-tl"></div>
+      <div class="corner-tr"></div>
+      <div class="corner-bl"></div>
+      <div class="corner-br"></div>
+
+      <div class="hero-content">
+        <div class="hero-logo-contain">
+          <img src="https://www.bonitaesterorealtors.com/wp-content/uploads/2024/02/4b58c437-7692-4036-9201-fc16fd60b379.png" alt="B.E.R. Home Foundation Logo">
         </div>
-        <div class="col-sm-2">
-
-        </div>
-        <div class="col-sm-4" id="socials">
-          <!-- Facebook -->
-                <a
-                  class="btn text-white btn-floating m-1"
-                  style="background-color: #ffffff;"
-                  href="https://www.facebook.com/groups/482719335711288"
-                  role="button" target="_blank"
-                  ><i class="fa fa-facebook"></i></a>
-
-
-                <!-- Youtube -->
-                <a
-                  class="btn text-white btn-floating m-1"
-                  style="background-color: #ffffff;"
-                  href="https://www.youtube.com/c/Bonitaesterorealtors"
-                  role="button" target="_blank"
-                  ><i class="fa fa-youtube"></i
-                ></a>
-
-                <!-- Instagram -->
-                <a
-                  class="btn text-white btn-floating m-1"
-                  style="background-color: #ffffff;" target="_blank"
-                  href="https://www.instagram.com/bonita_estero_realtors/"
-                  role="button"
-                  ><i class="fa fa-instagram"></i
-                ></a>
-
+        <div class="hero-text">
+          <div class="hero-micro">501(c)(3) · EST. BONITA SPRINGS, FL</div>
+          <h1 class="hero-title">B.E.R. Home Foundation</h1>
+          <p class="hero-subtitle">Members Helping Members</p>
+          <div class="hero-badge">
+            <span class="dot"></span>
+            Accepting Assistance Requests
+          </div>
         </div>
       </div>
     </div>
-    <div id="head-background">
-      <div class="row" id="heading">
-        <div class="col-sm">
-          <h3 onmouseover="aboutdrop()" onmouseout="removeabout()" id="about">About <i class="fa fa-caret-down" aria-hidden="true"></i></h3>
-          <div id="about-hover" onmouseover="aboutdrop()" onmouseout="removeabout()">
-            <a href="https://www.bonitaesterorealtors.com/about/"><p>About BER</p></a>
-            <a href="https://www.bonitaesterorealtors.com/2022-sales-excellence-award-winners/"><p>BER Sales Excellence Awards</p></a>
-            <a href="https://www.bonitaesterorealtors.com/2022-bod-and-past-pres/"><p>2024 Board of Directors</p></a>
-            <a href="https://www.bonitaesterorealtors.com/home-foundation/"><p>BER Home Foundation</p></a>
-            <a href="https://www.bonitaesterorealtors.com/leadership-academy-2023/"><p>Leadership Academy</p></a>
-            <a href="http://bonitaspringsesterorealtorsfl.growthzoneapp.com/realtordirectory/Find?term=&advFilter=eyJDdXN0b21GaWVsZFZhbHVlcyI6W10sIkNvdW50cmllcyI6W10sIlN0YXRlcyI6W10sIkNpdGllcyI6W10sIlBvc3RhbENvZGVzIjpbXSwiQ2F0ZWdvcnlWYWx1ZXMiOltdLCJSYWRpdXMiOiIwIn0%3D"><p>Realtor Directory</p></a>
-            <a href="http://bonitaspringsesterorealtorsfl.growthzoneapp.com/brokerdirectory/Find?term=&advFilter=eyJDdXN0b21GaWVsZFZhbHVlcyI6W10sIkNvdW50cmllcyI6W10sIlN0YXRlcyI6W10sIkNpdGllcyI6W10sIlBvc3RhbENvZGVzIjpbXSwiQ2F0ZWdvcnlWYWx1ZXMiOltdLCJSYWRpdXMiOiIwIn0%3D"><p>Broker Directory</p></a>
-            <a href="https://www.bonitaesterorealtors.com/simplyrets-listings/"><p>Property Search</p></a>
-            <a href="https://members.bonitaesterorealtors.com/affiliatedirectory"><p>Affiliate Directory</p></a>
-          </div>
-        </div>
-        <script type="text/javascript">
-          var about = document.getElementById("about-hover");
-          function aboutdrop() {
-            if (screen.width >= 769) {
-              about.style.display="inline";
 
-            }
-            else if (screen.width < 769) {
-            about.style.display="contents";
-          }
-          }
-          function removeabout() {
-            about.style.display="none";
-          }
-        </script>
-        <div class="col-sm">
-          <h3  onmouseover="memdrop()" onmouseout="removemem()" id="membership">Membership <i class="fa fa-caret-down" aria-hidden="true"></i></h3>
-          <div id="membership-hover" onmouseover="memdrop()" onmouseout="removemem()">
-            <a href="https://www.bonitaesterorealtors.com/join-bser/"><p>Join BER</p></a>
-            <a href="https://bonitaspringsesterorealtorsfl.growthzoneapp.com/ap/Form/Fill/rJD9lS4P"><p>Join A Commitee</p></a>
-            <a href="https://bonitaspringsesterorealtorsfl.growthzoneapp.com/realtorstore/"><p>Store</p></a>
-          </div>
-        </div>
-        <script type="text/javascript">
-          var membership = document.getElementById("membership-hover");
-          function memdrop() {
-            if (screen.width >= 769) {
-              membership.style.display="inline";
+    <!-- ═══════════════ ABOUT + ASSISTANCE ═══════════════ -->
+    <div class="two-col">
 
-            }
-            else if (screen.width < 769) {
-            membership.style.display="contents";
-            }
-          }
-          function removemem() {
-            membership.style.display="none";
-          }
-        </script>
-        <div class="col-sm">
-          <h3 onmouseover="newsdrop()" onmouseout="removenews()" id="newsandevents">News & Events <i class="fa fa-caret-down" aria-hidden="true"></i></h3>
-          <div onmouseover="newsdrop()" onmouseout="removenews()" id="news-hover">
-            <a href="https://members.bonitaesterorealtors.com/bercalendar"><p>Event Calendar</p></a>
-            <a href="https://www.bonitaesterorealtors.com/2022-realtor-review-page-q1/"><p>The Realtor Review Magazine</p></a>
-            <a href="https://www.bonitaesterorealtors.com/ber-news-home/"><p>BER News</p></a>
+      <!-- Mission -->
+      <div class="panel anim anim-d1">
+        <h2 class="section-title"><span class="title-idx">01</span> Mission</h2>
+        <p>The B.E.R. Home Foundation is a 501(c)(3) charitable organization within the Bonita Springs-Estero REALTORS®, Inc. The foundation is composed of three distinct arms:</p>
+        <ul>
+          <li>Student scholarships for those pursuing real estate as a career</li>
+          <li>Members in crisis</li>
+          <li>Community outreach</li>
+        </ul>
+
+        <div class="highlight-box">
+          <p><strong>Hurricane Ian Response:</strong> Following Hurricane Ian in 2022, the Foundation provided rapid-response financial aid to displaced members, coordinating with the Florida REALTORS® Disaster Relief Fund and NAR Relief Foundation to maximize support for those impacted.</p>
+        </div>
+
+        <div class="stats-row">
+          <div class="stat-chip">
+            <span class="stat-val">$3,000</span>
+            <span class="stat-label">Max / 12 Months</span>
+          </div>
+          <div class="stat-chip">
+            <span class="stat-val">12 mo</span>
+            <span class="stat-label">Min Membership</span>
+          </div>
+          <div class="stat-chip">
+            <span class="stat-val">100%</span>
+            <span class="stat-label">Confidential</span>
           </div>
         </div>
 
-        <div class="col-sm" id="logo-contain">
-            <a href="https://www.bonitaesterorealtors.com/"><img id="logo" src="https://www.bonitaesterorealtors.com/wp-content/uploads/2022/10/BonitaSpringsEsteroRealtors_Logo_Vertical.png" alt=""></a>
-        </div>
-
-        <script type="text/javascript">
-          var news = document.getElementById("news-hover");
-          function newsdrop() {
-            if (screen.width >= 769) {
-              news.style.display="inline";
-
-            }
-            else if (screen.width < 769) {
-            news.style.display="contents";
-            }
-          }
-          function removenews() {
-            news.style.display="none";
-          }
-        </script>
-        <div class="col-sm">
-            <a href="https://www.bonitaesterorealtors.com/continuing-education-2/"><h3 id="education">Education</h3></a>
-        </div>
-        <div class="col-sm">
-            <h3 onmouseover="resourcesdrop()" onmouseout="removeresources()" id="resources">Resources <i class="fa fa-caret-down" aria-hidden="true"></i></h3>
-            <div onmouseover="resourcesdrop()" onmouseout="removeresources()" id="resources-hover">
-              <a href="https://www.bonitaesterorealtors.com/mls-test-page/"><p>MLS Tips & Recordings</p></a>
-              <a href="https://www.bonitaesterorealtors.com/rpac/"><p>RPAC</p></a>
-              <a href="https://www.bonitaesterorealtors.com/b-e-a-r-global-network/"><p>Bonita Springs-Estero REALTORS® Global Network</p></a>
-              <a href="https://www.bonitaesterorealtors.com/florida-realtors-2/"><p>Florida Realtors</p></a>
-              <a href="https://www.bonitaesterorealtors.com/market-reports-2/"><p>Market Reports</p></a>
-              <a href="https://www.bonitaesterorealtors.com/important-links-and-contacts/"><p>Important Links & Resources</p></a>
-              <a href="https://www.bonitaesterorealtors.com/homebuyerssellers/"><p>Home Buyers & Sellers</p></a>
-              <a href="https://bonitaspringsesterorealtorsfl.growthzoneapp.com/ap/Form/Fill/r42XZSQP"><p>BER BOX Truck Rental</p></a>
-              <a href="https://bonitaspringsesterorealtorsfl.growthzoneapp.com/ap/Form/Fill/rOxknh2p"><p>Media Room Rental</p></a>
-              <a href="https://www.leegov.com/dhs/Documents/Housing/CDBG%20Application%2003.01.2023.pdf"><p>Lee County Homeownership Assistance</p></a>
-            </div>
-        </div>
-
-        <div class="col-sm">
-            <h3 onmouseover="toolssdrop()" onmouseout="removetools()" id="membership-tools">Membership Tools <i class="fa fa-caret-down" aria-hidden="true"></i></h3>
-            <div onmouseover="toolssdrop()" onmouseout="removetools()" id="membershiptools-hover">
-              <a href="https://www.bonitaesterorealtors.com/mls-membership-information/"><p>MLS</p></a>
-              <a href="https://www.bonitaesterorealtors.com/professional-standards/"><p>Professional Standards</p></a>
-              <a href="https://www.bonitaesterorealtors.com/wp-content/uploads/2022/10/2022-MLS-Model-Rules-and-Regs-1.pdf"><p>MLS Rules & Regulations</p></a>
-              <a href="https://www.bonitaesterorealtors.com/supra-information/"><p>Supra</p></a>
-              <a href="https://www.bonitaesterorealtors.com/document-library/"><p>Floor Plans</p></a>
-              <a href="https://www.bonitaesterorealtors.com/social-media-policy/"><p>Social Media Policy</p></a>
-              <a href="https://bonitasprings.wpengine.com/rpac/"><p>What is RPAC?</p></a>
-            </div>
-        </div>
-
-        <script type="text/javascript">
-          var resources = document.getElementById("resources-hover");
-          function resourcesdrop() {
-            if (screen.width >= 769) {
-              resources.style.display="inline";
-
-            }
-            else if (screen.width < 769) {
-            resources.style.display="contents";
-            }
-                    }
-
-          function removeresources() {
-            resources.style.display="none";
-          }
-
-          var tools = document.getElementById("membershiptools-hover");
-          function toolssdrop() {
-            if (screen.width >= 769) {
-              tools.style.display="inline";
-            }
-            else if (screen.width < 769) {
-            tools.style.display="contents";
-            }
-          }
-          function removetools() {
-            tools.style.display="none";
-          }
-        </script>
-
-        </div>
+        <p style="font-size: 0.8rem; color: var(--muted); margin-top: 0.5rem;">Eligibility requires being a BER member in good standing for at least 12 consecutive months, or an immediate family member of a qualified BER member, who has experienced severe personal financial hardship due to events beyond their control. There is no payback obligation — future donations are welcomed.</p>
       </div>
 
-      <style media="screen">
-        @keyframes loading {
-          0% {
-            width: 0%;
-          }
-          15% {
-            width: 0%;
-          }
-          100% {
-            width: 100%;
-          }
-        }
-          #loading-line1 {
-            position: absolute;
-            height: 10px;
-            z-index: 5;
-            width: 100%;
-            margin: 0 !important;
-            opacity: .3;
-            color: black;
-            border-top: black solid 5px;
-            animation: loading 12s linear;
-          }
-          #loading-line2 {
-            position: absolute;
-            height: 10px;
-            z-index: 5;
-            width: 100%;
-            margin: 0 !important;
-            opacity: .3;
-            color: black;
-            border-top: black solid 5px;
-            animation: loading 32s linear;
-          }
-          #loading-line3 {
-            position: absolute;
-            height: 10px;
-            z-index: 5;
-            width: 100%;
-            margin: 0 !important;
-            opacity: .3;
-            color: black;
-            border-top: black solid 5px;
-            animation: loading 64s linear;
-          }
-         #loading-line4 {
-            position: absolute;
-            height: 10px;
-            z-index: 5;
-            width: 100%;
-            margin: 0 !important;
-            opacity: .3;
-            color: black;
-            border-top: black solid 5px;
-            animation: loading 64s linear;
-          }
-          #loading-line5 {
-            position: absolute;
-            height: 10px;
-            z-index: 5;
-            width: 100%;
-            margin: 0 !important;
-            opacity: .3;
-            color: black;
-            border-top: black solid 5px;
-            animation: loading 64s linear;
-          }
-      </style>
+      <!-- How to Request Assistance -->
+      <div class="panel anim anim-d2">
+        <h2 class="section-title"><span class="title-idx">02</span> Request Assistance</h2>
+        <p>Foundation funds may be requested by contacting any member of the B.E.R. Home Foundation. Each request is handled with complete confidentiality. Requests are examined for approval and funds are distributed in accordance with the Foundation's Bylaws.</p>
 
-      <script type="text/javascript">
+        <p style="font-weight: 600; color: var(--ink); margin-top: 1rem; margin-bottom: 0.5rem;">Eligible Categories:</p>
+        <ul>
+          <li>Emergency Medical Needs</li>
+          <li>Emergency Travel</li>
+          <li>Assistance with Food or Shelter</li>
+          <li>Catastrophic Events (hurricanes, fires, floods)</li>
+          <li>Other severe personal financial hardship</li>
+        </ul>
 
-      function scrollFunc() {
-        if (window.scrollY < 100) {
-          document.getElementById("head-background").style.opacity = "1";
-        }
-        else if (window.scrollY > 100) {
-          document.getElementById("head-background").style.opacity = ".8";
-        }
-      }
-
-      </script>
-
-
-      <style>
-      #colorTop {
-          margin: auto;
-          height: 400px;
-          background-image: linear-gradient(to right, #1f8cb5, #2faae1, #1f8cb5);
-          display: flex;
-          align-items: center;
-      }
-        #cText{
-          align-items: center;
-          width: 700px;
-          color: white;
-        }
-        #cText h2 {
-          position: relative; /* Needed to position the pseudo-element correctly */
-          display: inline-block; /* Ensures the line aligns with the text width */
-        }
-
-        #cText h2::after {
-          content: '';
-          position: absolute;
-          bottom: -10px; /* Adjust this value to position the line below the text */
-          left: 0;
-          width: 100%; /* Line width matches the text width */
-          height: 2px; /* Line thickness */
-          background-color: white; /* Line color */
-          animation: bounce 2s infinite ease-in-out; /* Animation name, duration, loop, timing function */
-        }
-
-        @keyframes bounce {
-          0%, 100% {
-            transform: translateX(0); /* Start and end at the original position */
-          }
-          50% {
-            transform: translateX(20px); /* Adjust this value for the bounce distance */
-          }
-        }
-      </style>
-
-
-    <div id="mainSection">      
-
-      <div id="colorTop" class="row">     
-        <div><img id="BHFphoto" src="https://www.bonitaesterorealtors.com/wp-content/uploads/2024/02/4b58c437-7692-4036-9201-fc16fd60b379.png" style="margin: auto auto auto 80px; max-height: 240px;" alt=""></div>
-        <div id="cText">       
-          <h1>BER Home Foundation</h1>
-          <h2>Members Helping Members</h2>
+        <div class="highlight-box">
+          <p><strong>No payback obligation.</strong> The Foundation exists to lift up our community — recipients are encouraged to pay it forward through future donations when able.</p>
         </div>
+
+        <div class="cta-row">
+          <a href="https://bonitaspringsesterorealtorsfl.growthzoneapp.com/ap/Form/Fill/rklx0FVp" class="cta-btn" target="_blank">
+            Apply for Assistance <span class="chevron">↗</span>
+          </a>
+        </div>
+
+        <p style="font-family: var(--font-mono); font-size: 0.62rem; color: var(--muted); text-transform: uppercase; letter-spacing: 0.1em; margin-top: 1.5rem;">REF::BHF-ASSIST-2026 · CONFIDENTIAL PROCESS</p>
       </div>
-
-
-
-      <style>
-        .container {
-          display: flex;
-          flex-wrap: wrap;
-          margin: auto;
-          justify-content: center; /* Center the items horizontally */
-          align-items: flex-start; /* Align items to start from the top */
-        }
-        
-        .about-section, .assistance-section {
-          padding: 20px;
-          background-image: linear-gradient(to right, #1f8cb5, #2faae1, #1f8cb5);
-          border-radius: 10px; /* Rounded borders */
-          color: white;
-          transition: transform 0.3s ease, box-shadow 0.3s ease; /* Smooth transition for transform and shadow */
-          margin: 10px; /* Ensure some space around sections */
-          box-sizing: border-box; /* Include padding and border in the element's total width and height */
-        }
-        
-        .about-section:hover, .assistance-section:hover {
-          transform: scale(1.03); /* Grow effect on hover */
-          box-shadow: 0 0 10px rgba(0,0,0,0.2); /* Shadow for depth effect */
-        }
-      
-        h2 {
-          margin: 10px 5% auto 5%;
-        }
-        
-        /* Adjusted to keep both sections on the same row */
-        .about-section {
-          flex: 1; /* Allows the section to grow */
-          max-width: 33%; /* Maximum width */
-          padding-bottom: 40px;
-        }
-        
-        .assistance-section {
-          flex: 2; /* Allows the section to take twice the space of the about-section */
-          max-width: 66%; /* Maximum width */
-        }
-        
-        @media (max-width: 768px) {
-          .about-section, .assistance-section {
-            flex: 1 0 100%; /* Takes full width on smaller screens */
-            max-width: 100%;
-          }
-        }
-      </style>
-      
-      <br>
-      <br>
-      <br>
-      <div class="container" style="padding: 0 5% 0 5%;">
-        <div class="about-section">
-            <h2 style="margin: auto; font-family: 'Lobster', cursive; font-size: 5rem;">About</h2>
-            <hr style="border-color: white; margin: 10px auto;">
-            <p>The B.E.R. Home Foundation is an organization within the Bonita Springs-Estero REALTORS®, Inc. The mission of the B.E.R. Home Foundation is:</p>
-            <ul>
-              <li>To accumulate assets from fundraising and donations that can be managed to serve our Members.</li>
-              <li>To recognize our fellow Bonita Springs-Estero REALTORS® members who are in need.</li>
-              <li>To be able to support and fulfill the needs of our Members and their families in a time of crisis.</li>
-            </ul>
-
-        </div>
-        <div class="assistance-section">
-            <h2 style="margin: auto; font-family: 'Lobster', cursive; font-size: 5rem;">How to Request Assistance</h2>
-            <hr style="border-color: white; margin: 10px auto;">
-            <p>Foundation funds may be requested by a phone call to any member of the B.E.R. Home Foundation. Each request is handled with complete confidentiality within the Foundation. Such a request is examined for approval and funds are distributed in accordance with our Bylaws. Funds may be requested for:</p>
-            <ul>
-              <li>Emergency Medical Needs</li>
-              <li>Emergency Travel</li>
-              <li>Assistance with Food or Shelter</li>
-              <li>Catastrophic Events</li>
-              <li>There is no payback obligation. Future donations will be accepted.</li>
-            </ul>
-            <div class="join-section" style="text-align: left; margin: 20px;">
-              <a href="https://bonitaspringsesterorealtorsfl.growthzoneapp.com/ap/Form/Fill/rklx0FVp" class="btn btn-primary" target="_blank" style="font-size: 20px; padding: 10px 20px; background-color: #007bff; color: white; border-radius: 5px; text-decoration: none;">Apply for Assistance</a>
-            </div>
-
-        </div>
     </div>
 
-    <br>
-    <br>
-
-    <div class="row" id="textArea">
-      <div><h3 style="font-family: 'Righteous';">Looking to become a part of the BER Home Foundation?</h3></div>
-    <div class="join-section" style="text-align: center; margin: 20px;">
-      <a href="https://bonitaspringsesterorealtorsfl.growthzoneapp.com/ap/Form/Fill/Lq1X7fML" class="btn btn-primary" target="_blank" style="font-size: 20px; padding: 10px 20px; background-color: #007bff; color: white; border-radius: 5px; text-decoration: none;">Join Here</a>
-    </div>
-        <!-- View Bylaws Button -->
-        <div style="text-align: center; margin: 20px;">
-          <button onclick="togglePDF()" style="font-size: 20px; padding: 10px 20px; background-color: #007bff; color: white; border-radius: 5px; text-decoration: none;">View Bylaws</button>
+    <!-- ═══════════════ JOIN / BYLAWS ═══════════════ -->
+    <div class="panel anim anim-d3">
+      <div class="join-bar">
+        <div class="join-bar-text">
+          <h3>Become a Part of the B.E.R. Home Foundation</h3>
+          <p>Join a community of REALTORS® committed to supporting each other through life's challenges.</p>
         </div>
-     </div>
+        <div class="cta-row" style="margin-top: 0;">
+          <a href="https://bonitaspringsesterorealtorsfl.growthzoneapp.com/ap/Form/Fill/Lq1X7fML" class="cta-btn" target="_blank">
+            Join Here <span class="chevron">↗</span>
+          </a>
+          <button onclick="togglePDF()" class="cta-btn cta-btn-outline">
+            View Bylaws
+          </button>
+        </div>
+      </div>
 
-    <br>
-    <br>
-
-      <style>
-        /* Additional styling for smooth transitions */
-        .pdfViewerVisible {
-          max-height: 600px; /* Adjust this value based on the actual height needed */
-          opacity: 1;
-        }
-        .pdfViewerVisible iframe {
-          opacity: 1; /* Ensure the iframe also becomes fully visible */
-        }
-      </style>
-    
-
-    <script>
-      function togglePDF() {
-        var pdfSection = document.getElementById("pdfViewer");
-        var iframe = pdfSection.querySelector("iframe");
-    
-        // Check if the PDF is currently visible
-        if (pdfSection.classList.contains("pdfViewerVisible")) {
-          // If visible, start the hide animation
-          pdfSection.style.maxHeight = '0';
-          iframe.style.opacity = '0';
-          
-          // Wait for the opacity transition, then set display to none
-          setTimeout(() => {
-            pdfSection.classList.remove("pdfViewerVisible");
-            pdfSection.style.opacity = '0';
-          }, 500); // Match the duration of the opacity transition
-        } else {
-          // If hidden, make the div block to enable transition, then start the show animation
-          pdfSection.classList.add("pdfViewerVisible");
-          pdfSection.style.opacity = '1';
-          pdfSection.style.maxHeight = '1000px'; // Ensure this matches the max height of the content
-          setTimeout(() => iframe.style.opacity = '1', 10); // Slightly delay the iframe opacity to ensure it transitions
-        }
-      }
-    </script>
-    
-
-    <!-- PDF Section Initially Invisible -->
-    <div id="pdfViewer" style="max-height: 0; overflow: hidden; opacity: 0; transition: opacity 0.5s ease, max-height 0.5s ease; text-align: center;">
-      <iframe src="https://www.bonitaesterorealtors.com/wp-content/uploads/2024/10/BYLAWS-OF-BHF-2024.pdf" style="width: 100%; height: 1000px; opacity: 0; transition: opacity 0.5s ease;"></iframe>
+      <!-- PDF Viewer -->
+      <div id="pdfViewer">
+        <iframe src="https://www.bonitaesterorealtors.com/wp-content/uploads/2024/10/BYLAWS-OF-BHF-2024.pdf"></iframe>
+      </div>
     </div>
 
-
-
-
-<br>
-<br>
-
-      <h2 style="margin: 30px auto 30px auto; text-align: center; font-family: 'Lobster', cursive; font-size: 6rem;">Directors</h2>
-      <hr style="margin: auto 5% auto 5%;">
-      <br>
-      <br>
-
-      
-
-      <!--Directors -->
-
-      <style>
-
-        .directors-grid {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: space-around;
-        }
-
-        .director-card {
-            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-            transition: transform 0.3s ease;
-            width: 30%;
-            margin-bottom: 70px;
-            text-align: center;
-        }
-
-        .director-card:hover {
-            transform: scale(1.05);
-        }
-
-        .director-card img {
-          width: auto;
-          height: auto;
-          display: flex;
-          margin: auto;
-          max-height: 280px;
-        }
-
-        .director-info {
-            padding: 15px;
-        }
-
-        h3 {
-          margin: -10px auto 10px auto;
-        }
-
-        h4 {
-          font-size: 22px;
-          margin: auto;
-        }
-
-        @media (max-width: 768px) {
-            .director-card {
-                width: 100%;
-            }
-        }
-        </style>
-
+    <!-- ═══════════════ DIRECTORS ═══════════════ -->
+    <div class="panel directors-section anim anim-d4">
+      <h2 class="section-title"><span class="title-idx">03</span> Board of Trustees — 2026–2027</h2>
 
       <div class="directors-grid">
+
+        <!-- President -->
         <div class="director-card">
-            <img src="https://www.bonitaesterorealtors.com/wp-content/uploads/2024/02/1.png" alt="Director 1">
-            <div class="director-info">
-                <h3>Jeanne Drath</h3>
-                <h4>President</h43>
-                <p>Term: 2024</p>
-            </div>
-        </div>
-        <div class="director-card">
-            <img src="https://www.bonitaesterorealtors.com/wp-content/uploads/2024/02/2.png" alt="Director 2">
-            <div class="director-info">
-              <h3>Andres Sanchez</h3>
-              <h4>Vice President</h43>
-              <p>Term: 2024</p>
-            </div>
+          <div class="director-photo-wrap">
+            <img src="https://www.bonitaesterorealtors.com/wp-content/uploads/2024/02/7.png" alt="Suzanne McGuire" loading="lazy">
+          </div>
+          <div class="director-info">
+            <div class="director-role">President</div>
+            <div class="director-name">Suzanne McGuire</div>
+            <div class="director-term">1st Term: 2024–2025 · 2nd Term: 2026–2027</div>
+          </div>
         </div>
 
+        <!-- Vice President -->
         <div class="director-card">
-            <img src="https://www.bonitaesterorealtors.com/wp-content/uploads/2024/02/3.png" alt="Director 3">
-            <div class="director-info">
-              <h3>Kelly Luck</h3>
-              <h4>Treasurer</h43>
-              <p>Term: 2024</p>
-            </div>
+          <div class="director-photo-wrap">
+            <img src="https://le-cdn.hibuwebsites.com/83152af88a804ae68ba9402b98a7d004/dms3rep/multi/opt/David-181h.jpg" alt="David Ged" loading="lazy">
+          </div>
+          <div class="director-info">
+            <div class="director-role">Vice President</div>
+            <div class="director-name">David Ged</div>
+            <div class="director-term">1st Term: 2024–2025 · 2nd Term: 2026–2027</div>
+          </div>
         </div>
+
+        <!-- Treasurer -->
+        <div class="director-card">
+          <div class="director-photo-wrap">
+            <img src="https://bonitaesterorealtors.com/wp-content/uploads/2026/02/Amy-Alvarez-Betz-scaled.jpg" alt="Amy Alvarez-Betz" loading="lazy">
+          </div>
+          <div class="director-info">
+            <div class="director-role">Treasurer</div>
+            <div class="director-name">Amy Alvarez-Betz</div>
+            <div class="director-term">1st Term: 2026–2027</div>
+          </div>
+        </div>
+
+        <!-- Secretary -->
+        <div class="director-card">
+          <div class="director-photo-wrap">
+            <img src="https://bonitaesterorealtors.com/wp-content/uploads/2026/02/Ursula-Weinkauff-PA-scaled.jpg" alt="Ursula Weinkauff" loading="lazy">
+          </div>
+          <div class="director-info">
+            <div class="director-role">Secretary</div>
+            <div class="director-name">Ursula Weinkauff</div>
+            <div class="director-term">1st Term: 2026–2027</div>
+          </div>
+        </div>
+
+        <!-- Director — Kelly Luck -->
+        <div class="director-card">
+          <div class="director-photo-wrap">
+            <img src="https://www.bonitaesterorealtors.com/wp-content/uploads/2024/02/3.png" alt="Kelly Luck" loading="lazy">
+          </div>
+          <div class="director-info">
+            <div class="director-role">Director</div>
+            <div class="director-name">Kelly Luck</div>
+            <div class="director-term">1st Term: 2023–2024 · 2nd Term: 2025–2026</div>
+          </div>
+        </div>
+
+        <!-- Director — Renee Malachowski -->
+        <div class="director-card">
+          <div class="director-photo-wrap">
+            <img src="https://production-uploads.fastly.propertybase.com/assets/uploads/agent/photo/91536/b9fe64e4d58335be28b8857e09cae10e.png?width=767&optimize=low&auto=webp" alt="Renee Malachowski" loading="lazy">
+          </div>
+          <div class="director-info">
+            <div class="director-role">Director</div>
+            <div class="director-name">Renee Malachowski</div>
+            <div class="director-term">1st Term: 2026–2027</div>
+          </div>
+        </div>
+
+        <!-- Director — Michael Jackson -->
+        <div class="director-card">
+          <div class="director-photo-wrap">
+            <img src="https://ap.rdcpix.com/89ed69207d804f19f692f77d5fe4b4eda-e1826328570rd-w260_h260.webp" alt="Michael Jackson" loading="lazy">
+          </div>
+          <div class="director-info">
+            <div class="director-role">Director</div>
+            <div class="director-name">Michael Jackson</div>
+            <div class="director-term">1st Term: 2026–2027</div>
+          </div>
+        </div>
+
+        <!-- Director — Darlene Williams -->
+        <div class="director-card">
+          <div class="director-photo-wrap">
+            <img src="https://bonitaesterorealtors.com/wp-content/uploads/2026/01/darlenewilliamsnoborder-lg2-2.jpg" alt="Darlene Williams" loading="lazy">
+          </div>
+          <div class="director-info">
+            <div class="director-role">Director</div>
+            <div class="director-name">Darlene Williams</div>
+            <div class="director-term">1st Term: 2026–2027</div>
+          </div>
+        </div>
+
       </div>
+    </div>
 
-      <br>
-      <br>
-      <br>
-      <br>
+    <!-- ═══════════════ FOOTER MICRO ═══════════════ -->
+    <div class="page-footer">
+      BER HOME FOUNDATION · BONITA SPRINGS-ESTERO REALTORS® · SYS::BHF-V2.0/2026
+    </div>
 
-      <div class="directors-grid">
-        <div class="director-card">
-            <img src="https://www.bonitaesterorealtors.com/wp-content/uploads/2024/02/4.png" alt="Director 1">
-            <div class="director-info">
-              <h3>Donna Marcotte</h3>
-              <h4>Secretary</h43>
-              <p>Term: 2024</p>
-            </div>
-        </div>
-        <div class="director-card">
-            <img src="https://www.bonitaesterorealtors.com/wp-content/uploads/2024/02/5.png" alt="Director 2">
-            <div class="director-info">
-              <h3>Lisa Schroeder</h3>
-              <h4>Director</h43>
-              <p>Term: 2024</p>
-            </div>
-        </div>
+  </div>
 
-        <div class="director-card">
-            <img src="https://www.bonitaesterorealtors.com/wp-content/uploads/2024/02/6.png" alt="Director 3">
-            <div class="director-info">
-              <h3>Andy Lynch</h3>
-              <h4>Director</h43>
-              <p>Term: 2024</p>
-            </div>
-        </div>
-      </div>
-
-      <br>
-      <br>
-      <br>
-      <br>
-
-      <div class="directors-grid">
-        <div class="director-card">
-            <img src="https://www.bonitaesterorealtors.com/wp-content/uploads/2024/02/7.png" alt="Director 1">
-            <div class="director-info">
-              <h3>Suzanne McGuire</h3>
-              <h4>Director</h43>
-              <p>Term: 2024</p>
-            </div>
-        </div>
-        <div class="director-card">
-            <img src="https://www.bonitaesterorealtors.com/wp-content/uploads/2024/02/8.png" alt="Director 2">
-            <div class="director-info">
-              <h3>Meighan Harris</h3>
-              <h4>CEO</h43>
-              <p>Term: 2024</p>
-            </div>
-        </div>
-      </div>
-  </body>
+  <!-- ─── JS ─── -->
+  <script>
+    function togglePDF() {
+      var viewer = document.getElementById('pdfViewer');
+      viewer.classList.toggle('visible');
+    }
+  </script>
+</body>
 </html>
-

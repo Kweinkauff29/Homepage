@@ -1371,7 +1371,7 @@
                     city = "Bonita Springs";
                 }
 
-                let state = (contact.State || "FL").trim().toUpperCase();
+                let state = (contact.State || contact.StateProvince || "FL").trim().toUpperCase();
                 return `${city}, ${state}`;
             }
 
@@ -1916,7 +1916,7 @@
                 }
 
                 const city = clean(contact.City || "estero");
-                const state = clean(contact.State || "fl");
+                const state = clean(contact.State || contact.StateProvince || "fl");
 
                 // Realtor.com format: firstname-lastname_city_state
                 // Example: kevin-weinkauff_estero_fl
@@ -2258,7 +2258,7 @@
                         const photo = (l.Media && l.Media.length > 0) ? l.Media[0].MediaURL : '';
 
                         html += `
-                                <div class="modal-listing-card" onclick="window.open('https://bonitaspringsesterolifestyles.com/home-search/?mls=${l.ListingId}', '_blank')">
+                                <div class="modal-listing-card" onclick="window.open('https://coconutcoastopenhouses.com/home-search/?mls=${l.ListingId}', '_blank')">
                                     <img src="${photo}" class="modal-listing-img" onerror="this.src='https://placehold.co/400x300?text=No+Photo'">
                                     <div class="modal-listing-info">
                                         <div class="modal-listing-price">$${Number(price).toLocaleString()}</div>
