@@ -740,6 +740,7 @@
       {
         year: 2026, month: "February",
         fastStats: "https://bonitaesterorealtors.com/wp-content/uploads/2026/03/BER_Fast_Stats-feb.pdf",
+        frStats: "https://bonitaesterorealtors.com/wp-content/uploads/2026/03/FR-Stats-February.pdf",
         indicators: "https://bonitaesterorealtors.com/wp-content/uploads/2026/03/BER_Monthly_Indicators-feb-1.pdf",
         thumb: DEFAULT_THUMB
       },
@@ -1117,6 +1118,7 @@
                 <button class="ai-q-btn" data-key="${r.year}-${monthSlug(r.month)}-q1">Key takeaways for ${r.month}?</button>
                 <button class="ai-q-btn" data-key="${r.year}-${monthSlug(r.month)}-q2">Pricing vs Inventory trend?</button>
                 <button class="ai-q-btn" data-key="${r.year}-${monthSlug(r.month)}-q3">Compare to past data</button>
+                ${hasFR ? `<button class="ai-q-btn" data-key="${r.year}-${monthSlug(r.month)}-fr">SFH vs. Condos Comparison</button>` : ""}
               </div>
               <div class="ai-response-area"></div>
             </div>
@@ -1249,6 +1251,7 @@
               <button class="ai-q-btn" data-key="${r.year}-${monthSlug(r.month)}-q1">Key takeaways for ${r.month}?</button>
               <button class="ai-q-btn" data-key="${r.year}-${monthSlug(r.month)}-q2">Pricing vs Inventory trend?</button>
               <button class="ai-q-btn" data-key="${r.year}-${monthSlug(r.month)}-q3">Compare to past data</button>
+              ${r.frStats ? `<button class="ai-q-btn" data-key="${r.year}-${monthSlug(r.month)}-fr">SFH vs. Condos Comparison</button>` : ""}
             </div>
              <div class="ai-response-area"></div>
           </div>
@@ -1326,18 +1329,28 @@
     // ---- Mock AI Chatbot Logic ----
     // Data mapping for specific month interactions
     const AI_DATA = {
-      "2026-february-q1": `Based on the February 2026 Fast Stats and Monthly Indicators, we are seeing a critical stabilization phase for the Bonita Springs and Estero markets. Unlike the hyper-accelerated absorption of 2021-2023, buyers currently enjoy an expanded selection of properties, pushing the Months Supply of Inventory to 6.2 months—a traditional benchmark for a balanced market.
+      "2026-february-q1": `Based on the February 2026 Florida Realtors and Fast Stats reports, the SWFL market is showing distinct behavior between product types. Single-Family Homes are entering a balanced phase with 6.1 months of supply, while the Townhouse and Condo segment is seeing a significant surge in closing volume.
 
 KEY METRICS OVERVIEW:
-* Median Sale Price: Increased to $615,000 (up 5.1% YoY).
-* Closed Sales: 385 units (down 3.2% YoY).
-* Days on Market: Expanded to 54 days on average.
+* Median Sale Price: $560,000 (SFH) | $380,000 (Condos).
+* Months Supply: 6.1 Months (SFH) | 8.3 Months (Condos).
+* New Pending Sales: Up 13.4% for SFH and 24.4% for Condos YoY.
 
-CLOSED SALES (YoY):
-[BAR: Feb 2025|398|85%, Feb 2026|385|82%]
+SINGLE-FAMILY CLOSED SALES:
+[BAR: Feb 2025|129|90%, Feb 2026|123|85%]
 
-DAYS ON MARKET (YoY):
-[BAR: Feb 2025|42 Days|70%, Feb 2026|54 Days|90%]`,
+TOWNHOUSE/CONDO CLOSED SALES:
+[BAR: Feb 2025|76|70%, Feb 2026|104|95%]`,
+
+      "2026-february-fr": `The February 2026 Florida Realtors report highlights a divergence in the SFH vs. Condo markets. While SFH closed sales saw a minor dip, the Condo market experienced a massive 36.8% YoY spike in transactions.
+
+SFH vs. CONDO DYNAMICS (FEB 2026):
+[BAR: SFH Price|$560K|95%, Condo Price|$380K|65%]
+
+INVENTORY LEVELS:
+[BAR: SFH Inventory|859|90%, Condo Inventory|738|78%]
+
+Closed sales for Condos reached 104 units this month, a sharp contrast to the 76 units recorded in Feb 2025, indicating high liquid demand for entry-level and seasonal-style multi-family units.`,
 
       "2026-february-q2": `PRICING DYNAMICS:
 Sellers are actively maintaining premium valuations, rooted in the sustained desirability of the SWFL region. However, erratic over-pricing is being selectively rejected.

@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>2026 Year Sponsors - Bonita Springs-Estero Realtors</title>
+    
+    <!-- External Glyphs and Fonts -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" integrity="sha512-dyZ88n1Kis7J1gY9+jnuv6QylsHY2Rz+5PjqF3tU5hAnk3q1uI5wVzW+Z3G6CVJz4N97Z8vaUeQb+J6aQ1mX0g==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Oswald:wght@400;700&family=Poppins:wght@400;700&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --ber-teal: #008080;
+            --ber-dark: #004D4D;
+            --ber-light: #F7FAFC;
+            --bs-border: rgba(0, 0, 0, 0.05);
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--ber-light);
+            margin: 0;
+            padding: 2rem 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        /* ---- Carousel (Affiliates) ---- */
+        .carousel {
+            position: relative;
+            width: 100%;
+            max-width: 1400px; /* Increased for row effect */
+            margin: auto;
+            overflow: hidden;
+            padding: 3rem 2rem;
+            background: #fff;
+            border-radius: 16px;
+            box-shadow: 0 12px 28px rgba(2, 8, 20, .08), 0 2px 6px rgba(2, 8, 20, .04);
+            text-align: center;
+        }
+
+        .carousel h3 {
+            font-family: 'Inter', sans-serif;
+            font-size: 2.5rem; /* Slightly larger */
+            font-weight: 700;
+            margin-bottom: 2rem;
+            color: var(--ber-teal);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .carousel .sponsor-group {
+            display: none;
+            flex-direction: row; /* Better for a "row" content */
+            flex-wrap: wrap;
+            justify-content: center;
+            align-items: center;
+            gap: 3rem; /* More space between logos */
+        }
+
+        .carousel .sponsor-group.show {
+            display: flex !important;
+        }
+
+        .carousel img {
+            margin: 0;
+            width: 220px !important; /* Slightly larger logos */
+            height: auto;
+            object-fit: contain;
+            opacity: 0;
+            transition: transform .3s, opacity 0.5s ease-in-out;
+        }
+
+        .carousel .sponsor-group.show img {
+            opacity: 1; /* Fix visibility */
+        }
+
+        #diamond img {
+            width: 300px !important;
+        }
+
+        /* Tier Badge Styling */
+        .tier-badge {
+            position: relative;
+            display: block; /* Full row width but centered */
+            width: 100%;
+            padding: 12px 40px;
+            margin-bottom: 30px;
+            font-family: 'Oswald', sans-serif;
+            font-size: 28px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 4px;
+            color: white;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+            border-radius: 6px;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.4);
+            animation: badgeBounceIn 0.8s cubic-bezier(0.68, -0.55, 0.265, 1.55) forwards;
+            opacity: 0;
+            max-width: 400px;
+            margin-left: auto;
+            margin-right: auto;
+            overflow: hidden;
+            border: 1px solid rgba(0, 0, 0, 0.1);
+            z-index: 10;
+        }
+
+        .tier-badge::after {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(to right, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0.3) 50%, rgba(255, 255, 255, 0) 100%);
+            transform: rotate(30deg);
+            animation: shine 3s infinite linear;
+        }
+
+        /* Premium Gradients */
+        .tier-badge.diamond {
+            background: linear-gradient(135deg, #004d57 0%, #008080 50%, #00a3a3 100%);
+            border-bottom: 3px solid #00333a;
+        }
+
+        .tier-badge.platinum {
+            background: linear-gradient(135deg, #7f8c8d 0%, #bdc3c7 50%, #ecf0f1 100%);
+            color: #2c3e50;
+            text-shadow: 1px 1px 0 rgba(255, 255, 255, 0.8);
+            border-bottom: 3px solid #636e72;
+        }
+
+        .tier-badge.gold {
+            background: linear-gradient(135deg, #b8860b 0%, #ffd700 50%, #ffe066 100%);
+            color: #5c4002;
+            text-shadow: 1px 1px 0 rgba(255, 255, 255, 0.6);
+            border-bottom: 3px solid #8a6608;
+        }
+
+        .tier-badge.silver {
+            background: linear-gradient(135deg, #7f8c8d 0%, #95a5a6 50%, #bdc3c7 100%);
+            color: #000;
+            text-shadow: 1px 1px 0 rgba(255, 255, 255, 0.5);
+            border-bottom: 3px solid #5a6366;
+        }
+
+        /* Animations */
+        @keyframes flyInLeft {
+            0% { opacity: 0; transform: translateX(-100px); }
+            100% { opacity: 1; transform: translateX(0); }
+        }
+
+        @keyframes flyInRight {
+            0% { opacity: 0; transform: translateX(100px); }
+            100% { opacity: 1; transform: translateX(0); }
+        }
+
+        @keyframes shine {
+            0% { transform: translateX(-100%) rotate(30deg); }
+            100% { transform: translateX(100%) rotate(30deg); }
+        }
+
+        @keyframes badgeBounceIn {
+            0% { opacity: 0; transform: translateY(-30px) scale(0.9); }
+            100% { opacity: 1; transform: translateY(0) scale(1); }
+        }
+
+        /* Apply animations to sponsor logos when their group is shown */
+        .carousel .sponsor-group.show > a {
+            opacity: 0;
+            animation-duration: 0.8s;
+            animation-fill-mode: forwards;
+            animation-timing-function: ease-out;
+            display: inline-block;
+        }
+
+        .carousel .sponsor-group.show > a:nth-of-type(odd) { animation-name: flyInLeft; }
+        .carousel .sponsor-group.show > a:nth-of-type(even) { animation-name: flyInRight; }
+
+        /* Staggered delays */
+        .carousel .sponsor-group.show > a:nth-of-type(1) { animation-delay: 0.2s; }
+        .carousel .sponsor-group.show > a:nth-of-type(2) { animation-delay: 0.4s; }
+        .carousel .sponsor-group.show > a:nth-of-type(3) { animation-delay: 0.6s; }
+        .carousel .sponsor-group.show > a:nth-of-type(4) { animation-delay: 0.8s; }
+        .carousel .sponsor-group.show > a:nth-of-type(5) { animation-delay: 1.0s; }
+
+        .carousel img:hover {
+            transform: scale(1.1);
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="carousel">
+        <h3>2026 Year Sponsors</h3>
+        
+        <!-- Diamond Tier -->
+        <div class="sponsor-group show" id="diamond">
+            <div class="tier-badge diamond">Diamond</div>
+            <a href="https://www.saadlegal.com/" target="_blank"><img src="https://www.saadlegal.com/wp-content/uploads/sites/1404714/2025/06/SamJSaad-site-logo-new.png" alt="Law Office of Sam J. Saad III"></a>
+            <a href="https://stateinsuranceusa.com/" target="_blank"><img src="https://stateinsuranceusa.com/wp-content/uploads/2023/01/logo-1.png" alt="State Insurance USA"></a>
+            <a href="https://movement.com/" target="_blank"><img src="https://bonitaesterorealtors.com/wp-content/uploads/2025/12/Movement-mortgage.png" alt="Movement Mortgage"></a>
+            <a href="https://www.cigflorida.com/" target="_blank"><img src="https://www.cigflorida.com/wp-content/uploads/2021/09/logo.jpg" alt="Chapman Insurance Group"></a>
+            <a href="https://www.lawfirmnaples.com/" target="_blank" style="background: #021a3f; padding: 5px; border-radius: 4px;"><img src="https://www.lawfirmnaples.com/wp-content/themes/paperstreet/images/logo.png" alt="Woods · Weidenmiller · Michetti · Rudnick"></a>
+        </div>
+
+        <!-- Platinum Tier -->
+        <div class="sponsor-group" id="platinum">
+            <div class="tier-badge platinum">Platinum</div>
+            <a href="https://cottrelltitle.com/" target="_blank"><img src="https://cottrelltitle.com/wp-content/uploads/cottrell-title-logo.png" alt="Cottrell Title & Escrow"></a>
+            <a href="https://housemaster.com/" target="_blank"><img src="https://bonitaesterorealtors.com/wp-content/uploads/2025/12/Housemaster.png" alt="HouseMaster"></a>
+        </div>
+
+        <!-- Gold Tier -->
+        <div class="sponsor-group" id="gold">
+            <div class="tier-badge gold">Gold</div>
+            <a href="#"><img src="https://www.premiummortgage.com/images/logo.png" alt="Premium Mortgage Corporation"></a>
+            <a href="#"><img src="https://bonitaesterorealtors.com/wp-content/uploads/2026/01/lane_logo_letters-pantone1815_icon-cmyk15-29-98-6-1536x306-1.webp" alt="Lane Insurance Group"></a>
+        </div>
+
+        <!-- Silver Tier -->
+        <div class="sponsor-group" id="silver">
+            <div class="tier-badge silver">Silver</div>
+            <a href="https://hiltonmovers.com/" target="_blank"><img src="https://hiltonmovers.com/wp-content/uploads/Hilton_logo.png" alt="Hilton Moving and Storage"></a>
+            <a href="#"><img src="https://bonitaesterorealtors.com/wp-content/uploads/2025/12/Lower-Mortgage.svg" alt="Lower Mortgage"></a>
+            <a href="#"><img src="https://d1to58gssdw062.cloudfront.net/images/logo_blue.svg" alt="Revolution Mortgage"></a>
+        </div>
+    </div>
+
+    <script>
+        (function () {
+            const groups = Array.from(document.querySelectorAll('.carousel .sponsor-group'));
+            let idx = 0;
+            const show = i => groups.forEach((g, j) => {
+                g.classList.toggle('show', j === i);
+                // Restart animations by removing and re-adding the class or just letting the CSS trigger
+            });
+            
+            show(idx);
+            setInterval(() => {
+                idx = (idx + 1) % groups.length;
+                show(idx);
+            }, 5000);
+        })();
+    </script>
+</body>
+</html>
