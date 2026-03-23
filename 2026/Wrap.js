@@ -1485,27 +1485,32 @@ async function listProjects(env) {
         `)
         .all();
 
-    // Eagerly load steps for all projects
+    const BATCH_SIZE = 100;
+
     if (results.length > 0) {
         const projectIds = results.map(p => p.id);
-        const placeholders = projectIds.map(() => "?").join(", ");
+        const allSteps = [];
 
-        // Fetch ALL steps for these projects
-        const allStepsRes = await env.WRAP_DB
-            .prepare(`
-                SELECT 
-                    s.*, 
-                    u.name AS assigned_to_name, 
-                    u.email AS assigned_to_email
-                FROM project_steps s
-                LEFT JOIN users u ON s.assigned_to_id = u.id
-                WHERE s.project_id IN (${placeholders})
-                ORDER BY s.project_id, s.step_order, s.id
-            `)
-            .bind(...projectIds)
-            .all();
-
-        const allSteps = allStepsRes.results;
+        // Batch load steps
+        for (let i = 0; i < projectIds.length; i += BATCH_SIZE) {
+            const batch = projectIds.slice(i, i + BATCH_SIZE);
+            const placeholders = batch.map(() => "?").join(", ");
+            const batchStepsRes = await env.WRAP_DB
+                .prepare(`
+                    SELECT 
+                        s.*, 
+                        u.name AS assigned_to_name, 
+                        u.email AS assigned_to_email
+                    FROM project_steps s
+                    LEFT JOIN users u ON s.assigned_to_id = u.id
+                    WHERE s.project_id IN (${placeholders})
+                    ORDER BY s.project_id, s.step_order, s.id
+                `)
+                .bind(...batch)
+                .all();
+            
+            allSteps.push(...batchStepsRes.results);
+        }
 
         // Group steps by project
         const stepsMap = new Map(); // projectId -> [steps]
@@ -1515,34 +1520,33 @@ async function listProjects(env) {
         }
 
         // Fetch ALL step assignees for these steps (if any)
-        // Optimization: only fetch if there are steps
         if (allSteps.length > 0) {
             const stepIds = allSteps.map(s => s.id);
-            // Chunking might be needed if too many steps, but assume manageable for now or chunk 100?
-            // SQLite limit is usually high enough for hundreds of steps. 
-            // If joint projects grow huge, this needs pagination.
-
-            const stepPlaceholders = stepIds.map(() => "?").join(", ");
-            const assigneesRes = await env.WRAP_DB
-                .prepare(`
-                    SELECT psa.step_id, u.id, u.name, u.email
-                    FROM project_step_assignees psa
-                    JOIN users u ON psa.user_id = u.id
-                    WHERE psa.step_id IN (${stepPlaceholders})
-                `)
-                .bind(...stepIds)
-                .all();
-
             const assigneesMap = new Map(); // stepId -> [users]
-            for (const row of assigneesRes.results) {
-                if (!assigneesMap.has(row.step_id)) assigneesMap.set(row.step_id, []);
-                assigneesMap.get(row.step_id).push(row);
+
+            // Batch load assignees
+            for (let i = 0; i < stepIds.length; i += BATCH_SIZE) {
+                const batch = stepIds.slice(i, i + BATCH_SIZE);
+                const stepPlaceholders = batch.map(() => "?").join(", ");
+                const assigneesRes = await env.WRAP_DB
+                    .prepare(`
+                        SELECT psa.step_id, u.id, u.name, u.email
+                        FROM project_step_assignees psa
+                        JOIN users u ON psa.user_id = u.id
+                        WHERE psa.step_id IN (${stepPlaceholders})
+                    `)
+                    .bind(...batch)
+                    .all();
+
+                for (const row of assigneesRes.results) {
+                    if (!assigneesMap.has(row.step_id)) assigneesMap.set(row.step_id, []);
+                    assigneesMap.get(row.step_id).push(row);
+                }
             }
 
             // Hydrate steps with assignees
             for (const s of allSteps) {
                 s.assignees = assigneesMap.get(s.id) || [];
-                // Fallback to primary if empty
                 if (s.assignees.length === 0 && s.assigned_to_id) {
                     s.assignees.push({
                         id: s.assigned_to_id,
@@ -1618,10 +1622,10 @@ async function createProject(request, env) {
 
     const info = await env.WRAP_DB
         .prepare(`
-            INSERT INTO projects (title, description, created_by_id, status, created_at, updated_at, waiting_on, blocking_task)
-            VALUES (?, ?, ?, 'active', ?, ?, ?, ?)
+            INSERT INTO projects (title, description, created_by_id, status, created_at, updated_at, waiting_on, blocking_task, link)
+            VALUES (?, ?, ?, 'active', ?, ?, ?, ?, ?)
         `)
-        .bind(title, description, created_by_id, now, now, waiting_on, blocking_task)
+        .bind(title, description, created_by_id, now, now, waiting_on, blocking_task, body.link || null)
         .run();
 
     const insertedId = info.meta?.last_row_id;
@@ -1657,10 +1661,11 @@ async function updateProject(request, env, id) {
     const status = body.status ?? existing.status;
     const waiting_on = body.waiting_on ?? existing.waiting_on;
     const blocking_task = body.blocking_task ?? existing.blocking_task;
+    const link = body.link !== undefined ? body.link : existing.link;
 
     await env.WRAP_DB
-        .prepare(`UPDATE projects SET title = ?, description = ?, status = ?, updated_at = ?, waiting_on = ?, blocking_task = ? WHERE id = ?`)
-        .bind(title, description, status, now, waiting_on, blocking_task, id)
+        .prepare(`UPDATE projects SET title = ?, description = ?, status = ?, updated_at = ?, waiting_on = ?, blocking_task = ?, link = ? WHERE id = ?`)
+        .bind(title, description, status, now, waiting_on, blocking_task, link, id)
         .run();
 
     const { results } = await env.WRAP_DB
@@ -1730,10 +1735,10 @@ async function duplicateProject(request, env, id) {
         try {
             const stepInfo = await env.WRAP_DB.prepare(`
                 INSERT INTO project_steps 
-                    (project_id, step_order, title, description, assigned_to_id, status, created_at, updated_at)
-                VALUES (?, ?, ?, ?, ?, 'pending', ?, ?)
+                    (project_id, step_order, title, description, assigned_to_id, status, created_at, updated_at, notes, priority)
+                VALUES (?, ?, ?, ?, ?, 'pending', ?, ?, ?, ?)
             `)
-                .bind(newProjectId, s.step_order, s.title, s.description, s.assigned_to_id, now, now)
+                .bind(newProjectId, s.step_order, s.title, s.description, s.assigned_to_id, now, now, s.notes || null, s.priority || 1)
                 .run();
 
             const newStepId = stepInfo.meta?.last_row_id;
@@ -1772,7 +1777,7 @@ async function duplicateProject(request, env, id) {
 
 async function createProjectStep(request, env, projectId) {
     const body = await getBody(request);
-    const { title, description = "", assigned_to_id = null, step_order = 999, assignee_ids = [] } = body;
+    const { title, description = "", assigned_to_id = null, step_order = 999, assignee_ids = [], notes = "", priority = 1 } = body;
 
     if (!title) {
         return json({ error: "title is required" }, 400);
@@ -1793,10 +1798,10 @@ async function createProjectStep(request, env, projectId) {
     const info = await env.WRAP_DB
         .prepare(`
             INSERT INTO project_steps 
-                (project_id, step_order, title, description, assigned_to_id, status, created_at, updated_at)
-            VALUES (?, ?, ?, ?, ?, 'pending', ?, ?)
+                (project_id, step_order, title, description, assigned_to_id, status, created_at, updated_at, notes, priority)
+            VALUES (?, ?, ?, ?, ?, 'pending', ?, ?, ?, ?)
         `)
-        .bind(projectId, step_order, title, description, assigned_to_id, now, now)
+        .bind(projectId, step_order, title, description, assigned_to_id, now, now, notes, priority)
         .run();
 
     const insertedId = info.meta?.last_row_id;
@@ -1846,6 +1851,8 @@ async function updateProjectStep(request, env, stepId) {
     const assigned_to_id = body.assigned_to_id !== undefined ? body.assigned_to_id : existing.assigned_to_id;
     const status = body.status ?? existing.status;
     const step_order = body.step_order !== undefined ? body.step_order : existing.step_order;
+    const notes = body.notes ?? existing.notes;
+    const priority = body.priority ?? existing.priority;
 
     let completed_at = existing.completed_at;
     if (existing.status !== "done" && status === "done") {
@@ -1857,10 +1864,10 @@ async function updateProjectStep(request, env, stepId) {
     await env.WRAP_DB
         .prepare(`
             UPDATE project_steps 
-            SET title = ?, description = ?, assigned_to_id = ?, status = ?, step_order = ?, completed_at = ?, updated_at = ?
+            SET title = ?, description = ?, assigned_to_id = ?, status = ?, step_order = ?, completed_at = ?, updated_at = ?, notes = ?, priority = ?
             WHERE id = ?
         `)
-        .bind(title, description, assigned_to_id, status, step_order, completed_at, now, stepId)
+        .bind(title, description, assigned_to_id, status, step_order, completed_at, now, notes, priority, stepId)
         .run();
 
     // Update assignees if provided

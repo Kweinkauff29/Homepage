@@ -4011,6 +4011,20 @@
           Title
           <input id="edit-project-step-title-input" placeholder="Step title..." />
         </label>
+        <div style="display:flex; gap:15px; margin-bottom:15px;">
+          <label style="flex:1;">
+            Priority
+            <select id="edit-project-step-priority">
+              <option value="1">Low ☕</option>
+              <option value="2">Medium ⚡</option>
+              <option value="3">High 🔥</option>
+            </select>
+          </label>
+        </div>
+        <label>
+          Notes
+          <textarea id="edit-project-step-notes" placeholder="Additional details..." style="min-height: 80px;"></textarea>
+        </label>
         <label>
           Assign To
           <div id="edit-project-step-assignees-container" class="checkbox-list"></div>
@@ -7660,7 +7674,7 @@
 
 
       // Weekly Tasks (BETA)
-      document.getElementById("add-weekly-task-btn").addEventListener("click", () => {
+      document.getElementById("add-weekly-task-btn")?.addEventListener("click", () => {
         const input = document.getElementById("new-weekly-task-input");
         const title = input.value.trim();
         if (title) {
@@ -7668,16 +7682,16 @@
           input.value = "";
         }
       });
-      document.getElementById("new-weekly-task-input").addEventListener("keydown", (e) => {
+      document.getElementById("new-weekly-task-input")?.addEventListener("keydown", (e) => {
         if (e.key === "Enter") {
           document.getElementById("add-weekly-task-btn").click();
         }
       });
-      document.getElementById("week-prev").addEventListener("click", async () => {
+      document.getElementById("week-prev")?.addEventListener("click", async () => {
         state.currentWeekKey = shiftWeek(state.currentWeekKey, -1);
         await loadWeeklyTasks();
       });
-      document.getElementById("week-next").addEventListener("click", async () => {
+      document.getElementById("week-next")?.addEventListener("click", async () => {
         state.currentWeekKey = shiftWeek(state.currentWeekKey, 1);
         await loadWeeklyTasks();
       });
@@ -9511,7 +9525,17 @@
       const titleDiv = document.createElement("div");
       const title = document.createElement("div");
       title.className = "project-title";
-      title.textContent = project.title;
+      if (project.link) {
+        const link = document.createElement("a");
+        link.href = project.link;
+        link.target = "_blank";
+        link.textContent = project.title;
+        link.style.color = "inherit";
+        link.style.textDecoration = "underline";
+        title.appendChild(link);
+      } else {
+        title.textContent = project.title;
+      }
       titleDiv.appendChild(title);
 
       const meta = document.createElement("div");
@@ -9720,6 +9744,7 @@
         let priorityIcon = "";
         if (step.priority == 3) priorityIcon = "🔥 ";
         else if (step.priority == 2) priorityIcon = "⚡ ";
+        else if (step.priority == 1) priorityIcon = "☕ ";
 
         const titleSpan = document.createElement("span");
         titleSpan.className = "step-title";
@@ -9739,6 +9764,17 @@
 
           metaSpan.textContent = `✓ ${dateStr}${who}`;
           contentDiv.appendChild(metaSpan);
+        }
+
+        if (step.notes) {
+          const notesDiv = document.createElement("div");
+          notesDiv.className = "step-notes";
+          notesDiv.style.fontSize = "10px";
+          notesDiv.style.color = "var(--ink-soft)";
+          notesDiv.style.marginTop = "2px";
+          notesDiv.style.whiteSpace = "pre-wrap";
+          notesDiv.textContent = step.notes;
+          contentDiv.appendChild(notesDiv);
         }
 
         row.appendChild(contentDiv);
@@ -9918,6 +9954,8 @@
       const modal = document.getElementById("project-step-modal");
       document.getElementById("edit-project-step-id").value = step.id;
       document.getElementById("edit-project-step-title-input").value = step.title;
+      document.getElementById("edit-project-step-priority").value = step.priority || "1";
+      document.getElementById("edit-project-step-notes").value = step.notes || "";
 
       const container = document.getElementById("edit-project-step-assignees-container");
       container.innerHTML = "";
@@ -9944,6 +9982,8 @@
     async function saveProjectStepFromModal() {
       const stepId = document.getElementById("edit-project-step-id").value;
       const title = document.getElementById("edit-project-step-title-input").value.trim();
+      const priority = document.getElementById("edit-project-step-priority").value;
+      const notes = document.getElementById("edit-project-step-notes").value.trim();
       const checkboxes = document.querySelectorAll("#edit-project-step-assignees-container input:checked");
       const assigneeIds = Array.from(checkboxes).map(cb => parseInt(cb.value, 10));
 
@@ -9956,7 +9996,9 @@
         await apiSend(`/project-steps/${stepId}`, "PATCH", {
           title: title,
           assignee_ids: assigneeIds,
-          assigned_to_id: assigneeIds[0] || null
+          assigned_to_id: assigneeIds[0] || null,
+          priority: parseInt(priority, 10),
+          notes: notes
         });
         document.getElementById("project-step-modal").classList.add("hidden");
         await loadProjects();
@@ -10027,10 +10069,14 @@
       const details = prompt("What are the details/blocking task? (Leave empty to clear)", project.blocking_task || "");
       if (details === null) return;
 
+      const link = prompt("Link / URL for this project? (Leave empty to clear)", project.link || "");
+      if (link === null) return;
+
       try {
         await apiSend(`/projects/${project.id}`, "PATCH", {
           waiting_on: waitingOn.trim(),
-          blocking_task: details.trim()
+          blocking_task: details.trim(),
+          link: link.trim()
         });
         await loadProjects();
         showToast("Project details updated");
@@ -11516,11 +11562,11 @@
       const modal = document.getElementById("goal-create-modal");
       if (!modal) return;
 
-      document.getElementById("goal-create-modal-close").addEventListener("click", () => modal.classList.add("hidden"));
-      document.getElementById("goal-create-modal-cancel").addEventListener("click", () => modal.classList.add("hidden"));
+      document.getElementById("goal-create-modal-close")?.addEventListener("click", () => modal.classList.add("hidden"));
+      document.getElementById("goal-create-modal-cancel")?.addEventListener("click", () => modal.classList.add("hidden"));
 
       // Subtask adding
-      document.getElementById("btn-add-transient-subtask").addEventListener("click", () => {
+      document.getElementById("btn-add-transient-subtask")?.addEventListener("click", () => {
         const input = document.getElementById("new-subtask-input");
         const val = input.value.trim();
         if (val) {
@@ -11530,7 +11576,7 @@
           input.focus();
         }
       });
-      document.getElementById("new-subtask-input").addEventListener("keydown", (e) => {
+      document.getElementById("new-subtask-input")?.addEventListener("keydown", (e) => {
         if (e.key === "Enter") {
           e.preventDefault();
           document.getElementById("btn-add-transient-subtask").click();
@@ -11538,7 +11584,7 @@
       });
 
       // Save
-      document.getElementById("goal-create-save-btn").addEventListener("click", async () => {
+      document.getElementById("goal-create-save-btn")?.addEventListener("click", async () => {
         const title = document.getElementById("create-goal-title").value.trim();
         if (!title) {
           showToast("Please enter a goal name", true);
@@ -11746,10 +11792,10 @@
       const modal = document.getElementById("goal-edit-modal");
       if (!modal) return;
 
-      document.getElementById("goal-edit-modal-close").addEventListener("click", () => modal.classList.add("hidden"));
-      document.getElementById("goal-edit-modal-cancel").addEventListener("click", () => modal.classList.add("hidden"));
+      document.getElementById("goal-edit-modal-close")?.addEventListener("click", () => modal.classList.add("hidden"));
+      document.getElementById("goal-edit-modal-cancel")?.addEventListener("click", () => modal.classList.add("hidden"));
 
-      document.getElementById("goal-edit-save-btn").addEventListener("click", async () => {
+      document.getElementById("goal-edit-save-btn")?.addEventListener("click", async () => {
         if (!currentEditingGoalId || !currentEditingGoalType) return;
 
         const committee = document.getElementById("goal-edit-committee").value;
