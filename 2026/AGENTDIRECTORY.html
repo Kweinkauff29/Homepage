@@ -2207,30 +2207,39 @@
                 </div>
             `;
 
-                fetchAgentListings(emailForContact, licenseNumber, contactId);
+                const allEmailsToSearch = [];
+                emails.forEach(e => { if (e.Value) allEmailsToSearch.push(e.Value); });
+                if (basic.EmailAddress && !allEmailsToSearch.includes(basic.EmailAddress)) allEmailsToSearch.push(basic.EmailAddress);
+
+                fetchAgentListings(allEmailsToSearch, licenseNumber, contactId);
                 trackProfileClick(contactId, name);
             }
 
-            async function fetchAgentListings(email, license, contactId) {
+            async function fetchAgentListings(emailsToSearch, license, contactId) {
                 const listingsContainer = document.getElementById('modalListingsContent');
                 const countSpan = document.getElementById('listingsCount');
                 const API_BASE = 'https://listingsworker.bonitaspringsrealtors.workers.dev/api/v2/OData/bsaor';
 
                 try {
-                    let memberKey = null;
-                    let filter = '';
-                    if (email) filter = `MemberEmail eq '${email}'`;
-                    else if (license) filter = `MemberStateLicense eq '${license}'`;
-
-                    if (filter) {
+                    let filterParts = [];
+                    if (Array.isArray(emailsToSearch)) {
+                        emailsToSearch.forEach(em => filterParts.push(`MemberEmail eq '${em}'`));
+                    } else if (emailsToSearch) {
+                        filterParts.push(`MemberEmail eq '${emailsToSearch}'`);
+                    }
+                    if (license) filterParts.push(`MemberStateLicense eq '${license}'`);
+                    
+                    let memberKeys = [];
+                    if (filterParts.length > 0) {
+                        const filter = filterParts.join(' or ');
                         const memberRes = await fetch(`${API_BASE}/Member?$filter=${encodeURIComponent(filter)}&$select=MemberKey`);
                         const memberData = await memberRes.json();
                         if (memberData.value && memberData.value.length > 0) {
-                            memberKey = memberData.value[0].MemberKey;
+                            memberKeys = memberData.value.map(m => m.MemberKey);
                         }
                     }
 
-                    if (!memberKey) {
+                    if (memberKeys.length === 0) {
                         listingsContainer.innerHTML = '<div class="modal-listings-placeholder">No MLS profile linked to this contact.</div>';
                         return;
                     }
@@ -2239,7 +2248,8 @@
                     twoYearsAgo.setFullYear(twoYearsAgo.getFullYear() - 2);
                     const dateStr = twoYearsAgo.toISOString().split('T')[0];
 
-                    const listingsFilter = `(ListAgentKey eq '${memberKey}') and (StandardStatus eq 'Active' or (StandardStatus eq 'Closed' and CloseDate ge ${dateStr}))`;
+                    const keysFilter = memberKeys.map(k => `ListAgentKey eq '${k}'`).join(' or ');
+                    const listingsFilter = `(${keysFilter}) and (StandardStatus eq 'Active' or (StandardStatus eq 'Closed' and CloseDate ge ${dateStr}))`;
                     const listingsRes = await fetch(`${API_BASE}/Property?$filter=${encodeURIComponent(listingsFilter)}&$select=ListingId,UnparsedAddress,ListPrice,ClosePrice,StandardStatus,Media&$orderby=StandardStatus asc,CloseDate desc&$top=10`);
                     const listingsData = await listingsRes.json();
                     const listings = listingsData.value || [];
