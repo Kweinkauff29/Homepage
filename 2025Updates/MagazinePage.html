@@ -2,650 +2,721 @@
 <html lang="en">
 <head>
   <meta charset="utf-8" />
-  <title>Realtor Review Magazine — Bonita Springs–Estero REALTORS®</title>
+  <title>Realtor Review Magazine — Winter 2026 | CCOR (formerly BER)</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <meta name="description" content="Flip through Bonita Springs–Estero REALTORS®’ Realtor Review magazine online, download the PDF, and see the magazine and Year Sponsors who support each issue.">
+  <meta name="description" content="Flip through our Winter 2026 issue of Realtor Review magazine online, download the PDF, and see the Year Sponsors who support each issue.">
 
-  <!-- Swiss-modern fonts -->
+  <!-- Swiss-Tech fonts & Icons -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&family=Montserrat:wght@600;800&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&family=Montserrat:wght@600;800&family=Roboto+Mono:wght@400;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" />
 
   <style>
-    :root{
-      --ink:#101114;
-      --ink-soft:#4b4f57;
-      --paper:#ffffff;
-      --muted:#f3f5f8;
+    :root {
+      --ink: #101114;
+      --ink-soft: #4b4f57;
+      --paper: #ffffff;
+      --muted: #f3f5f8;
+      
+      --accent: #00c2b7;
+      --accent-soft: #d0f2ec;
+      --accent-red: #ff2948;
+      
+      --brand-primary: #008080;
+      --brand-accent: #004D4D;
 
-      --accent:#00c2b7;
-      --accent-soft:#d0f2ec;
-      --accent-red:#ff2948;
+      --border: rgba(0,0,0,0.08);
+      --radius: 12px;
+      --font-body: 'Inter', system-ui, -apple-system, sans-serif;
+      --font-heading: 'Montserrat', system-ui, sans-serif;
+      --font-mono: 'Roboto Mono', monospace;
     }
 
-    *{box-sizing:border-box;}
+    * { box-sizing: border-box; }
 
-    html,body{
-      margin:0;
-      padding:0;
-      background:var(--muted);
-      color:var(--ink);
-      font-family:Inter,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+    html, body {
+      margin: 0; padding: 0;
+      background: var(--muted);
+      color: var(--ink);
+      font-family: var(--font-body);
+      line-height: 1.5;
     }
 
-    a{color:inherit;text-decoration:none}
-    a:hover{text-decoration:underline}
+    a { color: inherit; text-decoration: none; }
+    a:hover { text-decoration: underline; }
 
-    .wrap{
-      max-width:1240px; /* wider so viewer is larger */
-      margin:0 auto;
-      padding:26px 14px 40px;
+    .wrap {
+      max-width: 1240px;
+      margin: 0 auto;
+      padding: 30px 20px 60px;
     }
 
-    .page-head{
-      border-bottom:2px solid #000;
-      padding-bottom:18px;
-      margin-bottom:22px;
-      display:grid;
-      grid-template-columns:minmax(0,2.4fr) minmax(0,1.2fr);
-      gap:26px;
+    /* Header */
+    .page-head {
+      border-bottom: 2px solid var(--ink);
+      padding-bottom: 24px;
+      margin-bottom: 30px;
+      display: grid;
+      grid-template-columns: minmax(0, 2fr) minmax(0, 1fr);
+      gap: 30px;
+      align-items: end;
     }
 
-    .page-tag{
-      display:inline-flex;
-      align-items:center;
-      padding:4px 10px;
-      border-radius:999px;
-      background:#000;
-      color:#fff;
-      font:700 11px/1 Inter;
-      text-transform:uppercase;
-      letter-spacing:.12em;
-      margin-bottom:10px;
+    .page-tag {
+      display: inline-flex;
+      align-items: center;
+      padding: 6px 12px;
+      border-radius: 999px;
+      background: var(--ink);
+      color: #fff;
+      font: 700 12px/1 var(--font-body);
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      margin-bottom: 12px;
     }
 
-    .page-head h1{
-      font-family:Montserrat,system-ui,sans-serif;
-      font-weight:800;
-      font-size:30px;
-      letter-spacing:.08em;
-      text-transform:uppercase;
-      margin:0 0 8px;
+    .page-head h1 {
+      font-family: var(--font-heading);
+      font-weight: 800;
+      font-size: 36px;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      margin: 0 0 10px;
+      line-height: 1.1;
     }
 
-    .page-head .sub{
-      margin:0;
-      max-width:620px;
-      font-size:15px;
-      color:var(--ink-soft);
+    .page-head .sub {
+      margin: 0;
+      max-width: 620px;
+      font-size: 16px;
+      color: var(--ink-soft);
     }
 
-    /* main layout – single-column so viewer can be as wide as possible */
-    .mag-layout{
-      margin-top:20px;
+    /* Flipbook Viewer */
+    .mag-layout {
+      margin-top: 20px;
     }
 
-    .mag-header-line{
-      display:flex;
-      flex-wrap:wrap;
-      justify-content:space-between;
-      gap:10px;
-      align-items:center;
-      margin-bottom:10px;
+    .mag-header-line {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      gap: 12px;
+      align-items: center;
+      margin-bottom: 16px;
     }
 
-    .mag-label{
-      font-weight:700;
-      font-size:13px;
-      text-transform:uppercase;
-      letter-spacing:.14em;
-      color:var(--ink-soft);
+    .mag-label {
+      font-weight: 700;
+      font-size: 14px;
+      text-transform: uppercase;
+      letter-spacing: 0.14em;
+      color: var(--ink-soft);
     }
 
-    .btn-row{
-      display:flex;
-      flex-wrap:wrap;
-      gap:8px;
+    .btn-row {
+      display: flex;flex-wrap: wrap; gap: 10px;
     }
 
-    .btn{
-      display:inline-flex;
-      align-items:center;
-      justify-content:center;
-      border-radius:999px;
-      padding:8px 14px;
-      font:700 12px/1 Inter;
-      text-transform:uppercase;
-      letter-spacing:.12em;
-      border:2px solid #000;
-      background:#fff;
-      cursor:pointer;
-      text-decoration:none;
-      white-space:nowrap;
+    .btn {
+      display: inline-flex; align-items: center; justify-content: center;
+      border-radius: 999px; padding: 10px 18px;
+      font: 700 13px/1 var(--font-body);
+      text-transform: uppercase; letter-spacing: 0.1em;
+      border: 2px solid var(--ink);
+      cursor: pointer; text-decoration: none; white-space: nowrap;
+      transition: all 0.2s ease;
+    }
+    .btn.primary { background: var(--ink); color: #fff; }
+    .btn.primary:hover { background: #333; }
+    .btn.secondary { background: transparent; color: var(--ink); border-color: var(--ink); }
+    .btn.secondary:hover { background: rgba(0,0,0,0.05); }
+
+    .flip-shell {
+      margin-top: 20px;
+      border-radius: var(--radius);
+      overflow: hidden;
+      background: #000;
+      box-shadow: 0 20px 40px rgba(0,0,0,0.15);
     }
 
-    .btn.primary{
-      background:#000;
-      color:#fff;
+    /* Replaced user's iframe layout with new classes */
+    .fp-iframe {
+      border: 1px solid lightgray;
+      width: 100%;
+      height: 720px;
+      display: block;
     }
 
-    .btn.secondary{
-      background:var(--muted);
-      border-color:#000;
+    /* Grid Layout for Main Content */
+    .content-grid {
+      display: grid;
+      grid-template-columns: 2fr 1fr;
+      gap: 30px;
+      margin-top: 40px;
+      align-items: start;
     }
 
-    .flip-shell{
-      margin-top:16px;
-      border-radius:16px;
-      overflow:hidden;
-      background:#000;
-      box-shadow:0 24px 60px rgba(0,0,0,.26);
+    /* Highlights Section (Swiss-Tech Styling) */
+    .mag-highlights {
+      padding: 30px;
+      border-radius: var(--radius);
+      background: #ffffff;
+      border: 1px solid var(--border);
+      box-shadow: 0 10px 30px rgba(0,0,0,0.03);
+      position: relative;
     }
 
-    .flip-shell iframe{
-      display:block;
-      width:100%;
-      height:720px; /* taller & wide for direct reading */
-      border:0;
+    .mag-highlights h2 {
+      margin: 0 0 8px;
+      font-family: var(--font-heading);
+      font-weight: 800;
+      font-size: 22px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      border-bottom: 2px solid var(--accent);
+      display: inline-block;
+      padding-bottom: 4px;
+    }
+    
+    .mag-highlights .subtext {
+      margin: 12px 0 24px;
+      font-size: 14px;
+      color: var(--ink-soft);
     }
 
-    /* HIGHLIGHTS SECTION */
-    .mag-highlights{
-      margin-top:28px;
-      padding:20px 18px 20px;
-      border-radius:20px;
-      background:linear-gradient(135deg, rgba(0,194,183,.10), #ffffff);
-      border:1px solid rgba(0,0,0,.06);
-      box-shadow:0 18px 40px rgba(0,0,0,.10);
-      position:relative;
-      overflow:hidden;
+    .mag-highlights-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 20px;
     }
 
-    .mag-highlights::before{
-      content:"+ FALL 2025 ISSUE";
-      position:absolute;
-      top:18px;
-      right:20px;
-      font-family:Montserrat,system-ui,sans-serif;
-      font-size:10px;
-      letter-spacing:.22em;
-      text-transform:uppercase;
-      color:rgba(0,0,0,.35);
+    .highlight-card {
+      padding: 20px;
+      border-radius: var(--radius);
+      background: var(--muted);
+      border: 1px solid var(--border);
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      transition: transform 0.2s;
+    }
+    .highlight-card:hover { transform: translateY(-2px); }
+
+    .highlight-tag {
+      font-family: var(--font-mono);
+      font-weight: 700;
+      font-size: 11px;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--brand-primary);
     }
 
-    .mag-highlights h2{
-      margin:0 0 6px;
-      font-family:Montserrat,system-ui,sans-serif;
-      font-weight:800;
-      font-size:18px;
-      letter-spacing:.16em;
-      text-transform:uppercase;
+    .highlight-title {
+      font-weight: 700;
+      font-size: 16px;
+      line-height: 1.3;
+      margin: 0;
     }
 
-    .mag-highlights p.subtext{
-      margin:0 0 14px;
-      font-size:13px;
-      color:var(--ink-soft);
-      max-width:720px;
+    .highlight-body {
+      font-size: 14px;
+      color: var(--ink-soft);
+      flex: 1;
+      margin: 0;
     }
 
-    .mag-highlights-grid{
-      display:grid;
-      grid-template-columns:repeat(auto-fit,minmax(240px,1fr));
-      gap:14px;
-      margin-top:8px;
+    .highlight-meta {
+      margin-top: 8px;
+      font-size: 12px;
+      font-family: var(--font-mono);
+      font-weight: 600;
+      text-transform: uppercase;
+      color: var(--ink);
+      border-top: 1px dashed var(--border);
+      padding-top: 8px;
     }
 
-    .highlight-card{
-      position:relative;
-      padding:14px 14px 12px;
-      border-radius:16px;
-      background:#fff;
-      border:1px solid rgba(0,0,0,.04);
-      box-shadow:0 10px 26px rgba(0,0,0,.08);
-      display:flex;
-      flex-direction:column;
-      gap:6px;
+    /* AI Chatbot Section (Ported from Market Reports) */
+    .ai-module {
+      padding: 24px;
+      border-radius: var(--radius);
+      background: #ffffff;
+      border: 1px solid var(--border);
+      box-shadow: 0 10px 30px rgba(0,0,0,0.03);
+      position: sticky;
+      top: 24px;
     }
 
-    .highlight-card::before{
-      content:"";
-      position:absolute;
-      left:0;
-      top:0;
-      width:46px;
-      height:4px;
-      border-radius:999px;
-      background:linear-gradient(90deg,var(--accent),var(--accent-red));
+    .ai-head {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 20px;
+      padding-bottom: 16px;
+      border-bottom: 1px dashed var(--border);
     }
 
-    .highlight-tag{
-      font-family:Montserrat,system-ui,sans-serif;
-      font-size:10px;
-      letter-spacing:.18em;
-      text-transform:uppercase;
-      color:var(--ink-soft);
-      margin-top:4px;
+    .ai-icon {
+      width: 32px; height: 32px;
+      background: var(--ink); color: #fff;
+      display: flex; align-items: center; justify-content: center;
+      border-radius: 8px; font-size: 14px;
     }
 
-    .highlight-title{
-      font-weight:700;
-      font-size:14px;
-      line-height:1.3;
+    .ai-title {
+      font: 800 18px var(--font-heading);
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      margin: 0;
     }
 
-    .highlight-body{
-      font-size:13px;
-      color:var(--ink-soft);
-      flex:1;
+    .ai-desc {
+      font-size: 13px; color: var(--ink-soft);
+      margin-bottom: 16px;
     }
 
-    .highlight-meta{
-      margin-top:4px;
-      font-size:11px;
-      text-transform:uppercase;
-      letter-spacing:.16em;
-      color:var(--accent);
+    .ai-questions {
+      display: flex; flex-direction: column; gap: 8px;
+      max-height: 360px; overflow-y: auto;
+      padding-right: 8px;
+    }
+    /* Scrollbar styling for questions list */
+    .ai-questions::-webkit-scrollbar { width: 6px; }
+    .ai-questions::-webkit-scrollbar-track { background: var(--muted); border-radius: 4px; }
+    .ai-questions::-webkit-scrollbar-thumb { background: #ccc; border-radius: 4px; }
+
+    .ai-q-btn {
+      background: #fff; border: 1px solid var(--border);
+      padding: 12px; border-radius: 8px;
+      font: 600 13px/1.4 var(--font-body); color: var(--ink);
+      text-align: left; cursor: pointer; transition: all 0.1s ease;
+      box-shadow: 2px 2px 0 rgba(0,0,0,0.03); position: relative;
+    }
+    .ai-q-btn:hover, .ai-q-btn.active-q {
+      box-shadow: 3px 3px 0 rgba(0,0,0,0.08);
+      border-color: var(--ink);
+      transform: translate(-1px, -1px);
     }
 
-    /* fine-print + about */
-    .fine-print{
-      margin-top:22px;
-      padding:16px 18px 14px;
-      border-radius:16px;
-      background:#f7f8fb;
-      border:1px solid rgba(0,0,0,.08);
+    .ai-response-area {
+      margin-top: 20px; background: #1a1b1e; border: 1px solid #2d3036;
+      border-radius: 8px; padding: 20px;
+      font: 400 14px/1.6 var(--font-mono); color: #e2e4e8;
+      display: none; box-shadow: inset 0 2px 8px rgba(0,0,0,0.3);
+      min-height: 120px; white-space: pre-wrap;
+    }
+    .ai-response-area.active { display: block; }
+
+    /* Typewriter effect parts */
+    .cursor {
+      display: inline-block; width: 8px; height: 14px;
+      background: #e2e4e8; vertical-align: middle;
+      animation: blink 1s step-end infinite; margin-left: 6px;
+    }
+    @keyframes blink { 0%, 100% {opacity:1;} 50% {opacity:0;} }
+
+    .thinking-dots { display: flex; gap: 4px; align-items: center; height: 20px; }
+    .thinking-dots span {
+      width: 6px; height: 6px; background: var(--ink-soft);
+      border-radius: 50%; animation: pulse 1.4s infinite ease-in-out both;
+    }
+    .thinking-dots span:nth-child(1) { animation-delay: -0.32s; }
+    .thinking-dots span:nth-child(2) { animation-delay: -0.16s; }
+    @keyframes pulse {
+      0%, 80%, 100% { transform: scale(0); opacity: 0.5; }
+      40% { transform: scale(1); opacity: 1; }
     }
 
-    .fine-print h2{
-      margin:0 0 8px;
-      font:700 13px/1 Inter;
-      text-transform:uppercase;
-      letter-spacing:.14em;
-      color:var(--ink-soft);
+    /* Sponsors Sections */
+    .sponsor-section {
+      margin-top: 50px;
+      padding-top: 30px;
+      border-top: 2px solid var(--border);
+    }
+    
+    .sponsor-section h2 {
+      font-family: var(--font-heading);
+      font-size: 24px;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      margin-bottom: 24px;
+      text-align: center;
     }
 
-    .fine-print ul{
-      margin:0 0 10px 18px;
-      padding:0;
-      list-style:disc;
+    /* Ad Specs / Magazine Sponsors */
+    .ad-specs-grid {
+      display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; margin-top: 20px;
+    }
+    .ad-spec-card {
+      background: #fff; border: 1px solid var(--border); border-radius: var(--radius); padding: 16px; text-align: center;
+    }
+    .ad-spec-card img { width: 100%; height: auto; border-radius: 8px; border: 1px solid var(--border); margin-bottom: 12px; }
+    
+    .contact-banner {
+      background: var(--muted); padding: 24px; border-radius: var(--radius); text-align: center; margin-top: 24px;
+      border: 1px dashed var(--ink);
     }
 
-    .fine-print li{
-      font-size:13px;
-      color:var(--ink-soft);
-      margin-bottom:4px;
+    /* Year Sponsors Grid Layout */
+    .y-tier {
+      margin-bottom: 40px; text-align: center;
+    }
+    .y-tier-label {
+      font: 700 16px/1 var(--font-heading);
+      letter-spacing: 0.2em; text-transform: uppercase;
+      margin-bottom: 20px; display: inline-block;
+      padding: 8px 16px; border-top: 2px solid #ccc; border-bottom: 2px solid #ccc;
+    }
+    .y-tier.diamond .y-tier-label { color: #008080; border-color: #008080; }
+    .y-tier.platinum .y-tier-label { color: #555; border-color: #555; }
+    .y-tier.gold .y-tier-label { color: #b8860b; border-color: #b8860b; }
+    .y-tier.silver .y-tier-label { color: #7f8c8d; border-color: #7f8c8d; }
+
+    .y-logos {
+      display: flex; flex-wrap: wrap; justify-content: center; gap: 24px; align-items: center;
+    }
+    .y-logo {
+      background: #fff; padding: 16px; border-radius: 12px;
+      border: 1px solid rgba(0,0,0,0.04); box-shadow: 0 4px 12px rgba(0,0,0,0.03);
+      display: flex; align-items: center; justify-content: center;
+      transition: transform 0.2s;
+    }
+    .y-logo:hover { transform: scale(1.05); }
+    .y-logo img { max-width: 180px; max-height: 80px; object-fit: contain; }
+    .diamond .y-logo img { max-width: 240px; max-height: 100px; }
+    
+    .mag-sponsors-tags {
+      display: flex; flex-wrap: wrap; justify-content: center; gap: 12px; margin-top: 10px;
+    }
+    .mag-tag {
+      padding: 8px 16px; background: #fff; border: 1px solid var(--border); border-radius: 999px;
+      font: 600 13px var(--font-body); box-shadow: 0 2px 6px rgba(0,0,0,0.02);
     }
 
-    .fine-print p{
-      font-size:13px;
-      color:var(--ink-soft);
-      margin:6px 0 4px;
+    /* Responsive */
+    @media (max-width: 960px) {
+      .content-grid { grid-template-columns: 1fr; }
+      .ad-specs-grid { grid-template-columns: 1fr; }
+      .fp-iframe { height: 500px; }
     }
-
-    .fine-print strong{
-      font-weight:700;
-    }
-
-    /* sponsors */
-    .sponsor-wall{
-      margin-top:32px;
-      padding-top:20px;
-      border-top:2px solid rgba(0,0,0,.12);
-    }
-
-    .sponsor-wall h2{
-      font-family:Montserrat,system-ui,sans-serif;
-      font-weight:800;
-      font-size:18px;
-      letter-spacing:.14em;
-      text-transform:uppercase;
-      margin:0 0 6px;
-    }
-
-    .sponsor-wall p{
-      margin:0 0 16px;
-      font-size:14px;
-      color:var(--ink-soft);
-    }
-
-    .sponsor-tier-row{
-      display:flex;
-      flex-wrap:wrap;
-      gap:12px;
-      margin-bottom:18px;
-      align-items:flex-start;
-    }
-
-    .sponsor-tier-label{
-      flex:0 0 160px;
-      max-width:160px;
-      font:700 11px/1.3 Inter;
-      text-transform:uppercase;
-      letter-spacing:.12em;
-      color:var(--ink-soft);
-    }
-
-    .sponsor-logos{
-      flex:1 1 auto;
-      display:flex;
-      flex-wrap:wrap;
-      gap:10px;
-    }
-
-    .sponsor-logo,
-    .sponsor-tag{
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      min-width:140px;
-      min-height:68px;
-      padding:8px 12px;
-      border-radius:16px;
-      background:#fff;
-      border:1px solid rgba(0,0,0,.05);
-      box-shadow:0 10px 30px rgba(0,0,0,.12);
-    }
-
-    .sponsor-logo img{
-      max-height:50px;
-      width:auto;
-      display:block;
-    }
-
-    .sponsor-tag{
-      min-height:auto;
-      box-shadow:0 6px 18px rgba(0,0,0,.08);
-      font-size:13px;
-      font-weight:600;
-      text-align:center;
-      padding:8px 14px;
-    }
-
-    @media (max-width:860px){
-      .page-head{
-        grid-template-columns:minmax(0,1fr);
-      }
-      .flip-shell iframe{
-        height:560px;
-      }
-      .sponsor-tier-label{
-        flex-basis:100%;
-        max-width:none;
-      }
-    }
-
-    @media (max-width:700px){
-      .mag-highlights{
-        padding:18px 14px 16px;
-      }
-      .mag-highlights-grid{
-        grid-template-columns:minmax(0,1fr);
-      }
-      .mag-highlights::before{
-        display:none;
-      }
-    }
-
-    @media (max-width:600px){
-      .btn-row{
-        flex-direction:column;
-        align-items:flex-start;
-      }
-      .flip-shell iframe{
-        height:520px;
-      }
+    @media (max-width: 600px) {
+      .page-head { grid-template-columns: 1fr; }
+      .mag-highlights-grid { grid-template-columns: 1fr; }
+      .y-logos { flex-direction: column; }
     }
   </style>
 </head>
 <body>
   <div class="wrap">
+    
     <header class="page-head">
       <div>
-        <div class="page-tag">Realtor Review</div>
-        <h1>Realtor Review Magazine</h1>
+        <div class="page-tag">Realtor Review Magazine</div>
+        <h1>Winter 2026 Issue</h1>
         <p class="sub">
-          Flip through our Fall 2025 issue of <em>Realtor Review</em> right in your browser, download a PDF copy,
-          and see the affiliates and Year Sponsors helping bring this magazine to life.
+          Flip through the milestone Winter 2026 issue. Celebrate BER’s 60-year history and the next chapter with CCOR, analyze market trends from 2020-2025, and discover the leadership shaping our future.
         </p>
       </div>
-      <!-- meta block removed per request -->
     </header>
 
     <main>
+      <!-- Viewer Section -->
       <section class="mag-layout" aria-label="Realtor Review flipbook">
         <div class="mag-header-line">
-          <div class="mag-label">Fall 2025 Issue</div>
+          <div class="mag-label">Interactive Flipbook</div>
           <div class="btn-row">
-            <a class="btn primary" href="https://heyzine.com/flip-book/f2d762518b.html" target="_blank" rel="noopener noreferrer">
+            <a class="btn primary" href="https://heyzine.com/flip-book/56d5ac1ac9.html" target="_blank" rel="noopener">
               Open Full Screen
-            </a>
-            <a class="btn secondary" href="https://bonitaesterorealtors.com/wp-content/uploads/2025/11/Fall-2025-12.pdf">
-              Download PDF
             </a>
           </div>
         </div>
 
         <div class="flip-shell">
-          <iframe
-            src="https://heyzine.com/flip-book/f2d762518b.html"
-            title="Realtor Review — Fall 2025 Flipbook"
-            loading="lazy"
-            allowfullscreen>
-          </iframe>
+          <iframe allowfullscreen="allowfullscreen" allow="clipboard-write" scrolling="no" class="fp-iframe" src="https://heyzine.com/flip-book/56d5ac1ac9.html" title="Winter 2026 Issue"></iframe>
         </div>
       </section>
 
-      <!-- NEW: Highlights from this issue -->
-      <section class="mag-highlights" aria-label="Highlights from the Fall 2025 issue">
-        <h2>Highlights from this issue</h2>
-        <p class="subtext">
-          Want the quick tour first? Start with these standout articles, then jump into the flipbook or PDF and head to the page numbers listed.
+      <!-- Grid Layout for Highlights and Chatbot -->
+      <div class="content-grid">
+        
+        <!-- Highlights -->
+        <section class="mag-highlights" aria-label="Issue Highlights">
+          <h2>Highlights from this issue</h2>
+          <p class="subtext">A quick look at the features, market stats, and announcements shaping our Winter 2026 edition.</p>
+          
+          <div class="mag-highlights-grid">
+            <article class="highlight-card">
+              <div class="highlight-tag">Leadership & Vision</div>
+              <h3 class="highlight-title">Jeanne’s Journal: Give Back, Grow Forward</h3>
+              <p class="highlight-body">CCOR President Jeanne Drath celebrates 60 years, thanks the 2025 leadership, and explains how the approved CCOR name change aligns with member support and a healthier housing market balance.</p>
+              <div class="highlight-meta">See page 4</div>
+            </article>
+
+            <article class="highlight-card">
+              <div class="highlight-tag">A New Chapter</div>
+              <h3 class="highlight-title">From BER to CCOR</h3>
+              <p class="highlight-body">A detailed look at the member-approved transition to the Coconut Coast Organization of REALTORS® (CCOR), examining the research, branding, and NAR approval process.</p>
+              <div class="highlight-meta">See page 4</div>
+            </article>
+
+            <article class="highlight-card">
+              <div class="highlight-tag">Convention Takeaways</div>
+              <h3 class="highlight-title">Champions for Growth</h3>
+              <p class="highlight-body">Recap the 2025 Florida Realtors® Convention with a practical growth plan focused on purpose, mindset, systems, and relationships—including a ready-to-use 30-day action plan.</p>
+              <div class="highlight-meta">See page 6</div>
+            </article>
+
+            <article class="highlight-card">
+              <div class="highlight-tag">Celebration & Recognition</div>
+              <h3 class="highlight-title">Installation Night</h3>
+              <p class="highlight-body">Relive the 2026 Installation Awards Banquet, centered on gratitude, leadership transitions, and unveiling CCOR while celebrating the sponsors who keep us moving forward.</p>
+              <div class="highlight-meta">See pages 8–9</div>
+            </article>
+
+            <article class="highlight-card">
+              <div class="highlight-tag">Market Snapshot</div>
+              <h3 class="highlight-title">Winter 2026 Stats</h3>
+              <p class="highlight-body">A visual update on local conditions, delivering median sales price trends, days on market, closed sales, and pending sales by ZIP code for clear listing conversations.</p>
+              <div class="highlight-meta">See page 11</div>
+            </article>
+
+            <article class="highlight-card">
+              <div class="highlight-tag">Trend Watch</div>
+              <h3 class="highlight-title">Market Evolution: 2020–2025</h3>
+              <p class="highlight-body">Zoom out to the big picture of a six-year local market journey. Understand the transition from the 2020 uncertainty to pandemic booms and the measured rhythm of today.</p>
+              <div class="highlight-meta">See pages 12–13</div>
+            </article>
+
+            <article class="highlight-card">
+              <div class="highlight-tag">60-Year Anniversary Feature</div>
+              <h3 class="highlight-title">Chapter 1 — The Founding Years</h3>
+              <p class="highlight-body">Travel back to 1966–1981 when Bonita Springs was “Old Florida.” Explore local history, founding facts, and the genesis of organized real estate by visionary pioneers.</p>
+              <div class="highlight-meta">See page 14</div>
+            </article>
+
+            <article class="highlight-card">
+              <div class="highlight-tag">From the Archives</div>
+              <h3 class="highlight-title">An Average Day for a BEAR REALTOR</h3>
+              <p class="highlight-body">Recreate the daily workflow of the association’s early years, showing how deep relationship-building mattered in the analog era of maps, paper files, and rotary phones.</p>
+              <div class="highlight-meta">See page 15</div>
+            </article>
+
+            <article class="highlight-card">
+              <div class="highlight-tag">Advocacy in Action</div>
+              <h3 class="highlight-title">RPAC 2025 Wins That Hit Home</h3>
+              <p class="highlight-body">Connect RPAC investments to real policy outcomes, covering tax relief, home-hardening funding, condo transparency, and major property-right protections.</p>
+              <div class="highlight-meta">See page 16</div>
+            </article>
+
+            <article class="highlight-card">
+              <div class="highlight-tag">Leadership & Member Tools</div>
+              <h3 class="highlight-title">2026 Committee Chairs + Realtor.com+</h3>
+              <p class="highlight-body">Meet the volunteers shaping the year ahead and learn how to leverage Realtor.com+, a live benefit supporting agents with real-time insight and integrated tools.</p>
+              <div class="highlight-meta">See page 17</div>
+            </article>
+
+            <article class="highlight-card">
+              <div class="highlight-tag">Top Producers Spotlight</div>
+              <h3 class="highlight-title">2025 Sales Excellence Winners</h3>
+              <p class="highlight-body">Honoring our top-producing agents across Diamond, Platinum, and Gold tiers, recognizing significant RPAC investments and outstanding association support.</p>
+              <div class="highlight-meta">See pages 18–19</div>
+            </article>
+
+            <article class="highlight-card">
+              <div class="highlight-tag">Powered by Partnership</div>
+              <h3 class="highlight-title">Thank You to Our Year Sponsors</h3>
+              <p class="highlight-body">A tribute to the year sponsors and featured advertisers who make BER programs, vital education, and this magazine publication possible.</p>
+              <div class="highlight-meta">See pages 19–20</div>
+            </article>
+          </div>
+        </section>
+
+        <!-- AI Chatbot Mock -->
+        <aside class="ai-module">
+          <div class="ai-head">
+            <div class="ai-icon"><i class="fa fa-terminal"></i></div>
+            <div>
+              <h2 class="ai-title">Magazine Insights AI</h2>
+            </div>
+          </div>
+          <p class="ai-desc">Ask the chatbot about the Winter 2026 content and key takeaways directly from the articles.</p>
+          
+          <div class="ai-questions" id="aiQList">
+            <!-- Populated via JS -->
+          </div>
+          
+          <div class="ai-response-area" id="aiResponse"></div>
+        </aside>
+
+      </div>
+
+      <!-- 2026 Year & Magazine Sponsors -->
+      <section class="sponsor-section" aria-label="2026 Year Sponsors">
+        <h2>2026 Year & Magazine Sponsors</h2>
+        <p style="text-align:center; color:var(--ink-soft); max-width:700px; margin:0 auto 40px;">
+          Thank you to our 2026 Year Sponsors and Magazine advertisers for supporting our programs, education, and member communications all year long.
         </p>
 
-        <div class="mag-highlights-grid">
-          <article class="highlight-card">
-            <div class="highlight-tag">Leadership & Community</div>
-            <h3 class="highlight-title">President’s Letter: Thrive in 2025</h3>
-            <p class="highlight-body">
-              2025 President Adam Ruud recaps Q3 wins—from Poker Run fundraising and kickball to advocacy victories—and looks ahead
-              to Jeanne Drath’s “Give Back, Grow Forward” theme for 2026.
-            </p>
-            <div class="highlight-meta">See page 4</div>
-          </article>
+        <div class="y-tier diamond">
+          <div class="y-tier-label">Diamond</div>
+          <div class="y-logos">
+            <div class="y-logo"><img src="https://www.saadlegal.com/wp-content/uploads/sites/1404714/2025/06/SamJSaad-site-logo-new.png" alt="Law Office of Sam J. Saad III"></div>
+            <div class="y-logo"><img src="https://stateinsuranceusa.com/wp-content/uploads/2023/01/logo-1.png" alt="State Insurance USA"></div>
+            <div class="y-logo"><img src="https://bonitaesterorealtors.com/wp-content/uploads/2025/12/Movement-mortgage.png" alt="Movement Mortgage"></div>
+            <div class="y-logo"><img src="https://www.cigflorida.com/wp-content/uploads/2021/09/logo.jpg" alt="Chapman Insurance Group"></div>
+            <div class="y-logo" style="background:#021a3f;"><img src="https://www.lawfirmnaples.com/wp-content/themes/paperstreet/images/logo.png" alt="Woods · Weidenmiller · Michetti · Rudnick"></div>
+          </div>
+        </div>
 
-          <article class="highlight-card">
-            <div class="highlight-tag">Market Watch</div>
-            <h3 class="highlight-title">Fed Rate Cuts: What REALTORS® Should Expect</h3>
-            <p class="highlight-body">
-              A breakdown of the Fed’s first rate cut in nine months, how a 0.25% drop shifts monthly payments, and talking points you can
-              use with buyers in today’s SWFL market.
-            </p>
-            <div class="highlight-meta">See page 6</div>
-          </article>
+        <div class="y-tier platinum">
+          <div class="y-tier-label">Platinum</div>
+          <div class="y-logos">
+            <div class="y-logo"><img src="https://cottrelltitle.com/wp-content/uploads/cottrell-title-logo.png" alt="Cottrell Title & Escrow"></div>
+            <div class="y-logo"><img src="https://bonitaesterorealtors.com/wp-content/uploads/2025/12/Housemaster.png" alt="HouseMaster"></div>
+          </div>
+        </div>
 
-          <article class="highlight-card">
-            <div class="highlight-tag">Risk Management</div>
-            <h3 class="highlight-title">Fake Title Companies Targeting SWFL</h3>
-            <p class="highlight-body">
-              Learn how scammers clone real title companies, red flags to watch for, and the verification steps that protect your buyers,
-              your closings, and your reputation.
-            </p>
-            <div class="highlight-meta">See pages 7–9</div>
-          </article>
+        <div class="y-tier gold">
+          <div class="y-tier-label">Gold</div>
+          <div class="y-logos">
+            <div class="y-logo"><img src="https://www.premiummortgage.com/images/logo.png" alt="Premium Mortgage Corporation"></div>
+            <div class="y-logo"><img src="https://bonitaesterorealtors.com/wp-content/uploads/2026/01/lane_logo_letters-pantone1815_icon-cmyk15-29-98-6-1536x306-1.webp" alt="Lane Insurance Group"></div>
+          </div>
+        </div>
 
-          <article class="highlight-card">
-            <div class="highlight-tag">Investor Guide</div>
-            <h3 class="highlight-title">Vacation Rentals Under the Microscope</h3>
-            <p class="highlight-body">
-              A city-by-city rundown of short-term rental rules from Cape Coral to Naples—permits, minimum stays, taxes, and tips for helping
-              investor clients stay compliant.
-            </p>
-            <div class="highlight-meta">See page 10</div>
-          </article>
+        <div class="y-tier silver">
+          <div class="y-tier-label">Silver</div>
+          <div class="y-logos">
+            <div class="y-logo"><img src="https://hiltonmovers.com/wp-content/uploads/Hilton_logo.png" alt="Hilton Moving and Storage"></div>
+            <div class="y-logo"><img src="https://bonitaesterorealtors.com/wp-content/uploads/2025/12/Lower-Mortgage.svg" alt="Lower Mortgage"></div>
+            <div class="y-logo"><img src="https://d1to58gssdw062.cloudfront.net/images/logo_blue.svg" alt="Revolution Mortgage"></div>
+          </div>
+        </div>
 
-          <article class="highlight-card">
-            <div class="highlight-tag">Commercial</div>
-            <h3 class="highlight-title">SWFL’s Commercial Scene</h3>
-            <p class="highlight-body">
-              Office and retail vacancy rates, rent growth, cap rates, and nearly 1M SF of new projects—get the snapshot you need when
-              commercial questions pop up.
-            </p>
-            <div class="highlight-meta">See page 12</div>
-          </article>
-
-          <article class="highlight-card">
-            <div class="highlight-tag">Local Development</div>
-            <h3 class="highlight-title">Imperial Crossing in Downtown Bonita</h3>
-            <p class="highlight-body">
-              A first look at the Imperial River mixed-use project—120 apartments, new retail and restaurant space, public parks, and a kayak
-              launch reshaping Old 41.
-            </p>
-            <div class="highlight-meta">See page 13</div>
-          </article>
-
-          <article class="highlight-card">
-            <div class="highlight-tag">Data Deep Dive</div>
-            <h3 class="highlight-title">New Construction vs. Resale in 2025</h3>
-            <p class="highlight-body">
-              Why resale homes now lead in median price and total sales, how builders are using incentives, and scripts for helping buyers
-              weigh character vs. efficiency.
-            </p>
-            <div class="highlight-meta">See pages 14–15</div>
-          </article>
-
-          <article class="highlight-card">
-            <div class="highlight-tag">Forms & Compliance</div>
-            <h3 class="highlight-title">New Legal Requirements for Florida REALTORS®</h3>
-            <p class="highlight-body">
-              Expanded flood disclosure laws for sales and leases plus updated exclusive listing agreements tied to NAR’s new “Multiple Listing
-              Options for Sellers” policies.
-            </p>
-            <div class="highlight-meta">See pages 16–17</div>
-          </article>
-
-          <article class="highlight-card">
-            <div class="highlight-tag">Member Tools</div>
-            <h3 class="highlight-title">2025 Year in Review & Must-Use Apps</h3>
-            <p class="highlight-body">
-              How BrokerBay, CubiCasa, and TrustedOnly are reshaping daily workflows—plus Open House Weekend, global outreach, and a peek
-              at what’s next for BER.
-            </p>
-            <div class="highlight-meta">See page 18</div>
-          </article>
-
-          <article class="highlight-card">
-            <div class="highlight-tag">Market Stats</div>
-            <h3 class="highlight-title">Fall 2025 Bonita & Estero Numbers</h3>
-            <p class="highlight-body">
-              Charts for median price, days on market, closed and pending sales, and inventory by ZIP so you can drop hyper-local data straight
-              into your listing and buyer presentations.
-            </p>
-            <div class="highlight-meta">See page 19</div>
-          </article>
+        <!-- Additional Magazine Partners listing -->
+        <h3 style="text-align:center; font:700 16px var(--font-heading); margin-top:40px; margin-bottom:12px;">Magazine Publication Partners</h3>
+        <div class="mag-sponsors-tags">
+          <span class="mag-tag">Downing Frye</span>
+          <span class="mag-tag">Top Choice</span>
+          <span class="mag-tag">RPAC</span>
         </div>
       </section>
 
-      <section class="fine-print" aria-label="Printing & sharing details">
-        <h2>Printing &amp; Sharing</h2>
-        <ul>
-          <li>For the cleanest hard copy, use the PDF version and choose “Fit” or “Shrink oversized pages” in your print dialog.</li>
-          <li>You’re welcome to share this link or PDF directly with your office, customers, and sphere.</li>
-          <li>Year Sponsorship inquiries should go to <strong>Support@BERealtors.org</strong>.</li>
-          <li>For questions about future ad placements in <em>Realtor Review</em>, email <strong>Support@BERealtors.org</strong>.</li>
-        </ul>
+      <!-- Advertisement Specs & Magazine Sponsors -->
+      <section class="sponsor-section" aria-label="Magazine Advertisements">
+        <h2>Advertise in Realtor Review</h2>
+        <div class="contact-banner">
+          <p style="margin-top:0;font-size:16px;">Secure your spot in our upcoming issues and reach a hyper-local audience of real estate professionals.</p>
+          <a href="mailto:tech@berealtors.org" class="btn primary">Contact tech@berealtors.org to Reserve</a>
+        </div>
 
-        <!-- About section moved here & styled the same -->
-        <p>
-          <strong>About Realtor Review:</strong>
-          Our <em>Realtor Review</em> magazine is distributed to over <strong>1,400+</strong> REALTORS® and
-          affiliate members with Bonita Springs–Estero REALTORS®. Each issue highlights market insights, upcoming
-          education, advocacy wins, and spotlights on the partners who support our members and community.
-        </p>
-      </section>
-
-      <!-- Magazine sponsors (above Year Sponsors) -->
-      <section class="sponsor-wall" aria-label="Realtor Review magazine sponsors">
-        <h2>Magazine Sponsors</h2>
-        <p>Thank you to the sponsors featured in this Fall 2025 issue of <em>Realtor Review</em>.</p>
-
-        <div class="sponsor-tier-row">
-          <div class="sponsor-tier-label">Magazine Sponsors</div>
-          <div class="sponsor-logos">
-            <span class="sponsor-tag">Downing Frye</span>
-            <span class="sponsor-tag">HouseMaster</span>
-            <span class="sponsor-tag">Top Choice</span>
-            <span class="sponsor-tag">Revolution Mortgage</span>
-            <span class="sponsor-tag">Woods, Weidenmiller, Michetti &amp; Rudnick</span>
-            <span class="sponsor-tag">RPAC</span>
-            <span class="sponsor-tag">Saad Legal</span>
+        <div class="ad-specs-grid">
+          <div class="ad-spec-card">
+            <img src="https://res.cloudinary.com/micronetonline/image/upload/c_limit,w_2000,h_1970/v1647352682/tenants/6c24b0da-8a6e-4f2b-8547-26a8c1dc4581/ab5adcb11301471e8f5d39600b37a889/full-page.png" alt="Full Page Spec" />
+            <h3 style="margin:0 0 4px;font:700 16px var(--font-heading);">Full Page Ad</h3>
+            <p style="margin:0;font-size:13px;color:var(--ink-soft);">$800 / Issue | $2,600 / 4-Issue Pkg<br>Specs: 8" x 10.25"</p>
+          </div>
+          <div class="ad-spec-card">
+            <img src="https://res.cloudinary.com/micronetonline/image/upload/c_limit,w_2000,h_1970/v1647353070/tenants/6c24b0da-8a6e-4f2b-8547-26a8c1dc4581/8593267eafec4fe291bd464f1744e4ea/Half-page-2.png" alt="Half Page Spec" />
+            <h3 style="margin:0 0 4px;font:700 16px var(--font-heading);">Half Page Ad</h3>
+            <p style="margin:0;font-size:13px;color:var(--ink-soft);">$500 / Issue | $1,700 / 4-Issue Pkg<br>Specs: 8" x 5"</p>
+          </div>
+          <div class="ad-spec-card">
+            <img src="https://res.cloudinary.com/micronetonline/image/upload/c_limit,w_1880,h_1576/v1647353201/tenants/6c24b0da-8a6e-4f2b-8547-26a8c1dc4581/e61fdb6f238d49a88a29c8c934dce901/Quarter-Page.png" alt="Quarter Page Spec" />
+            <h3 style="margin:0 0 4px;font:700 16px var(--font-heading);">Quarter Page Ad</h3>
+            <p style="margin:0;font-size:13px;color:var(--ink-soft);">$400 / Issue | $1,200 / 4-Issue Pkg<br>Specs: 3.9" x 5"</p>
           </div>
         </div>
       </section>
 
-      <!-- Year Sponsors with logos -->
-      <section class="sponsor-wall" aria-label="2025 Year Sponsors">
-        <h2>2025 Year Sponsors</h2>
-        <p>Thank you to our 2025 Year Sponsors for supporting our programs, education, and member communications all year long.</p>
-
-        <div class="sponsor-tier-row">
-          <div class="sponsor-tier-label">Diamond</div>
-          <div class="sponsor-logos">
-            <div class="sponsor-logo">
-              <img src="http://bonitaesterorealtors.com/wp-content/uploads/2025/11/Cottrell-Title-logo.png" alt="Cottrell Title &amp; Escrow — Diamond Year Sponsor">
-            </div>
-            <div class="sponsor-logo">
-              <img src="http://bonitaesterorealtors.com/wp-content/uploads/2025/11/SIUSA.png" alt="State Insurance USA — Diamond Year Sponsor">
-            </div>
-            <div class="sponsor-logo">
-              <img src="http://bonitaesterorealtors.com/wp-content/uploads/2025/11/HouseMaster-Home-Inspections-logo.png" alt="HouseMaster — Diamond Year Sponsor">
-            </div>
-            <div class="sponsor-logo">
-              <img src="http://bonitaesterorealtors.com/wp-content/uploads/2025/11/Law-Office-of-Sam-J.-Saad-III-logo.webp" alt="Law Office of Sam J. Saad III — Diamond Year Sponsor">
-            </div>
-            <div class="sponsor-logo">
-              <img src="http://bonitaesterorealtors.com/wp-content/uploads/2025/11/Woods-·-Weidenmiller-·-Michetti-·-Rudnick-logo.jpg" alt="Woods, Weidenmiller, Michetti &amp; Rudnick — Diamond Year Sponsor">
-            </div>
-          </div>
-        </div>
-
-        <div class="sponsor-tier-row">
-          <div class="sponsor-tier-label">Gold</div>
-          <div class="sponsor-logos">
-            <div class="sponsor-logo">
-              <img src="http://bonitaesterorealtors.com/wp-content/uploads/2025/11/Hilton-Moving-and-Storage-logo.png" alt="Hilton Moving and Storage — Gold Year Sponsor">
-            </div>
-            <div class="sponsor-logo">
-              <img src="http://bonitaesterorealtors.com/wp-content/uploads/2025/11/Private-Client-Title-Escrow-logo.webp" alt="Private Client Title &amp; Escrow — Gold Year Sponsor">
-            </div>
-            <div class="sponsor-logo">
-              <img src="http://bonitaesterorealtors.com/wp-content/uploads/2025/11/Davies-Duke-logo.webp" alt="Davies Duke — Gold Year Sponsor">
-            </div>
-          </div>
-        </div>
-
-        <div class="sponsor-tier-row">
-          <div class="sponsor-tier-label">Silver</div>
-          <div class="sponsor-logos">
-            <div class="sponsor-logo">
-              <img src="http://bonitaesterorealtors.com/wp-content/uploads/2025/11/239-Inspection-Services-logo.png" alt="239 Inspection Services — Silver Year Sponsor">
-            </div>
-          </div>
-        </div>
-
-        <div class="sponsor-tier-row">
-          <div class="sponsor-tier-label">Bronze</div>
-          <div class="sponsor-logos">
-            <div class="sponsor-logo">
-              <img src="http://bonitaesterorealtors.com/wp-content/uploads/2025/11/Premium-Mortgage-Corporation-logo.png" alt="Premium Mortgage Corporation — Bronze Year Sponsor">
-            </div>
-            <div class="sponsor-logo">
-              <img src="http://bonitaesterorealtors.com/wp-content/uploads/2025/11/Dwelling-Check-Home-Inspections-logo.png" alt="Dwelling Check Home Inspections — Bronze Year Sponsor">
-            </div>
-          </div>
-        </div>
-      </section>
     </main>
   </div>
+
+  <script>
+    // AI Chatbot Logic
+    const AI_QA = [
+      { q: "1) What is the overall theme of this Winter 2026 issue?", a: "This issue feels like a milestone edition in the best way. It celebrates BER’s 60-year history, introduces the next chapter with CCOR, looks at where the market has been from 2020 through 2025, and highlights the leadership, advocacy, and member achievements shaping 2026. (Cover; pages 4–5.)" },
+      { q: "2) Who wrote the President’s Letter, and what is her message?", a: "The President’s Letter is from 2026 BER President Jeanne Drath. Her message is centered on the theme “Give Back, Grow Forward,” which she uses to talk about honoring BER’s history while continuing to improve education, community engagement, member services, and the association’s future direction. (Page 4.)" },
+      { q: "3) What does “Give Back, Grow Forward” mean?", a: "In the magazine, it is not treated like a slogan for the sake of a slogan. Jeanne explains it as a very practical direction for 2026: give back by strengthening education, community engagement, and meaningful member connections, and grow forward by modernizing systems, improving the member experience, and evolving the brand to reflect where members really do business today. (Page 4.)" },
+      { q: "4) What major milestone happened for BER in January 2026?", a: "A big one: on January 15, 2026, the membership voted to approve BER’s name change. That made the transition to Coconut Coast Organization of REALTORS® (CCOR) official at the member level and marked a major turning point in how the association presents itself moving forward. (Page 4.)" },
+      { q: "5) Why is BER changing its name to CCOR?", a: "According to the President’s Letter, the change is about better reflecting the full scope of where members do business and the areas the association serves. The article emphasizes that the shift came out of strategic-plan feedback, a structured research process, multiple rounds of naming and branding work, and a desire to evolve without losing sight of BER’s history. (Page 4.)" },
+      { q: "6) What happens next after the membership approves the change?", a: "After the vote, the next step is the formal NAR name-change process. The issue explains that this includes submitting the application, providing required documents like meeting minutes and agreements, and then allowing other Florida REALTOR® associations time to respond if there are any conflicts before final approval is granted. (Page 4.)" },
+      { q: "7) How does the magazine describe the 2025 housing market?", a: "The issue describes 2025 as a re-balance, not a collapse. Inventory increased, time on market stretched, and pricing was more mixed by area, but the overall tone is that the market looked healthier and more sustainable than the ultra-frenzied years, with buyer activity showing signs of renewal. (Page 4; pages 11–13.)" },
+      { q: "8) In this market, what should REALTORS® focus on most?", a: "The magazine’s answer is pretty clear: this is the kind of market where professionalism stands out. It specifically points to smart pricing, solid preparation, professional photography and marketing, strong negotiation, and guidance rooted in real data rather than hype. (Page 4.)" },
+      { q: "9) What was the main takeaway from the Convention article?", a: "The convention article frames the event as more than a meeting or networking trip. Its biggest takeaway is that growth starts with purpose: mindset drives performance, systems create consistency, and relationships are what make long-term growth durable. (Page 6.)" },
+      { q: "10) What were the six “insights to lead with”?", a: "The article highlights six big ideas: success is mostly mindset, tools only work when paired with compassion and consistency, a CRM only matters if you actually use it, trust beats tech, leaders should stay ahead of change instead of reacting to it, and you have to protect your own energy because you cannot pour from an empty cup. (Page 6.)" },
+      { q: "11) What is the 30-day action plan from the convention?", a: "The article lays out a practical post-conference plan. In the first few days, follow up with five new contacts, pick three ideas to implement, and share one takeaway with your team; within two weeks, reconnect with ten past contacts; and within 30 days, host a client or community touchpoint event and set measurable goals. (Page 6.)" },
+      { q: "12) What happened at the 2026 Installation Banquet?", a: "It was an evening focused on recognition, gratitude, and transition. The article says members and partners gathered to install the 2026 Board, honor “Of the Year” award recipients, and celebrate the people, venue, and sponsors who helped make the event possible. (Pages 8–9.)" },
+      { q: "13) What does the new CCOR identity represent?", a: "The issue presents the CCOR identity as the association’s next era. It represents leadership, advocacy, and member support in a way that feels modern and forward-looking, while staying tied to BER’s mission and member community. (Page 9.)" },
+      { q: "14) Who were some of the 2025 “Of the Year” winners?", a: "Winners include Gina Lamouth (REALTOR® of the Year), Kris Boyle (Global Diversity), Andrew Yimin (Breakthrough Agent), Gail Langner (Pat Lord Community Service), Mark Ledbetter (Roger Brunswick Advocate), Keaton West (Committee Member), Sam Colburn (Educator), Premium Mortgage (Affiliate Company), Samuel Saad III (Affiliate), Sandy Wilder (Pinnacle of Professionalism), and Mark True (Elevated Engagement). (Page 9.)" },
+      { q: "15) What do the Winter 2026 market stats suggest?", a: "The visual takeaway is that the market is active, but slower and more inventory-rich than it was a few years ago. Days on market are higher than in 2023, homes for sale are up meaningfully, and selection has improved as urgency cools. (Page 11.)" },
+      { q: "16) What does the 6-year evolution piece say about 2020?", a: "The issue describes 2020 as a year of shock followed by a fast rebound. There was an early slowdown and uncertainty, but low interest rates and shifting lifestyle priorities quickly reignited demand. (Pages 12–13.)" },
+      { q: "17) What does it say about 2021?", a: "2021 is portrayed as the year of fierce competition. The article emphasizes multiple offers, historically low inventory, and a sharp rise in prices as limited supply collided with very strong demand. (Pages 12–13.)" },
+      { q: "18) What about 2022?", a: "The article treats 2022 as the peak of the pandemic-era boom. Sales stayed elevated and pricing hit new highs, even though the first signs of affordability strain were starting to show underneath the surface. (Pages 12–13.)" },
+      { q: "19) What does the magazine say happened in 2023?", a: "2023 is where the tone shifts. The issue says the rapid rise in mortgage rates cooled demand, slowed transaction volume, and pushed the market into a more cautious and affordability-focused phase. (Pages 12–13.)" },
+      { q: "20) How does the issue describe 2024?", a: "2024 is presented as a stabilization year. Transaction volume stayed below the peak years, but prices held firmer than many expected, helped by continuing inventory constraints and pent-up demand. (Pages 12–13.)" },
+      { q: "21) And how is 2025 framed?", a: "The magazine calls 2025 a recalibrated market. A more measured rhythm: not the chaos of the boom years, but not a dramatic reversal either — just a market more centered on affordability, intention, value, and sustainability. (Pages 12–13.)" },
+      { q: "22) When was the association founded? How large was it?", a: "The founding-years feature says the association was chartered in 1966 as the Bonita Springs Board of REALTORS®. It started with 13 founding members and reportedly grew to 66 members by 1967. (Page 14.)" },
+      { q: "23) Where was BER’s first home base?", a: "The issue says the first home base was on Old 41. It also notes that by 1980, the association had its first dedicated office at Bonita Beach Road and New 41. (Page 14.)" },
+      { q: "24) What did a typical day look like in 1966–1981?", a: "It was hands-on and relationship-driven. REALTORS® stopped by the office for messages, built paper files, prospected through calls, drove with maps, showed homes selling the lifestyle, and ended the day logging calls. (Page 15.)" },
+      { q: "25) What tools did REALTORS® rely on back then?", a: "Rotary phones, message pads, printed MLS sheets, listing books, road atlases, handwritten directions, carbon-copy forms, clipboards, filing cabinets, newspaper ads, yard signs, and a car stocked for showings. (Page 15.)" },
+      { q: "26) What were major RPAC wins highlighted for 2025?", a: "Big outcomes: elimination of Business Rent Tax, $50 million for Hometown Heroes, support for My Safe Florida programs, condo transparency, and stronger property-rights tools related to squatters and flood disclosures. (Page 16.)" },
+      { q: "27) Why does the magazine make such a strong case for RPAC?", a: "Because it ties RPAC to results members and clients actually feel. RPAC helps shape smoother transactions, better housing policy, stronger consumer protections, and broader economic benefits. (Page 16.)" },
+      { q: "28) Who are the 2026 committee chairs?", a: "The issue names chairs across major functions: Professional Development, Grievance, Events, Leadership Academy, Realtor Review, YPN, MLS, Professional Standards, Govt Affairs/RPAC, Media, Global Diversity, Leadership Development, and Advisory Council. (Page 17.)" },
+      { q: "29) What is Realtor.com+ as a BER benefit?", a: "It gives agents a protected, branded client space from search to closing with MLS-level search filters, real-time client insights, in-app chat, and touring requests in one connected experience. (Page 17.)" },
+      { q: "30) What does the issue celebrate in the Sales Excellence sections?", a: "Achievement and support. They recognize top-producing agents (Diamond, Platinum, Gold tiers), call out RPAC investors, and thank the sponsors and advertisers who power BER programs and events. (Pages 18–20.)" }
+    ];
+
+    document.addEventListener("DOMContentLoaded", () => {
+      const qList = document.getElementById("aiQList");
+      const respArea = document.getElementById("aiResponse");
+      const aiModule = document.querySelector(".ai-module");
+
+      // Populate buttons
+      AI_QA.forEach((item, idx) => {
+        const btn = document.createElement("button");
+        btn.className = "ai-q-btn";
+        btn.textContent = item.q;
+        btn.addEventListener("click", () => triggerAnswer(btn, item.a));
+        qList.appendChild(btn);
+      });
+
+      function triggerAnswer(btn, text) {
+        // Highlight active
+        document.querySelectorAll(".ai-q-btn").forEach(b => b.classList.remove("active-q"));
+        btn.classList.add("active-q");
+
+        // UI Prep
+        if (aiModule.dataset.isTyping === 'true') {
+          clearTimeout(Number(aiModule.dataset.typeTimeout));
+          aiModule.dataset.isTyping = 'false';
+        }
+        respArea.classList.add("active");
+        respArea.innerHTML = '<div class="thinking-dots"><span></span><span></span><span></span></div>';
+        
+        // Timeout to simulate thinking
+        setTimeout(() => {
+          aiModule.dataset.isTyping = 'true';
+          respArea.innerHTML = '';
+          const tokens = text.match(/\s+|\S+/g) || [];
+          typeWords(tokens, 0);
+        }, 600);
+      }
+
+      function typeWords(tokens, i) {
+        if (aiModule.dataset.isTyping !== 'true') return;
+        if (i < tokens.length) {
+          const currentText = tokens.slice(0, i + 1).join('');
+          respArea.innerHTML = currentText + '<span class="cursor"></span>';
+          aiModule.dataset.typeTimeout = setTimeout(() => typeWords(tokens, i + 1), 20);
+        } else {
+          respArea.innerHTML = tokens.join('') + '<span class="cursor"></span>';
+          aiModule.dataset.isTyping = 'false';
+        }
+      }
+    });
+  </script>
 </body>
 </html>
