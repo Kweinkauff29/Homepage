@@ -57,21 +57,79 @@ async function updateGrowthZoneLicense(page, contact) {
         throw new Error('Could not find the Professional widget containing the License inside any iframe.');
     }
 
-    console.log(`Finding Edit button for License in frame: ${targetFrame.url()}`);
-    // Click the Edit button on the License row within the identified frame
-    await targetFrame.evaluate(() => {
+    console.log(`Finding Matching License rows in frame: ${targetFrame.url()}`);
+    // Identify all rows that match "License" and "DBPR"
+    const matchingIndices = await targetFrame.evaluate(() => {
+        const rows = document.querySelectorAll('.widget-row');
+        const found = [];
+        rows.forEach((row, i) => {
+            const text = row.innerText;
+            if (text.includes('License') && text.includes('DBPR')) {
+                found.push(i);
+            }
+        });
+        return found;
+    });
+
+    if (matchingIndices.length > 1) {
+        console.log(`⚠️ Found ${matchingIndices.length} redundant license entries. Removing extras...`);
+        // Keep the first one, delete the rest
+        for (let i = matchingIndices.length - 1; i > 0; i--) {
+            const rowIndex = matchingIndices[i];
+            console.log(`Deleting redundant row at index ${rowIndex}...`);
+            
+            await targetFrame.evaluate((idx) => {
+                const rows = document.querySelectorAll('.widget-row');
+                const row = rows[idx];
+                if (!row) return;
+                // Try common delete icon selectors in GrowthZone
+                const delBtn = row.querySelector('.fal.fa-times') || row.querySelector('.fa-times') || row.querySelector('.delete-dialog');
+                if (delBtn) delBtn.click();
+            }, rowIndex);
+
+            // Wait for confirmation modal and click Delete
+            await new Promise(r => setTimeout(r, 2000));
+            const confirmed = await targetFrame.evaluate(() => {
+                const buttons = document.querySelectorAll('.modal-footer button, .btn-danger, .confirm-button');
+                for (let btn of buttons) {
+                    const txt = btn.innerText.trim().toLowerCase();
+                    if (txt === 'delete' || txt === 'yes' || txt === 'confirm') {
+                        btn.click();
+                        return true;
+                    }
+                }
+                return false;
+            });
+            
+            if (confirmed) {
+                console.log(`Confirmed deletion of row ${i + 1}`);
+                await new Promise(r => setTimeout(r, 3000)); // Wait for row to be removed from UI
+            } else {
+                console.log(`Could not find confirmation button for row ${i + 1}`);
+            }
+        }
+    }
+
+    // Now find the (remaining) row to edit
+    const editFound = await targetFrame.evaluate(() => {
         const rows = document.querySelectorAll('.widget-row');
         for (let row of rows) {
             const text = row.innerText;
             if (text.includes('License') && text.includes('DBPR')) {
-                const editBtn = row.querySelector('.fal.fa-pen.edit-dialog');
+                const editBtn = row.querySelector('.fal.fa-pen.edit-dialog') || row.querySelector('.fa-pen');
                 if (editBtn) {
                     editBtn.click();
                     return true;
                 }
             }
         }
+        return false;
     });
+
+    if (!editFound) {
+        throw new Error('Could not find the Edit button for the license row after cleanup.');
+    }
+
 
     console.log('Waiting for Edit Modal to appear...');
     // The modal fieldset id="License"
