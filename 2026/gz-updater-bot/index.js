@@ -71,6 +71,8 @@ async function updateGrowthZoneLicense(page, contact) {
         return found;
     });
 
+    let editFound = false;
+
     if (matchingIndices.length > 1) {
         console.log(`⚠️ Found ${matchingIndices.length} redundant license entries. Removing extras...`);
         // Keep the first one, delete the rest
@@ -87,77 +89,141 @@ async function updateGrowthZoneLicense(page, contact) {
                 if (delBtn) delBtn.click();
             }, rowIndex);
 
-            // Wait for confirmation modal and click Delete
+            // Wait for confirmation modal and click Delete / Remove / Yes
             await new Promise(r => setTimeout(r, 2000));
-            const confirmed = await targetFrame.evaluate(() => {
-                const buttons = document.querySelectorAll('.modal-footer button, .btn-danger, .confirm-button');
-                for (let btn of buttons) {
-                    const txt = btn.innerText.trim().toLowerCase();
-                    if (txt === 'delete' || txt === 'yes' || txt === 'confirm') {
-                        btn.click();
+            
+            async function findAndClickConfirmButton(scope) {
+                return await scope.evaluate(() => {
+                    const buttons = document.querySelectorAll('.modal-footer button, .btn-danger, .confirm-button, button.blue');
+                    for (let btn of buttons) {
+                        const txt = btn.innerText.trim().toLowerCase();
+                        if (['delete', 'yes', 'confirm', 'remove', 'ok'].includes(txt)) {
+                            console.log(`Clicking confirmation button: "${txt}"`);
+                            btn.click();
+                            return true;
+                        }
+                    }
+                    return false;
+                });
+            }
+
+            let confirmed = await findAndClickConfirmButton(targetFrame);
+            if (!confirmed) {
+                console.log(`Note: Confirmation button not found in iframe, checking main page...`);
+                // Sometimes modals are rendered in the main page context rather than the iframe
+                confirmed = await findAndClickConfirmButton(page);
+            }
+            
+            if (confirmed) {
+                console.log(`Successfully confirmed deletion of row ${i + 1}`);
+                await new Promise(r => setTimeout(r, 3000)); // Wait for row to be removed from UI
+            } else {
+                console.log(`⚠️ Warning: Could not find confirmation button ("Delete", "Remove", "Yes") for row ${i + 1}`);
+            }
+        }
+    }
+
+    if (matchingIndices.length === 0) {
+        console.log(`💡 No existing license found. Adding a new one...`);
+        // Find the plus (+) button in the header of the Professional widget
+        const addClicked = await targetFrame.evaluate(() => {
+            const headers = document.querySelectorAll('.widget-header');
+            for (let h of headers) {
+                if (h.innerText.includes('Professional')) {
+                    const addBtn = h.querySelector('.fal.fa-plus') || h.querySelector('.fa-plus');
+                    if (addBtn) {
+                        addBtn.click();
                         return true;
                     }
                 }
-                return false;
-            });
-            
-            if (confirmed) {
-                console.log(`Confirmed deletion of row ${i + 1}`);
-                await new Promise(r => setTimeout(r, 3000)); // Wait for row to be removed from UI
-            } else {
-                console.log(`Could not find confirmation button for row ${i + 1}`);
             }
-        }
-    }
-
-    // Now find the (remaining) row to edit
-    const editFound = await targetFrame.evaluate(() => {
-        const rows = document.querySelectorAll('.widget-row');
-        for (let row of rows) {
-            const text = row.innerText;
-            if (text.includes('License') && text.includes('DBPR')) {
-                const editBtn = row.querySelector('.fal.fa-pen.edit-dialog') || row.querySelector('.fa-pen');
-                if (editBtn) {
-                    editBtn.click();
-                    return true;
+            return false;
+        });
+        if (!addClicked) throw new Error('Could not find the (+) Add button in the Professional widget header.');
+        editFound = true;
+    } else {
+        // Now find the (remaining) row to edit
+        editFound = await targetFrame.evaluate(() => {
+            const rows = document.querySelectorAll('.widget-row');
+            for (let row of rows) {
+                const text = row.innerText;
+                if (text.includes('License') && text.includes('DBPR')) {
+                    const editBtn = row.querySelector('.fal.fa-pen.edit-dialog') || row.querySelector('.fa-pen');
+                    if (editBtn) {
+                        editBtn.click();
+                        return true;
+                    }
                 }
             }
-        }
-        return false;
-    });
-
-    if (!editFound) {
-        throw new Error('Could not find the Edit button for the license row after cleanup.');
+            return false;
+        });
     }
 
+    if (!editFound) {
+        throw new Error('Could not initiate Add or Edit for the license.');
+    }
 
-    console.log('Waiting for Edit Modal to appear...');
+    console.log('Waiting for Modal to appear...');
     // The modal fieldset id="License"
     const modalSelector = 'fieldset#License';
     await targetFrame.waitForSelector(modalSelector, { visible: true, timeout: 5000 });
+    
+    // Fallback: wait a moment for the content to fully load
+    await new Promise(r => setTimeout(r, 3000));
+
+    // Handle New License category selection
+    if (matchingIndices.length === 0) {
+        console.log('Setting Category to "License"...');
+        await targetFrame.evaluate(() => {
+            const selects = document.querySelectorAll('div[data-ng-model="vm.model.License.CategoryGUID"] select');
+            if (selects.length > 0) {
+                const select = selects[0];
+                for (let i = 0; i < select.options.length; i++) {
+                    if (select.options[i].text.includes('License')) {
+                        select.selectedIndex = i;
+                        select.dispatchEvent(new Event('change'));
+                        return;
+                    }
+                }
+            }
+        });
+        await new Promise(r => setTimeout(r, 1000));
+    }
+
+    // Set License Number, Type, Authority (especially for new ones)
+    const fillField = async (name, value) => {
+        if (!value) return;
+        await targetFrame.evaluate((n, v) => {
+            const input = document.querySelector(`div[data-ng-model="vm.model.License.${n}"] input`);
+            if (input) {
+                input.value = v;
+                input.dispatchEvent(new Event('input'));
+                input.dispatchEvent(new Event('change'));
+            }
+        }, name, value);
+    };
+
+    if (matchingIndices.length === 0) {
+        await fillField('LicenseNumber', contact['License Number']);
+        await fillField('LicenseType', contact['License Type']);
+        await fillField('Authority', 'DBPR');
+    }
 
     // Use the datetime attribute to find the correct date input
     const dateInputSelector = 'div[datetime="vm.model.License.EndDate"] input.form-control';
     await targetFrame.waitForSelector(dateInputSelector, { visible: true });
-
-    console.log('Waiting 5 full seconds for the modal to animate and become ready...');
-    await new Promise(r => setTimeout(r, 5000));
-
-    console.log(`Setting new expiration date to: ${contact['License Expiration Date']}`);
+    
+    console.log(`Setting expiration date to: ${contact['License Expiration Date']}`);
     await targetFrame.click(dateInputSelector);
-    await new Promise(r => setTimeout(r, 200));
+    await new Promise(r => setTimeout(r, 500));
 
-    // Subagent discovered sequence: Home -> Shift+End -> Backspace
+    // Clear and type
     await page.keyboard.press('Home');
     await page.keyboard.down('Shift');
     await page.keyboard.press('End');
     await page.keyboard.up('Shift');
     await page.keyboard.press('Backspace');
-
     await new Promise(r => setTimeout(r, 500));
-
-    console.log('Typing new date...');
-    // Subagent noted slashes MUST be included in the typed string
     await targetFrame.type(dateInputSelector, contact['License Expiration Date'], { delay: 100 });
 
     console.log('Clicking Done...');
@@ -165,7 +231,8 @@ async function updateGrowthZoneLicense(page, contact) {
     await targetFrame.evaluate(() => {
         const buttons = document.querySelectorAll('.modal-footer button');
         for (let btn of buttons) {
-            if (btn.innerText.trim() === 'Done') {
+            const txt = btn.innerText.trim();
+            if (txt === 'Done' || txt === 'Add' || txt === 'Ok') {
                 btn.click();
                 return;
             }
@@ -174,7 +241,7 @@ async function updateGrowthZoneLicense(page, contact) {
 
     // Wait for the modal to disappear
     await targetFrame.waitForSelector(modalSelector, { hidden: true, timeout: 5000 });
-    console.log(`Successfully updated ${contact.Name}`);
+    console.log(`Successfully updated/added license for ${contact.Name}`);
 }
 
 (async () => {
@@ -202,6 +269,12 @@ async function updateGrowthZoneLicense(page, contact) {
     console.log('Launching browser (visible mode for testing)...');
     const browser = await puppeteer.launch({ headless: false, defaultViewport: null, args: ['--start-maximized'] });
     const page = await browser.newPage();
+
+    // Automatically handle any browser-native confirmation dialogs (confirm / alert)
+    page.on('dialog', async dialog => {
+        console.log(`[Dialog] ${dialog.type()} appeared: "${dialog.message()}" - Accepting.`);
+        await dialog.accept();
+    });
 
     console.log('Navigating to login...');
     await page.goto('https://growthzoneapp.com/auth?ReturnUrl=%2fa', { waitUntil: 'domcontentloaded' });
