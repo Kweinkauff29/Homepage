@@ -802,7 +802,7 @@
                     if (rows.length > 0) console.log('First row keys:', Object.keys(rows[0]));
 
                     // Flexible column matching — find the right column names
-                    const colMap = { licNum: null, licType: null, expDate: null, name: null, email: null, office: null };
+                    const colMap = { licNum: null, licType: null, expDate: null, name: null, email: null, office: null, contactId: null };
                     if (rows.length > 0) {
                         const keys = Object.keys(rows[0]);
                         colMap.licNum = keys.find(k => /license.*number/i.test(k)) || null;
@@ -811,6 +811,8 @@
                         colMap.name = keys.find(k => /contact.*name|^name$/i.test(k)) || null;
                         colMap.email = keys.find(k => /email/i.test(k)) || null;
                         colMap.office = keys.find(k => /business|office|company/i.test(k)) || null;
+                        // Match 'ContactId', ignore 'Primary Contact Id'
+                        colMap.contactId = keys.find(k => /^contactid$/i.test(k.replace(/\s+/g, ''))) || null;
                         console.log('Column mapping:', colMap);
                     }
 
@@ -823,6 +825,7 @@
                         const name = colMap.name ? r[colMap.name] : '';
                         const email = colMap.email ? r[colMap.email] : '';
                         const office = colMap.office ? r[colMap.office] : '';
+                        const rawContactId = colMap.contactId ? r[colMap.contactId] : null;
 
                         // Accept any truthy licNum including numeric 0 edge case
                         if (licNum !== null && licNum !== undefined && String(licNum).trim() !== '') {
@@ -834,7 +837,7 @@
                                 gzExpStr: fmtD(parseD(expDate)),
                                 email: String(email || ''),
                                 office: String(office || ''),
-                                contactId: null
+                                contactId: rawContactId ? String(rawContactId).trim() : null
                             });
                         } else {
                             skipped++;
