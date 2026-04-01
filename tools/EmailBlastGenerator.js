@@ -3,13 +3,13 @@ const DEFAULTS = {
   orgName: 'Bonita Springs–Estero REALTORS®',
   orgAddr: '25300 Bernwood Drive, Suite 1 · Bonita Springs, FL 34135',
   supportEmail: 'Support@BERealtors.org',
-  heroW: 780, heroH: 315,
+  heroW: 730, heroH: 315,
   heroPrompt: 'Create a professional promotional email hero banner image. Style: clean, modern, corporate. Include bold headline text overlay. No photographic people unless they are stylized corporate illustrations or cartoon-style. Vibrant yet professional palette. Sharp edges, no blurry elements.',
   noPeople: true,
-  emailMaxW: 780,
+  emailMaxW: 730,
   mergeTag: '{{CFirstName}}',
   fontFamily: 'Arial, Helvetica, sans-serif',
-  preheaderLen: 100,
+  preheaderLen: 200,
   ctaShape: 'pill',
   c1a:'#008080',c1b:'#02aae1',
   c2a:'#1a237e',c2b:'#c5a44e',
@@ -275,7 +275,7 @@ function generateBodyCopy(data,v,s){
     let body=`<p style="margin:0 0 16px">Hi ${tag},</p>`;
     body+=`<p style="margin:0 0 16px">${s.orgName} is pleased to present an important educational opportunity:</p>`;
     body+=`<p style="margin:0 0 8px"><strong style="font-size:16px">${data.title}</strong></p>`;
-    if(introText)body+=`<p style="margin:0 0 16px;color:#555555;font-size:14px">${truncate(introText,350)}</p>`;
+    if(introText)body+=`<p style="margin:0 0 16px;color:#555555;font-size:14px">${introText}</p>`;
     body+=generateDetailsBlock(data,v);
     if(objectives.length>1) body+=generateLearnBlock(objectives,'What You Will Learn:',v);
     body+=`<p style="margin:16px 0">Don't miss this opportunity to enhance your professional knowledge and stay ahead of the curve. Secure your spot today — space is limited.</p>`;
@@ -285,7 +285,7 @@ function generateBodyCopy(data,v,s){
     let body=`<p style="margin:0 0 16px">Hi ${tag},</p>`;
     body+=`<p style="margin:0 0 16px">Are you ready to <strong>power up</strong> your real estate expertise? ${s.orgName} is bringing you a can't-miss class that will transform how you approach your business!</p>`;
     body+=`<p style="margin:0 0 8px"><strong style="font-size:18px">${data.title}</strong></p>`;
-    if(introText)body+=`<p style="margin:0 0 16px;color:#555555;font-size:14px">${truncate(introText,300)}</p>`;
+    if(introText)body+=`<p style="margin:0 0 16px;color:#555555;font-size:14px">${introText}</p>`;
     body+=generateDetailsBlock(data,v);
     if(objectives.length>1) body+=generateLearnBlock(objectives,'Here\'s what you\'ll walk away knowing:',v);
     body+=`<p style="margin:16px 0">This is YOUR chance to level up. Led by the incredible <strong>${data.instructor||'our expert instructor'}</strong>, this session is packed with actionable insights you can use <em>immediately</em>.</p>`;
@@ -296,7 +296,7 @@ function generateBodyCopy(data,v,s){
   let body=`<p style="margin:0 0 16px">Hi ${tag},</p>`;
   body+=`<p style="margin:0 0 16px"><strong>⚠️ Don't risk falling behind.</strong> This critical class is designed to keep you sharp, compliant, and ahead of the competition.</p>`;
   body+=`<p style="margin:0 0 8px"><strong style="font-size:17px">${data.title}</strong></p>`;
-  if(introText)body+=`<p style="margin:0 0 16px;color:#555555;font-size:14px">${truncate(introText,280)}</p>`;
+  if(introText)body+=`<p style="margin:0 0 16px;color:#555555;font-size:14px">${introText}</p>`;
   body+=generateDetailsBlock(data,v);
   if(objectives.length>1) body+=generateLearnBlock(objectives,'Why You NEED to Be There:',v);
   body+=`<p style="margin:16px 0">Learn from the best! <strong>${data.instructor||'Our expert instructor'}</strong> will break down complex topics into actionable knowledge, making sure you leave confident and prepared.</p>`;
