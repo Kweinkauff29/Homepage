@@ -123,6 +123,12 @@ function getYouTubeId(url){
 }
 
 // ===================== EMAIL GENERATION =====================
+// Store state globally so hero image can be applied after generation
+let _genData = null;
+let _genVariations = [];
+let _genPreheaders = [];
+let _genSettings = null;
+
 function generateAll(){
   // sync link inputs
   document.querySelectorAll('.link-repeater-item input').forEach((inp,i)=>{
@@ -145,13 +151,19 @@ function generateAll(){
     {name:'C — Urgency',tone:'urgency',colorA:s.c3a,colorB:s.c3b,badge:'#c62828'}
   ];
 
+  // Generate preheaders once so they stay consistent
+  _genData = data;
+  _genVariations = variations;
+  _genSettings = s;
+  _genPreheaders = variations.map(v => generatePreheader(data, v, s));
+
   const container=document.getElementById('tabContent');
   container.innerHTML='';
 
   variations.forEach((v,i)=>{
-    const preheader=generatePreheader(data,v,s);
-    const emailHtml=generateEmailHTML(data,v,s);
-    const heroPrompt=generateHeroPrompt(data,v,s);
+    const preheader = _genPreheaders[i];
+    const emailHtml = generateEmailHTML(data, v, s, preheader, '');
+    const heroPrompt = generateHeroPrompt(data, v, s);
 
     const panel=document.createElement('div');
     panel.className='tab-panel'+(i===0?' active':'');
@@ -166,7 +178,14 @@ function generateAll(){
         <iframe class="preview-frame" id="frame-${i}" sandbox="allow-same-origin"></iframe>
       </div>
       <div class="output-section">
-        <div class="output-label">🖼️ Hero Image AI Prompt (Gemini) <button class="copy-btn" onclick="copyText('hero-${i}')">Copy</button></div>
+        <div class="output-label">🖼️ Hero Image URL <span style="font-size:11px;color:var(--text2);font-weight:400;text-transform:none;letter-spacing:0">(paste your hosted image URL after generating in Gemini)</span></div>
+        <div style="display:flex;gap:8px;margin-bottom:4px">
+          <input type="url" id="heroUrl-${i}" placeholder="https://yourdomain.com/path/to/hero-image.png" style="flex:1">
+          <button class="copy-btn" style="padding:8px 16px;font-size:13px;font-weight:600" onclick="applyHeroImage(${i})">🖼️ Apply</button>
+        </div>
+      </div>
+      <div class="output-section">
+        <div class="output-label">🎨 Hero Image AI Prompt (Gemini) <button class="copy-btn" onclick="copyText('hero-${i}')">Copy</button></div>
         <div class="output-box" id="hero-${i}">${escHtml(heroPrompt)}</div>
       </div>
       <div class="output-section">
@@ -189,6 +208,26 @@ function generateAll(){
   document.querySelectorAll('.tab').forEach((t,i)=>{t.classList.toggle('active',i===0)});
   currentTab=0;
   toast('3 variations generated!');
+}
+
+// Apply a hosted hero image URL to a specific variation
+function applyHeroImage(idx) {
+  const url = gv('heroUrl-' + idx);
+  if (!url) { toast('Please paste a hero image URL first'); return; }
+
+  const v = _genVariations[idx];
+  const preheader = _genPreheaders[idx];
+  const emailHtml = generateEmailHTML(_genData, v, _genSettings, preheader, url);
+
+  // Update the raw HTML code block
+  document.getElementById('code-' + idx).textContent = emailHtml;
+
+  // Update the preview iframe
+  const frame = document.getElementById('frame-' + idx);
+  const doc = frame.contentDocument || frame.contentWindow.document;
+  doc.open(); doc.write(emailHtml); doc.close();
+
+  toast('Hero image applied to Variation ' + ['A','B','C'][idx] + '!');
 }
 
 function escHtml(s){return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')}
@@ -289,10 +328,10 @@ function generateLearnBlock(objectives,heading,v){
 }
 
 // ===================== EMAIL HTML =====================
-function generateEmailHTML(data,v,s){
+function generateEmailHTML(data, v, s, preheader, heroImageUrl){
   const ctaRadius = s.ctaShape==='pill'?'50px':s.ctaShape==='rounded'?'8px':'0px';
   const bodyCopy=generateBodyCopy(data,v,s);
-  const preheader=generatePreheader(data,v,s);
+  // preheader is now passed in so it stays consistent
 
   let ytSection='';
   let extraButtons='';
@@ -342,7 +381,9 @@ ${preheader}
 
 <!-- Hero image area -->
 <table width="${s.emailMaxW}" cellpadding="0" cellspacing="0" style="max-width:${s.emailMaxW}px">
-<tr><td style="background:linear-gradient(135deg,${v.colorA},${v.colorB});text-align:center;padding:0">
+${heroImageUrl ? `<tr><td style="text-align:center;padding:0;background-color:#ffffff">
+<img src="${heroImageUrl}" width="${s.emailMaxW}" style="width:100%;max-width:${s.emailMaxW}px;height:auto;display:block" alt="${data.title}">
+</td></tr>` : `<tr><td style="background:linear-gradient(135deg,${v.colorA},${v.colorB});text-align:center;padding:0">
 <div style="width:100%;height:${s.heroH}px;background:linear-gradient(135deg,${v.colorA}dd,${v.colorB}dd);display:flex;align-items:center;justify-content:center;text-align:center;">
 <!--[if mso]>
 <v:rect xmlns:v="urn:schemas-microsoft-com:vml" fill="true" stroke="false" style="width:${s.emailMaxW}px;height:${s.heroH}px;">
@@ -359,7 +400,7 @@ ${data.instructor?`<p style="font-size:13px;margin:0;opacity:.8">Instructor: ${d
 </v:textbox></v:rect>
 <![endif]-->
 </div>
-</td></tr>
+</td></tr>`}
 </table>
 
 <!-- Body -->
