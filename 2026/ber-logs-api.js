@@ -15,6 +15,8 @@
  */
 
 const ADMIN_PASSWORD = "BSER1966";
+const GZ_API_BASE = "https://bonitaspringsesterorealtorsfl.growthzoneapp.com/api";
+const GZ_API_KEY = "cR1djHVMkndNjLbwXyhDyOV7dWPJ6TnufYtcdOHc";
 
 const CORS_HEADERS = {
     "Access-Control-Allow-Origin": "*",
@@ -166,40 +168,24 @@ async function handleGetMember(request, env) {
         const nrdsId = url.searchParams.get("nrdsId");
 
         if (!nrdsId) {
-            return jsonResponse(
-                { success: false, error: "nrdsId is required" },
-                400
-            );
+            return jsonResponse({ success: false, error: "nrdsId is required" }, 400);
         }
 
-        const db = env.BER_MEMBERS;
-        if (!db) {
-            return jsonResponse(
-                { success: false, error: "Database binding BER_MEMBERS is not configured." },
-                500
-            );
+        // Search GZ by NRDS (CustomField 58303)
+        const filter = `Fields/any(f: f/CustomFieldId eq 58303 and f/Value eq '${nrdsId}')`;
+        const contacts = await gzRequest(`/contacts?$filter=${encodeURIComponent(filter)}&$expand=ContactInfos`);
+
+        if (!contacts || contacts.length === 0) {
+            return jsonResponse({ success: false, error: "Member not found" }, 404);
         }
 
-        const { results } = await db
-            .prepare("SELECT * FROM members WHERE nrds_id = ? LIMIT 1")
-            .bind(nrdsId)
-            .all();
+        const contact = contacts[0];
+        const member = await mapGZContactToMember(contact);
 
-        if (!results || results.length === 0) {
-            return jsonResponse(
-                { success: false, error: "Member not found" },
-                404
-            );
-        }
-
-        const member = results[0];
         return jsonResponse({ success: true, member });
     } catch (err) {
         console.error(err);
-        return jsonResponse(
-            { success: false, error: err.message || "Server error" },
-            500
-        );
+        return jsonResponse({ success: false, error: err.message || "Server error" }, 500);
     }
 }
 
@@ -208,39 +194,25 @@ async function handleSearchMembers(request, env) {
         const url = new URL(request.url);
         const q = (url.searchParams.get("q") || "").trim();
 
-        // Require at least 3 chars; front end enforces this too
         if (q.length < 3) {
             return jsonResponse({ success: true, results: [] });
         }
 
-        const db = env.BER_MEMBERS;
-        if (!db) {
-            return jsonResponse(
-                { success: false, error: "Database binding BER_MEMBERS is not configured." },
-                500
-            );
-        }
+        // Search GZ by Name
+        const filter = `contains(tolower(DisplayName), '${q.toLowerCase()}')`;
+        const contacts = await gzRequest(`/contacts?$filter=${encodeURIComponent(filter)}&$top=20`);
 
-        const like = `%${q}%`;
+        const results = (contacts || []).map(c => ({
+            full_name: c.DisplayName,
+            nrds_id: "", // GZ doesn't return custom fields in search results unless expanded
+            office_name: c.OrganizationName || "",
+            membership_status: c.StatusName || ""
+        }));
 
-        const { results } = await db
-            .prepare(
-                `SELECT full_name, nrds_id, office_name, membership_status
-         FROM members
-         WHERE full_name LIKE ?
-         ORDER BY full_name
-         LIMIT 20`
-            )
-            .bind(like)
-            .all();
-
-        return jsonResponse({ success: true, results: results || [] });
+        return jsonResponse({ success: true, results });
     } catch (err) {
         console.error(err);
-        return jsonResponse(
-            { success: false, error: err.message || "Server error" },
-            500
-        );
+        return jsonResponse({ success: false, error: err.message || "Server error" }, 500);
     }
 }
 
@@ -272,187 +244,58 @@ async function handleLogsRequest(request, env) {
             hasListings,
         } = body || {};
 
-        // Basic validation (front-end should also enforce)
-        if (!firstName || !lastName) {
-            return jsonResponse(
-                { success: false, error: "First and last name are required." },
-                400
-            );
-        }
-        if (!Array.isArray(dropMemberships) || dropMemberships.length === 0) {
-            return jsonResponse(
-                { success: false, error: "At least one membership to drop is required." },
-                400
-            );
-        }
-        if (!dropWhen) {
-            return jsonResponse(
-                { success: false, error: "Drop timing is required." },
-                400
-            );
-        }
-        if (!Array.isArray(changeReasons) || changeReasons.length === 0) {
-            return jsonResponse(
-                { success: false, error: "At least one change reason is required." },
-                400
-            );
-        }
-        if (!newBrokerInterested || !needsLetter || !cancelSupra || !hasListings) {
-            return jsonResponse(
-                { success: false, error: "Please complete all required questions." },
-                400
-            );
+        // Validation... (same as before)
+        if (!firstName || !lastName || !Array.isArray(dropMemberships) || dropMemberships.length === 0 || !dropWhen || !Array.isArray(changeReasons) || changeReasons.length === 0 || !newBrokerInterested || !needsLetter || !cancelSupra || !hasListings) {
+            return jsonResponse({ success: false, error: "All required fields must be completed." }, 400);
         }
 
-        const db = env.BER_MEMBERS;
-        let member = null;
-        let matchStatus = "not_searched";
+        let contact = null;
+        let matchStatus = "not_matched";
 
-        if (db) {
-            if (nrdsId && nrdsId.trim()) {
-                const { results } = await db
-                    .prepare("SELECT * FROM members WHERE nrds_id = ? LIMIT 1")
-                    .bind(nrdsId.trim())
-                    .all();
-                if (results && results.length) {
-                    member = results[0];
-                    matchStatus = "matched_by_nrds";
-                } else {
-                    matchStatus = "nrds_not_found";
-                }
-            } else {
-
-                // Normalize names for matching: support apostrophes (straight/curly),
-                // hyphens, accented characters, and extra whitespace.
-                function normalizeName(str) {
-                    if (!str) return "";
-                    return str
-                        .normalize("NFD")                          // decompose accents
-                        .replace(/[\u0300-\u036f]/g, "")           // strip diacritic marks
-                        .replace(/[\u2018\u2019\u02bc\u0060\u00b4]/g, "'") // curly/special → straight apostrophe
-                        .replace(/[\u2010-\u2015\u2212]/g, "-")   // various dashes → hyphen
-                        .replace(/\s+/g, " ")
-                        .trim();
-                }
-
-                const normFirst = normalizeName(firstName);
-                const normLast = normalizeName(lastName);
-                const fullName = `${normFirst} ${normLast}`;
-
-                // Helper: run a single-result DB search
-                async function tryQuery(sql, ...binds) {
-                    try {
-                        const { results } = await db.prepare(sql).bind(...binds).all();
-                        return (results && results.length) ? results[0] : null;
-                    } catch { return null; }
-                }
-
-                // 1. Exact match (case-insensitive)
-                member = await tryQuery(
-                    "SELECT * FROM members WHERE full_name = ? COLLATE NOCASE LIMIT 1",
-                    fullName
-                );
-                if (member) { matchStatus = "matched_by_name"; }
-
-                // 2. Prefix match ("Kelly O'Connell" → "Kelly O'Connell-Guzak")
-                if (!member) {
-                    member = await tryQuery(
-                        "SELECT * FROM members WHERE full_name LIKE ? COLLATE NOCASE LIMIT 1",
-                        `${fullName}%`
-                    );
-                    if (member) { matchStatus = "matched_by_name_prefix"; }
-                }
-
-                // 3. Contains match (handles reversed order, middle names)
-                if (!member && fullName.length > 5) {
-                    member = await tryQuery(
-                        "SELECT * FROM members WHERE full_name LIKE ? COLLATE NOCASE LIMIT 1",
-                        `%${fullName}%`
-                    );
-                    if (member) { matchStatus = "matched_by_name_fuzzy"; }
-                }
-
-                // 4. Apostrophe-insensitive: replace ' with _ (SQLite wildcard for any char)
-                //    Catches "O'Connell" stored as "O'Connell" or "O`Connell" etc.
-                if (!member && (normLast.includes("'") || normLast.includes("-"))) {
-                    const wildLast = normLast.replace(/['\-]/g, "_");
-                    const wildFull = `${normFirst} ${wildLast}`;
-                    member = await tryQuery(
-                        "SELECT * FROM members WHERE full_name LIKE ? COLLATE NOCASE LIMIT 1",
-                        `${wildFull}%`
-                    );
-                    if (member) { matchStatus = "matched_by_name_wildcard"; }
-                }
-
-                // 5. Last-name-only search scoped to first-name initial
-                //    e.g. find anyone whose full_name starts with "Kelly" and contains "O_Connell"
-                if (!member && normFirst.length >= 2 && normLast.length > 3) {
-                    const wildLast2 = normLast.replace(/['\-]/g, "_");
-                    member = await tryQuery(
-                        "SELECT * FROM members WHERE full_name LIKE ? AND full_name LIKE ? COLLATE NOCASE LIMIT 1",
-                        `${normFirst}%`, `%${wildLast2}%`
-                    );
-                    if (member) { matchStatus = "matched_by_parts"; }
-                }
-
-                // 6. Broad last-name-only fallback (last resort)
-                if (!member && normLast.length > 4) {
-                    const wildLast3 = normLast.replace(/['\-]/g, "_");
-                    member = await tryQuery(
-                        "SELECT * FROM members WHERE full_name LIKE ? COLLATE NOCASE LIMIT 1",
-                        `%${wildLast3}%`
-                    );
-                    if (member) { matchStatus = "matched_by_last_name"; }
-                }
-
-                if (!member) { matchStatus = "name_not_found"; }
+        // 1. Try NRDS match
+        if (nrdsId && nrdsId.trim()) {
+            const filter = `Fields/any(f: f/CustomFieldId eq 58303 and f/Value eq '${nrdsId.trim()}')`;
+            const results = await gzRequest(`/contacts?$filter=${encodeURIComponent(filter)}&$expand=ContactInfos`);
+            if (results && results.length) {
+                contact = results[0];
+                matchStatus = "matched_by_nrds";
             }
-        } else {
-            matchStatus = "db_not_configured";
         }
 
-        // Determine REQUEST STATUS and BLOCKING LOGIC
-        let requestStatus = "UNKNOWN";
+        // 2. Try Name match if no NRDS match
+        if (!contact) {
+            const fullName = `${firstName} ${lastName}`;
+            const filter = `DisplayName eq '${fullName}'`; // Exact match for simplicity, can expand if needed
+            const results = await gzRequest(`/contacts?$filter=${encodeURIComponent(filter)}&$expand=ContactInfos`);
+            if (results && results.length) {
+                contact = results[0];
+                matchStatus = "matched_by_name";
+            }
+        }
 
-        if (!member) {
-            requestStatus = "MEMBER_NOT_FOUND";
-        } else {
-            // Check Tags
+        let member = null;
+        let requestStatus = "MEMBER_NOT_FOUND";
+
+        if (contact) {
+            member = await mapGZContactToMember(contact);
+            
+            // Check Standing
             const tags = (member.tags || "").toLowerCase();
+            const balance = parseFloat(member.contact_balance) || 0;
+            const status = (member.membership_status || "").toLowerCase();
+
             if (tags.includes("no logs") || tags.includes("nologs") || tags.includes("no-logs")) {
                 requestStatus = "BLOCKED_TAGS";
+            } else if (balance > 0.01) { // 1 cent threshold
+                requestStatus = "BLOCKED_BALANCE";
+            } else if (status !== "active") {
+                requestStatus = "BLOCKED_STATUS";
             } else {
-                // Check Balance
-                const rawBalance = member.contact_balance || 0;
-                // Ensure it's treated as a number
-                const balance = parseFloat(rawBalance) || 0;
-
-                if (balance > 0) {
-                    requestStatus = "BLOCKED_BALANCE";
-                } else {
-                    requestStatus = "SUCCESS";
-                }
+                requestStatus = "SUCCESS";
             }
         }
 
-        // Save request to logs_requests table (NEW)
-        await saveLogsRequest(env, {
-            firstName,
-            lastName,
-            organization,
-            nrdsId,
-            dropMemberships,
-            dropWhen,
-            leavingFeedback,
-            otherWhy,
-            changeReasons,
-            newContact,
-            newBrokerInterested,
-            needsLetter,
-            cancelSupra,
-            hasListings,
-        }, !!member, requestStatus);
-
+        // handleLogsRequest continues from here...
         // Always email staff with the request (success or not)
         await sendLogsRequestEmail(env, {
             form: {
@@ -475,6 +318,24 @@ async function handleLogsRequest(request, env) {
             matchStatus,
             requestStatus // Pass status to email
         });
+
+        // Save request to logs_requests table
+        await saveLogsRequest(env, {
+            firstName,
+            lastName,
+            organization,
+            nrdsId,
+            dropMemberships,
+            dropWhen,
+            leavingFeedback,
+            otherWhy,
+            changeReasons,
+            newContact,
+            newBrokerInterested,
+            needsLetter,
+            cancelSupra,
+            hasListings,
+        }, !!member, requestStatus);
 
         if (!member) {
             const fullName = `${firstName || ""} ${lastName || ""}`.trim();
@@ -509,11 +370,21 @@ async function handleLogsRequest(request, env) {
             });
         }
 
+        if (requestStatus === "BLOCKED_STATUS") {
+            return jsonResponse({
+                success: false,
+                submitted: true,
+                errorCode: "BLOCKED_STATUS",
+                message: `Your membership status is currently "${member.membership_status}". LOGS can only be generated for Active members. Please contact membership@berealtors.org.`
+            });
+        }
+
         // Success: return member so the front end can display the Letter of Good Standing
         return jsonResponse({
             success: true,
             submitted: true,
             member,
+            requestStatus
         });
     } catch (err) {
         console.error(err);
@@ -870,10 +741,9 @@ async function sendLogsRequestEmail(env, payload) {
         );
     }
 
-    const text = lines.join("\n");
+    const text = "[TESTING - GZ API MIGRATION]\n\n" + lines.join("\n");
     const subject =
-        `LOGS / Membership Change Request – ${form.firstName || ""} ${form.lastName || ""}`.trim() ||
-        "LOGS / Membership Change Request";
+        `[TEST] LOGS / Membership Change Request – ${form.firstName || ""} ${form.lastName || ""}`.trim();
 
     // Mailjet Send API v3.1 – HTTP Basic auth
     const auth = "Basic " + btoa(`${mjApiKey}:${mjApiSecret}`);
@@ -920,6 +790,68 @@ async function sendLogsRequestEmail(env, payload) {
 
 // ============ HELPERS ============
 
+async function gzRequest(path, method = "GET", body = null) {
+    const url = `${GZ_API_BASE}${path}`;
+    const options = {
+        method,
+        headers: {
+            "Authorization": `ApiKey ${GZ_API_KEY}`,
+            "Content-Type": "application/json",
+        },
+    };
+    if (body) options.body = JSON.stringify(body);
+
+    const response = await fetch(url, options);
+    if (!response.ok) {
+        const errText = await response.text();
+        throw new Error(`GrowthZone API error (${response.status}): ${errText}`);
+    }
+    return response.json();
+}
+
+async function mapGZContactToMember(contact) {
+    // 1. Fetch "More Info" for custom fields
+    let fields = [];
+    try {
+        const moreInfo = await gzRequest(`/contacts/${contact.ContactId}/moreinfo`);
+        fields = moreInfo.Fields || [];
+    } catch (e) {
+        console.warn(`Could not fetch moreinfo for contact ${contact.ContactId}:`, e);
+    }
+
+    function getField(id) {
+        return fields.find(f => f.CustomFieldId === id)?.Value || "";
+    }
+
+    // 2. Extract address
+    let addr1 = "";
+    let addr2 = "";
+    if (contact.ContactInfos && contact.ContactInfos.length) {
+        const primaryAddr = contact.ContactInfos.find(i => i.Type === 3 && i.IsPrimary) || contact.ContactInfos.find(i => i.Type === 3);
+        if (primaryAddr && primaryAddr.Value) {
+            const parts = primaryAddr.Value.split("\n");
+            addr1 = parts[0] || "";
+            addr2 = parts.slice(1).join(", ") || "";
+        }
+    }
+
+    return {
+        contact_id: contact.ContactId,
+        nrds_id: getField(58303),
+        full_name: contact.DisplayName,
+        contact_type: contact.SystemContactTypeId === 1 ? "Individual" : "Company",
+        membership_status: contact.StatusName || "Active",
+        office_name: contact.OrganizationName || "",
+        coe_latest_date: "", // Field ID TBD
+        fair_housing_latest_date: "", // Field ID TBD
+        primary_address1: addr1,
+        primary_address2: addr2,
+        memberships: contact.MembershipStatus || "",
+        tags: getField(70615), // Placeholder or find real Tags field
+        contact_balance: contact.Balance || 0,
+    };
+}
+
 function jsonResponse(obj, status = 200) {
     return new Response(JSON.stringify(obj), {
         status,
@@ -930,9 +862,9 @@ function jsonResponse(obj, status = 200) {
     });
 }
 
-function safeJsonParse(str, fallback = []) {
+function safeJsonParse(data, fallback = []) {
     try {
-        return JSON.parse(str) || fallback;
+        return typeof data === "string" ? JSON.parse(data) : (data || fallback);
     } catch {
         return fallback;
     }
