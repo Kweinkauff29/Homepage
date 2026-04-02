@@ -24,6 +24,35 @@ const CORS_HEADERS = {
     "Access-Control-Allow-Headers": "Content-Type, Authorization",
 };
 
+// ============ MEMBER CACHE (Worker Memory Persistence) ============
+let contactsCache = null;
+let lastSyncTime = 0;
+const CACHE_TTL = 10 * 60 * 1000; // 10 minutes
+
+async function getGZContacts(env) {
+    const now = Date.now();
+    if (contactsCache && (now - lastSyncTime < CACHE_TTL)) {
+        return contactsCache;
+    }
+
+    console.log("Fetching fresh contact list from GrowthZone...");
+    // Fetch summary list of all contacts (approx 11,000 records / 7MB)
+    // We use top=11000 to get the entire set in one fast request (GZ summary list is fast)
+    const data = await gzRequest("/contacts?\$skip=0&\$top=11000");
+    const results = data?.Results || [];
+    
+    if (results.length > 0) {
+        contactsCache = results;
+        lastSyncTime = now;
+        console.log(`Success: Cached ${results.length} members`);
+    } else {
+        // Fallback if empty
+        return contactsCache || [];
+    }
+
+    return results;
+}
+
 export default {
     async fetch(request, env) {
         const url = new URL(request.url);
@@ -171,16 +200,16 @@ async function handleGetMember(request, env) {
             return jsonResponse({ success: false, error: "nrdsId is required" }, 400);
         }
 
-        // Search GZ by NRDS (CustomField 58303)
-        const filter = `Fields/any(f: f/CustomFieldId eq 58303 and f/Value eq '${nrdsId}')`;
-        const contacts = await gzRequest(`/contacts?$filter=${encodeURIComponent(filter)}&$expand=ContactInfos`);
+        // Use cached full list for reliable lookup (fixes OData filter issues)
+        const allContacts = await getGZContacts(env);
+        const match = allContacts.find(c => c.AccountNumber === nrdsId);
 
-        if (!contacts || contacts.length === 0) {
+        if (!match) {
             return jsonResponse({ success: false, error: "Member not found" }, 404);
         }
 
-        const contact = contacts[0];
-        const member = await mapGZContactToMember(contact);
+        // mapGZContactToMember handles the discrete /moreinfo and /contactinfos fetches
+        const member = await mapGZContactToMember(match);
 
         return jsonResponse({ success: true, member });
     } catch (err) {
@@ -194,17 +223,19 @@ async function handleSearchMembers(request, env) {
         const url = new URL(request.url);
         const q = (url.searchParams.get("q") || "").trim();
 
-        if (q.length < 3) {
-            return jsonResponse({ success: true, results: [] });
-        }
+        // Use cached full list for reliable autocomplete (fixes OData search issues)
+        const allContacts = await getGZContacts(env);
+        const term = q.toLowerCase();
+        
+        const filtered = allContacts.filter(c => 
+            (c.Name && c.Name.toLowerCase().includes(term)) || 
+            (c.ContactName && c.ContactName.toLowerCase().includes(term)) ||
+            (c.AccountNumber && c.AccountNumber.includes(term))
+        ).slice(0, 20);
 
-        // Search GZ by Name
-        const filter = `contains(tolower(DisplayName), '${q.toLowerCase()}')`;
-        const contacts = await gzRequest(`/contacts?$filter=${encodeURIComponent(filter)}&$top=20`);
-
-        const results = (contacts || []).map(c => ({
-            full_name: c.DisplayName,
-            nrds_id: "", // GZ doesn't return custom fields in search results unless expanded
+        const results = filtered.map(c => ({
+            full_name: c.Name || c.ContactName,
+            nrds_id: c.AccountNumber || "",
             office_name: c.OrganizationName || "",
             membership_status: c.StatusName || ""
         }));
@@ -249,26 +280,30 @@ async function handleLogsRequest(request, env) {
             return jsonResponse({ success: false, error: "All required fields must be completed." }, 400);
         }
 
-        let contact = null;
+        // Fetch all contacts once and perform precise local search
+        const allContacts = await getGZContacts(env);
+        let contactId = null;
         let matchStatus = "not_matched";
 
         // 1. Try NRDS match
         if (nrdsId && nrdsId.trim()) {
-            const filter = `Fields/any(f: f/CustomFieldId eq 58303 and f/Value eq '${nrdsId.trim()}')`;
-            const results = await gzRequest(`/contacts?$filter=${encodeURIComponent(filter)}&$expand=ContactInfos`);
-            if (results && results.length) {
-                contact = results[0];
+            const cleanNrds = nrdsId.trim();
+            const match = allContacts.find(c => c.AccountNumber === cleanNrds);
+            if (match) {
+                contactId = match.ContactId;
                 matchStatus = "matched_by_nrds";
             }
         }
 
         // 2. Try Name match if no NRDS match
-        if (!contact) {
-            const fullName = `${firstName} ${lastName}`;
-            const filter = `DisplayName eq '${fullName}'`; // Exact match for simplicity, can expand if needed
-            const results = await gzRequest(`/contacts?$filter=${encodeURIComponent(filter)}&$expand=ContactInfos`);
-            if (results && results.length) {
-                contact = results[0];
+        if (!contactId) {
+            const fullName = `${firstName} ${lastName}`.trim().toLowerCase();
+            const match = allContacts.find(c => 
+                (c.Name && c.Name.toLowerCase() === fullName) || 
+                (c.ContactName && c.ContactName.toLowerCase() === fullName)
+            );
+            if (match) {
+                contactId = match.ContactId;
                 matchStatus = "matched_by_name";
             }
         }
@@ -276,22 +311,28 @@ async function handleLogsRequest(request, env) {
         let member = null;
         let requestStatus = "MEMBER_NOT_FOUND";
 
-        if (contact) {
-            member = await mapGZContactToMember(contact);
+        if (contactId) {
+            // Use the summary object we already found in our cached list
+            const summaryMatch = allContacts.find(c => c.ContactId === contactId);
             
-            // Check Standing
-            const tags = (member.tags || "").toLowerCase();
-            const balance = parseFloat(member.contact_balance) || 0;
-            const status = (member.membership_status || "").toLowerCase();
+            if (summaryMatch) {
+                // mapGZContactToMember will now handle fetching /moreinfo and /contactinfos
+                member = await mapGZContactToMember(summaryMatch);
+                
+                // Check Standing
+                const tags = (member.tags || "").toLowerCase();
+                const balance = parseFloat(member.contact_balance) || 0;
+                const status = (member.membership_status || "").toLowerCase();
 
-            if (tags.includes("no logs") || tags.includes("nologs") || tags.includes("no-logs")) {
-                requestStatus = "BLOCKED_TAGS";
-            } else if (balance > 0.01) { // 1 cent threshold
-                requestStatus = "BLOCKED_BALANCE";
-            } else if (status !== "active") {
-                requestStatus = "BLOCKED_STATUS";
-            } else {
-                requestStatus = "SUCCESS";
+                if (tags.includes("no logs") || tags.includes("nologs") || tags.includes("no-logs")) {
+                    requestStatus = "BLOCKED_TAGS";
+                } else if (balance > 0.01) { // 1 cent threshold
+                    requestStatus = "BLOCKED_BALANCE";
+                } else if (status !== "active") {
+                    requestStatus = "BLOCKED_STATUS";
+                } else {
+                    requestStatus = "SUCCESS";
+                }
             }
         }
 
@@ -819,15 +860,25 @@ async function mapGZContactToMember(contact) {
         console.warn(`Could not fetch moreinfo for contact ${contact.ContactId}:`, e);
     }
 
+    // 2. Fetch ContactInfos for Address (Summary list doesn't have the full address array)
+    let contactInfos = contact.ContactInfos || [];
+    if (contactInfos.length === 0) {
+        try {
+            contactInfos = await gzRequest(`/contacts/${contact.ContactId}/contactinfos`);
+        } catch (e) {
+            console.warn(`Could not fetch contactinfos for contact ${contact.ContactId}:`, e);
+        }
+    }
+
     function getField(id) {
         return fields.find(f => f.CustomFieldId === id)?.Value || "";
     }
 
-    // 2. Extract address
+    // 3. Extract address
     let addr1 = "";
     let addr2 = "";
-    if (contact.ContactInfos && contact.ContactInfos.length) {
-        const primaryAddr = contact.ContactInfos.find(i => i.Type === 3 && i.IsPrimary) || contact.ContactInfos.find(i => i.Type === 3);
+    if (contactInfos && contactInfos.length) {
+        const primaryAddr = contactInfos.find(i => i.Type === 3 && i.IsPrimary) || contactInfos.find(i => i.Type === 3);
         if (primaryAddr && primaryAddr.Value) {
             const parts = primaryAddr.Value.split("\n");
             addr1 = parts[0] || "";
@@ -838,7 +889,7 @@ async function mapGZContactToMember(contact) {
     return {
         contact_id: contact.ContactId,
         nrds_id: getField(58303),
-        full_name: contact.DisplayName,
+        full_name: contact.Name || contact.ContactName,
         contact_type: contact.SystemContactTypeId === 1 ? "Individual" : "Company",
         membership_status: contact.StatusName || "Active",
         office_name: contact.OrganizationName || "",
