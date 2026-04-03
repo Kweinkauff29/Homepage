@@ -723,43 +723,30 @@ function generateFridayBlastHTML(data, v, s, isComposer = false){
     </table>`;
   }).join('');
 
-  return `<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>Friday Blast</title>
+  return `
 <style>
   @media only screen and (max-width: 600px) {
     .content-table { width: 100% !important; }
-    .header-cell { padding: 32px 15px !important; }
-    .section-container { padding: 25px 15px 0 !important; }
+    .header-cell { padding: 22px 15px !important; }
+    .section-container { padding: 20px 15px 0 !important; }
     .section-inner { padding: 0 15px !important; }
     .intro-box { width: 95% !important; }
   }
 </style>
-</head>
-<body style="margin:0;padding:0;background-color:#f4f4f4;font-family:${s.fontFamily};line-height:1.6;color:#333333">
-<table width="100%" cellpadding="0" cellspacing="0" style="background-color:#f4f4f4">
-<tr><td align="center" style="padding:0">
-  <table width="100%" cellpadding="0" cellspacing="0" class="content-table" style="max-width:${s.emailMaxW}px;background-color:#ffffff">
-    <tr><td align="center" class="header-cell" style="background-color:${hColor};padding:22px 24px;color:#ffffff">
-      <p style="margin:0;font-size:24px;font-weight:800;text-transform:uppercase;letter-spacing:1px">${hTitle}</p>
-      ${preText ? `
-      <div class="intro-box" style="margin:10px auto 0;width:90%;max-width:600px;border-top:1px solid rgba(255,255,255,0.4);padding-top:10px;font-size:14px;opacity:0.9;line-height:1.4">
-        ${preText}
-      </div>` : ''}
-    </td></tr>
-    <tr><td class="section-container" style="padding:24px 24px 0">
-      ${sectionsHtml}
-    </td></tr>
-    <tr><td style="padding:0 24px 10px;background-color:#ffffff;text-align:center;font-size:12px;color:#999999">
-    </td></tr>
-  </table>
-</td></tr>
-</table>
-</body>
-</html>`;
+<table width="100%" cellpadding="0" cellspacing="0" border="0" class="content-table" style="width:100%;max-width:${s.emailMaxW}px;background-color:#ffffff;margin:0 auto">
+  <tr><td align="center" class="header-cell" style="background-color:${hColor};padding:22px 24px;color:#ffffff">
+    <p style="margin:0;font-size:24px;font-weight:800;text-transform:uppercase;letter-spacing:1px">${hTitle}</p>
+    ${preText ? `
+    <div class="intro-box" style="margin:10px auto 0;width:90%;max-width:600px;border-top:1px solid rgba(255,255,255,0.4);padding-top:10px;font-size:14px;opacity:0.9;line-height:1.4">
+      ${preText}
+    </div>` : ''}
+  </td></tr>
+  <tr><td class="section-container" style="padding:24px 24px 0">
+    ${sectionsHtml}
+  </td></tr>
+  <tr><td style="padding:0 24px 10px;background-color:#ffffff;text-align:center;font-size:12px;color:#999999">
+  </td></tr>
+</table>`.trim();
 }
 
 
