@@ -3474,9 +3474,6 @@
       background: rgba(139, 92, 246, 0.05);
     }
 
-    .user-col-melodie {
-      background: rgba(249, 115, 22, 0.05);
-    }
 
     body[data-theme="dark"] .user-col-erica {
       background: rgba(236, 72, 153, 0.1);
@@ -3498,9 +3495,6 @@
       background: rgba(139, 92, 246, 0.1);
     }
 
-    body[data-theme="dark"] .user-col-melodie {
-      background: rgba(249, 115, 22, 0.1);
-    }
 
     .weekly-cell.row-header {
       background: #f1f5f9;
@@ -3651,7 +3645,7 @@
         <option value="">Loading team...</option>
       </select>
       <button id="user-select-confirm">Open Wrap Sheet</button>
-      <small>This is internal for BER: Meighan, Kevin, Erica, Jenna, Katie & Melodie.</small>
+      <small>This is internal for BER: Meighan, Kevin, Erica, Jenna & Katie.</small>
     </div>
   </div>
 
@@ -7354,7 +7348,7 @@
     async function loadUsers() {
       const allUsers = await apiGet("/users");
       // Filter to only show core BER staff
-      const allowedNames = ["kevin", "meighan", "jenna", "erica", "katie", "melodie"];
+      const allowedNames = ["kevin", "meighan", "jenna", "erica", "katie"];
       const excludedNames = ["kevin test", "kevin weinkauff", "meighan harris", "test whale"];
       state.users = allUsers.filter(u => {
         const lower = u.name.toLowerCase();
@@ -12125,7 +12119,7 @@
       const container = document.getElementById("weekly-priorities-grid");
       container.innerHTML = "";
 
-      const cols = ["", "Erica", "Katie", "Kevin", "Jenna", "Meighan", "Melodie"];
+      const cols = ["", "Erica", "Katie", "Kevin", "Jenna", "Meighan"];
       const rows = ["1", "2", "3", "4", "5"];
 
       container.style.gridTemplateColumns = `40px repeat(${cols.length - 1}, 1fr)`;
@@ -12634,7 +12628,6 @@
         { id: 3, name: "Erica" },
         { id: 4, name: "Jenna" },
         { id: 5, name: "Meighan" },
-        { id: 6, name: "Melodie" }
       ];
 
       CORE_TEAM.forEach(u => ensureUser(u.id, u.name));
@@ -12859,7 +12852,6 @@
         { id: 3, label: 'Erica', color: '#10b981' },
         { id: 4, label: 'Jenna', color: '#f59e0b' },
         { id: 5, label: 'Meighan', color: '#8b5cf6' },
-        { id: 6, label: 'Melodie', color: '#64748b' }
       ];
 
       const datasets = [
