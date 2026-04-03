@@ -691,11 +691,11 @@ function generateFridayBlastHTML(data, v, s, isComposer = false){
     
     return `
     <!-- Section: ${sec.title} -->
-    <table width="100%" cellpadding="0" cellspacing="0" style="background-color:#ffffff;margin-bottom:${marginBottom}">
-      <tr><td style="padding:0 0 16px">
-        ${heroUrl ? `<img src="${heroUrl}" width="${s.emailMaxW}" style="width:100%;max-width:${s.emailMaxW}px;height:auto;display:block" alt="${sec.title}">` : ''}
-      </td></tr>
-      <tr><td class="section-inner" style="padding:0 32px">
+    <table width="100%" cellpadding="0" cellspacing="0" style="background-color:#ffffff;margin-bottom:${marginBottom};table-layout:fixed;">
+      ${heroUrl ? `<tr><td style="padding:0">
+        <img src="${heroUrl}" width="100%" style="width:100%;max-width:${s.emailMaxW}px;height:auto;display:block" alt="${sec.title}">
+      </td></tr>` : ''}
+      <tr><td class="section-inner" style="padding:16px 32px 0">
         <p style="margin:0 0 12px;color:${themeColor};font-size:22px;font-weight:800;line-height:1.2;text-transform:uppercase;letter-spacing:.5px">
           ${sec.title}
         </p>
@@ -733,16 +733,20 @@ function generateFridayBlastHTML(data, v, s, isComposer = false){
     .intro-box { width: 95% !important; }
   }
 </style>
-<table width="100%" cellpadding="0" cellspacing="0" border="0" class="content-table" style="width:100%;max-width:${s.emailMaxW}px;background-color:#ffffff;margin:0 auto">
-  <tr><td align="center" class="header-cell" style="background-color:${hColor};padding:22px 24px;color:#ffffff">
-    <p style="margin:0;font-size:24px;font-weight:800;text-transform:uppercase;letter-spacing:1px">${hTitle}</p>
-    ${preText ? `
-    <div class="intro-box" style="margin:10px auto 0;width:90%;max-width:600px;border-top:1px solid rgba(255,255,255,0.4);padding-top:10px;font-size:14px;opacity:0.9;line-height:1.4">
-      ${preText}
-    </div>` : ''}
+<table width="100%" cellpadding="0" cellspacing="0" border="0" class="content-table" style="width:100%;max-width:${s.emailMaxW}px;background-color:#ffffff;margin:0 auto;table-layout:fixed">
+  <tr><td align="center" style="background-color:${hColor};padding:22px 0;color:#ffffff">
+    <div style="padding:0 24px">
+      <p style="margin:0;font-size:24px;font-weight:800;text-transform:uppercase;letter-spacing:1px">${hTitle}</p>
+      ${preText ? `
+      <div class="intro-box" style="margin:10px auto 0;width:90%;max-width:600px;border-top:1px solid rgba(255,255,255,0.4);padding-top:10px;font-size:14px;opacity:0.9;line-height:1.4">
+        ${preText}
+      </div>` : ''}
+    </div>
   </td></tr>
-  <tr><td class="section-container" style="padding:24px 24px 0">
-    ${sectionsHtml}
+  <tr><td class="section-container" style="padding:24px 0 0">
+    <div style="width:100%;max-width:${s.emailMaxW}px;margin:0 auto">
+      ${sectionsHtml}
+    </div>
   </td></tr>
   <tr><td style="padding:0 24px 10px;background-color:#ffffff;text-align:center;font-size:12px;color:#999999">
   </td></tr>
