@@ -154,7 +154,7 @@ function setMode(mode){
 
 function addFridaySection(){
   const id = Date.now();
-  fridaySections.push({id, title:'', dateTime:'', instructor:'', cost:'', credits:'', regLink:'', description:'', heroUrl:'', links:[]});
+  fridaySections.push({id, title:'', dateTime:'', instructor:'', cost:'', credits:'', regLink:'', description:'', heroUrl:'', variationIndex: 0, links:[]});
   renderFridaySections();
 }
 
@@ -166,46 +166,70 @@ function removeFridaySection(id){
 function renderFridaySections(){
   const container = document.getElementById('fridaySections');
   if(!container) return;
-  container.innerHTML = fridaySections.map((s, idx) => `
+  const s = getSettings();
+  container.innerHTML = fridaySections.map((sec, idx) => {
+    const vIdx = sec.variationIndex || 0;
+    return `
     <div class="card" style="margin-bottom:16px;border-color:var(--border);background:var(--bg)">
       <div class="card-header" style="font-size:13px;padding:8px 16px;justify-content:space-between">
-        <span>Section #${idx+1}</span>
-        <button class="btn-sm btn-danger" onclick="removeFridaySection(${s.id})">Remove</button>
+        <span>Section #${idx+1}: ${truncate(sec.title, 30) || '(New Event)'}</span>
+        <div style="display:flex;gap:4px">
+          <div class="tabs" style="margin-bottom:0;padding:2px">
+            <button class="tab ${vIdx===0?'active':''}" onclick="updateFSec(${sec.id},'variationIndex',0)" style="padding:2px 8px;font-size:10px">A</button>
+            <button class="tab ${vIdx===1?'active':''}" onclick="updateFSec(${sec.id},'variationIndex',1)" style="padding:2px 8px;font-size:10px">B</button>
+            <button class="tab ${vIdx===2?'active':''}" onclick="updateFSec(${sec.id},'variationIndex',2)" style="padding:2px 8px;font-size:10px">C</button>
+          </div>
+          <button class="btn-sm btn-danger" onclick="removeFridaySection(${sec.id})" style="padding:2px 8px;font-size:10px">✕</button>
+        </div>
       </div>
       <div class="card-body" style="padding:16px">
-        <div class="form-group"><label>Event Title</label><input type="text" value="${esc(s.title)}" onchange="updateFSec(${s.id},'title',this.value)"></div>
+        <div class="form-group"><label>Event Title</label><input type="text" value="${esc(sec.title)}" onchange="updateFSec(${sec.id},'title',this.value)"></div>
         <div class="form-row">
-          <div class="form-group"><label>Date/Time</label><input type="text" value="${esc(s.dateTime)}" onchange="updateFSec(${s.id},'dateTime',this.value)"></div>
-          <div class="form-group"><label>Hero Image URL</label><input type="url" value="${esc(s.heroUrl)}" onchange="updateFSec(${s.id},'heroUrl',this.value)" placeholder="https://..."></div>
+          <div class="form-group"><label>Date/Time</label><input type="text" value="${esc(sec.dateTime)}" onchange="updateFSec(${sec.id},'dateTime',this.value)"></div>
+          <div class="form-group"><label>Credits/Cost</label><input type="text" value="${esc(sec.credits)}" onchange="updateFSec(${sec.id},'credits',this.value)" placeholder="e.g. 3CE / FREE"></div>
         </div>
-        <div class="form-row">
-          <div class="form-group"><label>Reg Link</label><input type="url" value="${esc(s.regLink)}" onchange="updateFSec(${s.id},'regLink',this.value)"></div>
-          <div class="form-group"><label>Credits/Cost</label><input type="text" value="${esc(s.credits)}" onchange="updateFSec(${s.id},'credits',this.value)" placeholder="e.g. 3CE / FREE"></div>
+        <div class="form-group"><label>Reg Link</label><input type="url" value="${esc(sec.regLink)}" onchange="updateFSec(${sec.id},'regLink',this.value)"></div>
+        <div class="form-group"><label>Detailed Sales Copy</label><textarea style="min-height:100px;font-size:12px" onchange="updateFSec(${sec.id},'description',this.value)" placeholder="Write a compelling description that sells this event to agents...">${esc(sec.description)}</textarea></div>
+        
+        <div style="background:rgba(0,191,165,0.05);padding:12px;border-radius:8px;border:1px solid var(--border);margin-top:8px">
+          <label style="color:var(--accent);margin-bottom:8px;display:flex;justify-content:space-between">
+            🖼️ Hero Image 
+            <button class="btn-sm" onclick="copySectionHeroPrompt(${sec.id})" style="font-size:10px">📋 Copy AI Prompt (Theme ${['A','B','C'][vIdx]})</button>
+          </label>
+          <input type="url" value="${esc(sec.heroUrl)}" onchange="updateFSec(${sec.id},'heroUrl',this.value)" placeholder="Paste image URL here" style="font-size:12px">
         </div>
-        <div class="form-group"><label>Description</label><textarea style="min-height:60px;font-size:12px" onchange="updateFSec(${s.id},'description',this.value)">${esc(s.description)}</textarea></div>
       </div>
     </div>
-  `).join('');
+  `}).join('');
 }
 
 function updateFSec(id, field, val){
   const s = fridaySections.find(x=>x.id===id);
-  if(s) s[field] = val;
+  if(s) {
+    s[field] = val;
+    if(field === "variationIndex") renderFridaySections();
+  }
 }
 
 // ===================== AI INTEGRATION =====================
 function generateAIPrompt(){
   const raw = gv('aiRawInput');
   if(!raw){toast('Paste some raw event details first!');return;}
-  const prompt = `I am using an Email Blast Generator. Please parse the following raw input and return a JSON array of event objects. 
-Each object MUST have these fields: "title", "dateTime", "instructor", "cost", "credits", "regLink", "description". 
-If a field is missing, use an empty string. 
-Format the description into 3-5 punchy bullet points.
+  const prompt = `I am using an Email Blast Generator for a REALTOR association. Please parse the following raw input and return a JSON array of event objects. 
 
-RAW INPUT:
+Each object MUST have exactly these fields: "title", "dateTime", "instructor", "cost", "credits", "regLink", "description". 
+
+PARSING RULES:
+1. "title": Catchy, short event name.
+2. "dateTime": Full date and time string.
+3. "cost" & "credits": If multiple, combine them or put them in the credits field.
+4. "description": This is the MOST IMPORTANT field. Write compelling, detailed "sales copy" that sells this event or class to real estate agents. Use 1-2 punchy paragraphs, then 3-5 bold bullet points highlighting the key benefits. The goal is to make them want to register NOW.
+5. "regLink": The registration URL found in the text.
+
+RAW INPUT TO PARSE:
 ${raw}
 
-RETURN ONLY THE JSON ARRAY.`;
+RETURN ONLY THE JSON ARRAY. NO MARKDOWN BLOCK, NO PREAMBLE. JUST THE [ ... ] CONTENT.`;
   navigator.clipboard.writeText(prompt);
   document.getElementById('importBox').style.display = 'block';
   toast('AI Prompt copied! Paste into Gemini, then paste response below.');
@@ -225,6 +249,7 @@ function importAIResponse(){
       regLink: item.regLink||'',
       description: item.description||'',
       heroUrl: '',
+      variationIndex: 0,
       links: []
     }));
     renderFridaySections();
@@ -489,34 +514,42 @@ function generateLearnBlock(objectives,heading,v){
 function generateFridayBlastHTML(data, v, s, isComposer = false){
   const sectionsHtml = data.sections.map(sec => {
     let activeV = v;
+    let vIdx = sec.variationIndex || 0;
+    
     if(isComposer) {
-      const idx = composerPicks[sec.id];
-      activeV = _genVariations[idx];
+      const pickIdx = composerPicks[sec.id];
+      activeV = _genVariations[pickIdx];
+    } else if (v === null) {
+      activeV = _genVariations[vIdx];
     }
     
-    const bg = activeV.colorA; // use as header bar color
+    const themeColor = activeV.colorA;
+    const descHtml = sec.description ? sec.description.split('\n').join('<br>') : '';
+    
     return `
     <!-- Section: ${sec.title} -->
-    <table width="100%" cellpadding="0" cellspacing="0" style="background-color:#ffffff;margin-bottom:20px">
-      ${sec.heroUrl ? `<tr><td style="padding:0">
+    <table width="100%" cellpadding="0" cellspacing="0" style="background-color:#ffffff;margin-bottom:32px;border-bottom:1px solid #eeeeee">
+      ${sec.heroUrl ? `<tr><td style="padding:0 0 16px">
         <img src="${sec.heroUrl}" width="${s.emailMaxW}" style="width:100%;max-width:${s.emailMaxW}px;height:auto;display:block" alt="${sec.title}">
       </td></tr>` : ''}
-      <tr><td style="background-color:${bg};padding:12px 24px;color:#ffffff;font-size:18px;font-weight:800;text-align:center;text-transform:uppercase;letter-spacing:1px">
-        ${sec.title}
-      </td></tr>
-      <tr><td style="padding:24px 32px">
-        <p style="margin:0 0 16px;font-size:16px;line-height:1.5;color:#333333">${sec.description ? sec.description.split('\n').join('<br>') : ''}</p>
-        <table width="100%" cellpadding="0" cellspacing="0" style="margin:16px 0;background-color:#f9f9f9;border-radius:8px">
-          <tr><td style="padding:16px">
-            <p style="margin:0;font-size:14px;color:#666666">📅 <strong>${sec.dateTime}</strong></p>
+      <tr><td style="padding:0 32px">
+        <p style="margin:0 0 12px;color:${themeColor};font-size:22px;font-weight:800;line-height:1.2;text-transform:uppercase;letter-spacing:.5px">
+          ${sec.title}
+        </p>
+        <div style="margin:0 0 20px;font-size:16px;line-height:1.6;color:#333333">
+          ${descHtml}
+        </div>
+        <table width="100%" cellpadding="0" cellspacing="0" style="margin:0 0 20px;background-color:#f9f9f9;border-left:4px solid ${themeColor};border-radius:0 4px 4px 0">
+          <tr><td style="padding:12px 16px">
+            <p style="margin:0;font-size:14px;color:#444444">📅 <strong>${sec.dateTime}</strong></p>
             ${sec.credits ? `<p style="margin:4px 0 0;font-size:14px;color:#666666">🏷️ ${sec.credits}</p>` : ''}
           </td></tr>
         </table>
         <table width="100%" cellpadding="0" cellspacing="0">
-          <tr><td align="center" style="padding:16px 0">
+          <tr><td align="center" style="padding:8px 0 24px">
             <table cellpadding="0" cellspacing="0" style="margin:0 auto">
-              <tr><td align="center" style="background-color:${bg};border-radius:50px;padding:14px 40px">
-                <a href="${sec.regLink||'#'}" target="_blank" style="color:#ffffff;text-decoration:none;font-weight:800;font-size:16px">Register Here</a>
+              <tr><td align="center" style="background-color:${themeColor};border-radius:50px;padding:14px 40px">
+                <a href="${sec.regLink||'#'}" target="_blank" style="color:#ffffff;text-decoration:none;font-weight:800;font-size:16px;display:block">Register Here</a>
               </td></tr>
             </table>
           </td></tr>
@@ -524,6 +557,8 @@ function generateFridayBlastHTML(data, v, s, isComposer = false){
       </td></tr>
     </table>`;
   }).join('');
+
+  const intro = data.intro || `Hi {{CFirstName}} - Here's what's coming up at BER in the next couple of weeks!`;
 
   return `<!DOCTYPE html>
 <html lang="en">
@@ -540,7 +575,7 @@ function generateFridayBlastHTML(data, v, s, isComposer = false){
       Upcoming at BER — ${new Date().toLocaleDateString('en-US', {month:'long', day:'numeric'})}
     </td></tr>
     <tr><td style="background-color:#ffffff;padding:24px 32px 10px;text-align:center;font-size:14px;color:#666666">
-      ${data.intro || `Hi {{CFirstName}} - Here's what's coming up at BER in the next couple of weeks!`}
+      ${intro}
     </td></tr>
     <tr><td style="padding:0 24px">
       ${sectionsHtml}
@@ -677,6 +712,11 @@ function generateHeroPrompt(data,v,s){
     urgency:'Bold, urgent, and attention-grabbing. Use strong diagonal compositions, countdown-style elements, and warning-inspired visual cues with high-impact typography.'
   };
 
+  // Default to professional if v is null (for section-level prompts)
+  const activeTone = v ? v.tone : 'professional';
+  const activeColorA = v ? v.colorA : s.c1a;
+  const activeColorB = v ? v.colorB : s.c1b;
+
   // Extract theme keywords from title
   const keywords=data.title.replace(/[()]/g,'').split(/\s+/).filter(w=>w.length>3).slice(0,5).join(', ');
 
@@ -685,9 +725,9 @@ function generateHeroPrompt(data,v,s){
 EXACT DIMENSIONS: ${s.heroW}px wide × ${s.heroH}px tall.
 ASPECT RATIO: ${s.heroW}:${s.heroH} (wide banner format).
 
-COLOR PALETTE: Primary: ${v.colorA}, Secondary: ${v.colorB}. Use these as the dominant colors with complementary accents.
+COLOR PALETTE: Primary: ${activeColorA}, Secondary: ${activeColorB}. Use these as the dominant colors with complementary accents.
 
-DESIGN STYLE: ${themeMap[v.tone]}
+DESIGN STYLE: ${themeMap[activeTone]}
 
 CONTENT TO INCLUDE:
 - Large, bold headline text: "${data.title}"
@@ -708,6 +748,20 @@ ADDITIONAL RULES:
 - The banner should look like a premium, professionally-designed email header
 - Ensure all elements have sharp edges and high contrast
 - Do not use stock photo aesthetics — aim for a designed, illustrated look`;
+}
+
+// Generate prompt for a specific Friday Blast section
+function copySectionHeroPrompt(id) {
+  const s = getSettings();
+  const sec = fridaySections.find(x => x.id === id);
+  if(!sec) return;
+  
+  const vIdx = sec.variationIndex || 0;
+  const activeV = _genVariations[vIdx];
+  
+  const prompt = generateHeroPrompt(sec, activeV, s);
+  navigator.clipboard.writeText(prompt);
+  toast(`AI Hero Prompt (Theme ${['A','B','C'][vIdx]}) for "${truncate(sec.title, 20)}" copied!`);
 }
 
 // ===================== INIT =====================
