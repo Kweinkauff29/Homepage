@@ -154,7 +154,7 @@ function setMode(mode){
 
 function addFridaySection(){
   const id = Date.now();
-  fridaySections.push({id, title:'', dateTime:'', instructor:'', cost:'', credits:'', regLink:'', description:'', heroUrl:'', variationIndex: 0, links:[]});
+  fridaySections.push({id, title:'', dateTime:'', location:'', instructor:'', cost:'', credits:'', regLink:'', description:'', heroUrl:'', variationIndex: 0, customColor: '', links:[]});
   renderFridaySections();
 }
 
@@ -166,12 +166,22 @@ function removeFridaySection(id){
 function renderFridaySections(){
   const container = document.getElementById('fridaySections');
   if(!container) return;
-  const s = getSettings();
+  
+  // Safety: Ensure variations are populated or use defaults
+  const defaultVars = [
+    {tone:'professional', colorA:'#008080', colorB:'#02aae1'},
+    {tone:'energetic', colorA:'#1a237e', colorB:'#c5a44e'},
+    {tone:'urgency', colorA:'#c62828', colorB:'#f57c00'}
+  ];
+  const activeVars = (_genVariations && _genVariations.length >= 3) ? _genVariations : defaultVars;
+
   container.innerHTML = fridaySections.map((sec, idx) => {
     const vIdx = sec.variationIndex || 0;
+    const activeColor = sec.customColor || activeVars[vIdx].colorA;
+    
     return `
-    <div class="card" style="margin-bottom:16px;border-color:var(--border);background:var(--bg)">
-      <div class="card-header" style="font-size:13px;padding:8px 16px;justify-content:space-between">
+    <div class="card" style="margin-bottom:16px;border-color:var(--border);background:var(--bg);position:relative">
+      <div class="card-header" style="font-size:13px;padding:8px 16px;justify-content:space-between;border-bottom:2px solid ${activeColor}">
         <span>Section #${idx+1}: ${truncate(sec.title, 30) || '(New Event)'}</span>
         <div style="display:flex;gap:4px">
           <div class="tabs" style="margin-bottom:0;padding:2px">
@@ -186,15 +196,32 @@ function renderFridaySections(){
         <div class="form-group"><label>Event Title</label><input type="text" value="${esc(sec.title)}" onchange="updateFSec(${sec.id},'title',this.value)"></div>
         <div class="form-row">
           <div class="form-group"><label>Date/Time</label><input type="text" value="${esc(sec.dateTime)}" onchange="updateFSec(${sec.id},'dateTime',this.value)"></div>
-          <div class="form-group"><label>Credits/Cost</label><input type="text" value="${esc(sec.credits)}" onchange="updateFSec(${sec.id},'credits',this.value)" placeholder="e.g. 3CE / FREE"></div>
+          <div class="form-group"><label>Location</label><input type="text" value="${esc(sec.location)}" onchange="updateFSec(${sec.id},'location',this.value)" placeholder="e.g. BER Office / Zoom"></div>
         </div>
-        <div class="form-group"><label>Reg Link</label><input type="url" value="${esc(sec.regLink)}" onchange="updateFSec(${sec.id},'regLink',this.value)"></div>
+        <div class="form-row">
+          <div class="form-group" style="flex:2"><label>Registration Link</label><input type="url" value="${esc(sec.regLink)}" onchange="updateFSec(${sec.id},'regLink',this.value)"></div>
+          <div class="form-group"><label>Custom Color (Hex)</label><input type="text" value="${esc(sec.customColor)}" onchange="updateFSec(${sec.id},'customColor',this.value)" placeholder="#000000"></div>
+        </div>
+        <div class="form-group"><label>Credits/Cost</label><input type="text" value="${esc(sec.credits)}" onchange="updateFSec(${sec.id},'credits',this.value)" placeholder="e.g. 3CE / FREE"></div>
         <div class="form-group"><label>Detailed Sales Copy</label><textarea style="min-height:100px;font-size:12px" onchange="updateFSec(${sec.id},'description',this.value)" placeholder="Write a compelling description that sells this event to agents...">${esc(sec.description)}</textarea></div>
         
+        <div class="form-group">
+          <label style="display:flex;justify-content:space-between">Additional Buttons <button class="btn-sm" onclick="addFSecLink(${sec.id})" style="font-size:10px">+ Add Link</button></label>
+          <div id="fLinks-${sec.id}">
+            ${(sec.links||[]).map((l, lIdx) => `
+              <div class="form-row" style="margin-bottom:4px">
+                <input type="text" value="${esc(l.label)}" placeholder="Label" style="flex:1;font-size:11px" onchange="updateFSecLink(${sec.id},${lIdx},'label',this.value)">
+                <input type="url" value="${esc(l.url)}" placeholder="URL" style="flex:2;font-size:11px" onchange="updateFSecLink(${sec.id},${lIdx},'url',this.value)">
+                <button class="btn-sm btn-danger" onclick="removeFSecLink(${sec.id},${lIdx})" style="padding:0 8px">✕</button>
+              </div>
+            `).join('')}
+          </div>
+        </div>
+
         <div style="background:rgba(0,191,165,0.05);padding:12px;border-radius:8px;border:1px solid var(--border);margin-top:8px">
           <label style="color:var(--accent);margin-bottom:8px;display:flex;justify-content:space-between">
             🖼️ Hero Image 
-            <button class="btn-sm" onclick="copySectionHeroPrompt(${sec.id})" style="font-size:10px">📋 Copy AI Prompt (Theme ${['A','B','C'][vIdx]})</button>
+            <button class="btn-sm" onclick="copySectionHeroPrompt(${sec.id})" style="font-size:10px">📋 Copy AI Prompt</button>
           </label>
           <input type="url" value="${esc(sec.heroUrl)}" onchange="updateFSec(${sec.id},'heroUrl',this.value)" placeholder="Paste image URL here" style="font-size:12px">
         </div>
@@ -202,6 +229,31 @@ function renderFridaySections(){
     </div>
   `}).join('');
 }
+
+function addFSecLink(id){
+  const s = fridaySections.find(x=>x.id===id);
+  if(s){
+    if(!s.links) s.links = [];
+    s.links.push({label:'', url:''});
+    renderFridaySections();
+  }
+}
+
+function updateFSecLink(id, lIdx, field, val){
+  const s = fridaySections.find(x=>x.id===id);
+  if(s && s.links[lIdx]){
+    s.links[lIdx][field] = val;
+  }
+}
+
+function removeFSecLink(id, lIdx){
+  const s = fridaySections.find(x=>x.id===id);
+  if(s){
+    s.links.splice(lIdx, 1);
+    renderFridaySections();
+  }
+}
+
 
 function updateFSec(id, field, val){
   const s = fridaySections.find(x=>x.id===id);
@@ -217,7 +269,7 @@ function generateAIPrompt(){
   if(!raw){toast('Paste some raw event details first!');return;}
   const prompt = `I am using an Email Blast Generator for a REALTOR association. Please parse the following raw input and return a JSON array of event objects. 
 
-Each object MUST have exactly these fields: "title", "dateTime", "instructor", "cost", "credits", "regLink", "description". 
+Each object MUST have exactly these fields: "title", "dateTime", "location", "instructor", "cost", "credits", "regLink", "description". 
 
 PARSING RULES:
 1. "title": Catchy, short event name.
@@ -243,6 +295,7 @@ function importAIResponse(){
       id: Date.now() + Math.random(),
       title: item.title||'',
       dateTime: item.dateTime||'',
+      location: item.location||'',
       instructor: item.instructor||'',
       cost: item.cost||'',
       credits: item.credits||'',
@@ -250,6 +303,7 @@ function importAIResponse(){
       description: item.description||'',
       heroUrl: '',
       variationIndex: 0,
+      customColor: '',
       links: []
     }));
     renderFridaySections();
@@ -512,6 +566,10 @@ function generateLearnBlock(objectives,heading,v){
 
 // ===================== FRIDAY BLAST HTML =====================
 function generateFridayBlastHTML(data, v, s, isComposer = false){
+  const hColor = gv('fridayHeaderCol') || '#004a32';
+  const hTitle = gv('fridayHeaderTitle') || 'Upcoming at BER';
+  const preText = gv('fridayIntro') || '';
+
   const sectionsHtml = data.sections.map(sec => {
     let activeV = v;
     let vIdx = sec.variationIndex || 0;
@@ -523,12 +581,28 @@ function generateFridayBlastHTML(data, v, s, isComposer = false){
       activeV = _genVariations[vIdx];
     }
     
-    const themeColor = activeV.colorA;
+    const themeColor = sec.customColor || activeV.colorA;
     const descHtml = sec.description ? sec.description.split('\n').join('<br>') : '';
     
+    let extraBtnsHtml = '';
+    if(sec.links && sec.links.length > 0) {
+      sec.links.forEach(l => {
+        if(l.url) {
+          extraBtnsHtml += `
+          <tr><td align="center" style="padding:4px 0">
+            <table cellpadding="0" cellspacing="0" style="margin:0 auto">
+              <tr><td align="center" style="border:2px solid ${themeColor};border-radius:50px;padding:8px 30px">
+                <a href="${l.url}" target="_blank" style="color:${themeColor};text-decoration:none;font-weight:700;font-size:14px;display:block">${l.label||'Learn More'}</a>
+              </td></tr>
+            </table>
+          </td></tr>`;
+        }
+      });
+    }
+
     return `
     <!-- Section: ${sec.title} -->
-    <table width="100%" cellpadding="0" cellspacing="0" style="background-color:#ffffff;margin-bottom:32px;border-bottom:1px solid #eeeeee">
+    <table width="100%" cellpadding="0" cellspacing="0" style="background-color:#ffffff;margin-bottom:40px">
       ${sec.heroUrl ? `<tr><td style="padding:0 0 16px">
         <img src="${sec.heroUrl}" width="${s.emailMaxW}" style="width:100%;max-width:${s.emailMaxW}px;height:auto;display:block" alt="${sec.title}">
       </td></tr>` : ''}
@@ -536,29 +610,29 @@ function generateFridayBlastHTML(data, v, s, isComposer = false){
         <p style="margin:0 0 12px;color:${themeColor};font-size:22px;font-weight:800;line-height:1.2;text-transform:uppercase;letter-spacing:.5px">
           ${sec.title}
         </p>
-        <div style="margin:0 0 20px;font-size:16px;line-height:1.6;color:#333333">
+        <div style="margin:0 0 20px;font-size:15px;line-height:1.6;color:#333333">
           ${descHtml}
         </div>
         <table width="100%" cellpadding="0" cellspacing="0" style="margin:0 0 20px;background-color:#f9f9f9;border-left:4px solid ${themeColor};border-radius:0 4px 4px 0">
           <tr><td style="padding:12px 16px">
             <p style="margin:0;font-size:14px;color:#444444">📅 <strong>${sec.dateTime}</strong></p>
+            ${sec.location ? `<p style="margin:4px 0 0;font-size:14px;color:#444444">📍 ${sec.location}</p>` : ''}
             ${sec.credits ? `<p style="margin:4px 0 0;font-size:14px;color:#666666">🏷️ ${sec.credits}</p>` : ''}
           </td></tr>
         </table>
         <table width="100%" cellpadding="0" cellspacing="0">
-          <tr><td align="center" style="padding:8px 0 24px">
+          <tr><td align="center" style="padding:8px 0 12px">
             <table cellpadding="0" cellspacing="0" style="margin:0 auto">
               <tr><td align="center" style="background-color:${themeColor};border-radius:50px;padding:14px 40px">
                 <a href="${sec.regLink||'#'}" target="_blank" style="color:#ffffff;text-decoration:none;font-weight:800;font-size:16px;display:block">Register Here</a>
               </td></tr>
             </table>
           </td></tr>
+          ${extraBtnsHtml}
         </table>
       </td></tr>
     </table>`;
   }).join('');
-
-  const intro = data.intro || `Hi {{CFirstName}} - Here's what's coming up at BER in the next couple of weeks!`;
 
   return `<!DOCTYPE html>
 <html lang="en">
@@ -571,17 +645,17 @@ function generateFridayBlastHTML(data, v, s, isComposer = false){
 <table width="100%" cellpadding="0" cellspacing="0" style="background-color:#f4f4f4">
 <tr><td align="center" style="padding:0">
   <table width="${s.emailMaxW}" cellpadding="0" cellspacing="0" style="max-width:${s.emailMaxW}px;background-color:#ffffff">
-    <tr><td style="background-color:#004a32;padding:12px 24px;color:#ffffff;font-size:18px;font-weight:700;text-align:center">
-      Upcoming at BER — ${new Date().toLocaleDateString('en-US', {month:'long', day:'numeric'})}
+    <tr><td align="center" style="background-color:${hColor};padding:32px 24px;color:#ffffff">
+      <p style="margin:0;font-size:24px;font-weight:800;text-transform:uppercase;letter-spacing:1px">${hTitle}</p>
+      ${preText ? `
+      <div style="margin:16px auto 0;width:80%;max-width:400px;border-top:1px solid rgba(255,255,255,0.4);padding-top:16px;font-size:14px;opacity:0.9;line-height:1.4">
+        ${preText}
+      </div>` : ''}
     </td></tr>
-    <tr><td style="background-color:#ffffff;padding:24px 32px 10px;text-align:center;font-size:14px;color:#666666">
-      ${intro}
-    </td></tr>
-    <tr><td style="padding:0 24px">
+    <tr><td style="padding:32px 24px 0">
       ${sectionsHtml}
     </td></tr>
-    <tr><td style="padding:20px 48px;background-color:#f9f9f9;text-align:center;font-size:12px;color:#999999;border-top:1px solid #eeeeee">
-      ${s.orgName} · ${s.orgAddr}
+    <tr><td style="padding:24px 48px;background-color:#ffffff;text-align:center;font-size:12px;color:#999999">
     </td></tr>
   </table>
 </td></tr>
@@ -589,6 +663,7 @@ function generateFridayBlastHTML(data, v, s, isComposer = false){
 </body>
 </html>`;
 }
+
 
 // ===================== SINGLE EMAIL HTML =====================
 function generateEmailHTML(data, v, s, preheader, heroImageUrl){
@@ -689,11 +764,9 @@ ${ytSection}
 </td></tr>
 </table>
 
-<!-- Footer -->
+<!-- Footer Space -->
 <table width="${s.emailMaxW}" cellpadding="0" cellspacing="0" style="max-width:${s.emailMaxW}px">
-<tr><td style="border-top:3px solid ${v.colorA};padding:20px 40px;text-align:center;font-size:12px;color:#999999">
-${s.orgName} · ${s.orgAddr}
-</td></tr>
+<tr><td style="padding:20px 40px"></td></tr>
 </table>
 
 </td></tr>
@@ -757,9 +830,20 @@ function copySectionHeroPrompt(id) {
   if(!sec) return;
   
   const vIdx = sec.variationIndex || 0;
-  const activeV = _genVariations[vIdx];
+  const activeV = Object.assign({}, _genVariations[vIdx]);
+  if(sec.customColor) activeV.colorA = sec.customColor;
   
   const prompt = generateHeroPrompt(sec, activeV, s);
+  
+  // New: Show in Preview
+  const preview = document.getElementById('heroPromptPreview');
+  const box = document.getElementById('promptPreviewBox');
+  if(preview && box){
+    preview.value = prompt;
+    box.style.display = 'block';
+    preview.scrollIntoView({behavior:'smooth', block:'center'});
+  }
+
   navigator.clipboard.writeText(prompt);
   toast(`AI Hero Prompt (Theme ${['A','B','C'][vIdx]}) for "${truncate(sec.title, 20)}" copied!`);
 }
