@@ -4473,6 +4473,12 @@
               <div class="tool-name">Letter of Good Standing</div>
               <div class="tool-desc">Request & Processing Form</div>
             </a>
+            <!-- Restricted Tool (Kevin Only) -->
+            <a href="https://wrapsheet.bonitaspringsrealtors.workers.dev/tools/email-blast-generator?key=matrixadmin" target="_blank" class="tool-link-card" id="tool-email-generator" style="display:none;">
+              <span class="tool-icon">📧</span>
+              <div class="tool-name">Email Blast Generator</div>
+              <div class="tool-desc">Automation Tool (Internal)</div>
+            </a>
           </div>
         </section>
       </div> <!-- End sections-container -->
@@ -7462,6 +7468,13 @@
         populateCalendarOwnerSelect();
         setActiveUser(user.id);
         loadPillarsForCurrentUser();
+
+        // Restricted Tool Logic (Kevin Only)
+        const emailTool = document.getElementById("tool-email-generator");
+        if (emailTool) {
+          const isKevin = user.name.toLowerCase().includes("kevin") && !user.name.toLowerCase().includes("test");
+          emailTool.style.display = isKevin ? "flex" : "none";
+        }
       }
     }
 
