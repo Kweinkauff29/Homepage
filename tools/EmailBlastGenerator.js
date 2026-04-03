@@ -576,13 +576,22 @@ function parseBullets(desc){
   return lines;
 }
 
+function mdToHtml(text) {
+  if (!text) return '';
+  return text
+    .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+    .replace(/\*(.*?)\*/g, '<em>$1</em>')
+    .replace(/^\* (.*?)$/gm, '&bull; $1')
+    .split('\n').join('<br>');
+}
+
 // ===================== BODY COPY =====================
 function generateBodyCopy(data,v,s){
   const tag=s.mergeTag;
   const bullets=parseBullets(data.description);
   const objectives=bullets.filter(b=>b.length<200);
   const introParts=bullets.filter(b=>b.length>=200);
-  const introText=introParts.length?introParts[0]:'';
+  const introText=introParts.length?mdToHtml(introParts[0]):'';
 
   if(v.tone==='professional'){
     let body=`<p style="margin:0 0 16px">Hi ${tag},</p>`;
@@ -659,7 +668,7 @@ function generateFridayBlastHTML(data, v, s, isComposer = false){
     
     const themeColor = sec.customColor || activeV.colorA;
     const currentV = sec.variations[vIdx] || { description: '', heroUrl: '' };
-    const descHtml = currentV.description ? currentV.description.split('\n').join('<br>') : '';
+    const descHtml = mdToHtml(currentV.description);
     const heroUrl = currentV.heroUrl || '';
     
     let extraBtnsHtml = '';
@@ -681,10 +690,10 @@ function generateFridayBlastHTML(data, v, s, isComposer = false){
     return `
     <!-- Section: ${sec.title} -->
     <table width="100%" cellpadding="0" cellspacing="0" style="background-color:#ffffff;margin-bottom:40px">
-      ${heroUrl ? `<tr><td style="padding:0 0 16px">
-        <img src="${heroUrl}" width="${s.emailMaxW}" style="width:100%;max-width:${s.emailMaxW}px;height:auto;display:block" alt="${sec.title}">
-      </td></tr>` : ''}
-      <tr><td style="padding:0 32px">
+      <tr><td style="padding:0 0 16px">
+        ${heroUrl ? `<img src="${heroUrl}" width="${s.emailMaxW}" style="width:100%;max-width:${s.emailMaxW}px;height:auto;display:block" alt="${sec.title}">` : ''}
+      </td></tr>
+      <tr><td class="section-inner" style="padding:0 32px">
         <p style="margin:0 0 12px;color:${themeColor};font-size:22px;font-weight:800;line-height:1.2;text-transform:uppercase;letter-spacing:.5px">
           ${sec.title}
         </p>
@@ -718,22 +727,31 @@ function generateFridayBlastHTML(data, v, s, isComposer = false){
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
 <title>Friday Blast</title>
+<style>
+  @media only screen and (max-width: 600px) {
+    .content-table { width: 100% !important; }
+    .header-cell { padding: 32px 15px !important; }
+    .section-container { padding: 25px 15px 0 !important; }
+    .section-inner { padding: 0 15px !important; }
+    .intro-box { width: 95% !important; }
+  }
+</style>
 </head>
 <body style="margin:0;padding:0;background-color:#f4f4f4;font-family:${s.fontFamily};line-height:1.6;color:#333333">
 <table width="100%" cellpadding="0" cellspacing="0" style="background-color:#f4f4f4">
 <tr><td align="center" style="padding:0">
-  <table width="${s.emailMaxW}" cellpadding="0" cellspacing="0" style="max-width:${s.emailMaxW}px;background-color:#ffffff">
-    <tr><td align="center" style="background-color:${hColor};padding:32px 24px;color:#ffffff">
+  <table width="${s.emailMaxW}" cellpadding="0" cellspacing="0" class="content-table" style="width:100%;max-width:${s.emailMaxW}px;background-color:#ffffff">
+    <tr><td align="center" class="header-cell" style="background-color:${hColor};padding:32px 24px;color:#ffffff">
       <p style="margin:0;font-size:24px;font-weight:800;text-transform:uppercase;letter-spacing:1px">${hTitle}</p>
       ${preText ? `
-      <div style="margin:16px auto 0;width:90%;max-width:600px;border-top:1px solid rgba(255,255,255,0.4);padding-top:16px;font-size:14px;opacity:0.9;line-height:1.4">
+      <div class="intro-box" style="margin:16px auto 0;width:90%;max-width:600px;border-top:1px solid rgba(255,255,255,0.4);padding-top:16px;font-size:14px;opacity:0.9;line-height:1.4">
         ${preText}
       </div>` : ''}
     </td></tr>
-    <tr><td style="padding:32px 24px 0">
+    <tr><td class="section-container" style="padding:32px 24px 0">
       ${sectionsHtml}
     </td></tr>
-    <tr><td style="padding:24px 48px;background-color:#ffffff;text-align:center;font-size:12px;color:#999999">
+    <tr><td style="padding:0 24px 20px;background-color:#ffffff;text-align:center;font-size:12px;color:#999999">
     </td></tr>
   </table>
 </td></tr>
