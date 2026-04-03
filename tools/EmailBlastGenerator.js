@@ -726,7 +726,7 @@ function generateFridayBlastHTML(data, v, s, isComposer = false){
     <tr><td align="center" style="background-color:${hColor};padding:32px 24px;color:#ffffff">
       <p style="margin:0;font-size:24px;font-weight:800;text-transform:uppercase;letter-spacing:1px">${hTitle}</p>
       ${preText ? `
-      <div style="margin:16px auto 0;width:80%;max-width:400px;border-top:1px solid rgba(255,255,255,0.4);padding-top:16px;font-size:14px;opacity:0.9;line-height:1.4">
+      <div style="margin:16px auto 0;width:90%;max-width:600px;border-top:1px solid rgba(255,255,255,0.4);padding-top:16px;font-size:14px;opacity:0.9;line-height:1.4">
         ${preText}
       </div>` : ''}
     </td></tr>
