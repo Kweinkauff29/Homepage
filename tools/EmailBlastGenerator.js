@@ -154,13 +154,52 @@ function setMode(mode){
 
 function addFridaySection(){
   const id = Date.now();
-  fridaySections.push({id, title:'', dateTime:'', location:'', instructor:'', cost:'', credits:'', regLink:'', description:'', heroUrl:'', variationIndex: 0, customColor: '', links:[]});
+  fridaySections.push({
+    id, 
+    title:'', 
+    dateTime:'', 
+    location:'', 
+    instructor:'', 
+    cost:'', 
+    credits:'', 
+    regLink:'', 
+    variationIndex: 0, 
+    customColor: '', 
+    links:[],
+    variations: [
+      { description: '', heroUrl: '' }, // A: Professional
+      { description: '', heroUrl: '' }, // B: Energetic
+      { description: '', heroUrl: '' }  // C: Benefit-Led
+    ]
+  });
   renderFridaySections();
 }
 
 function removeFridaySection(id){
   fridaySections = fridaySections.filter(s=>s.id!==id);
   renderFridaySections();
+}
+
+function moveFSec(id, dir){
+  const idx = fridaySections.findIndex(x=>x.id===id);
+  if(idx===-1) return;
+  const newIdx = idx + dir;
+  if(newIdx < 0 || newIdx >= fridaySections.length) return;
+  [fridaySections[idx], fridaySections[newIdx]] = [fridaySections[newIdx], fridaySections[idx]];
+  renderFridaySections();
+}
+
+function parseFridayDate(str){
+  if(!str) return 9999999999999;
+  const part = str.split('|')[0].trim();
+  const d = new Date(part);
+  return isNaN(d.getTime()) ? 9999999999999 : d.getTime();
+}
+
+function sortFridaySectionsByDate(){
+  fridaySections.sort((a,b) => parseFridayDate(a.dateTime) - parseFridayDate(b.dateTime));
+  renderFridaySections();
+  toast('Sections sorted by date!');
 }
 
 function renderFridaySections(){
@@ -179,10 +218,27 @@ function renderFridaySections(){
     const vIdx = sec.variationIndex || 0;
     const activeColor = sec.customColor || activeVars[vIdx].colorA;
     
+    // Safety check for variations array
+    if(!sec.variations || sec.variations.length < 3) {
+      sec.variations = [
+        { description: sec.description || '', heroUrl: sec.heroUrl || '' },
+        { description: sec.description || '', heroUrl: sec.heroUrl || '' },
+        { description: sec.description || '', heroUrl: sec.heroUrl || '' }
+      ];
+    }
+
+    const currentV = sec.variations[vIdx];
+
     return `
     <div class="card" style="margin-bottom:16px;border-color:var(--border);background:var(--bg);position:relative">
       <div class="card-header" style="font-size:13px;padding:8px 16px;justify-content:space-between;border-bottom:2px solid ${activeColor}">
-        <span>Section #${idx+1}: ${truncate(sec.title, 30) || '(New Event)'}</span>
+        <div style="display:flex;align-items:center;gap:8px">
+          <div style="display:flex;flex-direction:column;gap:2px">
+            <button class="move-btn" onclick="moveFSec(${sec.id},-1)" ${idx===0?'disabled':''} title="Move Up">▲</button>
+            <button class="move-btn" onclick="moveFSec(${sec.id},1)" ${idx===fridaySections.length-1?'disabled':''} title="Move Down">▼</button>
+          </div>
+          <span>Section #${idx+1}: ${truncate(sec.title, 30) || '(New Event)'}</span>
+        </div>
         <div style="display:flex;gap:4px">
           <div class="tabs" style="margin-bottom:0;padding:2px">
             <button class="tab ${vIdx===0?'active':''}" onclick="updateFSec(${sec.id},'variationIndex',0)" style="padding:2px 8px;font-size:10px">A</button>
@@ -203,8 +259,22 @@ function renderFridaySections(){
           <div class="form-group"><label>Custom Color (Hex)</label><input type="text" value="${esc(sec.customColor)}" onchange="updateFSec(${sec.id},'customColor',this.value)" placeholder="#000000"></div>
         </div>
         <div class="form-group"><label>Credits/Cost</label><input type="text" value="${esc(sec.credits)}" onchange="updateFSec(${sec.id},'credits',this.value)" placeholder="e.g. 3CE / FREE"></div>
-        <div class="form-group"><label>Detailed Sales Copy</label><textarea style="min-height:100px;font-size:12px" onchange="updateFSec(${sec.id},'description',this.value)" placeholder="Write a compelling description that sells this event to agents...">${esc(sec.description)}</textarea></div>
         
+        <div class="variation-slot" style="background:rgba(0,0,0,0.02);padding:12px;border-radius:8px;border:1px dashed var(--border);margin-bottom:12px">
+          <div class="form-group">
+            <label style="color:var(--accent);font-weight:700">✍️ Sales Copy (Variation ${['A','B','C'][vIdx]})</label>
+            <textarea style="min-height:100px;font-size:12px" onchange="updateFSecV(${sec.id}, ${vIdx}, 'description', this.value)" placeholder="Marketing copy for this specific variation...">${esc(currentV.description)}</textarea>
+          </div>
+          
+          <div style="background:rgba(0,191,165,0.05);padding:12px;border-radius:8px;border:1px solid var(--border)">
+            <label style="color:var(--accent);margin-bottom:8px;display:flex;justify-content:space-between">
+              🖼️ Hero Image (Variation ${['A','B','C'][vIdx]})
+              <button class="btn-sm" onclick="copySectionHeroPrompt(${sec.id})" style="font-size:10px">📋 Copy Prompt</button>
+            </label>
+            <input type="url" value="${esc(currentV.heroUrl)}" onchange="updateFSecV(${sec.id}, ${vIdx}, 'heroUrl', this.value)" placeholder="Paste image URL here" style="font-size:12px">
+          </div>
+        </div>
+
         <div class="form-group">
           <label style="display:flex;justify-content:space-between">Additional Buttons <button class="btn-sm" onclick="addFSecLink(${sec.id})" style="font-size:10px">+ Add Link</button></label>
           <div id="fLinks-${sec.id}">
@@ -216,14 +286,6 @@ function renderFridaySections(){
               </div>
             `).join('')}
           </div>
-        </div>
-
-        <div style="background:rgba(0,191,165,0.05);padding:12px;border-radius:8px;border:1px solid var(--border);margin-top:8px">
-          <label style="color:var(--accent);margin-bottom:8px;display:flex;justify-content:space-between">
-            🖼️ Hero Image 
-            <button class="btn-sm" onclick="copySectionHeroPrompt(${sec.id})" style="font-size:10px">📋 Copy AI Prompt</button>
-          </label>
-          <input type="url" value="${esc(sec.heroUrl)}" onchange="updateFSec(${sec.id},'heroUrl',this.value)" placeholder="Paste image URL here" style="font-size:12px">
         </div>
       </div>
     </div>
@@ -263,25 +325,36 @@ function updateFSec(id, field, val){
   }
 }
 
+function updateFSecV(id, vIdx, field, val){
+  const s = fridaySections.find(x=>x.id===id);
+  if(s && s.variations[vIdx]) {
+    s.variations[vIdx][field] = val;
+  }
+}
+
 // ===================== AI INTEGRATION =====================
 function generateAIPrompt(){
   const raw = gv('aiRawInput');
   if(!raw){toast('Paste some raw event details first!');return;}
   const prompt = `I am using an Email Blast Generator for a REALTOR association. Please parse the following raw input and return a JSON array of event objects. 
-
-Each object MUST have exactly these fields: "title", "dateTime", "location", "instructor", "cost", "credits", "regLink", "description". 
-
-PARSING RULES:
-1. "title": Catchy, short event name.
-2. "dateTime": Full date and time string.
-3. "cost" & "credits": If multiple, combine them or put them in the credits field.
-4. "description": This is the MOST IMPORTANT field. Write compelling, detailed "sales copy" that sells this event or class to real estate agents. Use 1-2 punchy paragraphs, then 3-5 bold bullet points highlighting the key benefits. The goal is to make them want to register NOW.
-5. "regLink": The registration URL found in the text.
-
-RAW INPUT TO PARSE:
-${raw}
-
-RETURN ONLY THE JSON ARRAY. NO MARKDOWN BLOCK, NO PREAMBLE. JUST THE [ ... ] CONTENT.`;
+ 
+ For EACH event, you must provide THREE distinct marketing descriptions based on these angles:
+ Angle A (Professional/Informational): Direct, factual, authoritative, and clean.
+ Angle B (Energetic/FOMO): High excitement, community-focused, emphasizes networking and "don't miss out."
+ Angle C (Benefit-Led/Career Growth): Focuses specifically on the realtor's professional advancement, ROI, and credits.
+ 
+ Each object MUST have exactly these fields: "title", "dateTime", "location", "instructor", "cost", "credits", "regLink", "copyA", "copyB", "copyC". 
+ 
+ PARSING RULES:
+ 1. "title": Catchy, short event name.
+ 2. "dateTime": Full date and time string.
+ 3. "regLink": The registration URL found in the text.
+ 4. "copyA", "copyB", "copyC": Detailed "sales copy" following the angles above. Each should be 1-2 punchy paragraphs, then 3-5 bold bullet points.
+ 
+ RAW INPUT TO PARSE:
+ ${raw}
+ 
+ RETURN ONLY THE JSON ARRAY. NO MARKDOWN BLOCK, NO PREAMBLE. JUST THE [ ... ] CONTENT.`;
   navigator.clipboard.writeText(prompt);
   document.getElementById('importBox').style.display = 'block';
   toast('AI Prompt copied! Paste into Gemini, then paste response below.');
@@ -300,14 +373,17 @@ function importAIResponse(){
       cost: item.cost||'',
       credits: item.credits||'',
       regLink: item.regLink||'',
-      description: item.description||'',
-      heroUrl: '',
       variationIndex: 0,
       customColor: '',
-      links: []
+      links: [],
+      variations: [
+        { description: item.copyA || '', heroUrl: '' },
+        { description: item.copyB || '', heroUrl: '' },
+        { description: item.copyC || '', heroUrl: '' }
+      ]
     }));
-    renderFridaySections();
-    toast(`Imported ${data.length} sections!`);
+    sortFridaySectionsByDate();
+    toast(`Imported ${data.length} sections with 3 marketing angles each!`);
   } catch(e) {
     toast('Error parsing JSON. Make sure you copy/pasted only the JSON array.');
   }
@@ -582,7 +658,9 @@ function generateFridayBlastHTML(data, v, s, isComposer = false){
     }
     
     const themeColor = sec.customColor || activeV.colorA;
-    const descHtml = sec.description ? sec.description.split('\n').join('<br>') : '';
+    const currentV = sec.variations[vIdx] || { description: '', heroUrl: '' };
+    const descHtml = currentV.description ? currentV.description.split('\n').join('<br>') : '';
+    const heroUrl = currentV.heroUrl || '';
     
     let extraBtnsHtml = '';
     if(sec.links && sec.links.length > 0) {
@@ -603,8 +681,8 @@ function generateFridayBlastHTML(data, v, s, isComposer = false){
     return `
     <!-- Section: ${sec.title} -->
     <table width="100%" cellpadding="0" cellspacing="0" style="background-color:#ffffff;margin-bottom:40px">
-      ${sec.heroUrl ? `<tr><td style="padding:0 0 16px">
-        <img src="${sec.heroUrl}" width="${s.emailMaxW}" style="width:100%;max-width:${s.emailMaxW}px;height:auto;display:block" alt="${sec.title}">
+      ${heroUrl ? `<tr><td style="padding:0 0 16px">
+        <img src="${heroUrl}" width="${s.emailMaxW}" style="width:100%;max-width:${s.emailMaxW}px;height:auto;display:block" alt="${sec.title}">
       </td></tr>` : ''}
       <tr><td style="padding:0 32px">
         <p style="margin:0 0 12px;color:${themeColor};font-size:22px;font-weight:800;line-height:1.2;text-transform:uppercase;letter-spacing:.5px">
@@ -833,9 +911,25 @@ function copySectionHeroPrompt(id) {
   const activeV = Object.assign({}, _genVariations[vIdx]);
   if(sec.customColor) activeV.colorA = sec.customColor;
   
-  const prompt = generateHeroPrompt(sec, activeV, s);
+  const angles = [
+    "Professional, clean, and corporate. Highlighting facts and reliability.",
+    "Energetic, vibrant, and high-hype. Focused on community and networking.",
+    "Benefit-led, career-growth, and professional advancement focused."
+  ];
   
-  // New: Show in Preview
+  const currentV = sec.variations[vIdx];
+  const marketingContext = angles[vIdx];
+  
+  // Use generateHeroPrompt logic but with current variation's copy
+  const prompt = generateHeroPrompt({
+    title: sec.title,
+    dateTime: sec.dateTime,
+    credits: sec.credits,
+    instructor: sec.instructor,
+    description: currentV.description
+  }, activeV, s) + "\n\nMARKETING ANGLE: " + marketingContext;
+
+  // Show in Preview
   const preview = document.getElementById('heroPromptPreview');
   const box = document.getElementById('promptPreviewBox');
   if(preview && box){

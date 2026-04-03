@@ -25,6 +25,9 @@ input:focus,textarea:focus,select:focus{outline:none;border-color:var(--accent);
 textarea{resize:vertical;min-height:120px}
 .form-group{margin-bottom:16px}
 .form-row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.move-btn { background: var(--surface2); border: 1px solid var(--border); border-radius: 4px; color: var(--text); padding: 0 4px; font-size: 8px; cursor: pointer; line-height: 1; height: 12px; display: flex; align-items: center; justify-content: center; opacity: 0.7; }
+.move-btn:hover:not(:disabled) { background: var(--accent); color: white; opacity: 1; }
+.move-btn:disabled { opacity: 0.2; cursor: not-allowed; }
 .btn-primary{width:100%;padding:14px;background:linear-gradient(135deg,var(--accent),#00897b);color:#fff;border:none;border-radius:10px;font-size:15px;font-weight:700;cursor:pointer;transition:.2s;letter-spacing:.3px}
 .btn-primary:hover{transform:translateY(-1px);box-shadow:0 4px 20px rgba(0,191,165,.3)}
 .btn-sm{padding:6px 12px;font-size:12px;border-radius:6px;border:1px solid var(--border);background:var(--surface2);color:var(--text);cursor:pointer;transition:.2s}
