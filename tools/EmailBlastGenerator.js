@@ -52,7 +52,8 @@ function loadSettingsUI() {
   sv('sC1aHex',s.c1a);sv('sC1bHex',s.c1b);sv('sC2aHex',s.c2a);sv('sC2bHex',s.c2b);sv('sC3aHex',s.c3a);sv('sC3bHex',s.c3b);
   // sync color pickers with text
   ['sC1a','sC1b','sC2a','sC2b','sC3a','sC3b'].forEach(id=>{
-    document.getElementById(id).addEventListener('input',()=>{document.getElementById(id+'Hex').value=document.getElementById(id).value});
+    const el = document.getElementById(id);
+    if(el) el.addEventListener('input',()=>{document.getElementById(id+'Hex').value=document.getElementById(id).value});
   });
 }
 
@@ -92,7 +93,8 @@ function renderLinks(){
     </div>`).join('');
 }
 
-function esc(s){return s.replace(/"/g,'&quot;').replace(/</g,'&lt;')}
+function esc(s){return s ? s.toString().replace(/"/g,'&quot;').replace(/</g,'&lt;') : ''}
+function escHtml(s){return s ? s.toString().replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;') : ''}
 
 // ===================== TAB SWITCHING =====================
 let currentTab = 0;
@@ -100,9 +102,18 @@ function switchTab(idx,btn){
   currentTab=idx;
   document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
   btn.classList.add('active');
+  
+  // Hide all panels
   document.querySelectorAll('.tab-panel').forEach(p=>p.classList.remove('active'));
+  
+  if(idx === 3) {
+    // Composer
+    document.getElementById('composerPanel').classList.add('active');
+    return;
+  }
+  
   const panel=document.getElementById('panel-'+idx);
-  if(panel)panel.classList.add('active');
+  if(panel) panel.classList.add('active');
 }
 
 // ===================== COPY =====================
@@ -123,91 +134,246 @@ function getYouTubeId(url){
 }
 
 // ===================== EMAIL GENERATION =====================
-// Store state globally so hero image can be applied after generation
+let currentMode = 'single'; // 'single' or 'friday'
+let fridaySections = []; // array of {id, title, dateTime, instructor, cost, credits, regLink, description, heroUrl, links:[]}
+let composerPicks = {}; // sectionId -> variationIndex (0,1,2)
+
 let _genData = null;
 let _genVariations = [];
 let _genPreheaders = [];
 let _genSettings = null;
 
-function generateAll(){
-  // sync link inputs
-  document.querySelectorAll('.link-repeater-item input').forEach((inp,i)=>{
-    const idx=Math.floor(i/2);const field=i%2===0?'label':'url';
-    if(additionalLinks[idx])additionalLinks[idx][field]=inp.value;
-  });
+function setMode(mode){
+  currentMode = mode;
+  document.getElementById('modeSingle').classList.toggle('active', mode==='single');
+  document.getElementById('modeFriday').classList.toggle('active', mode==='friday');
+  document.getElementById('singleModeFields').style.display = mode==='single' ? 'block' : 'none';
+  document.getElementById('fridayModeFields').style.display = mode==='friday' ? 'block' : 'none';
+  if(mode==='friday' && fridaySections.length===0) addFridaySection();
+}
 
-  const data={
-    title:gv('eventTitle'),dateTime:gv('eventDateTime'),instructor:gv('instructor'),
-    cost:gv('cost'),credits:gv('ceCredits'),regLink:gv('regLink'),
-    description:gv('description'),links:[...additionalLinks]
-  };
+function addFridaySection(){
+  const id = Date.now();
+  fridaySections.push({id, title:'', dateTime:'', instructor:'', cost:'', credits:'', regLink:'', description:'', heroUrl:'', links:[]});
+  renderFridaySections();
+}
 
-  if(!data.title){toast('Please enter an event title');return;}
+function removeFridaySection(id){
+  fridaySections = fridaySections.filter(s=>s.id!==id);
+  renderFridaySections();
+}
 
-  const s=getSettings();
-  const variations=[
-    {name:'A — Professional',tone:'professional',colorA:s.c1a,colorB:s.c1b,badge:'#008080'},
-    {name:'B — Energetic',tone:'energetic',colorA:s.c2a,colorB:s.c2b,badge:'#1a237e'},
-    {name:'C — Urgency',tone:'urgency',colorA:s.c3a,colorB:s.c3b,badge:'#c62828'}
-  ];
-
-  // Generate preheaders once so they stay consistent
-  _genData = data;
-  _genVariations = variations;
-  _genSettings = s;
-  _genPreheaders = variations.map(v => generatePreheader(data, v, s));
-
-  const container=document.getElementById('tabContent');
-  container.innerHTML='';
-
-  variations.forEach((v,i)=>{
-    const preheader = _genPreheaders[i];
-    const emailHtml = generateEmailHTML(data, v, s, preheader, '');
-    const heroPrompt = generateHeroPrompt(data, v, s);
-
-    const panel=document.createElement('div');
-    panel.className='tab-panel'+(i===0?' active':'');
-    panel.id='panel-'+i;
-    panel.innerHTML=`
-      <div class="output-section">
-        <div class="output-label">📝 Preheader Text <button class="copy-btn" onclick="copyText('pre-${i}')">Copy</button></div>
-        <div class="output-box" id="pre-${i}">${escHtml(preheader)}</div>
+function renderFridaySections(){
+  const container = document.getElementById('fridaySections');
+  if(!container) return;
+  container.innerHTML = fridaySections.map((s, idx) => `
+    <div class="card" style="margin-bottom:16px;border-color:var(--border);background:var(--bg)">
+      <div class="card-header" style="font-size:13px;padding:8px 16px;justify-content:space-between">
+        <span>Section #${idx+1}</span>
+        <button class="btn-sm btn-danger" onclick="removeFridaySection(${s.id})">Remove</button>
       </div>
-      <div class="output-section">
-        <div class="output-label">👁️ Email Preview</div>
-        <iframe class="preview-frame" id="frame-${i}" sandbox="allow-same-origin"></iframe>
-      </div>
-      <div class="output-section">
-        <div class="output-label">🖼️ Hero Image URL <span style="font-size:11px;color:var(--text2);font-weight:400;text-transform:none;letter-spacing:0">(paste your hosted image URL after generating in Gemini)</span></div>
-        <div style="display:flex;gap:8px;margin-bottom:4px">
-          <input type="url" id="heroUrl-${i}" placeholder="https://yourdomain.com/path/to/hero-image.png" style="flex:1">
-          <button class="copy-btn" style="padding:8px 16px;font-size:13px;font-weight:600" onclick="applyHeroImage(${i})">🖼️ Apply</button>
+      <div class="card-body" style="padding:16px">
+        <div class="form-group"><label>Event Title</label><input type="text" value="${esc(s.title)}" onchange="updateFSec(${s.id},'title',this.value)"></div>
+        <div class="form-row">
+          <div class="form-group"><label>Date/Time</label><input type="text" value="${esc(s.dateTime)}" onchange="updateFSec(${s.id},'dateTime',this.value)"></div>
+          <div class="form-group"><label>Hero Image URL</label><input type="url" value="${esc(s.heroUrl)}" onchange="updateFSec(${s.id},'heroUrl',this.value)" placeholder="https://..."></div>
         </div>
+        <div class="form-row">
+          <div class="form-group"><label>Reg Link</label><input type="url" value="${esc(s.regLink)}" onchange="updateFSec(${s.id},'regLink',this.value)"></div>
+          <div class="form-group"><label>Credits/Cost</label><input type="text" value="${esc(s.credits)}" onchange="updateFSec(${s.id},'credits',this.value)" placeholder="e.g. 3CE / FREE"></div>
+        </div>
+        <div class="form-group"><label>Description</label><textarea style="min-height:60px;font-size:12px" onchange="updateFSec(${s.id},'description',this.value)">${esc(s.description)}</textarea></div>
       </div>
-      <div class="output-section">
-        <div class="output-label">🎨 Hero Image AI Prompt (Gemini) <button class="copy-btn" onclick="copyText('hero-${i}')">Copy</button></div>
-        <div class="output-box" id="hero-${i}">${escHtml(heroPrompt)}</div>
-      </div>
-      <div class="output-section">
-        <div class="output-label">📋 Raw HTML Code <button class="copy-btn" onclick="copyText('code-${i}')">Copy</button></div>
-        <div class="output-box" id="code-${i}" style="max-height:400px">${escHtml(emailHtml)}</div>
-      </div>`;
-    container.appendChild(panel);
+    </div>
+  `).join('');
+}
 
-    // write preview
-    setTimeout(()=>{
-      const frame=document.getElementById('frame-'+i);
-      const doc=frame.contentDocument||frame.contentWindow.document;
-      doc.open();doc.write(emailHtml);doc.close();
-    },50);
-  });
+function updateFSec(id, field, val){
+  const s = fridaySections.find(x=>x.id===id);
+  if(s) s[field] = val;
+}
+
+// ===================== AI INTEGRATION =====================
+function generateAIPrompt(){
+  const raw = gv('aiRawInput');
+  if(!raw){toast('Paste some raw event details first!');return;}
+  const prompt = `I am using an Email Blast Generator. Please parse the following raw input and return a JSON array of event objects. 
+Each object MUST have these fields: "title", "dateTime", "instructor", "cost", "credits", "regLink", "description". 
+If a field is missing, use an empty string. 
+Format the description into 3-5 punchy bullet points.
+
+RAW INPUT:
+${raw}
+
+RETURN ONLY THE JSON ARRAY.`;
+  navigator.clipboard.writeText(prompt);
+  document.getElementById('importBox').style.display = 'block';
+  toast('AI Prompt copied! Paste into Gemini, then paste response below.');
+}
+
+function importAIResponse(){
+  try {
+    const data = JSON.parse(gv('aiResponse'));
+    if(!Array.isArray(data)){toast('Invalid format: Expected an array');return;}
+    fridaySections = data.map(item => ({
+      id: Date.now() + Math.random(),
+      title: item.title||'',
+      dateTime: item.dateTime||'',
+      instructor: item.instructor||'',
+      cost: item.cost||'',
+      credits: item.credits||'',
+      regLink: item.regLink||'',
+      description: item.description||'',
+      heroUrl: '',
+      links: []
+    }));
+    renderFridaySections();
+    toast(`Imported ${data.length} sections!`);
+  } catch(e) {
+    toast('Error parsing JSON. Make sure you copy/pasted only the JSON array.');
+  }
+}
+
+// ===================== EMAIL GENERATION =====================
+function generateAll(){
+  const s=getSettings();
+  _genSettings = s;
+  
+  if(currentMode === 'single') {
+    // sync link inputs
+    document.querySelectorAll('#singleModeFields .link-repeater-item input').forEach((inp,i)=>{
+      const idx=Math.floor(i/2);const field=i%2===0?'label':'url';
+      if(additionalLinks[idx])additionalLinks[idx][field]=inp.value;
+    });
+
+    const data={
+      title:gv('eventTitle'),dateTime:gv('eventDateTime'),instructor:gv('instructor'),
+      cost:gv('cost'),credits:gv('ceCredits'),regLink:gv('regLink'),
+      description:gv('description'),links:[...additionalLinks]
+    };
+
+    if(!data.title){toast('Please enter an event title');return;}
+
+    const variations=[
+      {name:'A — Professional',tone:'professional',colorA:s.c1a,colorB:s.c1b,badge:'#008080'},
+      {name:'B — Energetic',tone:'energetic',colorA:s.c2a,colorB:s.c2b,badge:'#1a237e'},
+      {name:'C — Urgency',tone:'urgency',colorA:s.c3a,colorB:s.c3b,badge:'#c62828'}
+    ];
+
+    _genData = data;
+    _genVariations = variations;
+    _genPreheaders = variations.map(v => generatePreheader(data, v, s));
+
+    const container=document.getElementById('tabContent');
+    container.innerHTML='';
+
+    variations.forEach((v,i)=>{
+      const preheader = _genPreheaders[i];
+      const emailHtml = generateEmailHTML(data, v, s, preheader, '');
+      const heroPrompt = generateHeroPrompt(data, v, s);
+      renderVariationTab(i, v, preheader, emailHtml, heroPrompt, container);
+    });
+    
+    document.getElementById('composerTabBtn').style.display = 'none';
+  } else {
+    // FRIDAY BLAST MODE
+    if(fridaySections.length === 0){toast('Add at least one section');return;}
+    
+    _genData = { sections: [...fridaySections], intro: gv('fridayIntro') };
+    _genVariations = [
+      {name:'A — Professional',tone:'professional',colorA:s.c1a,colorB:s.c1b},
+      {name:'B — Energetic',tone:'energetic',colorA:s.c2a,colorB:s.c2b},
+      {name:'C — Urgency',tone:'urgency',colorA:s.c3a,colorB:s.c3b}
+    ];
+    
+    const container=document.getElementById('tabContent');
+    container.innerHTML='';
+    
+    _genVariations.forEach((v, i) => {
+      const emailHtml = generateFridayBlastHTML(_genData, v, s);
+      renderVariationTab(i, v, "Friday Update", emailHtml, "Prompt not applicable for multi-section", container);
+    });
+    
+    document.getElementById('composerTabBtn').style.display = 'block';
+    renderComposer();
+  }
 
   document.getElementById('emptyState').style.display='none';
   document.getElementById('outputArea').style.display='block';
-  // reset tabs
-  document.querySelectorAll('.tab').forEach((t,i)=>{t.classList.toggle('active',i===0)});
-  currentTab=0;
-  toast('3 variations generated!');
+  switchTab(0, document.querySelectorAll('.tab')[0]);
+  toast('Variations generated!');
+}
+
+function renderVariationTab(i, v, preheader, emailHtml, heroPrompt, container){
+  const panel=document.createElement('div');
+  panel.className='tab-panel'+(i===0?' active':'');
+  panel.id='panel-'+i;
+  panel.innerHTML=`
+    <div class="output-section">
+      <div class="output-label">📝 Preheader Text <button class="copy-btn" onclick="copyText('pre-${i}')">Copy</button></div>
+      <div class="output-box" id="pre-${i}">${escHtml(preheader)}</div>
+    </div>
+    <div class="output-section">
+      <div class="output-label">👁️ Email Preview</div>
+      <iframe class="preview-frame" id="frame-${i}" sandbox="allow-same-origin"></iframe>
+    </div>
+    ${currentMode==='single' ? `
+    <div class="output-section">
+      <div class="output-label">🖼️ Hero Image URL</div>
+      <div style="display:flex;gap:8px;margin-bottom:4px">
+        <input type="url" id="heroUrl-${i}" placeholder="https://..." style="flex:1">
+        <button class="copy-btn" style="padding:8px 16px" onclick="applyHeroImage(${i})">🖼️ Apply</button>
+      </div>
+    </div>
+    <div class="output-section">
+      <div class="output-label">🎨 Hero Image AI Prompt <button class="copy-btn" onclick="copyText('hero-${i}')">Copy</button></div>
+      <div class="output-box" id="hero-${i}">${escHtml(heroPrompt)}</div>
+    </div>` : ''}
+    <div class="output-section">
+      <div class="output-label">📋 Raw HTML Code <button class="copy-btn" onclick="copyText('code-${i}')">Copy</button></div>
+      <div class="output-box" id="code-${i}" style="max-height:400px">${escHtml(emailHtml)}</div>
+    </div>`;
+  container.appendChild(panel);
+
+  setTimeout(()=>{
+    const frame=document.getElementById('frame-'+i);
+    const doc=frame.contentDocument||frame.contentWindow.document;
+    doc.open();doc.write(emailHtml);doc.close();
+  },50);
+}
+
+// ===================== COMPOSER =====================
+function renderComposer(){
+  const container = document.getElementById('composerSections');
+  composerPicks = {};
+  _genData.sections.forEach(s => composerPicks[s.id] = 0); // Default to Variation A
+  
+  container.innerHTML = _genData.sections.map(s => `
+    <div style="background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:12px;margin-bottom:12px;display:flex;align-items:center;justify-content:space-between">
+      <span style="font-weight:600;font-size:14px">${truncate(s.title, 40)}</span>
+      <div class="tabs" style="margin-bottom:0;padding:2px">
+        <button class="tab active" onclick="pickVar(${s.id},0,this)">A</button>
+        <button class="tab" onclick="pickVar(${s.id},1,this)">B</button>
+        <button class="tab" onclick="pickVar(${s.id},2,this)">C</button>
+      </div>
+    </div>
+  `).join('');
+  updateComposerPreview();
+}
+
+function pickVar(secId, varIdx, btn){
+  composerPicks[secId] = varIdx;
+  btn.parentElement.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+  btn.classList.add('active');
+  updateComposerPreview();
+}
+
+function updateComposerPreview(){
+  const html = generateFridayBlastHTML(_genData, null, _genSettings, true);
+  document.getElementById('composerCode').textContent = html;
+  const frame = document.getElementById('composerFrame');
+  const doc = frame.contentDocument || frame.contentWindow.document;
+  doc.open(); doc.write(html); doc.close();
 }
 
 // Apply a hosted hero image URL to a specific variation
@@ -219,18 +385,13 @@ function applyHeroImage(idx) {
   const preheader = _genPreheaders[idx];
   const emailHtml = generateEmailHTML(_genData, v, _genSettings, preheader, url);
 
-  // Update the raw HTML code block
   document.getElementById('code-' + idx).textContent = emailHtml;
-
-  // Update the preview iframe
   const frame = document.getElementById('frame-' + idx);
   const doc = frame.contentDocument || frame.contentWindow.document;
   doc.open(); doc.write(emailHtml); doc.close();
 
   toast('Hero image applied to Variation ' + ['A','B','C'][idx] + '!');
 }
-
-function escHtml(s){return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')}
 
 // ===================== PREHEADER =====================
 function generatePreheader(data,v,s){
@@ -255,6 +416,7 @@ function generatePreheader(data,v,s){
 
 // ===================== PARSE BULLETS =====================
 function parseBullets(desc){
+  if(!desc) return [];
   const lines=desc.split(/[•\n]/g).map(l=>l.trim()).filter(l=>l.length>3);
   return lines;
 }
@@ -263,11 +425,7 @@ function parseBullets(desc){
 function generateBodyCopy(data,v,s){
   const tag=s.mergeTag;
   const bullets=parseBullets(data.description);
-  const hasLearning=bullets.length>2;
-
-  // Extract learning objectives (shorter ones that start with a verb)
   const objectives=bullets.filter(b=>b.length<200);
-  // Long paragraph = first bullet or anything really long
   const introParts=bullets.filter(b=>b.length>=200);
   const introText=introParts.length?introParts[0]:'';
 
@@ -304,7 +462,7 @@ function generateBodyCopy(data,v,s){
   return body;
 }
 
-function truncate(s,n){return s.length>n?s.substring(0,n)+'...':s}
+function truncate(s,n){if(!s) return ''; return s.length>n?s.substring(0,n)+'...':s}
 
 function generateDetailsBlock(data,v){
   let html=`<table width="100%" cellpadding="0" cellspacing="0" style="margin:16px 0;border-left:4px solid ${v.colorA};padding-left:12px"><tr><td>`;
@@ -327,11 +485,80 @@ function generateLearnBlock(objectives,heading,v){
   return html;
 }
 
-// ===================== EMAIL HTML =====================
+// ===================== FRIDAY BLAST HTML =====================
+function generateFridayBlastHTML(data, v, s, isComposer = false){
+  const sectionsHtml = data.sections.map(sec => {
+    let activeV = v;
+    if(isComposer) {
+      const idx = composerPicks[sec.id];
+      activeV = _genVariations[idx];
+    }
+    
+    const bg = activeV.colorA; // use as header bar color
+    return `
+    <!-- Section: ${sec.title} -->
+    <table width="100%" cellpadding="0" cellspacing="0" style="background-color:#ffffff;margin-bottom:20px">
+      ${sec.heroUrl ? `<tr><td style="padding:0">
+        <img src="${sec.heroUrl}" width="${s.emailMaxW}" style="width:100%;max-width:${s.emailMaxW}px;height:auto;display:block" alt="${sec.title}">
+      </td></tr>` : ''}
+      <tr><td style="background-color:${bg};padding:12px 24px;color:#ffffff;font-size:18px;font-weight:800;text-align:center;text-transform:uppercase;letter-spacing:1px">
+        ${sec.title}
+      </td></tr>
+      <tr><td style="padding:24px 32px">
+        <p style="margin:0 0 16px;font-size:16px;line-height:1.5;color:#333333">${sec.description ? sec.description.split('\n').join('<br>') : ''}</p>
+        <table width="100%" cellpadding="0" cellspacing="0" style="margin:16px 0;background-color:#f9f9f9;border-radius:8px">
+          <tr><td style="padding:16px">
+            <p style="margin:0;font-size:14px;color:#666666">📅 <strong>${sec.dateTime}</strong></p>
+            ${sec.credits ? `<p style="margin:4px 0 0;font-size:14px;color:#666666">🏷️ ${sec.credits}</p>` : ''}
+          </td></tr>
+        </table>
+        <table width="100%" cellpadding="0" cellspacing="0">
+          <tr><td align="center" style="padding:16px 0">
+            <table cellpadding="0" cellspacing="0" style="margin:0 auto">
+              <tr><td align="center" style="background-color:${bg};border-radius:50px;padding:14px 40px">
+                <a href="${sec.regLink||'#'}" target="_blank" style="color:#ffffff;text-decoration:none;font-weight:800;font-size:16px">Register Here</a>
+              </td></tr>
+            </table>
+          </td></tr>
+        </table>
+      </td></tr>
+    </table>`;
+  }).join('');
+
+  return `<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Friday Blast</title>
+</head>
+<body style="margin:0;padding:0;background-color:#f4f4f4;font-family:${s.fontFamily};line-height:1.6;color:#333333">
+<table width="100%" cellpadding="0" cellspacing="0" style="background-color:#f4f4f4">
+<tr><td align="center" style="padding:0">
+  <table width="${s.emailMaxW}" cellpadding="0" cellspacing="0" style="max-width:${s.emailMaxW}px;background-color:#ffffff">
+    <tr><td style="background-color:#004a32;padding:12px 24px;color:#ffffff;font-size:18px;font-weight:700;text-align:center">
+      Upcoming at BER — ${new Date().toLocaleDateString('en-US', {month:'long', day:'numeric'})}
+    </td></tr>
+    <tr><td style="background-color:#ffffff;padding:24px 32px 10px;text-align:center;font-size:14px;color:#666666">
+      ${data.intro || `Hi {{CFirstName}} - Here's what's coming up at BER in the next couple of weeks!`}
+    </td></tr>
+    <tr><td style="padding:0 24px">
+      ${sectionsHtml}
+    </td></tr>
+    <tr><td style="padding:20px 48px;background-color:#f9f9f9;text-align:center;font-size:12px;color:#999999;border-top:1px solid #eeeeee">
+      ${s.orgName} · ${s.orgAddr}
+    </td></tr>
+  </table>
+</td></tr>
+</table>
+</body>
+</html>`;
+}
+
+// ===================== SINGLE EMAIL HTML =====================
 function generateEmailHTML(data, v, s, preheader, heroImageUrl){
   const ctaRadius = s.ctaShape==='pill'?'50px':s.ctaShape==='rounded'?'8px':'0px';
   const bodyCopy=generateBodyCopy(data,v,s);
-  // preheader is now passed in so it stays consistent
 
   let ytSection='';
   let extraButtons='';

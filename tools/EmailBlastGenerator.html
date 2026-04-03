@@ -87,23 +87,56 @@ input[type="color"]{-webkit-appearance:none;width:38px;height:38px;border:2px so
 <div class="main-grid">
   <!-- INPUT FORM -->
   <div class="card">
-    <div class="card-header">📝 Event Details</div>
+    <div class="card-header" style="justify-content:space-between">
+      <span>📝 Content Editor</span>
+      <div class="tabs" style="margin-bottom:0;padding:2px">
+        <button class="tab active" id="modeSingle" onclick="setMode('single')" style="padding:6px 12px;font-size:11px">Single Class</button>
+        <button class="tab" id="modeFriday" onclick="setMode('friday')" style="padding:6px 12px;font-size:11px">Friday Blast</button>
+      </div>
+    </div>
     <div class="card-body">
-      <div class="form-group"><label>Event Title</label><input type="text" id="eventTitle" placeholder='e.g. Be the Change – Fair Housing and You (2CE)'></div>
-      <div class="form-row">
-        <div class="form-group"><label>Date & Time</label><input type="text" id="eventDateTime" placeholder="April 6, 2026 1:00 PM - 3:00 PM (EDT)"></div>
-        <div class="form-group"><label>Instructor</label><input type="text" id="instructor" placeholder="Caroline Boland"></div>
+      <!-- SINGLE CLASS MODE -->
+      <div id="singleModeFields">
+        <div class="form-group"><label>Event Title</label><input type="text" id="eventTitle" placeholder='e.g. Be the Change – Fair Housing and You (2CE)'></div>
+        <div class="form-row">
+          <div class="form-group"><label>Date & Time</label><input type="text" id="eventDateTime" placeholder="April 6, 2026 1:00 PM - 3:00 PM (EDT)"></div>
+          <div class="form-group"><label>Instructor</label><input type="text" id="instructor" placeholder="Caroline Boland"></div>
+        </div>
+        <div class="form-row">
+          <div class="form-group"><label>Cost</label><input type="text" id="cost" placeholder='FREE, $5, etc.'></div>
+          <div class="form-group"><label>CE Credits</label><input type="text" id="ceCredits" placeholder="2CE"></div>
+        </div>
+        <div class="form-group"><label>Registration Link</label><input type="url" id="regLink" placeholder="https://..."></div>
+        <div class="form-group"><label>Description & Key Details</label><textarea id="description" placeholder="Paste the full event description here..."></textarea></div>
+        <div class="form-group">
+          <label>Additional Links <button class="btn-sm" onclick="addLink()" style="margin-left:8px">+ Add Link</button></label>
+          <div id="linkRepeater"></div>
+        </div>
       </div>
-      <div class="form-row">
-        <div class="form-group"><label>Cost</label><input type="text" id="cost" placeholder='FREE, $5, etc.'></div>
-        <div class="form-group"><label>CE Credits</label><input type="text" id="ceCredits" placeholder="2CE"></div>
+
+      <!-- FRIDAY BLAST MODE -->
+      <div id="fridayModeFields" style="display:none">
+        <div class="form-group">
+          <label>Blast Header / Intro Text</label>
+          <textarea id="fridayIntro" style="min-height:80px" placeholder="Hi {{CFirstName}} - Here's what's coming up at BER in the next couple of weeks!"></textarea>
+        </div>
+        <div id="fridaySections">
+          <!-- Sections will be added here -->
+        </div>
+        <button class="btn-sm" onclick="addFridaySection()" style="width:100%;margin-bottom:16px;border-style:dashed;padding:10px">+ Add New Event Section</button>
+        <div style="background:rgba(124,77,255,0.1);padding:12px;border-radius:8px;border:1px solid var(--accent2);margin-bottom:16px">
+          <label style="color:var(--accent2)">✨ AI Content Assistant</label>
+          <p style="font-size:11px;color:var(--text2);margin-bottom:8px">Paste your event links/screenshots descriptions below, then click to generate a formatting prompt for Gemini.</p>
+          <textarea id="aiRawInput" style="min-height:100px;font-size:13px" placeholder="Paste links, details, or screenshot descriptions here..."></textarea>
+          <button class="btn-sm" onclick="generateAIPrompt()" style="width:100%;margin-top:8px;background:var(--accent2);color:#fff;border:none">📋 Generate AI Formatting Prompt</button>
+        </div>
+        <div class="form-group" id="importBox" style="display:none">
+          <label>Paste AI Response (JSON)</label>
+          <textarea id="aiResponse" style="min-height:80px;font-family:monospace" placeholder='Paste the JSON response from Gemini here...'></textarea>
+          <button class="btn-sm" onclick="importAIResponse()" style="width:100%;margin-top:4px">📥 Import Data</button>
+        </div>
       </div>
-      <div class="form-group"><label>Registration Link</label><input type="url" id="regLink" placeholder="https://..."></div>
-      <div class="form-group"><label>Description & Key Details</label><textarea id="description" placeholder="Paste the full event description here..."></textarea></div>
-      <div class="form-group">
-        <label>Additional Links <button class="btn-sm" onclick="addLink()" style="margin-left:8px">+ Add Link</button></label>
-        <div id="linkRepeater"></div>
-      </div>
+
       <button class="btn-primary" onclick="generateAll()">🚀 Generate 3 Variations</button>
     </div>
   </div>
@@ -115,15 +148,27 @@ input[type="color"]{-webkit-appearance:none;width:38px;height:38px;border:2px so
       <div class="card-body">
         <div id="emptyState" class="empty-state">
           <div class="icon">📨</div>
-          <p>Fill in event details and click Generate to create 3 email variations.</p>
+          <p>Fill in event details and click Generate to create 3 variations.</p>
         </div>
         <div id="outputArea" style="display:none">
           <div class="tabs">
             <button class="tab active" onclick="switchTab(0,this)">🎨 Variation A</button>
             <button class="tab" onclick="switchTab(1,this)">🎨 Variation B</button>
             <button class="tab" onclick="switchTab(2,this)">🎨 Variation C</button>
+            <button class="tab" id="composerTabBtn" onclick="switchTab(3,this)" style="border:1px solid var(--accent2);color:var(--accent2)">🛠️ THE COMPOSER</button>
           </div>
           <div id="tabContent"></div>
+          <div id="composerPanel" class="tab-panel">
+            <div class="output-section">
+              <div class="output-label">🛠️ COMPOSER: Pick Your Best Sections <button class="copy-btn" onclick="copyText('composerCode')">Copy Final HTML</button></div>
+              <p style="font-size:12px;color:var(--text2);margin-bottom:12px">Choose Variation A, B, or C for each section below. Your final HTML at the bottom will update instantly.</p>
+              <div id="composerSections"></div>
+              <div class="output-label" style="margin-top:20px">👁️ Final Preview</div>
+              <iframe class="preview-frame" id="composerFrame" sandbox="allow-same-origin"></iframe>
+              <div class="output-label" style="margin-top:20px">📋 Final Composite HTML</div>
+              <div class="output-box" id="composerCode" style="max-height:400px"></div>
+            </div>
+          </div>
         </div>
       </div>
     </div>
