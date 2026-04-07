@@ -580,8 +580,10 @@ function generateDynamicEmailHTML(blocks, settings, headerColor, headerTitle, pr
   @media only screen and (max-width: 600px) {
     .content-table { width: 100% !important; }
     .section-inner { padding: 0 15px !important; }
-    .img-col { display: block !important; width: 100% !important; }
-    .info-col { display: block !important; width: 100% !important; padding: 12px 0 !important; }
+    .img-col { display: block !important; width: 100% !important; box-sizing: border-box !important; padding: 0 0 16px 0 !important; }
+    .img-col img { width: 100% !important; max-width: 100% !important; }
+    .info-col { display: block !important; width: 100% !important; padding: 16px !important; box-sizing: border-box !important; margin-bottom: 12px !important; }
+    table[style*="table-layout:fixed"] { table-layout: auto !important; }
   }
 </style>
 <table width="100%" cellpadding="0" cellspacing="0" border="0" class="content-table" style="width:100%;max-width:${s.emailMaxW}px;background-color:#ffffff;margin:0 auto;table-layout:fixed">
