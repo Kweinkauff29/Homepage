@@ -388,8 +388,8 @@ function renderTuesdayBlockEditor(){
   let html = `<div style="margin-bottom:12px;padding:10px;background:rgba(0,191,165,0.08);border:1px solid var(--accent);border-radius:8px">
     <p style="font-size:12px;color:var(--accent);font-weight:700;margin-bottom:6px">✅ ${tuesdayBlocks.length} blocks imported — Edit below, then click Generate</p>
     <div class="form-row">
-      <div class="form-group"><label>Subject Line</label><input type="text" value="${esc(tuesdaySubject)}" onchange="tuesdaySubject=this.value"></div>
-      <div class="form-group"><label>Preheader</label><input type="text" value="${esc(tuesdayPreheaderText)}" onchange="tuesdayPreheaderText=this.value"></div>
+      <div class="form-group"><label>Subject Line</label><input type="text" value="${esc(tuesdaySubject)}" oninput="tuesdaySubject=this.value; updateTuesdayPreview()"></div>
+      <div class="form-group"><label>Preheader</label><input type="text" value="${esc(tuesdayPreheaderText)}" oninput="tuesdayPreheaderText=this.value; updateTuesdayPreview()"></div>
     </div>
   </div>`;
 
@@ -431,63 +431,63 @@ function renderBlockFields(block, idx){
     case 'hero':
       return `
         <div class="form-group"><label>Hero Image (${block.width||730}×${block.height||315})</label>
-          <input type="url" value="${esc(block.imageUrl||'')}" onchange="tuesdayBlocks[${idx}].imageUrl=this.value" placeholder="Paste generated image URL here">
+          <input type="url" value="${esc(block.imageUrl||'')}" oninput="tuesdayBlocks[${idx}].imageUrl=this.value; updateTuesdayPreview()" placeholder="Paste generated image URL here">
         </div>
         ${renderImagePrompts(block, idx)}
-        ${block.overlayText ? `<div class="form-group"><label>Overlay Text</label><input type="text" value="${esc(block.overlayText)}" onchange="tuesdayBlocks[${idx}].overlayText=this.value"></div>` : ''}
-        ${block.link ? `<div class="form-group"><label>Link</label><input type="url" value="${esc(block.link)}" onchange="tuesdayBlocks[${idx}].link=this.value"></div>` : ''}`;
+        ${block.overlayText ? `<div class="form-group"><label>Overlay Text</label><input type="text" value="${esc(block.overlayText)}" oninput="tuesdayBlocks[${idx}].overlayText=this.value; updateTuesdayPreview()"></div>` : ''}
+        ${block.link ? `<div class="form-group"><label>Link</label><input type="url" value="${esc(block.link)}" oninput="tuesdayBlocks[${idx}].link=this.value; updateTuesdayPreview()"></div>` : ''}`;
 
     case 'text':
       return `
-        ${block.heading ? `<div class="form-group"><label>Heading</label><input type="text" value="${esc(block.heading)}" onchange="tuesdayBlocks[${idx}].heading=this.value"></div>` : ''}
-        <div class="form-group"><label>Body (Markdown OK)</label><textarea style="min-height:80px;font-size:12px" onchange="tuesdayBlocks[${idx}].body=this.value">${esc(block.body||'')}</textarea></div>`;
+        ${block.heading ? `<div class="form-group"><label>Heading</label><input type="text" value="${esc(block.heading)}" oninput="tuesdayBlocks[${idx}].heading=this.value; updateTuesdayPreview()"></div>` : ''}
+        <div class="form-group"><label>Body (Markdown OK)</label><textarea style="min-height:80px;font-size:12px" oninput="tuesdayBlocks[${idx}].body=this.value; updateTuesdayPreview()">${esc(block.body||'')}</textarea></div>`;
 
     case 'imageRow':
       return (block.images||[]).map((img, iIdx) => `
         <div style="background:var(--surface2);padding:8px;border-radius:6px;margin-bottom:6px">
           <label style="font-size:10px">Image ${iIdx+1} (${img.width||350}×${img.height||200})</label>
-          <input type="url" value="${esc(img.url||'')}" onchange="tuesdayBlocks[${idx}].images[${iIdx}].url=this.value" placeholder="Image URL" style="font-size:11px;margin-bottom:4px">
-          ${img.link ? `<input type="url" value="${esc(img.link)}" onchange="tuesdayBlocks[${idx}].images[${iIdx}].link=this.value" placeholder="Link URL" style="font-size:11px;margin-bottom:4px">` : ''}
+          <input type="url" value="${esc(img.url||'')}" oninput="tuesdayBlocks[${idx}].images[${iIdx}].url=this.value; updateTuesdayPreview()" placeholder="Image URL" style="font-size:11px;margin-bottom:4px">
+          ${img.link ? `<input type="url" value="${esc(img.link)}" oninput="tuesdayBlocks[${idx}].images[${iIdx}].link=this.value; updateTuesdayPreview()" placeholder="Link URL" style="font-size:11px;margin-bottom:4px">` : ''}
           ${renderImagePromptsInline(img, idx, iIdx)}
         </div>`).join('');
 
     case 'cta':
       return `
         <div class="form-row">
-          <div class="form-group"><label>Button Label</label><input type="text" value="${esc(block.label||'')}" onchange="tuesdayBlocks[${idx}].label=this.value"></div>
-          <div class="form-group"><label>URL</label><input type="url" value="${esc(block.url||'')}" onchange="tuesdayBlocks[${idx}].url=this.value"></div>
+          <div class="form-group"><label>Button Label</label><input type="text" value="${esc(block.label||'')}" oninput="tuesdayBlocks[${idx}].label=this.value; updateTuesdayPreview()"></div>
+          <div class="form-group"><label>URL</label><input type="url" value="${esc(block.url||'')}" oninput="tuesdayBlocks[${idx}].url=this.value; updateTuesdayPreview()"></div>
         </div>
         <div class="form-row">
-          <div class="form-group"><label>Style</label><select onchange="tuesdayBlocks[${idx}].style=this.value"><option value="filled" ${block.style==='filled'?'selected':''}>Filled</option><option value="outlined" ${block.style==='outlined'?'selected':''}>Outlined</option></select></div>
-          <div class="form-group"><label>Color</label><input type="text" value="${esc(block.color||'#02aae1')}" onchange="tuesdayBlocks[${idx}].color=this.value" placeholder="#02aae1"></div>
+          <div class="form-group"><label>Style</label><select oninput="tuesdayBlocks[${idx}].style=this.value; updateTuesdayPreview()"><option value="filled" ${block.style==='filled'?'selected':''}>Filled</option><option value="outlined" ${block.style==='outlined'?'selected':''}>Outlined</option></select></div>
+          <div class="form-group"><label>Color</label><input type="text" value="${esc(block.color||'#02aae1')}" oninput="tuesdayBlocks[${idx}].color=this.value; updateTuesdayPreview()" placeholder="#02aae1"></div>
         </div>`;
 
     case 'infoCard':
       return (block.columns||[]).map((col, cIdx) => `
         <div style="background:var(--surface2);padding:8px;border-radius:6px;margin-bottom:6px">
           <label style="font-size:10px">Column ${cIdx+1}</label>
-          <input type="text" value="${esc(col.heading||'')}" onchange="tuesdayBlocks[${idx}].columns[${cIdx}].heading=this.value" placeholder="Heading" style="font-size:11px;margin-bottom:4px">
-          <textarea style="min-height:60px;font-size:11px" onchange="tuesdayBlocks[${idx}].columns[${cIdx}].body=this.value" placeholder="Content (markdown OK)">${esc(col.body||'')}</textarea>
+          <input type="text" value="${esc(col.heading||'')}" oninput="tuesdayBlocks[${idx}].columns[${cIdx}].heading=this.value; updateTuesdayPreview()" placeholder="Heading" style="font-size:11px;margin-bottom:4px">
+          <textarea style="min-height:60px;font-size:11px" oninput="tuesdayBlocks[${idx}].columns[${cIdx}].body=this.value; updateTuesdayPreview()" placeholder="Content (markdown OK)">${esc(col.body||'')}</textarea>
         </div>`).join('');
 
     case 'specs':
       return `
-        ${block.heading ? `<div class="form-group"><label>Heading</label><input type="text" value="${esc(block.heading)}" onchange="tuesdayBlocks[${idx}].heading=this.value"></div>` : ''}
+        ${block.heading ? `<div class="form-group"><label>Heading</label><input type="text" value="${esc(block.heading)}" oninput="tuesdayBlocks[${idx}].heading=this.value; updateTuesdayPreview()"></div>` : ''}
         <div style="font-size:11px;color:var(--text2)">${(block.items||[]).map((item, sIdx) =>
           `<div class="form-row" style="margin-bottom:4px">
-            <input type="text" value="${esc(item.label||'')}" onchange="tuesdayBlocks[${idx}].items[${sIdx}].label=this.value" style="font-size:11px" placeholder="Label">
-            <input type="text" value="${esc(item.value||'')}" onchange="tuesdayBlocks[${idx}].items[${sIdx}].value=this.value" style="font-size:11px" placeholder="Value">
+            <input type="text" value="${esc(item.label||'')}" oninput="tuesdayBlocks[${idx}].items[${sIdx}].label=this.value; updateTuesdayPreview()" style="font-size:11px" placeholder="Label">
+            <input type="text" value="${esc(item.value||'')}" oninput="tuesdayBlocks[${idx}].items[${sIdx}].value=this.value; updateTuesdayPreview()" style="font-size:11px" placeholder="Value">
           </div>`).join('')}
         </div>`;
 
     case 'bulletList':
       return `
-        ${block.heading ? `<div class="form-group"><label>Heading</label><input type="text" value="${esc(block.heading)}" onchange="tuesdayBlocks[${idx}].heading=this.value"></div>` : ''}
+        ${block.heading ? `<div class="form-group"><label>Heading</label><input type="text" value="${esc(block.heading)}" oninput="tuesdayBlocks[${idx}].heading=this.value; updateTuesdayPreview()"></div>` : ''}
         <div class="form-group"><label>Items (one per line)</label><textarea style="min-height:60px;font-size:11px" onchange="tuesdayBlocks[${idx}].items=this.value.split('\\n').filter(x=>x.trim())">${(block.items||[]).join('\n')}</textarea></div>
-        <div class="form-group"><label>Style</label><select onchange="tuesdayBlocks[${idx}].listStyle=this.value"><option value="bullet" ${block.listStyle!=='numbered'?'selected':''}>Bullets</option><option value="numbered" ${block.listStyle==='numbered'?'selected':''}>Numbered</option></select></div>`;
+        <div class="form-group"><label>Style</label><select oninput="tuesdayBlocks[${idx}].listStyle=this.value; updateTuesdayPreview()"><option value="bullet" ${block.listStyle!=='numbered'?'selected':''}>Bullets</option><option value="numbered" ${block.listStyle==='numbered'?'selected':''}>Numbered</option></select></div>`;
 
     case 'divider':
-      return `<div class="form-group"><label>Color</label><input type="text" value="${esc(block.color||'#e0e0e0')}" onchange="tuesdayBlocks[${idx}].color=this.value" placeholder="#e0e0e0"></div>`;
+      return `<div class="form-group"><label>Color</label><input type="text" value="${esc(block.color||'#e0e0e0')}" oninput="tuesdayBlocks[${idx}].color=this.value; updateTuesdayPreview()" placeholder="#e0e0e0"></div>`;
 
     default:
       return `<p style="font-size:11px;color:var(--text2)">Unknown block type: ${block.type}</p>`;
