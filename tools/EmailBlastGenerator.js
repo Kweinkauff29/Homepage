@@ -340,108 +340,352 @@ function updateFSecV(id, vIdx, field, val){
   }
 }
 
-// ===================== TUESDAY AFFILIATE SECTION LOGIC =====================
+// ===================== TUESDAY AFFILIATE — DYNAMIC BLOCK-BASED SYSTEM =====================
+let tuesdayBlocks = []; // Array of layout blocks after AI import
+let tuesdaySubject = '';
+let tuesdayPreheaderText = '';
+let tuesdayBlocksImported = false; // tracks whether we've done an AI import
+
+// Block type icons for display
+const BLOCK_ICONS = {
+  hero: '🖼️', text: '📝', imageRow: '🏞️', cta: '🔘',
+  infoCard: '📊', specs: '📋', bulletList: '📌', divider: '➖'
+};
+
+// Legacy section-based functions (kept for backward-compat but hidden when blocks are active)
 function addTuesdaySection(){
   const id = Date.now();
   tuesdaySections.push({
-    id, title:'', dateTime:'', location:'', instructor:'', cost:'', credits:'', regLink:'', variationIndex: 0, customColor: '', links:[],
-    variations: [
-      { description: '', heroUrl: '' }, // A: Professional
-      { description: '', heroUrl: '' }, // B: Energetic
-      { description: '', heroUrl: '' }  // C: Benefit-Led
-    ]
+    id, title:'', dateTime:'', location:'', regLink:'', variationIndex:0, customColor:'', links:[],
+    variations: [{description:'',heroUrl:''},{description:'',heroUrl:''},{description:'',heroUrl:''}]
   });
   renderTuesdaySections();
 }
-function removeTuesdaySection(id){
-  tuesdaySections = tuesdaySections.filter(s=>s.id!==id);
-  renderTuesdaySections();
-}
-function moveTSec(id, dir){
-  const idx = tuesdaySections.findIndex(x=>x.id===id);
-  if(idx===-1) return;
-  const newIdx = idx + dir;
-  if(newIdx < 0 || newIdx >= tuesdaySections.length) return;
-  [tuesdaySections[idx], tuesdaySections[newIdx]] = [tuesdaySections[newIdx], tuesdaySections[idx]];
+function removeTuesdaySection(id){ tuesdaySections=tuesdaySections.filter(s=>s.id!==id); renderTuesdaySections(); }
+function moveTSec(id,dir){
+  const idx=tuesdaySections.findIndex(x=>x.id===id); if(idx===-1)return;
+  const n=idx+dir; if(n<0||n>=tuesdaySections.length)return;
+  [tuesdaySections[idx],tuesdaySections[n]]=[tuesdaySections[n],tuesdaySections[idx]];
   renderTuesdaySections();
 }
 function renderTuesdaySections(){
-  const container = document.getElementById('tuesdaySections');
-  if(!container) return;
-  const activeVars = (_genVariations && _genVariations.length >= 3) ? _genVariations : [
-    {tone:'professional', colorA:'#02aae1'}, {tone:'energetic', colorA:'#1a237e'}, {tone:'urgency', colorA:'#c62828'}
-  ];
-  container.innerHTML = tuesdaySections.map((sec, idx) => {
-    const vIdx = sec.variationIndex || 0;
-    const activeColor = sec.customColor || activeVars[vIdx].colorA;
-    if(!sec.variations || sec.variations.length < 3) {
-      sec.variations = [{description:'',heroUrl:''},{description:'',heroUrl:''},{description:'',heroUrl:''}];
-    }
-    const currentV = sec.variations[vIdx];
-    return `
-    <div class="card" style="margin-bottom:16px;border-color:var(--border);background:var(--bg);position:relative">
-      <div class="card-header" style="font-size:13px;padding:8px 16px;justify-content:space-between;border-bottom:2px solid ${activeColor}">
-        <div style="display:flex;align-items:center;gap:8px">
-          <div style="display:flex;flex-direction:column;gap:2px">
-            <button class="move-btn" onclick="moveTSec(${sec.id},-1)" ${idx===0?'disabled':''} title="Move Up">▲</button>
-            <button class="move-btn" onclick="moveTSec(${sec.id},1)" ${idx===tuesdaySections.length-1?'disabled':''} title="Move Down">▼</button>
-          </div>
-          <span>Section #${idx+1}: ${truncate(sec.title, 30) || '(New Opportunity)'}</span>
-        </div>
-        <div style="display:flex;gap:4px">
-          <div class="tabs" style="margin-bottom:0;padding:2px">
-            <button class="tab ${vIdx===0?'active':''}" onclick="updateTSec(${sec.id},'variationIndex',0)" style="padding:2px 8px;font-size:10px">A</button>
-            <button class="tab ${vIdx===1?'active':''}" onclick="updateTSec(${sec.id},'variationIndex',1)" style="padding:2px 8px;font-size:10px">B</button>
-            <button class="tab ${vIdx===2?'active':''}" onclick="updateTSec(${sec.id},'variationIndex',2)" style="padding:2px 8px;font-size:10px">C</button>
-          </div>
-          <button class="btn-sm btn-danger" onclick="removeTuesdaySection(${sec.id})" style="padding:2px 8px;font-size:10px">✕</button>
-        </div>
-      </div>
-      <div class="card-body" style="padding:16px">
-        <div class="form-group"><label>Opportunity Title</label><input type="text" value="${esc(sec.title)}" onchange="updateTSec(${sec.id},'title',this.value)"></div>
-        <div class="form-row">
-          <div class="form-group"><label>Date/Time (if applicable)</label><input type="text" value="${esc(sec.dateTime)}" onchange="updateTSec(${sec.id},'dateTime',this.value)"></div>
-          <div class="form-group"><label>Location</label><input type="text" value="${esc(sec.location)}" onchange="updateTSec(${sec.id},'location',this.value)"></div>
-        </div>
-        <div class="form-row">
-          <div class="form-group" style="flex:2"><label>Link</label><input type="url" value="${esc(sec.regLink)}" onchange="updateTSec(${sec.id},'regLink',this.value)"></div>
-          <div class="form-group"><label>Custom Color (Hex)</label><input type="text" value="${esc(sec.customColor)}" onchange="updateTSec(${sec.id},'customColor',this.value)"></div>
-        </div>
-        
-        <div class="variation-slot" style="background:rgba(0,0,0,0.02);padding:12px;border-radius:8px;border:1px dashed var(--border);margin-bottom:12px">
-          <div class="form-group">
-            <label style="color:var(--accent);font-weight:700">✍️ Sales Copy (Variation ${['A','B','C'][vIdx]})</label>
-            <textarea style="min-height:100px;font-size:12px" onchange="updateTSecV(${sec.id}, ${vIdx}, 'description', this.value)" placeholder="Marketing copy for this specific variation...">${esc(currentV.description)}</textarea>
-          </div>
-          <div style="background:rgba(0,191,165,0.05);padding:12px;border-radius:8px;border:1px solid var(--border)">
-            <label style="color:var(--accent);margin-bottom:8px;display:flex;justify-content:space-between">
-              🖼️ Feature Image
-            </label>
-            <input type="url" value="${esc(currentV.heroUrl)}" onchange="updateTSecV(${sec.id}, ${vIdx}, 'heroUrl', this.value)" placeholder="Paste image URL here" style="font-size:12px">
-          </div>
-        </div>
-
-        <div class="form-group">
-          <label style="display:flex;justify-content:space-between">Additional Buttons <button class="btn-sm" onclick="addTSecLink(${sec.id})" style="font-size:10px">+ Add Link</button></label>
-          <div id="tLinks-${sec.id}">
-            ${(sec.links||[]).map((l, lIdx) => `
-              <div class="form-row" style="margin-bottom:4px">
-                <input type="text" value="${esc(l.label)}" placeholder="Label" style="flex:1;font-size:11px" onchange="updateTSecLink(${sec.id},${lIdx},'label',this.value)">
-                <input type="url" value="${esc(l.url)}" placeholder="URL" style="flex:2;font-size:11px" onchange="updateTSecLink(${sec.id},${lIdx},'url',this.value)">
-                <button class="btn-sm btn-danger" onclick="removeTSecLink(${sec.id},${lIdx})" style="padding:0 8px">✕</button>
-              </div>
-            `).join('')}
-          </div>
-        </div>
-      </div>
-    </div>
-  `}).join('');
+  const c=document.getElementById('tuesdaySections'); if(!c)return;
+  // If blocks are imported, show block editor instead
+  if(tuesdayBlocksImported && tuesdayBlocks.length > 0){ renderTuesdayBlockEditor(); return; }
+  c.innerHTML='<p style="font-size:12px;color:var(--text2);text-align:center;padding:20px">Use the AI Content Assistant below to generate a dynamic email layout, or add manual sections.</p>';
 }
 function addTSecLink(id){const s=tuesdaySections.find(x=>x.id===id);if(s){if(!s.links)s.links=[];s.links.push({label:'',url:''});renderTuesdaySections();}}
 function updateTSecLink(id,lIdx,field,val){const s=tuesdaySections.find(x=>x.id===id);if(s&&s.links[lIdx])s.links[lIdx][field]=val;}
 function removeTSecLink(id,lIdx){const s=tuesdaySections.find(x=>x.id===id);if(s){s.links.splice(lIdx,1);renderTuesdaySections();}}
 function updateTSec(id,field,val){const s=tuesdaySections.find(x=>x.id===id);if(s){s[field]=val;if(field==="variationIndex")renderTuesdaySections();}}
 function updateTSecV(id,vIdx,field,val){const s=tuesdaySections.find(x=>x.id===id);if(s&&s.variations[vIdx])s.variations[vIdx][field]=val;}
+
+// ===================== DYNAMIC BLOCK EDITOR =====================
+function renderTuesdayBlockEditor(){
+  const c = document.getElementById('tuesdaySections');
+  if(!c) return;
+
+  let html = `<div style="margin-bottom:12px;padding:10px;background:rgba(0,191,165,0.08);border:1px solid var(--accent);border-radius:8px">
+    <p style="font-size:12px;color:var(--accent);font-weight:700;margin-bottom:6px">✅ ${tuesdayBlocks.length} blocks imported — Edit below, then click Generate</p>
+    <div class="form-row">
+      <div class="form-group"><label>Subject Line</label><input type="text" value="${esc(tuesdaySubject)}" onchange="tuesdaySubject=this.value"></div>
+      <div class="form-group"><label>Preheader</label><input type="text" value="${esc(tuesdayPreheaderText)}" onchange="tuesdayPreheaderText=this.value"></div>
+    </div>
+  </div>`;
+
+  tuesdayBlocks.forEach((block, idx) => {
+    const icon = BLOCK_ICONS[block.type] || '📦';
+    html += `<div class="card" style="margin-bottom:10px;background:var(--bg);border-color:var(--border)">
+      <div class="card-header" style="font-size:12px;padding:6px 12px;justify-content:space-between;border-bottom:1px solid var(--border)">
+        <div style="display:flex;align-items:center;gap:6px">
+          <div style="display:flex;flex-direction:column;gap:1px">
+            <button class="move-btn" onclick="moveTBlock(${idx},-1)" ${idx===0?'disabled':''}>▲</button>
+            <button class="move-btn" onclick="moveTBlock(${idx},1)" ${idx===tuesdayBlocks.length-1?'disabled':''}>▼</button>
+          </div>
+          <span>${icon} <strong>${block.type.toUpperCase()}</strong></span>
+        </div>
+        <button class="btn-sm btn-danger" onclick="removeTBlock(${idx})" style="padding:2px 6px;font-size:9px">✕</button>
+      </div>
+      <div class="card-body" style="padding:10px">
+        ${renderBlockFields(block, idx)}
+      </div>
+    </div>`;
+  });
+
+  html += `<div style="display:flex;gap:4px;flex-wrap:wrap;margin-top:8px">
+    <button class="btn-sm" onclick="addTBlock('text')" style="font-size:10px">+ Text</button>
+    <button class="btn-sm" onclick="addTBlock('hero')" style="font-size:10px">+ Hero</button>
+    <button class="btn-sm" onclick="addTBlock('imageRow')" style="font-size:10px">+ Images</button>
+    <button class="btn-sm" onclick="addTBlock('cta')" style="font-size:10px">+ CTA</button>
+    <button class="btn-sm" onclick="addTBlock('infoCard')" style="font-size:10px">+ Info Card</button>
+    <button class="btn-sm" onclick="addTBlock('specs')" style="font-size:10px">+ Specs</button>
+    <button class="btn-sm" onclick="addTBlock('bulletList')" style="font-size:10px">+ List</button>
+    <button class="btn-sm" onclick="addTBlock('divider')" style="font-size:10px">+ Divider</button>
+  </div>`;
+
+  c.innerHTML = html;
+}
+
+function renderBlockFields(block, idx){
+  switch(block.type){
+    case 'hero':
+      return `
+        <div class="form-group"><label>Hero Image (${block.width||730}×${block.height||315})</label>
+          <input type="url" value="${esc(block.imageUrl||'')}" onchange="tuesdayBlocks[${idx}].imageUrl=this.value" placeholder="Paste generated image URL here">
+        </div>
+        ${renderImagePrompts(block, idx)}
+        ${block.overlayText ? `<div class="form-group"><label>Overlay Text</label><input type="text" value="${esc(block.overlayText)}" onchange="tuesdayBlocks[${idx}].overlayText=this.value"></div>` : ''}
+        ${block.link ? `<div class="form-group"><label>Link</label><input type="url" value="${esc(block.link)}" onchange="tuesdayBlocks[${idx}].link=this.value"></div>` : ''}`;
+
+    case 'text':
+      return `
+        ${block.heading ? `<div class="form-group"><label>Heading</label><input type="text" value="${esc(block.heading)}" onchange="tuesdayBlocks[${idx}].heading=this.value"></div>` : ''}
+        <div class="form-group"><label>Body (Markdown OK)</label><textarea style="min-height:80px;font-size:12px" onchange="tuesdayBlocks[${idx}].body=this.value">${esc(block.body||'')}</textarea></div>`;
+
+    case 'imageRow':
+      return (block.images||[]).map((img, iIdx) => `
+        <div style="background:var(--surface2);padding:8px;border-radius:6px;margin-bottom:6px">
+          <label style="font-size:10px">Image ${iIdx+1} (${img.width||350}×${img.height||200})</label>
+          <input type="url" value="${esc(img.url||'')}" onchange="tuesdayBlocks[${idx}].images[${iIdx}].url=this.value" placeholder="Image URL" style="font-size:11px;margin-bottom:4px">
+          ${img.link ? `<input type="url" value="${esc(img.link)}" onchange="tuesdayBlocks[${idx}].images[${iIdx}].link=this.value" placeholder="Link URL" style="font-size:11px;margin-bottom:4px">` : ''}
+          ${renderImagePromptsInline(img, idx, iIdx)}
+        </div>`).join('');
+
+    case 'cta':
+      return `
+        <div class="form-row">
+          <div class="form-group"><label>Button Label</label><input type="text" value="${esc(block.label||'')}" onchange="tuesdayBlocks[${idx}].label=this.value"></div>
+          <div class="form-group"><label>URL</label><input type="url" value="${esc(block.url||'')}" onchange="tuesdayBlocks[${idx}].url=this.value"></div>
+        </div>
+        <div class="form-row">
+          <div class="form-group"><label>Style</label><select onchange="tuesdayBlocks[${idx}].style=this.value"><option value="filled" ${block.style==='filled'?'selected':''}>Filled</option><option value="outlined" ${block.style==='outlined'?'selected':''}>Outlined</option></select></div>
+          <div class="form-group"><label>Color</label><input type="text" value="${esc(block.color||'#02aae1')}" onchange="tuesdayBlocks[${idx}].color=this.value" placeholder="#02aae1"></div>
+        </div>`;
+
+    case 'infoCard':
+      return (block.columns||[]).map((col, cIdx) => `
+        <div style="background:var(--surface2);padding:8px;border-radius:6px;margin-bottom:6px">
+          <label style="font-size:10px">Column ${cIdx+1}</label>
+          <input type="text" value="${esc(col.heading||'')}" onchange="tuesdayBlocks[${idx}].columns[${cIdx}].heading=this.value" placeholder="Heading" style="font-size:11px;margin-bottom:4px">
+          <textarea style="min-height:60px;font-size:11px" onchange="tuesdayBlocks[${idx}].columns[${cIdx}].body=this.value" placeholder="Content (markdown OK)">${esc(col.body||'')}</textarea>
+        </div>`).join('');
+
+    case 'specs':
+      return `
+        ${block.heading ? `<div class="form-group"><label>Heading</label><input type="text" value="${esc(block.heading)}" onchange="tuesdayBlocks[${idx}].heading=this.value"></div>` : ''}
+        <div style="font-size:11px;color:var(--text2)">${(block.items||[]).map((item, sIdx) =>
+          `<div class="form-row" style="margin-bottom:4px">
+            <input type="text" value="${esc(item.label||'')}" onchange="tuesdayBlocks[${idx}].items[${sIdx}].label=this.value" style="font-size:11px" placeholder="Label">
+            <input type="text" value="${esc(item.value||'')}" onchange="tuesdayBlocks[${idx}].items[${sIdx}].value=this.value" style="font-size:11px" placeholder="Value">
+          </div>`).join('')}
+        </div>`;
+
+    case 'bulletList':
+      return `
+        ${block.heading ? `<div class="form-group"><label>Heading</label><input type="text" value="${esc(block.heading)}" onchange="tuesdayBlocks[${idx}].heading=this.value"></div>` : ''}
+        <div class="form-group"><label>Items (one per line)</label><textarea style="min-height:60px;font-size:11px" onchange="tuesdayBlocks[${idx}].items=this.value.split('\\n').filter(x=>x.trim())">${(block.items||[]).join('\n')}</textarea></div>
+        <div class="form-group"><label>Style</label><select onchange="tuesdayBlocks[${idx}].listStyle=this.value"><option value="bullet" ${block.listStyle!=='numbered'?'selected':''}>Bullets</option><option value="numbered" ${block.listStyle==='numbered'?'selected':''}>Numbered</option></select></div>`;
+
+    case 'divider':
+      return `<div class="form-group"><label>Color</label><input type="text" value="${esc(block.color||'#e0e0e0')}" onchange="tuesdayBlocks[${idx}].color=this.value" placeholder="#e0e0e0"></div>`;
+
+    default:
+      return `<p style="font-size:11px;color:var(--text2)">Unknown block type: ${block.type}</p>`;
+  }
+}
+
+function renderImagePrompts(block, bIdx){
+  if(!block.imagePrompts || block.imagePrompts.length === 0) return '';
+  return `<div style="background:rgba(124,77,255,0.08);padding:8px;border-radius:6px;margin-top:6px">
+    <label style="color:var(--accent2);font-size:10px;margin-bottom:4px">🎨 AI Image Prompt Ideas (${block.width||730}×${block.height||315})</label>
+    ${block.imagePrompts.map((p, pIdx) => `
+      <div style="display:flex;gap:4px;margin-bottom:4px;align-items:start">
+        <span style="font-size:10px;color:var(--text2);min-width:16px">${pIdx+1}.</span>
+        <p style="font-size:10px;color:var(--text2);flex:1;line-height:1.4;margin:0">${esc(p)}</p>
+        <button class="btn-sm" onclick="copyBlockPrompt(${bIdx},${pIdx})" style="font-size:9px;padding:2px 6px;white-space:nowrap">Copy</button>
+      </div>`).join('')}
+  </div>`;
+}
+
+function renderImagePromptsInline(img, bIdx, iIdx){
+  if(!img.imagePrompts || img.imagePrompts.length === 0) return '';
+  return `<div style="background:rgba(124,77,255,0.06);padding:6px;border-radius:4px;margin-top:4px">
+    <label style="color:var(--accent2);font-size:9px">🎨 Image Ideas (${img.width||350}×${img.height||200})</label>
+    ${img.imagePrompts.map((p, pIdx) => `
+      <div style="display:flex;gap:4px;margin-bottom:2px;align-items:start">
+        <span style="font-size:9px;color:var(--text2);min-width:14px">${pIdx+1}.</span>
+        <p style="font-size:9px;color:var(--text2);flex:1;line-height:1.3;margin:0">${esc(p)}</p>
+        <button class="btn-sm" onclick="copyInlinePrompt(${bIdx},${iIdx},${pIdx})" style="font-size:8px;padding:1px 4px">Copy</button>
+      </div>`).join('')}
+  </div>`;
+}
+
+function copyBlockPrompt(bIdx, pIdx){
+  const p = tuesdayBlocks[bIdx]?.imagePrompts?.[pIdx];
+  if(p){ navigator.clipboard.writeText(p); toast('Image prompt copied!'); }
+}
+function copyInlinePrompt(bIdx, iIdx, pIdx){
+  const p = tuesdayBlocks[bIdx]?.images?.[iIdx]?.imagePrompts?.[pIdx];
+  if(p){ navigator.clipboard.writeText(p); toast('Image prompt copied!'); }
+}
+
+function moveTBlock(idx, dir){
+  const n = idx + dir;
+  if(n < 0 || n >= tuesdayBlocks.length) return;
+  [tuesdayBlocks[idx], tuesdayBlocks[n]] = [tuesdayBlocks[n], tuesdayBlocks[idx]];
+  renderTuesdayBlockEditor();
+}
+
+function removeTBlock(idx){
+  tuesdayBlocks.splice(idx, 1);
+  renderTuesdayBlockEditor();
+}
+
+function addTBlock(type){
+  const defaults = {
+    hero: {type:'hero', width:730, height:315, imageUrl:'', imagePrompts:[], overlayText:'', link:''},
+    text: {type:'text', heading:'', body:''},
+    imageRow: {type:'imageRow', images:[{url:'',width:350,height:200,link:'',altText:'',imagePrompts:[]},{url:'',width:350,height:200,link:'',altText:'',imagePrompts:[]}]},
+    cta: {type:'cta', label:'Learn More', url:'', style:'filled', color:'#02aae1'},
+    infoCard: {type:'infoCard', columns:[{heading:'Column 1',body:''},{heading:'Column 2',body:''}]},
+    specs: {type:'specs', heading:'Details', items:[{label:'',value:''}]},
+    bulletList: {type:'bulletList', heading:'', items:['Item 1'], listStyle:'bullet'},
+    divider: {type:'divider', color:'#e0e0e0'}
+  };
+  tuesdayBlocks.push(JSON.parse(JSON.stringify(defaults[type] || defaults.text)));
+  renderTuesdayBlockEditor();
+}
+
+// ===================== DYNAMIC EMAIL HTML RENDERER =====================
+function generateDynamicEmailHTML(blocks, settings, headerColor, headerTitle, preText){
+  const s = settings || getSettings();
+  const hColor = headerColor || '#02aae1';
+  const hTitle = headerTitle || 'Upcoming Affiliate Opportunities';
+
+  const blocksHtml = blocks.map(block => {
+    switch(block.type){
+      case 'hero': return renderHeroBlock(block, s);
+      case 'text': return renderTextBlock(block, s);
+      case 'imageRow': return renderImageRowBlock(block, s);
+      case 'cta': return renderCtaBlock(block, s);
+      case 'infoCard': return renderInfoCardBlock(block, s);
+      case 'specs': return renderSpecsBlock(block, s);
+      case 'bulletList': return renderBulletListBlock(block, s);
+      case 'divider': return renderDividerBlock(block, s);
+      default: return '';
+    }
+  }).join('\n');
+
+  return `<style>
+  @media only screen and (max-width: 600px) {
+    .content-table { width: 100% !important; }
+    .section-inner { padding: 0 15px !important; }
+    .img-col { display: block !important; width: 100% !important; }
+    .info-col { display: block !important; width: 100% !important; padding: 12px 0 !important; }
+  }
+</style>
+<table width="100%" cellpadding="0" cellspacing="0" border="0" class="content-table" style="width:100%;max-width:${s.emailMaxW}px;background-color:#ffffff;margin:0 auto;table-layout:fixed">
+  <tr><td align="center" style="background-color:${hColor};padding:22px 0;color:#ffffff">
+    <div style="padding:0 24px">
+      <p style="margin:0;font-size:24px;font-weight:800;text-transform:uppercase;letter-spacing:1px">${hTitle}</p>
+      ${preText ? `<div style="margin:10px auto 0;width:90%;max-width:600px;border-top:1px solid rgba(255,255,255,0.4);padding-top:10px;font-size:14px;opacity:0.9;line-height:1.4">${preText}</div>` : ''}
+    </div>
+  </td></tr>
+  <tr><td style="padding:0">
+    ${blocksHtml}
+  </td></tr>
+  <tr><td style="padding:0 24px 10px;background-color:#ffffff;text-align:center;font-size:12px;color:#999999">
+  </td></tr>
+</table>`.trim();
+}
+
+function renderHeroBlock(block, s){
+  const w = block.width || s.emailMaxW || 730;
+  const h = block.height || 315;
+  if(block.imageUrl){
+    const imgTag = `<img src="${block.imageUrl}" width="${w}" style="width:100%;max-width:${w}px;height:auto;display:block" alt="${block.overlayText||'Hero Image'}">`;
+    const linked = block.link ? `<a href="${block.link}" target="_blank" style="display:block">${imgTag}</a>` : imgTag;
+    return `<table width="100%" cellpadding="0" cellspacing="0"><tr><td style="padding:0">${linked}</td></tr></table>`;
+  }
+  return `<table width="100%" cellpadding="0" cellspacing="0"><tr><td style="background:linear-gradient(135deg,#02aae1,#004a8f);text-align:center;padding:40px 24px;color:#ffffff">
+    <p style="font-size:24px;font-weight:800;margin:0">${block.overlayText||'[Hero Image Placeholder]'}</p>
+    <p style="font-size:12px;margin:8px 0 0;opacity:.7">${w}×${h} — Paste generated image URL above</p>
+  </td></tr></table>`;
+}
+
+function renderTextBlock(block, s){
+  let html = '<table width="100%" cellpadding="0" cellspacing="0"><tr><td style="padding:16px 32px">';
+  if(block.heading) html += `<p style="margin:0 0 10px;font-size:20px;font-weight:800;color:#333333">${block.heading}</p>`;
+  if(block.body) html += `<div style="font-size:15px;line-height:1.6;color:#333333">${mdToHtml(block.body)}</div>`;
+  html += '</td></tr></table>';
+  return html;
+}
+
+function renderImageRowBlock(block, s){
+  const images = block.images || [];
+  if(images.length === 0) return '';
+  const maxW = s.emailMaxW || 730;
+  const colW = Math.floor(maxW / images.length);
+  const cols = images.map(img => {
+    const imgTag = img.url
+      ? `<img src="${img.url}" width="${img.width||colW}" style="width:100%;max-width:${img.width||colW}px;height:auto;display:block;border-radius:4px" alt="${img.altText||''}">`
+      : `<div style="background:#f0f0f0;width:100%;height:${img.height||200}px;display:flex;align-items:center;justify-content:center;border-radius:4px;font-size:11px;color:#999">${img.width||colW}×${img.height||200}</div>`;
+    const linked = img.link ? `<a href="${img.link}" target="_blank" style="display:block;text-decoration:none">${imgTag}</a>` : imgTag;
+    return `<td class="img-col" width="${Math.floor(100/images.length)}%" style="padding:4px;vertical-align:top">${linked}${img.caption ? `<p style="font-size:11px;color:#666;margin:4px 0 0;text-align:center">${img.caption}</p>` : ''}</td>`;
+  }).join('');
+  return `<table width="100%" cellpadding="0" cellspacing="0"><tr><td style="padding:12px 28px"><table width="100%" cellpadding="0" cellspacing="0"><tr>${cols}</tr></table></td></tr></table>`;
+}
+
+function renderCtaBlock(block, s){
+  const color = block.color || '#02aae1';
+  const filled = block.style !== 'outlined';
+  const bg = filled ? `background-color:${color}` : 'background:transparent';
+  const border = filled ? 'border:none' : `border:2px solid ${color}`;
+  const textColor = filled ? '#ffffff' : color;
+  return `<table width="100%" cellpadding="0" cellspacing="0"><tr><td align="center" style="padding:12px 32px">
+    <table cellpadding="0" cellspacing="0" style="margin:0 auto"><tr><td align="center" style="${bg};${border};border-radius:50px;padding:14px 40px">
+      <a href="${block.url||'#'}" target="_blank" style="color:${textColor};text-decoration:none;font-weight:800;font-size:16px;display:block">${block.label||'Learn More'}</a>
+    </td></tr></table>
+  </td></tr></table>`;
+}
+
+function renderInfoCardBlock(block, s){
+  const columns = block.columns || [];
+  if(columns.length === 0) return '';
+  const bgColors = ['#f0f9f4', '#f0f4f9', '#f9f4f0', '#f4f0f9'];
+  const cols = columns.map((col, i) =>
+    `<td class="info-col" width="${Math.floor(100/columns.length)}%" style="padding:16px;vertical-align:top;background-color:${bgColors[i%bgColors.length]};border-radius:4px">
+      ${col.heading ? `<p style="font-weight:800;font-size:16px;margin:0 0 8px;color:#333">${col.heading}</p>` : ''}
+      <div style="font-size:14px;line-height:1.5;color:#444">${mdToHtml(col.body||'')}</div>
+    </td>`).join('');
+  return `<table width="100%" cellpadding="0" cellspacing="0"><tr><td style="padding:12px 28px"><table width="100%" cellpadding="0" cellspacing="8"><tr>${cols}</tr></table></td></tr></table>`;
+}
+
+function renderSpecsBlock(block, s){
+  const color = block.color || '#02aae1';
+  let rows = (block.items||[]).map(item =>
+    `<tr><td style="font-weight:700;padding:6px 12px;color:${color};font-size:14px;vertical-align:top;white-space:nowrap">${item.label}</td><td style="padding:6px 12px;font-size:14px;color:#333">${item.value}</td></tr>`
+  ).join('');
+  return `<table width="100%" cellpadding="0" cellspacing="0"><tr><td style="padding:12px 32px">
+    ${block.heading ? `<p style="font-weight:800;font-size:18px;margin:0 0 10px;color:#333">${block.heading}</p>` : ''}
+    <table width="100%" cellpadding="0" cellspacing="0" style="border-left:4px solid ${color};background:#f9f9f9;border-radius:0 4px 4px 0">${rows}</table>
+  </td></tr></table>`;
+}
+
+function renderBulletListBlock(block, s){
+  const items = block.items || [];
+  const numbered = block.listStyle === 'numbered';
+  const tag = numbered ? 'ol' : 'ul';
+  const listHtml = items.map(item => `<li style="margin-bottom:6px;font-size:14px;color:#333">${mdToHtml(item)}</li>`).join('');
+  return `<table width="100%" cellpadding="0" cellspacing="0"><tr><td style="padding:8px 32px">
+    ${block.heading ? `<p style="font-weight:700;font-size:16px;margin:0 0 8px;color:#333">${block.heading}</p>` : ''}
+    <${tag} style="padding-left:20px;margin:0">${listHtml}</${tag}>
+  </td></tr></table>`;
+}
+
+function renderDividerBlock(block, s){
+  return `<table width="100%" cellpadding="0" cellspacing="0"><tr><td style="padding:16px 32px"><hr style="border:none;border-top:2px solid ${block.color||'#e0e0e0'};margin:0"></td></tr></table>`;
+}
 
 // ===================== AI INTEGRATION =====================
 function generateAIPrompt(){
@@ -503,20 +747,81 @@ function importAIResponse(){
 function generateAIPromptTuesday(){
   const raw = gv('aiRawInputTuesday');
   if(!raw){toast('Paste some raw details first!');return;}
-  const prompt = `I am using an Email Blast Generator for a REALTOR association specifically targeting Affiliates and Sponsors. Please parse the following raw input and return a JSON array of sponsorship/networking opportunities.
+  const s = getSettings();
+  const maxW = s.emailMaxW || 730;
+  const prompt = `You are an expert email marketing designer for a REALTOR association called "${s.orgName}". I need you to design a COMPLETE, DYNAMIC email layout for our Tuesday Affiliate Blast targeting our affiliates and sponsors.
 
-For EACH item, you must provide THREE distinct marketing descriptions based on these angles:
-Angle A (Professional): Direct, factual, and focused on business value.
-Angle B (Networking/Exposure): Highly encouraging, focuses on meeting people, branding visibility, and collaboration.
-Angle C (ROI/Sponsorship specific): Focuses on the direct return on investment, lead generation, and exclusivity of the sponsor slot.
+IMPORTANT: If I provide any URLs or links below, please visit/review them thoroughly and extract ALL relevant information (event details, pricing, dates, images, descriptions, sponsorship tiers, etc.) to use in the email content. Do NOT leave placeholders — fill in EVERY detail from the source material.
 
-Each object MUST have exactly these fields: "title", "dateTime", "location", "regLink", "copyA", "copyB", "copyC".
-Do not return fields that do not apply (e.g. instructor, cost, credits - keep them empty).
+YOUR TASK: Design a rich, dynamic email layout using content blocks. Think like a professional email designer — use multi-image rows, side-by-side info cards, spec tables, bold CTAs, etc. Do NOT just stack identical sections. Make it visually interesting and varied.
 
-RAW INPUT TO PARSE:
+RETURN A SINGLE JSON OBJECT (not an array) with this exact structure:
+{
+  "subject": "Catchy email subject line",
+  "preheader": "Preview text for email clients (max 200 chars)",
+  "blocks": [
+    // Array of content blocks — each block is one of the types below
+  ]
+}
+
+BLOCK TYPES AVAILABLE:
+
+1. HERO — Full-width banner image
+   {"type":"hero", "width":${maxW}, "height":315, "imageUrl":"", "overlayText":"Optional text on image", "link":"https://...", "imagePrompts":["prompt 1","prompt 2","prompt 3"]}
+
+2. TEXT — Heading + body copy
+   {"type":"text", "heading":"Section Title", "body":"Body text with **bold** and *italic* markdown supported. Use \\n for line breaks."}
+
+3. IMAGE ROW — 1 to 3 images side-by-side (great for showcasing multiple items)
+   {"type":"imageRow", "images":[
+     {"url":"", "width":${Math.floor(maxW/2)-10}, "height":200, "link":"https://...", "altText":"Description", "caption":"Optional caption", "imagePrompts":["prompt 1","prompt 2","prompt 3"]},
+     {"url":"", "width":${Math.floor(maxW/2)-10}, "height":200, "link":"https://...", "altText":"Description", "caption":"Optional caption", "imagePrompts":["prompt 1","prompt 2","prompt 3"]}
+   ]}
+
+4. CTA — Call-to-action button
+   {"type":"cta", "label":"Reserve Your Spot!", "url":"https://...", "style":"filled", "color":"#02aae1"}
+
+5. INFO CARD — Side-by-side info columns (great for "Benefits | Steps" or "Before | After")
+   {"type":"infoCard", "columns":[
+     {"heading":"Column 1 Title", "body":"Content with **markdown**"},
+     {"heading":"Column 2 Title", "body":"Content with **markdown**"}
+   ]}
+
+6. SPECS — Key-value table (great for pricing tiers, dates, dimensions)
+   {"type":"specs", "heading":"Available Opportunities:", "color":"#02aae1", "items":[
+     {"label":"Full Page", "value":"$700/issue or $2,600 for 4-issue bundle (SPECS: 8×10.25)"},
+     {"label":"Half Page", "value":"$500/issue (SPECS: 8×5)"}
+   ]}
+
+7. BULLET LIST — Numbered or bulleted list
+   {"type":"bulletList", "heading":"Why Sponsor?", "items":["Reason 1","Reason 2","Reason 3"], "listStyle":"numbered"}
+
+8. DIVIDER — Visual separator
+   {"type":"divider", "color":"#e0e0e0"}
+
+IMAGE PROMPT RULES:
+- For EVERY image slot (hero and imageRow images), provide exactly 3 "imagePrompts" — these are AI image generation prompts I'll paste into an image generator.
+- STRICT: No photographic or realistic human faces/figures. Use stylized illustrations, icons, abstract graphics, or photo-realistic scenes WITHOUT people.
+- No generated logos. Leave logo space blank/placeholder.
+- Hero images: ${maxW}×315 px. Match the email's color scheme.
+- Row images: dimensions should match the layout (half-width ≈ ${Math.floor(maxW/2)-10}px, third-width ≈ ${Math.floor(maxW/3)-10}px).
+- Prompts should be detailed, specifying style, colors, composition, and content.
+
+DESIGN PRINCIPLES:
+- Mix block types for visual variety — don't just stack text blocks
+- Use imageRow blocks to show multiple related visuals side-by-side
+- Use infoCard blocks for comparative or step-by-step content
+- Use specs blocks for pricing tiers, dates, or technical details
+- Every major section should have at least one CTA button
+- Write ALL copy fully — do not leave any placeholder text
+- Target audience: Real estate affiliates, sponsors, and business partners
+- Tone: Professional but warm, emphasizing networking value and business ROI
+
+RAW INPUT TO ANALYZE:
 ${raw}
 
-RETURN ONLY THE JSON ARRAY. NO MARKDOWN BLOCK, NO PREAMBLE. JUST THE [ ... ] CONTENT.`;
+RETURN ONLY THE JSON OBJECT. NO MARKDOWN BLOCK, NO BACKTICKS, NO PREAMBLE. JUST THE { ... } CONTENT.`;
+
   navigator.clipboard.writeText(prompt);
   document.getElementById('importBoxTuesday').style.display = 'block';
   toast('AI Prompt copied! Paste into Gemini, then paste response below.');
@@ -524,28 +829,34 @@ RETURN ONLY THE JSON ARRAY. NO MARKDOWN BLOCK, NO PREAMBLE. JUST THE [ ... ] CON
 
 function importAIResponseTuesday(){
   try {
-    const data = JSON.parse(gv('aiResponseTuesday'));
-    if(!Array.isArray(data)){toast('Invalid format: Expected an array');return;}
-    tuesdaySections = data.map(item => ({
-      id: Date.now() + Math.random(),
-      title: item.title||'',
-      dateTime: item.dateTime||'',
-      location: item.location||'',
-      instructor: '', cost: '', credits: '',
-      regLink: item.regLink||'',
-      variationIndex: 0,
-      customColor: '',
-      links: [],
-      variations: [
-        { description: item.copyA || '', heroUrl: '' },
-        { description: item.copyB || '', heroUrl: '' },
-        { description: item.copyC || '', heroUrl: '' }
-      ]
-    }));
-    renderTuesdaySections();
-    toast(`Imported ${data.length} affiliate opportunities!`);
+    let rawText = gv('aiResponseTuesday').trim();
+    // Strip markdown code blocks if present
+    if(rawText.startsWith('```')) rawText = rawText.replace(/^```[a-z]*\n?/,'').replace(/\n?```$/,'').trim();
+    const data = JSON.parse(rawText);
+
+    if(data.blocks && Array.isArray(data.blocks)){
+      tuesdayBlocks = data.blocks;
+      tuesdaySubject = data.subject || '';
+      tuesdayPreheaderText = data.preheader || '';
+      tuesdayBlocksImported = true;
+      renderTuesdayBlockEditor();
+      toast(`Imported ${data.blocks.length} layout blocks! Review and click Generate.`);
+    } else if(Array.isArray(data)){
+      // Legacy array format fallback
+      tuesdaySections = data.map(item => ({
+        id: Date.now() + Math.random(), title: item.title||'', dateTime: item.dateTime||'',
+        location: item.location||'', regLink: item.regLink||'', variationIndex:0, customColor:'', links:[],
+        variations: [{description:item.copyA||'',heroUrl:''},{description:item.copyB||'',heroUrl:''},{description:item.copyC||'',heroUrl:''}]
+      }));
+      tuesdayBlocksImported = false;
+      renderTuesdaySections();
+      toast(`Imported ${data.length} sections (legacy format).`);
+    } else {
+      toast('Invalid format: Expected an object with "blocks" array.');
+    }
   } catch(e) {
-    toast('Error parsing JSON. Make sure you copy/pasted only the JSON array.');
+    console.error('Import error:', e);
+    toast('Error parsing JSON. Make sure you pasted only the JSON content.');
   }
 }
 
@@ -622,8 +933,51 @@ function generateAll(){
       renderVariationTab(i, v, preheader, emailHtml, heroPrompt, container);
     });
     
-    } else if (currentMode === 'friday' || currentMode === 'tuesday') {
-    // MULTI-SECTION MODES (Friday/Tuesday)
+    } else if (currentMode === 'tuesday' && tuesdayBlocksImported && tuesdayBlocks.length > 0) {
+    // TUESDAY BLOCK-BASED MODE
+    const hColor = gv('tuesdayHeaderCol') || '#02aae1';
+    const hTitle = gv('tuesdayHeaderTitle') || 'Upcoming Affiliate Opportunities';
+    const preText = gv('tuesdayIntro') || '';
+    
+    const emailHtml = generateDynamicEmailHTML(tuesdayBlocks, s, hColor, hTitle, preText);
+    
+    const container = document.getElementById('tabContent');
+    container.innerHTML = '';
+    
+    // Single output — no A/B/C variations for dynamic block mode
+    const panel = document.createElement('div');
+    panel.className = 'tab-panel active';
+    panel.id = 'panel-0';
+    panel.innerHTML = `
+      <div class="output-section">
+        <div class="output-label">📝 Subject Line <button class="copy-btn" onclick="copyText('subj-0')">Copy</button></div>
+        <div class="output-box" id="subj-0">${escHtml(tuesdaySubject)}</div>
+      </div>
+      <div class="output-section">
+        <div class="output-label">📝 Preheader Text <button class="copy-btn" onclick="copyText('pre-0')">Copy</button></div>
+        <div class="output-box" id="pre-0">${escHtml(tuesdayPreheaderText)}</div>
+      </div>
+      <div class="output-section">
+        <div class="output-label">👁️ Email Preview</div>
+        <iframe class="preview-frame" id="frame-0" sandbox="allow-same-origin"></iframe>
+      </div>
+      <div class="output-section">
+        <div class="output-label">📋 Raw HTML Code <button class="copy-btn" onclick="copyText('code-0')">Copy</button></div>
+        <div class="output-box" id="code-0" style="max-height:400px">${escHtml(emailHtml)}</div>
+      </div>`;
+    container.appendChild(panel);
+    
+    setTimeout(() => {
+      const frame = document.getElementById('frame-0');
+      const doc = frame.contentDocument || frame.contentWindow.document;
+      doc.open(); doc.write(emailHtml); doc.close();
+    }, 50);
+    
+    // Hide A/B/C tabs and composer for block mode
+    document.getElementById('composerTabBtn').style.display = 'none';
+
+  } else if (currentMode === 'friday' || currentMode === 'tuesday') {
+    // MULTI-SECTION MODES (Friday/Tuesday Legacy)
     const isTuesday = currentMode === 'tuesday';
     const activeSections = isTuesday ? tuesdaySections : fridaySections;
     const activeIntro = isTuesday ? gv('tuesdayIntro') : gv('fridayIntro');
