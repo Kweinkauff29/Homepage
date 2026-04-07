@@ -1166,7 +1166,6 @@ function generateBodyCopy(data,v,s){
   if(v.tone==='professional'){
     let body=`<p style="margin:0 0 16px">Hi ${tag},</p>`;
     body+=`<p style="margin:0 0 16px">${s.orgName} is pleased to present an important educational opportunity:</p>`;
-    body+=`<p style="margin:0 0 8px"><strong style="font-size:16px">${data.title}</strong></p>`;
     if(introText)body+=`<p style="margin:0 0 16px;color:#555555;font-size:14px">${introText}</p>`;
     body+=generateDetailsBlock(data,v);
     if(objectives.length>1) body+=generateLearnBlock(objectives,'What You Will Learn:',v);
@@ -1176,7 +1175,6 @@ function generateBodyCopy(data,v,s){
   if(v.tone==='energetic'){
     let body=`<p style="margin:0 0 16px">Hi ${tag},</p>`;
     body+=`<p style="margin:0 0 16px">Are you ready to <strong>power up</strong> your real estate expertise? ${s.orgName} is bringing you a can't-miss class that will transform how you approach your business!</p>`;
-    body+=`<p style="margin:0 0 8px"><strong style="font-size:18px">${data.title}</strong></p>`;
     if(introText)body+=`<p style="margin:0 0 16px;color:#555555;font-size:14px">${introText}</p>`;
     body+=generateDetailsBlock(data,v);
     if(objectives.length>1) body+=generateLearnBlock(objectives,'Here\'s what you\'ll walk away knowing:',v);
@@ -1187,7 +1185,6 @@ function generateBodyCopy(data,v,s){
   // urgency
   let body=`<p style="margin:0 0 16px">Hi ${tag},</p>`;
   body+=`<p style="margin:0 0 16px"><strong>⚠️ Don't risk falling behind.</strong> This critical class is designed to keep you sharp, compliant, and ahead of the competition.</p>`;
-  body+=`<p style="margin:0 0 8px"><strong style="font-size:17px">${data.title}</strong></p>`;
   if(introText)body+=`<p style="margin:0 0 16px;color:#555555;font-size:14px">${introText}</p>`;
   body+=generateDetailsBlock(data,v);
   if(objectives.length>1) body+=generateLearnBlock(objectives,'Why You NEED to Be There:',v);
@@ -1199,14 +1196,14 @@ function generateBodyCopy(data,v,s){
 function truncate(s,n){if(!s) return ''; return s.length>n?s.substring(0,n)+'...':s}
 
 function generateDetailsBlock(data,v){
-  let html=`<table width="100%" cellpadding="0" cellspacing="0" style="margin:16px 0;border-left:4px solid ${v.colorA};padding-left:12px"><tr><td>`;
-  html+=`<p style="font-weight:700;font-size:15px;margin:0 0 8px;color:${v.colorA}">Event At-A-Glance:</p>`;
+  let html=`<table width="100%" cellpadding="0" cellspacing="0" style="margin:24px 0;background-color:#f9f9f9;border-radius:8px;border:1px solid #e0e0e0"><tr><td style="padding:20px">`;
+  html+=`<p style="font-weight:800;font-size:16px;margin:0 0 16px;color:${v.colorA};text-transform:uppercase;letter-spacing:1px;border-bottom:1px solid #e0e0e0;padding-bottom:10px">Event At-A-Glance</p>`;
   html+=`<table cellpadding="0" cellspacing="0" style="font-size:14px;width:100%">`;
-  html+=`<tr><td style="font-weight:700;vertical-align:top;padding:4px 20px 8px 0;white-space:nowrap;width:1%;color:${v.colorA}">WHAT:</td><td style="padding:4px 0 8px">${data.title}</td></tr>`;
-  html+=`<tr><td style="font-weight:700;vertical-align:top;padding:4px 20px 8px 0;white-space:nowrap;width:1%;color:${v.colorA}">WHEN:</td><td style="padding:4px 0 8px">${data.dateTime}</td></tr>`;
-  if(data.instructor)html+=`<tr><td style="font-weight:700;vertical-align:top;padding:4px 20px 8px 0;white-space:nowrap;width:1%;color:${v.colorA}">WHO:</td><td style="padding:4px 0 8px">${data.instructor}</td></tr>`;
-  if(data.cost)html+=`<tr><td style="font-weight:700;vertical-align:top;padding:4px 20px 8px 0;white-space:nowrap;width:1%;color:${v.colorA}">COST:</td><td style="padding:4px 0 8px">${data.cost}</td></tr>`;
-  if(data.credits)html+=`<tr><td style="font-weight:700;vertical-align:top;padding:4px 20px 8px 0;white-space:nowrap;width:1%;color:${v.colorA}">CREDITS:</td><td style="padding:4px 0 8px">${data.credits}</td></tr>`;
+  html+=`<tr><td style="font-weight:700;vertical-align:top;padding:8px 24px 12px 0;white-space:nowrap;width:1%;color:${v.colorA}">WHAT:</td><td style="padding:8px 0 12px;color:#333;font-weight:600">${data.title}</td></tr>`;
+  html+=`<tr><td style="font-weight:700;vertical-align:top;padding:8px 24px 12px 0;white-space:nowrap;width:1%;color:${v.colorA}">WHEN:</td><td style="padding:8px 0 12px;color:#333">${data.dateTime}</td></tr>`;
+  if(data.instructor)html+=`<tr><td style="font-weight:700;vertical-align:top;padding:8px 24px 12px 0;white-space:nowrap;width:1%;color:${v.colorA}">WHO:</td><td style="padding:8px 0 12px;color:#333">${data.instructor}</td></tr>`;
+  if(data.cost)html+=`<tr><td style="font-weight:700;vertical-align:top;padding:8px 24px 12px 0;white-space:nowrap;width:1%;color:${v.colorA}">COST:</td><td style="padding:8px 0 12px;color:#333">${data.cost}</td></tr>`;
+  if(data.credits)html+=`<tr><td style="font-weight:700;vertical-align:top;padding:8px 24px 12px 0;white-space:nowrap;width:1%;color:${v.colorA}">CREDITS:</td><td style="padding:8px 0 12px;color:#333">${data.credits}</td></tr>`;
   html+=`</table></td></tr></table>`;
   return html;
 }
