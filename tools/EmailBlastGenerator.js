@@ -1199,11 +1199,11 @@ function generateDetailsBlock(data,v){
   let html=`<table width="100%" cellpadding="0" cellspacing="0" style="margin:24px 0;background-color:#f9f9f9;border-radius:8px;border:1px solid #e0e0e0"><tr><td style="padding:20px">`;
   html+=`<p style="font-weight:800;font-size:16px;margin:0 0 16px;color:${v.colorA};text-transform:uppercase;letter-spacing:1px;border-bottom:1px solid #e0e0e0;padding-bottom:10px">Event At-A-Glance</p>`;
   html+=`<table cellpadding="0" cellspacing="0" style="font-size:14px;width:100%">`;
-  html+=`<tr><td style="font-weight:700;vertical-align:top;padding:8px 24px 12px 0;white-space:nowrap;width:1%;color:${v.colorA}">WHAT:</td><td style="padding:8px 0 12px;color:#333;font-weight:600">${data.title}</td></tr>`;
-  html+=`<tr><td style="font-weight:700;vertical-align:top;padding:8px 24px 12px 0;white-space:nowrap;width:1%;color:${v.colorA}">WHEN:</td><td style="padding:8px 0 12px;color:#333">${data.dateTime}</td></tr>`;
-  if(data.instructor)html+=`<tr><td style="font-weight:700;vertical-align:top;padding:8px 24px 12px 0;white-space:nowrap;width:1%;color:${v.colorA}">WHO:</td><td style="padding:8px 0 12px;color:#333">${data.instructor}</td></tr>`;
-  if(data.cost)html+=`<tr><td style="font-weight:700;vertical-align:top;padding:8px 24px 12px 0;white-space:nowrap;width:1%;color:${v.colorA}">COST:</td><td style="padding:8px 0 12px;color:#333">${data.cost}</td></tr>`;
-  if(data.credits)html+=`<tr><td style="font-weight:700;vertical-align:top;padding:8px 24px 12px 0;white-space:nowrap;width:1%;color:${v.colorA}">CREDITS:</td><td style="padding:8px 0 12px;color:#333">${data.credits}</td></tr>`;
+  html+=`<tr><td style="font-weight:700;vertical-align:top;padding:8px 10px 12px 0;width:90px;color:${v.colorA}">WHAT:</td><td style="padding:8px 0 12px;color:#333;font-weight:600">${data.title}</td></tr>`;
+  html+=`<tr><td style="font-weight:700;vertical-align:top;padding:8px 10px 12px 0;width:90px;color:${v.colorA}">WHEN:</td><td style="padding:8px 0 12px;color:#333">${data.dateTime}</td></tr>`;
+  if(data.instructor)html+=`<tr><td style="font-weight:700;vertical-align:top;padding:8px 10px 12px 0;width:90px;color:${v.colorA}">WHO:</td><td style="padding:8px 0 12px;color:#333">${data.instructor}</td></tr>`;
+  if(data.cost)html+=`<tr><td style="font-weight:700;vertical-align:top;padding:8px 10px 12px 0;width:90px;color:${v.colorA}">COST:</td><td style="padding:8px 0 12px;color:#333">${data.cost}</td></tr>`;
+  if(data.credits)html+=`<tr><td style="font-weight:700;vertical-align:top;padding:8px 10px 12px 0;width:90px;color:${v.colorA}">CREDITS:</td><td style="padding:8px 0 12px;color:#333">${data.credits}</td></tr>`;
   html+=`</table></td></tr></table>`;
   return html;
 }
