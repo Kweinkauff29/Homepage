@@ -144,6 +144,52 @@
       padding: 0 !important;
     }
 
+    /* Thumbs Gallery */
+    .thumbs-gallery {
+      display: flex;
+      overflow-x: auto;
+      scroll-snap-type: x mandatory;
+      scrollbar-width: none;
+      -ms-overflow-style: none;
+      height: 100%;
+    }
+    .thumbs-gallery::-webkit-scrollbar {
+      display: none;
+    }
+    .thumbs-gallery img {
+      flex: 0 0 100%;
+      scroll-snap-align: start;
+      object-fit: contain;
+    }
+    .gallery-nav {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      background: rgba(255, 255, 255, 0.9);
+      border: 1px solid var(--border);
+      color: var(--ink);
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      z-index: 10;
+      box-shadow: 2px 2px 0 rgba(0,0,0,0.1);
+      transition: all 0.1s ease;
+    }
+    .gallery-nav:hover {
+      transform: translateY(-50%) translate(-1px, -1px);
+      box-shadow: 3px 3px 0 rgba(0,0,0,0.15);
+    }
+    .gallery-nav:active {
+      transform: translateY(-50%) translate(0, 0);
+      box-shadow: none;
+    }
+    .gallery-nav.next { right: 12px; }
+    .gallery-nav.prev { left: 12px; }
+
     /* Feature block (hero) */
     .feature {
       display: grid;
@@ -738,6 +784,18 @@
     const REPORTS = [
       /* ===== 2026 ===== */
       {
+        year: 2026, month: "March",
+        fastStats: "https://bonitaesterorealtors.com/wp-content/uploads/2026/04/BER_Fast_Stats-8.pdf",
+        frStats: null,
+        indicators: "https://bonitaesterorealtors.com/wp-content/uploads/2026/04/BER_Monthly_Indicators-5.pdf",
+        thumb: "https://bonitaesterorealtors.com/wp-content/uploads/2026/04/Bonita-March-20261.png",
+        thumbs: [
+          "https://bonitaesterorealtors.com/wp-content/uploads/2026/04/Bonita-March-20261.png",
+          "https://bonitaesterorealtors.com/wp-content/uploads/2026/04/Naples-March-20261.png",
+          "https://bonitaesterorealtors.com/wp-content/uploads/2026/04/Fort-March-20261.png"
+        ]
+      },
+      {
         year: 2026, month: "February",
         fastStats: "https://bonitaesterorealtors.com/wp-content/uploads/2026/03/BER_Fast_Stats-feb.pdf",
         frStats: "https://bonitaesterorealtors.com/wp-content/uploads/2026/03/FR-Stats-February.pdf",
@@ -1085,7 +1143,15 @@
       return `
         <article class="feature-card" aria-label="Featured market report ${dateLabel}">
           <div class="feature-media">
-            <img src="${thumb}" alt="${dateLabel} preview" loading="eager" />
+            ${r.thumbs && r.thumbs.length > 1 ? `
+              <div class="thumbs-gallery">
+                ${r.thumbs.map(t => `<img src="${t}" alt="${dateLabel} preview" />`).join('')}
+              </div>
+              <button class="gallery-nav next" onclick="this.parentElement.querySelector('.thumbs-gallery').scrollBy({left: this.parentElement.offsetWidth, behavior: 'smooth'})" aria-label="Next image"><i class="fa fa-chevron-right"></i></button>
+              <button class="gallery-nav prev" onclick="this.parentElement.querySelector('.thumbs-gallery').scrollBy({left: -this.parentElement.offsetWidth, behavior: 'smooth'})" aria-label="Previous image"><i class="fa fa-chevron-left"></i></button>
+            ` : `
+              <img src="${thumb}" alt="${dateLabel} preview" loading="eager" />
+            `}
             <div class="badge">Latest</div>
           </div>
           <div class="feature-body">
@@ -1402,7 +1468,39 @@ PENDING ESCROW SALES (MoM):
 [BAR: Dec 2025|310|75%, Jan 2026|450|95%]
 
 MEDIAN SALE PRICE (MoM):
-[BAR: Dec 2025|$590K|75%, Jan 2026|$600K|85%]`
+[BAR: Dec 2025|$590K|75%, Jan 2026|$600K|85%]`,
+      "2026-march-q1": `March 2026 saw a significant surge in transaction activity across the Southwest Florida region. Both Single-Family Homes and Condos experienced double-digit growth in closed sales and a massive increase in pending contracts, signaling a highly active spring market.
+
+KEY METRICS OVERVIEW:
+* Median Sale Price: $445,000 (SFH) | $360,000 (Condos).
+* Months Supply: 5 Months (SFH) | 6 Months (Condos).
+* New Pending Sales: Up 33.5% for SFH and 42.4% for Condos YoY.
+
+SINGLE-FAMILY CLOSED SALES:
+[BAR: Mar 2025|1,910|80%, Mar 2026|2,179|95%]
+
+TOWNHOUSE/CONDO CLOSED SALES:
+[BAR: Mar 2025|971|75%, Mar 2026|1,237|98%]`,
+
+      "2026-march-q2": `PRICING & INVENTORY:
+While the median price for Single-Family Homes held steady ($445k vs $450k YoY), the local areas of Naples and Fort Myers saw more significant easing in median prices (-11% and -13% respectively).
+
+INVENTORY TIGHTENING:
+The market is shifting back toward a seller's advantage. Months Supply of Inventory plummeted by over 30% regionally. New Listings were down roughly 14-15%, which, combined with the sales surge, has rapidly consumed available stock.
+
+REGIONAL FLOW (MAR 2026):
+[BAR: New List|3,080|90%, Pending|3,162|100%]`,
+
+      "2026-march-q3": `Comparison of March 2026 vs March 2025 reflects a market that has transitioned from a period of high accumulation to high absorption. Last year saw 8-10 months of inventory; we are now down to 5-6 months.
+
+ACTIVE INVENTORY LEVELS (YoY):
+[BAR: Mar 2025|8-10 Mos|90%, Mar 2026|5-6 Mos|60%]
+
+PENDING SALES SURGE (YoY):
+[BAR: SFH Pending 25|2,369|75%, SFH Pending 26|3,162|100%]
+
+MEDIAN DAYS ON MARKET (YoY):
+[BAR: Mar 2025|48 Days|70%, Mar 2026|57 Days|85%]`
     };
 
     function bindAIButtons(container) {
