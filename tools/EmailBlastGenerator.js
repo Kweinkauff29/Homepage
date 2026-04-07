@@ -1201,12 +1201,12 @@ function truncate(s,n){if(!s) return ''; return s.length>n?s.substring(0,n)+'...
 function generateDetailsBlock(data,v){
   let html=`<table width="100%" cellpadding="0" cellspacing="0" style="margin:16px 0;border-left:4px solid ${v.colorA};padding-left:12px"><tr><td>`;
   html+=`<p style="font-weight:700;font-size:15px;margin:0 0 8px;color:${v.colorA}">Event At-A-Glance:</p>`;
-  html+=`<table cellpadding="4" cellspacing="0" style="font-size:14px">`;
-  html+=`<tr><td style="font-weight:700;vertical-align:top;padding-right:8px">WHAT:</td><td>${data.title}</td></tr>`;
-  html+=`<tr><td style="font-weight:700;vertical-align:top;padding-right:8px">WHEN:</td><td>${data.dateTime}</td></tr>`;
-  if(data.instructor)html+=`<tr><td style="font-weight:700;vertical-align:top;padding-right:8px">WHO:</td><td>${data.instructor}</td></tr>`;
-  if(data.cost)html+=`<tr><td style="font-weight:700;vertical-align:top;padding-right:8px">COST:</td><td>${data.cost}</td></tr>`;
-  if(data.credits)html+=`<tr><td style="font-weight:700;vertical-align:top;padding-right:8px">CREDITS:</td><td>${data.credits}</td></tr>`;
+  html+=`<table cellpadding="4" cellspacing="0" style="font-size:14px;width:100%">`;
+  html+=`<tr><td style="font-weight:700;vertical-align:top;padding-right:8px;white-space:nowrap;width:1%">WHAT:</td><td>${data.title}</td></tr>`;
+  html+=`<tr><td style="font-weight:700;vertical-align:top;padding-right:8px;white-space:nowrap;width:1%">WHEN:</td><td>${data.dateTime}</td></tr>`;
+  if(data.instructor)html+=`<tr><td style="font-weight:700;vertical-align:top;padding-right:8px;white-space:nowrap;width:1%">WHO:</td><td>${data.instructor}</td></tr>`;
+  if(data.cost)html+=`<tr><td style="font-weight:700;vertical-align:top;padding-right:8px;white-space:nowrap;width:1%">COST:</td><td>${data.cost}</td></tr>`;
+  if(data.credits)html+=`<tr><td style="font-weight:700;vertical-align:top;padding-right:8px;white-space:nowrap;width:1%">CREDITS:</td><td>${data.credits}</td></tr>`;
   html+=`</table></td></tr></table>`;
   return html;
 }
