@@ -625,15 +625,18 @@ function renderImageRowBlock(block, s){
   const images = block.images || [];
   if(images.length === 0) return '';
   const maxW = s.emailMaxW || 730;
-  const colW = Math.floor(maxW / images.length);
+  // Calculate exact inner available space: 730 container - 56 (28px left/right padding)
+  const innerSpace = maxW - 56;
+  // Calculate exact pixel width for each image, subtracting 8px (4px padding on each side of the img-col cell)
+  const colW = Math.floor(innerSpace / images.length) - 8;
   const cols = images.map(img => {
     const imgTag = img.url
-      ? `<img src="${img.url}" width="${img.width||colW}" style="width:100%;max-width:${img.width||colW}px;height:auto;display:block;border-radius:4px" alt="${img.altText||''}">`
-      : `<div style="background:#f0f0f0;width:100%;height:${img.height||200}px;display:flex;align-items:center;justify-content:center;border-radius:4px;font-size:11px;color:#999">${img.width||colW}×${img.height||200}</div>`;
+      ? `<img src="${img.url}" width="${colW}" style="width:100%;max-width:${colW}px;height:auto;display:block;border-radius:4px" alt="${img.altText||''}">`
+      : `<div style="background:#f0f0f0;width:100%;height:${img.height||200}px;display:flex;align-items:center;justify-content:center;border-radius:4px;font-size:11px;color:#999">${colW}×${img.height||200}</div>`;
     const linked = img.link ? `<a href="${img.link}" target="_blank" style="display:block;text-decoration:none">${imgTag}</a>` : imgTag;
     return `<td class="img-col" width="${Math.floor(100/images.length)}%" style="padding:4px;vertical-align:top">${linked}${img.caption ? `<p style="font-size:11px;color:#666;margin:4px 0 0;text-align:center">${img.caption}</p>` : ''}</td>`;
   }).join('');
-  return `<table width="100%" cellpadding="0" cellspacing="0"><tr><td style="padding:12px 28px"><table width="100%" cellpadding="0" cellspacing="0"><tr>${cols}</tr></table></td></tr></table>`;
+  return `<table width="100%" cellpadding="0" cellspacing="0"><tr><td style="padding:12px 28px"><table width="100%" cellpadding="0" cellspacing="0" style="table-layout:fixed"><tr>${cols}</tr></table></td></tr></table>`;
 }
 
 function renderCtaBlock(block, s){
@@ -809,6 +812,7 @@ IMAGE PROMPT RULES:
 
 DESIGN PRINCIPLES:
 - Mix block types for visual variety — don't just stack text blocks
+- Theme Colors: Determine a vibrant, cohesive color theme for the email. Do NOT just use the default #02aae1 everywhere. Assign distinct, complementary hex colors to CTA buttons, dividers, and specs blocks to clearly separate different features/sponsors (e.g. use #2e7d32 for one sponsor CTA, #f57c00 for a divider, #1a237e for specs, etc).
 - Use imageRow blocks to show multiple related visuals side-by-side
 - Use infoCard blocks for comparative or step-by-step content
 - Use specs blocks for pricing tiers, dates, or technical details
