@@ -10,7 +10,7 @@
 :root{--bg:#0f1117;--surface:#1a1d27;--surface2:#242836;--border:#2e3346;--text:#e8eaed;--text2:#9aa0b0;--accent:#00bfa5;--accent2:#7c4dff;--danger:#ff5252}
 body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);min-height:100vh}
 .app-header{background:linear-gradient(135deg,#1a1d27 0%,#242836 100%);border-bottom:1px solid var(--border);padding:16px 24px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100}
-.app-header h1{font-size:20px;font-weight:700;background:linear-gradient(135deg,var(--accent),var(--accent2));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.app-header h1{font-size:20px;font-weight:700;background:linear-gradient(135deg,var(--accent),var(--accent2));-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
 .app-header .subtitle{font-size:12px;color:var(--text2);margin-top:2px}
 .settings-btn{background:var(--surface2);border:1px solid var(--border);color:var(--text);padding:8px 16px;border-radius:8px;cursor:pointer;font-size:13px;display:flex;align-items:center;gap:6px;transition:.2s}
 .settings-btn:hover{border-color:var(--accent);color:var(--accent)}
@@ -66,7 +66,7 @@ textarea{resize:vertical;min-height:120px}
 .color-swatch{width:38px;height:38px;border-radius:8px;border:2px solid var(--border);cursor:pointer;padding:0}
 .color-swatch::-webkit-color-swatch{border:none;border-radius:6px}
 .color-swatch::-webkit-color-swatch-wrapper{padding:0}
-input[type="color"]{-webkit-appearance:none;width:38px;height:38px;border:2px solid var(--border);border-radius:8px;cursor:pointer;padding:2px;background:var(--surface2)}
+input[type="color"]{-webkit-appearance:none;appearance:none;width:38px;height:38px;border:2px solid var(--border);border-radius:8px;cursor:pointer;padding:2px;background:var(--surface2)}
 .toggle-row{display:flex;align-items:center;justify-content:space-between;padding:8px 0}
 .toggle{width:44px;height:24px;background:var(--border);border-radius:12px;position:relative;cursor:pointer;transition:.2s;border:none}
 .toggle.on{background:var(--accent)}
@@ -92,9 +92,11 @@ input[type="color"]{-webkit-appearance:none;width:38px;height:38px;border:2px so
   <div class="card">
     <div class="card-header" style="justify-content:space-between">
       <span>📝 Content Editor</span>
-      <div class="tabs" style="margin-bottom:0;padding:2px">
+      <div class="tabs" style="margin-bottom:0;padding:2px;flex-wrap:wrap">
         <button class="tab active" id="modeSingle" onclick="setMode('single')" style="padding:6px 12px;font-size:11px">Single Class</button>
         <button class="tab" id="modeFriday" onclick="setMode('friday')" style="padding:6px 12px;font-size:11px">Friday Blast</button>
+        <button class="tab" id="modeTuesday" onclick="setMode('tuesday')" style="padding:6px 12px;font-size:11px">Tuesday Affiliate</button>
+        <button class="tab" id="modeFlyer" onclick="setMode('flyer')" style="padding:6px 12px;font-size:11px">Flyer Creator</button>
       </div>
     </div>
     <div class="card-body">
@@ -151,6 +153,61 @@ input[type="color"]{-webkit-appearance:none;width:38px;height:38px;border:2px so
           <label>📋 AI Hero Image Prompt Preview</label>
           <textarea id="heroPromptPreview" style="min-height:120px;font-size:12px;background:rgba(0,0,0,0.05);color:var(--accent)" readonly></textarea>
           <p style="font-size:10px;color:var(--text2);margin-top:4px">This is the prompt you just copied. Review it here before pasting into Gemini.</p>
+        </div>
+      </div>
+
+      <!-- TUESDAY AFFILIATE MODE -->
+      <div id="tuesdayModeFields" style="display:none">
+        <div class="form-group">
+          <label>Tuesday Affiliate Header Settings</label>
+          <div class="form-row">
+            <div class="form-group"><label>Header Color</label><input type="color" id="tuesdayHeaderCol" value="#02aae1" onchange="sv('tuesdayHeaderColHex',this.value)"></div>
+            <div class="form-group"><label>Hex</label><input type="text" id="tuesdayHeaderColHex" value="#02aae1" onchange="sv('tuesdayHeaderCol',this.value)"></div>
+          </div>
+          <div class="form-group"><label>Header Title/Date Text</label><input type="text" id="tuesdayHeaderTitle" value="Upcoming Affiliate Opportunities"></div>
+        </div>
+        <div class="form-group">
+          <label>Blast Intro / Preheader Text</label>
+          <textarea id="tuesdayIntro" style="min-height:65px">Hi {{CFirstName}} - Check out these upcoming networking and sponsorship opportunities!</textarea>
+          <p style="font-size:10px;color:var(--text2);margin-top:4px">This text will appear inside the colored header block below the title.</p>
+        </div>
+        <div id="tuesdaySections">
+          <!-- Sections will be added here -->
+        </div>
+        <button class="btn-sm" onclick="addTuesdaySection()" style="width:100%;margin-bottom:16px;border-style:dashed;padding:10px">+ Add New Sponsor/Event Section</button>
+        <div style="background:rgba(124,77,255,0.1);padding:12px;border-radius:8px;border:1px solid var(--accent2);margin-bottom:16px">
+          <label style="color:var(--accent2)">✨ AI Content Assistant (Affiliate Focus)</label>
+          <p style="font-size:11px;color:var(--text2);margin-bottom:8px">Paste your sponsorship/event details below to generate a Gemini formatting prompt.</p>
+          <textarea id="aiRawInputTuesday" style="min-height:100px;font-size:13px" placeholder="Paste links, sponsorship tiers, or event details here..."></textarea>
+          <button class="btn-sm" onclick="generateAIPromptTuesday()" style="width:100%;margin-top:8px;background:var(--accent2);color:#fff;border:none">📋 Generate AI Formatting Prompt</button>
+        </div>
+        <div class="form-group" id="importBoxTuesday" style="display:none">
+          <label>Paste AI Response (JSON)</label>
+          <textarea id="aiResponseTuesday" style="min-height:80px;font-family:monospace" placeholder='Paste the JSON response from Gemini here...'></textarea>
+          <button class="btn-sm" onclick="importAIResponseTuesday()" style="width:100%;margin-top:4px">📥 Import Data</button>
+        </div>
+        <div class="form-group" id="promptPreviewBoxTuesday" style="margin-top:16px;display:none">
+          <label>📋 AI Hero Image Prompt Preview</label>
+          <textarea id="heroPromptPreviewTuesday" style="min-height:120px;font-size:12px;background:rgba(0,0,0,0.05);color:var(--accent)" readonly></textarea>
+        </div>
+      </div>
+
+      <!-- FLYER CREATOR MODE -->
+      <div id="flyerModeFields" style="display:none">
+        <label>Flyer Generator Details</label>
+        <div class="form-group"><label>Event / Link</label><input type="text" id="flyerLink" placeholder="Link or exact title to include..."></div>
+        <div class="form-group"><label>Text & Details</label><textarea id="flyerText" placeholder="Paste the details that must be included on the flyer..."></textarea></div>
+        <div class="toggle-row"><span style="font-size:13px">Has Instructor Photo (Include Placeholder)</span><button class="toggle" id="flyerInstructor" onclick="this.classList.toggle('on')"></button></div>
+        
+        <div style="background:rgba(124,77,255,0.1);padding:12px;border-radius:8px;border:1px solid var(--accent2);margin-top:16px">
+          <label style="color:var(--accent2)">✨ Generate Flyer Prompt</label>
+          <p style="font-size:11px;color:var(--text2);margin-bottom:8px">Generates an image generation prompt with strict 8.5x11 aspect ratio and Swiss-tech elements.</p>
+          <button class="btn-sm" onclick="generateFlyerPrompt()" style="width:100%;margin-top:4px;background:var(--accent2);color:#fff;border:none">📋 Generate & Copy Image Prompt</button>
+        </div>
+
+        <div class="form-group" id="flyerCodeBox" style="margin-top:16px;display:none">
+          <label>Flyer Prompt <button class="btn-sm" onclick="copyText('flyerGeneratedCode')" style="margin-left:8px">Copy</button></label>
+          <textarea id="flyerGeneratedCode" style="min-height:220px;font-size:12px;background:rgba(0,0,0,0.05);color:var(--accent)" readonly></textarea>
         </div>
       </div>
 

@@ -134,8 +134,9 @@ function getYouTubeId(url){
 }
 
 // ===================== EMAIL GENERATION =====================
-let currentMode = 'single'; // 'single' or 'friday'
-let fridaySections = []; // array of {id, title, dateTime, instructor, cost, credits, regLink, description, heroUrl, links:[]}
+let currentMode = 'single'; // 'single', 'friday', 'tuesday', 'flyer'
+let fridaySections = []; // array of {id, title, ...}
+let tuesdaySections = []; // array of sections for tuesday affiliate blast
 let composerPicks = {}; // sectionId -> variationIndex (0,1,2)
 
 let _genData = null;
@@ -147,9 +148,16 @@ function setMode(mode){
   currentMode = mode;
   document.getElementById('modeSingle').classList.toggle('active', mode==='single');
   document.getElementById('modeFriday').classList.toggle('active', mode==='friday');
+  document.getElementById('modeTuesday').classList.toggle('active', mode==='tuesday');
+  document.getElementById('modeFlyer').classList.toggle('active', mode==='flyer');
+  
   document.getElementById('singleModeFields').style.display = mode==='single' ? 'block' : 'none';
   document.getElementById('fridayModeFields').style.display = mode==='friday' ? 'block' : 'none';
+  document.getElementById('tuesdayModeFields').style.display = mode==='tuesday' ? 'block' : 'none';
+  document.getElementById('flyerModeFields').style.display = mode==='flyer' ? 'block' : 'none';
+  
   if(mode==='friday' && fridaySections.length===0) addFridaySection();
+  if(mode==='tuesday' && tuesdaySections.length===0) addTuesdaySection();
 }
 
 function addFridaySection(){
@@ -332,6 +340,109 @@ function updateFSecV(id, vIdx, field, val){
   }
 }
 
+// ===================== TUESDAY AFFILIATE SECTION LOGIC =====================
+function addTuesdaySection(){
+  const id = Date.now();
+  tuesdaySections.push({
+    id, title:'', dateTime:'', location:'', instructor:'', cost:'', credits:'', regLink:'', variationIndex: 0, customColor: '', links:[],
+    variations: [
+      { description: '', heroUrl: '' }, // A: Professional
+      { description: '', heroUrl: '' }, // B: Energetic
+      { description: '', heroUrl: '' }  // C: Benefit-Led
+    ]
+  });
+  renderTuesdaySections();
+}
+function removeTuesdaySection(id){
+  tuesdaySections = tuesdaySections.filter(s=>s.id!==id);
+  renderTuesdaySections();
+}
+function moveTSec(id, dir){
+  const idx = tuesdaySections.findIndex(x=>x.id===id);
+  if(idx===-1) return;
+  const newIdx = idx + dir;
+  if(newIdx < 0 || newIdx >= tuesdaySections.length) return;
+  [tuesdaySections[idx], tuesdaySections[newIdx]] = [tuesdaySections[newIdx], tuesdaySections[idx]];
+  renderTuesdaySections();
+}
+function renderTuesdaySections(){
+  const container = document.getElementById('tuesdaySections');
+  if(!container) return;
+  const activeVars = (_genVariations && _genVariations.length >= 3) ? _genVariations : [
+    {tone:'professional', colorA:'#02aae1'}, {tone:'energetic', colorA:'#1a237e'}, {tone:'urgency', colorA:'#c62828'}
+  ];
+  container.innerHTML = tuesdaySections.map((sec, idx) => {
+    const vIdx = sec.variationIndex || 0;
+    const activeColor = sec.customColor || activeVars[vIdx].colorA;
+    if(!sec.variations || sec.variations.length < 3) {
+      sec.variations = [{description:'',heroUrl:''},{description:'',heroUrl:''},{description:'',heroUrl:''}];
+    }
+    const currentV = sec.variations[vIdx];
+    return `
+    <div class="card" style="margin-bottom:16px;border-color:var(--border);background:var(--bg);position:relative">
+      <div class="card-header" style="font-size:13px;padding:8px 16px;justify-content:space-between;border-bottom:2px solid ${activeColor}">
+        <div style="display:flex;align-items:center;gap:8px">
+          <div style="display:flex;flex-direction:column;gap:2px">
+            <button class="move-btn" onclick="moveTSec(${sec.id},-1)" ${idx===0?'disabled':''} title="Move Up">▲</button>
+            <button class="move-btn" onclick="moveTSec(${sec.id},1)" ${idx===tuesdaySections.length-1?'disabled':''} title="Move Down">▼</button>
+          </div>
+          <span>Section #${idx+1}: ${truncate(sec.title, 30) || '(New Opportunity)'}</span>
+        </div>
+        <div style="display:flex;gap:4px">
+          <div class="tabs" style="margin-bottom:0;padding:2px">
+            <button class="tab ${vIdx===0?'active':''}" onclick="updateTSec(${sec.id},'variationIndex',0)" style="padding:2px 8px;font-size:10px">A</button>
+            <button class="tab ${vIdx===1?'active':''}" onclick="updateTSec(${sec.id},'variationIndex',1)" style="padding:2px 8px;font-size:10px">B</button>
+            <button class="tab ${vIdx===2?'active':''}" onclick="updateTSec(${sec.id},'variationIndex',2)" style="padding:2px 8px;font-size:10px">C</button>
+          </div>
+          <button class="btn-sm btn-danger" onclick="removeTuesdaySection(${sec.id})" style="padding:2px 8px;font-size:10px">✕</button>
+        </div>
+      </div>
+      <div class="card-body" style="padding:16px">
+        <div class="form-group"><label>Opportunity Title</label><input type="text" value="${esc(sec.title)}" onchange="updateTSec(${sec.id},'title',this.value)"></div>
+        <div class="form-row">
+          <div class="form-group"><label>Date/Time (if applicable)</label><input type="text" value="${esc(sec.dateTime)}" onchange="updateTSec(${sec.id},'dateTime',this.value)"></div>
+          <div class="form-group"><label>Location</label><input type="text" value="${esc(sec.location)}" onchange="updateTSec(${sec.id},'location',this.value)"></div>
+        </div>
+        <div class="form-row">
+          <div class="form-group" style="flex:2"><label>Link</label><input type="url" value="${esc(sec.regLink)}" onchange="updateTSec(${sec.id},'regLink',this.value)"></div>
+          <div class="form-group"><label>Custom Color (Hex)</label><input type="text" value="${esc(sec.customColor)}" onchange="updateTSec(${sec.id},'customColor',this.value)"></div>
+        </div>
+        
+        <div class="variation-slot" style="background:rgba(0,0,0,0.02);padding:12px;border-radius:8px;border:1px dashed var(--border);margin-bottom:12px">
+          <div class="form-group">
+            <label style="color:var(--accent);font-weight:700">✍️ Sales Copy (Variation ${['A','B','C'][vIdx]})</label>
+            <textarea style="min-height:100px;font-size:12px" onchange="updateTSecV(${sec.id}, ${vIdx}, 'description', this.value)" placeholder="Marketing copy for this specific variation...">${esc(currentV.description)}</textarea>
+          </div>
+          <div style="background:rgba(0,191,165,0.05);padding:12px;border-radius:8px;border:1px solid var(--border)">
+            <label style="color:var(--accent);margin-bottom:8px;display:flex;justify-content:space-between">
+              🖼️ Feature Image
+            </label>
+            <input type="url" value="${esc(currentV.heroUrl)}" onchange="updateTSecV(${sec.id}, ${vIdx}, 'heroUrl', this.value)" placeholder="Paste image URL here" style="font-size:12px">
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label style="display:flex;justify-content:space-between">Additional Buttons <button class="btn-sm" onclick="addTSecLink(${sec.id})" style="font-size:10px">+ Add Link</button></label>
+          <div id="tLinks-${sec.id}">
+            ${(sec.links||[]).map((l, lIdx) => `
+              <div class="form-row" style="margin-bottom:4px">
+                <input type="text" value="${esc(l.label)}" placeholder="Label" style="flex:1;font-size:11px" onchange="updateTSecLink(${sec.id},${lIdx},'label',this.value)">
+                <input type="url" value="${esc(l.url)}" placeholder="URL" style="flex:2;font-size:11px" onchange="updateTSecLink(${sec.id},${lIdx},'url',this.value)">
+                <button class="btn-sm btn-danger" onclick="removeTSecLink(${sec.id},${lIdx})" style="padding:0 8px">✕</button>
+              </div>
+            `).join('')}
+          </div>
+        </div>
+      </div>
+    </div>
+  `}).join('');
+}
+function addTSecLink(id){const s=tuesdaySections.find(x=>x.id===id);if(s){if(!s.links)s.links=[];s.links.push({label:'',url:''});renderTuesdaySections();}}
+function updateTSecLink(id,lIdx,field,val){const s=tuesdaySections.find(x=>x.id===id);if(s&&s.links[lIdx])s.links[lIdx][field]=val;}
+function removeTSecLink(id,lIdx){const s=tuesdaySections.find(x=>x.id===id);if(s){s.links.splice(lIdx,1);renderTuesdaySections();}}
+function updateTSec(id,field,val){const s=tuesdaySections.find(x=>x.id===id);if(s){s[field]=val;if(field==="variationIndex")renderTuesdaySections();}}
+function updateTSecV(id,vIdx,field,val){const s=tuesdaySections.find(x=>x.id===id);if(s&&s.variations[vIdx])s.variations[vIdx][field]=val;}
+
 // ===================== AI INTEGRATION =====================
 function generateAIPrompt(){
   const raw = gv('aiRawInput');
@@ -389,6 +500,88 @@ function importAIResponse(){
   }
 }
 
+function generateAIPromptTuesday(){
+  const raw = gv('aiRawInputTuesday');
+  if(!raw){toast('Paste some raw details first!');return;}
+  const prompt = `I am using an Email Blast Generator for a REALTOR association specifically targeting Affiliates and Sponsors. Please parse the following raw input and return a JSON array of sponsorship/networking opportunities.
+
+For EACH item, you must provide THREE distinct marketing descriptions based on these angles:
+Angle A (Professional): Direct, factual, and focused on business value.
+Angle B (Networking/Exposure): Highly encouraging, focuses on meeting people, branding visibility, and collaboration.
+Angle C (ROI/Sponsorship specific): Focuses on the direct return on investment, lead generation, and exclusivity of the sponsor slot.
+
+Each object MUST have exactly these fields: "title", "dateTime", "location", "regLink", "copyA", "copyB", "copyC".
+Do not return fields that do not apply (e.g. instructor, cost, credits - keep them empty).
+
+RAW INPUT TO PARSE:
+${raw}
+
+RETURN ONLY THE JSON ARRAY. NO MARKDOWN BLOCK, NO PREAMBLE. JUST THE [ ... ] CONTENT.`;
+  navigator.clipboard.writeText(prompt);
+  document.getElementById('importBoxTuesday').style.display = 'block';
+  toast('AI Prompt copied! Paste into Gemini, then paste response below.');
+}
+
+function importAIResponseTuesday(){
+  try {
+    const data = JSON.parse(gv('aiResponseTuesday'));
+    if(!Array.isArray(data)){toast('Invalid format: Expected an array');return;}
+    tuesdaySections = data.map(item => ({
+      id: Date.now() + Math.random(),
+      title: item.title||'',
+      dateTime: item.dateTime||'',
+      location: item.location||'',
+      instructor: '', cost: '', credits: '',
+      regLink: item.regLink||'',
+      variationIndex: 0,
+      customColor: '',
+      links: [],
+      variations: [
+        { description: item.copyA || '', heroUrl: '' },
+        { description: item.copyB || '', heroUrl: '' },
+        { description: item.copyC || '', heroUrl: '' }
+      ]
+    }));
+    renderTuesdaySections();
+    toast(`Imported ${data.length} affiliate opportunities!`);
+  } catch(e) {
+    toast('Error parsing JSON. Make sure you copy/pasted only the JSON array.');
+  }
+}
+
+// ===================== FLYER GENERATOR =====================
+function generateFlyerPrompt() {
+  const link = gv('flyerLink');
+  const details = gv('flyerText');
+  const hasInstructor = document.getElementById('flyerInstructor').classList.contains('on');
+
+  if(!details && !link) {
+    toast('Please enter some flyer details first.');
+    return;
+  }
+
+  const prompt = `Create a strict image generation prompt for a flyer.
+ASPECT RATIO: 8.5 x 11 inches (portrait).
+STYLE: Modern corporate, clear and professional. Must feature "Swiss-tech" design elements (e.g., wavy lines, corner plus signs (+), neat geometric accents, grids). No generic borders. 
+
+RULES:
+1. Do NOT generate any actual company logos. Leave a blank placeholder space for the organizational logo.
+2. Do NOT generate any photographic people or fake faces.
+${hasInstructor ? '3. Leave a distinct rectangular or circular placeholder frame intended for an instructor photo.' : ''}
+
+CONTENT TO INTEGRATE ONSCREEN:
+Link / Focus: ${link}
+Details: ${details}
+
+Ensure the design cleanly incorporates a title, main body area, and clear readable typography slots. 
+Return only the generated image prompt, nothing else.`;
+
+  navigator.clipboard.writeText(prompt);
+  document.getElementById('flyerCodeBox').style.display = 'block';
+  sv('flyerGeneratedCode', prompt);
+  toast('Prompt copied to clipboard! Paste it into your AI image generator.');
+}
+
 // ===================== EMAIL GENERATION =====================
 function generateAll(){
   const s=getSettings();
@@ -429,12 +622,15 @@ function generateAll(){
       renderVariationTab(i, v, preheader, emailHtml, heroPrompt, container);
     });
     
-    document.getElementById('composerTabBtn').style.display = 'none';
-  } else {
-    // FRIDAY BLAST MODE
-    if(fridaySections.length === 0){toast('Add at least one section');return;}
+    } else if (currentMode === 'friday' || currentMode === 'tuesday') {
+    // MULTI-SECTION MODES (Friday/Tuesday)
+    const isTuesday = currentMode === 'tuesday';
+    const activeSections = isTuesday ? tuesdaySections : fridaySections;
+    const activeIntro = isTuesday ? gv('tuesdayIntro') : gv('fridayIntro');
     
-    _genData = { sections: [...fridaySections], intro: gv('fridayIntro') };
+    if(activeSections.length === 0){toast('Add at least one section');return;}
+    
+    _genData = { sections: [...activeSections], intro: activeIntro };
     _genVariations = [
       {name:'A — Professional',tone:'professional',colorA:s.c1a,colorB:s.c1b},
       {name:'B — Energetic',tone:'energetic',colorA:s.c2a,colorB:s.c2b},
@@ -445,12 +641,16 @@ function generateAll(){
     container.innerHTML='';
     
     _genVariations.forEach((v, i) => {
-      const emailHtml = generateFridayBlastHTML(_genData, v, s);
-      renderVariationTab(i, v, "Friday Update", emailHtml, "Prompt not applicable for multi-section", container);
+      const emailHtml = generateMultiSectionHTML(_genData, v, s, isTuesday);
+      renderVariationTab(i, v, (isTuesday ? "Tuesday Update" : "Friday Update"), emailHtml, "Prompt not applicable for multi-section", container);
     });
     
     document.getElementById('composerTabBtn').style.display = 'block';
-    renderComposer();
+    renderComposer(isTuesday);
+  } else {
+    // Flyer mode doesn't generate emails here
+    toast('Use the generate prompt button above in Flyer Creator.');
+    return;
   }
 
   document.getElementById('emptyState').style.display='none';
@@ -498,7 +698,7 @@ function renderVariationTab(i, v, preheader, emailHtml, heroPrompt, container){
 }
 
 // ===================== COMPOSER =====================
-function renderComposer(){
+function renderComposer(isTuesday = false){
   const container = document.getElementById('composerSections');
   composerPicks = {};
   _genData.sections.forEach(s => composerPicks[s.id] = 0); // Default to Variation A
@@ -507,24 +707,24 @@ function renderComposer(){
     <div style="background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:12px;margin-bottom:12px;display:flex;align-items:center;justify-content:space-between">
       <span style="font-weight:600;font-size:14px">${truncate(s.title, 40)}</span>
       <div class="tabs" style="margin-bottom:0;padding:2px">
-        <button class="tab active" onclick="pickVar(${s.id},0,this)">A</button>
-        <button class="tab" onclick="pickVar(${s.id},1,this)">B</button>
-        <button class="tab" onclick="pickVar(${s.id},2,this)">C</button>
+        <button class="tab active" onclick="pickVar(${s.id},0,this,${isTuesday})">A</button>
+        <button class="tab" onclick="pickVar(${s.id},1,this,${isTuesday})">B</button>
+        <button class="tab" onclick="pickVar(${s.id},2,this,${isTuesday})">C</button>
       </div>
     </div>
   `).join('');
-  updateComposerPreview();
+  updateComposerPreview(isTuesday);
 }
 
-function pickVar(secId, varIdx, btn){
+function pickVar(secId, varIdx, btn, isTuesday){
   composerPicks[secId] = varIdx;
   btn.parentElement.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
   btn.classList.add('active');
-  updateComposerPreview();
+  updateComposerPreview(isTuesday);
 }
 
-function updateComposerPreview(){
-  const html = generateFridayBlastHTML(_genData, null, _genSettings, true);
+function updateComposerPreview(isTuesday){
+  const html = generateMultiSectionHTML(_genData, null, _genSettings, isTuesday, true);
   document.getElementById('composerCode').textContent = html;
   const frame = document.getElementById('composerFrame');
   const doc = frame.contentDocument || frame.contentWindow.document;
@@ -649,13 +849,13 @@ function generateLearnBlock(objectives,heading,v){
   return html;
 }
 
-// ===================== FRIDAY BLAST HTML =====================
-function generateFridayBlastHTML(data, v, s, isComposer = false){
-  const hColor = gv('fridayHeaderCol') || '#004a32';
-  const hTitle = gv('fridayHeaderTitle') || 'Upcoming at BER';
-  const preText = gv('fridayIntro') || '';
+// ===================== MULTI-SECTION HTML (FRIDAY & TUESDAY) =====================
+function generateMultiSectionHTML(data, v, s, isTuesday = false, isComposer = false){
+  const hColor = isTuesday ? (gv('tuesdayHeaderCol') || '#02aae1') : (gv('fridayHeaderCol') || '#004a32');
+  const hTitle = isTuesday ? (gv('tuesdayHeaderTitle') || 'Upcoming Affiliate Opportunities') : (gv('fridayHeaderTitle') || 'Upcoming at BER');
+  const preText = isTuesday ? (gv('tuesdayIntro') || '') : (gv('fridayIntro') || '');
 
-  const sectionsHtml = data.sections.map(sec => {
+  const sectionsHtml = data.sections.map((sec, idx) => {
     let activeV = v;
     let vIdx = sec.variationIndex || 0;
     
