@@ -817,6 +817,12 @@ DESIGN PRINCIPLES:
 - Target audience: Real estate affiliates, sponsors, and business partners
 - Tone: Professional but warm, emphasizing networking value and business ROI
 
+CRITICAL JSON FORMATTING RULES (TO PREVENT PARSING ERRORS):
+1. Output MUST be 100% strictly valid JSON.
+2. You MUST perfectly escape ALL internal double quotes inside strings (e.g. use \\" for inside quotes).
+3. Do NOT use actual newlines inside strings; use \\n.
+4. Do NOT leave trailing commas at the end of objects or arrays.
+
 RAW INPUT TO ANALYZE:
 ${raw}
 
@@ -832,6 +838,10 @@ function importAIResponseTuesday(){
     let rawText = gv('aiResponseTuesday').trim();
     // Strip markdown code blocks if present
     if(rawText.startsWith('```')) rawText = rawText.replace(/^```[a-z]*\n?/,'').replace(/\n?```$/,'').trim();
+    
+    // Attempt basic fix for trailing commas before parsing
+    rawText = rawText.replace(/,\s*([\]}])/g, '$1');
+    
     const data = JSON.parse(rawText);
 
     if(data.blocks && Array.isArray(data.blocks)){
