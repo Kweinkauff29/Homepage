@@ -1,4 +1,27 @@
 // ===================== SETTINGS =====================
+const ORGS = {
+  ber: {
+    id: 'ber',
+    name: 'Bonita Springs–EsterO REALTORS®',
+    shortName: 'BER',
+    addr: '25300 Bernwood Drive, Suite 1 · Bonita Springs, FL 34135',
+    email: 'Support@BERealtors.org',
+    logo: 'https://res.cloudinary.com/micronetonline/image/upload/q_auto/f_auto/c_crop,h_503,w_2954,x_0,y_0/v1573591630/tenants/6c24b0da-8a6e-4f2b-8547-26a8c1dc4581/98b2cd4b19a748e0be424cae2a868161/BonitaSpringsEsteroRealtors-Logo-Horizontal.png',
+    colors: ['#004a32', '#006847'] // Green
+  },
+  wcr: {
+    id: 'wcr',
+    name: "Women's Council of REALTORS® Bonita Springs–Estero",
+    shortName: 'WCR',
+    addr: '25300 Bernwood Drive, Suite 1 · Bonita Springs, FL 34135',
+    email: 'WCR@BERealtors.org',
+    logo: 'https://www.wcr.org/wp-content/uploads/2025/03/wcrlogo.png.webp',
+    colors: ['#002b4c', '#005a8c'] // Navy flow
+  }
+};
+
+let currentOrgId = localStorage.getItem('ebg_org') || 'ber';
+
 const DEFAULTS = {
   orgName: 'Bonita Springs–Estero REALTORS®',
   orgAddr: '25300 Bernwood Drive, Suite 1 · Bonita Springs, FL 34135',
@@ -43,18 +66,64 @@ function resetSettings() {
 
 function loadSettingsUI() {
   const s = getSettings();
-  sv('sOrgName',s.orgName);sv('sOrgAddr',s.orgAddr);sv('sSupportEmail',s.supportEmail);
+  const org = ORGS[currentOrgId];
+  
+  // Use current org defaults if no manual override
+  const orgName = s.orgName || org.name;
+  const orgAddr = s.orgAddr || org.addr;
+  const supportEmail = s.supportEmail || org.email;
+
+  sv('sOrgName', orgName);
+  sv('sOrgAddr', orgAddr);
+  sv('sSupportEmail', supportEmail);
   sv('sHeroW',s.heroW);sv('sHeroH',s.heroH);sv('sHeroPrompt',s.heroPrompt);
   const np=document.getElementById('sNoPeople');s.noPeople?np.classList.add('on'):np.classList.remove('on');
   sv('sEmailMaxW',s.emailMaxW);sv('sMergeTag',s.mergeTag);sv('sFontFamily',s.fontFamily);
   sv('sPreheaderLen',s.preheaderLen);sv('sCtaShape',s.ctaShape);
   sv('sC1a',s.c1a);sv('sC1b',s.c1b);sv('sC2a',s.c2a);sv('sC2b',s.c2b);sv('sC3a',s.c3a);sv('sC3b',s.c3b);
   sv('sC1aHex',s.c1a);sv('sC1bHex',s.c1b);sv('sC2aHex',s.c2a);sv('sC2bHex',s.c2b);sv('sC3aHex',s.c3a);sv('sC3bHex',s.c3b);
-  // sync color pickers with text
-  ['sC1a','sC1b','sC2a','sC2b','sC3a','sC3b'].forEach(id=>{
-    const el = document.getElementById(id);
-    if(el) el.addEventListener('input',()=>{document.getElementById(id+'Hex').value=document.getElementById(id).value});
+  
+  updateBrandingUI();
+}
+
+function setBranding(orgId) {
+  currentOrgId = orgId;
+  localStorage.setItem('ebg_org', orgId);
+  const org = ORGS[orgId];
+  
+  // Update UI and prompts
+  updateBrandingUI();
+  toast(`Designing for: ${org.name}`);
+  
+  // Auto-fill settings with org defaults if user hasn't customized them manually yet
+  // Or just refresh them anyway to make the transition clear
+  const s = getSettings();
+  s.orgName = org.name;
+  s.orgAddr = org.addr;
+  s.supportEmail = org.email;
+  // If WCR, swap default green gradients for navy blue flow
+  if(orgId === 'wcr') {
+    s.c1a = '#002b4c'; s.c1b = '#005a8c';
+  } else {
+    s.c1a = '#004a32'; s.c1b = '#006847';
+  }
+  
+  localStorage.setItem('ebg_settings', JSON.stringify(s));
+  loadSettingsUI();
+  updateTuesdayPreview();
+}
+
+function updateBrandingUI() {
+  const org = ORGS[currentOrgId];
+  document.querySelectorAll('.branding-btn').forEach(btn => {
+    btn.classList.toggle('active', btn.dataset.org === currentOrgId);
   });
+  
+  // Update header text/title if needed
+  const header = document.querySelector('.header p');
+  if(header) {
+    header.innerHTML = `Email Blast & Flyer Generator <span style="font-size:12px;opacity:0.6"> — Designing for: ${org.shortName}</span> `;
+  }
 }
 
 function gv(id){return document.getElementById(id).value}
@@ -557,69 +626,118 @@ function addTBlock(type){
 }
 
 // ===================== DYNAMIC EMAIL HTML RENDERER =====================
-function generateDynamicEmailHTML(blocks, settings, headerColor, headerTitle, preText){
+function generateDynamicEmailHTML(blocks, settings, headerColor, headerTitle, preText, variation){
   const s = settings || getSettings();
+  const org = ORGS[currentOrgId];
   const hColor = headerColor || '#02aae1';
   const hTitle = headerTitle || 'Upcoming Affiliate Opportunities';
-
+  const v = variation || {};
+  const fontName = v.fontFamily || 'Montserrat';
+  const hGrad = v.headerGradient || [hColor, hColor];
+  
   const blocksHtml = blocks.map(block => {
     switch(block.type){
-      case 'hero': return renderHeroBlock(block, s);
-      case 'text': return renderTextBlock(block, s);
-      case 'imageRow': return renderImageRowBlock(block, s);
-      case 'cta': return renderCtaBlock(block, s);
-      case 'infoCard': return renderInfoCardBlock(block, s);
-      case 'specs': return renderSpecsBlock(block, s);
-      case 'bulletList': return renderBulletListBlock(block, s);
-      case 'divider': return renderDividerBlock(block, s);
+      case 'hero': return renderHeroBlock(block, s, v);
+      case 'text': return renderTextBlock(block, s, v);
+      case 'imageRow': return renderImageRowBlock(block, s, v);
+      case 'cta': return renderCtaBlock(block, s, v);
+      case 'infoCard': return renderInfoCardBlock(block, s, v);
+      case 'specs': return renderSpecsBlock(block, s, v);
+      case 'bulletList': return renderBulletListBlock(block, s, v);
+      case 'divider': return renderDividerBlock(block, s, v);
+      case 'instructor': return renderInstructorBlock(block, s, v);
       default: return '';
     }
   }).join('\n');
 
-  return `<style>
+  return `<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link href="https://fonts.googleapis.com/css2?family=${fontName.replace(/ /g,'+')}:wght@400;700;800&display=swap" rel="stylesheet">
+<style>
+  body { font-family: '${fontName}', 'Helvetica Neue', Helvetica, Arial, sans-serif; -webkit-font-smoothing: antialiased; }
   @media only screen and (max-width: 600px) {
     .content-table { width: 100% !important; }
-    .section-inner { padding: 0 15px !important; }
-    .img-col { display: block !important; width: 100% !important; box-sizing: border-box !important; padding: 0 0 16px 0 !important; }
-    .img-col img { width: 100% !important; max-width: 100% !important; }
-    .info-col { display: block !important; width: 100% !important; padding: 16px !important; box-sizing: border-box !important; margin-bottom: 12px !important; }
-    table[style*="table-layout:fixed"] { table-layout: auto !important; }
+    .section-inner { padding: 0 20px !important; }
+    .img-col { display: block !important; width: 100% !important; padding: 0 0 16px 0 !important; }
+    .info-col { display: block !important; width: 100% !important; padding: 20px !important; margin-bottom: 15px !important; }
+    .header-text { font-size: 26px !important; }
   }
 </style>
-<table width="100%" cellpadding="0" cellspacing="0" border="0" class="content-table" style="width:100%;max-width:${s.emailMaxW}px;background-color:#ffffff;margin:0 auto;table-layout:fixed">
-  <tr><td align="center" style="background-color:${hColor};padding:22px 0;color:#ffffff">
-    <div style="padding:0 24px">
-      <p style="margin:0;font-size:24px;font-weight:800;text-transform:uppercase;letter-spacing:1px">${hTitle}</p>
-      ${preText ? `<div style="margin:10px auto 0;width:90%;max-width:600px;border-top:1px solid rgba(255,255,255,0.4);padding-top:10px;font-size:14px;opacity:0.9;line-height:1.4">${preText}</div>` : ''}
+<!--[if mso]>
+<style type="text/css">
+  body, table, td, p, a { font-family: Helvetica, Arial, sans-serif !important; }
+</style>
+<![endif]-->
+</head>
+<body style="margin:0;padding:20px 0;background-color:#f4f7f9;font-family:'${fontName}', Helvetica, Arial, sans-serif">
+<table width="100%" cellpadding="0" cellspacing="0" border="0" class="content-table" style="width:100%;max-width:${s.emailMaxW}px;background-color:#ffffff;margin:0 auto;table-layout:fixed;border-radius:12px;overflow:hidden;box-shadow:0 10px 30px rgba(0,0,0,0.05)">
+  <!-- Logo Row -->
+  <tr><td align="center" style="padding:20px 0;background-color:#ffffff">
+    <img src="${org.logo}" height="50" style="height:50px;width:auto;display:block" alt="${org.name}">
+  </td></tr>
+  <!-- Header -->
+  <tr><td align="center" style="background:${hGrad[0]};background:linear-gradient(135deg, ${hGrad[0]} 0%, ${hGrad[1]} 100%);">
+    <!--[if mso]>
+    <v:rect xmlns:v="urn:schemas-microsoft-com:vml" fill="true" stroke="false" style="width:${s.emailMaxW}px;height:140px;">
+    <v:fill type="gradient" color="${hGrad[0]}" color2="${hGrad[1]}" angle="135" />
+    <v:textbox inset="0,0,0,0">
+    <![endif]-->
+    <div style="padding:40px 24px;color:#ffffff">
+      <p class="header-text" style="margin:0;font-size:32px;font-weight:900;text-transform:uppercase;letter-spacing:1.5px;text-shadow:0 2px 10px rgba(0,0,0,0.2)">${hTitle}</p>
+      ${preText ? `<div style="margin:15px auto 0;width:85%;border-top:1px solid rgba(255,255,255,0.3);padding-top:15px;font-size:15px;opacity:0.95;line-height:1.5;font-weight:500">${preText}</div>` : ''}
     </div>
+    <!--[if mso]>
+    </v:textbox>
+    </v:rect>
+    <![endif]-->
   </td></tr>
   <tr><td style="padding:0">
-    ${blocksHtml}
+    <table width="100%" cellpadding="0" cellspacing="0" border="0" style="table-layout:fixed">
+      ${blocksHtml}
+    </table>
   </td></tr>
-  <tr><td style="padding:0 24px 10px;background-color:#ffffff;text-align:center;font-size:12px;color:#999999">
+  <tr><td style="padding:40px 24px 30px;background-color:#ffffff;text-align:center;font-size:12px;color:#999999;border-top:1px solid #eeeeee">
+    <p style="margin:0">© ${new Date().getFullYear()} ${s.orgName}</p>
+    <p style="margin:5px 0 0">${s.orgAddr}</p>
   </td></tr>
-</table>`.trim();
+</table>
+</body>
+</html>`.trim();
 }
 
-function renderHeroBlock(block, s){
+function renderHeroBlock(block, s, v){
   const w = block.width || s.emailMaxW || 730;
   const h = block.height || 315;
-  if(block.imageUrl){
-    const imgTag = `<img src="${block.imageUrl}" width="${w}" style="width:100%;max-width:${w}px;height:auto;display:block" alt="${block.overlayText||'Hero Image'}">`;
+  const url = block.imageUrl || v.heroImageUrl;
+  if(url){
+    const imgTag = `<img src="${url}" width="${w}" style="width:100%;max-width:${w}px;height:auto;display:block" alt="${block.overlayText||'Hero Image'}">`;
     const linked = block.link ? `<a href="${block.link}" target="_blank" style="display:block">${imgTag}</a>` : imgTag;
-    return `<table width="100%" cellpadding="0" cellspacing="0"><tr><td style="padding:0">${linked}</td></tr></table>`;
+    return `<tr><td style="padding:0">${linked}</td></tr>`;
   }
-  return `<table width="100%" cellpadding="0" cellspacing="0"><tr><td style="background:linear-gradient(135deg,#02aae1,#004a8f);text-align:center;padding:40px 24px;color:#ffffff">
-    <p style="font-size:24px;font-weight:800;margin:0">${block.overlayText||'[Hero Image Placeholder]'}</p>
-    <p style="font-size:12px;margin:8px 0 0;opacity:.7">${w}×${h} — Paste generated image URL above</p>
-  </td></tr></table>`;
+  const g = v.headerGradient || ['#02aae1','#004a8f'];
+  return `<tr><td style="background:${g[0]};background:linear-gradient(135deg,${g[0]},${g[1]});text-align:center;padding:60px 24px;color:#ffffff">
+    <!--[if mso]>
+    <v:rect xmlns:v="urn:schemas-microsoft-com:vml" fill="true" stroke="false" style="width:${s.emailMaxW}px;height:200px;">
+    <v:fill type="gradient" color="${g[0]}" color2="${g[1]}" angle="135" />
+    <v:textbox inset="0,0,0,0">
+    <![endif]-->
+    <div style="padding:40px 0">
+      <p style="font-size:24px;font-weight:800;margin:0">${block.overlayText||'[Hero Image Placeholder]'}</p>
+      <p style="font-size:13px;margin:10px 0 0;opacity:.8;font-style:italic">Generate your teaser image and paste the URL above to see it here.</p>
+    </div>
+    <!--[if mso]>
+    </v:textbox></v:rect>
+    <![endif]-->
+  </td></tr>`;
 }
 
-function renderTextBlock(block, s){
-  let html = '<table width="100%" cellpadding="0" cellspacing="0"><tr><td style="padding:16px 32px">';
-  if(block.heading) html += `<p style="margin:0 0 10px;font-size:20px;font-weight:800;color:#333333">${block.heading}</p>`;
-  if(block.body) html += `<div style="font-size:15px;line-height:1.6;color:#333333">${mdToHtml(block.body)}</div>`;
-  html += '</td></tr></table>';
+function renderTextBlock(block, s, v){
+  let html = '<tr><td class="section-inner" style="padding:24px 40px">';
+  if(block.heading) html += `<p style="margin:0 0 12px;font-size:22px;font-weight:800;color:#333333;line-height:1.2">${block.heading}</p>`;
+  if(block.body) html += `<div style="font-size:16px;line-height:1.6;color:#444444">${mdToHtml(block.body)}</div>`;
+  html += '</td></tr>';
   return html;
 }
 
@@ -627,9 +745,7 @@ function renderImageRowBlock(block, s){
   const images = block.images || [];
   if(images.length === 0) return '';
   const maxW = s.emailMaxW || 730;
-  // Calculate exact inner available space: 730 container - 56 (28px left/right padding)
   const innerSpace = maxW - 56;
-  // Calculate exact pixel width for each image, subtracting 8px (4px padding on each side of the img-col cell)
   const colW = Math.floor(innerSpace / images.length) - 8;
   const cols = images.map(img => {
     const imgTag = img.url
@@ -638,20 +754,30 @@ function renderImageRowBlock(block, s){
     const linked = img.link ? `<a href="${img.link}" target="_blank" style="display:block;text-decoration:none">${imgTag}</a>` : imgTag;
     return `<td class="img-col" width="${Math.floor(100/images.length)}%" style="padding:4px;vertical-align:top">${linked}${img.caption ? `<p style="font-size:11px;color:#666;margin:4px 0 0;text-align:center">${img.caption}</p>` : ''}</td>`;
   }).join('');
-  return `<table width="100%" cellpadding="0" cellspacing="0"><tr><td style="padding:12px 28px"><table width="100%" cellpadding="0" cellspacing="0" style="table-layout:fixed"><tr>${cols}</tr></table></td></tr></table>`;
+  return `<tr><td style="padding:12px 28px"><table width="100%" cellpadding="0" cellspacing="0" style="table-layout:fixed"><tr>${cols}</tr></table></td></tr>`;
 }
 
-function renderCtaBlock(block, s){
-  const color = block.color || '#02aae1';
-  const filled = block.style !== 'outlined';
-  const bg = filled ? `background-color:${color}` : 'background:transparent';
-  const border = filled ? 'border:none' : `border:2px solid ${color}`;
-  const textColor = filled ? '#ffffff' : color;
-  return `<table width="100%" cellpadding="0" cellspacing="0"><tr><td align="center" style="padding:12px 32px">
-    <table cellpadding="0" cellspacing="0" style="margin:0 auto"><tr><td align="center" style="${bg};${border};border-radius:50px;padding:14px 40px">
-      <a href="${block.url||'#'}" target="_blank" style="color:${textColor};text-decoration:none;font-weight:800;font-size:16px;display:block">${block.label||'Learn More'}</a>
-    </td></tr></table>
-  </td></tr></table>`;
+function renderCtaBlock(block, s, v){
+  const g = v.buttonGradient || ['#02aae1', '#004a8f'];
+  const textColor = '#ffffff';
+  const radius = s.ctaShape==='pill'?'50px':s.ctaShape==='rounded'?'10px':'0px';
+  
+  return `<tr><td align="center" style="padding:15px 40px 25px">
+    <table cellpadding="0" cellspacing="0" style="margin:0 auto;width:100%;max-width:300px">
+      <tr><td align="center" style="background:${g[0]};background:linear-gradient(135deg,${g[0]},${g[1]});border-radius:${radius};">
+        <!--[if mso]>
+        <v:roundrect xmlns:v="urn:schemas-microsoft-com:vml" xmlns:w="urn:schemas-microsoft-com:office:word" href="${block.url||'#'}" style="height:55px;v-text-anchor:middle;width:300px;" arcsize="50%" stroke="f" fillcolor="${g[0]}">
+        <v:fill type="gradient" color="${g[0]}" color2="${g[1]}" angle="135" />
+        <w:anchorlock/>
+        <center style="color:#ffffff;font-family:sans-serif;font-size:18px;font-weight:bold;">${block.label||'Register Now'}</center>
+        </v:roundrect>
+        <![endif]-->
+        <!--[if !mso]><!-->
+        <a href="${block.url||'#'}" target="_blank" style="color:${textColor};text-decoration:none;font-weight:800;font-size:18px;display:block;padding:16px 30px;letter-spacing:1px">${block.label||'Register Now'}</a>
+        <!--<![endif]-->
+      </td></tr>
+    </table>
+  </td></tr>`;
 }
 
 function renderInfoCardBlock(block, s){
@@ -663,7 +789,7 @@ function renderInfoCardBlock(block, s){
       ${col.heading ? `<p style="font-weight:800;font-size:16px;margin:0 0 8px;color:#333">${col.heading}</p>` : ''}
       <div style="font-size:14px;line-height:1.5;color:#444">${mdToHtml(col.body||'')}</div>
     </td>`).join('');
-  return `<table width="100%" cellpadding="0" cellspacing="0"><tr><td style="padding:12px 28px"><table width="100%" cellpadding="0" cellspacing="8"><tr>${cols}</tr></table></td></tr></table>`;
+  return `<tr><td style="padding:12px 28px"><table width="100%" cellpadding="0" cellspacing="8"><tr>${cols}</tr></table></td></tr>`;
 }
 
 function renderSpecsBlock(block, s){
@@ -671,10 +797,10 @@ function renderSpecsBlock(block, s){
   let rows = (block.items||[]).map(item =>
     `<tr><td style="font-weight:700;padding:6px 12px;color:${color};font-size:14px;vertical-align:top;white-space:nowrap">${item.label}</td><td style="padding:6px 12px;font-size:14px;color:#333">${item.value}</td></tr>`
   ).join('');
-  return `<table width="100%" cellpadding="0" cellspacing="0"><tr><td style="padding:12px 32px">
+  return `<tr><td style="padding:12px 32px">
     ${block.heading ? `<p style="font-weight:800;font-size:18px;margin:0 0 10px;color:#333">${block.heading}</p>` : ''}
     <table width="100%" cellpadding="0" cellspacing="0" style="border-left:4px solid ${color};background:#f9f9f9;border-radius:0 4px 4px 0">${rows}</table>
-  </td></tr></table>`;
+  </td></tr>`;
 }
 
 function renderBulletListBlock(block, s){
@@ -682,50 +808,78 @@ function renderBulletListBlock(block, s){
   const numbered = block.listStyle === 'numbered';
   const tag = numbered ? 'ol' : 'ul';
   const listHtml = items.map(item => `<li style="margin-bottom:6px;font-size:14px;color:#333">${mdToHtml(item)}</li>`).join('');
-  return `<table width="100%" cellpadding="0" cellspacing="0"><tr><td style="padding:8px 32px">
+  return `<tr><td style="padding:8px 32px">
     ${block.heading ? `<p style="font-weight:700;font-size:16px;margin:0 0 8px;color:#333">${block.heading}</p>` : ''}
     <${tag} style="padding-left:20px;margin:0">${listHtml}</${tag}>
-  </td></tr></table>`;
+  </td></tr>`;
 }
 
 function renderDividerBlock(block, s){
-  return `<table width="100%" cellpadding="0" cellspacing="0"><tr><td style="padding:16px 32px"><hr style="border:none;border-top:2px solid ${block.color||'#e0e0e0'};margin:0"></td></tr></table>`;
+  return `<tr><td style="padding:16px 32px"><hr style="border:none;border-top:2px solid ${block.color||'#e0e0e0'};margin:0"></td></tr>`;
 }
 
 // ===================== AI INTEGRATION =====================
 function generateAIPrompt(){
   const raw = gv('aiRawInput');
   if(!raw){toast('Paste some raw event details first!');return;}
-  const prompt = `I am using an Email Blast Generator for a REALTOR association. Please parse the following raw input and return a JSON array of event objects. 
- 
- For EACH event, you must provide THREE distinct marketing descriptions based on these angles:
- Angle A (Professional/Informational): Direct, factual, authoritative, and clean.
- Angle B (Energetic/FOMO): High excitement, community-focused, emphasizes networking and "don't miss out."
- Angle C (Benefit-Led/Career Growth): Focuses specifically on the realtor's professional advancement, ROI, and credits.
- 
- Each object MUST have exactly these fields: "title", "dateTime", "location", "instructor", "cost", "credits", "regLink", "copyA", "copyB", "copyC". 
- 
- PARSING RULES:
- 1. "title": Catchy, short event name.
- 2. "dateTime": Full date and time string.
- 3. "regLink": The registration URL found in the text.
- 4. "copyA", "copyB", "copyC": Detailed "sales copy" following the angles above. Each should be 1-2 punchy paragraphs, then 3-5 bold bullet points.
- 
- RAW INPUT TO PARSE:
- ${raw}
- 
- RETURN ONLY THE JSON ARRAY. NO MARKDOWN BLOCK, NO PREAMBLE. JUST THE [ ... ] CONTENT.`;
+  const s = getSettings();
+  const prompt = `You are an expert design-focused email marketer for "${s.orgName}". Parse the raw input and return a COMPLETE marketing JSON object.
+
+### CRITICAL RULES:
+1. NO CITATIONS: Do not include source links or references in any text.
+2. RICH MARKETING: Write 3 distinct descriptions for each event:
+   - copyA: Professional & factual.
+   - copyB: Energetic & FOMO.
+   - copyC: Urgency & Benefit-led.
+
+RETURN A JSON OBJECT (not an array) with this exact structure:
+{
+  "design": {
+    "fontFamily": "Outfit", // Choose from: Montserrat, Outfit, Playfair Display, Inter
+    "headerGradient": ["#004a32", "#006847"], // 2 hex codes for a rich gradient
+    "buttonGradient": ["#006847", "#008a5e"],
+    "accentColor": "#008a5e"
+  },
+  "sections": [
+    {
+       "title": "Short catchy title",
+       "dateTime": "Full string",
+       "location": "...",
+       "instructor": "...",
+       "regLink": "...",
+       "copyA": "Detailed sales copy with **bold** highlights",
+       "copyB": "...",
+       "copyC": "..."
+    },
+    ...
+  ]
+}
+
+RAW INPUT:
+${raw}
+
+RETURN ONLY THE JSON OBJECT. NO MARKDOWN, NO PREAMBLE. JUST { ... }`;
+
   navigator.clipboard.writeText(prompt);
   document.getElementById('importBox').style.display = 'block';
   toast('AI Prompt copied! Paste into Gemini, then paste response below.');
 }
 
+let fridayDesign = null;
+
 function importAIResponse(){
   try {
-    const data = JSON.parse(gv('aiResponse'));
-    if(!Array.isArray(data)){toast('Invalid format: Expected an array');return;}
-    fridaySections = data.map(item => ({
-      id: Date.now() + Math.random(),
+    let rawText = gv('aiResponse').trim();
+    if(rawText.startsWith('```')) rawText = rawText.replace(/^```[a-z]*\n?/,'').replace(/\n?```$/,'').trim();
+    rawText = rawText.replace(/,\s*([\]}])/g, '$1');
+    
+    const data = JSON.parse(rawText);
+    const sections = Array.isArray(data) ? data : (data.sections || []);
+    
+    if(data.design) fridayDesign = data.design;
+    
+    fridaySections = sections.map((item, idx) => ({
+      id: Date.now() + Math.random() + idx,
       title: item.title||'',
       dateTime: item.dateTime||'',
       location: item.location||'',
@@ -743,9 +897,10 @@ function importAIResponse(){
       ]
     }));
     sortFridaySectionsByDate();
-    toast(`Imported ${data.length} sections with 3 marketing angles each!`);
+    toast(`Imported ${fridaySections.length} sections with advanced design!`);
   } catch(e) {
-    toast('Error parsing JSON. Make sure you copy/pasted only the JSON array.');
+    console.error('Import error:', e);
+    toast('Error parsing JSON. Check your input.');
   }
 }
 
@@ -753,8 +908,12 @@ function generateAIPromptTuesday(){
   const raw = gv('aiRawInputTuesday');
   if(!raw){toast('Paste some raw details first!');return;}
   const s = getSettings();
+  const org = ORGS[currentOrgId];
   const maxW = s.emailMaxW || 730;
-  const prompt = `You are an expert email marketing designer for a REALTOR association called "${s.orgName}". I need you to design a COMPLETE, DYNAMIC email layout for our Tuesday Affiliate Blast targeting our affiliates and sponsors.
+
+  const prompt = `You are an expert email marketing designer for ${org.name}. I need you to design a COMPLETE, DYNAMIC email layout for our Tuesday Affiliate Blast targeting our affiliates and sponsors.
+  
+  ${currentOrgId === 'wcr' ? 'CONTEXT: This is for the Women\'s Council of REALTORS®. The tone should be empowering, collaborative, and professional.' : 'CONTEXT: This is for the local REALTOR® association affiliate members.'}
 
 IMPORTANT: If I provide any URLs or links below, please visit/review them thoroughly and extract ALL relevant information (event details, pricing, dates, images, descriptions, sponsorship tiers, etc.) to use in the email content. Do NOT leave placeholders — fill in EVERY detail from the source material.
 
@@ -762,6 +921,12 @@ YOUR TASK: Design a rich, dynamic email layout using content blocks. Think like 
 
 RETURN A SINGLE JSON OBJECT (not an array) with this exact structure:
 {
+  "design": {
+    "fontFamily": "Outfit", // Choose from: Montserrat, Outfit, Playfair Display, Inter
+    "headerGradient": ["#002b4c", "#005a8c"], // 2 hex codes for a rich gradient
+    "buttonGradient": ["#005a8c", "#02aae1"],
+    "accentColor": "#02aae1"
+  },
   "subject": "Catchy email subject line",
   "preheader": "Preview text for email clients (max 200 chars)",
   "blocks": [
@@ -839,17 +1004,17 @@ RETURN ONLY THE JSON OBJECT. NO MARKDOWN BLOCK, NO BACKTICKS, NO PREAMBLE. JUST 
   toast('AI Prompt copied! Paste into Gemini, then paste response below.');
 }
 
+let tuesdayDesign = null;
+
 function importAIResponseTuesday(){
   try {
     let rawText = gv('aiResponseTuesday').trim();
-    // Strip markdown code blocks if present
     if(rawText.startsWith('```')) rawText = rawText.replace(/^```[a-z]*\n?/,'').replace(/\n?```$/,'').trim();
-    
-    // Attempt basic fix for trailing commas before parsing
     rawText = rawText.replace(/,\s*([\]}])/g, '$1');
     
     const data = JSON.parse(rawText);
 
+    if(data.design) tuesdayDesign = data.design;
     if(data.blocks && Array.isArray(data.blocks)){
       tuesdayBlocks = data.blocks;
       tuesdaySubject = data.subject || '';
@@ -877,36 +1042,309 @@ function importAIResponseTuesday(){
 }
 
 // ===================== FLYER GENERATOR =====================
-function generateFlyerPrompt() {
+function generateFlyerAIPrompt() {
   const link = gv('flyerLink');
-  const details = gv('flyerText');
-  const hasInstructor = document.getElementById('flyerInstructor').classList.contains('on');
+  const details = gv('flyerDetails');
+  if(!link && !details){ toast('Add some flyer details first!'); return; }
+  
+  const skipInstructor = document.getElementById('flyerNoInstructor').classList.contains('on');
+  const bioSpot = !skipInstructor ? "\n- LEAVE A CLEAR BOX/SPOT FOR: Instructor Name & Bio (I will fill this in manually later)" : "";
+  const org = ORGS[currentOrgId];
 
-  if(!details && !link) {
-    toast('Please enter some flyer details first.');
-    return;
-  }
+  const commonRules = `
+STRICT DESIGN RULES:
+1. ASPECT RATIO: 8.5 x 11 inches (Portrait).
+2. STYLE: "Swiss-Tech" Aesthetic. Clean, authoritative, and modern.
+3. TYPOGRAPHY: Use only bold, heavy-weight sans-serif fonts for titles. Clean medium-weight for body.
+4. BRANDING: Do NOT generate actual logos. Leave a clear 3-inch wide placeholder at the top for the "${org.name}" logo.
+5. CONTEXT: This is for ${org.name}. ${currentOrgId === 'wcr' ? "The flyer should feel empowering, leadership-focused, and professional." : "The flyer should feel authoritative, educational, and service-oriented."}
+6. NO PHOTOGRAPHIC PEOPLE: Only use the provided instructor headshot if available. Otherwise, use icons or abstract geometric human silhouettes.
+7. GRID ELEMENTS: Include subtle 6x6 dot grid patterns (plus signs) in the background of primary color blocks.
+8. DIVIDERS: Use curved diagonal "wave" lines to separate major sections (e.g., Hero Image to Title, Title to Body).
+9. HIGHLIGHTS: Place Price/Location/CE Credits in high-contrast "pill" shapes or rectangular boxes with thick borders.
+10. COLOR PALETTE: Dominant Navy Blue (#001F3F or similar), vibrant Red accents (#FF0000), and crisp White.
+`;
 
-  const prompt = `Create a strict image generation prompt for a flyer.
-ASPECT RATIO: 8.5 x 11 inches (portrait).
-STYLE: Modern corporate, clear and professional. Must feature "Swiss-tech" design elements (e.g., wavy lines, corner plus signs (+), neat geometric accents, grids). No generic borders. 
+  const prompt = `Create a strict, structured image generation prompt for 3 DIFFERENT 8.5x11 printable flyers based on the following details:
+EVENT/TITLE: ${link}
+DETAILS: ${details}
+${instructorSection}
 
-RULES:
-1. Do NOT generate any actual company logos. Leave a blank placeholder space for the organizational logo.
-2. Do NOT generate any photographic people or fake faces.
-${hasInstructor ? '3. Leave a distinct rectangular or circular placeholder frame intended for an instructor photo.' : ''}
+${commonRules}
 
-CONTENT TO INTEGRATE ONSCREEN:
-Link / Focus: ${link}
-Details: ${details}
+VARIATION 1: "Strict Swiss Grid"
+- Focus on mathematical alignment and the dot grid pattern.
+- High use of Navy Blue blocks and white text.
+- Very minimal, high-end technical feel.
 
-Ensure the design cleanly incorporates a title, main body area, and clear readable typography slots. 
-Return only the generated image prompt, nothing else.`;
+VARIATION 2: "Modern Wave"
+- Focus on the curved diagonal dividers and vibrant Red accents.
+- Larger, more dynamic hero area.
+- Energetic and bold, intended for high-engagement networking events.
+
+VARIATION 3: "Premium Corporate"
+- Focus on clean whitespace and elegant typography hierarchy.
+- Subtle background textures.
+- Professional, sophisticated, and balanced.
+
+RETURN THE 3 PROMPTS CLEARLY LABELED.`;
 
   navigator.clipboard.writeText(prompt);
   document.getElementById('flyerCodeBox').style.display = 'block';
   sv('flyerGeneratedCode', prompt);
-  toast('Prompt copied to clipboard! Paste it into your AI image generator.');
+  toast('3 Flyer Variations copied to clipboard!');
+}
+
+// ===================== SINGLE CLASS AI PROMPT WORKFLOW =====================
+
+let singleClassBlocks = []; // imported blocks per variation
+let singleClassData = null; // parsed AI response
+let singleClassImported = false;
+
+function toggleInstructorFields(){
+  const on = document.getElementById('singleInstructorToggle').classList.contains('on');
+  document.getElementById('singleInstructorFields').style.display = on ? 'block' : 'none';
+}
+
+function generateSingleClassAIPrompt(){
+  const raw = gv('singleRawInput');
+  if(!raw){ toast('Paste the class details first!'); return; }
+  
+  const s = getSettings();
+  const org = ORGS[currentOrgId];
+  const regLink = gv('regLink') || '';
+  const includeInstructor = document.getElementById('singleInstructorToggle').classList.contains('on');
+  const instructorName = includeInstructor ? gv('singleInstructorName') : '';
+  const instructorHeadshot = includeInstructor ? gv('singleInstructorHeadshot') : '';
+  const maxW = s.emailMaxW || 730;
+  const heroW = s.heroW || 730;
+  const heroH = s.heroH || 315;
+
+  const instructorSection = includeInstructor ? `
+INSTRUCTOR SECTION (REQUIRED):
+- Include an instructor block in each email variation
+- Instructor Name: "${instructorName}"
+${instructorHeadshot ? `- Instructor Headshot URL: "${instructorHeadshot}" — render as a circular image (150×150px recommended)` : "- No headshot provided — use a placeholder circle with the instructor's initials"}
+- WRITE A PROFESSIONAL BIO for this instructor (2-3 sentences). Research who "${instructorName}" is in the real estate education space. The bio should mention their expertise relevant to the class topic, any certifications, and their teaching approach. If you cannot find specific info, create a plausible, professional bio based on the class subject matter.
+- Place the instructor block AFTER the main description and BEFORE the CTA button
+- Layout: circular headshot on the left (or top on mobile), name + title + bio text on the right
+` : `
+INSTRUCTOR SECTION: Not required for this email.
+`;
+
+  const prompt = `You are an expert email marketing designer and copywriter for ${org.name} located at ${org.addr}.
+  
+  ${currentOrgId === 'wcr' ? 'CONTEXT: This is for the Women\'s Council of REALTORS®. Ensure the copy reflects their mission of professional networking and leadership development.' : ''}
+
+YOUR MISSION: Design a COMPLETE, high-end single-class promotional email blast. Use your "thinking" capabilities to research the topic deeply and provide rich, compelling marketing copy.
+
+### CRITICAL RULES:
+1. NO CITATIONS: Do not include any citations, references, or [Source] tags in your output.
+2. RESEARCH: Deeply understand the class topic to write copy that addresses realtors' specific pain points and opportunities.
+3. VISUALS: Each variation should feel distinct, using matching gradients and typography.
+
+### HERO IMAGE "TEASER" RULES:
+Generate prompts for a "Teaser" Style hero image (730×315px). Follow these styles:
+- SYMBOLIC OBJECTS: Use high-quality 3D or stylized icons like scales of justice (legal), golden keys (closing), global maps (international), or blueprints (development).
+- PATTERNED BACKGROUNDS: Incorporate Swiss-tech dot grids, topographic lines, or geometric rays.
+- BRANDED FEEL: Match the specific color theme of each variation.
+- STYLIZED ONLY: No realistic human faces. Use silhouettes or stylized illustrations if people are needed.
+- TEASER TEXT: Include prompt instructions for a clean central area where text like "PROFESSIONAL EDUCATION" or the class title could theoretically sit (but do not generate the text itself).
+
+RAW CLASS DETAILS:
+${raw}
+
+${regLink ? `REGISTRATION LINK: ${regLink}` : 'No registration link provided — use #'}
+
+${instructorSection}
+
+RETURN A JSON OBJECT (strictly valid) with this structure:
+{
+  "parsed": {
+    "title": "Short, catchy title",
+    "dateTime": "Readable date/time",
+    "cost": "Price",
+    "credits": "CE info",
+    "instructor": "Name",
+    "location": "Location",
+    "description": "Engaging summary"
+  },
+  "variations": [
+    {
+      "name": "A — Professional",
+      "fontFamily": "Montserrat", // Choose from: Montserrat, Outfit, Playfair Display, Inter
+      "headerGradient": ["#002b4c", "#005a8c"], // 2 hex codes for a rich gradient
+      "buttonGradient": ["#005a8c", "#02aae1"],
+      "accentColor": "#02aae1",
+      "subject": "Factual & Authoritative",
+      "preheader": "Max 200 chars",
+      "blocks": [
+        {"type":"hero", "width":${maxW}, "height":${heroH}, "imageUrl":"", "overlayText":"", "imagePrompts":[]},
+        {"type":"text", "heading":"Main Heading", "body":"Marketing copy with **bold**, *italic*, and standard markdown. Use \\n for line breaks."},
+        {"type":"specs", "heading":"At-A-Glance", "items":[{"label":"WHAT","value":"..."}, ...]},
+        ${includeInstructor ? `{"type":"instructor", "name":"${instructorName}", "headshotUrl":"${instructorHeadshot}", "bio":"Refined AI bio", "title":"Title"},` : ''}
+        {"type":"cta", "label":"Register Now", "url":"${regLink || '#'}"}
+      ]
+    },
+    { "name": "B — Energetic", "fontFamily": "Outfit", "headerGradient": ["#8e24aa", "#5e35b1"], "buttonGradient": ["#5e35b1", "#3949ab"], "accentColor": "#3949ab", "subject": "High FOMO", "preheader": "...", "blocks": [...] },
+    { "name": "C — Urgency", "fontFamily": "Playfair Display", "headerGradient": ["#c62828", "#b71c1c"], "buttonGradient": ["#b71c1c", "#880e4f"], "accentColor": "#880e4f", "subject": "Last Chance", "preheader": "...", "blocks": [...] }
+  ],
+  "heroImagePrompts": [
+    "Variation A Prompt: [Teaser style details]...",
+    "Variation B Prompt: [Thematic graphics]...",
+    "Variation C Prompt: [Abstract urgency]..."
+  ]
+}`;
+
+  navigator.clipboard.writeText(prompt);
+  document.getElementById('singleImportBox').style.display = 'block';
+  document.getElementById('singlePromptPreviewBox').style.display = 'block';
+  document.getElementById('singlePromptPreview').textContent = prompt;
+  toast('AI Prompt copied to clipboard! Paste into Gemini or ChatGPT, then paste the response below.');
+}
+
+function importSingleClassAIResponse(){
+  try {
+    let rawText = gv('singleAIResponse').trim();
+    if(rawText.startsWith('```')) rawText = rawText.replace(/^```[a-z]*\n?/,'').replace(/\n?```$/,'').trim();
+    rawText = rawText.replace(/,\s*([\]}])/g, '$1');
+    
+    const data = JSON.parse(rawText);
+    singleClassData = data;
+    singleClassImported = true;
+
+    // Show hero image prompts
+    if(data.heroImagePrompts && data.heroImagePrompts.length > 0){
+      const box = document.getElementById('singleHeroPromptsBox');
+      const list = document.getElementById('singleHeroPromptsList');
+      box.style.display = 'block';
+      list.innerHTML = data.heroImagePrompts.map((p, i) => `
+        <div style="background:var(--bg);border:1px solid var(--border);border-radius:8px;padding:10px;margin-bottom:8px">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px">
+            <span style="font-size:11px;font-weight:700;color:var(--accent2)">Prompt ${i+1} (${['Professional','Energetic','Urgency'][i] || 'Variation'})</span>
+            <button class="btn-sm" onclick="navigator.clipboard.writeText(singleClassData.heroImagePrompts[${i}]);toast('Hero prompt ${i+1} copied!')" style="font-size:10px;padding:3px 8px">📋 Copy</button>
+          </div>
+          <p style="font-size:11px;color:var(--text2);line-height:1.4;margin:0">${esc(p)}</p>
+        </div>
+      `).join('');
+    }
+
+    // Now generate the email variations
+    const s = getSettings();
+    _genSettings = s;
+
+    const container = document.getElementById('tabContent');
+    container.innerHTML = '';
+
+    if(data.variations && data.variations.length > 0){
+      _genVariations = data.variations.map(v => ({
+        name: v.name,
+        tone: v.tone,
+        colorA: v.accentColor || s.c1a,
+        colorB: v.accentColor || s.c1b
+      }));
+      _genPreheaders = data.variations.map(v => v.preheader || '');
+
+      data.variations.forEach((v, i) => {
+        const blocks = v.blocks || [];
+        // Render instructor blocks if present
+        const processedBlocks = blocks.map(b => {
+          if(b.type === 'instructor') return b; // will be handled by renderer
+          return b;
+        });
+        
+        const emailHtml = generateDynamicEmailHTML(
+          processedBlocks, s, 
+          v.accentColor || s.c1a, 
+          data.parsed?.title || 'Class Announcement',
+          `Hi ${s.mergeTag} — ${v.preheader || ''}`,
+          v // Pass variation object for font/gradient support
+        );
+
+        const panel = document.createElement('div');
+        panel.className = 'tab-panel' + (i === 0 ? ' active' : '');
+        panel.id = 'panel-' + i;
+        panel.innerHTML = `
+          <div class="output-section">
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px">
+              <div style="background:rgba(255,255,255,0.03);padding:10px;border-radius:8px">
+                <span style="font-size:10px;text-transform:uppercase;color:var(--text2)">Selected Font</span>
+                <div style="font-weight:700;color:var(--accent2)">${v.fontFamily || 'Default'}</div>
+              </div>
+              <div style="background:rgba(255,255,255,0.03);padding:10px;border-radius:8px">
+                <span style="font-size:10px;text-transform:uppercase;color:var(--text2)">Color Theme</span>
+                <div style="display:flex;gap:4px;margin-top:2px">
+                  <div style="width:16px;height:16px;border-radius:50%;background:${(v.headerGradient||[])[0]||'#ccc'}"></div>
+                  <div style="width:16px;height:16px;border-radius:50%;background:${(v.headerGradient||[])[1]||'#ccc'}"></div>
+                </div>
+              </div>
+            </div>
+            
+            <div class="form-group" style="margin-bottom:16px">
+              <label style="font-size:11px;color:var(--accent2)">🔗 Hero Image URL (Paste here after generating)</label>
+              <input type="url" id="hero-url-${i}" placeholder="https://... (URL from your image host)" oninput="updateHeroUrl(${i}, this.value)">
+            </div>
+
+            <div class="output-label">📝 Subject Line <button class="copy-btn" onclick="copyText('subj-${i}')">Copy</button></div>
+            <div class="output-box" id="subj-${i}">${escHtml(v.subject || '')}</div>
+          </div>
+          <div class="output-section">
+            <div class="output-label">📝 Preheader Text <button class="copy-btn" onclick="copyText('pre-${i}')">Copy</button></div>
+            <div class="output-box" id="pre-${i}">${escHtml(v.preheader || '')}</div>
+          </div>
+          <div class="output-section">
+            <div class="output-label">👁️ Email Preview</div>
+            <iframe class="preview-frame" id="frame-${i}" sandbox="allow-same-origin"></iframe>
+          </div>
+          <div class="output-section">
+            <div class="output-label">📋 Raw HTML Code <button class="copy-btn" onclick="copyText('code-${i}')">Copy</button></div>
+            <div class="output-box" id="code-${i}" style="max-height:400px">${escHtml(emailHtml)}</div>
+          </div>`;
+        container.appendChild(panel);
+
+        setTimeout(() => {
+          const frame = document.getElementById('frame-' + i);
+          if(frame){
+            const doc = frame.contentDocument || frame.contentWindow.document;
+            doc.open(); doc.write(emailHtml); doc.close();
+          }
+        }, 50);
+      });
+
+      // Show output tabs for A/B/C
+      document.getElementById('composerTabBtn').style.display = 'none';
+    }
+
+    document.getElementById('emptyState').style.display = 'none';
+    document.getElementById('outputArea').style.display = 'block';
+    switchTab(0, document.querySelectorAll('.tab')[0]);
+    toast(`Imported ${data.variations?.length || 0} email variations with hero prompts!`);
+  } catch(e) {
+    console.error('Import error:', e);
+    toast('Error parsing JSON: ' + e.message + '. Make sure you pasted only the JSON.');
+  }
+}
+
+// Handle "instructor" block type in dynamic renderer
+function renderInstructorBlock(block, s){
+  const headshotHtml = block.headshotUrl 
+    ? `<img src="${block.headshotUrl}" width="120" height="120" style="width:120px;height:120px;border-radius:50%;display:block;object-fit:cover;border:3px solid #e0e0e0" alt="${block.name}">`
+    : `<div style="width:120px;height:120px;border-radius:50%;background:linear-gradient(135deg,#667eea,#764ba2);display:flex;align-items:center;justify-content:center;color:#fff;font-size:36px;font-weight:800">${(block.name||'?').split(' ').map(w=>w[0]).join('').substring(0,2)}</div>`;
+  
+  return `<tr><td class="section-inner" style="padding:20px 32px">
+    <table width="100%" cellpadding="0" cellspacing="0" style="background:#f8f9fa;border-radius:8px;overflow:hidden">
+      <tr>
+        <td style="padding:20px;width:140px;vertical-align:top;text-align:center">
+          ${headshotHtml}
+        </td>
+        <td style="padding:20px 20px 20px 0;vertical-align:top">
+          <p style="margin:0 0 4px;font-size:18px;font-weight:800;color:#333">${block.name || 'Instructor'}</p>
+          ${block.title ? `<p style="margin:0 0 8px;font-size:13px;font-weight:600;color:#666;text-transform:uppercase;letter-spacing:0.5px">${block.title}</p>` : ''}
+          <p style="margin:0;font-size:14px;line-height:1.5;color:#444">${block.bio || ''}</p>
+        </td>
+      </tr>
+    </table>
+  </td></tr>`;
 }
 
 // ===================== EMAIL GENERATION =====================
@@ -915,39 +1353,24 @@ function generateAll(){
   _genSettings = s;
   
   if(currentMode === 'single') {
-    // sync link inputs
-    document.querySelectorAll('#singleModeFields .link-repeater-item input').forEach((inp,i)=>{
-      const idx=Math.floor(i/2);const field=i%2===0?'label':'url';
-      if(additionalLinks[idx])additionalLinks[idx][field]=inp.value;
-    });
-
-    const data={
-      title:gv('eventTitle'),dateTime:gv('eventDateTime'),instructor:gv('instructor'),
-      cost:gv('cost'),credits:gv('ceCredits'),regLink:gv('regLink'),
-      description:gv('description'),links:[...additionalLinks]
-    };
-
-    if(!data.title){toast('Please enter an event title');return;}
-
-    const variations=[
-      {name:'A — Professional',tone:'professional',colorA:s.c1a,colorB:s.c1b,badge:'#008080'},
-      {name:'B — Energetic',tone:'energetic',colorA:s.c2a,colorB:s.c2b,badge:'#1a237e'},
-      {name:'C — Urgency',tone:'urgency',colorA:s.c3a,colorB:s.c3b,badge:'#c62828'}
-    ];
-
-    _genData = data;
-    _genVariations = variations;
-    _genPreheaders = variations.map(v => generatePreheader(data, v, s));
-
-    const container=document.getElementById('tabContent');
-    container.innerHTML='';
-
-    variations.forEach((v,i)=>{
-      const preheader = _genPreheaders[i];
-      const emailHtml = generateEmailHTML(data, v, s, preheader, '');
-      const heroPrompt = generateHeroPrompt(data, v, s);
-      renderVariationTab(i, v, preheader, emailHtml, heroPrompt, container);
-    });
+    // Check if AI response was imported
+    if(singleClassImported && singleClassData){
+      // Already rendered via importSingleClassAIResponse — just show it
+      document.getElementById('emptyState').style.display='none';
+      document.getElementById('outputArea').style.display='block';
+      switchTab(0, document.querySelectorAll('.tab')[0]);
+      toast('Showing imported AI variations!');
+      return;
+    }
+    
+    // Fallback: if raw input exists but no import yet, prompt user
+    const raw = gv('singleRawInput');
+    if(raw) {
+      toast('Click "Generate AI Prompt" first, then paste the AI response and import it.');
+      return;
+    }
+    toast('Paste class details and use the AI prompt workflow to generate emails.');
+    return;
     
     } else if (currentMode === 'tuesday' && tuesdayBlocksImported && tuesdayBlocks.length > 0) {
     // TUESDAY BLOCK-BASED MODE
@@ -955,7 +1378,7 @@ function generateAll(){
     const hTitle = gv('tuesdayHeaderTitle') || 'Upcoming Affiliate Opportunities';
     const preText = gv('tuesdayIntro') || '';
     
-    const emailHtml = generateDynamicEmailHTML(tuesdayBlocks, s, hColor, hTitle, preText);
+    const emailHtml = generateDynamicEmailHTML(tuesdayBlocks, s, hColor, hTitle, preText, tuesdayDesign);
     
     const container = document.getElementById('tabContent');
     container.innerHTML = '';
@@ -1011,7 +1434,7 @@ function generateAll(){
     container.innerHTML='';
     
     _genVariations.forEach((v, i) => {
-      const emailHtml = generateMultiSectionHTML(_genData, v, s, isTuesday);
+      const emailHtml = generateMultiSectionHTML(_genData, v, s, isTuesday, false, (isTuesday ? tuesdayDesign : fridayDesign));
       renderVariationTab(i, v, (isTuesday ? "Tuesday Update" : "Friday Update"), emailHtml, "Prompt not applicable for multi-section", container);
     });
     
@@ -1093,12 +1516,12 @@ function pickVar(secId, varIdx, btn, isTuesday){
   updateComposerPreview(isTuesday);
 }
 
-function updateComposerPreview(isTuesday){
-  const html = generateMultiSectionHTML(_genData, null, _genSettings, isTuesday, true);
-  document.getElementById('composerCode').textContent = html;
-  const frame = document.getElementById('composerFrame');
-  const doc = frame.contentDocument || frame.contentWindow.document;
-  doc.open(); doc.write(html); doc.close();
+function updateComposerPreview(isTuesday = false){
+  const emailHtml = generateMultiSectionHTML(_genData, null, _genSettings, isTuesday, true, (isTuesday ? tuesdayDesign : fridayDesign));
+  const frame=document.getElementById('composerPreviewFrame');
+  const doc=frame.contentDocument||frame.contentWindow.document;
+  doc.open();doc.write(emailHtml);doc.close();
+  sv('composerCodeBox', emailHtml);
 }
 
 // Apply a hosted hero image URL to a specific variation
@@ -1116,6 +1539,28 @@ function applyHeroImage(idx) {
   doc.open(); doc.write(emailHtml); doc.close();
 
   toast('Hero image applied to Variation ' + ['A','B','C'][idx] + '!');
+}
+
+function updateHeroUrl(idx, url){
+  if(!singleClassData || !singleClassData.variations) return;
+  singleClassData.variations[idx].heroImageUrl = url;
+  
+  const v = singleClassData.variations[idx];
+  const s = getSettings();
+  const processedBlocks = v.blocks || [];
+  
+  const emailHtml = generateDynamicEmailHTML(
+    processedBlocks, s, 
+    v.accentColor || s.c1a, 
+    singleClassData.parsed?.title || 'Class Announcement',
+    `Hi ${s.mergeTag} — ${v.preheader || ''}`,
+    v
+  );
+
+  document.getElementById('code-' + idx).textContent = emailHtml;
+  const frame = document.getElementById('frame-' + idx);
+  const doc = frame.contentDocument || frame.contentWindow.document;
+  doc.open(); doc.write(emailHtml); doc.close();
 }
 
 // ===================== PREHEADER =====================
@@ -1151,6 +1596,7 @@ function mdToHtml(text) {
   return text
     .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
     .replace(/\*(.*?)\*/g, '<em>$1</em>')
+    .replace(/\[color:(#[0-9a-fA-F]{6})\](.*?)\[\/color\]/g, '<span style="color:$1">$2</span>')
     .replace(/^\* (.*?)$/gm, '&bull; $1')
     .split('\n').join('<br>');
 }
@@ -1217,10 +1663,16 @@ function generateLearnBlock(objectives,heading,v){
 }
 
 // ===================== MULTI-SECTION HTML (FRIDAY & TUESDAY) =====================
-function generateMultiSectionHTML(data, v, s, isTuesday = false, isComposer = false){
-  const hColor = isTuesday ? (gv('tuesdayHeaderCol') || '#02aae1') : (gv('fridayHeaderCol') || '#004a32');
+function generateMultiSectionHTML(data, v, s, isTuesday = false, isComposer = false, design = null){
+  const org = ORGS[currentOrgId];
+  const d = design || (isTuesday ? tuesdayDesign : fridayDesign) || {};
+  const hColorStr = isTuesday ? (gv('tuesdayHeaderCol') || '#02aae1') : (gv('fridayHeaderCol') || '#004a32');
   const hTitle = isTuesday ? (gv('tuesdayHeaderTitle') || 'Upcoming Affiliate Opportunities') : (gv('fridayHeaderTitle') || 'Upcoming at BER');
   const preText = isTuesday ? (gv('tuesdayIntro') || '') : (gv('fridayIntro') || '');
+  
+  const fontName = d.fontFamily || 'Montserrat';
+  const hGrad = d.headerGradient || [hColorStr, hColorStr];
+  const btnGrad = d.buttonGradient || [hGrad[0], hGrad[1]];
 
   const sectionsHtml = data.sections.map((sec, idx) => {
     let activeV = v;
@@ -1244,11 +1696,20 @@ function generateMultiSectionHTML(data, v, s, isTuesday = false, isComposer = fa
         if(l.url) {
           extraBtnsHtml += `
           <tr><td align="center" style="padding:4px 0">
+            <!--[if mso]>
+            <v:roundrect xmlns:v="urn:schemas-microsoft-com:vml" xmlns:w="urn:schemas-microsoft-com:office:word" href="${l.url}" style="height:36px;v-text-anchor:middle;width:180px;" arcsize="50%" stroke="f" fill="t">
+              <v:fill type="gradient" color="${btnGrad[0]}" color2="${btnGrad[1]}" />
+              <w:anchorlock/>
+              <center style="color:#ffffff;font-family:sans-serif;font-size:14px;font-weight:bold;">${l.label||'Learn More'}</center>
+            </v:roundrect>
+            <![endif]-->
+            <!--[if !mso]><!-->
             <table cellpadding="0" cellspacing="0" style="margin:0 auto">
-              <tr><td align="center" style="border:2px solid ${themeColor};border-radius:50px;padding:8px 30px">
-                <a href="${l.url}" target="_blank" style="color:${themeColor};text-decoration:none;font-weight:700;font-size:14px;display:block">${l.label||'Learn More'}</a>
+              <tr><td align="center" style="background:${btnGrad[0]};background:linear-gradient(135deg, ${btnGrad[0]} 0%, ${btnGrad[1]} 100%);border-radius:50px;padding:8px 30px">
+                <a href="${l.url}" target="_blank" style="color:#ffffff;text-decoration:none;font-weight:700;font-size:14px;display:block">${l.label||'Learn More'}</a>
               </td></tr>
             </table>
+            <!--<![endif]-->
           </td></tr>`;
         }
       });
@@ -1278,11 +1739,20 @@ function generateMultiSectionHTML(data, v, s, isTuesday = false, isComposer = fa
         </table>
         <table width="100%" cellpadding="0" cellspacing="0">
           <tr><td align="center" style="padding:8px 0 12px">
+            <!--[if mso]>
+            <v:roundrect xmlns:v="urn:schemas-microsoft-com:vml" xmlns:w="urn:schemas-microsoft-com:office:word" href="${sec.regLink||'#'}" style="height:48px;v-text-anchor:middle;width:240px;" arcsize="50%" stroke="f" fill="t">
+              <v:fill type="gradient" color="${btnGrad[0]}" color2="${btnGrad[1]}" />
+              <w:anchorlock/>
+              <center style="color:#ffffff;font-family:sans-serif;font-size:16px;font-weight:bold;">Register Here</center>
+            </v:roundrect>
+            <![endif]-->
+            <!--[if !mso]><!-->
             <table cellpadding="0" cellspacing="0" style="margin:0 auto">
-              <tr><td align="center" style="background-color:${themeColor};border-radius:50px;padding:14px 40px">
+              <tr><td align="center" style="background:${btnGrad[0]};background:linear-gradient(135deg, ${btnGrad[0]} 0%, ${btnGrad[1]} 100%);border-radius:50px;padding:14px 40px">
                 <a href="${sec.regLink||'#'}" target="_blank" style="color:#ffffff;text-decoration:none;font-weight:800;font-size:16px;display:block">Register Here</a>
               </td></tr>
             </table>
+            <!--<![endif]-->
           </td></tr>
           ${extraBtnsHtml}
         </table>
@@ -1290,34 +1760,62 @@ function generateMultiSectionHTML(data, v, s, isTuesday = false, isComposer = fa
     </table>`;
   }).join('');
 
-  return `
+  return `<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link href="https://fonts.googleapis.com/css2?family=${fontName.replace(/ /g,'+')}:wght@400;700;800&display=swap" rel="stylesheet">
 <style>
+  body { font-family: '${fontName}', 'Helvetica Neue', Helvetica, Arial, sans-serif; -webkit-font-smoothing: antialiased; }
   @media only screen and (max-width: 600px) {
     .content-table { width: 100% !important; }
     .header-cell { padding: 22px 15px !important; }
     .section-container { padding: 20px 15px 0 !important; }
     .section-inner { padding: 0 15px !important; }
     .intro-box { width: 95% !important; }
+    .header-text { font-size: 26px !important; }
   }
 </style>
+<!--[if mso]>
+<style type="text/css">
+  body, table, td, p, a { font-family: Helvetica, Arial, sans-serif !important; }
+</style>
+<![endif]-->
+</head>
+<body style="margin:0;padding:0;background-color:#f4f7f9;font-family:'${fontName}', Helvetica, Arial, sans-serif">
 <table width="100%" cellpadding="0" cellspacing="0" border="0" class="content-table" style="width:100%;max-width:${s.emailMaxW}px;background-color:#ffffff;margin:0 auto;table-layout:fixed">
-  <tr><td align="center" style="background-color:${hColor};padding:22px 0;color:#ffffff">
+  <!-- Logo Row -->
+  <tr><td align="center" style="padding:20px 0;background-color:#ffffff">
+    <img src="${org.logo}" height="50" style="height:50px;width:auto;display:block" alt="${org.name}">
+  </td></tr>
+  <tr><td align="center" style="background:${hGrad[0]};background:linear-gradient(135deg, ${hGrad[0]} 0%, ${hGrad[1]} 100%);padding:40px 0;color:#ffffff">
+    <!--[if mso]>
+    <v:rect xmlns:v="urn:schemas-microsoft-com:vml" fill="true" stroke="false" style="width:${s.emailMaxW}px;height:120px;">
+    <v:fill type="gradient" color="${hGrad[0]}" color2="${hGrad[1]}" angle="135" />
+    <v:textbox inset="0,0,0,0">
+    <![endif]-->
     <div style="padding:0 24px">
-      <p style="margin:0;font-size:24px;font-weight:800;text-transform:uppercase;letter-spacing:1px">${hTitle}</p>
+      <p class="header-text" style="margin:0;font-size:32px;font-weight:900;text-transform:uppercase;letter-spacing:1.5px;text-shadow:0 2px 10px rgba(0,0,0,0.2)">${hTitle}</p>
       ${preText ? `
-      <div class="intro-box" style="margin:10px auto 0;width:90%;max-width:600px;border-top:1px solid rgba(255,255,255,0.4);padding-top:10px;font-size:14px;opacity:0.9;line-height:1.4">
+      <div class="intro-box" style="margin:15px auto 0;width:90%;max-width:600px;border-top:1px solid rgba(255,255,255,0.3);padding-top:15px;font-size:15px;opacity:0.95;line-height:1.5;font-weight:500">
         ${preText}
       </div>` : ''}
     </div>
+    <!--[if mso]>
+    </v:textbox></v:rect>
+    <![endif]-->
   </td></tr>
   <tr><td class="section-container" style="padding:24px 0 0">
     <div style="width:100%;max-width:${s.emailMaxW}px;margin:0 auto">
       ${sectionsHtml}
     </div>
   </td></tr>
-  <tr><td style="padding:0 24px 10px;background-color:#ffffff;text-align:center;font-size:12px;color:#999999">
+  <tr><td style="padding:40px 24px 30px;background-color:#ffffff;text-align:center;font-size:12px;color:#999999;border-top:1px solid #eeeeee">
+    <p style="margin:0">© ${new Date().getFullYear()} ${s.orgName}</p>
+    <p style="margin:5px 0 0">${s.orgAddr}</p>
   </td></tr>
-</table>`.trim();
+</table>
+</body></html>`.trim();
 }
 
 

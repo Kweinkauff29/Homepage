@@ -74,17 +74,26 @@ input[type="color"]{-webkit-appearance:none;appearance:none;width:38px;height:38
 .toggle.on::after{left:22px}
 .toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(100px);background:var(--accent);color:#fff;padding:10px 24px;border-radius:8px;font-size:13px;font-weight:600;z-index:300;transition:.3s;opacity:0}
 .toast.show{transform:translateX(-50%) translateY(0);opacity:1}
-.variation-badge{display:inline-block;padding:3px 10px;border-radius:20px;font-size:11px;font-weight:700;margin-left:8px}
+.branding-toggle{display:flex;background:var(--surface2);border:1px solid var(--border);border-radius:20px;padding:2px;margin-right:12px}
+.branding-btn{border:none;background:transparent;color:var(--text2);padding:6px 14px;border-radius:18px;font-size:11px;font-weight:700;cursor:pointer;transition:.2s}
+.branding-btn.active{background:var(--accent);color:#fff;box-shadow:0 2px 6px rgba(0,191,165,.3)}
+.branding-btn:hover:not(.active){color:var(--text)}
 </style>
 </head>
 <body>
 
 <header class="app-header">
   <div>
-    <h1>✉️ Email Blast Generator</h1>
+    <h1 id="appTitle">✉️ Email Blast Generator</h1>
     <div class="subtitle">Generate 3 email variations with HTML, preheader & hero image prompts</div>
   </div>
-  <button class="settings-btn" onclick="toggleSettings()">⚙️ Settings & Rules</button>
+  <div style="display:flex;align-items:center">
+    <div class="branding-toggle">
+      <button class="branding-btn active" data-org="ber" onclick="setBranding('ber')">BER</button>
+      <button class="branding-btn" data-org="wcr" onclick="setBranding('wcr')">WCR</button>
+    </div>
+    <button class="settings-btn" onclick="toggleSettings()">⚙️ Settings & Rules</button>
+  </div>
 </header>
 
 <div class="main-grid">
@@ -102,20 +111,45 @@ input[type="color"]{-webkit-appearance:none;appearance:none;width:38px;height:38
     <div class="card-body">
       <!-- SINGLE CLASS MODE -->
       <div id="singleModeFields">
-        <div class="form-group"><label>Event Title</label><input type="text" id="eventTitle" placeholder='e.g. Be the Change – Fair Housing and You (2CE)'></div>
-        <div class="form-row">
-          <div class="form-group"><label>Date & Time</label><input type="text" id="eventDateTime" placeholder="April 6, 2026 1:00 PM - 3:00 PM (EDT)"></div>
-          <div class="form-group"><label>Instructor</label><input type="text" id="instructor" placeholder="Caroline Boland"></div>
-        </div>
-        <div class="form-row">
-          <div class="form-group"><label>Cost</label><input type="text" id="cost" placeholder='FREE, $5, etc.'></div>
-          <div class="form-group"><label>CE Credits</label><input type="text" id="ceCredits" placeholder="2CE"></div>
-        </div>
-        <div class="form-group"><label>Registration Link</label><input type="url" id="regLink" placeholder="https://..."></div>
-        <div class="form-group"><label>Description & Key Details</label><textarea id="description" placeholder="Paste the full event description here..."></textarea></div>
         <div class="form-group">
-          <label>Additional Links <button class="btn-sm" onclick="addLink()" style="margin-left:8px">+ Add Link</button></label>
-          <div id="linkRepeater"></div>
+          <label>📋 Paste All Class Details</label>
+          <textarea id="singleRawInput" style="min-height:160px;font-size:13px" placeholder="Paste everything here — title, description, date, time, price, CE credits, instructor name, location, registration link, etc. The AI will parse and structure it all."></textarea>
+          <p style="font-size:10px;color:var(--text2);margin-top:4px">Paste event title, description, date/time, price, CE credits, and any other details in one block. The AI will extract and parse everything.</p>
+        </div>
+        <div class="form-group"><label>Registration Link</label><input type="url" id="regLink" placeholder="https://registration-link..."></div>
+
+        <div style="background:rgba(0,191,165,0.08);padding:14px;border-radius:8px;border:1px solid rgba(0,191,165,0.25);margin-bottom:16px">
+          <div class="toggle-row" style="padding:0 0 8px">
+            <span style="font-size:13px;font-weight:600">👩‍🏫 Include Instructor Section?</span>
+            <button class="toggle" id="singleInstructorToggle" onclick="this.classList.toggle('on'); toggleInstructorFields()"></button>
+          </div>
+          <div id="singleInstructorFields" style="display:none">
+            <div class="form-group" style="margin-bottom:8px"><label>Instructor Name</label><input type="text" id="singleInstructorName" placeholder="e.g. Caroline Boland"></div>
+            <div class="form-group" style="margin-bottom:4px"><label>Instructor Headshot URL</label><input type="url" id="singleInstructorHeadshot" placeholder="https://... (paste hosted image URL)"></div>
+            <p style="font-size:10px;color:var(--text2);margin-top:2px">Upload the headshot to your image host first, then paste the URL here. The AI will generate the instructor bio automatically based on the name and class topic.</p>
+          </div>
+        </div>
+
+        <div style="background:rgba(124,77,255,0.1);padding:12px;border-radius:8px;border:1px solid var(--accent2);margin-bottom:16px">
+          <label style="color:var(--accent2)">✨ AI Email Blast Script Generator</label>
+          <p style="font-size:11px;color:var(--text2);margin-bottom:8px">Generates a comprehensive AI prompt you can paste into Gemini or ChatGPT. The AI will research the class, design 3 email variations with matching colors, write marketing copy, generate 3 hero image prompts, and optionally write an instructor bio.</p>
+          <button class="btn-sm" onclick="generateSingleClassAIPrompt()" style="width:100%;margin-top:4px;background:var(--accent2);color:#fff;border:none;padding:10px;font-size:13px;font-weight:700">🚀 Generate AI Prompt & Copy to Clipboard</button>
+        </div>
+
+        <div class="form-group" id="singleImportBox" style="display:none">
+          <label>Paste AI Response (JSON)</label>
+          <textarea id="singleAIResponse" style="min-height:100px;font-family:monospace;font-size:12px" placeholder='Paste the JSON response from Gemini/ChatGPT here...'></textarea>
+          <button class="btn-sm" onclick="importSingleClassAIResponse()" style="width:100%;margin-top:4px;background:var(--accent);color:#fff;border:none;padding:10px;font-weight:600">📥 Import AI Response & Generate Emails</button>
+        </div>
+
+        <div class="form-group" id="singlePromptPreviewBox" style="margin-top:16px;display:none">
+          <label>📋 Generated AI Prompt Preview <button class="btn-sm" onclick="copyText('singlePromptPreview')" style="margin-left:8px">Copy Again</button></label>
+          <div class="output-box" id="singlePromptPreview" style="min-height:120px;font-size:11px;max-height:300px"></div>
+        </div>
+
+        <div id="singleHeroPromptsBox" style="display:none;margin-bottom:16px">
+          <label style="color:var(--accent);font-weight:700;margin-bottom:8px;display:block">🖼️ Hero Image Prompts (730×315px — No Real People)</label>
+          <div id="singleHeroPromptsList"></div>
         </div>
       </div>
 
@@ -197,7 +231,20 @@ input[type="color"]{-webkit-appearance:none;appearance:none;width:38px;height:38
         <label>Flyer Generator Details</label>
         <div class="form-group"><label>Event / Link</label><input type="text" id="flyerLink" placeholder="Link or exact title to include..."></div>
         <div class="form-group"><label>Text & Details</label><textarea id="flyerText" placeholder="Paste the details that must be included on the flyer..."></textarea></div>
-        <div class="toggle-row"><span style="font-size:13px">Has Instructor Photo (Include Placeholder)</span><button class="toggle" id="flyerInstructor" onclick="this.classList.toggle('on')"></button></div>
+        <div class="toggle-row"><span style="font-size:13px">Include Instructor Section?</span><button class="toggle" id="flyerInstructorToggle" onclick="this.classList.toggle('on'); document.getElementById('flyerInstructorForm').style.display = this.classList.contains('on') ? 'block' : 'none'"></button></div>
+        
+        <div id="flyerInstructorForm" style="display:none; margin-top:12px; border-left:2px solid var(--accent2); padding-left:12px">
+          <div class="form-group"><label>Instructor Name</label><input type="text" id="flyerInstructorName" placeholder="Full name of the instructor..."></div>
+          <div class="form-group">
+            <label>Instructor Headshot URL</label>
+            <input type="text" id="flyerInstructorHeadshot" placeholder="https://... (paste hosted image URL)">
+            <p style="font-size:10px;color:var(--text2);margin-top:4px">Upload the headshot to your image host first, then paste the URL here. The AI will generate the instructor bio automatically based on the name and class topic.</p>
+          </div>
+          <div class="form-group">
+            <label>Instructor Bio (Optional)</label>
+            <textarea id="flyerInstructorBio" style="min-height:60px" placeholder="Leave blank for AI to generate based on name..."></textarea>
+          </div>
+        </div>
         
         <div style="background:rgba(124,77,255,0.1);padding:12px;border-radius:8px;border:1px solid var(--accent2);margin-top:16px">
           <label style="color:var(--accent2)">✨ Generate Flyer Prompt</label>
