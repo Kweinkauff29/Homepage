@@ -630,10 +630,14 @@ function generateDynamicEmailHTML(blocks, settings, headerColor, headerTitle, pr
   const s = settings || getSettings();
   const org = ORGS[currentOrgId];
   const hColor = headerColor || '#02aae1';
-  const hTitle = headerTitle || 'Upcoming Affiliate Opportunities';
   const v = variation || {};
+  const hTitle = v.headerTitle || headerTitle || 'Upcoming Affiliate Opportunities';
   const fontName = v.fontFamily || 'Montserrat';
   const hGrad = v.headerGradient || [hColor, hColor];
+  const introText = firstNonEmpty(v.headerSummary, preText);
+  const preheaderText = firstNonEmpty(v.preheader, preText);
+  const showHeaderLogo = v.logoPlacement !== 'none';
+  const headerEyebrow = firstNonEmpty(v.headerEyebrow);
   
   const blocksHtml = blocks.map(block => {
     switch(block.type){
@@ -672,11 +676,11 @@ function generateDynamicEmailHTML(blocks, settings, headerColor, headerTitle, pr
 <![endif]-->
 </head>
 <body style="margin:0;padding:20px 0;background-color:#f4f7f9;font-family:'${fontName}', Helvetica, Arial, sans-serif">
+<span style="display:none!important;font-size:1px;color:#f4f7f9;line-height:1px;max-height:0;max-width:0;opacity:0;overflow:hidden">${preheaderText}</span>
 <table width="100%" cellpadding="0" cellspacing="0" border="0" class="content-table" style="width:100%;max-width:${s.emailMaxW}px;background-color:#ffffff;margin:0 auto;table-layout:fixed;border-radius:12px;overflow:hidden;box-shadow:0 10px 30px rgba(0,0,0,0.05)">
-  <!-- Logo Row -->
-  <tr><td align="center" style="padding:20px 0;background-color:#ffffff">
+  ${showHeaderLogo ? `<tr><td align="center" style="padding:20px 0;background-color:#ffffff">
     <img src="${org.logo}" height="50" style="height:50px;width:auto;display:block" alt="${org.name}">
-  </td></tr>
+  </td></tr>` : ''}
   <!-- Header -->
   <tr><td align="center" style="background:${hGrad[0]};background:linear-gradient(135deg, ${hGrad[0]} 0%, ${hGrad[1]} 100%);">
     <!--[if mso]>
@@ -685,8 +689,9 @@ function generateDynamicEmailHTML(blocks, settings, headerColor, headerTitle, pr
     <v:textbox inset="0,0,0,0">
     <![endif]-->
     <div style="padding:40px 24px;color:#ffffff">
+      ${headerEyebrow ? `<p style="margin:0 0 10px;font-size:12px;font-weight:700;letter-spacing:2px;text-transform:uppercase;opacity:0.88">${headerEyebrow}</p>` : ''}
       <p class="header-text" style="margin:0;font-size:32px;font-weight:900;text-transform:uppercase;letter-spacing:1.5px;text-shadow:0 2px 10px rgba(0,0,0,0.2)">${hTitle}</p>
-      ${preText ? `<div style="margin:15px auto 0;width:85%;border-top:1px solid rgba(255,255,255,0.3);padding-top:15px;font-size:15px;opacity:0.95;line-height:1.5;font-weight:500">${preText}</div>` : ''}
+      ${introText ? `<div style="margin:15px auto 0;width:85%;border-top:1px solid rgba(255,255,255,0.3);padding-top:15px;font-size:15px;opacity:0.95;line-height:1.5;font-weight:500">${introText}</div>` : ''}
     </div>
     <!--[if mso]>
     </v:textbox>
@@ -712,11 +717,15 @@ function renderHeroBlock(block, s, v){
   const h = block.height || 315;
   const url = block.imageUrl || v.heroImageUrl;
   if(url){
-    const imgTag = `<img src="${url}" width="${w}" style="width:100%;max-width:${w}px;height:auto;display:block" alt="${block.overlayText||'Hero Image'}">`;
+    const imgTag = `<img src="${url}" width="${w}" style="width:100%;max-width:${w}px;height:auto;display:block" alt="${block.altText||block.overlayText||'Hero Image'}">`;
     const linked = block.link ? `<a href="${block.link}" target="_blank" style="display:block">${imgTag}</a>` : imgTag;
     return `<tr><td style="padding:0">${linked}</td></tr>`;
   }
   const g = v.headerGradient || ['#02aae1','#004a8f'];
+  const badges = (block.detailBadges || []).filter(Boolean).slice(0, 4);
+  const badgesHtml = badges.length ? `<div style="display:flex;flex-wrap:wrap;justify-content:center;gap:8px;margin:16px 0 0">
+    ${badges.map(item => `<span style="display:inline-block;padding:6px 12px;border-radius:999px;background:rgba(255,255,255,0.16);border:1px solid rgba(255,255,255,0.24);font-size:11px;font-weight:700;letter-spacing:0.4px">${escHtml(item)}</span>`).join('')}
+  </div>` : '';
   return `<tr><td style="background:${g[0]};background:linear-gradient(135deg,${g[0]},${g[1]});text-align:center;padding:60px 24px;color:#ffffff">
     <!--[if mso]>
     <v:rect xmlns:v="urn:schemas-microsoft-com:vml" fill="true" stroke="false" style="width:${s.emailMaxW}px;height:200px;">
@@ -725,7 +734,8 @@ function renderHeroBlock(block, s, v){
     <![endif]-->
     <div style="padding:40px 0">
       <p style="font-size:24px;font-weight:800;margin:0">${block.overlayText||'[Hero Image Placeholder]'}</p>
-      <p style="font-size:13px;margin:10px 0 0;opacity:.8;font-style:italic">Generate your teaser image and paste the URL above to see it here.</p>
+      ${badgesHtml}
+      <p style="font-size:13px;margin:10px 0 0;opacity:.8;font-style:italic">Generate your teaser image with the event details baked into the concept, then paste the hosted URL above to preview it here.</p>
     </div>
     <!--[if mso]>
     </v:textbox></v:rect>
@@ -734,8 +744,9 @@ function renderHeroBlock(block, s, v){
 }
 
 function renderTextBlock(block, s, v){
+  const headingColor = block.color || v.accentColor || '#333333';
   let html = '<tr><td class="section-inner" style="padding:24px 40px">';
-  if(block.heading) html += `<p style="margin:0 0 12px;font-size:22px;font-weight:800;color:#333333;line-height:1.2">${block.heading}</p>`;
+  if(block.heading) html += `<p style="margin:0 0 12px;font-size:22px;font-weight:800;color:${headingColor};line-height:1.2">${block.heading}</p>`;
   if(block.body) html += `<div style="font-size:16px;line-height:1.6;color:#444444">${mdToHtml(block.body)}</div>`;
   html += '</td></tr>';
   return html;
@@ -780,36 +791,38 @@ function renderCtaBlock(block, s, v){
   </td></tr>`;
 }
 
-function renderInfoCardBlock(block, s){
+function renderInfoCardBlock(block, s, v){
   const columns = block.columns || [];
   if(columns.length === 0) return '';
-  const bgColors = ['#f0f9f4', '#f0f4f9', '#f9f4f0', '#f4f0f9'];
+  const bgColors = [block.surfaceColor || v.surfaceColor || '#f8fafc', '#f4f7fb', '#f9f7f2', '#f5f3ff'];
+  const accentColors = normalizeColorArray(block.colors).length ? normalizeColorArray(block.colors) : (normalizeColorArray(v.supportingColors).length ? normalizeColorArray(v.supportingColors) : [v.accentColor || '#02aae1']);
   const cols = columns.map((col, i) =>
-    `<td class="info-col" width="${Math.floor(100/columns.length)}%" style="padding:16px;vertical-align:top;background-color:${bgColors[i%bgColors.length]};border-radius:4px">
-      ${col.heading ? `<p style="font-weight:800;font-size:16px;margin:0 0 8px;color:#333">${col.heading}</p>` : ''}
+    `<td class="info-col" width="${Math.floor(100/columns.length)}%" style="padding:16px;vertical-align:top;background-color:${col.backgroundColor || bgColors[i%bgColors.length]};border-radius:6px;border-top:4px solid ${col.accentColor || accentColors[i%accentColors.length]}">
+      ${col.heading ? `<p style="font-weight:800;font-size:16px;margin:0 0 8px;color:${col.accentColor || accentColors[i%accentColors.length]}">${col.heading}</p>` : ''}
       <div style="font-size:14px;line-height:1.5;color:#444">${mdToHtml(col.body||'')}</div>
     </td>`).join('');
   return `<tr><td style="padding:12px 28px"><table width="100%" cellpadding="0" cellspacing="8"><tr>${cols}</tr></table></td></tr>`;
 }
 
-function renderSpecsBlock(block, s){
-  const color = block.color || '#02aae1';
+function renderSpecsBlock(block, s, v){
+  const color = block.color || (v.supportingColors || [])[0] || v.accentColor || '#02aae1';
   let rows = (block.items||[]).map(item =>
     `<tr><td style="font-weight:700;padding:6px 12px;color:${color};font-size:14px;vertical-align:top;white-space:nowrap">${item.label}</td><td style="padding:6px 12px;font-size:14px;color:#333">${item.value}</td></tr>`
   ).join('');
   return `<tr><td style="padding:12px 32px">
-    ${block.heading ? `<p style="font-weight:800;font-size:18px;margin:0 0 10px;color:#333">${block.heading}</p>` : ''}
-    <table width="100%" cellpadding="0" cellspacing="0" style="border-left:4px solid ${color};background:#f9f9f9;border-radius:0 4px 4px 0">${rows}</table>
+    ${block.heading ? `<p style="font-weight:800;font-size:18px;margin:0 0 10px;color:${color}">${block.heading}</p>` : ''}
+    <table width="100%" cellpadding="0" cellspacing="0" style="border-left:4px solid ${color};background:${block.backgroundColor || v.surfaceColor || '#f9f9f9'};border-radius:0 4px 4px 0">${rows}</table>
   </td></tr>`;
 }
 
-function renderBulletListBlock(block, s){
+function renderBulletListBlock(block, s, v){
   const items = block.items || [];
   const numbered = block.listStyle === 'numbered';
   const tag = numbered ? 'ol' : 'ul';
+  const color = block.color || (v.supportingColors || [])[1] || v.accentColor || '#333';
   const listHtml = items.map(item => `<li style="margin-bottom:6px;font-size:14px;color:#333">${mdToHtml(item)}</li>`).join('');
   return `<tr><td style="padding:8px 32px">
-    ${block.heading ? `<p style="font-weight:700;font-size:16px;margin:0 0 8px;color:#333">${block.heading}</p>` : ''}
+    ${block.heading ? `<p style="font-weight:700;font-size:16px;margin:0 0 8px;color:${color}">${block.heading}</p>` : ''}
     <${tag} style="padding-left:20px;margin:0">${listHtml}</${tag}>
   </td></tr>`;
 }
@@ -1106,10 +1119,350 @@ function toggleInstructorFields(){
   document.getElementById('singleInstructorFields').style.display = on ? 'block' : 'none';
 }
 
+
+const SINGLE_CLASS_FONT_OPTIONS = [
+  'Montserrat',
+  'Outfit',
+  'Playfair Display',
+  'Inter',
+  'Manrope',
+  'DM Sans',
+  'Libre Baskerville',
+  'Space Grotesk'
+];
+
+const SINGLE_CLASS_THEME_OPTIONS = [
+  {name:'Coastal Authority', notes:'Atlantic blues, sea-glass teal, sharp editorial spacing', colors:['#0B3954','#087E8B','#F59E0B','#E0FBFC','#F8FAFC']},
+  {name:'Sunrise Momentum', notes:'Terracotta, amber, and warm sand with a high-energy sunrise feel', colors:['#8C1C13','#BF4342','#F79D65','#F5CDA7','#FFF7F0']},
+  {name:'Evergreen Leadership', notes:'Deep green, civic sage, and polished gold for confident credibility', colors:['#123524','#3E7C59','#A7C957','#F4C95D','#F6FBF7']},
+  {name:'Slate and Brass', notes:'Architectural slate, brass, and refined neutral panels', colors:['#243B53','#486581','#D9A441','#E5E7EB','#F8FAFC']},
+  {name:'Coral Energy', notes:'Coral, berry, and soft blush with strong movement', colors:['#A63A50','#F26A8D','#5F0F40','#F7CAD0','#FFF7FA']},
+  {name:'Civic Indigo', notes:'Indigo, electric blue, and gold for an institutional feel', colors:['#1F3C88','#5893D4','#F2C14E','#D9E2EC','#F7FAFF']},
+  {name:'Sand and Sage', notes:'Natural sand, sage, and clay for warm authority', colors:['#6B705C','#A5A58D','#CB997E','#FFE8D6','#FDFBF7']},
+  {name:'Luxe Noir', notes:'Near-black, graphite, and metallic gold with premium restraint', colors:['#111827','#374151','#D4AF37','#E5E7EB','#FAFAFA']}
+];
+
+function firstNonEmpty(){
+  for(let i=0;i<arguments.length;i++){
+    const value = arguments[i];
+    if(typeof value === 'string' && value.trim()) return value.trim();
+  }
+  return '';
+}
+
+function cloneJson(value){
+  return JSON.parse(JSON.stringify(value));
+}
+
+function normalizeStringArray(value){
+  if(Array.isArray(value)){
+    return value.map(item => typeof item === 'string' ? item.trim() : '').filter(Boolean);
+  }
+  if(typeof value === 'string' && value.trim()){
+    return value.split(/\n+|\u2022|;+/).map(item => item.trim()).filter(Boolean);
+  }
+  return [];
+}
+
+function normalizeColorArray(value){
+  return Array.isArray(value)
+    ? value.map(item => typeof item === 'string' ? item.trim() : '').filter(Boolean)
+    : [];
+}
+
+function findBlockIndex(blocks, type){
+  return (blocks || []).findIndex(block => block && block.type === type);
+}
+
+function insertBeforeCta(blocks, block){
+  const ctaIndex = findBlockIndex(blocks, 'cta');
+  blocks.splice(ctaIndex === -1 ? blocks.length : ctaIndex, 0, block);
+}
+
+function getSingleClassThemeGuide(){
+  return SINGLE_CLASS_THEME_OPTIONS.map((theme, index) =>
+    `${index + 1}. ${theme.name}: ${theme.notes}. Core colors ${theme.colors.join(', ')}`
+  ).join('\n');
+}
+
+function getSingleClassThemeFallback(index){
+  const theme = SINGLE_CLASS_THEME_OPTIONS[index % SINGLE_CLASS_THEME_OPTIONS.length];
+  return {
+    themeName: theme.name,
+    themeDescription: theme.notes,
+    headerGradient: [theme.colors[0], theme.colors[1]],
+    buttonGradient: [theme.colors[1], theme.colors[2]],
+    accentColor: theme.colors[2],
+    supportingColors: [theme.colors[1], theme.colors[2], theme.colors[3]],
+    surfaceColor: theme.colors[4]
+  };
+}
+
+function buildSingleClassDetailItems(parsed, variation){
+  const items = [];
+  const seen = new Set();
+  const add = (label, value) => {
+    const cleanLabel = firstNonEmpty(label).toUpperCase();
+    const cleanValue = firstNonEmpty(value);
+    if(!cleanLabel || !cleanValue || seen.has(cleanLabel)) return;
+    seen.add(cleanLabel);
+    items.push({label: cleanLabel, value: cleanValue});
+  };
+
+  (Array.isArray(parsed.eventDetails) ? parsed.eventDetails : []).forEach(item => {
+    add(item && item.label, item && item.value);
+  });
+
+  add('WHAT', firstNonEmpty(parsed.shortTitle, parsed.title));
+  add('WHEN', firstNonEmpty(parsed.dateTime, [firstNonEmpty(parsed.eventDate), firstNonEmpty(parsed.eventTime)].filter(Boolean).join(' | ')));
+  add('WHERE', firstNonEmpty(parsed.location));
+  add('COST', firstNonEmpty(parsed.cost));
+  add('CREDITS', firstNonEmpty(parsed.credits));
+  add('INSTRUCTOR', firstNonEmpty(parsed.instructor));
+  add('AUDIENCE', firstNonEmpty(variation && variation.audience, parsed.audience));
+
+  return items.slice(0, 8);
+}
+
+function buildSingleClassInfoColumns(parsed, variation){
+  const columns = [];
+  const push = (heading, body) => {
+    const cleanBody = firstNonEmpty(body);
+    if(cleanBody) columns.push({heading, body: cleanBody});
+  };
+
+  push('Professional Overview', firstNonEmpty(variation && variation.professionalOverview, parsed.professionalOverview, parsed.description));
+  push('Who Should Attend', firstNonEmpty(variation && variation.audience, parsed.audience));
+  push('Why It Matters Now', firstNonEmpty(variation && variation.whyAttend, parsed.whyAttend));
+
+  return columns.slice(0, 3);
+}
+
+function buildSingleClassTakeawayItems(parsed, variation){
+  const takeaways = normalizeStringArray(
+    (variation && variation.keyTakeaways) ||
+    parsed.keyTakeaways ||
+    parsed.learningOutcomes ||
+    parsed.takeaways
+  );
+
+  if(takeaways.length) return takeaways.slice(0, 6);
+
+  return [
+    'Understand the practical implications of this topic for active real estate professionals.',
+    'Leave with talking points, next steps, and client-facing value you can use immediately.',
+    'Identify the biggest risk areas, opportunities, and takeaways tied to this class topic.'
+  ];
+}
+
+function buildSingleClassHeroBadges(parsed){
+  return [
+    firstNonEmpty(parsed.dateTime),
+    firstNonEmpty(parsed.location),
+    firstNonEmpty(parsed.credits),
+    firstNonEmpty(parsed.cost)
+  ].filter(Boolean).slice(0, 4);
+}
+
+function buildSingleClassHeroPromptEntry(entry, variation, parsed, index){
+  const defaultTitle = `Variation ${String.fromCharCode(65 + index)} Hero Prompt`;
+  const source = entry || (variation && (variation.heroImagePrompt || variation.heroPrompt)) || null;
+
+  if(typeof source === 'string'){
+    return {title: defaultTitle, prompt: source};
+  }
+
+  if(source && typeof source === 'object'){
+    return {
+      title: firstNonEmpty(source.title, defaultTitle),
+      prompt: firstNonEmpty(source.prompt, source.text),
+      eventDetailsToFeature: normalizeStringArray(source.eventDetailsToFeature || source.eventDetails),
+      visualFocus: firstNonEmpty(source.visualFocus),
+      reservedTextAreas: normalizeStringArray(source.reservedTextAreas || source.reservedText),
+      altText: firstNonEmpty(source.altText)
+    };
+  }
+
+  return {
+    title: defaultTitle,
+    prompt: '',
+    eventDetailsToFeature: [],
+    visualFocus: '',
+    reservedTextAreas: [],
+    altText: ''
+  };
+}
+
+function buildSingleClassHeroPrompts(data){
+  const prompts = [];
+  const parsed = data.parsed || {};
+  const rootPrompts = Array.isArray(data.heroImagePrompts) ? data.heroImagePrompts : [];
+  const variations = Array.isArray(data.variations) ? data.variations : [];
+  const total = Math.max(rootPrompts.length, variations.length);
+
+  for(let i=0;i<total;i++){
+    const prompt = buildSingleClassHeroPromptEntry(rootPrompts[i], variations[i] || {}, parsed, i);
+    if(prompt.prompt) prompts.push(prompt);
+  }
+
+  return prompts;
+}
+
+function ensureSingleClassVariationBlocks(variation, parsed, options){
+  const index = options.index || 0;
+  const theme = getSingleClassThemeFallback(index);
+  const v = Object.assign({}, variation || {});
+
+  v.themeName = firstNonEmpty(v.themeName, theme.themeName);
+  v.themeDescription = firstNonEmpty(v.themeDescription, theme.themeDescription);
+  v.fontFamily = firstNonEmpty(v.fontFamily, SINGLE_CLASS_FONT_OPTIONS[index % SINGLE_CLASS_FONT_OPTIONS.length], 'Montserrat');
+
+  v.headerGradient = normalizeColorArray(v.headerGradient).slice(0, 2);
+  if(v.headerGradient.length < 2) v.headerGradient = theme.headerGradient.slice();
+
+  v.buttonGradient = normalizeColorArray(v.buttonGradient).slice(0, 2);
+  if(v.buttonGradient.length < 2) v.buttonGradient = theme.buttonGradient.slice();
+
+  v.supportingColors = normalizeColorArray(v.supportingColors);
+  if(!v.supportingColors.length) v.supportingColors = theme.supportingColors.slice();
+
+  v.accentColor = firstNonEmpty(v.accentColor, v.supportingColors[0], v.buttonGradient[0], theme.accentColor);
+  v.surfaceColor = firstNonEmpty(v.surfaceColor, theme.surfaceColor);
+  v.headerEyebrow = firstNonEmpty(v.headerEyebrow, parsed.credits ? `PROFESSIONAL EDUCATION | ${parsed.credits}` : 'PROFESSIONAL EDUCATION');
+  v.headerTitle = firstNonEmpty(v.headerTitle, parsed.shortTitle, parsed.title, 'Professional Education');
+  v.logoPlacement = firstNonEmpty(v.logoPlacement, 'none');
+  v.subject = firstNonEmpty(v.subject, parsed.title, v.headerTitle);
+  v.preheader = firstNonEmpty(v.preheader, parsed.description, parsed.professionalOverview);
+  v.heroImagePrompt = buildSingleClassHeroPromptEntry(v.heroImagePrompt || v.heroPrompt, v, parsed, index);
+
+  const blocks = Array.isArray(v.blocks) ? cloneJson(v.blocks) : [];
+  const detailItems = buildSingleClassDetailItems(parsed, v);
+  const infoColumns = buildSingleClassInfoColumns(parsed, v);
+  const takeaways = buildSingleClassTakeawayItems(parsed, v);
+  const heroBadges = buildSingleClassHeroBadges(parsed);
+  const ctaUrl = firstNonEmpty(options.regLink, parsed.registrationUrl, parsed.regLink, '#');
+
+  let heroIndex = findBlockIndex(blocks, 'hero');
+  if(heroIndex === -1){
+    blocks.unshift({type:'hero'});
+    heroIndex = 0;
+  }
+
+  const heroBlock = blocks[heroIndex];
+  heroBlock.width = heroBlock.width || options.maxW || 730;
+  heroBlock.height = heroBlock.height || options.heroH || 315;
+  heroBlock.overlayText = firstNonEmpty(heroBlock.overlayText, parsed.shortTitle, parsed.title, v.headerTitle);
+  heroBlock.altText = firstNonEmpty(heroBlock.altText, v.heroImagePrompt.altText, parsed.title, 'Event hero image');
+  heroBlock.detailBadges = Array.isArray(heroBlock.detailBadges) && heroBlock.detailBadges.length ? heroBlock.detailBadges : heroBadges;
+  heroBlock.imagePrompts = Array.isArray(heroBlock.imagePrompts) && heroBlock.imagePrompts.length
+    ? heroBlock.imagePrompts
+    : (v.heroImagePrompt.prompt ? [v.heroImagePrompt.prompt] : []);
+
+  const specsIndex = findBlockIndex(blocks, 'specs');
+  if(specsIndex === -1){
+    blocks.splice(heroIndex + 1, 0, {
+      type:'specs',
+      heading:'Event Details',
+      color:v.supportingColors[0] || v.accentColor,
+      items:detailItems
+    });
+  } else {
+    blocks[specsIndex].heading = firstNonEmpty(blocks[specsIndex].heading, 'Event Details');
+    blocks[specsIndex].color = firstNonEmpty(blocks[specsIndex].color, v.supportingColors[0], v.accentColor);
+    if(!Array.isArray(blocks[specsIndex].items) || !blocks[specsIndex].items.length){
+      blocks[specsIndex].items = detailItems;
+    }
+  }
+
+  const overviewBody = firstNonEmpty(v.professionalOverview, parsed.professionalOverview, parsed.description);
+  const textIndex = findBlockIndex(blocks, 'text');
+  if(textIndex === -1 && overviewBody){
+    insertBeforeCta(blocks, {
+      type:'text',
+      heading:'Professional Overview',
+      color:v.accentColor,
+      body:overviewBody
+    });
+  } else if(textIndex !== -1){
+    blocks[textIndex].heading = firstNonEmpty(blocks[textIndex].heading, 'Professional Overview');
+    blocks[textIndex].color = firstNonEmpty(blocks[textIndex].color, v.accentColor);
+    blocks[textIndex].body = firstNonEmpty(blocks[textIndex].body, overviewBody);
+  }
+
+  const infoCardIndex = findBlockIndex(blocks, 'infoCard');
+  if(infoCardIndex === -1 && infoColumns.length >= 2){
+    insertBeforeCta(blocks, {
+      type:'infoCard',
+      columns: infoColumns,
+      colors: v.supportingColors
+    });
+  } else if(infoCardIndex !== -1){
+    if(!Array.isArray(blocks[infoCardIndex].columns) || !blocks[infoCardIndex].columns.length){
+      blocks[infoCardIndex].columns = infoColumns;
+    }
+    if(!Array.isArray(blocks[infoCardIndex].colors) || !blocks[infoCardIndex].colors.length){
+      blocks[infoCardIndex].colors = v.supportingColors;
+    }
+  }
+
+  const bulletIndex = findBlockIndex(blocks, 'bulletList');
+  if(bulletIndex === -1){
+    insertBeforeCta(blocks, {
+      type:'bulletList',
+      heading:'Key Takeaways',
+      color:v.supportingColors[1] || v.accentColor,
+      items:takeaways,
+      listStyle:'bullet'
+    });
+  } else {
+    blocks[bulletIndex].heading = firstNonEmpty(blocks[bulletIndex].heading, 'Key Takeaways');
+    blocks[bulletIndex].color = firstNonEmpty(blocks[bulletIndex].color, v.supportingColors[1], v.accentColor);
+    if(!Array.isArray(blocks[bulletIndex].items) || !blocks[bulletIndex].items.length){
+      blocks[bulletIndex].items = takeaways;
+    }
+  }
+
+  if(options.includeInstructor){
+    const instructorIndex = findBlockIndex(blocks, 'instructor');
+    const instructorBlock = {
+      type:'instructor',
+      name:firstNonEmpty(options.instructorName, parsed.instructor, 'Instructor'),
+      headshotUrl:firstNonEmpty(options.instructorHeadshot),
+      title:firstNonEmpty(v.instructorTitle, parsed.instructorTitle, 'Instructor'),
+      bio:firstNonEmpty(v.instructorBio, parsed.instructorBio, parsed.professionalOverview)
+    };
+
+    if(instructorIndex === -1){
+      insertBeforeCta(blocks, instructorBlock);
+    } else {
+      blocks[instructorIndex] = Object.assign(instructorBlock, blocks[instructorIndex]);
+      blocks[instructorIndex].name = firstNonEmpty(blocks[instructorIndex].name, instructorBlock.name);
+      blocks[instructorIndex].headshotUrl = firstNonEmpty(blocks[instructorIndex].headshotUrl, instructorBlock.headshotUrl);
+      blocks[instructorIndex].title = firstNonEmpty(blocks[instructorIndex].title, instructorBlock.title);
+      blocks[instructorIndex].bio = firstNonEmpty(blocks[instructorIndex].bio, instructorBlock.bio);
+    }
+  }
+
+  const ctaIndex = findBlockIndex(blocks, 'cta');
+  if(ctaIndex === -1){
+    blocks.push({
+      type:'cta',
+      label:firstNonEmpty(v.ctaLabel, 'Reserve Your Seat'),
+      url:ctaUrl
+    });
+  } else {
+    blocks[ctaIndex].label = firstNonEmpty(blocks[ctaIndex].label, v.ctaLabel, 'Reserve Your Seat');
+    blocks[ctaIndex].url = firstNonEmpty(blocks[ctaIndex].url, ctaUrl);
+  }
+
+  v.blocks = blocks;
+  return v;
+}
+
 function generateSingleClassAIPrompt(){
   const raw = gv('singleRawInput');
   if(!raw){ toast('Paste the class details first!'); return; }
-  
+
   const s = getSettings();
   const org = ORGS[currentOrgId];
   const regLink = gv('regLink') || '';
@@ -1117,44 +1470,59 @@ function generateSingleClassAIPrompt(){
   const instructorName = includeInstructor ? gv('singleInstructorName') : '';
   const instructorHeadshot = includeInstructor ? gv('singleInstructorHeadshot') : '';
   const maxW = s.emailMaxW || 730;
-  const heroW = s.heroW || 730;
   const heroH = s.heroH || 315;
+  const fontGuide = SINGLE_CLASS_FONT_OPTIONS.join(', ');
+  const themeGuide = getSingleClassThemeGuide();
 
   const instructorSection = includeInstructor ? `
 INSTRUCTOR SECTION (REQUIRED):
-- Include an instructor block in each email variation
+- Include an instructor block in each email variation.
 - Instructor Name: "${instructorName}"
-${instructorHeadshot ? `- Instructor Headshot URL: "${instructorHeadshot}" — render as a circular image (150×150px recommended)` : "- No headshot provided — use a placeholder circle with the instructor's initials"}
-- WRITE A PROFESSIONAL BIO for this instructor (2-3 sentences). Research who "${instructorName}" is in the real estate education space. The bio should mention their expertise relevant to the class topic, any certifications, and their teaching approach. If you cannot find specific info, create a plausible, professional bio based on the class subject matter.
-- Place the instructor block AFTER the main description and BEFORE the CTA button
-- Layout: circular headshot on the left (or top on mobile), name + title + bio text on the right
+- Instructor Headshot URL: "${instructorHeadshot || 'Not provided - use a polished initials placeholder if needed'}"
+- Write a professional bio for this instructor (2-3 sentences). Research who "${instructorName}" is in the real estate education space. The bio should mention expertise relevant to the class topic, any certifications, and teaching approach. If specific info is not available, create a plausible, polished bio based on the class subject matter.
+- Place the instructor block after the main overview copy and before the CTA button.
+- Layout: circular headshot on the left (or top on mobile), name + title + bio text on the right.
 ` : `
 INSTRUCTOR SECTION: Not required for this email.
 `;
 
   const prompt = `You are an expert email marketing designer and copywriter for ${org.name} located at ${org.addr}.
-  
-  ${currentOrgId === 'wcr' ? 'CONTEXT: This is for the Women\'s Council of REALTORS®. Ensure the copy reflects their mission of professional networking and leadership development.' : ''}
 
-YOUR MISSION: Design a COMPLETE, high-end single-class promotional email blast. Use your "thinking" capabilities to research the topic deeply and provide rich, compelling marketing copy.
+${currentOrgId === 'wcr' ? 'CONTEXT: This is for the Women\'s Council of REALTORS. Ensure the copy reflects their mission of professional networking and leadership development.' : 'CONTEXT: This is for the local REALTOR association audience and should feel credible, professional, and genuinely useful.'}
+
+YOUR MISSION: Design a complete, high-end single-class promotional email blast. Use your thinking capabilities to research the topic deeply and provide rich, compelling marketing copy.
 
 ### CRITICAL RULES:
-1. NO CITATIONS: Do not include any citations, references, or [Source] tags in your output.
-2. RESEARCH: Deeply understand the class topic to write copy that addresses realtors' specific pain points and opportunities.
-3. VISUALS: Each variation should feel distinct, using matching gradients and typography.
+1. No citations: do not include citations, references, footnotes, or source tags.
+2. Research the class topic deeply enough to write for real estate professionals with specificity.
+3. Each variation should feel distinct through palette, typography direction, and layout emphasis.
+4. Every variation must include BOTH:
+   - a concrete event-details section with logistics and specifics
+   - a professional overview section that explains why the topic matters to agents, brokers, or affiliates right now
+5. Do NOT place the Bonita Estero REALTORS or WCR logo above the header. Use an editorial header with no logo row.
+6. Return more detail, not less. Write full sections, not thin placeholder copy.
+7. Make each variation feel like a finished campaign, not a quick mockup.
 
-### HERO IMAGE "TEASER" RULES:
-Generate prompts for a "Teaser" Style hero image (730×315px). Follow these styles:
-- SYMBOLIC OBJECTS: Use high-quality 3D or stylized icons like scales of justice (legal), golden keys (closing), global maps (international), or blueprints (development).
-- PATTERNED BACKGROUNDS: Incorporate Swiss-tech dot grids, topographic lines, or geometric rays.
-- BRANDED FEEL: Match the specific color theme of each variation.
-- STYLIZED ONLY: No realistic human faces. Use silhouettes or stylized illustrations if people are needed.
-- TEASER TEXT: Include prompt instructions for a clean central area where text like "PROFESSIONAL EDUCATION" or the class title could theoretically sit (but do not generate the text itself).
+### HERO IMAGE RULES:
+Generate one hero image prompt for each variation at ${maxW}x${heroH}px.
+- Each hero image prompt MUST visually reference the actual event details: topic, date/time, credits, location context, instructor expertise, and the main business outcome of the class.
+- Use symbolic objects, architectural forms, charts, contract details, map cues, legal motifs, negotiation cues, or market-specific visual devices tied to the class topic.
+- Match the specific color theme of each variation.
+- No realistic human faces. Stylized silhouettes or editorial illustration are acceptable only if they support the event topic.
+- Reserve clean text zones for: eyebrow/kicker, title, date-time strip, and CTA badge.
+- The prompt must describe the visual mood, composition, featured objects, and exactly which event details should appear as design cues.
+
+### FONT DIRECTIONS:
+Choose from: ${fontGuide}
+
+### THEME DIRECTIONS:
+Choose a distinct direction for each variation or intelligently adapt from this library:
+${themeGuide}
 
 RAW CLASS DETAILS:
 ${raw}
 
-${regLink ? `REGISTRATION LINK: ${regLink}` : 'No registration link provided — use #'}
+${regLink ? `REGISTRATION LINK: ${regLink}` : 'No registration link provided - use #'}
 
 ${instructorSection}
 
@@ -1162,39 +1530,89 @@ RETURN A JSON OBJECT (strictly valid) with this structure:
 {
   "parsed": {
     "title": "Short, catchy title",
+    "shortTitle": "Condensed hero-friendly title",
     "dateTime": "Readable date/time",
+    "eventDate": "Readable event date",
+    "eventTime": "Readable event time",
     "cost": "Price",
     "credits": "CE info",
     "instructor": "Name",
     "location": "Location",
-    "description": "Engaging summary"
+    "audience": "Who should attend",
+    "professionalOverview": "Why this topic matters in professional practice",
+    "whyAttend": "Why this class is timely and valuable right now",
+    "description": "Engaging summary",
+    "keyTakeaways": ["Outcome 1", "Outcome 2", "Outcome 3"],
+    "eventDetails": [
+      {"label":"WHAT","value":"..."},
+      {"label":"WHEN","value":"..."},
+      {"label":"WHERE","value":"..."},
+      {"label":"CREDITS","value":"..."}
+    ]
   },
   "variations": [
     {
-      "name": "A — Professional",
-      "fontFamily": "Montserrat", // Choose from: Montserrat, Outfit, Playfair Display, Inter
-      "headerGradient": ["#002b4c", "#005a8c"], // 2 hex codes for a rich gradient
+      "name": "A - Professional",
+      "themeName": "Coastal Authority",
+      "themeDescription": "Short explanation of the visual direction",
+      "fontFamily": "Montserrat",
+      "headerEyebrow": "PROFESSIONAL EDUCATION | 4 CE CREDITS",
+      "headerTitle": "Variation-specific headline",
+      "logoPlacement": "none",
+      "headerGradient": ["#002b4c", "#005a8c"],
       "buttonGradient": ["#005a8c", "#02aae1"],
       "accentColor": "#02aae1",
-      "subject": "Factual & Authoritative",
+      "supportingColors": ["#f59e0b", "#dbeafe", "#ecfeff"],
+      "surfaceColor": "#f8fbff",
+      "subject": "Factual and authoritative subject line",
       "preheader": "Max 200 chars",
+      "professionalOverview": "2-4 sentence overview written for real estate professionals",
+      "audience": "Ideal attendee profile",
+      "whyAttend": "Why this is urgent or valuable now",
+      "keyTakeaways": ["...", "...", "..."],
+      "heroImagePrompt": {
+        "title": "Variation A Hero Prompt",
+        "prompt": "Complete image prompt here",
+        "eventDetailsToFeature": ["topic", "date/time", "credits", "location cue"],
+        "visualFocus": "What the image should emphasize",
+        "reservedTextAreas": ["eyebrow", "headline", "date-time strip", "cta badge"],
+        "altText": "Accessible description of the hero concept"
+      },
       "blocks": [
-        {"type":"hero", "width":${maxW}, "height":${heroH}, "imageUrl":"", "overlayText":"", "imagePrompts":[]},
-        {"type":"text", "heading":"Main Heading", "body":"Marketing copy with **bold**, *italic*, and standard markdown. Use \\n for line breaks."},
-        {"type":"specs", "heading":"At-A-Glance", "items":[{"label":"WHAT","value":"..."}, ...]},
-        ${includeInstructor ? `{"type":"instructor", "name":"${instructorName}", "headshotUrl":"${instructorHeadshot}", "bio":"Refined AI bio", "title":"Title"},` : ''}
-        {"type":"cta", "label":"Register Now", "url":"${regLink || '#'}"}
+        {"type":"hero", "width":${maxW}, "height":${heroH}, "imageUrl":"", "overlayText":"Hero-ready short title"},
+        {"type":"specs", "heading":"Event Details", "color":"#02aae1", "items":[{"label":"WHEN","value":"..."},{"label":"WHERE","value":"..."}]},
+        {"type":"text", "heading":"Professional Overview", "body":"Rich overview copy with **bold**, *italic*, and standard markdown. Use \\n for line breaks."},
+        {"type":"infoCard", "columns":[
+          {"heading":"Who Should Attend","body":"..."},
+          {"heading":"Why It Matters Now","body":"..."},
+          {"heading":"What You Will Walk Away With","body":"..."}
+        ]},
+        {"type":"bulletList", "heading":"Key Takeaways", "items":["...","...","..."]},
+        ${includeInstructor ? `{"type":"instructor", "name":"${instructorName}", "headshotUrl":"${instructorHeadshot}", "bio":"Refined AI bio", "title":"Instructor"},` : ''}
+        {"type":"cta", "label":"Reserve Your Seat", "url":"${regLink || '#'}"}
       ]
-    },
-    { "name": "B — Energetic", "fontFamily": "Outfit", "headerGradient": ["#8e24aa", "#5e35b1"], "buttonGradient": ["#5e35b1", "#3949ab"], "accentColor": "#3949ab", "subject": "High FOMO", "preheader": "...", "blocks": [...] },
-    { "name": "C — Urgency", "fontFamily": "Playfair Display", "headerGradient": ["#c62828", "#b71c1c"], "buttonGradient": ["#b71c1c", "#880e4f"], "accentColor": "#880e4f", "subject": "Last Chance", "preheader": "...", "blocks": [...] }
+    }
   ],
   "heroImagePrompts": [
-    "Variation A Prompt: [Teaser style details]...",
-    "Variation B Prompt: [Thematic graphics]...",
-    "Variation C Prompt: [Abstract urgency]..."
+    {
+      "title": "Variation A Hero Prompt",
+      "prompt": "Complete image prompt here",
+      "eventDetailsToFeature": ["topic", "date/time", "credits", "location cue"],
+      "visualFocus": "What the image should emphasize",
+      "reservedTextAreas": ["eyebrow", "headline", "date-time strip", "cta badge"],
+      "altText": "Accessible description of the hero concept"
+    }
   ]
-}`;
+}
+
+REQUIRED CONTENT RULES FOR EACH VARIATION:
+- Return exactly 3 variation objects using the shape above.
+- Each variation must contain at minimum: hero, event details specs, professional overview text, a multi-column benefits/proof section, a key takeaways list, and a CTA.
+- Each variation must clearly surface the event details and the professional overview instead of hiding them in one paragraph.
+- Each variation must use a noticeably different theme direction and color palette.
+- The JSON must contain real, specific sections and details - not placeholders like "..." or "[insert copy]".
+
+RETURN ONLY THE JSON OBJECT. NO MARKDOWN BLOCK, NO BACKTICKS, NO PREAMBLE. JUST THE { ... } CONTENT.`;
 
   navigator.clipboard.writeText(prompt);
   document.getElementById('singleImportBox').style.display = 'block';
@@ -1208,29 +1626,49 @@ function importSingleClassAIResponse(){
     let rawText = gv('singleAIResponse').trim();
     if(rawText.startsWith('```')) rawText = rawText.replace(/^```[a-z]*\n?/,'').replace(/\n?```$/,'').trim();
     rawText = rawText.replace(/,\s*([\]}])/g, '$1');
-    
+
     const data = JSON.parse(rawText);
+    const s = getSettings();
+    const includeInstructor = document.getElementById('singleInstructorToggle').classList.contains('on');
+    const parsed = data.parsed || {};
+    const regLink = gv('regLink') || parsed.registrationUrl || parsed.regLink || '#';
+
+    data.variations = (Array.isArray(data.variations) ? data.variations : []).slice(0, 3).map((variation, index) =>
+      ensureSingleClassVariationBlocks(variation, parsed, {
+        index,
+        includeInstructor,
+        instructorName: gv('singleInstructorName'),
+        instructorHeadshot: gv('singleInstructorHeadshot'),
+        regLink,
+        maxW: s.emailMaxW || 730,
+        heroH: s.heroH || 315
+      })
+    );
+
+    data.heroImagePrompts = buildSingleClassHeroPrompts(data);
     singleClassData = data;
     singleClassImported = true;
 
-    // Show hero image prompts
     if(data.heroImagePrompts && data.heroImagePrompts.length > 0){
       const box = document.getElementById('singleHeroPromptsBox');
       const list = document.getElementById('singleHeroPromptsList');
       box.style.display = 'block';
       list.innerHTML = data.heroImagePrompts.map((p, i) => `
         <div style="background:var(--bg);border:1px solid var(--border);border-radius:8px;padding:10px;margin-bottom:8px">
-          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px">
-            <span style="font-size:11px;font-weight:700;color:var(--accent2)">Prompt ${i+1} (${['Professional','Energetic','Urgency'][i] || 'Variation'})</span>
-            <button class="btn-sm" onclick="navigator.clipboard.writeText(singleClassData.heroImagePrompts[${i}]);toast('Hero prompt ${i+1} copied!')" style="font-size:10px;padding:3px 8px">📋 Copy</button>
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px;gap:12px">
+            <span style="font-size:11px;font-weight:700;color:var(--accent2)">${escHtml(p.title || `Prompt ${i+1}`)}</span>
+            <button class="btn-sm" onclick="navigator.clipboard.writeText(singleClassData.heroImagePrompts[${i}].prompt);toast('Hero prompt ${i+1} copied!')" style="font-size:10px;padding:3px 8px">?? Copy</button>
           </div>
-          <p style="font-size:11px;color:var(--text2);line-height:1.4;margin:0">${esc(p)}</p>
+          ${p.visualFocus ? `<p style="font-size:10px;color:var(--accent);line-height:1.4;margin:0 0 6px"><strong>Visual Focus:</strong> ${escHtml(p.visualFocus)}</p>` : ''}
+          ${p.eventDetailsToFeature && p.eventDetailsToFeature.length ? `<p style="font-size:10px;color:var(--text2);line-height:1.4;margin:0 0 6px"><strong>Event Details:</strong> ${escHtml(p.eventDetailsToFeature.join(' ? '))}</p>` : ''}
+          ${p.reservedTextAreas && p.reservedTextAreas.length ? `<p style="font-size:10px;color:var(--text2);line-height:1.4;margin:0 0 6px"><strong>Reserved Text Zones:</strong> ${escHtml(p.reservedTextAreas.join(' ? '))}</p>` : ''}
+          <p style="font-size:11px;color:var(--text2);line-height:1.4;margin:0">${escHtml(p.prompt)}</p>
         </div>
       `).join('');
+    } else {
+      document.getElementById('singleHeroPromptsBox').style.display = 'none';
     }
 
-    // Now generate the email variations
-    const s = getSettings();
     _genSettings = s;
 
     const container = document.getElementById('tabContent');
@@ -1240,64 +1678,62 @@ function importSingleClassAIResponse(){
       _genVariations = data.variations.map(v => ({
         name: v.name,
         tone: v.tone,
-        colorA: v.accentColor || s.c1a,
-        colorB: v.accentColor || s.c1b
+        colorA: v.accentColor || (v.headerGradient || [])[0] || s.c1a,
+        colorB: (v.buttonGradient || [])[1] || (v.headerGradient || [])[1] || s.c1b
       }));
       _genPreheaders = data.variations.map(v => v.preheader || '');
 
       data.variations.forEach((v, i) => {
-        const blocks = v.blocks || [];
-        // Render instructor blocks if present
-        const processedBlocks = blocks.map(b => {
-          if(b.type === 'instructor') return b; // will be handled by renderer
-          return b;
-        });
-        
+        const processedBlocks = v.blocks || [];
+
         const emailHtml = generateDynamicEmailHTML(
-          processedBlocks, s, 
-          v.accentColor || s.c1a, 
-          data.parsed?.title || 'Class Announcement',
-          `Hi ${s.mergeTag} — ${v.preheader || ''}`,
-          v // Pass variation object for font/gradient support
+          processedBlocks, s,
+          v.accentColor || (v.headerGradient || [])[0] || s.c1a,
+          v.headerTitle || data.parsed?.title || 'Class Announcement',
+          `Hi ${s.mergeTag} - ${v.preheader || ''}`,
+          v
         );
 
         const panel = document.createElement('div');
         panel.className = 'tab-panel' + (i === 0 ? ' active' : '');
         panel.id = 'panel-' + i;
+        const themeSwatches = [ ...(v.headerGradient || []).slice(0, 2), v.accentColor, ...((v.supportingColors || []).slice(0, 2)) ]
+          .filter(Boolean)
+          .map(color => `<div style="width:16px;height:16px;border-radius:50%;background:${color};border:1px solid rgba(255,255,255,0.08)"></div>`)
+          .join('');
         panel.innerHTML = `
           <div class="output-section">
             <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px">
               <div style="background:rgba(255,255,255,0.03);padding:10px;border-radius:8px">
-                <span style="font-size:10px;text-transform:uppercase;color:var(--text2)">Selected Font</span>
-                <div style="font-weight:700;color:var(--accent2)">${v.fontFamily || 'Default'}</div>
+                <span style="font-size:10px;text-transform:uppercase;color:var(--text2)">Variation Theme</span>
+                <div style="font-weight:700;color:var(--accent2)">${escHtml(v.themeName || v.name || 'Custom Theme')}</div>
+                ${v.themeDescription ? `<div style="font-size:11px;color:var(--text2);line-height:1.4;margin-top:4px">${escHtml(v.themeDescription)}</div>` : ''}
               </div>
               <div style="background:rgba(255,255,255,0.03);padding:10px;border-radius:8px">
-                <span style="font-size:10px;text-transform:uppercase;color:var(--text2)">Color Theme</span>
-                <div style="display:flex;gap:4px;margin-top:2px">
-                  <div style="width:16px;height:16px;border-radius:50%;background:${(v.headerGradient||[])[0]||'#ccc'}"></div>
-                  <div style="width:16px;height:16px;border-radius:50%;background:${(v.headerGradient||[])[1]||'#ccc'}"></div>
-                </div>
+                <span style="font-size:10px;text-transform:uppercase;color:var(--text2)">Selected Font</span>
+                <div style="font-weight:700;color:var(--accent2)">${v.fontFamily || 'Default'}</div>
+                <div style="display:flex;gap:4px;flex-wrap:wrap;margin-top:8px">${themeSwatches}</div>
               </div>
             </div>
-            
+
             <div class="form-group" style="margin-bottom:16px">
-              <label style="font-size:11px;color:var(--accent2)">🔗 Hero Image URL (Paste here after generating)</label>
+              <label style="font-size:11px;color:var(--accent2)">?? Hero Image URL (Paste here after generating)</label>
               <input type="url" id="hero-url-${i}" placeholder="https://... (URL from your image host)" oninput="updateHeroUrl(${i}, this.value)">
             </div>
 
-            <div class="output-label">📝 Subject Line <button class="copy-btn" onclick="copyText('subj-${i}')">Copy</button></div>
+            <div class="output-label">?? Subject Line <button class="copy-btn" onclick="copyText('subj-${i}')">Copy</button></div>
             <div class="output-box" id="subj-${i}">${escHtml(v.subject || '')}</div>
           </div>
           <div class="output-section">
-            <div class="output-label">📝 Preheader Text <button class="copy-btn" onclick="copyText('pre-${i}')">Copy</button></div>
+            <div class="output-label">?? Preheader Text <button class="copy-btn" onclick="copyText('pre-${i}')">Copy</button></div>
             <div class="output-box" id="pre-${i}">${escHtml(v.preheader || '')}</div>
           </div>
           <div class="output-section">
-            <div class="output-label">👁️ Email Preview</div>
+            <div class="output-label">??? Email Preview</div>
             <iframe class="preview-frame" id="frame-${i}" sandbox="allow-same-origin"></iframe>
           </div>
           <div class="output-section">
-            <div class="output-label">📋 Raw HTML Code <button class="copy-btn" onclick="copyText('code-${i}')">Copy</button></div>
+            <div class="output-label">?? Raw HTML Code <button class="copy-btn" onclick="copyText('code-${i}')">Copy</button></div>
             <div class="output-box" id="code-${i}" style="max-height:400px">${escHtml(emailHtml)}</div>
           </div>`;
         container.appendChild(panel);
@@ -1311,7 +1747,6 @@ function importSingleClassAIResponse(){
         }, 50);
       });
 
-      // Show output tabs for A/B/C
       document.getElementById('composerTabBtn').style.display = 'none';
     }
 
