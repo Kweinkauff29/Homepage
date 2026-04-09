@@ -2,18 +2,18 @@
 const ORGS = {
   ber: {
     id: 'ber',
-    name: 'Bonita Springs–EsterO REALTORS®',
+    name: 'Bonita Springs-Estero REALTORS',
     shortName: 'BER',
-    addr: '25300 Bernwood Drive, Suite 1 · Bonita Springs, FL 34135',
+    addr: '25300 Bernwood Drive, Suite 1 - Bonita Springs, FL 34135',
     email: 'Support@BERealtors.org',
     logo: 'https://res.cloudinary.com/micronetonline/image/upload/q_auto/f_auto/c_crop,h_503,w_2954,x_0,y_0/v1573591630/tenants/6c24b0da-8a6e-4f2b-8547-26a8c1dc4581/98b2cd4b19a748e0be424cae2a868161/BonitaSpringsEsteroRealtors-Logo-Horizontal.png',
     colors: ['#004a32', '#006847'] // Green
   },
   wcr: {
     id: 'wcr',
-    name: "Women's Council of REALTORS® Bonita Springs–Estero",
+    name: "Women's Council of REALTORS Bonita Springs-Estero",
     shortName: 'WCR',
-    addr: '25300 Bernwood Drive, Suite 1 · Bonita Springs, FL 34135',
+    addr: '25300 Bernwood Drive, Suite 1 - Bonita Springs, FL 34135',
     email: 'WCR@BERealtors.org',
     logo: 'https://www.wcr.org/wp-content/uploads/2025/03/wcrlogo.png.webp',
     colors: ['#002b4c', '#005a8c'] // Navy flow
@@ -23,8 +23,8 @@ const ORGS = {
 let currentOrgId = localStorage.getItem('ebg_org') || 'ber';
 
 const DEFAULTS = {
-  orgName: 'Bonita Springs–Estero REALTORS®',
-  orgAddr: '25300 Bernwood Drive, Suite 1 · Bonita Springs, FL 34135',
+  orgName: 'Bonita Springs-Estero REALTORS',
+  orgAddr: '25300 Bernwood Drive, Suite 1 - Bonita Springs, FL 34135',
   supportEmail: 'Support@BERealtors.org',
   heroW: 730, heroH: 315,
   heroPrompt: 'Create a professional promotional email hero banner image. Style: clean, modern, corporate. Include bold headline text overlay. No photographic people unless they are stylized corporate illustrations or cartoon-style. Vibrant yet professional palette. Sharp edges, no blurry elements.',
@@ -122,7 +122,7 @@ function updateBrandingUI() {
   // Update header text/title if needed
   const header = document.querySelector('.header p');
   if(header) {
-    header.innerHTML = `Email Blast & Flyer Generator <span style="font-size:12px;opacity:0.6"> — Designing for: ${org.shortName}</span> `;
+    header.innerHTML = `Email Blast & Flyer Generator <span style="font-size:12px;opacity:0.6"> - Designing for: ${org.shortName}</span> `;
   }
 }
 
@@ -402,8 +402,8 @@ function renderFridaySections(){
       <div class="card-header" style="font-size:13px;padding:8px 16px;justify-content:space-between;border-bottom:2px solid ${activeColor}">
         <div style="display:flex;align-items:center;gap:8px">
           <div style="display:flex;flex-direction:column;gap:2px">
-            <button class="move-btn" onclick="moveFSec(${sec.id},-1)" ${idx===0?'disabled':''} title="Move Up">▲</button>
-            <button class="move-btn" onclick="moveFSec(${sec.id},1)" ${idx===fridaySections.length-1?'disabled':''} title="Move Down">▼</button>
+            <button class="move-btn" onclick="moveFSec(${sec.id},-1)" ${idx===0?'disabled':''} title="Move Up">^</button>
+            <button class="move-btn" onclick="moveFSec(${sec.id},1)" ${idx===fridaySections.length-1?'disabled':''} title="Move Down">v</button>
           </div>
           <span>Section #${idx+1}: ${truncate(sec.title, 30) || '(New Event)'}</span>
         </div>
@@ -430,14 +430,14 @@ function renderFridaySections(){
         
         <div class="variation-slot" style="background:rgba(0,0,0,0.02);padding:12px;border-radius:8px;border:1px dashed var(--border);margin-bottom:12px">
           <div class="form-group">
-            <label style="color:var(--accent);font-weight:700">✍️ Sales Copy (Variation ${['A','B','C'][vIdx]})</label>
+            <label style="color:var(--accent);font-weight:700">Sales Copy (Variation ${['A','B','C'][vIdx]})</label>
             <textarea style="min-height:100px;font-size:12px" onchange="updateFSecV(${sec.id}, ${vIdx}, 'description', this.value)" placeholder="Marketing copy for this specific variation...">${esc(currentV.description)}</textarea>
           </div>
           
           <div style="background:rgba(0,191,165,0.05);padding:12px;border-radius:8px;border:1px solid var(--border)">
             <label style="color:var(--accent);margin-bottom:8px;display:flex;justify-content:space-between">
-              🖼️ Hero Image (Variation ${['A','B','C'][vIdx]})
-              <button class="btn-sm" onclick="copySectionHeroPrompt(${sec.id})" style="font-size:10px">📋 Copy Prompt</button>
+              Hero Image (Variation ${['A','B','C'][vIdx]})
+              <button class="btn-sm" onclick="copySectionHeroPrompt(${sec.id})" style="font-size:10px">Copy Prompt</button>
             </label>
             <input type="url" value="${esc(currentV.heroUrl)}" onchange="updateFSecV(${sec.id}, ${vIdx}, 'heroUrl', this.value)" placeholder="Paste image URL here" style="font-size:12px">
           </div>
@@ -546,7 +546,7 @@ function renderTuesdayBlockEditor(){
   if(!c) return;
 
   let html = `<div style="margin-bottom:12px;padding:10px;background:rgba(0,191,165,0.08);border:1px solid var(--accent);border-radius:8px">
-    <p style="font-size:12px;color:var(--accent);font-weight:700;margin-bottom:6px">✅ ${tuesdayBlocks.length} blocks imported — Edit below, then click Generate</p>
+    <p style="font-size:12px;color:var(--accent);font-weight:700;margin-bottom:6px">${tuesdayBlocks.length} blocks imported - Edit below, then click Generate</p>
     <div class="form-row">
       <div class="form-group"><label>Subject Line</label><input type="text" value="${esc(tuesdaySubject)}" oninput="tuesdaySubject=this.value; updateTuesdayPreview()"></div>
       <div class="form-group"><label>Preheader</label><input type="text" value="${esc(tuesdayPreheaderText)}" oninput="tuesdayPreheaderText=this.value; updateTuesdayPreview()"></div>
@@ -559,8 +559,8 @@ function renderTuesdayBlockEditor(){
       <div class="card-header" style="font-size:12px;padding:6px 12px;justify-content:space-between;border-bottom:1px solid var(--border)">
         <div style="display:flex;align-items:center;gap:6px">
           <div style="display:flex;flex-direction:column;gap:1px">
-            <button class="move-btn" onclick="moveTBlock(${idx},-1)" ${idx===0?'disabled':''}>▲</button>
-            <button class="move-btn" onclick="moveTBlock(${idx},1)" ${idx===tuesdayBlocks.length-1?'disabled':''}>▼</button>
+            <button class="move-btn" onclick="moveTBlock(${idx},-1)" ${idx===0?'disabled':''}>^</button>
+            <button class="move-btn" onclick="moveTBlock(${idx},1)" ${idx===tuesdayBlocks.length-1?'disabled':''}>v</button>
           </div>
           <span>${icon} <strong>${block.type.toUpperCase()}</strong></span>
         </div>
@@ -590,7 +590,7 @@ function renderBlockFields(block, idx){
   switch(block.type){
     case 'hero':
       return `
-        <div class="form-group"><label>Hero Image (${block.width||730}×${block.height||315})</label>
+        <div class="form-group"><label>Hero Image (${block.width||730}x${block.height||315})</label>
           <input type="url" value="${esc(block.imageUrl||'')}" oninput="tuesdayBlocks[${idx}].imageUrl=this.value; updateTuesdayPreview()" placeholder="Paste generated image URL here">
         </div>
         ${renderImagePrompts(block, idx)}
@@ -605,7 +605,7 @@ function renderBlockFields(block, idx){
     case 'imageRow':
       return (block.images||[]).map((img, iIdx) => `
         <div style="background:var(--surface2);padding:8px;border-radius:6px;margin-bottom:6px">
-          <label style="font-size:10px">Image ${iIdx+1} (${img.width||350}×${img.height||200})</label>
+          <label style="font-size:10px">Image ${iIdx+1} (${img.width||350}x${img.height||200})</label>
           <input type="url" value="${esc(img.url||'')}" oninput="tuesdayBlocks[${idx}].images[${iIdx}].url=this.value; updateTuesdayPreview()" placeholder="Image URL" style="font-size:11px;margin-bottom:4px">
           ${img.link ? `<input type="url" value="${esc(img.link)}" oninput="tuesdayBlocks[${idx}].images[${iIdx}].link=this.value; updateTuesdayPreview()" placeholder="Link URL" style="font-size:11px;margin-bottom:4px">` : ''}
           ${renderImagePromptsInline(img, idx, iIdx)}
@@ -657,7 +657,7 @@ function renderBlockFields(block, idx){
 function renderImagePrompts(block, bIdx){
   if(!block.imagePrompts || block.imagePrompts.length === 0) return '';
   return `<div style="background:rgba(124,77,255,0.08);padding:8px;border-radius:6px;margin-top:6px">
-    <label style="color:var(--accent2);font-size:10px;margin-bottom:4px">🎨 AI Image Prompt Ideas (${block.width||730}×${block.height||315})</label>
+    <label style="color:var(--accent2);font-size:10px;margin-bottom:4px">AI Image Prompt Ideas (${block.width||730}x${block.height||315})</label>
     ${block.imagePrompts.map((p, pIdx) => `
       <div style="display:flex;gap:4px;margin-bottom:4px;align-items:start">
         <span style="font-size:10px;color:var(--text2);min-width:16px">${pIdx+1}.</span>
@@ -670,7 +670,7 @@ function renderImagePrompts(block, bIdx){
 function renderImagePromptsInline(img, bIdx, iIdx){
   if(!img.imagePrompts || img.imagePrompts.length === 0) return '';
   return `<div style="background:rgba(124,77,255,0.06);padding:6px;border-radius:4px;margin-top:4px">
-    <label style="color:var(--accent2);font-size:9px">🎨 Image Ideas (${img.width||350}×${img.height||200})</label>
+    <label style="color:var(--accent2);font-size:9px">Image Ideas (${img.width||350}x${img.height||200})</label>
     ${img.imagePrompts.map((p, pIdx) => `
       <div style="display:flex;gap:4px;margin-bottom:2px;align-items:start">
         <span style="font-size:9px;color:var(--text2);min-width:14px">${pIdx+1}.</span>
@@ -1032,7 +1032,7 @@ function generateAIPromptTuesday(){
 
   const prompt = `You are an expert email marketing designer for ${org.name}. I need you to design a COMPLETE, DYNAMIC email layout for our Tuesday Affiliate Blast targeting our affiliates and sponsors.
   
-  ${currentOrgId === 'wcr' ? 'CONTEXT: This is for the Women\'s Council of REALTORS®. The tone should be empowering, collaborative, and professional.' : 'CONTEXT: This is for the local REALTOR® association affiliate members.'}
+  ${currentOrgId === 'wcr' ? 'CONTEXT: This is for the Women\'s Council of REALTORS. The tone should be empowering, collaborative, and professional.' : 'CONTEXT: This is for the local REALTOR association affiliate members.'}
 
 IMPORTANT: If I provide any URLs or links below, please visit/review them thoroughly and extract ALL relevant information (event details, pricing, dates, images, descriptions, sponsorship tiers, etc.) to use in the email content. Do NOT leave placeholders — fill in EVERY detail from the source material.
 
@@ -1921,10 +1921,10 @@ function heroDetailsToMarkup(heroPrompt){
     ? `<div style="font-size:11px;color:var(--text2);line-height:1.5;margin-bottom:6px"><strong style="color:var(--text)">Visual focus:</strong> ${escHtml(heroPrompt.visualFocus)}</div>`
     : '';
   const details = heroPrompt && heroPrompt.eventDetailsToFeature && heroPrompt.eventDetailsToFeature.length
-    ? `<div style="font-size:11px;color:var(--text2);line-height:1.5"><strong style="color:var(--text)">Feature details:</strong> ${escHtml(heroPrompt.eventDetailsToFeature.join(' • '))}</div>`
+    ? `<div style="font-size:11px;color:var(--text2);line-height:1.5"><strong style="color:var(--text)">Feature details:</strong> ${escHtml(heroPrompt.eventDetailsToFeature.join(' | '))}</div>`
     : '';
   const zones = heroPrompt && heroPrompt.reservedTextAreas && heroPrompt.reservedTextAreas.length
-    ? `<div style="font-size:11px;color:var(--text2);line-height:1.5;margin-top:6px"><strong style="color:var(--text)">Reserved text zones:</strong> ${escHtml(heroPrompt.reservedTextAreas.join(' • '))}</div>`
+    ? `<div style="font-size:11px;color:var(--text2);line-height:1.5;margin-top:6px"><strong style="color:var(--text)">Reserved text zones:</strong> ${escHtml(heroPrompt.reservedTextAreas.join(' | '))}</div>`
     : '';
   const promptText = heroPrompt && heroPrompt.prompt
     ? `<div style="font-size:11px;color:var(--text2);line-height:1.5;margin-top:6px">${escHtml(heroPrompt.prompt)}</div>`
@@ -1955,8 +1955,8 @@ function renderCampaignPlanOutput(){
       design.accentColor,
       ...((design.supportingColors || []).slice(0, 2))
     ].filter(Boolean).map(color => `<div style="width:16px;height:16px;border-radius:999px;background:${color};border:1px solid rgba(255,255,255,0.08)"></div>`).join('');
-    const mustInclude = email.mustIncludeDetails.length ? `<div style="font-size:11px;color:var(--text2);line-height:1.5"><strong style="color:var(--text)">Must include:</strong> ${escHtml(email.mustIncludeDetails.join(' • '))}</div>` : '';
-    const sections = email.recommendedSections.length ? `<div style="font-size:11px;color:var(--text2);line-height:1.5;margin-top:6px"><strong style="color:var(--text)">Section focus:</strong> ${escHtml(email.recommendedSections.join(' • '))}</div>` : '';
+    const mustInclude = email.mustIncludeDetails.length ? `<div style="font-size:11px;color:var(--text2);line-height:1.5"><strong style="color:var(--text)">Must include:</strong> ${escHtml(email.mustIncludeDetails.join(' | '))}</div>` : '';
+    const sections = email.recommendedSections.length ? `<div style="font-size:11px;color:var(--text2);line-height:1.5;margin-top:6px"><strong style="color:var(--text)">Section focus:</strong> ${escHtml(email.recommendedSections.join(' | '))}</div>` : '';
 
     return `
       <div style="background:rgba(255,255,255,0.03);border:1px solid var(--border);border-radius:12px;padding:14px;margin-bottom:16px">
@@ -1964,7 +1964,7 @@ function renderCampaignPlanOutput(){
           <div>
             <div style="font-size:11px;text-transform:uppercase;letter-spacing:1px;color:var(--accent2)">Send ${index + 1}</div>
             <div style="font-size:18px;font-weight:800;color:var(--text)">${escHtml(firstNonEmpty(email.stage, `Send ${index + 1}`))}</div>
-            <div style="font-size:12px;color:var(--text2);margin-top:4px">${escHtml(firstNonEmpty(formatLongDate(email.sendDate), email.sendDate))}${email.relativeTiming ? ` • ${escHtml(email.relativeTiming)}` : ''}</div>
+            <div style="font-size:12px;color:var(--text2);margin-top:4px">${escHtml(firstNonEmpty(formatLongDate(email.sendDate), email.sendDate))}${email.relativeTiming ? ` | ${escHtml(email.relativeTiming)}` : ''}</div>
           </div>
           <div style="min-width:240px;max-width:320px;background:rgba(255,255,255,0.04);border-radius:10px;padding:10px">
             <div style="font-size:10px;text-transform:uppercase;color:var(--text2)">Design Direction</div>
@@ -2229,11 +2229,11 @@ function importSingleClassAIResponse(){
         <div style="background:var(--bg);border:1px solid var(--border);border-radius:8px;padding:10px;margin-bottom:8px">
           <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px;gap:12px">
             <span style="font-size:11px;font-weight:700;color:var(--accent2)">${escHtml(p.title || `Prompt ${i+1}`)}</span>
-            <button class="btn-sm" onclick="navigator.clipboard.writeText(singleClassData.heroImagePrompts[${i}].prompt);toast('Hero prompt ${i+1} copied!')" style="font-size:10px;padding:3px 8px">?? Copy</button>
+            <button class="btn-sm" onclick="navigator.clipboard.writeText(singleClassData.heroImagePrompts[${i}].prompt);toast('Hero prompt ${i+1} copied!')" style="font-size:10px;padding:3px 8px">Copy</button>
           </div>
           ${p.visualFocus ? `<p style="font-size:10px;color:var(--accent);line-height:1.4;margin:0 0 6px"><strong>Visual Focus:</strong> ${escHtml(p.visualFocus)}</p>` : ''}
-          ${p.eventDetailsToFeature && p.eventDetailsToFeature.length ? `<p style="font-size:10px;color:var(--text2);line-height:1.4;margin:0 0 6px"><strong>Event Details:</strong> ${escHtml(p.eventDetailsToFeature.join(' ? '))}</p>` : ''}
-          ${p.reservedTextAreas && p.reservedTextAreas.length ? `<p style="font-size:10px;color:var(--text2);line-height:1.4;margin:0 0 6px"><strong>Reserved Text Zones:</strong> ${escHtml(p.reservedTextAreas.join(' ? '))}</p>` : ''}
+          ${p.eventDetailsToFeature && p.eventDetailsToFeature.length ? `<p style="font-size:10px;color:var(--text2);line-height:1.4;margin:0 0 6px"><strong>Event Details:</strong> ${escHtml(p.eventDetailsToFeature.join(' | '))}</p>` : ''}
+          ${p.reservedTextAreas && p.reservedTextAreas.length ? `<p style="font-size:10px;color:var(--text2);line-height:1.4;margin:0 0 6px"><strong>Reserved Text Zones:</strong> ${escHtml(p.reservedTextAreas.join(' | '))}</p>` : ''}
           <p style="font-size:11px;color:var(--text2);line-height:1.4;margin:0">${escHtml(p.prompt)}</p>
         </div>
       `).join('');
@@ -2289,23 +2289,23 @@ function importSingleClassAIResponse(){
             </div>
 
             <div class="form-group" style="margin-bottom:16px">
-              <label style="font-size:11px;color:var(--accent2)">?? Hero Image URL (Paste here after generating)</label>
+              <label style="font-size:11px;color:var(--accent2)">Hero Image URL (Paste here after generating)</label>
               <input type="url" id="hero-url-${i}" placeholder="https://... (URL from your image host)" oninput="updateHeroUrl(${i}, this.value)">
             </div>
 
-            <div class="output-label">?? Subject Line <button class="copy-btn" onclick="copyText('subj-${i}')">Copy</button></div>
+            <div class="output-label">Subject Line <button class="copy-btn" onclick="copyText('subj-${i}')">Copy</button></div>
             <div class="output-box" id="subj-${i}">${escHtml(v.subject || '')}</div>
           </div>
           <div class="output-section">
-            <div class="output-label">?? Preheader Text <button class="copy-btn" onclick="copyText('pre-${i}')">Copy</button></div>
+            <div class="output-label">Preheader Text <button class="copy-btn" onclick="copyText('pre-${i}')">Copy</button></div>
             <div class="output-box" id="pre-${i}">${escHtml(v.preheader || '')}</div>
           </div>
           <div class="output-section">
-            <div class="output-label">??? Email Preview</div>
+            <div class="output-label">Email Preview</div>
             <iframe class="preview-frame" id="frame-${i}" sandbox="allow-same-origin"></iframe>
           </div>
           <div class="output-section">
-            <div class="output-label">?? Raw HTML Code <button class="copy-btn" onclick="copyText('code-${i}')">Copy</button></div>
+            <div class="output-label">Raw HTML Code <button class="copy-btn" onclick="copyText('code-${i}')">Copy</button></div>
             <div class="output-box" id="code-${i}" style="max-height:400px">${escHtml(emailHtml)}</div>
           </div>`;
         container.appendChild(panel);
@@ -2460,27 +2460,27 @@ function renderVariationTab(i, v, preheader, emailHtml, heroPrompt, container){
   panel.id='panel-'+i;
   panel.innerHTML=`
     <div class="output-section">
-      <div class="output-label">📝 Preheader Text <button class="copy-btn" onclick="copyText('pre-${i}')">Copy</button></div>
+      <div class="output-label">Preheader Text <button class="copy-btn" onclick="copyText('pre-${i}')">Copy</button></div>
       <div class="output-box" id="pre-${i}">${escHtml(preheader)}</div>
     </div>
     <div class="output-section">
-      <div class="output-label">👁️ Email Preview</div>
+      <div class="output-label">Email Preview</div>
       <iframe class="preview-frame" id="frame-${i}" sandbox="allow-same-origin"></iframe>
     </div>
     ${currentMode==='single' ? `
     <div class="output-section">
-      <div class="output-label">🖼️ Hero Image URL</div>
+      <div class="output-label">Hero Image URL</div>
       <div style="display:flex;gap:8px;margin-bottom:4px">
         <input type="url" id="heroUrl-${i}" placeholder="https://..." style="flex:1">
-        <button class="copy-btn" style="padding:8px 16px" onclick="applyHeroImage(${i})">🖼️ Apply</button>
+        <button class="copy-btn" style="padding:8px 16px" onclick="applyHeroImage(${i})">Apply</button>
       </div>
     </div>
     <div class="output-section">
-      <div class="output-label">🎨 Hero Image AI Prompt <button class="copy-btn" onclick="copyText('hero-${i}')">Copy</button></div>
+      <div class="output-label">Hero Image AI Prompt <button class="copy-btn" onclick="copyText('hero-${i}')">Copy</button></div>
       <div class="output-box" id="hero-${i}">${escHtml(heroPrompt)}</div>
     </div>` : ''}
     <div class="output-section">
-      <div class="output-label">📋 Raw HTML Code <button class="copy-btn" onclick="copyText('code-${i}')">Copy</button></div>
+      <div class="output-label">Raw HTML Code <button class="copy-btn" onclick="copyText('code-${i}')">Copy</button></div>
       <div class="output-box" id="code-${i}" style="max-height:400px">${escHtml(emailHtml)}</div>
     </div>`;
   container.appendChild(panel);
@@ -2738,8 +2738,8 @@ function generateMultiSectionHTML(data, v, s, isTuesday = false, isComposer = fa
         <table width="100%" cellpadding="0" cellspacing="0" style="margin:0 0 20px;background-color:${surfaceColor};border-left:4px solid ${themeColor};border-top:1px solid ${sectionSupport};border-right:1px solid rgba(15,23,42,0.06);border-bottom:1px solid rgba(15,23,42,0.06);border-radius:0 10px 10px 0">
           <tr><td style="padding:12px 16px">
             <p style="margin:0;font-size:14px;color:#444444">📅 <strong>${sec.dateTime}</strong></p>
-            ${sec.location ? `<p style="margin:4px 0 0;font-size:14px;color:#444444">📍 ${sec.location}</p>` : ''}
-            ${sec.credits ? `<p style="margin:4px 0 0;font-size:14px;color:#666666">🏷️ ${sec.credits}</p>` : ''}
+            ${sec.location ? `<p style="margin:4px 0 0;font-size:14px;color:#444444">Location: ${sec.location}</p>` : ''}
+            ${sec.credits ? `<p style="margin:4px 0 0;font-size:14px;color:#666666">Credits: ${sec.credits}</p>` : ''}
           </td></tr>
         </table>
         <table width="100%" cellpadding="0" cellspacing="0">

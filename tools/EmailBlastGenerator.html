@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Email Blast Generator | Bonita Springs–Estero REALTORS®</title>
+<title>Email Blast Generator | Bonita Springs-Estero REALTORS</title>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
@@ -84,7 +84,7 @@ input[type="color"]{-webkit-appearance:none;appearance:none;width:38px;height:38
 
 <header class="app-header">
   <div>
-    <h1 id="appTitle">✉️ Email Blast Generator</h1>
+    <h1 id="appTitle">Email Blast Generator</h1>
     <div class="subtitle">Generate 3 email variations with HTML, preheader & hero image prompts</div>
   </div>
   <div style="display:flex;align-items:center">
@@ -92,7 +92,7 @@ input[type="color"]{-webkit-appearance:none;appearance:none;width:38px;height:38
       <button class="branding-btn active" data-org="ber" onclick="setBranding('ber')">BER</button>
       <button class="branding-btn" data-org="wcr" onclick="setBranding('wcr')">WCR</button>
     </div>
-    <button class="settings-btn" onclick="toggleSettings()">⚙️ Settings & Rules</button>
+    <button class="settings-btn" onclick="toggleSettings()">Settings & Rules</button>
   </div>
 </header>
 
@@ -100,7 +100,7 @@ input[type="color"]{-webkit-appearance:none;appearance:none;width:38px;height:38
   <!-- INPUT FORM -->
   <div class="card">
     <div class="card-header" style="justify-content:space-between">
-      <span>📝 Content Editor</span>
+      <span>Content Editor</span>
       <div class="tabs" style="margin-bottom:0;padding:2px;flex-wrap:wrap">
         <button class="tab active" id="modeSingle" onclick="setMode('single')" style="padding:6px 12px;font-size:11px">Single Class</button>
         <button class="tab" id="modeCampaign" onclick="setMode('campaign')" style="padding:6px 12px;font-size:11px">Campaign Planner</button>
@@ -113,15 +113,15 @@ input[type="color"]{-webkit-appearance:none;appearance:none;width:38px;height:38
       <!-- SINGLE CLASS MODE -->
       <div id="singleModeFields">
         <div class="form-group">
-          <label>📋 Paste All Class Details</label>
-          <textarea id="singleRawInput" style="min-height:160px;font-size:13px" placeholder="Paste everything here — title, description, date, time, price, CE credits, instructor name, location, registration link, etc. The AI will parse and structure it all."></textarea>
+          <label>Paste All Class Details</label>
+          <textarea id="singleRawInput" style="min-height:160px;font-size:13px" placeholder="Paste everything here - title, description, date, time, price, CE credits, instructor name, location, registration link, etc. The AI will parse and structure it all."></textarea>
           <p style="font-size:10px;color:var(--text2);margin-top:4px">Paste event title, description, date/time, price, CE credits, and any other details in one block. The AI will extract and parse everything.</p>
         </div>
         <div class="form-group"><label>Registration Link</label><input type="url" id="regLink" placeholder="https://registration-link..."></div>
 
         <div style="background:rgba(0,191,165,0.08);padding:14px;border-radius:8px;border:1px solid rgba(0,191,165,0.25);margin-bottom:16px">
           <div class="toggle-row" style="padding:0 0 8px">
-            <span style="font-size:13px;font-weight:600">👩‍🏫 Include Instructor Section?</span>
+            <span style="font-size:13px;font-weight:600">Include Instructor Section?</span>
             <button class="toggle" id="singleInstructorToggle" onclick="this.classList.toggle('on'); toggleInstructorFields()"></button>
           </div>
           <div id="singleInstructorFields" style="display:none">
@@ -132,24 +132,24 @@ input[type="color"]{-webkit-appearance:none;appearance:none;width:38px;height:38
         </div>
 
         <div style="background:rgba(124,77,255,0.1);padding:12px;border-radius:8px;border:1px solid var(--accent2);margin-bottom:16px">
-          <label style="color:var(--accent2)">✨ AI Email Blast Script Generator</label>
+          <label style="color:var(--accent2)">AI Email Blast Script Generator</label>
           <p style="font-size:11px;color:var(--text2);margin-bottom:8px">Generates a comprehensive AI prompt you can paste into Gemini or ChatGPT. The AI will research the class, design 3 email variations with matching colors, write marketing copy, generate 3 hero image prompts, and optionally write an instructor bio.</p>
-          <button class="btn-sm" onclick="generateSingleClassAIPrompt()" style="width:100%;margin-top:4px;background:var(--accent2);color:#fff;border:none;padding:10px;font-size:13px;font-weight:700">🚀 Generate AI Prompt & Copy to Clipboard</button>
+          <button class="btn-sm" onclick="generateSingleClassAIPrompt()" style="width:100%;margin-top:4px;background:var(--accent2);color:#fff;border:none;padding:10px;font-size:13px;font-weight:700">Generate AI Prompt & Copy to Clipboard</button>
         </div>
 
         <div class="form-group" id="singleImportBox" style="display:none">
           <label>Paste AI Response (JSON)</label>
           <textarea id="singleAIResponse" style="min-height:100px;font-family:monospace;font-size:12px" placeholder='Paste the JSON response from Gemini/ChatGPT here...'></textarea>
-          <button class="btn-sm" onclick="importSingleClassAIResponse()" style="width:100%;margin-top:4px;background:var(--accent);color:#fff;border:none;padding:10px;font-weight:600">📥 Import AI Response & Generate Emails</button>
+          <button class="btn-sm" onclick="importSingleClassAIResponse()" style="width:100%;margin-top:4px;background:var(--accent);color:#fff;border:none;padding:10px;font-weight:600">Import AI Response & Generate Emails</button>
         </div>
 
         <div class="form-group" id="singlePromptPreviewBox" style="margin-top:16px;display:none">
-          <label>📋 Generated AI Prompt Preview <button class="btn-sm" onclick="copyText('singlePromptPreview')" style="margin-left:8px">Copy Again</button></label>
+          <label>Generated AI Prompt Preview <button class="btn-sm" onclick="copyText('singlePromptPreview')" style="margin-left:8px">Copy Again</button></label>
           <div class="output-box" id="singlePromptPreview" style="min-height:120px;font-size:11px;max-height:300px"></div>
         </div>
 
         <div id="singleHeroPromptsBox" style="display:none;margin-bottom:16px">
-          <label style="color:var(--accent);font-weight:700;margin-bottom:8px;display:block">🖼️ Hero Image Prompts (730×315px — No Real People)</label>
+          <label style="color:var(--accent);font-weight:700;margin-bottom:8px;display:block">Hero Image Prompts (730x315px - No Real People)</label>
           <div id="singleHeroPromptsList"></div>
         </div>
       </div>
@@ -188,7 +188,7 @@ input[type="color"]{-webkit-appearance:none;appearance:none;width:38px;height:38
 
         <div style="background:rgba(0,191,165,0.08);padding:14px;border-radius:8px;border:1px solid rgba(0,191,165,0.25);margin-bottom:16px">
           <div class="toggle-row" style="padding:0 0 8px">
-            <span style="font-size:13px;font-weight:600">ðŸ‘©â€ðŸ« Include Instructor Section?</span>
+            <span style="font-size:13px;font-weight:600">Include Instructor Section?</span>
             <button class="toggle" id="campaignInstructorToggle" onclick="this.classList.toggle('on'); toggleCampaignInstructorFields()"></button>
           </div>
           <div id="campaignInstructorFields" style="display:none">
@@ -199,25 +199,25 @@ input[type="color"]{-webkit-appearance:none;appearance:none;width:38px;height:38
         </div>
 
         <div class="form-group">
-          <label>ðŸ—“ï¸ Paste All Event / Class Details</label>
-          <textarea id="campaignRawInput" style="min-height:180px;font-size:13px" placeholder="Paste the full event or class brief here â€” title, description, date, audience, pricing, credits, location, speaker details, sponsor notes, objections, urgency factors, and anything else the planner should consider."></textarea>
+          <label>Paste All Event / Class Details</label>
+          <textarea id="campaignRawInput" style="min-height:180px;font-size:13px" placeholder="Paste the full event or class brief here - title, description, date, audience, pricing, credits, location, speaker details, sponsor notes, objections, urgency factors, and anything else the planner should consider."></textarea>
           <p style="font-size:10px;color:var(--text2);margin-top:4px">This planner builds a full campaign schedule first, then creates copy-ready prompts for each send in the sequence.</p>
         </div>
 
         <div style="background:rgba(124,77,255,0.1);padding:12px;border-radius:8px;border:1px solid var(--accent2);margin-bottom:16px">
-          <label style="color:var(--accent2)">âœ¨ Campaign Email Planner</label>
+          <label style="color:var(--accent2)">Campaign Email Planner</label>
           <p style="font-size:11px;color:var(--text2);margin-bottom:8px">Generates a scheduling and strategy prompt that plans when each email should send, what it should emphasize, and the design direction each email should use.</p>
-          <button class="btn-sm" onclick="generateCampaignPlannerPrompt()" style="width:100%;margin-top:4px;background:var(--accent2);color:#fff;border:none;padding:10px;font-size:13px;font-weight:700">ðŸ—“ï¸ Generate Campaign Planner Prompt & Copy</button>
+          <button class="btn-sm" onclick="generateCampaignPlannerPrompt()" style="width:100%;margin-top:4px;background:var(--accent2);color:#fff;border:none;padding:10px;font-size:13px;font-weight:700">Generate Campaign Planner Prompt & Copy</button>
         </div>
 
         <div class="form-group" id="campaignPlannerImportBox" style="display:none">
           <label>Paste Campaign Planner AI Response (JSON)</label>
           <textarea id="campaignPlannerAIResponse" style="min-height:100px;font-family:monospace;font-size:12px" placeholder='Paste the campaign planner JSON response here...'></textarea>
-          <button class="btn-sm" onclick="importCampaignPlannerResponse()" style="width:100%;margin-top:4px;background:var(--accent);color:#fff;border:none;padding:10px;font-weight:600">ðŸ“¥ Import Campaign Plan</button>
+          <button class="btn-sm" onclick="importCampaignPlannerResponse()" style="width:100%;margin-top:4px;background:var(--accent);color:#fff;border:none;padding:10px;font-weight:600">Import Campaign Plan</button>
         </div>
 
         <div class="form-group" id="campaignPlannerPromptPreviewBox" style="margin-top:16px;display:none">
-          <label>ðŸ“‹ Campaign Planner Prompt Preview <button class="btn-sm" onclick="copyText('campaignPlannerPromptPreview')" style="margin-left:8px">Copy Again</button></label>
+          <label>Campaign Planner Prompt Preview <button class="btn-sm" onclick="copyText('campaignPlannerPromptPreview')" style="margin-left:8px">Copy Again</button></label>
           <div class="output-box" id="campaignPlannerPromptPreview" style="min-height:120px;font-size:11px;max-height:300px"></div>
         </div>
       </div>
@@ -242,18 +242,18 @@ input[type="color"]{-webkit-appearance:none;appearance:none;width:38px;height:38
         </div>
         <button class="btn-sm" onclick="addFridaySection()" style="width:100%;margin-bottom:16px;border-style:dashed;padding:10px">+ Add New Event Section</button>
         <div style="background:rgba(124,77,255,0.1);padding:12px;border-radius:8px;border:1px solid var(--accent2);margin-bottom:16px">
-          <label style="color:var(--accent2)">✨ AI Content Assistant</label>
+          <label style="color:var(--accent2)">AI Content Assistant</label>
           <p style="font-size:11px;color:var(--text2);margin-bottom:8px">Paste your event links/screenshots descriptions below, then click to generate a formatting prompt for Gemini.</p>
           <textarea id="aiRawInput" style="min-height:100px;font-size:13px" placeholder="Paste links, details, or screenshot descriptions here..."></textarea>
-          <button class="btn-sm" onclick="generateAIPrompt()" style="width:100%;margin-top:8px;background:var(--accent2);color:#fff;border:none">📋 Generate AI Formatting Prompt</button>
+          <button class="btn-sm" onclick="generateAIPrompt()" style="width:100%;margin-top:8px;background:var(--accent2);color:#fff;border:none">Generate AI Formatting Prompt</button>
         </div>
         <div class="form-group" id="importBox" style="display:none">
           <label>Paste AI Response (JSON)</label>
           <textarea id="aiResponse" style="min-height:80px;font-family:monospace" placeholder='Paste the JSON response from Gemini here...'></textarea>
-          <button class="btn-sm" onclick="importAIResponse()" style="width:100%;margin-top:4px">📥 Import Data</button>
+          <button class="btn-sm" onclick="importAIResponse()" style="width:100%;margin-top:4px">Import Data</button>
         </div>
         <div class="form-group" id="promptPreviewBox" style="margin-top:16px;display:none">
-          <label>📋 AI Hero Image Prompt Preview</label>
+          <label>AI Hero Image Prompt Preview</label>
           <textarea id="heroPromptPreview" style="min-height:120px;font-size:12px;background:rgba(0,0,0,0.05);color:var(--accent)" readonly></textarea>
           <p style="font-size:10px;color:var(--text2);margin-top:4px">This is the prompt you just copied. Review it here before pasting into Gemini.</p>
         </div>
@@ -279,18 +279,18 @@ input[type="color"]{-webkit-appearance:none;appearance:none;width:38px;height:38
         </div>
         <button class="btn-sm" onclick="addTuesdaySection()" style="width:100%;margin-bottom:16px;border-style:dashed;padding:10px">+ Add New Sponsor/Event Section</button>
         <div style="background:rgba(124,77,255,0.1);padding:12px;border-radius:8px;border:1px solid var(--accent2);margin-bottom:16px">
-          <label style="color:var(--accent2)">✨ AI Content Assistant (Affiliate Focus)</label>
+          <label style="color:var(--accent2)">AI Content Assistant (Affiliate Focus)</label>
           <p style="font-size:11px;color:var(--text2);margin-bottom:8px">Paste your sponsorship/event details below to generate a Gemini formatting prompt.</p>
           <textarea id="aiRawInputTuesday" style="min-height:100px;font-size:13px" placeholder="Paste links, sponsorship tiers, or event details here..."></textarea>
-          <button class="btn-sm" onclick="generateAIPromptTuesday()" style="width:100%;margin-top:8px;background:var(--accent2);color:#fff;border:none">📋 Generate AI Formatting Prompt</button>
+          <button class="btn-sm" onclick="generateAIPromptTuesday()" style="width:100%;margin-top:8px;background:var(--accent2);color:#fff;border:none">Generate AI Formatting Prompt</button>
         </div>
         <div class="form-group" id="importBoxTuesday" style="display:none">
           <label>Paste AI Response (JSON)</label>
           <textarea id="aiResponseTuesday" style="min-height:80px;font-family:monospace" placeholder='Paste the JSON response from Gemini here...'></textarea>
-          <button class="btn-sm" onclick="importAIResponseTuesday()" style="width:100%;margin-top:4px">📥 Import Data</button>
+          <button class="btn-sm" onclick="importAIResponseTuesday()" style="width:100%;margin-top:4px">Import Data</button>
         </div>
         <div class="form-group" id="promptPreviewBoxTuesday" style="margin-top:16px;display:none">
-          <label>📋 AI Hero Image Prompt Preview</label>
+          <label>AI Hero Image Prompt Preview</label>
           <textarea id="heroPromptPreviewTuesday" style="min-height:120px;font-size:12px;background:rgba(0,0,0,0.05);color:var(--accent)" readonly></textarea>
         </div>
       </div>
@@ -316,9 +316,9 @@ input[type="color"]{-webkit-appearance:none;appearance:none;width:38px;height:38
         </div>
         
         <div style="background:rgba(124,77,255,0.1);padding:12px;border-radius:8px;border:1px solid var(--accent2);margin-top:16px">
-          <label style="color:var(--accent2)">✨ Generate Flyer Prompt</label>
+          <label style="color:var(--accent2)">Generate Flyer Prompt</label>
           <p style="font-size:11px;color:var(--text2);margin-bottom:8px">Generates an image generation prompt with strict 8.5x11 aspect ratio and Swiss-tech elements.</p>
-          <button class="btn-sm" onclick="generateFlyerPrompt()" style="width:100%;margin-top:4px;background:var(--accent2);color:#fff;border:none">📋 Generate & Copy Image Prompt</button>
+          <button class="btn-sm" onclick="generateFlyerPrompt()" style="width:100%;margin-top:4px;background:var(--accent2);color:#fff;border:none">Generate & Copy Image Prompt</button>
         </div>
 
         <div class="form-group" id="flyerCodeBox" style="margin-top:16px;display:none">
@@ -327,35 +327,35 @@ input[type="color"]{-webkit-appearance:none;appearance:none;width:38px;height:38
         </div>
       </div>
 
-      <button class="btn-primary" id="generateBtn" onclick="generateAll()">🚀 Generate 3 Variations</button>
+      <button class="btn-primary" id="generateBtn" onclick="generateAll()">Generate 3 Variations</button>
     </div>
   </div>
 
   <!-- OUTPUT -->
   <div>
     <div class="card" id="outputCard">
-      <div class="card-header">📧 Generated Variations</div>
+      <div class="card-header">Generated Variations</div>
       <div class="card-body">
         <div id="emptyState" class="empty-state">
-          <div class="icon">📨</div>
+          <div class="icon">EMAIL</div>
           <p>Fill in event details and click Generate to create 3 variations.</p>
         </div>
         <div id="outputArea" style="display:none">
           <div class="tabs" id="outputTabs">
-            <button class="tab active" id="outputTab0" onclick="switchTab(0,this)">?? Variation A</button>
-            <button class="tab" id="outputTab1" onclick="switchTab(1,this)">?? Variation B</button>
-            <button class="tab" id="outputTab2" onclick="switchTab(2,this)">?? Variation C</button>
-            <button class="tab" id="composerTabBtn" onclick="switchTab(3,this)" style="border:1px solid var(--accent2);color:var(--accent2)">🛠️ THE COMPOSER</button>
+            <button class="tab active" id="outputTab0" onclick="switchTab(0,this)">Variation A</button>
+            <button class="tab" id="outputTab1" onclick="switchTab(1,this)">Variation B</button>
+            <button class="tab" id="outputTab2" onclick="switchTab(2,this)">Variation C</button>
+            <button class="tab" id="composerTabBtn" onclick="switchTab(3,this)" style="border:1px solid var(--accent2);color:var(--accent2)">THE COMPOSER</button>
           </div>
           <div id="tabContent"></div>
           <div id="composerPanel" class="tab-panel">
             <div class="output-section">
-              <div class="output-label">🛠️ COMPOSER: Pick Your Best Sections <button class="copy-btn" onclick="copyText('composerCode')">Copy Final HTML</button></div>
+              <div class="output-label">COMPOSER: Pick Your Best Sections <button class="copy-btn" onclick="copyText('composerCode')">Copy Final HTML</button></div>
               <p style="font-size:12px;color:var(--text2);margin-bottom:12px">Choose Variation A, B, or C for each section below. Your final HTML at the bottom will update instantly.</p>
               <div id="composerSections"></div>
-              <div class="output-label" style="margin-top:20px">👁️ Final Preview</div>
+              <div class="output-label" style="margin-top:20px">Final Preview</div>
               <iframe class="preview-frame" id="composerFrame" sandbox="allow-same-origin"></iframe>
-              <div class="output-label" style="margin-top:20px">📋 Final Composite HTML</div>
+              <div class="output-label" style="margin-top:20px">Final Composite HTML</div>
               <div class="output-box" id="composerCode" style="max-height:400px"></div>
             </div>
           </div>
@@ -368,11 +368,11 @@ input[type="color"]{-webkit-appearance:none;appearance:none;width:38px;height:38
 <!-- SETTINGS SIDEBAR -->
 <div class="backdrop" id="backdrop" onclick="toggleSettings()"></div>
 <div class="settings-overlay" id="settingsPanel">
-  <div class="card-header">⚙️ Settings & Rules <button class="close-settings" onclick="toggleSettings()">✕</button></div>
+  <div class="card-header">Settings & Rules <button class="close-settings" onclick="toggleSettings()">X</button></div>
   <div class="card-body">
     <h3 style="font-size:13px;color:var(--accent);margin-bottom:12px">Organization</h3>
-    <div class="form-group"><label>Organization Name</label><input type="text" id="sOrgName" value="Bonita Springs–Estero REALTORS®"></div>
-    <div class="form-group"><label>Organization Address</label><input type="text" id="sOrgAddr" value="25300 Bernwood Drive, Suite 1 · Bonita Springs, FL 34135"></div>
+    <div class="form-group"><label>Organization Name</label><input type="text" id="sOrgName" value="Bonita Springs-Estero REALTORS"></div>
+    <div class="form-group"><label>Organization Address</label><input type="text" id="sOrgAddr" value="25300 Bernwood Drive, Suite 1 - Bonita Springs, FL 34135"></div>
     <div class="form-group"><label>Support Email</label><input type="text" id="sSupportEmail" value="Support@BERealtors.org"></div>
 
     <h3 style="font-size:13px;color:var(--accent);margin:20px 0 12px">Hero Image Rules</h3>
@@ -401,20 +401,20 @@ input[type="color"]{-webkit-appearance:none;appearance:none;width:38px;height:38
 
     <h3 style="font-size:13px;color:var(--accent);margin:20px 0 12px">Color Schemes (3 Variations)</h3>
     <div style="margin-bottom:16px">
-      <label>Variation A — Professional</label>
+      <label>Variation A - Professional</label>
       <div class="color-row"><input type="color" id="sC1a" value="#008080"><input type="text" id="sC1aHex" value="#008080" onchange="document.getElementById('sC1a').value=this.value"><input type="color" id="sC1b" value="#02aae1"><input type="text" id="sC1bHex" value="#02aae1" onchange="document.getElementById('sC1b').value=this.value"></div>
     </div>
     <div style="margin-bottom:16px">
-      <label>Variation B — Energetic</label>
+      <label>Variation B - Energetic</label>
       <div class="color-row"><input type="color" id="sC2a" value="#1a237e"><input type="text" id="sC2aHex" value="#1a237e" onchange="document.getElementById('sC2a').value=this.value"><input type="color" id="sC2b" value="#c5a44e"><input type="text" id="sC2bHex" value="#c5a44e" onchange="document.getElementById('sC2b').value=this.value"></div>
     </div>
     <div style="margin-bottom:16px">
-      <label>Variation C — Urgency</label>
+      <label>Variation C - Urgency</label>
       <div class="color-row"><input type="color" id="sC3a" value="#c62828"><input type="text" id="sC3aHex" value="#c62828" onchange="document.getElementById('sC3a').value=this.value"><input type="color" id="sC3b" value="#f57c00"><input type="text" id="sC3bHex" value="#f57c00" onchange="document.getElementById('sC3b').value=this.value"></div>
     </div>
 
     <div style="display:flex;gap:8px;margin-top:24px">
-      <button class="btn-primary" onclick="saveSettings()" style="flex:1">💾 Save Settings</button>
+      <button class="btn-primary" onclick="saveSettings()" style="flex:1">Save Settings</button>
       <button class="btn-sm btn-danger" onclick="resetSettings()">Reset Defaults</button>
     </div>
   </div>
