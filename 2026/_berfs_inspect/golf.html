@@ -2656,7 +2656,7 @@ Closed Sales:
         const ordered = shuffle(rest.filter((s) => (s.priority || 0) >= 8)).concat(shuffle(rest.filter((s) => (s.priority || 0) < 8)));
         const marketIndex = ordered.findIndex((s) => s.type === "market");
         if (marketIndex > -1) ordered.splice(Math.min(2, ordered.length), 0, ordered.splice(marketIndex, 1)[0]);
-        return welcome ? [welcome, ...ordered] : ordered;
+        return deck.filter((s) => s.id === "golf");
       };
 
       const refs = {
