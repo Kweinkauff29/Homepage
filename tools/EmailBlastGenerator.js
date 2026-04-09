@@ -168,30 +168,77 @@ function escHtml(s){return s ? s.toString().replace(/&/g,'&amp;').replace(/</g,'
 // ===================== TAB SWITCHING =====================
 let currentTab = 0;
 function switchTab(idx,btn){
-  currentTab=idx;
-  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
-  btn.classList.add('active');
-  
-  // Hide all panels
-  document.querySelectorAll('.tab-panel').forEach(p=>p.classList.remove('active'));
-  
+  currentTab = idx;
+  document.querySelectorAll('#outputTabs .tab').forEach(t => t.classList.remove('active'));
+  if(btn) btn.classList.add('active');
+
+  document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+
   if(idx === 3) {
-    // Composer
-    document.getElementById('composerPanel').classList.add('active');
+    const composerPanel = document.getElementById('composerPanel');
+    if(composerPanel) composerPanel.classList.add('active');
     return;
   }
-  
-  const panel=document.getElementById('panel-'+idx);
+
+  const panel = document.getElementById('panel-' + idx);
   if(panel) panel.classList.add('active');
+}
+
+function configureOutputTabs(options = {}){
+  const config = Object.assign({
+    tab0: 'Variation A',
+    tab1: 'Variation B',
+    tab2: 'Variation C',
+    showTab1: true,
+    showTab2: true,
+    showComposer: false,
+    composerLabel: 'THE COMPOSER'
+  }, options);
+
+  const tab0 = document.getElementById('outputTab0');
+  const tab1 = document.getElementById('outputTab1');
+  const tab2 = document.getElementById('outputTab2');
+  const composer = document.getElementById('composerTabBtn');
+  if(!tab0 || !tab1 || !tab2 || !composer) return;
+
+  tab0.textContent = config.tab0;
+  tab1.textContent = config.tab1;
+  tab2.textContent = config.tab2;
+  composer.textContent = config.composerLabel;
+
+  tab0.style.display = '';
+  tab1.style.display = config.showTab1 ? '' : 'none';
+  tab2.style.display = config.showTab2 ? '' : 'none';
+  composer.style.display = config.showComposer ? '' : 'none';
+}
+
+function openOutputTab(idx){
+  const btn = document.getElementById('outputTab' + idx);
+  if(btn && btn.style.display !== 'none') switchTab(idx, btn);
+}
+
+function setOutputVisible(){
+  document.getElementById('emptyState').style.display = 'none';
+  document.getElementById('outputArea').style.display = 'block';
 }
 
 // ===================== COPY =====================
 function copyText(id){
-  const el=document.getElementById(id);
-  const text=el.innerText||el.textContent;
-  navigator.clipboard.writeText(text).then(()=>{
-    const btn=el.parentElement.querySelector('.copy-btn');
-    if(btn){btn.textContent='✓ Copied!';btn.classList.add('copied');setTimeout(()=>{btn.textContent='Copy';btn.classList.remove('copied')},2000);}
+  const el = document.getElementById(id);
+  if(!el) return;
+  const text = typeof el.value === 'string' ? el.value : (el.innerText || el.textContent || '');
+  navigator.clipboard.writeText(text).then(() => {
+    const btn = el.parentElement ? el.parentElement.querySelector('.copy-btn') : null;
+    if(btn){
+      const original = btn.dataset.originalText || btn.textContent;
+      btn.dataset.originalText = original;
+      btn.textContent = 'Copied!';
+      btn.classList.add('copied');
+      setTimeout(() => {
+        btn.textContent = btn.dataset.originalText || 'Copy';
+        btn.classList.remove('copied');
+      }, 2000);
+    }
     toast('Copied to clipboard!');
   });
 }
@@ -202,31 +249,79 @@ function getYouTubeId(url){
   return m?m[1]:null;
 }
 
+function formatDateForInput(value){
+  const date = value instanceof Date ? value : new Date(value);
+  if(Number.isNaN(date.getTime())) return '';
+  return date.toISOString().slice(0, 10);
+}
+
+function formatLongDate(value){
+  if(!value) return '';
+  const date = new Date(value + 'T12:00:00');
+  if(Number.isNaN(date.getTime())) return value;
+  return date.toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' });
+}
+
+function diffDays(fromValue, toValue){
+  const from = new Date(fromValue + 'T12:00:00');
+  const to = new Date(toValue + 'T12:00:00');
+  if(Number.isNaN(from.getTime()) || Number.isNaN(to.getTime())) return null;
+  return Math.round((to.getTime() - from.getTime()) / 86400000);
+}
+
+function initCampaignPlannerDefaults(){
+  if(!gv('campaignStartDate')) sv('campaignStartDate', formatDateForInput(new Date()));
+  if(!gv('campaignGoal')) sv('campaignGoal', 'Maximize registrations and attendance');
+}
+
 // ===================== EMAIL GENERATION =====================
-let currentMode = 'single'; // 'single', 'friday', 'tuesday', 'flyer'
+let currentMode = 'single'; // 'single', 'campaign', 'friday', 'tuesday', 'flyer'
 let fridaySections = []; // array of {id, title, ...}
 let tuesdaySections = []; // array of sections for tuesday affiliate blast
 let composerPicks = {}; // sectionId -> variationIndex (0,1,2)
+let campaignPlanData = null;
+let campaignPlanImported = false;
 
 let _genData = null;
 let _genVariations = [];
 let _genPreheaders = [];
 let _genSettings = null;
 
+function updateGenerateButtonLabel(){
+  const btn = document.getElementById('generateBtn');
+  if(!btn) return;
+  if(currentMode === 'campaign'){
+    btn.textContent = 'Review Imported Campaign Plan';
+    return;
+  }
+  if(currentMode === 'tuesday' && tuesdayBlocksImported && tuesdayBlocks.length > 0){
+    btn.textContent = 'Generate Final Email';
+    return;
+  }
+  if(currentMode === 'flyer'){
+    btn.textContent = 'Use Flyer Prompt Above';
+    return;
+  }
+  btn.textContent = 'Generate 3 Variations';
+}
+
 function setMode(mode){
   currentMode = mode;
   document.getElementById('modeSingle').classList.toggle('active', mode==='single');
+  document.getElementById('modeCampaign').classList.toggle('active', mode==='campaign');
   document.getElementById('modeFriday').classList.toggle('active', mode==='friday');
   document.getElementById('modeTuesday').classList.toggle('active', mode==='tuesday');
   document.getElementById('modeFlyer').classList.toggle('active', mode==='flyer');
-  
+
   document.getElementById('singleModeFields').style.display = mode==='single' ? 'block' : 'none';
+  document.getElementById('campaignModeFields').style.display = mode==='campaign' ? 'block' : 'none';
   document.getElementById('fridayModeFields').style.display = mode==='friday' ? 'block' : 'none';
   document.getElementById('tuesdayModeFields').style.display = mode==='tuesday' ? 'block' : 'none';
   document.getElementById('flyerModeFields').style.display = mode==='flyer' ? 'block' : 'none';
-  
+
   if(mode==='friday' && fridaySections.length===0) addFridaySection();
   if(mode==='tuesday' && tuesdaySections.length===0) addTuesdaySection();
+  updateGenerateButtonLabel();
 }
 
 function addFridaySection(){
@@ -284,11 +379,7 @@ function renderFridaySections(){
   if(!container) return;
   
   // Safety: Ensure variations are populated or use defaults
-  const defaultVars = [
-    {tone:'professional', colorA:'#008080', colorB:'#02aae1'},
-    {tone:'energetic', colorA:'#1a237e', colorB:'#c5a44e'},
-    {tone:'urgency', colorA:'#c62828', colorB:'#f57c00'}
-  ];
+  const defaultVars = buildLegacyToneVariations(getSettings(), fridayDesign);
   const activeVars = (_genVariations && _genVariations.length >= 3) ? _genVariations : defaultVars;
 
   container.innerHTML = fridaySections.map((sec, idx) => {
@@ -836,6 +927,8 @@ function generateAIPrompt(){
   const raw = gv('aiRawInput');
   if(!raw){toast('Paste some raw event details first!');return;}
   const s = getSettings();
+  const fontGuide = SINGLE_CLASS_FONT_OPTIONS.join(', ');
+  const themeGuide = getSingleClassThemeGuide();
   const prompt = `You are an expert design-focused email marketer for "${s.orgName}". Parse the raw input and return a COMPLETE marketing JSON object.
 
 ### CRITICAL RULES:
@@ -844,14 +937,25 @@ function generateAIPrompt(){
    - copyA: Professional & factual.
    - copyB: Energetic & FOMO.
    - copyC: Urgency & Benefit-led.
+3. Make the design direction feel intentional. External AI is allowed to choose rich fonts, gradients, supporting colors, and a more editorial look.
+4. Use this theme library as inspiration:
+${themeGuide}
+5. Choose the fontFamily from: ${fontGuide}
 
 RETURN A JSON OBJECT (not an array) with this exact structure:
 {
   "design": {
-    "fontFamily": "Outfit", // Choose from: Montserrat, Outfit, Playfair Display, Inter
-    "headerGradient": ["#004a32", "#006847"], // 2 hex codes for a rich gradient
+    "themeName": "Coastal Authority",
+    "themeDescription": "Short explanation of the creative direction",
+    "fontFamily": "Outfit",
+    "headerEyebrow": "Upcoming Education",
+    "logoPlacement": "header", // Use "none" for a logo-free editorial header
+    "headerGradient": ["#004a32", "#006847"],
     "buttonGradient": ["#006847", "#008a5e"],
-    "accentColor": "#008a5e"
+    "accentColor": "#008a5e",
+    "supportingColors": ["#0f766e", "#d9f99d", "#ecfeff"],
+    "surfaceColor": "#f7fbfa",
+    "variationAccents": ["#0f766e", "#1d4ed8", "#d97706"]
   },
   "sections": [
     {
@@ -889,7 +993,7 @@ function importAIResponse(){
     const data = JSON.parse(rawText);
     const sections = Array.isArray(data) ? data : (data.sections || []);
     
-    if(data.design) fridayDesign = data.design;
+    if(data.design) fridayDesign = normalizeCreativeDesign(data.design, 0, gv('fridayHeaderCol') || '#004a32');
     
     fridaySections = sections.map((item, idx) => ({
       id: Date.now() + Math.random() + idx,
@@ -923,6 +1027,8 @@ function generateAIPromptTuesday(){
   const s = getSettings();
   const org = ORGS[currentOrgId];
   const maxW = s.emailMaxW || 730;
+  const fontGuide = SINGLE_CLASS_FONT_OPTIONS.join(', ');
+  const themeGuide = getSingleClassThemeGuide();
 
   const prompt = `You are an expert email marketing designer for ${org.name}. I need you to design a COMPLETE, DYNAMIC email layout for our Tuesday Affiliate Blast targeting our affiliates and sponsors.
   
@@ -935,10 +1041,16 @@ YOUR TASK: Design a rich, dynamic email layout using content blocks. Think like 
 RETURN A SINGLE JSON OBJECT (not an array) with this exact structure:
 {
   "design": {
-    "fontFamily": "Outfit", // Choose from: Montserrat, Outfit, Playfair Display, Inter
-    "headerGradient": ["#002b4c", "#005a8c"], // 2 hex codes for a rich gradient
+    "themeName": "Coastal Authority",
+    "themeDescription": "Short explanation of the creative direction",
+    "fontFamily": "Outfit", // Choose from: ${fontGuide}
+    "headerEyebrow": "Affiliate Opportunities",
+    "logoPlacement": "header", // Use "none" if the editorial header should stand on its own
+    "headerGradient": ["#002b4c", "#005a8c"],
     "buttonGradient": ["#005a8c", "#02aae1"],
-    "accentColor": "#02aae1"
+    "accentColor": "#02aae1",
+    "supportingColors": ["#f59e0b", "#dbeafe", "#ecfeff"],
+    "surfaceColor": "#f8fbff"
   },
   "subject": "Catchy email subject line",
   "preheader": "Preview text for email clients (max 200 chars)",
@@ -946,6 +1058,9 @@ RETURN A SINGLE JSON OBJECT (not an array) with this exact structure:
     // Array of content blocks — each block is one of the types below
   ]
 }
+
+CREATIVE DIRECTION LIBRARY:
+${themeGuide}
 
 BLOCK TYPES AVAILABLE:
 
@@ -1027,13 +1142,14 @@ function importAIResponseTuesday(){
     
     const data = JSON.parse(rawText);
 
-    if(data.design) tuesdayDesign = data.design;
+    if(data.design) tuesdayDesign = normalizeCreativeDesign(data.design, 1, gv('tuesdayHeaderCol') || '#02aae1');
     if(data.blocks && Array.isArray(data.blocks)){
       tuesdayBlocks = data.blocks;
       tuesdaySubject = data.subject || '';
       tuesdayPreheaderText = data.preheader || '';
       tuesdayBlocksImported = true;
       renderTuesdayBlockEditor();
+      updateGenerateButtonLabel();
       toast(`Imported ${data.blocks.length} layout blocks! Review and click Generate.`);
     } else if(Array.isArray(data)){
       // Legacy array format fallback
@@ -1044,6 +1160,7 @@ function importAIResponseTuesday(){
       }));
       tuesdayBlocksImported = false;
       renderTuesdaySections();
+      updateGenerateButtonLabel();
       toast(`Imported ${data.length} sections (legacy format).`);
     } else {
       toast('Invalid format: Expected an object with "blocks" array.');
@@ -1117,6 +1234,11 @@ let singleClassImported = false;
 function toggleInstructorFields(){
   const on = document.getElementById('singleInstructorToggle').classList.contains('on');
   document.getElementById('singleInstructorFields').style.display = on ? 'block' : 'none';
+}
+
+function toggleCampaignInstructorFields(){
+  const on = document.getElementById('campaignInstructorToggle').classList.contains('on');
+  document.getElementById('campaignInstructorFields').style.display = on ? 'block' : 'none';
 }
 
 
@@ -1196,6 +1318,83 @@ function getSingleClassThemeFallback(index){
     supportingColors: [theme.colors[1], theme.colors[2], theme.colors[3]],
     surfaceColor: theme.colors[4]
   };
+}
+
+function getThemeFallbackByName(name){
+  const match = SINGLE_CLASS_THEME_OPTIONS.find(theme => theme.name.toLowerCase() === firstNonEmpty(name).toLowerCase());
+  return match ? {
+    themeName: match.name,
+    themeDescription: match.notes,
+    headerGradient: [match.colors[0], match.colors[1]],
+    buttonGradient: [match.colors[1], match.colors[2]],
+    accentColor: match.colors[2],
+    supportingColors: [match.colors[1], match.colors[2], match.colors[3]],
+    surfaceColor: match.colors[4]
+  } : null;
+}
+
+function normalizeCreativeDesign(design, fallbackIndex = 0, fallbackHeaderColor = ''){
+  const theme = getThemeFallbackByName(design && design.themeName) || getSingleClassThemeFallback(fallbackIndex);
+  const normalized = Object.assign({}, design || {});
+
+  normalized.themeName = firstNonEmpty(normalized.themeName, theme.themeName);
+  normalized.themeDescription = firstNonEmpty(normalized.themeDescription, theme.themeDescription);
+  normalized.fontFamily = firstNonEmpty(normalized.fontFamily, SINGLE_CLASS_FONT_OPTIONS[fallbackIndex % SINGLE_CLASS_FONT_OPTIONS.length], 'Montserrat');
+  normalized.headerEyebrow = firstNonEmpty(normalized.headerEyebrow);
+  normalized.logoPlacement = firstNonEmpty(normalized.logoPlacement, 'header');
+
+  normalized.headerGradient = normalizeColorArray(normalized.headerGradient).slice(0, 2);
+  if(normalized.headerGradient.length < 2){
+    normalized.headerGradient = [firstNonEmpty(fallbackHeaderColor, theme.headerGradient[0]), theme.headerGradient[1]];
+  }
+
+  normalized.buttonGradient = normalizeColorArray(normalized.buttonGradient).slice(0, 2);
+  if(normalized.buttonGradient.length < 2){
+    normalized.buttonGradient = theme.buttonGradient.slice();
+  }
+
+  normalized.supportingColors = normalizeColorArray(normalized.supportingColors);
+  if(normalized.supportingColors.length < 3){
+    normalized.supportingColors = theme.supportingColors.slice();
+  }
+
+  normalized.accentColor = firstNonEmpty(normalized.accentColor, normalized.supportingColors[0], theme.accentColor);
+  normalized.surfaceColor = firstNonEmpty(normalized.surfaceColor, theme.surfaceColor);
+  normalized.variationAccents = normalizeColorArray(normalized.variationAccents);
+  if(normalized.variationAccents.length < 3){
+    normalized.variationAccents = [
+      firstNonEmpty(normalized.variationAccents[0], normalized.accentColor, normalized.headerGradient[0]),
+      firstNonEmpty(normalized.variationAccents[1], normalized.supportingColors[0], normalized.buttonGradient[0]),
+      firstNonEmpty(normalized.variationAccents[2], normalized.supportingColors[1], normalized.buttonGradient[1])
+    ];
+  }
+
+  return normalized;
+}
+
+function buildLegacyToneVariations(settings, design){
+  const s = settings || getSettings();
+  const d = normalizeCreativeDesign(design, 0, s.c1a);
+  return [
+    {
+      name:'A - Professional',
+      tone:'professional',
+      colorA:firstNonEmpty(d.variationAccents[0], s.c1a),
+      colorB:firstNonEmpty(d.headerGradient[1], d.buttonGradient[0], s.c1b)
+    },
+    {
+      name:'B - Energetic',
+      tone:'energetic',
+      colorA:firstNonEmpty(d.variationAccents[1], d.supportingColors[0], s.c2a),
+      colorB:firstNonEmpty(d.supportingColors[1], d.buttonGradient[1], s.c2b)
+    },
+    {
+      name:'C - Urgency',
+      tone:'urgency',
+      colorA:firstNonEmpty(d.variationAccents[2], d.supportingColors[1], s.c3a),
+      colorB:firstNonEmpty(d.buttonGradient[1], d.supportingColors[2], s.c3b)
+    }
+  ];
 }
 
 function buildSingleClassDetailItems(parsed, variation){
@@ -1459,20 +1658,30 @@ function ensureSingleClassVariationBlocks(variation, parsed, options){
   return v;
 }
 
-function generateSingleClassAIPrompt(){
-  const raw = gv('singleRawInput');
-  if(!raw){ toast('Paste the class details first!'); return; }
-
-  const s = getSettings();
-  const org = ORGS[currentOrgId];
-  const regLink = gv('regLink') || '';
-  const includeInstructor = document.getElementById('singleInstructorToggle').classList.contains('on');
-  const instructorName = includeInstructor ? gv('singleInstructorName') : '';
-  const instructorHeadshot = includeInstructor ? gv('singleInstructorHeadshot') : '';
-  const maxW = s.emailMaxW || 730;
-  const heroH = s.heroH || 315;
+function buildSingleClassPromptText(options = {}){
+  const raw = options.raw || '';
+  const s = options.settings || getSettings();
+  const org = ORGS[options.orgId || currentOrgId];
+  const regLink = firstNonEmpty(options.regLink);
+  const includeInstructor = !!options.includeInstructor;
+  const instructorName = includeInstructor ? firstNonEmpty(options.instructorName) : '';
+  const instructorHeadshot = includeInstructor ? firstNonEmpty(options.instructorHeadshot) : '';
+  const maxW = options.maxW || s.emailMaxW || 730;
+  const heroH = options.heroH || s.heroH || 315;
   const fontGuide = SINGLE_CLASS_FONT_OPTIONS.join(', ');
   const themeGuide = getSingleClassThemeGuide();
+  const mission = firstNonEmpty(
+    options.mission,
+    'Design a complete, high-end single-class promotional email blast. Use your thinking capabilities to research the topic deeply and provide rich, compelling marketing copy.'
+  );
+  const strategyLines = normalizeStringArray(options.strategyLines);
+  const additionalRules = normalizeStringArray(options.additionalRules);
+  const strategyBlock = strategyLines.length
+    ? `\n### SEND-SPECIFIC STRATEGY:\n${strategyLines.map(line => `- ${line}`).join('\n')}\n`
+    : '';
+  const additionalRuleBlock = additionalRules.length
+    ? `\n### ADDITIONAL CAMPAIGN RULES:\n${additionalRules.map(line => `- ${line}`).join('\n')}\n`
+    : '';
 
   const instructorSection = includeInstructor ? `
 INSTRUCTOR SECTION (REQUIRED):
@@ -1486,12 +1695,11 @@ INSTRUCTOR SECTION (REQUIRED):
 INSTRUCTOR SECTION: Not required for this email.
 `;
 
-  const prompt = `You are an expert email marketing designer and copywriter for ${org.name} located at ${org.addr}.
+  return `You are an expert email marketing designer and copywriter for ${org.name} located at ${org.addr}.
 
 ${currentOrgId === 'wcr' ? 'CONTEXT: This is for the Women\'s Council of REALTORS. Ensure the copy reflects their mission of professional networking and leadership development.' : 'CONTEXT: This is for the local REALTOR association audience and should feel credible, professional, and genuinely useful.'}
 
-YOUR MISSION: Design a complete, high-end single-class promotional email blast. Use your thinking capabilities to research the topic deeply and provide rich, compelling marketing copy.
-
+YOUR MISSION: ${mission}${strategyBlock}
 ### CRITICAL RULES:
 1. No citations: do not include citations, references, footnotes, or source tags.
 2. Research the class topic deeply enough to write for real estate professionals with specificity.
@@ -1501,7 +1709,7 @@ YOUR MISSION: Design a complete, high-end single-class promotional email blast. 
    - a professional overview section that explains why the topic matters to agents, brokers, or affiliates right now
 5. Do NOT place the Bonita Estero REALTORS or WCR logo above the header. Use an editorial header with no logo row.
 6. Return more detail, not less. Write full sections, not thin placeholder copy.
-7. Make each variation feel like a finished campaign, not a quick mockup.
+7. Make each variation feel like a finished campaign, not a quick mockup.${additionalRuleBlock}
 
 ### HERO IMAGE RULES:
 Generate one hero image prompt for each variation at ${maxW}x${heroH}px.
@@ -1525,7 +1733,6 @@ ${raw}
 ${regLink ? `REGISTRATION LINK: ${regLink}` : 'No registration link provided - use #'}
 
 ${instructorSection}
-
 RETURN A JSON OBJECT (strictly valid) with this structure:
 {
   "parsed": {
@@ -1613,12 +1820,376 @@ REQUIRED CONTENT RULES FOR EACH VARIATION:
 - The JSON must contain real, specific sections and details - not placeholders like "..." or "[insert copy]".
 
 RETURN ONLY THE JSON OBJECT. NO MARKDOWN BLOCK, NO BACKTICKS, NO PREAMBLE. JUST THE { ... } CONTENT.`;
+}
+
+function generateSingleClassAIPrompt(){
+  const raw = gv('singleRawInput');
+  if(!raw){ toast('Paste the class details first!'); return; }
+
+  const prompt = buildSingleClassPromptText({
+    raw,
+    regLink: gv('regLink'),
+    includeInstructor: document.getElementById('singleInstructorToggle').classList.contains('on'),
+    instructorName: gv('singleInstructorName'),
+    instructorHeadshot: gv('singleInstructorHeadshot'),
+    settings: getSettings()
+  });
 
   navigator.clipboard.writeText(prompt);
   document.getElementById('singleImportBox').style.display = 'block';
   document.getElementById('singlePromptPreviewBox').style.display = 'block';
   document.getElementById('singlePromptPreview').textContent = prompt;
   toast('AI Prompt copied to clipboard! Paste into Gemini or ChatGPT, then paste the response below.');
+}
+
+function buildCampaignEmailPrompt(email){
+  if(!email) return '';
+  const campaign = campaignPlanData ? (campaignPlanData.campaign || {}) : {};
+  const eventDate = firstNonEmpty(campaign.eventDate, gv('campaignEventDate'));
+  const sendDateLabel = firstNonEmpty(formatLongDate(email.sendDate), email.sendDate);
+  const eventDateLabel = firstNonEmpty(formatLongDate(eventDate), eventDate);
+  const daysBeforeEvent = eventDate && email.sendDate ? diffDays(email.sendDate, eventDate) : null;
+  const design = normalizeCreativeDesign(email.designDirection, 0, currentOrgId === 'wcr' ? '#002b4c' : '#004a32');
+  const heroDetails = buildSingleClassHeroPromptEntry(email.heroImagePrompt, {}, {}, 0);
+  const strategyLines = [
+    firstNonEmpty(campaign.campaignName) ? `Campaign: ${campaign.campaignName}` : '',
+    sendDateLabel ? `This email is scheduled to send on ${sendDateLabel}.` : '',
+    eventDateLabel ? `The event takes place on ${eventDateLabel}.` : '',
+    firstNonEmpty(email.relativeTiming, daysBeforeEvent !== null ? `${daysBeforeEvent} days before the event` : '') ? `Campaign timing: ${firstNonEmpty(email.relativeTiming, daysBeforeEvent !== null ? `${daysBeforeEvent} days before the event` : '')}.` : '',
+    firstNonEmpty(email.stage) ? `Campaign stage: ${email.stage}.` : '',
+    firstNonEmpty(email.purpose) ? `Primary purpose: ${email.purpose}.` : '',
+    firstNonEmpty(email.angle) ? `Marketing angle to emphasize: ${email.angle}.` : '',
+    firstNonEmpty(email.targetAudience) ? `Target audience for this send: ${email.targetAudience}.` : '',
+    firstNonEmpty(email.subjectLineIdea) ? `Subject line territory to honor: ${email.subjectLineIdea}.` : '',
+    firstNonEmpty(email.preheaderIdea) ? `Preheader direction to honor: ${email.preheaderIdea}.` : '',
+    firstNonEmpty(email.ctaLabel) ? `Preferred CTA label: ${email.ctaLabel}.` : '',
+    email.mustIncludeDetails && email.mustIncludeDetails.length ? `Must-include details: ${email.mustIncludeDetails.join('; ')}.` : '',
+    email.recommendedSections && email.recommendedSections.length ? `Sections to emphasize: ${email.recommendedSections.join(', ')}.` : '',
+    design.themeName ? `Design direction: ${design.themeName} - ${design.themeDescription}.` : '',
+    design.fontFamily ? `Use ${design.fontFamily} as the leading font direction.` : '',
+    design.headerEyebrow ? `Suggested header eyebrow: ${design.headerEyebrow}.` : '',
+    heroDetails.visualFocus ? `Hero focus: ${heroDetails.visualFocus}.` : '',
+    heroDetails.eventDetailsToFeature && heroDetails.eventDetailsToFeature.length ? `Hero details to feature: ${heroDetails.eventDetailsToFeature.join(', ')}.` : ''
+  ].filter(Boolean);
+
+  const additionalRules = [
+    'The subject line and preheader must feel specific to this campaign stage rather than generic launch copy.',
+    'Honor the timing of the send: early emails should educate and build value, while later emails should increase urgency and specificity.',
+    design.logoPlacement === 'none' ? 'Do not place the BER or WCR logo above the header for this send.' : 'If you use a logo row, keep it subordinate to the main editorial header.',
+    `Lean into this palette: header gradient ${design.headerGradient.join(' to ')}, button gradient ${design.buttonGradient.join(' to ')}, accent ${design.accentColor}.`,
+    email.mustIncludeDetails && email.mustIncludeDetails.length ? `Explicitly surface these details inside the event-details section: ${email.mustIncludeDetails.join('; ')}.` : '',
+    firstNonEmpty(email.ctaLabel) ? `Use "${email.ctaLabel}" as the preferred CTA language unless the content demands a stronger equivalent.` : ''
+  ].filter(Boolean);
+
+  return buildSingleClassPromptText({
+    raw: gv('campaignRawInput').trim(),
+    regLink: firstNonEmpty(gv('campaignRegLink'), campaign.registrationLink),
+    includeInstructor: document.getElementById('campaignInstructorToggle').classList.contains('on'),
+    instructorName: gv('campaignInstructorName'),
+    instructorHeadshot: gv('campaignInstructorHeadshot'),
+    settings: getSettings(),
+    mission: 'Design one polished send inside a larger campaign for this class or event. Return 3 high-end email variations tailored to this specific send timing, audience, and campaign objective.',
+    strategyLines,
+    additionalRules
+  });
+}
+
+function normalizeCampaignPlanEmail(email, index, campaign){
+  const item = Object.assign({}, email || {});
+  const designDirection = normalizeCreativeDesign(item.designDirection || item.design || {}, index, currentOrgId === 'wcr' ? '#002b4c' : '#004a32');
+  const sendDate = firstNonEmpty(item.sendDate, item.date, item.postDate);
+  const relativeTiming = firstNonEmpty(item.relativeTiming, item.timing, item.sendWindow);
+  return {
+    sendDate,
+    relativeTiming: firstNonEmpty(relativeTiming, sendDate && campaign.eventDate ? `${diffDays(sendDate, campaign.eventDate)} days before event` : ''),
+    stage: firstNonEmpty(item.stage, item.phase, `Send ${index + 1}`),
+    targetAudience: firstNonEmpty(item.targetAudience, item.audience, campaign.audienceSummary),
+    purpose: firstNonEmpty(item.purpose, item.goal, item.objective),
+    angle: firstNonEmpty(item.angle, item.messageAngle, item.focus),
+    subjectLineIdea: firstNonEmpty(item.subjectLineIdea, item.subject),
+    preheaderIdea: firstNonEmpty(item.preheaderIdea, item.preheader),
+    ctaLabel: firstNonEmpty(item.ctaLabel, 'Reserve Your Seat'),
+    mustIncludeDetails: normalizeStringArray(item.mustIncludeDetails || item.keyDetails || item.mustSurface),
+    recommendedSections: normalizeStringArray(item.recommendedSections || item.sectionsToEmphasize || item.sectionFocus),
+    designDirection,
+    heroImagePrompt: buildSingleClassHeroPromptEntry(item.heroImagePrompt || item.heroPrompt, {}, {}, index)
+  };
+}
+
+function heroDetailsToMarkup(heroPrompt){
+  const focus = heroPrompt && heroPrompt.visualFocus
+    ? `<div style="font-size:11px;color:var(--text2);line-height:1.5;margin-bottom:6px"><strong style="color:var(--text)">Visual focus:</strong> ${escHtml(heroPrompt.visualFocus)}</div>`
+    : '';
+  const details = heroPrompt && heroPrompt.eventDetailsToFeature && heroPrompt.eventDetailsToFeature.length
+    ? `<div style="font-size:11px;color:var(--text2);line-height:1.5"><strong style="color:var(--text)">Feature details:</strong> ${escHtml(heroPrompt.eventDetailsToFeature.join(' • '))}</div>`
+    : '';
+  const zones = heroPrompt && heroPrompt.reservedTextAreas && heroPrompt.reservedTextAreas.length
+    ? `<div style="font-size:11px;color:var(--text2);line-height:1.5;margin-top:6px"><strong style="color:var(--text)">Reserved text zones:</strong> ${escHtml(heroPrompt.reservedTextAreas.join(' • '))}</div>`
+    : '';
+  const promptText = heroPrompt && heroPrompt.prompt
+    ? `<div style="font-size:11px;color:var(--text2);line-height:1.5;margin-top:6px">${escHtml(heroPrompt.prompt)}</div>`
+    : '';
+  return `${focus}${details}${zones}${promptText}`;
+}
+
+function renderCampaignPlanOutput(){
+  if(!campaignPlanData || !campaignPlanData.emails || !campaignPlanData.emails.length){
+    toast('Import a campaign plan first.');
+    return;
+  }
+
+  const campaign = campaignPlanData.campaign || {};
+  const container = document.getElementById('tabContent');
+  const firstDesign = campaignPlanData.emails[0].designDirection || {};
+  const overviewSwatches = [
+    ...(firstDesign.headerGradient || []).slice(0, 2),
+    firstDesign.accentColor,
+    ...((firstDesign.supportingColors || []).slice(0, 2))
+  ].filter(Boolean).map(color => `<div style="width:16px;height:16px;border-radius:999px;background:${color};border:1px solid rgba(255,255,255,0.08)"></div>`).join('');
+
+  const timelineHtml = campaignPlanData.emails.map((email, index) => {
+    const prompt = buildCampaignEmailPrompt(email);
+    const design = email.designDirection;
+    const swatches = [
+      ...(design.headerGradient || []).slice(0, 2),
+      design.accentColor,
+      ...((design.supportingColors || []).slice(0, 2))
+    ].filter(Boolean).map(color => `<div style="width:16px;height:16px;border-radius:999px;background:${color};border:1px solid rgba(255,255,255,0.08)"></div>`).join('');
+    const mustInclude = email.mustIncludeDetails.length ? `<div style="font-size:11px;color:var(--text2);line-height:1.5"><strong style="color:var(--text)">Must include:</strong> ${escHtml(email.mustIncludeDetails.join(' • '))}</div>` : '';
+    const sections = email.recommendedSections.length ? `<div style="font-size:11px;color:var(--text2);line-height:1.5;margin-top:6px"><strong style="color:var(--text)">Section focus:</strong> ${escHtml(email.recommendedSections.join(' • '))}</div>` : '';
+
+    return `
+      <div style="background:rgba(255,255,255,0.03);border:1px solid var(--border);border-radius:12px;padding:14px;margin-bottom:16px">
+        <div style="display:flex;justify-content:space-between;gap:16px;align-items:flex-start;margin-bottom:12px;flex-wrap:wrap">
+          <div>
+            <div style="font-size:11px;text-transform:uppercase;letter-spacing:1px;color:var(--accent2)">Send ${index + 1}</div>
+            <div style="font-size:18px;font-weight:800;color:var(--text)">${escHtml(firstNonEmpty(email.stage, `Send ${index + 1}`))}</div>
+            <div style="font-size:12px;color:var(--text2);margin-top:4px">${escHtml(firstNonEmpty(formatLongDate(email.sendDate), email.sendDate))}${email.relativeTiming ? ` • ${escHtml(email.relativeTiming)}` : ''}</div>
+          </div>
+          <div style="min-width:240px;max-width:320px;background:rgba(255,255,255,0.04);border-radius:10px;padding:10px">
+            <div style="font-size:10px;text-transform:uppercase;color:var(--text2)">Design Direction</div>
+            <div style="font-weight:700;color:var(--accent2)">${escHtml(design.themeName || 'Custom Theme')}</div>
+            ${design.themeDescription ? `<div style="font-size:11px;color:var(--text2);line-height:1.4;margin-top:4px">${escHtml(design.themeDescription)}</div>` : ''}
+            <div style="font-size:11px;color:var(--text2);margin-top:8px">Font: <strong style="color:var(--text)">${escHtml(design.fontFamily || 'Montserrat')}</strong></div>
+            <div style="display:flex;gap:4px;flex-wrap:wrap;margin-top:8px">${swatches}</div>
+          </div>
+        </div>
+
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:10px;margin-bottom:12px">
+          <div style="background:rgba(255,255,255,0.04);padding:10px;border-radius:8px"><span style="font-size:10px;text-transform:uppercase;color:var(--text2)">Audience</span><div style="font-size:13px;line-height:1.45;color:var(--text)">${escHtml(firstNonEmpty(email.targetAudience, 'General audience'))}</div></div>
+          <div style="background:rgba(255,255,255,0.04);padding:10px;border-radius:8px"><span style="font-size:10px;text-transform:uppercase;color:var(--text2)">Purpose</span><div style="font-size:13px;line-height:1.45;color:var(--text)">${escHtml(firstNonEmpty(email.purpose, 'Drive registrations'))}</div></div>
+          <div style="background:rgba(255,255,255,0.04);padding:10px;border-radius:8px"><span style="font-size:10px;text-transform:uppercase;color:var(--text2)">Angle</span><div style="font-size:13px;line-height:1.45;color:var(--text)">${escHtml(firstNonEmpty(email.angle, 'Promote the event with a clear value proposition'))}</div></div>
+        </div>
+
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:10px;margin-bottom:12px">
+          <div style="background:rgba(0,0,0,0.18);padding:10px;border-radius:8px">
+            <div class="output-label" style="margin-bottom:6px">Subject Idea <button class="copy-btn" onclick="copyText('campaign-subject-${index}')">Copy</button></div>
+            <div class="output-box" id="campaign-subject-${index}" style="max-height:none;min-height:auto">${escHtml(firstNonEmpty(email.subjectLineIdea, 'Use the imported campaign subject suggestion.'))}</div>
+          </div>
+          <div style="background:rgba(0,0,0,0.18);padding:10px;border-radius:8px">
+            <div class="output-label" style="margin-bottom:6px">Preheader Idea <button class="copy-btn" onclick="copyText('campaign-preheader-${index}')">Copy</button></div>
+            <div class="output-box" id="campaign-preheader-${index}" style="max-height:none;min-height:auto">${escHtml(firstNonEmpty(email.preheaderIdea, 'Use the imported campaign preheader suggestion.'))}</div>
+          </div>
+        </div>
+
+        ${mustInclude || sections ? `<div style="background:rgba(255,255,255,0.04);padding:10px;border-radius:8px;margin-bottom:12px">${mustInclude}${sections}</div>` : ''}
+
+        <div style="background:rgba(255,255,255,0.04);padding:10px;border-radius:8px;margin-bottom:12px">
+          <div style="font-size:10px;text-transform:uppercase;color:var(--text2);margin-bottom:6px">Hero Direction</div>
+          ${heroDetailsToMarkup(email.heroImagePrompt)}
+        </div>
+
+        <div class="output-section" style="margin-bottom:0">
+          <div class="output-label">Single Email Prompt <button class="copy-btn" onclick="copyText('campaign-prompt-${index}')">Copy</button></div>
+          <div class="output-box" id="campaign-prompt-${index}" style="max-height:360px">${escHtml(prompt)}</div>
+        </div>
+      </div>`;
+  }).join('');
+
+  container.innerHTML = `
+    <div class="tab-panel active" id="panel-0">
+      <div class="output-section">
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:12px;margin-bottom:16px">
+          <div style="background:rgba(255,255,255,0.03);padding:12px;border-radius:10px">
+            <span style="font-size:10px;text-transform:uppercase;color:var(--text2)">Campaign</span>
+            <div style="font-size:18px;font-weight:800;color:var(--accent2)">${escHtml(firstNonEmpty(campaign.campaignName, 'Campaign Email Planner'))}</div>
+            <div style="font-size:12px;color:var(--text2);line-height:1.5;margin-top:6px">${escHtml(firstNonEmpty(campaign.strategySummary, campaign.campaignObjective, 'Imported campaign strategy ready for execution.'))}</div>
+          </div>
+          <div style="background:rgba(255,255,255,0.03);padding:12px;border-radius:10px">
+            <span style="font-size:10px;text-transform:uppercase;color:var(--text2)">Dates</span>
+            <div style="font-size:13px;color:var(--text);line-height:1.6;margin-top:6px">Start: ${escHtml(firstNonEmpty(formatLongDate(campaign.todayDate), campaign.todayDate, gv('campaignStartDate')))}<br>Event: ${escHtml(firstNonEmpty(formatLongDate(campaign.eventDate), campaign.eventDate, gv('campaignEventDate')))}<br>Sends planned: ${campaignPlanData.emails.length}</div>
+          </div>
+          <div style="background:rgba(255,255,255,0.03);padding:12px;border-radius:10px">
+            <span style="font-size:10px;text-transform:uppercase;color:var(--text2)">Audience & Tone</span>
+            <div style="font-size:12px;color:var(--text2);line-height:1.5;margin-top:6px">${escHtml(firstNonEmpty(campaign.audienceSummary, gv('campaignTargetAudience'), 'General audience'))}</div>
+            <div style="display:flex;gap:4px;flex-wrap:wrap;margin-top:10px">${overviewSwatches}</div>
+          </div>
+        </div>
+      </div>
+      ${timelineHtml}
+    </div>`;
+
+  configureOutputTabs({ tab0: 'Campaign Plan', showTab1: false, showTab2: false, showComposer: false });
+  setOutputVisible();
+  openOutputTab(0);
+}
+
+function importCampaignPlannerResponse(){
+  try {
+    let rawText = gv('campaignPlannerAIResponse').trim();
+    if(rawText.startsWith('```')) rawText = rawText.replace(/^```[a-z]*\n?/,'').replace(/\n?```$/,'').trim();
+    rawText = rawText.replace(/,\s*([\]}])/g, '$1');
+
+    const data = JSON.parse(rawText);
+    const campaign = Object.assign({}, data.campaign || data.plan || {});
+    campaign.todayDate = firstNonEmpty(campaign.todayDate, gv('campaignStartDate'), formatDateForInput(new Date()));
+    campaign.eventDate = firstNonEmpty(campaign.eventDate, gv('campaignEventDate'));
+    campaign.campaignName = firstNonEmpty(campaign.campaignName, campaign.name, 'Campaign Email Planner');
+    campaign.campaignObjective = firstNonEmpty(campaign.campaignObjective, campaign.goal, gv('campaignGoal'));
+    campaign.audienceSummary = firstNonEmpty(campaign.audienceSummary, campaign.targetAudience, gv('campaignTargetAudience'));
+    campaign.strategySummary = firstNonEmpty(campaign.strategySummary, campaign.recommendedCadence, campaign.campaignObjective);
+    campaign.registrationLink = firstNonEmpty(campaign.registrationLink, gv('campaignRegLink'));
+
+    let emails = [];
+    if(Array.isArray(data.emails)) emails = data.emails;
+    else if(Array.isArray(data.timeline)) emails = data.timeline;
+    else if(Array.isArray(data.schedule)) emails = data.schedule;
+
+    emails = emails
+      .map((email, index) => normalizeCampaignPlanEmail(email, index, campaign))
+      .filter(email => email.sendDate || email.stage || email.purpose);
+
+    emails.sort((a, b) => firstNonEmpty(a.sendDate).localeCompare(firstNonEmpty(b.sendDate)));
+
+    if(!emails.length){
+      toast('Campaign JSON needs an emails, timeline, or schedule array.');
+      return;
+    }
+
+    campaignPlanData = { campaign, emails };
+    campaignPlanImported = true;
+    updateGenerateButtonLabel();
+    renderCampaignPlanOutput();
+    toast(`Imported campaign plan with ${emails.length} scheduled emails.`);
+  } catch(e) {
+    console.error('Campaign planner import error:', e);
+    toast('Error parsing campaign planner JSON: ' + e.message);
+  }
+}
+
+function generateCampaignPlannerPrompt(){
+  const raw = gv('campaignRawInput').trim();
+  if(!raw){ toast('Paste the event or class details first!'); return; }
+
+  const todayDate = firstNonEmpty(gv('campaignStartDate'), formatDateForInput(new Date()));
+  const eventDate = firstNonEmpty(gv('campaignEventDate'));
+  if(!eventDate){ toast('Add the event or due date first.'); return; }
+
+  const org = ORGS[currentOrgId];
+  const targetAudience = firstNonEmpty(gv('campaignTargetAudience'), 'General audience');
+  const goal = firstNonEmpty(gv('campaignGoal'), 'Maximize registrations and attendance');
+  const cadence = firstNonEmpty(gv('campaignCadence'), 'recommended');
+  const regLink = firstNonEmpty(gv('campaignRegLink'), 'Not provided');
+  const fontGuide = SINGLE_CLASS_FONT_OPTIONS.join(', ');
+  const themeGuide = getSingleClassThemeGuide();
+  const includeInstructor = document.getElementById('campaignInstructorToggle').classList.contains('on');
+  const instructorLines = includeInstructor ? `
+INSTRUCTOR DATA TO USE IN THE PLANNING:
+- Instructor name: ${firstNonEmpty(gv('campaignInstructorName'), 'Not provided')}
+- Instructor headshot URL: ${firstNonEmpty(gv('campaignInstructorHeadshot'), 'Not provided')}
+- Include instructor credibility touches in the send plans when relevant.
+` : '';
+
+  const prompt = `You are an expert lifecycle email strategist and editorial email designer for ${org.name}.
+
+${currentOrgId === 'wcr' ? 'CONTEXT: This campaign is for the Women\'s Council of REALTORS. Make the sequencing feel leadership-focused, polished, collaborative, and highly relevant to members and affiliates.' : 'CONTEXT: This campaign is for a REALTOR association audience. Make the sequencing feel practical, high-value, timely, and professionally credible.'}
+
+TODAY'S DATE: ${todayDate}
+EVENT / DUE DATE: ${eventDate}
+TARGET AUDIENCE: ${targetAudience}
+PRIMARY GOAL: ${goal}
+CADENCE PREFERENCE: ${cadence}
+REGISTRATION LINK: ${regLink}
+${instructorLines}
+THEME LIBRARY YOU MAY DRAW FROM:
+${themeGuide}
+
+FONT OPTIONS:
+${fontGuide}
+
+TASK:
+Plan a full campaign of promotional email blasts from today's date through the event date. Decide how many sends are appropriate based on the runway, the audience, the urgency, and the likely objections. Then plan each email so it can later be generated as a rich single-email blast with multiple variations.
+
+REQUIREMENTS:
+- Plan between 2 and 7 total sends depending on the runway.
+- Every send must have an intentional date, purpose, audience focus, and creative angle.
+- The earlier sends should build awareness, value, and credibility.
+- Mid-campaign sends should deepen urgency, professional relevance, and proof.
+- Final sends should become more specific, urgent, and conversion-focused.
+- Each send should specify a design direction that an external AI can follow, including font, gradients, accent colors, supporting colors, surface color, header eyebrow, and logo placement.
+- Each send should also specify a hero image direction that bakes in the event details.
+- Think carefully about timing gaps. Do not cluster everything at the end unless the runway is genuinely short.
+- Return valid JSON only.
+
+RETURN A SINGLE JSON OBJECT with this exact structure:
+{
+  "campaign": {
+    "campaignName": "Short internal campaign name",
+    "todayDate": "${todayDate}",
+    "eventDate": "${eventDate}",
+    "campaignObjective": "One-sentence goal",
+    "audienceSummary": "Who we are trying to move and why",
+    "recommendedCadence": "Short explanation of spacing and sequencing",
+    "strategySummary": "Overall campaign strategy in 2-4 sentences",
+    "keyVariables": ["urgency factor", "audience need", "timing note"]
+  },
+  "emails": [
+    {
+      "sendDate": "YYYY-MM-DD",
+      "relativeTiming": "e.g. 21 days before event",
+      "stage": "Launch / Value Proof / Urgency / Last Chance",
+      "targetAudience": "Specific audience segment for this send",
+      "purpose": "What this email needs to accomplish",
+      "angle": "Core narrative or hook for the send",
+      "subjectLineIdea": "Suggested subject direction",
+      "preheaderIdea": "Suggested preheader direction",
+      "ctaLabel": "Preferred CTA copy",
+      "mustIncludeDetails": ["detail 1", "detail 2", "detail 3"],
+      "recommendedSections": ["Professional Overview", "Event Details", "Why It Matters Now", "Key Takeaways"],
+      "designDirection": {
+        "themeName": "Theme name",
+        "themeDescription": "Short creative explanation",
+        "fontFamily": "Outfit",
+        "headerEyebrow": "EDITORIAL EYEBROW COPY",
+        "logoPlacement": "none",
+        "headerGradient": ["#002b4c", "#005a8c"],
+        "buttonGradient": ["#005a8c", "#02aae1"],
+        "accentColor": "#02aae1",
+        "supportingColors": ["#f59e0b", "#dbeafe", "#ecfeff"],
+        "surfaceColor": "#f8fbff"
+      },
+      "heroImagePrompt": {
+        "title": "Hero prompt label",
+        "prompt": "Detailed hero direction",
+        "eventDetailsToFeature": ["topic", "date/time", "credits", "location cue"],
+        "visualFocus": "What the image should emphasize",
+        "reservedTextAreas": ["eyebrow", "headline", "date strip", "cta badge"],
+        "altText": "Accessible description"
+      }
+    }
+  ]
+}
+
+RAW EVENT / CLASS DETAILS:
+${raw}
+
+RETURN ONLY THE JSON OBJECT. NO MARKDOWN BLOCK, NO BACKTICKS, NO PREAMBLE.`;
+
+  navigator.clipboard.writeText(prompt);
+  document.getElementById('campaignPlannerImportBox').style.display = 'block';
+  document.getElementById('campaignPlannerPromptPreviewBox').style.display = 'block';
+  document.getElementById('campaignPlannerPromptPreview').textContent = prompt;
+  toast('Campaign planner prompt copied to clipboard!');
 }
 
 function importSingleClassAIResponse(){
@@ -1648,6 +2219,7 @@ function importSingleClassAIResponse(){
     data.heroImagePrompts = buildSingleClassHeroPrompts(data);
     singleClassData = data;
     singleClassImported = true;
+    updateGenerateButtonLabel();
 
     if(data.heroImagePrompts && data.heroImagePrompts.length > 0){
       const box = document.getElementById('singleHeroPromptsBox');
@@ -1750,9 +2322,9 @@ function importSingleClassAIResponse(){
       document.getElementById('composerTabBtn').style.display = 'none';
     }
 
-    document.getElementById('emptyState').style.display = 'none';
-    document.getElementById('outputArea').style.display = 'block';
-    switchTab(0, document.querySelectorAll('.tab')[0]);
+    configureOutputTabs({ tab0: 'Variation A', tab1: 'Variation B', tab2: 'Variation C', showTab1: true, showTab2: true, showComposer: false });
+    setOutputVisible();
+    openOutputTab(0);
     toast(`Imported ${data.variations?.length || 0} email variations with hero prompts!`);
   } catch(e) {
     console.error('Import error:', e);
@@ -1786,19 +2358,16 @@ function renderInstructorBlock(block, s){
 function generateAll(){
   const s=getSettings();
   _genSettings = s;
-  
+
   if(currentMode === 'single') {
-    // Check if AI response was imported
     if(singleClassImported && singleClassData){
-      // Already rendered via importSingleClassAIResponse — just show it
-      document.getElementById('emptyState').style.display='none';
-      document.getElementById('outputArea').style.display='block';
-      switchTab(0, document.querySelectorAll('.tab')[0]);
+      configureOutputTabs({ tab0: 'Variation A', tab1: 'Variation B', tab2: 'Variation C', showTab1: true, showTab2: true, showComposer: false });
+      setOutputVisible();
+      openOutputTab(0);
       toast('Showing imported AI variations!');
       return;
     }
-    
-    // Fallback: if raw input exists but no import yet, prompt user
+
     const raw = gv('singleRawInput');
     if(raw) {
       toast('Click "Generate AI Prompt" first, then paste the AI response and import it.');
@@ -1806,84 +2375,82 @@ function generateAll(){
     }
     toast('Paste class details and use the AI prompt workflow to generate emails.');
     return;
-    
-    } else if (currentMode === 'tuesday' && tuesdayBlocksImported && tuesdayBlocks.length > 0) {
-    // TUESDAY BLOCK-BASED MODE
+
+  } else if (currentMode === 'campaign') {
+    if(campaignPlanImported && campaignPlanData){
+      renderCampaignPlanOutput();
+      toast('Showing imported campaign plan.');
+      return;
+    }
+    toast('Generate the campaign planner prompt first, then import the JSON response.');
+    return;
+
+  } else if (currentMode === 'tuesday' && tuesdayBlocksImported && tuesdayBlocks.length > 0) {
     const hColor = gv('tuesdayHeaderCol') || '#02aae1';
     const hTitle = gv('tuesdayHeaderTitle') || 'Upcoming Affiliate Opportunities';
     const preText = gv('tuesdayIntro') || '';
-    
+
     const emailHtml = generateDynamicEmailHTML(tuesdayBlocks, s, hColor, hTitle, preText, tuesdayDesign);
-    
     const container = document.getElementById('tabContent');
     container.innerHTML = '';
-    
-    // Single output — no A/B/C variations for dynamic block mode
+
     const panel = document.createElement('div');
     panel.className = 'tab-panel active';
     panel.id = 'panel-0';
     panel.innerHTML = `
       <div class="output-section">
-        <div class="output-label">📝 Subject Line <button class="copy-btn" onclick="copyText('subj-0')">Copy</button></div>
+        <div class="output-label">Subject Line <button class="copy-btn" onclick="copyText('subj-0')">Copy</button></div>
         <div class="output-box" id="subj-0">${escHtml(tuesdaySubject)}</div>
       </div>
       <div class="output-section">
-        <div class="output-label">📝 Preheader Text <button class="copy-btn" onclick="copyText('pre-0')">Copy</button></div>
+        <div class="output-label">Preheader Text <button class="copy-btn" onclick="copyText('pre-0')">Copy</button></div>
         <div class="output-box" id="pre-0">${escHtml(tuesdayPreheaderText)}</div>
       </div>
       <div class="output-section">
-        <div class="output-label">👁️ Email Preview</div>
+        <div class="output-label">Email Preview</div>
         <iframe class="preview-frame" id="frame-0" sandbox="allow-same-origin"></iframe>
       </div>
       <div class="output-section">
-        <div class="output-label">📋 Raw HTML Code <button class="copy-btn" onclick="copyText('code-0')">Copy</button></div>
+        <div class="output-label">Raw HTML Code <button class="copy-btn" onclick="copyText('code-0')">Copy</button></div>
         <div class="output-box" id="code-0" style="max-height:400px">${escHtml(emailHtml)}</div>
       </div>`;
     container.appendChild(panel);
-    
+
     setTimeout(() => {
       const frame = document.getElementById('frame-0');
       const doc = frame.contentDocument || frame.contentWindow.document;
       doc.open(); doc.write(emailHtml); doc.close();
     }, 50);
-    
-    // Hide A/B/C tabs and composer for block mode
-    document.getElementById('composerTabBtn').style.display = 'none';
+
+    configureOutputTabs({ tab0: 'Final Email', showTab1: false, showTab2: false, showComposer: false });
 
   } else if (currentMode === 'friday' || currentMode === 'tuesday') {
-    // MULTI-SECTION MODES (Friday/Tuesday Legacy)
     const isTuesday = currentMode === 'tuesday';
     const activeSections = isTuesday ? tuesdaySections : fridaySections;
     const activeIntro = isTuesday ? gv('tuesdayIntro') : gv('fridayIntro');
-    
+
     if(activeSections.length === 0){toast('Add at least one section');return;}
-    
+
     _genData = { sections: [...activeSections], intro: activeIntro };
-    _genVariations = [
-      {name:'A — Professional',tone:'professional',colorA:s.c1a,colorB:s.c1b},
-      {name:'B — Energetic',tone:'energetic',colorA:s.c2a,colorB:s.c2b},
-      {name:'C — Urgency',tone:'urgency',colorA:s.c3a,colorB:s.c3b}
-    ];
-    
+    _genVariations = buildLegacyToneVariations(s, isTuesday ? tuesdayDesign : fridayDesign);
+
     const container=document.getElementById('tabContent');
     container.innerHTML='';
-    
+
     _genVariations.forEach((v, i) => {
       const emailHtml = generateMultiSectionHTML(_genData, v, s, isTuesday, false, (isTuesday ? tuesdayDesign : fridayDesign));
-      renderVariationTab(i, v, (isTuesday ? "Tuesday Update" : "Friday Update"), emailHtml, "Prompt not applicable for multi-section", container);
+      renderVariationTab(i, v, (isTuesday ? 'Tuesday Update' : 'Friday Update'), emailHtml, 'Prompt not applicable for multi-section', container);
     });
-    
-    document.getElementById('composerTabBtn').style.display = 'block';
+
+    configureOutputTabs({ tab0: 'Variation A', tab1: 'Variation B', tab2: 'Variation C', showTab1: true, showTab2: true, showComposer: true, composerLabel: 'THE COMPOSER' });
     renderComposer(isTuesday);
   } else {
-    // Flyer mode doesn't generate emails here
     toast('Use the generate prompt button above in Flyer Creator.');
     return;
   }
 
-  document.getElementById('emptyState').style.display='none';
-  document.getElementById('outputArea').style.display='block';
-  switchTab(0, document.querySelectorAll('.tab')[0]);
+  setOutputVisible();
+  openOutputTab(0);
   toast('Variations generated!');
 }
 
@@ -1953,10 +2520,10 @@ function pickVar(secId, varIdx, btn, isTuesday){
 
 function updateComposerPreview(isTuesday = false){
   const emailHtml = generateMultiSectionHTML(_genData, null, _genSettings, isTuesday, true, (isTuesday ? tuesdayDesign : fridayDesign));
-  const frame=document.getElementById('composerPreviewFrame');
+  const frame=document.getElementById('composerFrame');
   const doc=frame.contentDocument||frame.contentWindow.document;
   doc.open();doc.write(emailHtml);doc.close();
-  sv('composerCodeBox', emailHtml);
+  document.getElementById('composerCode').textContent = emailHtml;
 }
 
 // Apply a hosted hero image URL to a specific variation
@@ -2100,14 +2667,16 @@ function generateLearnBlock(objectives,heading,v){
 // ===================== MULTI-SECTION HTML (FRIDAY & TUESDAY) =====================
 function generateMultiSectionHTML(data, v, s, isTuesday = false, isComposer = false, design = null){
   const org = ORGS[currentOrgId];
-  const d = design || (isTuesday ? tuesdayDesign : fridayDesign) || {};
   const hColorStr = isTuesday ? (gv('tuesdayHeaderCol') || '#02aae1') : (gv('fridayHeaderCol') || '#004a32');
   const hTitle = isTuesday ? (gv('tuesdayHeaderTitle') || 'Upcoming Affiliate Opportunities') : (gv('fridayHeaderTitle') || 'Upcoming at BER');
   const preText = isTuesday ? (gv('tuesdayIntro') || '') : (gv('fridayIntro') || '');
-  
+  const d = normalizeCreativeDesign(design || (isTuesday ? tuesdayDesign : fridayDesign) || {}, isTuesday ? 1 : 0, hColorStr);
   const fontName = d.fontFamily || 'Montserrat';
   const hGrad = d.headerGradient || [hColorStr, hColorStr];
   const btnGrad = d.buttonGradient || [hGrad[0], hGrad[1]];
+  const headerEyebrow = firstNonEmpty(d.headerEyebrow);
+  const surfaceColor = firstNonEmpty(d.surfaceColor, '#ffffff');
+  const showHeaderLogo = d.logoPlacement !== 'none';
 
   const sectionsHtml = data.sections.map((sec, idx) => {
     let activeV = v;
@@ -2121,6 +2690,7 @@ function generateMultiSectionHTML(data, v, s, isTuesday = false, isComposer = fa
     }
     
     const themeColor = sec.customColor || activeV.colorA;
+    const sectionSupport = (d.supportingColors || [])[idx % Math.max((d.supportingColors || []).length, 1)] || btnGrad[1];
     const currentV = sec.variations[vIdx] || { description: '', heroUrl: '' };
     const descHtml = mdToHtml(currentV.description);
     const heroUrl = currentV.heroUrl || '';
@@ -2154,18 +2724,18 @@ function generateMultiSectionHTML(data, v, s, isTuesday = false, isComposer = fa
     
     return `
     <!-- Section: ${sec.title} -->
-    <table width="100%" cellpadding="0" cellspacing="0" style="background-color:#ffffff;margin-bottom:${marginBottom};table-layout:fixed;">
+    <table width="100%" cellpadding="0" cellspacing="0" style="background-color:${surfaceColor};margin-bottom:${marginBottom};table-layout:fixed;border:1px solid rgba(15,23,42,0.06);border-radius:14px;overflow:hidden;">
       ${heroUrl ? `<tr><td style="padding:0">
         <img src="${heroUrl}" width="100%" style="width:100%;max-width:${s.emailMaxW}px;height:auto;display:block" alt="${sec.title}">
       </td></tr>` : ''}
-      <tr><td class="section-inner" style="padding:16px 32px 0">
+      <tr><td class="section-inner" style="padding:18px 32px 4px">
         <p style="margin:0 0 12px;color:${themeColor};font-size:22px;font-weight:800;line-height:1.2;text-transform:uppercase;letter-spacing:.5px">
           ${sec.title}
         </p>
         <div style="margin:0 0 20px;font-size:15px;line-height:1.6;color:#333333">
           ${descHtml}
         </div>
-        <table width="100%" cellpadding="0" cellspacing="0" style="margin:0 0 20px;background-color:#f9f9f9;border-left:4px solid ${themeColor};border-radius:0 4px 4px 0">
+        <table width="100%" cellpadding="0" cellspacing="0" style="margin:0 0 20px;background-color:${surfaceColor};border-left:4px solid ${themeColor};border-top:1px solid ${sectionSupport};border-right:1px solid rgba(15,23,42,0.06);border-bottom:1px solid rgba(15,23,42,0.06);border-radius:0 10px 10px 0">
           <tr><td style="padding:12px 16px">
             <p style="margin:0;font-size:14px;color:#444444">📅 <strong>${sec.dateTime}</strong></p>
             ${sec.location ? `<p style="margin:4px 0 0;font-size:14px;color:#444444">📍 ${sec.location}</p>` : ''}
@@ -2218,11 +2788,11 @@ function generateMultiSectionHTML(data, v, s, isTuesday = false, isComposer = fa
 <![endif]-->
 </head>
 <body style="margin:0;padding:0;background-color:#f4f7f9;font-family:'${fontName}', Helvetica, Arial, sans-serif">
-<table width="100%" cellpadding="0" cellspacing="0" border="0" class="content-table" style="width:100%;max-width:${s.emailMaxW}px;background-color:#ffffff;margin:0 auto;table-layout:fixed">
-  <!-- Logo Row -->
-  <tr><td align="center" style="padding:20px 0;background-color:#ffffff">
+<span style="display:none!important;font-size:1px;color:#f4f7f9;line-height:1px;max-height:0;max-width:0;opacity:0;overflow:hidden">${preText}</span>
+<table width="100%" cellpadding="0" cellspacing="0" border="0" class="content-table" style="width:100%;max-width:${s.emailMaxW}px;background-color:#ffffff;margin:0 auto;table-layout:fixed;border-radius:16px;overflow:hidden;box-shadow:0 12px 30px rgba(15,23,42,0.08)">
+  ${showHeaderLogo ? `<tr><td align="center" style="padding:20px 0;background-color:#ffffff">
     <img src="${org.logo}" height="50" style="height:50px;width:auto;display:block" alt="${org.name}">
-  </td></tr>
+  </td></tr>` : ''}
   <tr><td align="center" style="background:${hGrad[0]};background:linear-gradient(135deg, ${hGrad[0]} 0%, ${hGrad[1]} 100%);padding:40px 0;color:#ffffff">
     <!--[if mso]>
     <v:rect xmlns:v="urn:schemas-microsoft-com:vml" fill="true" stroke="false" style="width:${s.emailMaxW}px;height:120px;">
@@ -2230,6 +2800,7 @@ function generateMultiSectionHTML(data, v, s, isTuesday = false, isComposer = fa
     <v:textbox inset="0,0,0,0">
     <![endif]-->
     <div style="padding:0 24px">
+      ${headerEyebrow ? `<p style="margin:0 0 10px;font-size:12px;font-weight:700;letter-spacing:2px;text-transform:uppercase;opacity:0.9">${headerEyebrow}</p>` : ''}
       <p class="header-text" style="margin:0;font-size:32px;font-weight:900;text-transform:uppercase;letter-spacing:1.5px;text-shadow:0 2px 10px rgba(0,0,0,0.2)">${hTitle}</p>
       ${preText ? `
       <div class="intro-box" style="margin:15px auto 0;width:90%;max-width:600px;border-top:1px solid rgba(255,255,255,0.3);padding-top:15px;font-size:15px;opacity:0.95;line-height:1.5;font-weight:500">
@@ -2456,4 +3027,6 @@ function copySectionHeroPrompt(id) {
 // ===================== INIT =====================
 document.addEventListener('DOMContentLoaded',()=>{
   loadSettingsUI();
+  initCampaignPlannerDefaults();
+  updateGenerateButtonLabel();
 });

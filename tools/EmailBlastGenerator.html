@@ -103,6 +103,7 @@ input[type="color"]{-webkit-appearance:none;appearance:none;width:38px;height:38
       <span>📝 Content Editor</span>
       <div class="tabs" style="margin-bottom:0;padding:2px;flex-wrap:wrap">
         <button class="tab active" id="modeSingle" onclick="setMode('single')" style="padding:6px 12px;font-size:11px">Single Class</button>
+        <button class="tab" id="modeCampaign" onclick="setMode('campaign')" style="padding:6px 12px;font-size:11px">Campaign Planner</button>
         <button class="tab" id="modeFriday" onclick="setMode('friday')" style="padding:6px 12px;font-size:11px">Friday Blast</button>
         <button class="tab" id="modeTuesday" onclick="setMode('tuesday')" style="padding:6px 12px;font-size:11px">Tuesday Affiliate</button>
         <button class="tab" id="modeFlyer" onclick="setMode('flyer')" style="padding:6px 12px;font-size:11px">Flyer Creator</button>
@@ -150,6 +151,74 @@ input[type="color"]{-webkit-appearance:none;appearance:none;width:38px;height:38
         <div id="singleHeroPromptsBox" style="display:none;margin-bottom:16px">
           <label style="color:var(--accent);font-weight:700;margin-bottom:8px;display:block">🖼️ Hero Image Prompts (730×315px — No Real People)</label>
           <div id="singleHeroPromptsList"></div>
+        </div>
+      </div>
+
+      <!-- CAMPAIGN PLANNER MODE -->
+      <div id="campaignModeFields" style="display:none">
+        <div class="form-row">
+          <div class="form-group">
+            <label>Campaign Start Date</label>
+            <input type="date" id="campaignStartDate">
+            <p style="font-size:10px;color:var(--text2);margin-top:4px">Defaults to today so the schedule starts from the current date.</p>
+          </div>
+          <div class="form-group">
+            <label>Event / Due Date</label>
+            <input type="date" id="campaignEventDate">
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group"><label>Target Audience</label><input type="text" id="campaignTargetAudience" placeholder="e.g. New agents, brokers, affiliates, investors"></div>
+          <div class="form-group"><label>Primary Goal</label><input type="text" id="campaignGoal" placeholder="e.g. Maximize registrations and attendance"></div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label>Campaign Intensity</label>
+            <select id="campaignCadence">
+              <option value="recommended">Let AI choose the best cadence</option>
+              <option value="light">Light touch</option>
+              <option value="standard">Standard promotion</option>
+              <option value="aggressive">Aggressive push</option>
+            </select>
+          </div>
+          <div class="form-group"><label>Registration Link</label><input type="url" id="campaignRegLink" placeholder="https://registration-link..."></div>
+        </div>
+
+        <div style="background:rgba(0,191,165,0.08);padding:14px;border-radius:8px;border:1px solid rgba(0,191,165,0.25);margin-bottom:16px">
+          <div class="toggle-row" style="padding:0 0 8px">
+            <span style="font-size:13px;font-weight:600">ðŸ‘©â€ðŸ« Include Instructor Section?</span>
+            <button class="toggle" id="campaignInstructorToggle" onclick="this.classList.toggle('on'); toggleCampaignInstructorFields()"></button>
+          </div>
+          <div id="campaignInstructorFields" style="display:none">
+            <div class="form-group" style="margin-bottom:8px"><label>Instructor Name</label><input type="text" id="campaignInstructorName" placeholder="e.g. Caroline Boland"></div>
+            <div class="form-group" style="margin-bottom:4px"><label>Instructor Headshot URL</label><input type="url" id="campaignInstructorHeadshot" placeholder="https://... (paste hosted image URL)"></div>
+            <p style="font-size:10px;color:var(--text2);margin-top:2px">If you want each planned email prompt to include an instructor section, add the details here.</p>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label>ðŸ—“ï¸ Paste All Event / Class Details</label>
+          <textarea id="campaignRawInput" style="min-height:180px;font-size:13px" placeholder="Paste the full event or class brief here â€” title, description, date, audience, pricing, credits, location, speaker details, sponsor notes, objections, urgency factors, and anything else the planner should consider."></textarea>
+          <p style="font-size:10px;color:var(--text2);margin-top:4px">This planner builds a full campaign schedule first, then creates copy-ready prompts for each send in the sequence.</p>
+        </div>
+
+        <div style="background:rgba(124,77,255,0.1);padding:12px;border-radius:8px;border:1px solid var(--accent2);margin-bottom:16px">
+          <label style="color:var(--accent2)">âœ¨ Campaign Email Planner</label>
+          <p style="font-size:11px;color:var(--text2);margin-bottom:8px">Generates a scheduling and strategy prompt that plans when each email should send, what it should emphasize, and the design direction each email should use.</p>
+          <button class="btn-sm" onclick="generateCampaignPlannerPrompt()" style="width:100%;margin-top:4px;background:var(--accent2);color:#fff;border:none;padding:10px;font-size:13px;font-weight:700">ðŸ—“ï¸ Generate Campaign Planner Prompt & Copy</button>
+        </div>
+
+        <div class="form-group" id="campaignPlannerImportBox" style="display:none">
+          <label>Paste Campaign Planner AI Response (JSON)</label>
+          <textarea id="campaignPlannerAIResponse" style="min-height:100px;font-family:monospace;font-size:12px" placeholder='Paste the campaign planner JSON response here...'></textarea>
+          <button class="btn-sm" onclick="importCampaignPlannerResponse()" style="width:100%;margin-top:4px;background:var(--accent);color:#fff;border:none;padding:10px;font-weight:600">ðŸ“¥ Import Campaign Plan</button>
+        </div>
+
+        <div class="form-group" id="campaignPlannerPromptPreviewBox" style="margin-top:16px;display:none">
+          <label>ðŸ“‹ Campaign Planner Prompt Preview <button class="btn-sm" onclick="copyText('campaignPlannerPromptPreview')" style="margin-left:8px">Copy Again</button></label>
+          <div class="output-box" id="campaignPlannerPromptPreview" style="min-height:120px;font-size:11px;max-height:300px"></div>
         </div>
       </div>
 
@@ -258,7 +327,7 @@ input[type="color"]{-webkit-appearance:none;appearance:none;width:38px;height:38
         </div>
       </div>
 
-      <button class="btn-primary" onclick="generateAll()">🚀 Generate 3 Variations</button>
+      <button class="btn-primary" id="generateBtn" onclick="generateAll()">🚀 Generate 3 Variations</button>
     </div>
   </div>
 
@@ -272,10 +341,10 @@ input[type="color"]{-webkit-appearance:none;appearance:none;width:38px;height:38
           <p>Fill in event details and click Generate to create 3 variations.</p>
         </div>
         <div id="outputArea" style="display:none">
-          <div class="tabs">
-            <button class="tab active" onclick="switchTab(0,this)">🎨 Variation A</button>
-            <button class="tab" onclick="switchTab(1,this)">🎨 Variation B</button>
-            <button class="tab" onclick="switchTab(2,this)">🎨 Variation C</button>
+          <div class="tabs" id="outputTabs">
+            <button class="tab active" id="outputTab0" onclick="switchTab(0,this)">?? Variation A</button>
+            <button class="tab" id="outputTab1" onclick="switchTab(1,this)">?? Variation B</button>
+            <button class="tab" id="outputTab2" onclick="switchTab(2,this)">?? Variation C</button>
             <button class="tab" id="composerTabBtn" onclick="switchTab(3,this)" style="border:1px solid var(--accent2);color:var(--accent2)">🛠️ THE COMPOSER</button>
           </div>
           <div id="tabContent"></div>
