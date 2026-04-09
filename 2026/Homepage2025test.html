@@ -2107,6 +2107,36 @@
       line-height: 1.4;
     }
 
+    #ber-featured-stage[data-berfs-type="benefits"] .berfs__panel,
+    #ber-featured-stage[data-berfs-type="market"] .berfs__panel {
+      grid-template-columns: minmax(0, 1fr);
+    }
+
+    #ber-featured-stage[data-berfs-type="market"] .berfs__title {
+      max-width: none;
+      font-size: clamp(1.8rem, 3vw, 3rem);
+    }
+
+    #ber-featured-stage[data-berfs-type="market"] .berfs__description {
+      max-width: 68ch;
+      font-size: 0.84rem;
+      line-height: 1.38;
+    }
+
+    #ber-featured-stage[data-berfs-type="market"] .berfs__charts-grid {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 10px;
+    }
+
+    #ber-featured-stage[data-berfs-type="market"] .berfs__chart-card {
+      min-height: 0;
+      padding: 10px;
+    }
+
+    #ber-featured-stage[data-berfs-type="market"] .berfs__chart-shell {
+      height: 88px;
+    }
+
     #ber-featured-stage .berfs__featured-tool {
       display: grid;
       grid-template-columns: 68px minmax(0, 1fr);
@@ -2702,19 +2732,20 @@ Closed Sales:
         if (slide.type === "team") return teamCards(slide);
         if (slide.type === "benefits") return featureTools(slide);
         if (slide.type === "magazine") return magazineHighlights(slide);
+        if (slide.type === "market") return marketPanel(slide);
         if (slide.type === "committee") return slide.panelNote ? `<div class="berfs__support-card berfs__reveal" style="--berfs-delay:460ms"><h3>Leadership track</h3><p>${esc(slide.panelNote)}</p></div>` : "";
         if (slide.type === "rpac") return gridCards(slide.sideCards || [], 460);
         if (slide.type === "event") return slide.panelNote ? `<div class="berfs__support-card berfs__reveal" style="--berfs-delay:460ms"><h3>Poster note</h3><p>${esc(slide.panelNote)}</p></div>` : "";
-        if (slide.type === "market") return "";
         return gridCards(slide.sideCards || [], 460);
       };
       const sideFor = (slide) => {
         if (slide.type === "team") return `<div class="berfs__visual-stage berfs__visual-stage--portrait berfs__reveal" style="--berfs-delay:120ms"><img src="${esc(slide.teamMembers?.[0]?.image || slide.mediaSrc)}" alt="${esc(slide.teamMembers?.[0]?.name || slide.title)}"></div>`;
-        if (slide.type === "benefits") return `<div class="berfs__visual-stage berfs__visual-stage--contain berfs__reveal" style="--berfs-delay:120ms"><img src="${esc(slide.mediaSrc)}" alt="${esc(slide.title)}"></div>`;
-        if (slide.type === "market") return `<div class="berfs__visual-stage berfs__visual-stage--chart berfs__reveal" style="--berfs-delay:120ms">${marketPanel(slide)}</div>`;
+        if (slide.type === "membership") return `<div class="berfs__visual-stage berfs__visual-stage--contain berfs__reveal" style="--berfs-delay:120ms"><img src="${esc(slide.mediaSrc)}" alt="${esc(slide.title)}"></div>`;
+        if (slide.type === "benefits") return ``;
+        if (slide.type === "market") return ``;
         if (slide.type === "magazine") return `<div class="berfs__visual-stage berfs__visual-stage--contain berfs__reveal" style="--berfs-delay:120ms"><img src="${esc(slide.flyerSrc || slide.mediaSrc)}" alt="${esc(slide.title)} cover"></div>`;
         if (slide.type === "committee") return `<div class="berfs__visual-stage berfs__visual-stage--contain berfs__reveal" style="--berfs-delay:120ms"><img src="${esc(slide.flyerSrc)}" alt="MLS committee flyer"></div>`;
-        if (slide.type === "rpac") return `<div class="berfs__visual-stage berfs__reveal" style="--berfs-delay:120ms"><img src="${esc(slide.mediaSrc)}" alt="RPAC featured investor"></div>`;
+        if (slide.type === "rpac") return `<div class="berfs__visual-stage berfs__visual-stage--portrait berfs__reveal" style="--berfs-delay:120ms"><img src="${esc(slide.mediaSrc)}" alt="RPAC featured investor"></div>`;
         if (slide.type === "event") return posterVisual(slide, 120);
         return `<div class="berfs__visual-stage berfs__reveal" style="--berfs-delay:120ms"><img src="${esc(slide.mediaSrc)}" alt="${esc(slide.title)}"></div>`;
       };
