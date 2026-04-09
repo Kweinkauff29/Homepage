@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Email Blast Generator | Bonita Springs-Estero REALTORS</title>
+<title>Email Blast Generator | Bonita Springs-Estero REALTORS®</title>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
@@ -84,7 +84,7 @@ input[type="color"]{-webkit-appearance:none;appearance:none;width:38px;height:38
 
 <header class="app-header">
   <div>
-    <h1 id="appTitle">Email Blast Generator</h1>
+    <h1 id="appTitle">✉️ Email Blast Generator</h1>
     <div class="subtitle">Generate 3 email variations with HTML, preheader & hero image prompts</div>
   </div>
   <div style="display:flex;align-items:center">
@@ -100,7 +100,7 @@ input[type="color"]{-webkit-appearance:none;appearance:none;width:38px;height:38
   <!-- INPUT FORM -->
   <div class="card">
     <div class="card-header" style="justify-content:space-between">
-      <span>Content Editor</span>
+      <span>📝 Content Editor</span>
       <div class="tabs" style="margin-bottom:0;padding:2px;flex-wrap:wrap">
         <button class="tab active" id="modeSingle" onclick="setMode('single')" style="padding:6px 12px;font-size:11px">Single Class</button>
         <button class="tab" id="modeCampaign" onclick="setMode('campaign')" style="padding:6px 12px;font-size:11px">Campaign Planner</button>
@@ -138,7 +138,7 @@ input[type="color"]{-webkit-appearance:none;appearance:none;width:38px;height:38
         </div>
 
         <div class="form-group" id="singleImportBox" style="display:none">
-          <label>Paste AI Response (JSON)</label>
+          <label>📥 Paste AI Response (JSON)</label>
           <textarea id="singleAIResponse" style="min-height:100px;font-family:monospace;font-size:12px" placeholder='Paste the JSON response from Gemini/ChatGPT here...'></textarea>
           <button class="btn-sm" onclick="importSingleClassAIResponse()" style="width:100%;margin-top:4px;background:var(--accent);color:#fff;border:none;padding:10px;font-weight:600">Import AI Response & Generate Emails</button>
         </div>
@@ -248,7 +248,7 @@ input[type="color"]{-webkit-appearance:none;appearance:none;width:38px;height:38
           <button class="btn-sm" onclick="generateAIPrompt()" style="width:100%;margin-top:8px;background:var(--accent2);color:#fff;border:none">Generate AI Formatting Prompt</button>
         </div>
         <div class="form-group" id="importBox" style="display:none">
-          <label>Paste AI Response (JSON)</label>
+          <label>📥 Paste AI Response (JSON)</label>
           <textarea id="aiResponse" style="min-height:80px;font-family:monospace" placeholder='Paste the JSON response from Gemini here...'></textarea>
           <button class="btn-sm" onclick="importAIResponse()" style="width:100%;margin-top:4px">Import Data</button>
         </div>
@@ -285,7 +285,7 @@ input[type="color"]{-webkit-appearance:none;appearance:none;width:38px;height:38
           <button class="btn-sm" onclick="generateAIPromptTuesday()" style="width:100%;margin-top:8px;background:var(--accent2);color:#fff;border:none">Generate AI Formatting Prompt</button>
         </div>
         <div class="form-group" id="importBoxTuesday" style="display:none">
-          <label>Paste AI Response (JSON)</label>
+          <label>📥 Paste AI Response (JSON)</label>
           <textarea id="aiResponseTuesday" style="min-height:80px;font-family:monospace" placeholder='Paste the JSON response from Gemini here...'></textarea>
           <button class="btn-sm" onclick="importAIResponseTuesday()" style="width:100%;margin-top:4px">Import Data</button>
         </div>
@@ -297,7 +297,7 @@ input[type="color"]{-webkit-appearance:none;appearance:none;width:38px;height:38
 
       <!-- FLYER CREATOR MODE -->
       <div id="flyerModeFields" style="display:none">
-        <label>Flyer Generator Details</label>
+        <label>📄 Flyer Generator Details</label>
         <div class="form-group"><label>Event / Link</label><input type="text" id="flyerLink" placeholder="Link or exact title to include..."></div>
         <div class="form-group"><label>Text & Details</label><textarea id="flyerText" placeholder="Paste the details that must be included on the flyer..."></textarea></div>
         <div class="toggle-row"><span style="font-size:13px">Include Instructor Section?</span><button class="toggle" id="flyerInstructorToggle" onclick="this.classList.toggle('on'); document.getElementById('flyerInstructorForm').style.display = this.classList.contains('on') ? 'block' : 'none'"></button></div>
@@ -334,7 +334,7 @@ input[type="color"]{-webkit-appearance:none;appearance:none;width:38px;height:38
   <!-- OUTPUT -->
   <div>
     <div class="card" id="outputCard">
-      <div class="card-header">Generated Variations</div>
+      <div class="card-header">🚀 Generated Variations</div>
       <div class="card-body">
         <div id="emptyState" class="empty-state">
           <div class="icon">EMAIL</div>
@@ -368,11 +368,11 @@ input[type="color"]{-webkit-appearance:none;appearance:none;width:38px;height:38
 <!-- SETTINGS SIDEBAR -->
 <div class="backdrop" id="backdrop" onclick="toggleSettings()"></div>
 <div class="settings-overlay" id="settingsPanel">
-  <div class="card-header">Settings & Rules <button class="close-settings" onclick="toggleSettings()">X</button></div>
+  <div class="card-header">⚙️ Settings & Rules <button class="close-settings" onclick="toggleSettings()">X</button></div>
   <div class="card-body">
     <h3 style="font-size:13px;color:var(--accent);margin-bottom:12px">Organization</h3>
-    <div class="form-group"><label>Organization Name</label><input type="text" id="sOrgName" value="Bonita Springs-Estero REALTORS"></div>
-    <div class="form-group"><label>Organization Address</label><input type="text" id="sOrgAddr" value="25300 Bernwood Drive, Suite 1 - Bonita Springs, FL 34135"></div>
+    <div class="form-group"><label>Organization Name</label><input type="text" id="sOrgName" value="Bonita Springs–Estero REALTORS®"></div>
+    <div class="form-group"><label>Organization Address</label><input type="text" id="sOrgAddr" value="25300 Bernwood Drive, Suite 1 · Bonita Springs, FL 34135"></div>
     <div class="form-group"><label>Support Email</label><input type="text" id="sSupportEmail" value="Support@BERealtors.org"></div>
 
     <h3 style="font-size:13px;color:var(--accent);margin:20px 0 12px">Hero Image Rules</h3>

@@ -2,18 +2,18 @@
 const ORGS = {
   ber: {
     id: 'ber',
-    name: 'Bonita Springs-Estero REALTORS',
+    name: 'Bonita Springs–Estero REALTORS®',
     shortName: 'BER',
-    addr: '25300 Bernwood Drive, Suite 1 - Bonita Springs, FL 34135',
+    addr: '25300 Bernwood Drive, Suite 1 · Bonita Springs, FL 34135',
     email: 'Support@BERealtors.org',
     logo: 'https://res.cloudinary.com/micronetonline/image/upload/q_auto/f_auto/c_crop,h_503,w_2954,x_0,y_0/v1573591630/tenants/6c24b0da-8a6e-4f2b-8547-26a8c1dc4581/98b2cd4b19a748e0be424cae2a868161/BonitaSpringsEsteroRealtors-Logo-Horizontal.png',
     colors: ['#004a32', '#006847'] // Green
   },
   wcr: {
     id: 'wcr',
-    name: "Women's Council of REALTORS Bonita Springs-Estero",
+    name: "Women's Council of REALTORS® Bonita Springs–Estero",
     shortName: 'WCR',
-    addr: '25300 Bernwood Drive, Suite 1 - Bonita Springs, FL 34135',
+    addr: '25300 Bernwood Drive, Suite 1 · Bonita Springs, FL 34135',
     email: 'WCR@BERealtors.org',
     logo: 'https://www.wcr.org/wp-content/uploads/2025/03/wcrlogo.png.webp',
     colors: ['#002b4c', '#005a8c'] // Navy flow
@@ -23,8 +23,8 @@ const ORGS = {
 let currentOrgId = localStorage.getItem('ebg_org') || 'ber';
 
 const DEFAULTS = {
-  orgName: 'Bonita Springs-Estero REALTORS',
-  orgAddr: '25300 Bernwood Drive, Suite 1 - Bonita Springs, FL 34135',
+  orgName: 'Bonita Springs–Estero REALTORS®',
+  orgAddr: '25300 Bernwood Drive, Suite 1 · Bonita Springs, FL 34135',
   supportEmail: 'Support@BERealtors.org',
   heroW: 730, heroH: 315,
   heroPrompt: 'Create a professional promotional email hero banner image. Style: clean, modern, corporate. Include bold headline text overlay. No photographic people unless they are stylized corporate illustrations or cartoon-style. Vibrant yet professional palette. Sharp edges, no blurry elements.',
