@@ -243,19 +243,19 @@ input[type="color"]{-webkit-appearance:none;appearance:none;width:38px;height:38
         <button class="btn-sm" onclick="addFridaySection()" style="width:100%;margin-bottom:16px;border-style:dashed;padding:10px">+ Add New Event Section</button>
         <div style="background:rgba(124,77,255,0.1);padding:12px;border-radius:8px;border:1px solid var(--accent2);margin-bottom:16px">
           <label style="color:var(--accent2)">AI Content Assistant</label>
-          <p style="font-size:11px;color:var(--text2);margin-bottom:8px">Paste your event links/screenshots descriptions below, then click to generate a formatting prompt for Gemini.</p>
+          <p style="font-size:11px;color:var(--text2);margin-bottom:8px">Paste event links, screenshots, notes, or rough copy here. The Friday prompt now asks ChatGPT or Gemini for stricter JSON, deeper copy, stronger section themes, tailored CTA gradients, and better hero-image prompts.</p>
           <textarea id="aiRawInput" style="min-height:100px;font-size:13px" placeholder="Paste links, details, or screenshot descriptions here..."></textarea>
           <button class="btn-sm" onclick="generateAIPrompt()" style="width:100%;margin-top:8px;background:var(--accent2);color:#fff;border:none">Generate AI Formatting Prompt</button>
         </div>
         <div class="form-group" id="importBox" style="display:none">
           <label>📥 Paste AI Response (JSON)</label>
-          <textarea id="aiResponse" style="min-height:80px;font-family:monospace" placeholder='Paste the JSON response from Gemini here...'></textarea>
+          <textarea id="aiResponse" style="min-height:80px;font-family:monospace" placeholder='Paste the JSON response from ChatGPT or Gemini here...'></textarea>
           <button class="btn-sm" onclick="importAIResponse()" style="width:100%;margin-top:4px">Import Data</button>
         </div>
         <div class="form-group" id="promptPreviewBox" style="margin-top:16px;display:none">
           <label>AI Hero Image Prompt Preview</label>
           <textarea id="heroPromptPreview" style="min-height:120px;font-size:12px;background:rgba(0,0,0,0.05);color:var(--accent)" readonly></textarea>
-          <p style="font-size:10px;color:var(--text2);margin-top:4px">This is the prompt you just copied. Review it here before pasting into Gemini.</p>
+          <p style="font-size:10px;color:var(--text2);margin-top:4px">This is the prompt you just copied. Review it here before pasting into ChatGPT or Gemini.</p>
         </div>
       </div>
 
@@ -280,13 +280,13 @@ input[type="color"]{-webkit-appearance:none;appearance:none;width:38px;height:38
         <button class="btn-sm" onclick="addTuesdaySection()" style="width:100%;margin-bottom:16px;border-style:dashed;padding:10px">+ Add New Sponsor/Event Section</button>
         <div style="background:rgba(124,77,255,0.1);padding:12px;border-radius:8px;border:1px solid var(--accent2);margin-bottom:16px">
           <label style="color:var(--accent2)">AI Content Assistant (Affiliate Focus)</label>
-          <p style="font-size:11px;color:var(--text2);margin-bottom:8px">Paste your sponsorship/event details below to generate a Gemini formatting prompt.</p>
+          <p style="font-size:11px;color:var(--text2);margin-bottom:8px">Paste sponsorship or event details here. The Tuesday prompt now pushes ChatGPT or Gemini toward stricter JSON, deeper section detail, stronger block choices, and more intentional image direction.</p>
           <textarea id="aiRawInputTuesday" style="min-height:100px;font-size:13px" placeholder="Paste links, sponsorship tiers, or event details here..."></textarea>
           <button class="btn-sm" onclick="generateAIPromptTuesday()" style="width:100%;margin-top:8px;background:var(--accent2);color:#fff;border:none">Generate AI Formatting Prompt</button>
         </div>
         <div class="form-group" id="importBoxTuesday" style="display:none">
           <label>📥 Paste AI Response (JSON)</label>
-          <textarea id="aiResponseTuesday" style="min-height:80px;font-family:monospace" placeholder='Paste the JSON response from Gemini here...'></textarea>
+          <textarea id="aiResponseTuesday" style="min-height:80px;font-family:monospace" placeholder='Paste the JSON response from ChatGPT or Gemini here...'></textarea>
           <button class="btn-sm" onclick="importAIResponseTuesday()" style="width:100%;margin-top:4px">Import Data</button>
         </div>
         <div class="form-group" id="promptPreviewBoxTuesday" style="margin-top:16px;display:none">

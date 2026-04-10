@@ -324,26 +324,180 @@ function setMode(mode){
   updateGenerateButtonLabel();
 }
 
-function addFridaySection(){
-  const id = Date.now();
-  fridaySections.push({
-    id, 
-    title:'', 
-    dateTime:'', 
-    location:'', 
-    instructor:'', 
-    cost:'', 
-    credits:'', 
-    regLink:'', 
-    variationIndex: 0, 
-    customColor: '', 
+function buildFridayDefaultVariation(label){
+  return {
+    description: '',
+    heroUrl: '',
+    ctaLabel: '',
+    titleColor: '',
+    buttonGradient: [],
+    detailLines: [],
+    heroPrompt: buildSingleClassHeroPromptEntry(null, {}, {}, label.charCodeAt(0) - 65)
+  };
+}
+
+function buildFridayDefaultSection(id){
+  return {
+    id,
+    title:'',
+    dateTime:'',
+    location:'',
+    instructor:'',
+    cost:'',
+    credits:'',
+    regLink:'',
+    variationIndex: 0,
+    customColor: '',
+    supportColor: '',
+    surfaceColor: '',
+    ctaLabel: 'Register Here',
+    secondaryLinkLabel: '',
+    secondaryLinkUrl: '',
+    detailLines: [],
+    buttonGradient: [],
+    sectionThemeName: '',
+    sectionThemeDescription: '',
+    heroAlt: '',
     links:[],
     variations: [
-      { description: '', heroUrl: '' }, // A: Professional
-      { description: '', heroUrl: '' }, // B: Energetic
-      { description: '', heroUrl: '' }  // C: Benefit-Led
+      buildFridayDefaultVariation('A'),
+      buildFridayDefaultVariation('B'),
+      buildFridayDefaultVariation('C')
     ]
+  };
+}
+
+function normalizeFridayLink(link){
+  if(!link || typeof link !== 'object') return null;
+  const url = firstNonEmpty(link.url, link.href);
+  if(!url) return null;
+  return {
+    label: stripAICitations(firstNonEmpty(link.label, link.text, 'Learn More')),
+    url,
+    style: firstNonEmpty(link.style, 'button')
+  };
+}
+
+function buildFridayDetailLines(section){
+  const lines = [];
+  if(firstNonEmpty(section.dateTime)) lines.push(`📅 **${section.dateTime}**`);
+  if(firstNonEmpty(section.location)) lines.push(`📍 ${section.location}`);
+  const valueLine = [firstNonEmpty(section.credits), firstNonEmpty(section.cost)].filter(Boolean).join(' | ');
+  if(valueLine) lines.push(`🏷️ ${valueLine}`);
+  if(firstNonEmpty(section.instructor) && lines.length < 4) lines.push(`👤 ${section.instructor}`);
+  return lines.slice(0, 4);
+}
+
+function getFridayVariationCandidates(item){
+  if(Array.isArray(item.variations) && item.variations.length) return item.variations;
+  if(item.variations && typeof item.variations === 'object'){
+    const source = item.variations;
+    return [
+      source.A || source.a || source.professional || source.variationA || source[0],
+      source.B || source.b || source.energetic || source.variationB || source[1],
+      source.C || source.c || source.benefit || source.urgency || source.variationC || source[2]
+    ];
+  }
+  return [
+    {
+      description: firstNonEmpty(item.copyA, item.descriptionA, item.professionalCopy, item.description),
+      heroUrl: firstNonEmpty(item.heroUrlA, item.heroImageUrlA),
+      heroPrompt: item.heroImagePromptA || item.heroPromptA || item.heroImagePrompt || item.heroPrompt,
+      ctaLabel: firstNonEmpty(item.ctaLabelA, item.ctaLabel, item.buttonLabel)
+    },
+    {
+      description: firstNonEmpty(item.copyB, item.descriptionB, item.energeticCopy, item.description),
+      heroUrl: firstNonEmpty(item.heroUrlB, item.heroImageUrlB),
+      heroPrompt: item.heroImagePromptB || item.heroPromptB || item.heroImagePrompt || item.heroPrompt,
+      ctaLabel: firstNonEmpty(item.ctaLabelB, item.ctaLabel, item.buttonLabel)
+    },
+    {
+      description: firstNonEmpty(item.copyC, item.descriptionC, item.benefitCopy, item.urgencyCopy, item.description),
+      heroUrl: firstNonEmpty(item.heroUrlC, item.heroImageUrlC),
+      heroPrompt: item.heroImagePromptC || item.heroPromptC || item.heroImagePrompt || item.heroPrompt,
+      ctaLabel: firstNonEmpty(item.ctaLabelC, item.ctaLabel, item.buttonLabel)
+    }
+  ];
+}
+
+function normalizeFridayVariationEntry(source, fallbackDescription, index){
+  const item = source && typeof source === 'object' ? source : {};
+  return {
+    description: stripAICitations(firstNonEmpty(item.description, item.copy, item.body, item.marketingCopy, fallbackDescription)),
+    heroUrl: firstNonEmpty(item.heroUrl, item.heroImageUrl, item.imageUrl),
+    ctaLabel: stripAICitations(firstNonEmpty(item.ctaLabel, item.buttonLabel)),
+    titleColor: firstNonEmpty(item.titleColor, item.accentColor, item.sectionColor),
+    buttonGradient: normalizeGradientArray(item.buttonGradient || item.ctaGradient || item.sectionGradient),
+    detailLines: normalizeFridayDetailLines(item.detailLines || item.infoLines || item.factLines || item.eventDetails),
+    heroPrompt: buildSingleClassHeroPromptEntry(item.heroImagePrompt || item.heroPrompt, item, {}, index)
+  };
+}
+
+function normalizeFridaySection(item, idx){
+  const source = item && typeof item === 'object' ? item : {};
+  const preservedId = typeof source.id === 'number' || typeof source.id === 'string'
+    ? source.id
+    : Date.now() + Math.random() + idx;
+  const section = buildFridayDefaultSection(preservedId);
+  const secondaryLink = source.secondaryTextLink || source.secondaryLink || source.supportingLink || source.textLink || {};
+  const designFallback = normalizeCreativeDesign(fridayDesign || {}, 0, gv('fridayHeaderCol') || ORGS[currentOrgId].colors[0]);
+  const variationCandidates = getFridayVariationCandidates(source);
+
+  section.title = stripAICitations(firstNonEmpty(source.title, source.headline));
+  section.dateTime = stripAICitations(firstNonEmpty(source.dateTime, source.date, source.dateLine));
+  section.location = stripAICitations(firstNonEmpty(source.location, source.venue));
+  section.instructor = stripAICitations(firstNonEmpty(source.instructor, source.presenter, source.host));
+  section.cost = stripAICitations(firstNonEmpty(source.cost, source.price));
+  section.credits = stripAICitations(firstNonEmpty(source.credits, source.creditInfo, source.badgeLine));
+  section.regLink = firstNonEmpty(source.regLink, source.registrationLink, source.ctaUrl, source.url);
+  section.variationIndex = Math.max(0, Math.min(2, parseInt(source.variationIndex, 10) || 0));
+  section.customColor = firstNonEmpty(source.customColor, source.titleColor, source.sectionColor, source.accentColor);
+  section.supportColor = firstNonEmpty(source.supportColor, source.infoBorderColor, source.detailBoxColor, source.borderColor);
+  section.surfaceColor = firstNonEmpty(source.surfaceColor, source.sectionSurfaceColor, source.cardBackground);
+  section.ctaLabel = stripAICitations(firstNonEmpty(source.ctaLabel, source.primaryCtaLabel, source.buttonLabel, source.regButtonLabel, section.ctaLabel));
+  section.secondaryLinkLabel = stripAICitations(firstNonEmpty(source.secondaryLinkLabel, source.secondaryTextLinkLabel, source.textLinkLabel, secondaryLink.label));
+  section.secondaryLinkUrl = firstNonEmpty(source.secondaryLinkUrl, source.secondaryTextLinkUrl, source.textLinkUrl, secondaryLink.url);
+  section.detailLines = normalizeFridayDetailLines(source.detailLines || source.infoLines || source.factLines || source.eventDetails);
+  section.buttonGradient = normalizeGradientArray(source.buttonGradient || source.ctaGradient || source.sectionGradient);
+  section.sectionThemeName = stripAICitations(firstNonEmpty(source.sectionThemeName, source.themeName));
+  section.sectionThemeDescription = stripAICitations(firstNonEmpty(source.sectionThemeDescription, source.themeDescription));
+  section.heroAlt = stripAICitations(firstNonEmpty(source.heroAlt, source.altText, source.imageAlt));
+  section.links = (Array.isArray(source.links) ? source.links : []).map(normalizeFridayLink).filter(Boolean);
+
+  section.variations = ['A','B','C'].map((label, variationIndex) => {
+    const candidate = variationCandidates[variationIndex];
+    const candidateDescription = typeof candidate === 'string' ? candidate : (candidate && candidate.description);
+    const fallbackDescription = firstNonEmpty(
+      source[`copy${label}`],
+      source[`description${label}`],
+      candidateDescription,
+      source.description
+    );
+    const variation = normalizeFridayVariationEntry(candidate, fallbackDescription, variationIndex);
+    if(!variation.ctaLabel) variation.ctaLabel = section.ctaLabel;
+    if(!variation.titleColor) variation.titleColor = section.customColor;
+    if(!variation.buttonGradient.length) variation.buttonGradient = section.buttonGradient.slice();
+    if(!variation.detailLines.length) variation.detailLines = section.detailLines.slice();
+    if(!variation.heroPrompt || !variation.heroPrompt.prompt){
+      variation.heroPrompt = buildSingleClassHeroPromptEntry(source.heroImagePrompt || source.heroPrompt, source, {}, variationIndex);
+    }
+    return variation;
   });
+
+  if(!section.detailLines.length) section.detailLines = buildFridayDetailLines(section);
+  if(!section.supportColor) section.supportColor = firstNonEmpty(section.buttonGradient[section.buttonGradient.length - 1], designFallback.supportingColors[0], designFallback.buttonGradient[designFallback.buttonGradient.length - 1]);
+  if(!section.buttonGradient.length){
+    section.buttonGradient = [
+      firstNonEmpty(section.customColor, designFallback.buttonGradient[0], designFallback.accentColor),
+      firstNonEmpty(section.supportColor, designFallback.buttonGradient[designFallback.buttonGradient.length - 1], designFallback.headerGradient[designFallback.headerGradient.length - 1])
+    ].filter(Boolean).slice(0, 2);
+  }
+
+  return section;
+}
+
+function addFridaySection(){
+  fridaySections.push(normalizeFridaySection(buildFridayDefaultSection(Date.now()), fridaySections.length));
   renderFridaySections();
 }
 
@@ -382,20 +536,14 @@ function renderFridaySections(){
   const defaultVars = buildLegacyToneVariations(getSettings(), fridayDesign);
   const activeVars = (_genVariations && _genVariations.length >= 3) ? _genVariations : defaultVars;
 
+  fridaySections = fridaySections.map((sec, idx) => normalizeFridaySection(sec, idx));
+
   container.innerHTML = fridaySections.map((sec, idx) => {
     const vIdx = sec.variationIndex || 0;
     const activeColor = sec.customColor || activeVars[vIdx].colorA;
-    
-    // Safety check for variations array
-    if(!sec.variations || sec.variations.length < 3) {
-      sec.variations = [
-        { description: sec.description || '', heroUrl: sec.heroUrl || '' },
-        { description: sec.description || '', heroUrl: sec.heroUrl || '' },
-        { description: sec.description || '', heroUrl: sec.heroUrl || '' }
-      ];
-    }
-
     const currentV = sec.variations[vIdx];
+    const detailLinesText = (sec.detailLines || []).join('\n');
+    const gradientText = (sec.buttonGradient || []).join(', ');
 
     return `
     <div class="card" style="margin-bottom:16px;border-color:var(--border);background:var(--bg);position:relative">
@@ -424,9 +572,21 @@ function renderFridaySections(){
         </div>
         <div class="form-row">
           <div class="form-group" style="flex:2"><label>Registration Link</label><input type="url" value="${esc(sec.regLink)}" onchange="updateFSec(${sec.id},'regLink',this.value)"></div>
-          <div class="form-group"><label>Custom Color (Hex)</label><input type="text" value="${esc(sec.customColor)}" onchange="updateFSec(${sec.id},'customColor',this.value)" placeholder="#000000"></div>
+          <div class="form-group"><label>Theme / Title Color</label><input type="text" value="${esc(sec.customColor)}" onchange="updateFSec(${sec.id},'customColor',this.value)" placeholder="#000000"></div>
         </div>
-        <div class="form-group"><label>Credits/Cost</label><input type="text" value="${esc(sec.credits)}" onchange="updateFSec(${sec.id},'credits',this.value)" placeholder="e.g. 3CE / FREE"></div>
+        <div class="form-row">
+          <div class="form-group"><label>Credits / Cost</label><input type="text" value="${esc(sec.credits)}" onchange="updateFSec(${sec.id},'credits',this.value)" placeholder="e.g. 3 CE | FREE"></div>
+          <div class="form-group"><label>Primary CTA Label</label><input type="text" value="${esc(sec.ctaLabel)}" onchange="updateFSec(${sec.id},'ctaLabel',this.value)" placeholder="Reserve Your Spot"></div>
+        </div>
+        <div class="form-row">
+          <div class="form-group"><label>Support / Border Color</label><input type="text" value="${esc(sec.supportColor)}" onchange="updateFSec(${sec.id},'supportColor',this.value)" placeholder="#1469AD"></div>
+          <div class="form-group"><label>Button Gradient Stops</label><input type="text" value="${esc(gradientText)}" onchange="updateFSecGradient(${sec.id},'buttonGradient',this.value)" placeholder="#0B3954, #1469AD"></div>
+        </div>
+        <div class="form-group"><label>Detail Box Lines (one per line)</label><textarea style="min-height:78px;font-size:12px" onchange="updateFSecLines(${sec.id},'detailLines',this.value)" placeholder="📅 **Tuesday, April 28**&#10;📍 BER Office&#10;🏷️ Includes credits / pricing">${esc(detailLinesText)}</textarea></div>
+        <div class="form-row">
+          <div class="form-group"><label>Secondary Text Link Label</label><input type="text" value="${esc(sec.secondaryLinkLabel)}" onchange="updateFSec(${sec.id},'secondaryLinkLabel',this.value)" placeholder="View related report"></div>
+          <div class="form-group"><label>Secondary Text Link URL</label><input type="url" value="${esc(sec.secondaryLinkUrl)}" onchange="updateFSec(${sec.id},'secondaryLinkUrl',this.value)" placeholder="https://..."></div>
+        </div>
         
         <div class="variation-slot" style="background:rgba(0,0,0,0.02);padding:12px;border-radius:8px;border:1px dashed var(--border);margin-bottom:12px">
           <div class="form-group">
@@ -493,9 +653,23 @@ function updateFSec(id, field, val){
   }
 }
 
+function updateFSecLines(id, field, val){
+  const s = fridaySections.find(x=>x.id===id);
+  if(s) s[field] = normalizeFridayDetailLines(val);
+}
+
+function updateFSecGradient(id, field, val){
+  const s = fridaySections.find(x=>x.id===id);
+  if(s) s[field] = normalizeGradientArray(normalizeStringArray(String(val || '').replace(/,/g, '\n')));
+}
+
 function updateFSecV(id, vIdx, field, val){
   const s = fridaySections.find(x=>x.id===id);
   if(s && s.variations[vIdx]) {
+    if(field === 'description'){
+      s.variations[vIdx][field] = stripAICitations(val);
+      return;
+    }
     s.variations[vIdx][field] = val;
   }
 }
@@ -927,50 +1101,149 @@ function generateAIPrompt(){
   const raw = gv('aiRawInput');
   if(!raw){toast('Paste some raw event details first!');return;}
   const s = getSettings();
+  const org = ORGS[currentOrgId];
+  const todayLabel = new Intl.DateTimeFormat('en-US', { month: 'long', day: 'numeric', year: 'numeric' }).format(new Date());
   const fontGuide = SINGLE_CLASS_FONT_OPTIONS.join(', ');
   const themeGuide = getSingleClassThemeGuide();
-  const prompt = `You are an expert design-focused email marketer for "${s.orgName}". Parse the raw input and return a COMPLETE marketing JSON object.
+  const prompt = `You are the senior email art director and copywriter for "${org.name}". Convert the raw Friday blast source material into ONE strict JSON object for a polished BER Friday blast.
 
-### CRITICAL RULES:
-1. NO CITATIONS: Do not include source links or references in any text.
-2. RICH MARKETING: Write 3 distinct descriptions for each event:
-   - copyA: Professional & factual.
-   - copyB: Energetic & FOMO.
-   - copyC: Urgency & Benefit-led.
-3. Make the design direction feel intentional. External AI is allowed to choose rich fonts, gradients, supporting colors, and a more editorial look.
-4. Use this theme library as inspiration:
+THIS JSON IS PARSED DIRECTLY BY A TOOL. IF THE JSON IS INVALID, THE TOOL FAILS.
+
+ABSOLUTE OUTPUT RULES:
+- Return ONLY one valid JSON object.
+- Use double quotes for every key and every string.
+- No markdown fences, no preamble, no commentary, no comments.
+- No citations, no source mentions, no footnotes, no bracket references, and no "according to" language.
+- No trailing commas.
+- No placeholder text like "..." or "[insert copy]".
+- Escape internal quotation marks correctly.
+- Use \\n\\n for paragraph breaks inside long copy fields.
+- Keep body copy HTML-free. You may use markdown **bold** sparingly.
+- Order sections chronologically when dates are available.
+
+CREATIVE DIRECTION RULES:
+- Make more design decisions yourself. Choose the font, header gradient, section title colors, section button gradients, CTA labels, and detail-box lines.
+- The final result should feel like a finished editorial BER email, not a rough digest.
+- Include materially more detail than a teaser blurb. Each section should feel ready to send.
+- Choose the fontFamily from: ${fontGuide}
+- Use this theme library as inspiration without copying it mechanically:
 ${themeGuide}
-5. Choose the fontFamily from: ${fontGuide}
 
-RETURN A JSON OBJECT (not an array) with this exact structure:
+FRIDAY BLAST-SPECIFIC DESIGN RULES:
+- Default to "logoPlacement": "none" unless the content truly needs a logo row.
+- The header should feel premium and finished, similar to a BER featured blast.
+- Each section must choose its own title color and matching button gradient.
+- Each section button gradient must START with the section title color.
+- Use distinct but compatible section themes across the full email.
+- Prefer a minimal footer.
+
+HERO IMAGE PROMPT RULES:
+- Every section variation must include a production-ready heroImagePrompt object.
+- Hero prompts must be specific to the actual event/article and clearly stronger than a generic stock-photo prompt.
+- Each hero prompt must describe composition, mood, featured objects/scene, color direction, text-safe space, and which event details should visibly influence the art.
+- Do NOT ask the image model to render citations, QR codes, watermarks, logos, or dense readable flyer text.
+- Favor premium marketing art direction over generic corporate stock language.
+
+RETURN THIS EXACT TOP-LEVEL SHAPE:
 {
+  "headerTitle": "Upcoming at BER - April 10th",
+  "preheaderText": "Hi {{CFirstName}} - One sentence preview of what is inside this Friday blast.",
   "design": {
     "themeName": "Coastal Authority",
     "themeDescription": "Short explanation of the creative direction",
     "fontFamily": "Outfit",
-    "headerEyebrow": "Upcoming Education",
-    "logoPlacement": "header", // Use "none" for a logo-free editorial header
-    "headerGradient": ["#004a32", "#006847"],
-    "buttonGradient": ["#006847", "#008a5e"],
-    "accentColor": "#008a5e",
-    "supportingColors": ["#0f766e", "#d9f99d", "#ecfeff"],
-    "surfaceColor": "#f7fbfa",
-    "variationAccents": ["#0f766e", "#1d4ed8", "#d97706"]
+    "headerEyebrow": "",
+    "logoPlacement": "none",
+    "headerGradient": ["#0B3954", "#1469AD", "#087E8B"],
+    "buttonGradient": ["#0B3954", "#1469AD"],
+    "accentColor": "#1469AD",
+    "supportingColors": ["#1469AD", "#087E8B", "#F4F7F9"],
+    "surfaceColor": "#F8FAFC",
+    "variationAccents": ["#0B3954", "#2B7147", "#237F86"],
+    "footerMode": "minimal"
   },
   "sections": [
     {
-       "title": "Short catchy title",
-       "dateTime": "Full string",
-       "location": "...",
-       "instructor": "...",
-       "regLink": "...",
-       "copyA": "Detailed sales copy with **bold** highlights",
-       "copyB": "...",
-       "copyC": "..."
-    },
-    ...
-  ]
+      "title": "Section title",
+      "dateTime": "Full date/time string",
+      "location": "Venue or delivery format",
+      "instructor": "Optional instructor or host",
+      "credits": "Optional credit/certification line",
+      "cost": "Optional price/value line",
+      "regLink": "https://...",
+      "ctaLabel": "Reserve Your Spot",
+      "titleColor": "#2B7147",
+      "supportColor": "#1469AD",
+      "surfaceColor": "#F8FAFC",
+      "buttonGradient": ["#2B7147", "#1469AD"],
+      "detailLines": [
+        "📅 **Saturday, April 25, 2026 | Check-in: 5:15 PM | Start: 6:00 PM**",
+        "📍 HeadPinz Entertainment Center",
+        "🍕 Includes pizza, salad, shoe rental, and two games"
+      ],
+      "secondaryTextLinkLabel": "Optional supporting text link label",
+      "secondaryTextLinkUrl": "https://...",
+      "copyA": "2-4 sentence polished professional body copy with useful specifics and **bold** emphasis where helpful.",
+      "copyB": "2-4 sentence energetic/FOMO body copy with specifics.",
+      "copyC": "2-4 sentence benefit-led or urgency copy with specifics.",
+      "variations": [
+        {
+          "name": "A - Professional",
+          "description": "Full finished copy for variation A.",
+          "ctaLabel": "Reserve Your Spot",
+          "heroImagePrompt": {
+            "title": "Variation A Hero Prompt",
+            "prompt": "Complete production-ready image prompt",
+            "visualFocus": "What should dominate the composition",
+            "eventDetailsToFeature": ["detail 1", "detail 2", "detail 3"],
+            "reservedTextAreas": ["headline zone", "detail strip", "cta area"],
+            "altText": "Accessible description"
+          }
+        },
+        {
+          "name": "B - Energetic",
+          "description": "Full finished copy for variation B.",
+          "ctaLabel": "Join the Action",
+          "heroImagePrompt": {
+            "title": "Variation B Hero Prompt",
+            "prompt": "Complete production-ready image prompt",
+            "visualFocus": "What should dominate the composition",
+            "eventDetailsToFeature": ["detail 1", "detail 2", "detail 3"],
+            "reservedTextAreas": ["headline zone", "detail strip", "cta area"],
+            "altText": "Accessible description"
+          }
+        },
+        {
+          "name": "C - Benefit-Led",
+          "description": "Full finished copy for variation C.",
+          "ctaLabel": "Claim Your Seat",
+          "heroImagePrompt": {
+            "title": "Variation C Hero Prompt",
+            "prompt": "Complete production-ready image prompt",
+            "visualFocus": "What should dominate the composition",
+            "eventDetailsToFeature": ["detail 1", "detail 2", "detail 3"],
+            "reservedTextAreas": ["headline zone", "detail strip", "cta area"],
+            "altText": "Accessible description"
+          }
+        }
+      ]
+     },
+     ...
+   ]
 }
+
+SECTION CONTENT REQUIREMENTS:
+- Each section must feel like finished marketing copy, not a placeholder summary.
+- Include real specifics from the raw input whenever available: dates, location, pricing, credits, sponsor opportunities, incentives, included items, audience benefit, etc.
+- The detailLines array must be ready to render directly in the info box.
+- CTA labels must be tailored to the section, not always "Register Here".
+- If there is a strong supporting resource, use the secondaryTextLink fields.
+- Variation A should generally be the most polished default version.
+
+TODAY'S CONTEXT:
+- Today is ${todayLabel}.
+- Organization: ${org.name}
+- Default email width: ${s.emailMaxW}px
 
 RAW INPUT:
 ${raw}
@@ -979,45 +1252,49 @@ RETURN ONLY THE JSON OBJECT. NO MARKDOWN, NO PREAMBLE. JUST { ... }`;
 
   navigator.clipboard.writeText(prompt);
   document.getElementById('importBox').style.display = 'block';
-  toast('AI Prompt copied! Paste into Gemini, then paste response below.');
+  toast('Friday blast prompt copied. Paste into ChatGPT or Gemini, then paste the JSON response below.');
 }
 
 let fridayDesign = null;
 
 function importAIResponse(){
   try {
-    let rawText = gv('aiResponse').trim();
-    if(rawText.startsWith('```')) rawText = rawText.replace(/^```[a-z]*\n?/,'').replace(/\n?```$/,'').trim();
+    let rawText = extractJsonCandidate(gv('aiResponse'));
     rawText = rawText.replace(/,\s*([\]}])/g, '$1');
     
-    const data = JSON.parse(rawText);
+    const data = sanitizeAIData(JSON.parse(rawText));
     const sections = Array.isArray(data) ? data : (data.sections || []);
     
-    if(data.design) fridayDesign = normalizeCreativeDesign(data.design, 0, gv('fridayHeaderCol') || '#004a32');
-    
-    fridaySections = sections.map((item, idx) => ({
-      id: Date.now() + Math.random() + idx,
-      title: item.title||'',
-      dateTime: item.dateTime||'',
-      location: item.location||'',
-      instructor: item.instructor||'',
-      cost: item.cost||'',
-      credits: item.credits||'',
-      regLink: item.regLink||'',
-      variationIndex: 0,
-      customColor: '',
-      links: [],
-      variations: [
-        { description: item.copyA || '', heroUrl: '' },
-        { description: item.copyB || '', heroUrl: '' },
-        { description: item.copyC || '', heroUrl: '' }
-      ]
-    }));
+    if(data.design){
+      fridayDesign = normalizeCreativeDesign(data.design, 0, gv('fridayHeaderCol') || '#004a32');
+      fridayDesign.logoPlacementExplicit = !!Object.prototype.hasOwnProperty.call(data.design, 'logoPlacement');
+      if(fridayDesign.headerGradient && fridayDesign.headerGradient[0]){
+        sv('fridayHeaderCol', fridayDesign.headerGradient[0]);
+        sv('fridayHeaderColHex', fridayDesign.headerGradient[0]);
+      }
+    }
+
+    const importedHeaderTitle = stripAICitations(firstNonEmpty(
+      data.headerTitle,
+      data.design && data.design.headerTitle
+    ));
+    const importedPreheader = stripAICitations(firstNonEmpty(
+      data.preheaderText,
+      data.preheader,
+      data.introText,
+      data.design && data.design.preheaderText,
+      data.design && data.design.preheader
+    ));
+
+    if(importedHeaderTitle) sv('fridayHeaderTitle', importedHeaderTitle);
+    if(importedPreheader) sv('fridayIntro', importedPreheader);
+
+    fridaySections = sections.map((item, idx) => normalizeFridaySection(item, idx));
     sortFridaySectionsByDate();
-    toast(`Imported ${fridaySections.length} sections with advanced design!`);
+    toast(`Imported ${fridaySections.length} Friday sections with richer design and copy data.`);
   } catch(e) {
     console.error('Import error:', e);
-    toast('Error parsing JSON. Check your input.');
+    toast('Error parsing JSON. Make sure ChatGPT or Gemini returned only one valid JSON object.');
   }
 }
 
@@ -1030,22 +1307,32 @@ function generateAIPromptTuesday(){
   const fontGuide = SINGLE_CLASS_FONT_OPTIONS.join(', ');
   const themeGuide = getSingleClassThemeGuide();
 
-  const prompt = `You are an expert email marketing designer for ${org.name}. I need you to design a COMPLETE, DYNAMIC email layout for our Tuesday Affiliate Blast targeting our affiliates and sponsors.
+  const prompt = `You are the senior email art director and editorial copywriter for ${org.name}. Design a COMPLETE, DYNAMIC Tuesday Affiliate Blast for affiliates and sponsors.
   
   ${currentOrgId === 'wcr' ? 'CONTEXT: This is for the Women\'s Council of REALTORS. The tone should be empowering, collaborative, and professional.' : 'CONTEXT: This is for the local REALTOR association affiliate members.'}
 
-IMPORTANT: If I provide any URLs or links below, please visit/review them thoroughly and extract ALL relevant information (event details, pricing, dates, images, descriptions, sponsorship tiers, etc.) to use in the email content. Do NOT leave placeholders — fill in EVERY detail from the source material.
+  IMPORTANT: If I provide any URLs or links below, please visit/review them thoroughly and extract ALL relevant information (event details, pricing, dates, images, descriptions, sponsorship tiers, etc.) to use in the email content. Do NOT leave placeholders — fill in EVERY detail from the source material.
 
-YOUR TASK: Design a rich, dynamic email layout using content blocks. Think like a professional email designer — use multi-image rows, side-by-side info cards, spec tables, bold CTAs, etc. Do NOT just stack identical sections. Make it visually interesting and varied.
+  THIS JSON IS PARSED DIRECTLY BY A TOOL. IF THE JSON IS INVALID, THE TOOL FAILS.
+
+  ABSOLUTE OUTPUT RULES:
+  - Return ONLY one valid JSON object.
+  - No markdown fences, no preamble, no comments, no citations, no source mentions, and no bracket references.
+  - Use double quotes for every key and every string.
+  - Do not leave trailing commas.
+  - Do not use placeholder text like "..." or "[insert text]".
+  - Keep copy HTML-free. Use markdown **bold** only when it materially helps emphasis.
+
+  YOUR TASK: Design a rich, dynamic email layout using content blocks. Think like a professional email designer — use multi-image rows, side-by-side info cards, spec tables, bold CTAs, and sharper editorial hierarchy. Do NOT just stack identical sections. Make it visually interesting and varied.
 
 RETURN A SINGLE JSON OBJECT (not an array) with this exact structure:
 {
   "design": {
     "themeName": "Coastal Authority",
     "themeDescription": "Short explanation of the creative direction",
-    "fontFamily": "Outfit", // Choose from: ${fontGuide}
+    "fontFamily": "Outfit",
     "headerEyebrow": "Affiliate Opportunities",
-    "logoPlacement": "header", // Use "none" if the editorial header should stand on its own
+    "logoPlacement": "header",
     "headerGradient": ["#002b4c", "#005a8c"],
     "buttonGradient": ["#005a8c", "#02aae1"],
     "accentColor": "#02aae1",
@@ -1054,9 +1341,7 @@ RETURN A SINGLE JSON OBJECT (not an array) with this exact structure:
   },
   "subject": "Catchy email subject line",
   "preheader": "Preview text for email clients (max 200 chars)",
-  "blocks": [
-    // Array of content blocks — each block is one of the types below
-  ]
+  "blocks": []
 }
 
 CREATIVE DIRECTION LIBRARY:
@@ -1103,16 +1388,19 @@ IMAGE PROMPT RULES:
 - No generated logos. Leave logo space blank/placeholder.
 - Hero images: ${maxW}×315 px. Match the email's color scheme.
 - Row images: dimensions should match the layout (half-width ≈ ${Math.floor(maxW/2)-10}px, third-width ≈ ${Math.floor(maxW/3)-10}px).
-- Prompts should be detailed, specifying style, colors, composition, and content.
+- Prompts should be detailed, specifying style, colors, composition, content, mood, and reserved text-safe areas.
+- Make stronger visual decisions yourself. The prompts should feel like premium commissioned email art direction, not generic stock-image requests.
 
 DESIGN PRINCIPLES:
-- Mix block types for visual variety — don't just stack text blocks
+- Mix block types for visual variety ? don't just stack text blocks
 - Theme Colors: Determine a vibrant, cohesive color theme for the email. Do NOT just use the default #02aae1 everywhere. Assign distinct, complementary hex colors to CTA buttons, dividers, and specs blocks to clearly separate different features/sponsors (e.g. use #2e7d32 for one sponsor CTA, #f57c00 for a divider, #1a237e for specs, etc).
 - Use imageRow blocks to show multiple related visuals side-by-side
 - Use infoCard blocks for comparative or step-by-step content
 - Use specs blocks for pricing tiers, dates, or technical details
 - Every major section should have at least one CTA button
-- Write ALL copy fully — do not leave any placeholder text
+- Write ALL copy fully ? do not leave any placeholder text
+- Return more detail, not less. Every block should feel ready to send rather than sketched in.
+- Make more creative decisions yourself around font, gradients, accent hierarchy, and editorial pacing.
 - Target audience: Real estate affiliates, sponsors, and business partners
 - Tone: Professional but warm, emphasizing networking value and business ROI
 
@@ -1121,6 +1409,7 @@ CRITICAL JSON FORMATTING RULES (TO PREVENT PARSING ERRORS):
 2. You MUST perfectly escape ALL internal double quotes inside strings (e.g. use \\" for inside quotes).
 3. Do NOT use actual newlines inside strings; use \\n.
 4. Do NOT leave trailing commas at the end of objects or arrays.
+5. Do not include citations, footnotes, source labels, or markdown links.
 
 RAW INPUT TO ANALYZE:
 ${raw}
@@ -1129,18 +1418,17 @@ RETURN ONLY THE JSON OBJECT. NO MARKDOWN BLOCK, NO BACKTICKS, NO PREAMBLE. JUST 
 
   navigator.clipboard.writeText(prompt);
   document.getElementById('importBoxTuesday').style.display = 'block';
-  toast('AI Prompt copied! Paste into Gemini, then paste response below.');
+  toast('Tuesday prompt copied. Paste into ChatGPT or Gemini, then paste the JSON response below.');
 }
 
 let tuesdayDesign = null;
 
 function importAIResponseTuesday(){
   try {
-    let rawText = gv('aiResponseTuesday').trim();
-    if(rawText.startsWith('```')) rawText = rawText.replace(/^```[a-z]*\n?/,'').replace(/\n?```$/,'').trim();
+    let rawText = extractJsonCandidate(gv('aiResponseTuesday'));
     rawText = rawText.replace(/,\s*([\]}])/g, '$1');
     
-    const data = JSON.parse(rawText);
+    const data = sanitizeAIData(JSON.parse(rawText));
 
     if(data.design) tuesdayDesign = normalizeCreativeDesign(data.design, 1, gv('tuesdayHeaderCol') || '#02aae1');
     if(data.blocks && Array.isArray(data.blocks)){
@@ -1172,7 +1460,7 @@ function importAIResponseTuesday(){
 }
 
 // ===================== FLYER GENERATOR =====================
-function generateFlyerAIPrompt() {
+function generateFlyerPrompt() {
   const link = gv('flyerLink');
   const details = gv('flyerDetails');
   if(!link && !details){ toast('Add some flyer details first!'); return; }
@@ -1190,20 +1478,37 @@ STRICT DESIGN RULES:
 5. CONTEXT: This is for ${org.name}. ${currentOrgId === 'wcr' ? "The flyer should feel empowering, leadership-focused, and professional." : "The flyer should feel authoritative, educational, and service-oriented."}
 6. NO PHOTOGRAPHIC PEOPLE: Only use the provided instructor headshot if available. Otherwise, use icons or abstract geometric human silhouettes.
 7. GRID ELEMENTS: Include subtle 6x6 dot grid patterns (plus signs) in the background of primary color blocks.
-8. DIVIDERS: Use curved diagonal "wave" lines to separate major sections (e.g., Hero Image to Title, Title to Body).
-9. HIGHLIGHTS: Place Price/Location/CE Credits in high-contrast "pill" shapes or rectangular boxes with thick borders.
+8. DIVIDERS: Use curved diagonal "wave" lines to separate major sections (for example: hero image to title, title to body).
+9. HIGHLIGHTS: Place price, location, CE credits, or value props in high-contrast pill shapes or rectangular boxes with thick borders.
 10. COLOR PALETTE: Dominant Navy Blue (#001F3F or similar), vibrant Red accents (#FF0000), and crisp White.
+11. NO CITATIONS, QR CODES, WATERMARKS, OR FAKE FLYER LEGAL COPY.
+${bioSpot}
 `;
 
-  const prompt = `Create a strict, structured image generation prompt for 3 DIFFERENT 8.5x11 printable flyers based on the following details:
+  const prompt = `You are a senior event-poster art director. Create 3 production-ready image generation prompts for 8.5x11 printable flyers based on the details below.
+
+RETURN FORMAT:
+- Return plain text only.
+- Clearly label the outputs as "Variation 1", "Variation 2", and "Variation 3".
+- Each variation must be a complete, copy-paste-ready image prompt, not a short summary.
+- No citations, no source notes, no markdown code fences, and no placeholder language.
+
+SOURCE DETAILS:
 EVENT/TITLE: ${link}
 DETAILS: ${details}
-${instructorSection}
 
 ${commonRules}
 
+ALL 3 VARIATIONS MUST:
+- Make the visual hierarchy explicit: logo placeholder, headline zone, date/time zone, detail box cluster, CTA zone, and optional instructor area.
+- Include a stronger color strategy, composition strategy, and typography strategy.
+- Call out which event details should be emphasized visually.
+- Specify premium print-poster styling, not generic social-media art.
+- Avoid fake logos, QR codes, watermarks, or dense unreadable micro-text.
+- Keep the prompt usable in ChatGPT, Gemini, Midjourney, or similar image models.
+
 VARIATION 1: "Strict Swiss Grid"
-- Focus on mathematical alignment and the dot grid pattern.
+- Focus on mathematical alignment, modular spacing, and the dot-grid pattern.
 - High use of Navy Blue blocks and white text.
 - Very minimal, high-end technical feel.
 
@@ -1213,16 +1518,27 @@ VARIATION 2: "Modern Wave"
 - Energetic and bold, intended for high-engagement networking events.
 
 VARIATION 3: "Premium Corporate"
-- Focus on clean whitespace and elegant typography hierarchy.
+- Focus on clean whitespace, polished hierarchy, and restrained luxury.
 - Subtle background textures.
 - Professional, sophisticated, and balanced.
 
-RETURN THE 3 PROMPTS CLEARLY LABELED.`;
+For each variation, explicitly describe:
+1. overall art direction
+2. layout and composition
+3. color palette
+4. typography treatment
+5. featured objects or visual motifs
+6. where the key event details should appear
+7. how the instructor area should be handled if included`;
 
   navigator.clipboard.writeText(prompt);
   document.getElementById('flyerCodeBox').style.display = 'block';
   sv('flyerGeneratedCode', prompt);
   toast('3 Flyer Variations copied to clipboard!');
+}
+
+function generateFlyerAIPrompt() {
+  return generateFlyerPrompt();
 }
 
 // ===================== SINGLE CLASS AI PROMPT WORKFLOW =====================
@@ -1292,6 +1608,115 @@ function normalizeColorArray(value){
     : [];
 }
 
+function normalizeGradientArray(value, fallback){
+  const gradient = normalizeColorArray(value).slice(0, 3);
+  if(gradient.length >= 2) return gradient;
+  const fallbackGradient = normalizeColorArray(fallback).slice(0, 3);
+  return fallbackGradient.length >= 2 ? fallbackGradient : gradient;
+}
+
+function buildGradientCss(colors, angle = '135deg'){
+  const stops = normalizeColorArray(colors).slice(0, 3);
+  if(!stops.length) return '';
+  if(stops.length === 1) return stops[0];
+  const lastIndex = stops.length - 1;
+  const gradientStops = stops.map((color, index) => `${color} ${Math.round((index / lastIndex) * 100)}%`);
+  return `linear-gradient(${angle}, ${gradientStops.join(', ')})`;
+}
+
+function gradientEndpoints(colors, fallbackA = '', fallbackB = ''){
+  const stops = normalizeColorArray(colors).slice(0, 3);
+  if(stops.length >= 2) return [stops[0], stops[stops.length - 1]];
+  return [fallbackA, fallbackB];
+}
+
+function stripAICitations(text){
+  if(typeof text !== 'string') return '';
+  return text
+    .replace(/\[([^\]]+)\]\((https?:\/\/[^)]+)\)/gi, '$1')
+    .replace(/【[^】]+】/g, '')
+    .replace(/\[(\d+|source|sources?)\]/gi, '')
+    .replace(/\((?:source|sources?):[^)]*\)/gi, '')
+    .replace(/(?:^|\n)Sources?:[^\n]*/gi, '')
+    .replace(/\n{3,}/g, '\n\n')
+    .trim();
+}
+
+function sanitizeAIData(value){
+  if(Array.isArray(value)) return value.map(sanitizeAIData);
+  if(value && typeof value === 'object'){
+    const result = {};
+    Object.keys(value).forEach(key => {
+      result[key] = sanitizeAIData(value[key]);
+    });
+    return result;
+  }
+  if(typeof value === 'string') return stripAICitations(value);
+  return value;
+}
+
+function normalizeFridayDetailLines(value){
+  const rawItems = Array.isArray(value) ? value : normalizeStringArray(value);
+  return rawItems
+    .map(item => {
+      if(typeof item === 'string') return stripAICitations(item);
+      if(item && typeof item === 'object'){
+        const label = stripAICitations(firstNonEmpty(item.label, item.heading));
+        const body = stripAICitations(firstNonEmpty(item.value, item.text, item.body));
+        if(label && body) return `${label}: ${body}`;
+        return label || body;
+      }
+      return '';
+    })
+    .filter(Boolean);
+}
+
+function extractJsonCandidate(rawText){
+  const cleaned = String(rawText || '')
+    .trim()
+    .replace(/^```[a-z]*\s*/i, '')
+    .replace(/\s*```$/i, '')
+    .replace(/[“”]/g, '"')
+    .replace(/[‘’]/g, "'");
+
+  const objectIndex = cleaned.indexOf('{');
+  const arrayIndex = cleaned.indexOf('[');
+  let startIndex = -1;
+  if(objectIndex === -1) startIndex = arrayIndex;
+  else if(arrayIndex === -1) startIndex = objectIndex;
+  else startIndex = Math.min(objectIndex, arrayIndex);
+  if(startIndex === -1) return cleaned;
+
+  let depth = 0;
+  let inString = false;
+  let escapeNext = false;
+
+  for(let i = startIndex; i < cleaned.length; i++){
+    const char = cleaned[i];
+    if(escapeNext){
+      escapeNext = false;
+      continue;
+    }
+    if(char === '\\'){
+      escapeNext = true;
+      continue;
+    }
+    if(char === '"'){
+      inString = !inString;
+      continue;
+    }
+    if(inString) continue;
+
+    if(char === '{' || char === '[') depth++;
+    if(char === '}' || char === ']'){
+      depth--;
+      if(depth === 0) return cleaned.slice(startIndex, i + 1);
+    }
+  }
+
+  return cleaned.slice(startIndex);
+}
+
 function findBlockIndex(blocks, type){
   return (blocks || []).findIndex(block => block && block.type === type);
 }
@@ -1343,12 +1768,12 @@ function normalizeCreativeDesign(design, fallbackIndex = 0, fallbackHeaderColor 
   normalized.headerEyebrow = firstNonEmpty(normalized.headerEyebrow);
   normalized.logoPlacement = firstNonEmpty(normalized.logoPlacement, 'header');
 
-  normalized.headerGradient = normalizeColorArray(normalized.headerGradient).slice(0, 2);
+  normalized.headerGradient = normalizeGradientArray(normalized.headerGradient);
   if(normalized.headerGradient.length < 2){
     normalized.headerGradient = [firstNonEmpty(fallbackHeaderColor, theme.headerGradient[0]), theme.headerGradient[1]];
   }
 
-  normalized.buttonGradient = normalizeColorArray(normalized.buttonGradient).slice(0, 2);
+  normalized.buttonGradient = normalizeGradientArray(normalized.buttonGradient);
   if(normalized.buttonGradient.length < 2){
     normalized.buttonGradient = theme.buttonGradient.slice();
   }
@@ -1700,6 +2125,7 @@ INSTRUCTOR SECTION: Not required for this email.
 ${currentOrgId === 'wcr' ? 'CONTEXT: This is for the Women\'s Council of REALTORS. Ensure the copy reflects their mission of professional networking and leadership development.' : 'CONTEXT: This is for the local REALTOR association audience and should feel credible, professional, and genuinely useful.'}
 
 YOUR MISSION: ${mission}${strategyBlock}
+THIS JSON IS PARSED DIRECTLY BY A TOOL. IF THE JSON IS INVALID, THE TOOL FAILS.
 ### CRITICAL RULES:
 1. No citations: do not include citations, references, footnotes, or source tags.
 2. Research the class topic deeply enough to write for real estate professionals with specificity.
@@ -2036,11 +2462,10 @@ function renderCampaignPlanOutput(){
 
 function importCampaignPlannerResponse(){
   try {
-    let rawText = gv('campaignPlannerAIResponse').trim();
-    if(rawText.startsWith('```')) rawText = rawText.replace(/^```[a-z]*\n?/,'').replace(/\n?```$/,'').trim();
+    let rawText = extractJsonCandidate(gv('campaignPlannerAIResponse'));
     rawText = rawText.replace(/,\s*([\]}])/g, '$1');
 
-    const data = JSON.parse(rawText);
+    const data = sanitizeAIData(JSON.parse(rawText));
     const campaign = Object.assign({}, data.campaign || data.plan || {});
     campaign.todayDate = firstNonEmpty(campaign.todayDate, gv('campaignStartDate'), formatDateForInput(new Date()));
     campaign.eventDate = firstNonEmpty(campaign.eventDate, gv('campaignEventDate'));
@@ -2121,15 +2546,16 @@ TASK:
 Plan a full campaign of promotional email blasts from today's date through the event date. Decide how many sends are appropriate based on the runway, the audience, the urgency, and the likely objections. Then plan each email so it can later be generated as a rich single-email blast with multiple variations.
 
 REQUIREMENTS:
+- Return ONLY one valid JSON object. No markdown fences, no comments, no citations, no footnotes, and no source mentions.
 - Plan between 2 and 7 total sends depending on the runway.
 - Every send must have an intentional date, purpose, audience focus, and creative angle.
 - The earlier sends should build awareness, value, and credibility.
 - Mid-campaign sends should deepen urgency, professional relevance, and proof.
 - Final sends should become more specific, urgent, and conversion-focused.
 - Each send should specify a design direction that an external AI can follow, including font, gradients, accent colors, supporting colors, surface color, header eyebrow, and logo placement.
-- Each send should also specify a hero image direction that bakes in the event details.
+- Each send should also specify a hero image direction that bakes in the event details and makes stronger visual decisions for composition, mood, and text-safe space.
 - Think carefully about timing gaps. Do not cluster everything at the end unless the runway is genuinely short.
-- Return valid JSON only.
+- Return more detail, not less. Each planned send should feel actionable and specific.
 
 RETURN A SINGLE JSON OBJECT with this exact structure:
 {
@@ -2194,11 +2620,10 @@ RETURN ONLY THE JSON OBJECT. NO MARKDOWN BLOCK, NO BACKTICKS, NO PREAMBLE.`;
 
 function importSingleClassAIResponse(){
   try {
-    let rawText = gv('singleAIResponse').trim();
-    if(rawText.startsWith('```')) rawText = rawText.replace(/^```[a-z]*\n?/,'').replace(/\n?```$/,'').trim();
+    let rawText = extractJsonCandidate(gv('singleAIResponse'));
     rawText = rawText.replace(/,\s*([\]}])/g, '$1');
 
-    const data = JSON.parse(rawText);
+    const data = sanitizeAIData(JSON.parse(rawText));
     const s = getSettings();
     const includeInstructor = document.getElementById('singleInstructorToggle').classList.contains('on');
     const parsed = data.parsed || {};
@@ -2438,8 +2863,8 @@ function generateAll(){
     container.innerHTML='';
 
     _genVariations.forEach((v, i) => {
-      const emailHtml = generateMultiSectionHTML(_genData, v, s, isTuesday, false, (isTuesday ? tuesdayDesign : fridayDesign));
-      renderVariationTab(i, v, (isTuesday ? 'Tuesday Update' : 'Friday Update'), emailHtml, 'Prompt not applicable for multi-section', container);
+      const emailHtml = generateMultiSectionHTML(_genData, v, s, isTuesday, false, (isTuesday ? tuesdayDesign : fridayDesign), i);
+      renderVariationTab(i, v, activeIntro, emailHtml, 'Prompt not applicable for multi-section', container);
     });
 
     configureOutputTabs({ tab0: 'Variation A', tab1: 'Variation B', tab2: 'Variation C', showTab1: true, showTab2: true, showComposer: true, composerLabel: 'THE COMPOSER' });
@@ -2519,7 +2944,7 @@ function pickVar(secId, varIdx, btn, isTuesday){
 }
 
 function updateComposerPreview(isTuesday = false){
-  const emailHtml = generateMultiSectionHTML(_genData, null, _genSettings, isTuesday, true, (isTuesday ? tuesdayDesign : fridayDesign));
+  const emailHtml = generateMultiSectionHTML(_genData, null, _genSettings, isTuesday, true, (isTuesday ? tuesdayDesign : fridayDesign), null);
   const frame=document.getElementById('composerFrame');
   const doc=frame.contentDocument||frame.contentWindow.document;
   doc.open();doc.write(emailHtml);doc.close();
@@ -2665,105 +3090,139 @@ function generateLearnBlock(objectives,heading,v){
 }
 
 // ===================== MULTI-SECTION HTML (FRIDAY & TUESDAY) =====================
-function generateMultiSectionHTML(data, v, s, isTuesday = false, isComposer = false, design = null){
+function generateMultiSectionHTML(data, v, s, isTuesday = false, isComposer = false, design = null, forcedVariationIndex = null){
   const org = ORGS[currentOrgId];
   const hColorStr = isTuesday ? (gv('tuesdayHeaderCol') || '#02aae1') : (gv('fridayHeaderCol') || '#004a32');
   const hTitle = isTuesday ? (gv('tuesdayHeaderTitle') || 'Upcoming Affiliate Opportunities') : (gv('fridayHeaderTitle') || 'Upcoming at BER');
   const preText = isTuesday ? (gv('tuesdayIntro') || '') : (gv('fridayIntro') || '');
   const d = normalizeCreativeDesign(design || (isTuesday ? tuesdayDesign : fridayDesign) || {}, isTuesday ? 1 : 0, hColorStr);
   const fontName = d.fontFamily || 'Montserrat';
-  const hGrad = d.headerGradient || [hColorStr, hColorStr];
-  const btnGrad = d.buttonGradient || [hGrad[0], hGrad[1]];
+  const hGrad = normalizeGradientArray(d.headerGradient, [hColorStr, hColorStr]);
+  const btnGrad = normalizeGradientArray(d.buttonGradient, hGrad);
   const headerEyebrow = firstNonEmpty(d.headerEyebrow);
   const surfaceColor = firstNonEmpty(d.surfaceColor, '#ffffff');
-  const showHeaderLogo = d.logoPlacement !== 'none';
+  const headerGradientCss = buildGradientCss(hGrad) || hGrad[0];
+  const [headerVmlStart, headerVmlEnd] = gradientEndpoints(hGrad, hColorStr, hColorStr);
+  const hasExplicitFridayLogoSetting = !!(design && typeof design === 'object' && design.logoPlacementExplicit);
+  const showHeaderLogo = isTuesday
+    ? d.logoPlacement !== 'none'
+    : hasExplicitFridayLogoSetting && d.logoPlacement === 'header';
+  const footerMode = firstNonEmpty(d.footerMode, isTuesday ? 'full' : 'minimal');
+  const headerPadding = isTuesday ? '40px 0' : '42px 0';
+  const introMaxWidth = isTuesday ? 600 : 610;
+  const headerVmlHeight = isTuesday ? 120 : 150;
 
-  const sectionsHtml = data.sections.map((sec, idx) => {
-    let activeV = v;
-    let vIdx = sec.variationIndex || 0;
-    
+  const sectionsHtml = data.sections.map((rawSection, idx) => {
+    const sec = isTuesday ? rawSection : normalizeFridaySection(rawSection, idx);
+    let vIdx = Number.isInteger(forcedVariationIndex) ? forcedVariationIndex : (sec.variationIndex || 0);
+    let activeV = _genVariations[vIdx] || v || _genVariations[0];
+
     if(isComposer) {
       const pickIdx = composerPicks[sec.id];
-      activeV = _genVariations[pickIdx];
+      vIdx = Number.isInteger(pickIdx) ? pickIdx : (sec.variationIndex || 0);
+      activeV = _genVariations[vIdx] || _genVariations[0];
     } else if (v === null) {
-      activeV = _genVariations[vIdx];
+      activeV = _genVariations[vIdx] || _genVariations[0];
     }
-    
-    const themeColor = sec.customColor || activeV.colorA;
-    const sectionSupport = (d.supportingColors || [])[idx % Math.max((d.supportingColors || []).length, 1)] || btnGrad[1];
-    const currentV = sec.variations[vIdx] || { description: '', heroUrl: '' };
-    const descHtml = mdToHtml(currentV.description);
-    const heroUrl = currentV.heroUrl || '';
-    
-    let extraBtnsHtml = '';
+
+    const currentV = (sec.variations && sec.variations[vIdx]) || (sec.variations && sec.variations[0]) || { description: '', heroUrl: '', detailLines: [], buttonGradient: [] };
+    const themeColor = firstNonEmpty(sec.customColor, currentV.titleColor, activeV && activeV.colorA, btnGrad[0], hGrad[0]);
+    const sectionSupport = firstNonEmpty(sec.supportColor, (d.supportingColors || [])[idx % Math.max((d.supportingColors || []).length, 1)], btnGrad[btnGrad.length - 1], hGrad[hGrad.length - 1]);
+    const sectionGradient = normalizeGradientArray(currentV.buttonGradient || sec.buttonGradient, [themeColor, sectionSupport]);
+    const sectionGradientCss = buildGradientCss(sectionGradient) || themeColor;
+    const [sectionVmlStart, sectionVmlEnd] = gradientEndpoints(sectionGradient, themeColor, sectionSupport);
+    const sectionSurface = firstNonEmpty(sec.surfaceColor, surfaceColor);
+    const descHtml = mdToHtml(stripAICitations(currentV.description));
+    const heroUrl = firstNonEmpty(currentV.heroUrl, sec.heroUrl);
+    const heroAlt = stripAICitations(firstNonEmpty(currentV.heroPrompt && currentV.heroPrompt.altText, sec.heroAlt, sec.title));
+    const primaryCtaLabel = stripAICitations(firstNonEmpty(currentV.ctaLabel, sec.ctaLabel, 'Register Here'));
+    const detailLines = (currentV.detailLines && currentV.detailLines.length ? currentV.detailLines : sec.detailLines || []).filter(Boolean);
+    const marginBottom = idx === data.sections.length - 1 ? '10px' : '35px';
+
+    let extraLinksHtml = '';
     if(sec.links && sec.links.length > 0) {
-      sec.links.forEach(l => {
-        if(l.url) {
-          extraBtnsHtml += `
+      sec.links.forEach(link => {
+        if(!link || !link.url) return;
+        if(link.style === 'text'){
+          extraLinksHtml += `
+          <tr><td align="center" style="padding:0 0 12px">
+            <a href="${link.url}" target="_blank" style="font-size:13px;line-height:1.5;color:${themeColor};text-decoration:underline;font-weight:700;">${link.label || 'Learn More'}</a>
+          </td></tr>`;
+          return;
+        }
+        extraLinksHtml += `
           <tr><td align="center" style="padding:4px 0">
             <!--[if mso]>
-            <v:roundrect xmlns:v="urn:schemas-microsoft-com:vml" xmlns:w="urn:schemas-microsoft-com:office:word" href="${l.url}" style="height:36px;v-text-anchor:middle;width:180px;" arcsize="50%" stroke="f" fill="t">
-              <v:fill type="gradient" color="${btnGrad[0]}" color2="${btnGrad[1]}" />
+            <v:roundrect xmlns:v="urn:schemas-microsoft-com:vml" xmlns:w="urn:schemas-microsoft-com:office:word" href="${link.url}" style="height:36px;v-text-anchor:middle;width:210px;" arcsize="50%" stroke="f" fill="t">
+              <v:fill type="gradient" color="${sectionVmlStart}" color2="${sectionVmlEnd}" />
               <w:anchorlock/>
-              <center style="color:#ffffff;font-family:sans-serif;font-size:14px;font-weight:bold;">${l.label||'Learn More'}</center>
+              <center style="color:#ffffff;font-family:sans-serif;font-size:14px;font-weight:bold;">${link.label || 'Learn More'}</center>
             </v:roundrect>
             <![endif]-->
             <!--[if !mso]><!-->
             <table cellpadding="0" cellspacing="0" style="margin:0 auto">
-              <tr><td align="center" style="background:${btnGrad[0]};background:linear-gradient(135deg, ${btnGrad[0]} 0%, ${btnGrad[1]} 100%);border-radius:50px;padding:8px 30px">
-                <a href="${l.url}" target="_blank" style="color:#ffffff;text-decoration:none;font-weight:700;font-size:14px;display:block">${l.label||'Learn More'}</a>
+              <tr><td align="center" style="background:${sectionVmlStart};background:${sectionGradientCss};border-radius:50px;padding:8px 30px">
+                <a href="${link.url}" target="_blank" style="color:#ffffff;text-decoration:none;font-weight:700;font-size:14px;display:block">${link.label || 'Learn More'}</a>
               </td></tr>
             </table>
             <!--<![endif]-->
           </td></tr>`;
-        }
       });
     }
 
-    const marginBottom = idx === data.sections.length - 1 ? '10px' : '35px';
-    
+    const secondaryTextLinkHtml = sec.secondaryLinkLabel && sec.secondaryLinkUrl ? `
+      <tr><td align="center" style="padding:0 0 14px">
+        <a href="${sec.secondaryLinkUrl}" target="_blank" style="font-size:13px;line-height:1.5;color:${themeColor};text-decoration:underline;font-weight:700;">${sec.secondaryLinkLabel}</a>
+      </td></tr>` : '';
+
     return `
     <!-- Section: ${sec.title} -->
-    <table width="100%" cellpadding="0" cellspacing="0" style="background-color:${surfaceColor};margin-bottom:${marginBottom};table-layout:fixed;border:1px solid rgba(15,23,42,0.06);border-radius:14px;overflow:hidden;">
+    <table width="100%" cellpadding="0" cellspacing="0" style="background-color:${sectionSurface};margin-bottom:${marginBottom};table-layout:fixed;border:1px solid rgba(15,23,42,0.06);border-radius:14px;overflow:hidden;">
       ${heroUrl ? `<tr><td style="padding:0">
-        <img src="${heroUrl}" width="100%" style="width:100%;max-width:${s.emailMaxW}px;height:auto;display:block" alt="${sec.title}">
+        <img src="${heroUrl}" width="100%" style="width:100%;max-width:${s.emailMaxW}px;height:auto;display:block" alt="${esc(heroAlt || sec.title)}">
       </td></tr>` : ''}
       <tr><td class="section-inner" style="padding:18px 32px 4px">
         <p style="margin:0 0 12px;color:${themeColor};font-size:22px;font-weight:800;line-height:1.2;text-transform:uppercase;letter-spacing:.5px">
           ${sec.title}
         </p>
-        <div style="margin:0 0 20px;font-size:15px;line-height:1.6;color:#333333">
+        <div style="margin:0 0 20px;font-size:15px;line-height:${isTuesday ? '1.6' : '1.7'};color:#333333">
           ${descHtml}
         </div>
-        <table width="100%" cellpadding="0" cellspacing="0" style="margin:0 0 20px;background-color:${surfaceColor};border-left:4px solid ${themeColor};border-top:1px solid ${sectionSupport};border-right:1px solid rgba(15,23,42,0.06);border-bottom:1px solid rgba(15,23,42,0.06);border-radius:0 10px 10px 0">
+        <table width="100%" cellpadding="0" cellspacing="0" style="margin:0 0 20px;background-color:${sectionSurface};border-left:4px solid ${themeColor};border-top:1px solid ${sectionSupport};border-right:1px solid rgba(15,23,42,0.06);border-bottom:1px solid rgba(15,23,42,0.06);border-radius:0 10px 10px 0">
           <tr><td style="padding:12px 16px">
-            <p style="margin:0;font-size:14px;color:#444444">📅 <strong>${sec.dateTime}</strong></p>
-            ${sec.location ? `<p style="margin:4px 0 0;font-size:14px;color:#444444">Location: ${sec.location}</p>` : ''}
-            ${sec.credits ? `<p style="margin:4px 0 0;font-size:14px;color:#666666">Credits: ${sec.credits}</p>` : ''}
+            ${(detailLines.length ? detailLines : buildFridayDetailLines(sec)).map((line, lineIndex) => `<p style="margin:${lineIndex === 0 ? '0' : '4px 0 0'};font-size:14px;color:${lineIndex < 2 ? '#444444' : '#666666'}">${mdToHtml(line)}</p>`).join('')}
           </td></tr>
         </table>
         <table width="100%" cellpadding="0" cellspacing="0">
-          <tr><td align="center" style="padding:8px 0 12px">
+          <tr><td align="center" style="padding:8px 0 6px">
             <!--[if mso]>
-            <v:roundrect xmlns:v="urn:schemas-microsoft-com:vml" xmlns:w="urn:schemas-microsoft-com:office:word" href="${sec.regLink||'#'}" style="height:48px;v-text-anchor:middle;width:240px;" arcsize="50%" stroke="f" fill="t">
-              <v:fill type="gradient" color="${btnGrad[0]}" color2="${btnGrad[1]}" />
+            <v:roundrect xmlns:v="urn:schemas-microsoft-com:vml" xmlns:w="urn:schemas-microsoft-com:office:word" href="${sec.regLink || '#'}" style="height:48px;v-text-anchor:middle;width:280px;" arcsize="50%" stroke="f" fill="t">
+              <v:fill type="gradient" color="${sectionVmlStart}" color2="${sectionVmlEnd}" />
               <w:anchorlock/>
-              <center style="color:#ffffff;font-family:sans-serif;font-size:16px;font-weight:bold;">Register Here</center>
+              <center style="color:#ffffff;font-family:sans-serif;font-size:16px;font-weight:bold;">${primaryCtaLabel}</center>
             </v:roundrect>
             <![endif]-->
             <!--[if !mso]><!-->
             <table cellpadding="0" cellspacing="0" style="margin:0 auto">
-              <tr><td align="center" style="background:${btnGrad[0]};background:linear-gradient(135deg, ${btnGrad[0]} 0%, ${btnGrad[1]} 100%);border-radius:50px;padding:14px 40px">
-                <a href="${sec.regLink||'#'}" target="_blank" style="color:#ffffff;text-decoration:none;font-weight:800;font-size:16px;display:block">Register Here</a>
+              <tr><td align="center" style="background:${sectionVmlStart};background:${sectionGradientCss};border-radius:50px;padding:14px 40px">
+                <a href="${sec.regLink || '#'}" target="_blank" style="color:#ffffff;text-decoration:none;font-weight:800;font-size:16px;display:block">${primaryCtaLabel}</a>
               </td></tr>
             </table>
             <!--<![endif]-->
           </td></tr>
-          ${extraBtnsHtml}
+          ${secondaryTextLinkHtml}
+          ${extraLinksHtml}
         </table>
       </td></tr>
     </table>`;
   }).join('');
+
+  const footerHtml = footerMode === 'minimal'
+    ? `<tr><td style="padding:40px 24px 30px;background-color:#ffffff;text-align:center;font-size:12px;color:#999999;border-top:1px solid #eeeeee"></td></tr>`
+    : `<tr><td style="padding:40px 24px 30px;background-color:#ffffff;text-align:center;font-size:12px;color:#999999;border-top:1px solid #eeeeee">
+    <p style="margin:0">© ${new Date().getFullYear()} ${s.orgName}</p>
+    <p style="margin:5px 0 0">${s.orgAddr}</p>
+  </td></tr>`;
 
   return `<!DOCTYPE html>
 <html>
@@ -2774,7 +3233,7 @@ function generateMultiSectionHTML(data, v, s, isTuesday = false, isComposer = fa
   body { font-family: '${fontName}', 'Helvetica Neue', Helvetica, Arial, sans-serif; -webkit-font-smoothing: antialiased; }
   @media only screen and (max-width: 600px) {
     .content-table { width: 100% !important; }
-    .header-cell { padding: 22px 15px !important; }
+    .header-cell { padding: 24px 15px !important; }
     .section-container { padding: 20px 15px 0 !important; }
     .section-inner { padding: 0 15px !important; }
     .intro-box { width: 95% !important; }
@@ -2793,17 +3252,17 @@ function generateMultiSectionHTML(data, v, s, isTuesday = false, isComposer = fa
   ${showHeaderLogo ? `<tr><td align="center" style="padding:20px 0;background-color:#ffffff">
     <img src="${org.logo}" height="50" style="height:50px;width:auto;display:block" alt="${org.name}">
   </td></tr>` : ''}
-  <tr><td align="center" style="background:${hGrad[0]};background:linear-gradient(135deg, ${hGrad[0]} 0%, ${hGrad[1]} 100%);padding:40px 0;color:#ffffff">
+  <tr><td align="center" class="header-cell" style="background:${headerVmlStart};background:${headerGradientCss};padding:${headerPadding};color:#ffffff">
     <!--[if mso]>
-    <v:rect xmlns:v="urn:schemas-microsoft-com:vml" fill="true" stroke="false" style="width:${s.emailMaxW}px;height:120px;">
-    <v:fill type="gradient" color="${hGrad[0]}" color2="${hGrad[1]}" angle="135" />
+    <v:rect xmlns:v="urn:schemas-microsoft-com:vml" fill="true" stroke="false" style="width:${s.emailMaxW}px;height:${headerVmlHeight}px;">
+    <v:fill type="gradient" color="${headerVmlStart}" color2="${headerVmlEnd}" angle="135" />
     <v:textbox inset="0,0,0,0">
     <![endif]-->
     <div style="padding:0 24px">
       ${headerEyebrow ? `<p style="margin:0 0 10px;font-size:12px;font-weight:700;letter-spacing:2px;text-transform:uppercase;opacity:0.9">${headerEyebrow}</p>` : ''}
       <p class="header-text" style="margin:0;font-size:32px;font-weight:900;text-transform:uppercase;letter-spacing:1.5px;text-shadow:0 2px 10px rgba(0,0,0,0.2)">${hTitle}</p>
       ${preText ? `
-      <div class="intro-box" style="margin:15px auto 0;width:90%;max-width:600px;border-top:1px solid rgba(255,255,255,0.3);padding-top:15px;font-size:15px;opacity:0.95;line-height:1.5;font-weight:500">
+      <div class="intro-box" style="margin:15px auto 0;width:90%;max-width:${introMaxWidth}px;border-top:1px solid rgba(255,255,255,0.3);padding-top:15px;font-size:15px;opacity:0.96;line-height:1.55;font-weight:500">
         ${preText}
       </div>` : ''}
     </div>
@@ -2816,10 +3275,7 @@ function generateMultiSectionHTML(data, v, s, isTuesday = false, isComposer = fa
       ${sectionsHtml}
     </div>
   </td></tr>
-  <tr><td style="padding:40px 24px 30px;background-color:#ffffff;text-align:center;font-size:12px;color:#999999;border-top:1px solid #eeeeee">
-    <p style="margin:0">© ${new Date().getFullYear()} ${s.orgName}</p>
-    <p style="margin:5px 0 0">${s.orgAddr}</p>
-  </td></tr>
+  ${footerHtml}
 </table>
 </body></html>`.trim();
 }
@@ -2983,35 +3439,55 @@ ADDITIONAL RULES:
 - Do not use stock photo aesthetics — aim for a designed, illustrated look`;
 }
 
+function buildFridayHeroPrompt(sec, variation, vIdx){
+  const org = ORGS[currentOrgId];
+  const design = normalizeCreativeDesign(fridayDesign || {}, 0, gv('fridayHeaderCol') || org.colors[0]);
+  const themeColor = firstNonEmpty(sec.customColor, variation.titleColor, design.accentColor, org.colors[0]);
+  const supportColor = firstNonEmpty(sec.supportColor, design.buttonGradient[design.buttonGradient.length - 1], design.headerGradient[design.headerGradient.length - 1], org.colors[1]);
+  const gradient = normalizeGradientArray(variation.buttonGradient || sec.buttonGradient, [themeColor, supportColor]);
+  const detailLines = (variation.detailLines && variation.detailLines.length ? variation.detailLines : sec.detailLines && sec.detailLines.length ? sec.detailLines : buildFridayDetailLines(sec))
+    .map(line => stripAICitations(String(line || '').replace(/\*\*/g, '')))
+    .filter(Boolean);
+  const heroData = variation.heroPrompt || buildSingleClassHeroPromptEntry(null, {}, {}, vIdx);
+  const toneDescriptions = [
+    'Professional, editorial, fact-rich, and polished.',
+    'Energetic, community-driven, and high-engagement.',
+    'Benefit-led, career-growth focused, and conversion-oriented.'
+  ];
+  const reservedAreas = heroData.reservedTextAreas && heroData.reservedTextAreas.length
+    ? heroData.reservedTextAreas
+    : ['headline zone', 'detail strip', 'cta pill'];
+  const featuredDetails = heroData.eventDetailsToFeature && heroData.eventDetailsToFeature.length
+    ? heroData.eventDetailsToFeature
+    : detailLines;
+  const basePrompt = firstNonEmpty(heroData.prompt);
+
+  return [
+    `Create a premium wide email hero image for ${org.name}.`,
+    `Use this for the "${sec.title}" section in a Friday blast. Canvas should feel like a 730px-wide landscape email hero with a clean text-safe composition.`,
+    `Visual direction: ${firstNonEmpty(sec.sectionThemeName, design.themeName, 'Editorial BER feature')} with palette cues from ${gradient.join(' -> ')}.`,
+    `Marketing angle: ${toneDescriptions[vIdx]}`,
+    basePrompt || `Show a scene or designed composition that clearly feels specific to "${sec.title}" instead of a generic stock-photo concept. Use environment cues, props, venue/activity hints, and energy that match the event or opportunity.`,
+    `Feature these details visually or through the scene styling: ${featuredDetails.join('; ')}.`,
+    `Reserve clean space for: ${reservedAreas.join(', ')}.`,
+    heroData.visualFocus ? `Visual focus: ${heroData.visualFocus}.` : '',
+    variation.description ? `Copy context: ${stripAICitations(variation.description)}` : '',
+    'Do not render citations, QR codes, logos, watermarks, flyer text blocks, or dense small type.',
+    'Avoid generic stock-photo aesthetics. The result should feel like premium custom marketing art direction.',
+    'If text appears inside the generated image at all, it must stay minimal, oversized, and secondary to the layout-safe composition.',
+    heroData.altText ? `Accessibility target: ${heroData.altText}.` : ''
+  ].filter(Boolean).join('\n\n');
+}
+
 // Generate prompt for a specific Friday Blast section
 function copySectionHeroPrompt(id) {
-  const s = getSettings();
   const sec = fridaySections.find(x => x.id === id);
   if(!sec) return;
-  
-  const vIdx = sec.variationIndex || 0;
-  const activeV = Object.assign({}, _genVariations[vIdx]);
-  if(sec.customColor) activeV.colorA = sec.customColor;
-  
-  const angles = [
-    "Professional, clean, and corporate. Highlighting facts and reliability.",
-    "Energetic, vibrant, and high-hype. Focused on community and networking.",
-    "Benefit-led, career-growth, and professional advancement focused."
-  ];
-  
-  const currentV = sec.variations[vIdx];
-  const marketingContext = angles[vIdx];
-  
-  // Use generateHeroPrompt logic but with current variation's copy
-  const prompt = generateHeroPrompt({
-    title: sec.title,
-    dateTime: sec.dateTime,
-    credits: sec.credits,
-    instructor: sec.instructor,
-    description: currentV.description
-  }, activeV, s) + "\n\nMARKETING ANGLE: " + marketingContext;
 
-  // Show in Preview
+  const vIdx = sec.variationIndex || 0;
+  const currentV = (sec.variations && sec.variations[vIdx]) || buildFridayDefaultVariation(['A','B','C'][vIdx] || 'A');
+  const prompt = buildFridayHeroPrompt(sec, currentV, vIdx);
+
   const preview = document.getElementById('heroPromptPreview');
   const box = document.getElementById('promptPreviewBox');
   if(preview && box){
@@ -3021,7 +3497,7 @@ function copySectionHeroPrompt(id) {
   }
 
   navigator.clipboard.writeText(prompt);
-  toast(`AI Hero Prompt (Theme ${['A','B','C'][vIdx]}) for "${truncate(sec.title, 20)}" copied!`);
+  toast(`Friday hero prompt (${['A','B','C'][vIdx]}) for "${truncate(sec.title, 20)}" copied.`);
 }
 
 // ===================== INIT =====================
