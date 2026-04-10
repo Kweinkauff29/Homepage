@@ -7,6 +7,8 @@ const ORGS = {
     addr: '25300 Bernwood Drive, Suite 1 · Bonita Springs, FL 34135',
     email: 'Support@BERealtors.org',
     logo: 'https://res.cloudinary.com/micronetonline/image/upload/q_auto/f_auto/c_crop,h_503,w_2954,x_0,y_0/v1573591630/tenants/6c24b0da-8a6e-4f2b-8547-26a8c1dc4581/98b2cd4b19a748e0be424cae2a868161/BonitaSpringsEsteroRealtors-Logo-Horizontal.png',
+    emailLogo: 'https://res.cloudinary.com/micronetonline/image/upload/q_auto/f_auto/c_crop,h_503,w_2954,x_0,y_0/v1573591630/tenants/6c24b0da-8a6e-4f2b-8547-26a8c1dc4581/98b2cd4b19a748e0be424cae2a868161/BonitaSpringsEsteroRealtors-Logo-Horizontal.png',
+    mergeTag: '{{CFirstName}}',
     colors: ['#004a32', '#006847'] // Green
   },
   wcr: {
@@ -16,6 +18,13 @@ const ORGS = {
     addr: '25300 Bernwood Drive, Suite 1 · Bonita Springs, FL 34135',
     email: 'WCR@BERealtors.org',
     logo: 'https://www.wcr.org/wp-content/uploads/2025/03/wcrlogo.png.webp',
+    emailLogo: 'https://bonitaesterorealtors.com/wp-content/uploads/2026/04/wcr-corporate-logo.jpg',
+    mergeTag: '[[FIRSTNAME]]',
+    trackingImage: '[[trackingImage]]',
+    socialLinks: [
+      { href: 'https://www.instagram.com/bonitaesterowomenscouncil', icon: 'https://cdn.tools.unlayer.com/social/icons/circle/instagram.png', alt: 'Instagram' },
+      { href: 'https://www.youtube.com/c/Bonitaesterorealtors', icon: 'https://cdn.tools.unlayer.com/social/icons/circle/youtube.png', alt: 'YouTube' }
+    ],
     colors: ['#002b4c', '#005a8c'] // Navy flow
   }
 };
@@ -896,6 +905,9 @@ function generateDynamicEmailHTML(blocks, settings, headerColor, headerTitle, pr
   const org = ORGS[currentOrgId];
   const hColor = headerColor || '#02aae1';
   const v = variation || {};
+  if(v.renderTemplate === 'wcr-constant-contact'){
+    return generateWcrSingleClassHTML(blocks, s, hColor, headerTitle, preText, v);
+  }
   const hTitle = v.headerTitle || headerTitle || 'Upcoming Affiliate Opportunities';
   const fontName = v.fontFamily || 'Montserrat';
   const hGrad = v.headerGradient || [hColor, hColor];
@@ -973,6 +985,267 @@ function generateDynamicEmailHTML(blocks, settings, headerColor, headerTitle, pr
     <p style="margin:5px 0 0">${s.orgAddr}</p>
   </td></tr>
 </table>
+</body>
+</html>`.trim();
+}
+
+function generateWcrSingleClassHTML(blocks, settings, headerColor, headerTitle, preText, variation){
+  const s = settings || getSettings();
+  const org = ORGS.wcr;
+  const hColor = headerColor || '#243B53';
+  const v = variation || {};
+  const hTitle = firstNonEmpty(v.headerTitle, headerTitle, 'WCR Education Spotlight');
+  const fontName = firstNonEmpty(v.fontFamily, 'Libre Baskerville');
+  const hGrad = normalizeGradientArray(v.headerGradient, [hColor, '#486581']);
+  const introText = firstNonEmpty(v.headerSummary, preText);
+  const preheaderText = firstNonEmpty(v.preheader, preText);
+  const logoUrl = firstNonEmpty(org.emailLogo, org.logo);
+  const trackingImage = firstNonEmpty(org.trackingImage);
+  const socialLinks = Array.isArray(org.socialLinks) ? org.socialLinks : [];
+  const blocksHtml = blocks.map(block => {
+    switch(block.type){
+      case 'hero': return renderHeroBlock(block, s, v);
+      case 'text': return renderTextBlock(block, s, v);
+      case 'imageRow': return renderImageRowBlock(block, s, v);
+      case 'cta': return renderCtaBlock(block, s, v);
+      case 'infoCard': return renderInfoCardBlock(block, s, v);
+      case 'specs': return renderSpecsBlock(block, s, v);
+      case 'bulletList': return renderBulletListBlock(block, s, v);
+      case 'divider': return renderDividerBlock(block, s, v);
+      case 'instructor': return renderInstructorBlock(block, s, v);
+      default: return '';
+    }
+  }).join('\n');
+
+  const socialHtml = socialLinks.map((link, index) => `
+                                  <table style="width: 32px !important; height: 32px !important; display: inline-block; border-collapse: collapse; table-layout: fixed; border-spacing: 0; vertical-align: top; margin-right: ${index === socialLinks.length - 1 ? '0px' : '5px'};" align="left" border="0" cellspacing="0" cellpadding="0" width="32" height="32">
+                                    <tbody>
+                                      <tr style="vertical-align: top">
+                                        <td style="word-break: break-word; border-collapse: collapse !important; vertical-align: top;" align="left" valign="middle">
+                                          <a href="${link.href}" title="${link.alt}" target="_blank">
+                                            <img style="outline: none; text-decoration: none; clear: both; display: block !important; border: medium; height: auto; float: none; max-width: 32px !important; width: 32px;" src="${link.icon}" alt="${link.alt}" title="${link.alt}" width="32" />
+                                          </a>
+                                        </td>
+                                      </tr>
+                                    </tbody>
+                                  </table>`).join('');
+
+  return `<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>${escHtml(hTitle)}</title>
+  <link href="https://fonts.googleapis.com/css2?family=${fontName.replace(/ /g,'+')}:wght@400;700;800&display=swap" rel="stylesheet" />
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      background-color: #f5f5f5;
+      font-family: '${fontName}', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    table,
+    td {
+      border-collapse: collapse;
+    }
+
+    img {
+      border: 0;
+      outline: none;
+      text-decoration: none;
+      -ms-interpolation-mode: bicubic;
+    }
+
+    @media only screen and (max-width: 600px) {
+      .content-table {
+        width: 100% !important;
+      }
+
+      .section-inner {
+        padding: 0 20px !important;
+      }
+
+      .img-col {
+        display: block !important;
+        width: 100% !important;
+        padding: 0 0 16px 0 !important;
+      }
+
+      .info-col {
+        display: block !important;
+        width: 100% !important;
+        padding: 20px !important;
+        margin-bottom: 15px !important;
+      }
+
+      .header-text {
+        font-size: 26px !important;
+      }
+
+      .u-row {
+        width: 100% !important;
+        max-width: 100% !important;
+      }
+
+      .u-col {
+        display: block !important;
+        width: 100% !important;
+        min-width: 100% !important;
+      }
+    }
+  </style>
+  <!--[if mso]>
+  <style type="text/css">
+    body, table, td, p, a { font-family: Helvetica, Arial, sans-serif !important; }
+  </style>
+  <![endif]-->
+</head>
+<body style="margin:0;padding:0;background-color:#f5f5f5;">${trackingImage}
+  <span style="display:none!important;font-size:1px;color:#f4f7f9;line-height:1px;max-height:0;max-width:0;opacity:0;overflow:hidden;">
+    ${preheaderText}
+  </span>
+
+  <table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%" style="background-color:#f5f5f5;">
+    <tbody>
+      <tr style="vertical-align: top">
+        <td style="word-break: break-word; border-collapse: collapse !important; vertical-align: top;">
+          <div class="u-row-container" style="padding: 20px 0px 0px; background-color: transparent;">
+            <div class="u-row" style="margin: 0 auto; min-width: 320px; max-width: ${s.emailMaxW}px; overflow-wrap: break-word; word-wrap: break-word; word-break: break-word; background-color: transparent;">
+              <div style="border-collapse: collapse; display: table; width: 100%; height: 100%; background-color: transparent;">
+                <div class="u-col u-col-100" style="max-width: 320px; min-width: ${s.emailMaxW}px; display: table-cell; vertical-align: top;">
+                  <div style="height: 100%; width: 100% !important; border-radius: 0px;">
+                    <div style="box-sizing: border-box; height: 100%; padding: 0px; border-radius: 0px;">
+
+                      <table style="font-family:arial,helvetica,sans-serif;" role="presentation" cellpadding="0" cellspacing="0" width="100%" border="0">
+                        <tbody>
+                          <tr>
+                            <td style="overflow-wrap:break-word; word-break:break-word; padding:10px; font-family:arial,helvetica,sans-serif;" align="left">
+                              <table width="100%" cellpadding="0" cellspacing="0" border="0">
+                                <tbody>
+                                  <tr>
+                                    <td style="padding-right: 0px; padding-left: 0px;" align="center">
+                                      <img style="outline: none; text-decoration: none; clear: both; display: inline-block !important; border: medium; height: auto; float: none; width: 205.9px; max-width: 205.9px;" align="center" border="0" src="${logoUrl}" alt="Womens Council of REALTORS Bonita Springs-Estero" title="Womens Council of REALTORS Bonita Springs-Estero" width="205.9" />
+                                    </td>
+                                  </tr>
+                                </tbody>
+                              </table>
+                            </td>
+                          </tr>
+                        </tbody>
+                      </table>
+
+                      <table style="font-family:arial,helvetica,sans-serif;" role="presentation" cellpadding="0" cellspacing="0" width="100%" border="0">
+                        <tbody>
+                          <tr>
+                            <td style="overflow-wrap:break-word; word-break:break-word; padding:10px; font-family:arial,helvetica,sans-serif;" align="left">
+                              <table style="border-collapse: collapse; table-layout: fixed; border-spacing: 0; vertical-align: top; border-top: 1px solid #BBBBBB; -ms-text-size-adjust: 100%; -webkit-text-size-adjust: 100%;" height="0px" align="center" border="0" cellpadding="0" cellspacing="0" width="100%">
+                                <tbody>
+                                  <tr style="vertical-align: top">
+                                    <td style="word-break: break-word; border-collapse: collapse !important; vertical-align: top; font-size: 0px; line-height: 0px; mso-line-height-rule: exactly; -ms-text-size-adjust: 100%; -webkit-text-size-adjust: 100%;">
+                                      <span>&nbsp;</span>
+                                    </td>
+                                  </tr>
+                                </tbody>
+                              </table>
+                            </td>
+                          </tr>
+                        </tbody>
+                      </table>
+
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="u-row-container" style="padding: 0px; background-color: transparent;">
+            <div class="u-row" style="margin: 0 auto; min-width: 320px; max-width: ${s.emailMaxW}px; overflow-wrap: break-word; word-wrap: break-word; word-break: break-word; background-color: #ffffff;">
+              <div style="border-collapse: collapse; display: table; width: 100%; height: 100%; background-color: transparent;">
+                <div class="u-col u-col-100" style="max-width: 320px; min-width: ${s.emailMaxW}px; display: table-cell; vertical-align: top;">
+                  <div style="height: 100%; width: 100% !important; border-radius: 0px;">
+                    <div style="box-sizing: border-box; height: 100%; padding: 0px; border-radius: 0px;">
+
+                      <table style="font-family:arial,helvetica,sans-serif;" role="presentation" cellpadding="0" cellspacing="0" width="100%" border="0">
+                        <tbody>
+                          <tr>
+                            <td style="overflow-wrap:break-word; word-break:break-word; padding:0px; font-family:arial,helvetica,sans-serif;" align="left">
+                              <div>
+                                <table class="content-table" style="width:100%; max-width:${s.emailMaxW}px; background-color:#ffffff; margin:0 auto; table-layout:fixed; border-radius:12px; overflow:hidden; box-shadow:0 10px 30px rgba(0,0,0,0.05);" width="100%" cellpadding="0" cellspacing="0" border="0">
+                                  <tbody>
+                                    <tr>
+                                      <td style="background:${hGrad[0]}; background:${buildGradientCss(hGrad) || hGrad[0]};" align="center">
+                                        <div style="padding:40px 24px; color:#ffffff;">
+                                          <p class="header-text" style="margin:0; font-size:24px; font-weight:900; letter-spacing:0.2px; text-shadow:0 2px 10px rgba(0,0,0,0.2);">${hTitle}</p>
+                                          ${introText ? `<div style="margin:15px auto 0; width:85%; border-top:1px solid rgba(255,255,255,0.3); padding-top:15px; font-size:15px; opacity:0.95; line-height:1.5; font-weight:500;">
+                                            ${introText}
+                                          </div>` : ''}
+                                        </div>
+                                      </td>
+                                    </tr>
+
+                                    <tr>
+                                      <td style="padding:0;">
+                                        <table style="table-layout:fixed;" width="100%" cellpadding="0" cellspacing="0" border="0">
+                                          <tbody>
+                                            ${blocksHtml}
+                                            <tr>
+                                              <td style="padding:40px 24px 30px; background-color:#ffffff; text-align:center; font-size:12px; color:#999999; border-top:1px solid #eeeeee;">
+                                              </td>
+                                            </tr>
+                                          </tbody>
+                                        </table>
+                                      </td>
+                                    </tr>
+                                  </tbody>
+                                </table>
+                              </div>
+                            </td>
+                          </tr>
+                        </tbody>
+                      </table>
+
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="u-row-container" style="padding: 0px 0px 20px; background-color: transparent;">
+            <div class="u-row" style="margin: 0 auto; min-width: 320px; max-width: ${s.emailMaxW}px; overflow-wrap: break-word; word-wrap: break-word; word-break: break-word; background-color: #414141;">
+              <div style="border-collapse: collapse; display: table; width: 100%; height: 100%; background-color: transparent;">
+                <div class="u-col u-col-100" style="max-width: 320px; min-width: ${s.emailMaxW}px; display: table-cell; vertical-align: top;">
+                  <div style="height: 100%; width: 100% !important; border-radius: 0px;">
+                    <div style="box-sizing: border-box; height: 100%; padding: 0px; border-radius: 0px;">
+
+                      <table style="font-family:arial,helvetica,sans-serif;" role="presentation" cellpadding="0" cellspacing="0" width="100%" border="0">
+                        <tbody>
+                          <tr>
+                            <td style="overflow-wrap:break-word; word-break:break-word; padding:10px; font-family:arial,helvetica,sans-serif;" align="left">
+                              <div align="center">
+                                <div style="display: table; max-width:${Math.max(37, socialLinks.length * 37)}px;">
+${socialHtml}
+                                </div>
+                              </div>
+                            </td>
+                          </tr>
+                        </tbody>
+                      </table>
+
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </td>
+      </tr>
+    </tbody>
+  </table>
 </body>
 </html>`.trim();
 }
@@ -1588,6 +1861,18 @@ function firstNonEmpty(){
   return '';
 }
 
+function getOrgMergeTag(orgId = currentOrgId, settings){
+  const org = ORGS[orgId] || {};
+  const s = settings || getSettings();
+  return firstNonEmpty(org.mergeTag, s.mergeTag, DEFAULTS.mergeTag);
+}
+
+function buildSingleClassPreheaderLine(preheader, settings, orgId = currentOrgId){
+  const mergeTag = getOrgMergeTag(orgId, settings);
+  const intro = firstNonEmpty(preheader);
+  return intro ? `Hi ${mergeTag} — ${intro}` : `Hi ${mergeTag}`;
+}
+
 function cloneJson(value){
   return JSON.parse(JSON.stringify(value));
 }
@@ -1849,11 +2134,18 @@ function buildSingleClassDetailItems(parsed, variation){
 }
 
 function buildSingleClassInfoColumns(parsed, variation){
+  const isWcr = currentOrgId === 'wcr';
   const columns = [];
   const push = (heading, body) => {
     const cleanBody = firstNonEmpty(body);
     if(cleanBody) columns.push({heading, body: cleanBody});
   };
+
+  if(isWcr){
+    push('Why Attend?', firstNonEmpty(variation && variation.whyAttend, parsed.whyAttend, parsed.professionalOverview, parsed.description));
+    push('WCR Member Value', firstNonEmpty(variation && variation.audience, parsed.audience, 'Designed for members who want stronger leadership, sharper business systems, and more professional visibility.'));
+    return columns.slice(0, 2);
+  }
 
   push('Professional Overview', firstNonEmpty(variation && variation.professionalOverview, parsed.professionalOverview, parsed.description));
   push('Who Should Attend', firstNonEmpty(variation && variation.audience, parsed.audience));
@@ -1935,11 +2227,12 @@ function buildSingleClassHeroPrompts(data){
 function ensureSingleClassVariationBlocks(variation, parsed, options){
   const index = options.index || 0;
   const theme = getSingleClassThemeFallback(index);
+  const isWcrSingleClass = currentOrgId === 'wcr';
   const v = Object.assign({}, variation || {});
 
   v.themeName = firstNonEmpty(v.themeName, theme.themeName);
   v.themeDescription = firstNonEmpty(v.themeDescription, theme.themeDescription);
-  v.fontFamily = firstNonEmpty(v.fontFamily, SINGLE_CLASS_FONT_OPTIONS[index % SINGLE_CLASS_FONT_OPTIONS.length], 'Montserrat');
+  v.fontFamily = firstNonEmpty(v.fontFamily, isWcrSingleClass ? 'Libre Baskerville' : SINGLE_CLASS_FONT_OPTIONS[index % SINGLE_CLASS_FONT_OPTIONS.length], 'Montserrat');
 
   v.headerGradient = normalizeColorArray(v.headerGradient).slice(0, 2);
   if(v.headerGradient.length < 2) v.headerGradient = theme.headerGradient.slice();
@@ -1952,9 +2245,10 @@ function ensureSingleClassVariationBlocks(variation, parsed, options){
 
   v.accentColor = firstNonEmpty(v.accentColor, v.supportingColors[0], v.buttonGradient[0], theme.accentColor);
   v.surfaceColor = firstNonEmpty(v.surfaceColor, theme.surfaceColor);
-  v.headerEyebrow = firstNonEmpty(v.headerEyebrow, parsed.credits ? `PROFESSIONAL EDUCATION | ${parsed.credits}` : 'PROFESSIONAL EDUCATION');
+  v.headerEyebrow = firstNonEmpty(v.headerEyebrow, isWcrSingleClass ? '' : (parsed.credits ? `PROFESSIONAL EDUCATION | ${parsed.credits}` : 'PROFESSIONAL EDUCATION'));
   v.headerTitle = firstNonEmpty(v.headerTitle, parsed.shortTitle, parsed.title, 'Professional Education');
-  v.logoPlacement = firstNonEmpty(v.logoPlacement, 'none');
+  v.logoPlacement = isWcrSingleClass ? 'header' : firstNonEmpty(v.logoPlacement, 'none');
+  v.renderTemplate = firstNonEmpty(v.renderTemplate, isWcrSingleClass ? 'wcr-constant-contact' : 'standard');
   v.subject = firstNonEmpty(v.subject, parsed.title, v.headerTitle);
   v.preheader = firstNonEmpty(v.preheader, parsed.description, parsed.professionalOverview);
   v.heroImagePrompt = buildSingleClassHeroPromptEntry(v.heroImagePrompt || v.heroPrompt, v, parsed, index);
@@ -2033,13 +2327,13 @@ function ensureSingleClassVariationBlocks(variation, parsed, options){
   if(bulletIndex === -1){
     insertBeforeCta(blocks, {
       type:'bulletList',
-      heading:'Key Takeaways',
+      heading:isWcrSingleClass ? 'Key Competencies' : 'Key Takeaways',
       color:v.supportingColors[1] || v.accentColor,
       items:takeaways,
       listStyle:'bullet'
     });
   } else {
-    blocks[bulletIndex].heading = firstNonEmpty(blocks[bulletIndex].heading, 'Key Takeaways');
+    blocks[bulletIndex].heading = firstNonEmpty(blocks[bulletIndex].heading, isWcrSingleClass ? 'Key Competencies' : 'Key Takeaways');
     blocks[bulletIndex].color = firstNonEmpty(blocks[bulletIndex].color, v.supportingColors[1], v.accentColor);
     if(!Array.isArray(blocks[bulletIndex].items) || !blocks[bulletIndex].items.length){
       blocks[bulletIndex].items = takeaways;
@@ -2086,7 +2380,9 @@ function ensureSingleClassVariationBlocks(variation, parsed, options){
 function buildSingleClassPromptText(options = {}){
   const raw = options.raw || '';
   const s = options.settings || getSettings();
-  const org = ORGS[options.orgId || currentOrgId];
+  const targetOrgId = options.orgId || currentOrgId;
+  const org = ORGS[targetOrgId];
+  const isWcr = targetOrgId === 'wcr';
   const regLink = firstNonEmpty(options.regLink);
   const includeInstructor = !!options.includeInstructor;
   const instructorName = includeInstructor ? firstNonEmpty(options.instructorName) : '';
@@ -2095,6 +2391,7 @@ function buildSingleClassPromptText(options = {}){
   const heroH = options.heroH || s.heroH || 315;
   const fontGuide = SINGLE_CLASS_FONT_OPTIONS.join(', ');
   const themeGuide = getSingleClassThemeGuide();
+  const mergeTag = getOrgMergeTag(targetOrgId, s);
   const mission = firstNonEmpty(
     options.mission,
     'Design a complete, high-end single-class promotional email blast. Use your thinking capabilities to research the topic deeply and provide rich, compelling marketing copy.'
@@ -2120,9 +2417,22 @@ INSTRUCTOR SECTION (REQUIRED):
 INSTRUCTOR SECTION: Not required for this email.
 `;
 
+  const wcrShellRules = isWcr ? `
+### WCR CONSTANT CONTACT SHELL RULES:
+- This output will be rendered into a custom Constant Contact-compatible HTML shell for WCR.
+- The final email will include the WCR corporate logo row above the header, the [[trackingImage]] token, and the ${mergeTag} merge tag.
+- For WCR, DO use a polished logo row above the header and assume the shell already includes the dark social footer row.
+- Write copy that reads naturally after "Hi ${mergeTag} —".
+- Favor a refined, leadership-forward tone with premium but practical detail.
+- The best WCR layouts usually include: hero image, event details table, one major overview section, one 2-column value/benefit row, a key competencies list, an instructor spotlight, and a strong CTA.
+` : '';
+
+  const logoPlacementExample = isWcr ? 'header' : 'none';
+  const defaultFontExample = isWcr ? 'Libre Baskerville' : 'Montserrat';
+
   return `You are an expert email marketing designer and copywriter for ${org.name} located at ${org.addr}.
 
-${currentOrgId === 'wcr' ? 'CONTEXT: This is for the Women\'s Council of REALTORS. Ensure the copy reflects their mission of professional networking and leadership development.' : 'CONTEXT: This is for the local REALTOR association audience and should feel credible, professional, and genuinely useful.'}
+${isWcr ? 'CONTEXT: This is for the Women\'s Council of REALTORS. Ensure the copy reflects their mission of professional networking, leadership development, visibility, and member advancement.' : 'CONTEXT: This is for the local REALTOR association audience and should feel credible, professional, and genuinely useful.'}
 
 YOUR MISSION: ${mission}${strategyBlock}
 THIS JSON IS PARSED DIRECTLY BY A TOOL. IF THE JSON IS INVALID, THE TOOL FAILS.
@@ -2133,9 +2443,11 @@ THIS JSON IS PARSED DIRECTLY BY A TOOL. IF THE JSON IS INVALID, THE TOOL FAILS.
 4. Every variation must include BOTH:
    - a concrete event-details section with logistics and specifics
    - a professional overview section that explains why the topic matters to agents, brokers, or affiliates right now
-5. Do NOT place the Bonita Estero REALTORS or WCR logo above the header. Use an editorial header with no logo row.
+5. ${isWcr ? 'For WCR, assume a Constant Contact custom-code shell with a WCR corporate logo row above the header.' : 'Do NOT place the Bonita Estero REALTORS or WCR logo above the header. Use an editorial header with no logo row.'}
 6. Return more detail, not less. Write full sections, not thin placeholder copy.
 7. Make each variation feel like a finished campaign, not a quick mockup.${additionalRuleBlock}
+
+${wcrShellRules}
 
 ### HERO IMAGE RULES:
 Generate one hero image prompt for each variation at ${maxW}x${heroH}px.
@@ -2188,10 +2500,10 @@ RETURN A JSON OBJECT (strictly valid) with this structure:
       "name": "A - Professional",
       "themeName": "Coastal Authority",
       "themeDescription": "Short explanation of the visual direction",
-      "fontFamily": "Montserrat",
-      "headerEyebrow": "PROFESSIONAL EDUCATION | 4 CE CREDITS",
+      "fontFamily": "${defaultFontExample}",
+      "headerEyebrow": "${isWcr ? '' : 'PROFESSIONAL EDUCATION | 4 CE CREDITS'}",
       "headerTitle": "Variation-specific headline",
-      "logoPlacement": "none",
+      "logoPlacement": "${logoPlacementExample}",
       "headerGradient": ["#002b4c", "#005a8c"],
       "buttonGradient": ["#005a8c", "#02aae1"],
       "accentColor": "#02aae1",
@@ -2220,7 +2532,7 @@ RETURN A JSON OBJECT (strictly valid) with this structure:
           {"heading":"Why It Matters Now","body":"..."},
           {"heading":"What You Will Walk Away With","body":"..."}
         ]},
-        {"type":"bulletList", "heading":"Key Takeaways", "items":["...","...","..."]},
+        {"type":"bulletList", "heading":"${isWcr ? 'Key Competencies' : 'Key Takeaways'}", "items":["...","...","..."]},
         ${includeInstructor ? `{"type":"instructor", "name":"${instructorName}", "headshotUrl":"${instructorHeadshot}", "bio":"Refined AI bio", "title":"Instructor"},` : ''}
         {"type":"cta", "label":"Reserve Your Seat", "url":"${regLink || '#'}"}
       ]
@@ -2243,6 +2555,7 @@ REQUIRED CONTENT RULES FOR EACH VARIATION:
 - Each variation must contain at minimum: hero, event details specs, professional overview text, a multi-column benefits/proof section, a key takeaways list, and a CTA.
 - Each variation must clearly surface the event details and the professional overview instead of hiding them in one paragraph.
 - Each variation must use a noticeably different theme direction and color palette.
+- ${isWcr ? 'For WCR, make the block plan feel appropriate for a Constant Contact custom-code email: premium header, full-width hero, event details table, major overview copy, 2-column member value row, key competencies, instructor spotlight, CTA.' : 'For BER, keep the layout editorial, polished, and logo-free above the header.'}
 - The JSON must contain real, specific sections and details - not placeholders like "..." or "[insert copy]".
 
 RETURN ONLY THE JSON OBJECT. NO MARKDOWN BLOCK, NO BACKTICKS, NO PREAMBLE. JUST THE { ... } CONTENT.`;
@@ -2687,7 +3000,7 @@ function importSingleClassAIResponse(){
           processedBlocks, s,
           v.accentColor || (v.headerGradient || [])[0] || s.c1a,
           v.headerTitle || data.parsed?.title || 'Class Announcement',
-          `Hi ${s.mergeTag} - ${v.preheader || ''}`,
+          buildSingleClassPreheaderLine(v.preheader || '', s, currentOrgId),
           v
         );
 
@@ -2980,7 +3293,7 @@ function updateHeroUrl(idx, url){
     processedBlocks, s, 
     v.accentColor || s.c1a, 
     singleClassData.parsed?.title || 'Class Announcement',
-    `Hi ${s.mergeTag} — ${v.preheader || ''}`,
+    buildSingleClassPreheaderLine(v.preheader || '', s, currentOrgId),
     v
   );
 
