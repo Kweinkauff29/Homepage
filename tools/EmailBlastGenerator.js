@@ -25,7 +25,7 @@ const ORGS = {
       { href: 'https://www.instagram.com/bonitaesterowomenscouncil', icon: 'https://cdn.tools.unlayer.com/social/icons/circle/instagram.png', alt: 'Instagram' },
       { href: 'https://www.youtube.com/c/Bonitaesterorealtors', icon: 'https://cdn.tools.unlayer.com/social/icons/circle/youtube.png', alt: 'YouTube' }
     ],
-    colors: ['#002b4c', '#005a8c'] // Navy flow
+    colors: ['#243B53', '#D9A441'] // Navy & Gold
   }
 };
 
@@ -113,8 +113,10 @@ function setBranding(orgId) {
   // If WCR, swap default green gradients for navy blue flow
   if(orgId === 'wcr') {
     s.c1a = '#002b4c'; s.c1b = '#005a8c';
+    s.mergeTag = '[[FIRSTNAME]]';
   } else {
     s.c1a = '#004a32'; s.c1b = '#006847';
+    s.mergeTag = '{{CFirstName}}';
   }
   
   localStorage.setItem('ebg_settings', JSON.stringify(s));
@@ -287,6 +289,10 @@ function initCampaignPlannerDefaults(){
 let currentMode = 'single'; // 'single', 'campaign', 'friday', 'tuesday', 'flyer'
 let fridaySections = []; // array of {id, title, ...}
 let tuesdaySections = []; // array of sections for tuesday affiliate blast
+let announcementBlocks = []; // Array of layout blocks after AI import for general announcements
+let announcementSubject = '';
+let announcementPreheaderText = '';
+let announcementBlocksImported = false;
 let composerPicks = {}; // sectionId -> variationIndex (0,1,2)
 let campaignPlanData = null;
 let campaignPlanImported = false;
@@ -307,6 +313,10 @@ function updateGenerateButtonLabel(){
     btn.textContent = 'Generate Final Email';
     return;
   }
+  if(currentMode === 'announcement' && announcementBlocksImported && announcementBlocks.length > 0){
+    btn.textContent = 'Generate Final Email';
+    return;
+  }
   if(currentMode === 'flyer'){
     btn.textContent = 'Use Flyer Prompt Above';
     return;
@@ -320,12 +330,14 @@ function setMode(mode){
   document.getElementById('modeCampaign').classList.toggle('active', mode==='campaign');
   document.getElementById('modeFriday').classList.toggle('active', mode==='friday');
   document.getElementById('modeTuesday').classList.toggle('active', mode==='tuesday');
+  document.getElementById('modeAnnouncement').classList.toggle('active', mode==='announcement');
   document.getElementById('modeFlyer').classList.toggle('active', mode==='flyer');
 
   document.getElementById('singleModeFields').style.display = mode==='single' ? 'block' : 'none';
   document.getElementById('campaignModeFields').style.display = mode==='campaign' ? 'block' : 'none';
   document.getElementById('fridayModeFields').style.display = mode==='friday' ? 'block' : 'none';
   document.getElementById('tuesdayModeFields').style.display = mode==='tuesday' ? 'block' : 'none';
+  document.getElementById('announcementModeFields').style.display = mode==='announcement' ? 'block' : 'none';
   document.getElementById('flyerModeFields').style.display = mode==='flyer' ? 'block' : 'none';
 
   if(mode==='friday' && fridaySections.length===0) addFridaySection();
@@ -691,7 +703,7 @@ let tuesdayBlocksImported = false; // tracks whether we've done an AI import
 
 // Block type icons for display
 const BLOCK_ICONS = {
-  hero: '🖼️', text: '📝', imageRow: '🏞️', cta: '🔘',
+  hero: '🖼️', video: '🎬', text: '📝', imageRow: '🏞️', cta: '🔘',
   infoCard: '📊', specs: '📋', bulletList: '📌', divider: '➖'
 };
 
@@ -750,7 +762,7 @@ function renderTuesdayBlockEditor(){
         <button class="btn-sm btn-danger" onclick="removeTBlock(${idx})" style="padding:2px 6px;font-size:9px">✕</button>
       </div>
       <div class="card-body" style="padding:10px">
-        ${renderBlockFields(block, idx)}
+        ${renderGenericBlockFields(block, idx, 'tuesdayBlocks', 'updateTuesdayPreview()')}
       </div>
     </div>`;
   });
@@ -769,109 +781,6 @@ function renderTuesdayBlockEditor(){
   c.innerHTML = html;
 }
 
-function renderBlockFields(block, idx){
-  switch(block.type){
-    case 'hero':
-      return `
-        <div class="form-group"><label>Hero Image (${block.width||730}x${block.height||315})</label>
-          <input type="url" value="${esc(block.imageUrl||'')}" oninput="tuesdayBlocks[${idx}].imageUrl=this.value; updateTuesdayPreview()" placeholder="Paste generated image URL here">
-        </div>
-        ${renderImagePrompts(block, idx)}
-        ${block.overlayText ? `<div class="form-group"><label>Overlay Text</label><input type="text" value="${esc(block.overlayText)}" oninput="tuesdayBlocks[${idx}].overlayText=this.value; updateTuesdayPreview()"></div>` : ''}
-        ${block.link ? `<div class="form-group"><label>Link</label><input type="url" value="${esc(block.link)}" oninput="tuesdayBlocks[${idx}].link=this.value; updateTuesdayPreview()"></div>` : ''}`;
-
-    case 'text':
-      return `
-        ${block.heading ? `<div class="form-group"><label>Heading</label><input type="text" value="${esc(block.heading)}" oninput="tuesdayBlocks[${idx}].heading=this.value; updateTuesdayPreview()"></div>` : ''}
-        <div class="form-group"><label>Body (Markdown OK)</label><textarea style="min-height:80px;font-size:12px" oninput="tuesdayBlocks[${idx}].body=this.value; updateTuesdayPreview()">${esc(block.body||'')}</textarea></div>`;
-
-    case 'imageRow':
-      return (block.images||[]).map((img, iIdx) => `
-        <div style="background:var(--surface2);padding:8px;border-radius:6px;margin-bottom:6px">
-          <label style="font-size:10px">Image ${iIdx+1} (${img.width||350}x${img.height||200})</label>
-          <input type="url" value="${esc(img.url||'')}" oninput="tuesdayBlocks[${idx}].images[${iIdx}].url=this.value; updateTuesdayPreview()" placeholder="Image URL" style="font-size:11px;margin-bottom:4px">
-          ${img.link ? `<input type="url" value="${esc(img.link)}" oninput="tuesdayBlocks[${idx}].images[${iIdx}].link=this.value; updateTuesdayPreview()" placeholder="Link URL" style="font-size:11px;margin-bottom:4px">` : ''}
-          ${renderImagePromptsInline(img, idx, iIdx)}
-        </div>`).join('');
-
-    case 'cta':
-      return `
-        <div class="form-row">
-          <div class="form-group"><label>Button Label</label><input type="text" value="${esc(block.label||'')}" oninput="tuesdayBlocks[${idx}].label=this.value; updateTuesdayPreview()"></div>
-          <div class="form-group"><label>URL</label><input type="url" value="${esc(block.url||'')}" oninput="tuesdayBlocks[${idx}].url=this.value; updateTuesdayPreview()"></div>
-        </div>
-        <div class="form-row">
-          <div class="form-group"><label>Style</label><select oninput="tuesdayBlocks[${idx}].style=this.value; updateTuesdayPreview()"><option value="filled" ${block.style==='filled'?'selected':''}>Filled</option><option value="outlined" ${block.style==='outlined'?'selected':''}>Outlined</option></select></div>
-          <div class="form-group"><label>Color</label><input type="text" value="${esc(block.color||'#02aae1')}" oninput="tuesdayBlocks[${idx}].color=this.value; updateTuesdayPreview()" placeholder="#02aae1"></div>
-        </div>`;
-
-    case 'infoCard':
-      return (block.columns||[]).map((col, cIdx) => `
-        <div style="background:var(--surface2);padding:8px;border-radius:6px;margin-bottom:6px">
-          <label style="font-size:10px">Column ${cIdx+1}</label>
-          <input type="text" value="${esc(col.heading||'')}" oninput="tuesdayBlocks[${idx}].columns[${cIdx}].heading=this.value; updateTuesdayPreview()" placeholder="Heading" style="font-size:11px;margin-bottom:4px">
-          <textarea style="min-height:60px;font-size:11px" oninput="tuesdayBlocks[${idx}].columns[${cIdx}].body=this.value; updateTuesdayPreview()" placeholder="Content (markdown OK)">${esc(col.body||'')}</textarea>
-        </div>`).join('');
-
-    case 'specs':
-      return `
-        ${block.heading ? `<div class="form-group"><label>Heading</label><input type="text" value="${esc(block.heading)}" oninput="tuesdayBlocks[${idx}].heading=this.value; updateTuesdayPreview()"></div>` : ''}
-        <div style="font-size:11px;color:var(--text2)">${(block.items||[]).map((item, sIdx) =>
-          `<div class="form-row" style="margin-bottom:4px">
-            <input type="text" value="${esc(item.label||'')}" oninput="tuesdayBlocks[${idx}].items[${sIdx}].label=this.value; updateTuesdayPreview()" style="font-size:11px" placeholder="Label">
-            <input type="text" value="${esc(item.value||'')}" oninput="tuesdayBlocks[${idx}].items[${sIdx}].value=this.value; updateTuesdayPreview()" style="font-size:11px" placeholder="Value">
-          </div>`).join('')}
-        </div>`;
-
-    case 'bulletList':
-      return `
-        ${block.heading ? `<div class="form-group"><label>Heading</label><input type="text" value="${esc(block.heading)}" oninput="tuesdayBlocks[${idx}].heading=this.value; updateTuesdayPreview()"></div>` : ''}
-        <div class="form-group"><label>Items (one per line)</label><textarea style="min-height:60px;font-size:11px" onchange="tuesdayBlocks[${idx}].items=this.value.split('\\n').filter(x=>x.trim())">${(block.items||[]).join('\n')}</textarea></div>
-        <div class="form-group"><label>Style</label><select oninput="tuesdayBlocks[${idx}].listStyle=this.value; updateTuesdayPreview()"><option value="bullet" ${block.listStyle!=='numbered'?'selected':''}>Bullets</option><option value="numbered" ${block.listStyle==='numbered'?'selected':''}>Numbered</option></select></div>`;
-
-    case 'divider':
-      return `<div class="form-group"><label>Color</label><input type="text" value="${esc(block.color||'#e0e0e0')}" oninput="tuesdayBlocks[${idx}].color=this.value; updateTuesdayPreview()" placeholder="#e0e0e0"></div>`;
-
-    default:
-      return `<p style="font-size:11px;color:var(--text2)">Unknown block type: ${block.type}</p>`;
-  }
-}
-
-function renderImagePrompts(block, bIdx){
-  if(!block.imagePrompts || block.imagePrompts.length === 0) return '';
-  return `<div style="background:rgba(124,77,255,0.08);padding:8px;border-radius:6px;margin-top:6px">
-    <label style="color:var(--accent2);font-size:10px;margin-bottom:4px">AI Image Prompt Ideas (${block.width||730}x${block.height||315})</label>
-    ${block.imagePrompts.map((p, pIdx) => `
-      <div style="display:flex;gap:4px;margin-bottom:4px;align-items:start">
-        <span style="font-size:10px;color:var(--text2);min-width:16px">${pIdx+1}.</span>
-        <p style="font-size:10px;color:var(--text2);flex:1;line-height:1.4;margin:0">${esc(p)}</p>
-        <button class="btn-sm" onclick="copyBlockPrompt(${bIdx},${pIdx})" style="font-size:9px;padding:2px 6px;white-space:nowrap">Copy</button>
-      </div>`).join('')}
-  </div>`;
-}
-
-function renderImagePromptsInline(img, bIdx, iIdx){
-  if(!img.imagePrompts || img.imagePrompts.length === 0) return '';
-  return `<div style="background:rgba(124,77,255,0.06);padding:6px;border-radius:4px;margin-top:4px">
-    <label style="color:var(--accent2);font-size:9px">Image Ideas (${img.width||350}x${img.height||200})</label>
-    ${img.imagePrompts.map((p, pIdx) => `
-      <div style="display:flex;gap:4px;margin-bottom:2px;align-items:start">
-        <span style="font-size:9px;color:var(--text2);min-width:14px">${pIdx+1}.</span>
-        <p style="font-size:9px;color:var(--text2);flex:1;line-height:1.3;margin:0">${esc(p)}</p>
-        <button class="btn-sm" onclick="copyInlinePrompt(${bIdx},${iIdx},${pIdx})" style="font-size:8px;padding:1px 4px">Copy</button>
-      </div>`).join('')}
-  </div>`;
-}
-
-function copyBlockPrompt(bIdx, pIdx){
-  const p = tuesdayBlocks[bIdx]?.imagePrompts?.[pIdx];
-  if(p){ navigator.clipboard.writeText(p); toast('Image prompt copied!'); }
-}
-function copyInlinePrompt(bIdx, iIdx, pIdx){
-  const p = tuesdayBlocks[bIdx]?.images?.[iIdx]?.imagePrompts?.[pIdx];
-  if(p){ navigator.clipboard.writeText(p); toast('Image prompt copied!'); }
-}
-
 function moveTBlock(idx, dir){
   const n = idx + dir;
   if(n < 0 || n >= tuesdayBlocks.length) return;
@@ -887,6 +796,7 @@ function removeTBlock(idx){
 function addTBlock(type){
   const defaults = {
     hero: {type:'hero', width:730, height:315, imageUrl:'', imagePrompts:[], overlayText:'', link:''},
+    video: {type:'video', width:730, height:315, url:'', imageUrl:'', imagePrompts:[], overlayText:''},
     text: {type:'text', heading:'', body:''},
     imageRow: {type:'imageRow', images:[{url:'',width:350,height:200,link:'',altText:'',imagePrompts:[]},{url:'',width:350,height:200,link:'',altText:'',imagePrompts:[]}]},
     cta: {type:'cta', label:'Learn More', url:'', style:'filled', color:'#02aae1'},
@@ -899,18 +809,39 @@ function addTBlock(type){
   renderTuesdayBlockEditor();
 }
 
+function renderBlockFields(block, idx){
+  return renderGenericBlockFields(block, idx, 'tuesdayBlocks', 'updateTuesdayPreview()');
+}
+
+function renderVideoBlock(block, s, v){
+  const ytId = getYouTubeId(block.url || '');
+  const thumbUrl = block.imageUrl || (ytId ? `https://img.youtube.com/vi/${ytId}/maxresdefault.jpg` : '');
+  const playIcon = 'https://bonitaesterorealtors.com/wp-content/uploads/2026/04/play-button-overlay.png'; // High-end play overlay
+  
+  return `<tr><td class="section-inner" style="padding:20px 32px">
+    <a href="${block.url || '#'}" target="_blank" style="display:block;text-decoration:none;position:relative;border-radius:12px;overflow:hidden;background-color:#000;box-shadow:0 8px 24px rgba(0,0,0,0.15)">
+      ${thumbUrl ? `<img src="${thumbUrl}" width="100%" style="width:100%;display:block" alt="Watch Video">` : `<div style="width:100%;height:300px;background:#334155;display:flex;align-items:center;justify-content:center;color:#fff;font-size:24px;font-weight:700">Video Placeholder</div>`}
+      <div style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:72px;height:72px;background:rgba(255,255,255,0.9);border-radius:50%;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 12px rgba(0,0,0,0.3)">
+        <div style="width:0;height:0;border-top:14px solid transparent;border-bottom:14px solid transparent;border-left:22px solid #000;margin-left:6px"></div>
+      </div>
+      ${block.overlayText ? `<div style="position:absolute;bottom:0;left:0;right:0;background:linear-gradient(transparent,rgba(0,0,0,0.8));padding:30px 20px 15px;color:#fff;font-size:18px;font-weight:700">${block.overlayText}</div>` : ''}
+    </a>
+  </td></tr>`;
+}
+
 // ===================== DYNAMIC EMAIL HTML RENDERER =====================
 function generateDynamicEmailHTML(blocks, settings, headerColor, headerTitle, preText, variation){
   const s = settings || getSettings();
   const org = ORGS[currentOrgId];
-  const hColor = headerColor || '#02aae1';
+  const isWcr = currentOrgId === 'wcr';
+  const hColor = isWcr ? '#243B53' : (headerColor || '#02aae1');
   const v = variation || {};
   if(v.renderTemplate === 'wcr-constant-contact'){
     return generateWcrSingleClassHTML(blocks, s, hColor, headerTitle, preText, v);
   }
   const hTitle = v.headerTitle || headerTitle || 'Upcoming Affiliate Opportunities';
   const fontName = v.fontFamily || 'Montserrat';
-  const hGrad = v.headerGradient || [hColor, hColor];
+  const hGrad = isWcr ? ['#243B53', '#334E68'] : (v.headerGradient || [hColor, hColor]);
   const introText = firstNonEmpty(v.headerSummary, preText);
   const preheaderText = firstNonEmpty(v.preheader, preText);
   const showHeaderLogo = v.logoPlacement !== 'none';
@@ -919,6 +850,7 @@ function generateDynamicEmailHTML(blocks, settings, headerColor, headerTitle, pr
   const blocksHtml = blocks.map(block => {
     switch(block.type){
       case 'hero': return renderHeroBlock(block, s, v);
+      case 'video': return renderVideoBlock(block, s, v);
       case 'text': return renderTextBlock(block, s, v);
       case 'imageRow': return renderImageRowBlock(block, s, v);
       case 'cta': return renderCtaBlock(block, s, v);
@@ -931,6 +863,19 @@ function generateDynamicEmailHTML(blocks, settings, headerColor, headerTitle, pr
     }
   }).join('\n');
 
+  const footerDisclaimer = isWcr 
+    ? `Please note - if you unsubscribe you may lose access to important billing emails and information - If you wish to do so <a href="unsubscribe by clicking here." style="color:#243B53;text-decoration:underline">unsubscribe by clicking here.</a>`
+    : `© ${new Date().getFullYear()} ${s.orgName}<br>${s.orgAddr}`;
+
+  const socialLinks = isWcr ? `
+    <table cellpadding="0" cellspacing="0" style="margin:20px auto">
+      <tr>
+        <td style="padding:0 8px"><a href="https://www.facebook.com/BonitaEsteroRealtors" target="_blank"><img src="https://bonitaesterorealtors.com/wp-content/uploads/2024/05/facebook-icon.png" width="28" style="width:28px;height:auto"></a></td>
+        <td style="padding:0 8px"><a href="https://www.instagram.com/bonita_estero_realtors" target="_blank"><img src="https://bonitaesterorealtors.com/wp-content/uploads/2024/05/instagram-icon.png" width="28" style="width:28px;height:auto"></a></td>
+        <td style="padding:0 8px"><a href="https://www.youtube.com/@BonitaEsteroRealtors" target="_blank"><img src="https://bonitaesterorealtors.com/wp-content/uploads/2024/05/youtube-icon.png" width="28" style="width:28px;height:auto"></a></td>
+      </tr>
+    </table>` : '';
+
   return `<!DOCTYPE html>
 <html>
 <head>
@@ -939,11 +884,11 @@ function generateDynamicEmailHTML(blocks, settings, headerColor, headerTitle, pr
 <style>
   body { font-family: '${fontName}', 'Helvetica Neue', Helvetica, Arial, sans-serif; -webkit-font-smoothing: antialiased; }
   @media only screen and (max-width: 600px) {
-    .content-table { width: 100% !important; }
+    .content-table { width: 100% !important; border-radius: 0 !important; }
     .section-inner { padding: 0 20px !important; }
     .img-col { display: block !important; width: 100% !important; padding: 0 0 16px 0 !important; }
     .info-col { display: block !important; width: 100% !important; padding: 20px !important; margin-bottom: 15px !important; }
-    .header-text { font-size: 26px !important; }
+    .header-text { font-size: 24px !important; }
   }
 </style>
 <!--[if mso]>
@@ -952,37 +897,58 @@ function generateDynamicEmailHTML(blocks, settings, headerColor, headerTitle, pr
 </style>
 <![endif]-->
 </head>
-<body style="margin:0;padding:20px 0;background-color:#f4f7f9;font-family:'${fontName}', Helvetica, Arial, sans-serif">
-<span style="display:none!important;font-size:1px;color:#f4f7f9;line-height:1px;max-height:0;max-width:0;opacity:0;overflow:hidden">${preheaderText}</span>
+<body style="margin:0;padding:20px 0;background-color:#f5f5f5;font-family:'${fontName}', Helvetica, Arial, sans-serif">
+<span style="display:none!important;font-size:1px;color:#f5f5f5;line-height:1px;max-height:0;max-width:0;opacity:0;overflow:hidden">${preheaderText}</span>
 <table width="100%" cellpadding="0" cellspacing="0" border="0" class="content-table" style="width:100%;max-width:${s.emailMaxW}px;background-color:#ffffff;margin:0 auto;table-layout:fixed;border-radius:12px;overflow:hidden;box-shadow:0 10px 30px rgba(0,0,0,0.05)">
-  ${showHeaderLogo ? `<tr><td align="center" style="padding:20px 0;background-color:#ffffff">
-    <img src="${org.logo}" height="50" style="height:50px;width:auto;display:block" alt="${org.name}">
+  ${showHeaderLogo ? `<tr><td align="center" style="padding:30px 20px 20px;background-color:#ffffff">
+    ${isWcr ? `
+      <table width="100%" cellpadding="0" cellspacing="0">
+        <tr>
+          <td style="border-top:1px solid #e0e0e0;width:30%">&nbsp;</td>
+          <td width="40%" align="center">
+            <img src="${org.logo}" height="60" style="height:60px;width:auto;display:block;margin:0 auto" alt="${org.name}">
+          </td>
+          <td style="border-top:1px solid #e0e0e0;width:30%">&nbsp;</td>
+        </tr>
+      </table>` : `<img src="${org.logo}" height="50" style="height:50px;width:auto;display:block" alt="${org.name}">`}
   </td></tr>` : ''}
-  <!-- Header -->
-  <tr><td align="center" style="background:${hGrad[0]};background:linear-gradient(135deg, ${hGrad[0]} 0%, ${hGrad[1]} 100%);">
-    <!--[if mso]>
-    <v:rect xmlns:v="urn:schemas-microsoft-com:vml" fill="true" stroke="false" style="width:${s.emailMaxW}px;height:140px;">
-    <v:fill type="gradient" color="${hGrad[0]}" color2="${hGrad[1]}" angle="135" />
-    <v:textbox inset="0,0,0,0">
-    <![endif]-->
-    <div style="padding:40px 24px;color:#ffffff">
-      ${headerEyebrow ? `<p style="margin:0 0 10px;font-size:12px;font-weight:700;letter-spacing:2px;text-transform:uppercase;opacity:0.88">${headerEyebrow}</p>` : ''}
-      <p class="header-text" style="margin:0;font-size:32px;font-weight:900;text-transform:uppercase;letter-spacing:1.5px;text-shadow:0 2px 10px rgba(0,0,0,0.2)">${hTitle}</p>
-      ${introText ? `<div style="margin:15px auto 0;width:85%;border-top:1px solid rgba(255,255,255,0.3);padding-top:15px;font-size:15px;opacity:0.95;line-height:1.5;font-weight:500">${introText}</div>` : ''}
-    </div>
-    <!--[if mso]>
-    </v:textbox>
-    </v:rect>
-    <![endif]-->
+  <!-- Header Title Block -->
+  <tr><td align="center" style="padding:${isWcr ? '0 20px' : '0'}">
+    <table width="100%" cellpadding="0" cellspacing="0" style="background:${hGrad[0]};background:linear-gradient(135deg, ${hGrad[0]} 0%, ${hGrad[1]} 100%);border-radius:${isWcr ? '12px 12px 0 0' : '0'}">
+      <tr><td align="center" style="padding:40px 24px;color:#ffffff">
+        <!--[if mso]>
+        <v:rect xmlns:v="urn:schemas-microsoft-com:vml" fill="true" stroke="false" style="width:${isWcr ? s.emailMaxW-40 : s.emailMaxW}px;height:140px;">
+        <v:fill type="gradient" color="${hGrad[0]}" color2="${hGrad[1]}" angle="135" />
+        <v:textbox inset="0,0,0,0">
+        <![endif]-->
+        <div style="color:#ffffff">
+          ${headerEyebrow ? `<p style="margin:0 0 10px;font-size:12px;font-weight:700;letter-spacing:2px;text-transform:uppercase;opacity:0.88">${headerEyebrow}</p>` : ''}
+          <p class="header-text" style="margin:0;font-size:32px;font-weight:900;text-transform:uppercase;letter-spacing:1.5px;line-height:1.2">${hTitle}</p>
+          ${(() => {
+            if(!introText) return '';
+            const t = introText.trim();
+            const hasGreeting = t.toLowerCase().startsWith('hi') || t.includes(s.mergeTag);
+            const greeting = hasGreeting ? '' : `Hi ${s.mergeTag} — `;
+            return `<div style="margin:15px auto 0;width:85%;border-top:1px solid rgba(255,255,255,0.3);padding-top:15px;font-size:15px;opacity:0.95;line-height:1.5;font-weight:500">${greeting}${introText}</div>`;
+          })()}
+        </div>
+        <!--[if mso]>
+        </v:textbox>
+        </v:rect>
+        <![endif]-->
+      </td></tr>
+    </table>
   </td></tr>
   <tr><td style="padding:0">
     <table width="100%" cellpadding="0" cellspacing="0" border="0" style="table-layout:fixed">
       ${blocksHtml}
     </table>
   </td></tr>
-  <tr><td style="padding:40px 24px 30px;background-color:#ffffff;text-align:center;font-size:12px;color:#999999;border-top:1px solid #eeeeee">
-    <p style="margin:0">© ${new Date().getFullYear()} ${s.orgName}</p>
-    <p style="margin:5px 0 0">${s.orgAddr}</p>
+  <tr><td style="padding:40px 30px;background-color:#ffffff;text-align:center;font-size:12px;color:#666666;border-top:1px solid #eeeeee;line-height:1.6">
+    ${socialLinks}
+    <div style="max-width:600px;margin:0 auto">
+      ${footerDisclaimer}
+    </div>
   </td></tr>
 </table>
 </body>
@@ -1307,7 +1273,8 @@ function renderImageRowBlock(block, s){
 }
 
 function renderCtaBlock(block, s, v){
-  const g = v.buttonGradient || ['#02aae1', '#004a8f'];
+  const isWcr = currentOrgId === 'wcr';
+  const g = isWcr ? ['#486581', '#D9A441'] : (v.buttonGradient || ['#02aae1', '#004a8f']);
   const textColor = '#ffffff';
   const radius = s.ctaShape==='pill'?'50px':s.ctaShape==='rounded'?'10px':'0px';
   
@@ -1343,13 +1310,16 @@ function renderInfoCardBlock(block, s, v){
 }
 
 function renderSpecsBlock(block, s, v){
-  const color = block.color || (v.supportingColors || [])[0] || v.accentColor || '#02aae1';
+  const isWcr = currentOrgId === 'wcr';
+  const themeColor = isWcr ? '#243B53' : (block.color || (v.supportingColors || [])[0] || v.accentColor || '#02aae1');
+  const accentColor = isWcr ? '#243B53' : themeColor;
+  
   let rows = (block.items||[]).map(item =>
-    `<tr><td style="font-weight:700;padding:6px 12px;color:${color};font-size:14px;vertical-align:top;white-space:nowrap">${item.label}</td><td style="padding:6px 12px;font-size:14px;color:#333">${item.value}</td></tr>`
+    `<tr><td style="font-weight:700;padding:8px 12px;color:${themeColor};font-size:14px;vertical-align:top;white-space:nowrap">${item.label}</td><td style="padding:8px 12px;font-size:14px;color:#333">${item.value}</td></tr>`
   ).join('');
   return `<tr><td style="padding:12px 32px">
-    ${block.heading ? `<p style="font-weight:800;font-size:18px;margin:0 0 10px;color:${color}">${block.heading}</p>` : ''}
-    <table width="100%" cellpadding="0" cellspacing="0" style="border-left:4px solid ${color};background:${block.backgroundColor || v.surfaceColor || '#f9f9f9'};border-radius:0 4px 4px 0">${rows}</table>
+    ${block.heading ? `<p style="font-weight:800;font-size:18px;margin:0 0 10px;color:${themeColor};text-transform:uppercase;letter-spacing:1px">${block.heading}</p>` : ''}
+    <table width="100%" cellpadding="0" cellspacing="0" style="border-left:4px solid ${accentColor};background:${block.backgroundColor || (isWcr ? '#f9f9f9' : (v.surfaceColor || '#f9f9f9'))};border-radius:0 4px 4px 0">${rows}</table>
   </td></tr>`;
 }
 
@@ -1732,14 +1702,337 @@ function importAIResponseTuesday(){
   }
 }
 
-// ===================== FLYER GENERATOR =====================
-function generateFlyerPrompt() {
-  const link = gv('flyerLink');
-  const details = gv('flyerDetails');
-  if(!link && !details){ toast('Add some flyer details first!'); return; }
+// ===================== GENERAL ANNOUNCEMENTS — DYNAMIC BLOCK-BASED SYSTEM =====================
+
+function generateAnnouncementAIPrompt(){
+  const raw = gv('aiRawInputAnnouncement');
+  if(!raw){toast('Paste some announcement details or a link first!');return;}
+  const s = getSettings();
+  const org = ORGS[currentOrgId];
+  const maxW = s.emailMaxW || 730;
+  const fontGuide = SINGLE_CLASS_FONT_OPTIONS.join(', ');
+
   
-  const skipInstructor = document.getElementById('flyerNoInstructor').classList.contains('on');
-  const bioSpot = !skipInstructor ? "\n- LEAVE A CLEAR BOX/SPOT FOR: Instructor Name & Bio (I will fill this in manually later)" : "";
+  const announcementThemes = [
+    {name:'Data Professional', notes:'Clean, data-forward, using architectural slates and corporate blues. Focus on clarity and authority.', colors:['#1e293b','#334155','#3b82f6','#f8fafc','#f1f5f9']},
+    {name:'Market Pulse', notes:'Vibrant, energetic, using high-contrast oranges and deep navies to denote movement and trends.', colors:['#0f172a','#1e293b','#f59e0b','#fff7ed','#fef3c7']},
+    {name:'Community Spotlight', notes:'Warm, approachable, using sage greens and soft sands to feel organic and local.', colors:['#365314','#4d7c0f','#a3e635','#f7fee7','#ecfccb']},
+    {name:'Modern Minimalist', notes:'Ultra-clean, high whitespace, using sharp blacks and a single vibrant accent color.', colors:['#000000','#111827','#00bfa5','#ffffff','#fafafa']}
+  ];
+  
+  const themeGuide = announcementThemes.map((t,i) => `${i+1}. ${t.name}: ${t.notes}. Colors: ${t.colors.join(', ')}`).join('\n');
+
+  const prompt = `You are an expert editorial email designer for ${org.name}. I need you to design a COMPLETE, DYNAMIC announcement email for our members. 
+  
+  ${currentOrgId === 'wcr' ? 'CONTEXT: This is for the Women\'s Council of REALTORS. The tone should be empowering, professional, and forward-thinking.' : 'CONTEXT: This is for the local REALTOR association members.'}
+  
+  MEMBER CONTACT TAG: Use "${s.mergeTag}" when addressing the recipient by name in the copy.
+
+IMPORTANT: If I provide any URLs (like market updates, news articles, etc.) below, please visit/review them thoroughly.
+- Extract ALL key statistics, infographics, videos, and useful links.
+- Synthesize the content into an engaging, professional email.
+- Do NOT leave placeholders — fill in EVERY detail from the source material.
+
+YOUR TASK: Design a rich, dynamic email layout using content blocks. For market updates, prioritize data visualization cues (specs tables, info cards) and visual variety.
+
+RETURN A SINGLE JSON OBJECT (not an array) with this exact structure:
+{
+  "design": {
+    "themeName": "Data Professional",
+    "themeDescription": "Short explanation of the creative direction",
+    "fontFamily": "Outfit", // Choose from: ${fontGuide}
+    "headerEyebrow": "Market Intelligence",
+    "logoPlacement": "header", 
+    "headerGradient": ["#1e293b", "#334155"],
+    "buttonGradient": ["#3b82f6", "#2563eb"],
+    "accentColor": "#3b82f6",
+    "supportingColors": ["#64748b", "#cbd5e1", "#f1f5f9"],
+    "surfaceColor": "#f8fafc"
+  },
+  "subject": "Catchy email subject line",
+  "preheader": "Preview text for email clients (max 200 chars)",
+  "blocks": [
+    // Array of content blocks — use types like hero, text, imageRow, cta, infoCard, specs, bulletList, divider
+  ]
+}
+
+THEME OPTIONS:
+${themeGuide}
+
+BLOCK TYPES & USAGE:
+- HERO: High-impact banner for the main headline.
+- TEXT: Use for intros, summaries, and editorial commentary.
+- IMAGE ROW: Great for displaying infographics or multiple charts side-by-side.
+- INFO CARD: Use for "Key Takeaways" or "Top 3 Insights".
+- SPECS: PERFECT for market statistics (Median Price, Inventory, Sales count).
+- BULLET LIST: Use for quick-hit lists of news or updates.
+- CTA: For "Read More", "Watch Video", or "Download PDF".
+
+IMAGE PROMPT RULES:
+- For EVERY image slot (hero and imageRow), provide 3 detailed AI image generation prompts.
+- NO photographic real people. Style: corporate illustration, abstract data art, or high-end architectural/market photography WITHOUT humans.
+- Match the theme's color palette.
+
+RAW INPUT / URL TO ANALYZE:
+${raw}
+
+RETURN ONLY THE JSON OBJECT. NO MARKDOWN, NO PREAMBLE.`;
+
+  navigator.clipboard.writeText(prompt);
+  document.getElementById('importBoxAnnouncement').style.display = 'block';
+  document.getElementById('promptPreviewBoxAnnouncement').style.display = 'block';
+  sv('heroPromptPreviewAnnouncement', prompt);
+  toast('AI Announcement Prompt copied to clipboard!');
+}
+
+let announcementDesign = null;
+
+function importAIResponseAnnouncement(){
+  try {
+    let rawText = gv('aiResponseAnnouncement').trim();
+    if(rawText.startsWith('```')) rawText = rawText.replace(/^```[a-z]*\n?/,'').replace(/\n?```$/,'').trim();
+    rawText = rawText.replace(/,\s*([\]}])/g, '$1');
+    
+    const data = JSON.parse(rawText);
+
+    if(data.design) announcementDesign = normalizeCreativeDesign(data.design, 2, gv('announcementHeaderCol') || '#1a237e');
+    if(data.blocks && Array.isArray(data.blocks)){
+      announcementBlocks = data.blocks;
+      announcementSubject = data.subject || '';
+      announcementPreheaderText = data.preheader || '';
+      announcementBlocksImported = true;
+      renderAnnouncementBlockEditor();
+      updateGenerateButtonLabel();
+      toast(`Imported ${data.blocks.length} announcement blocks!`);
+    } else {
+      toast('Invalid format: Expected an object with "blocks" array.');
+    }
+  } catch(e) {
+    console.error('Import error:', e);
+    toast('Error parsing JSON. Check your input.');
+  }
+}
+
+function renderAnnouncementBlockEditor(){
+  const c = document.getElementById('announcementSections');
+  if(!c) return;
+
+  let html = `<div style="margin-bottom:12px;padding:10px;background:rgba(124,77,255,0.08);border:1px solid var(--accent2);border-radius:8px">
+    <p style="font-size:12px;color:var(--accent2);font-weight:700;margin-bottom:6px">${announcementBlocks.length} blocks imported - Review and click Generate</p>
+    <div class="form-row">
+      <div class="form-group"><label>Subject Line</label><input type="text" value="${esc(announcementSubject)}" oninput="announcementSubject=this.value; updateAnnouncementPreview()"></div>
+      <div class="form-group"><label>Preheader</label><input type="text" value="${esc(announcementPreheaderText)}" oninput="announcementPreheaderText=this.value; updateAnnouncementPreview()"></div>
+    </div>
+  </div>`;
+
+  announcementBlocks.forEach((block, idx) => {
+    const icon = BLOCK_ICONS[block.type] || '📦';
+    html += `<div class="card" style="margin-bottom:10px;background:var(--bg);border-color:var(--border)">
+      <div class="card-header" style="font-size:12px;padding:6px 12px;justify-content:space-between;border-bottom:1px solid var(--border)">
+        <div style="display:flex;align-items:center;gap:6px">
+          <div style="display:flex;flex-direction:column;gap:1px">
+            <button class="move-btn" onclick="moveABlock(${idx},-1)" ${idx===0?'disabled':''}>^</button>
+            <button class="move-btn" onclick="moveABlock(${idx},1)" ${idx===announcementBlocks.length-1?'disabled':''}>v</button>
+          </div>
+          <span>${icon} <strong>${block.type.toUpperCase()}</strong></span>
+        </div>
+        <button class="btn-sm btn-danger" onclick="removeABlock(${idx})" style="padding:2px 6px;font-size:9px">✕</button>
+      </div>
+      <div class="card-body" style="padding:10px">
+        ${renderBlockFieldsAnnouncement(block, idx)}
+      </div>
+    </div>`;
+  });
+
+  html += `<div style="display:flex;gap:4px;flex-wrap:wrap;margin-top:8px">
+    <button class="btn-sm" onclick="addABlock('text')" style="font-size:10px">+ Text</button>
+    <button class="btn-sm" onclick="addABlock('hero')" style="font-size:10px">+ Hero</button>
+    <button class="btn-sm" onclick="addABlock('video')" style="font-size:10px">+ Video</button>
+    <button class="btn-sm" onclick="addABlock('imageRow')" style="font-size:10px">+ Images</button>
+    <button class="btn-sm" onclick="addABlock('cta')" style="font-size:10px">+ CTA</button>
+    <button class="btn-sm" onclick="addABlock('infoCard')" style="font-size:10px">+ Info Card</button>
+    <button class="btn-sm" onclick="addABlock('specs')" style="font-size:10px">+ Specs</button>
+    <button class="btn-sm" onclick="addABlock('bulletList')" style="font-size:10px">+ List</button>
+    <button class="btn-sm" onclick="addABlock('divider')" style="font-size:10px">+ Divider</button>
+  </div>`;
+
+  c.innerHTML = html;
+}
+
+function renderBlockFieldsAnnouncement(block, idx){
+  // We can reuse the Tuesday helper or define a specific one if needed.
+  // For now, let's just make announcementBlocks[idx] the target.
+  // Actually, renderBlockFields uses tuesdayBlocks[idx] hardcoded... I need to refactor or copy.
+  // Let's create a generic one.
+  return renderGenericBlockFields(block, idx, 'announcementBlocks', 'updateAnnouncementPreview()');
+}
+
+function renderGenericBlockFields(block, idx, arrayName, previewCall){
+  switch(block.type){
+    case 'video':
+      return `
+        <div class="form-group"><label>YouTube or Vimeo URL</label>
+          <input type="url" value="${esc(block.url||'')}" oninput="${arrayName}[${idx}].url=this.value; ${previewCall}" placeholder="https://www.youtube.com/watch?v=...">
+        </div>
+        <div class="form-group"><label>Custom Thumbnail URL (Optional)</label>
+          <input type="url" value="${esc(block.imageUrl||'')}" oninput="${arrayName}[${idx}].imageUrl=this.value; ${previewCall}" placeholder="Leave blank to auto-fetch YouTube thumbnail">
+        </div>
+        ${renderImagePromptsGeneric(block, idx, arrayName)}
+        ${block.overlayText ? `<div class="form-group"><label>Overlay Text</label><input type="text" value="${esc(block.overlayText)}" oninput="${arrayName}[${idx}].overlayText=this.value; ${previewCall}"></div>` : ''}`;
+
+    case 'hero':
+      return `
+        <div class="form-group"><label>Hero Image (${block.width||730}x${block.height||315})</label>
+          <input type="url" value="${esc(block.imageUrl||'')}" oninput="${arrayName}[${idx}].imageUrl=this.value; ${previewCall}" placeholder="Paste generated image URL here">
+        </div>
+        ${renderImagePromptsGeneric(block, idx, arrayName)}
+        ${block.overlayText ? `<div class="form-group"><label>Overlay Text</label><input type="text" value="${esc(block.overlayText)}" oninput="${arrayName}[${idx}].overlayText=this.value; ${previewCall}"></div>` : ''}
+        ${block.link ? `<div class="form-group"><label>Link</label><input type="url" value="${esc(block.link)}" oninput="${arrayName}[${idx}].link=this.value; ${previewCall}"></div>` : ''}`;
+
+    case 'text':
+      return `
+        ${block.heading ? `<div class="form-group"><label>Heading</label><input type="text" value="${esc(block.heading)}" oninput="${arrayName}[${idx}].heading=this.value; ${previewCall}"></div>` : ''}
+        <div class="form-group"><label>Body (Markdown OK)</label><textarea style="min-height:80px;font-size:12px" oninput="${arrayName}[${idx}].body=this.value; ${previewCall}">${esc(block.body||'')}</textarea></div>`;
+
+    case 'imageRow':
+      return (block.images||[]).map((img, iIdx) => `
+        <div style="background:var(--surface2);padding:8px;border-radius:6px;margin-bottom:6px">
+          <label style="font-size:10px">Image ${iIdx+1} (${img.width||350}x${img.height||200})</label>
+          <input type="url" value="${esc(img.url||'')}" oninput="${arrayName}[${idx}].images[${iIdx}].url=this.value; ${previewCall}" placeholder="Image URL" style="font-size:11px;margin-bottom:4px">
+          ${img.link ? `<input type="url" value="${esc(img.link)}" oninput="${arrayName}[${idx}].images[${iIdx}].link=this.value; ${previewCall}" placeholder="Link URL" style="font-size:11px;margin-bottom:4px">` : ''}
+          ${renderImagePromptsInlineGeneric(img, idx, iIdx, arrayName)}
+        </div>`).join('');
+
+    case 'cta':
+      return `
+        <div class="form-row">
+          <div class="form-group"><label>Button Label</label><input type="text" value="${esc(block.label||'')}" oninput="${arrayName}[${idx}].label=this.value; ${previewCall}"></div>
+          <div class="form-group"><label>URL</label><input type="url" value="${esc(block.url||'')}" oninput="${arrayName}[${idx}].url=this.value; ${previewCall}"></div>
+        </div>
+        <div class="form-row">
+          <div class="form-group"><label>Style</label><select oninput="${arrayName}[${idx}].style=this.value; ${previewCall}"><option value="filled" ${block.style==='filled'?'selected':''}>Filled</option><option value="outlined" ${block.style==='outlined'?'selected':''}>Outlined</option></select></div>
+          <div class="form-group"><label>Color</label><input type="text" value="${esc(block.color||'#02aae1')}" oninput="${arrayName}[${idx}].color=this.value; ${previewCall}" placeholder="#02aae1"></div>
+        </div>`;
+
+    case 'infoCard':
+      return (block.columns||[]).map((col, cIdx) => `
+        <div style="background:var(--surface2);padding:8px;border-radius:6px;margin-bottom:6px">
+          <label style="font-size:10px">Column ${cIdx+1}</label>
+          <input type="text" value="${esc(col.heading||'')}" oninput="${arrayName}[${idx}].columns[${cIdx}].heading=this.value; ${previewCall}" placeholder="Heading" style="font-size:11px;margin-bottom:4px">
+          <textarea style="min-height:60px;font-size:11px" oninput="${arrayName}[${idx}].columns[${cIdx}].body=this.value; ${previewCall}" placeholder="Content (markdown OK)">${esc(col.body||'')}</textarea>
+        </div>`).join('');
+
+    case 'specs':
+      return `
+        ${block.heading ? `<div class="form-group"><label>Heading</label><input type="text" value="${esc(block.heading)}" oninput="${arrayName}[${idx}].heading=this.value; ${previewCall}"></div>` : ''}
+        <div style="font-size:11px;color:var(--text2)">${(block.items||[]).map((item, sIdx) =>
+          `<div class="form-row" style="margin-bottom:4px">
+            <input type="text" value="${esc(item.label||'')}" oninput="${arrayName}[${idx}].items[${sIdx}].label=this.value; ${previewCall}" style="font-size:11px" placeholder="Label">
+            <input type="text" value="${esc(item.value||'')}" oninput="${arrayName}[${idx}].items[${sIdx}].value=this.value; ${previewCall}" style="font-size:11px" placeholder="Value">
+          </div>`).join('')}
+        </div>`;
+
+    case 'bulletList':
+      return `
+        ${block.heading ? `<div class="form-group"><label>Heading</label><input type="text" value="${esc(block.heading)}" oninput="${arrayName}[${idx}].heading=this.value; ${previewCall}"></div>` : ''}
+        <div class="form-group"><label>Items (one per line)</label><textarea style="min-height:60px;font-size:11px" onchange="${arrayName}[${idx}].items=this.value.split('\\n').filter(x=>x.trim())">${(block.items||[]).join('\n')}</textarea></div>
+        <div class="form-group"><label>Style</label><select oninput="${arrayName}[${idx}].listStyle=this.value; ${previewCall}"><option value="bullet" ${block.listStyle!=='numbered'?'selected':''}>Bullets</option><option value="numbered" ${block.listStyle==='numbered'?'selected':''}>Numbered</option></select></div>`;
+
+    case 'divider':
+      return `<div class="form-group"><label>Color</label><input type="text" value="${esc(block.color||'#e0e0e0')}" oninput="${arrayName}[${idx}].color=this.value; ${previewCall}" placeholder="#e0e0e0"></div>`;
+
+    default:
+      return `<p style="font-size:11px;color:var(--text2)">Unknown block type: ${block.type}</p>`;
+  }
+}
+
+function renderImagePromptsGeneric(block, bIdx, arrayName){
+  if(!block.imagePrompts || block.imagePrompts.length === 0) return '';
+  return `<div style="background:rgba(124,77,255,0.08);padding:8px;border-radius:6px;margin-top:6px">
+    <label style="color:var(--accent2);font-size:10px;margin-bottom:4px">AI Image Prompt Ideas (${block.width||730}x${block.height||315})</label>
+    ${block.imagePrompts.map((p, pIdx) => `
+      <div style="display:flex;gap:4px;margin-bottom:4px;align-items:start">
+        <span style="font-size:10px;color:var(--text2);min-width:16px">${pIdx+1}.</span>
+        <p style="font-size:10px;color:var(--text2);flex:1;line-height:1.4;margin:0">${esc(p)}</p>
+        <button class="btn-sm" onclick="copyGenericBlockPrompt('${arrayName}',${bIdx},${pIdx})" style="font-size:9px;padding:2px 6px;white-space:nowrap">Copy</button>
+      </div>`).join('')}
+  </div>`;
+}
+
+function renderImagePromptsInlineGeneric(img, bIdx, iIdx, arrayName){
+  if(!img.imagePrompts || img.imagePrompts.length === 0) return '';
+  return `<div style="background:rgba(124,77,255,0.06);padding:6px;border-radius:4px;margin-top:4px">
+    <label style="color:var(--accent2);font-size:9px">Image Ideas (${img.width||350}x${img.height||200})</label>
+    ${img.imagePrompts.map((p, pIdx) => `
+      <div style="display:flex;gap:4px;margin-bottom:2px;align-items:start">
+        <span style="font-size:9px;color:var(--text2);min-width:14px">${pIdx+1}.</span>
+        <p style="font-size:9px;color:var(--text2);flex:1;line-height:1.3;margin:0">${esc(p)}</p>
+        <button class="btn-sm" onclick="copyGenericInlinePrompt('${arrayName}',${bIdx},${iIdx},${pIdx})" style="font-size:8px;padding:1px 4px">Copy</button>
+      </div>`).join('')}
+  </div>`;
+}
+
+function copyGenericBlockPrompt(arrayName, bIdx, pIdx){
+  const p = window[arrayName][bIdx]?.imagePrompts?.[pIdx];
+  if(p){ navigator.clipboard.writeText(p); toast('Image prompt copied!'); }
+}
+
+function copyGenericInlinePrompt(arrayName, bIdx, iIdx, pIdx){
+  const p = window[arrayName][bIdx]?.images?.[iIdx]?.imagePrompts?.[pIdx];
+  if(p){ navigator.clipboard.writeText(p); toast('Image prompt copied!'); }
+}
+
+function moveABlock(idx, dir){
+  const n = idx + dir;
+  if(n < 0 || n >= announcementBlocks.length) return;
+  [announcementBlocks[idx], announcementBlocks[n]] = [announcementBlocks[n], announcementBlocks[idx]];
+  renderAnnouncementBlockEditor();
+}
+
+function removeABlock(idx){
+  announcementBlocks.splice(idx, 1);
+  renderAnnouncementBlockEditor();
+}
+
+function addABlock(type){
+  const defaults = {
+    hero: {type:'hero', width:730, height:315, imageUrl:'', imagePrompts:[], overlayText:'', link:''},
+    video: {type:'video', width:730, height:315, url:'', imageUrl:'', imagePrompts:[], overlayText:''},
+    text: {type:'text', heading:'', body:''},
+    imageRow: {type:'imageRow', images:[{url:'',width:350,height:200,link:'',altText:'',imagePrompts:[]},{url:'',width:350,height:200,link:'',altText:'',imagePrompts:[]}]},
+    cta: {type:'cta', label:'Read More', url:'', style:'filled', color:'#1a237e'},
+    infoCard: {type:'infoCard', columns:[{heading:'Update 1',body:''},{heading:'Update 2',body:''}]},
+    specs: {type:'specs', heading:'Key Statistics', items:[{label:'',value:''}]},
+    bulletList: {type:'bulletList', heading:'', items:['Point 1'], listStyle:'bullet'},
+    divider: {type:'divider', color:'#e0e0e0'}
+  };
+  announcementBlocks.push(JSON.parse(JSON.stringify(defaults[type] || defaults.text)));
+  renderAnnouncementBlockEditor();
+}
+
+function updateAnnouncementPreview(){
+  // This would ideally update a live preview if we had one.
+  // For now, it just ensures the data is synced.
+}
+function generateFlyerPrompt() {
+  const title = gv('flyerLink');
+  const details = gv('flyerText');
+  if(!title && !details){ toast('Add some flyer details first!'); return; }
+  
+  const includeInstructor = document.getElementById('flyerInstructorToggle').classList.contains('on');
+  let instructorSection = "";
+  
+  if(includeInstructor) {
+    const name = gv('flyerInstructorName');
+    const headshot = gv('flyerInstructorHeadshot');
+    const bio = gv('flyerInstructorBio');
+    instructorSection = `\nINSTRUCTOR DATA:
+- Name: ${name || '[INSERT NAME]'}
+- Headshot: ${headshot || '[INSERT HEADSHOT URL]'}
+- Bio: ${bio || 'Write a professional 2-sentence bio based on the class topic.'}
+- LEAVE A CLEAR BOX/SPOT FOR: This instructor information near the bottom.`;
+  }
+
   const org = ORGS[currentOrgId];
 
   const commonRules = `
@@ -1755,7 +2048,6 @@ STRICT DESIGN RULES:
 9. HIGHLIGHTS: Place price, location, CE credits, or value props in high-contrast pill shapes or rectangular boxes with thick borders.
 10. COLOR PALETTE: Dominant Navy Blue (#001F3F or similar), vibrant Red accents (#FF0000), and crisp White.
 11. NO CITATIONS, QR CODES, WATERMARKS, OR FAKE FLYER LEGAL COPY.
-${bioSpot}
 `;
 
   const prompt = `You are a senior event-poster art director. Create 3 production-ready image generation prompts for 8.5x11 printable flyers based on the details below.
@@ -1767,7 +2059,7 @@ RETURN FORMAT:
 - No citations, no source notes, no markdown code fences, and no placeholder language.
 
 SOURCE DETAILS:
-EVENT/TITLE: ${link}
+EVENT/TITLE: ${title}
 DETAILS: ${details}
 
 ${commonRules}
@@ -2434,6 +2726,8 @@ INSTRUCTOR SECTION: Not required for this email.
 
 ${isWcr ? 'CONTEXT: This is for the Women\'s Council of REALTORS. Ensure the copy reflects their mission of professional networking, leadership development, visibility, and member advancement.' : 'CONTEXT: This is for the local REALTOR association audience and should feel credible, professional, and genuinely useful.'}
 
+MEMBER CONTACT TAG: Use "${s.mergeTag}" when addressing the recipient by name (e.g. "Hi ${s.mergeTag}").
+
 YOUR MISSION: ${mission}${strategyBlock}
 THIS JSON IS PARSED DIRECTLY BY A TOOL. IF THE JSON IS INVALID, THE TOOL FAILS.
 ### CRITICAL RULES:
@@ -3071,21 +3365,23 @@ function importSingleClassAIResponse(){
 }
 
 // Handle "instructor" block type in dynamic renderer
-function renderInstructorBlock(block, s){
+function renderInstructorBlock(block, s, v){
+  const isWcr = currentOrgId === 'wcr';
+  const themeColor = isWcr ? '#243B53' : (v.accentColor || '#02aae1');
   const headshotHtml = block.headshotUrl 
-    ? `<img src="${block.headshotUrl}" width="120" height="120" style="width:120px;height:120px;border-radius:50%;display:block;object-fit:cover;border:3px solid #e0e0e0" alt="${block.name}">`
-    : `<div style="width:120px;height:120px;border-radius:50%;background:linear-gradient(135deg,#667eea,#764ba2);display:flex;align-items:center;justify-content:center;color:#fff;font-size:36px;font-weight:800">${(block.name||'?').split(' ').map(w=>w[0]).join('').substring(0,2)}</div>`;
+    ? `<img src="${block.headshotUrl}" width="120" style="width:120px;height:auto;border-radius:50%;display:block;border:3px solid #f1f1f1" alt="${block.name}">`
+    : `<div style="width:120px;height:120px;border-radius:50%;background:${themeColor};display:flex;align-items:center;justify-content:center;color:#fff;font-size:36px;font-weight:800">${(block.name||'?').split(' ').map(w=>w[0]).join('').substring(0,2)}</div>`;
   
-  return `<tr><td class="section-inner" style="padding:20px 32px">
-    <table width="100%" cellpadding="0" cellspacing="0" style="background:#f8f9fa;border-radius:8px;overflow:hidden">
+  return `<tr><td class="section-inner" style="padding:24px 32px">
+    <table width="100%" cellpadding="0" cellspacing="0" style="background:${isWcr ? '#fcfcfc' : '#f8f9fa'};border-radius:12px;border:1px solid #eeeeee">
       <tr>
-        <td style="padding:20px;width:140px;vertical-align:top;text-align:center">
+        <td class="img-col" style="padding:20px;width:140px;vertical-align:top;text-align:center">
           ${headshotHtml}
         </td>
-        <td style="padding:20px 20px 20px 0;vertical-align:top">
-          <p style="margin:0 0 4px;font-size:18px;font-weight:800;color:#333">${block.name || 'Instructor'}</p>
-          ${block.title ? `<p style="margin:0 0 8px;font-size:13px;font-weight:600;color:#666;text-transform:uppercase;letter-spacing:0.5px">${block.title}</p>` : ''}
-          <p style="margin:0;font-size:14px;line-height:1.5;color:#444">${block.bio || ''}</p>
+        <td style="padding:20px;vertical-align:top">
+          <p style="margin:0 0 4px;font-size:20px;font-weight:800;color:#333">${block.name || 'Instructor'}</p>
+          ${block.title ? `<p style="margin:0 0 12px;font-size:12px;font-weight:700;color:${themeColor};text-transform:uppercase;letter-spacing:1px">${block.title}</p>` : ''}
+          <div style="margin:0;font-size:14px;line-height:1.6;color:#555">${mdToHtml(block.bio || '')}</div>
         </td>
       </tr>
     </table>
@@ -3158,6 +3454,47 @@ function generateAll(){
       const frame = document.getElementById('frame-0');
       const doc = frame.contentDocument || frame.contentWindow.document;
       doc.open(); doc.write(emailHtml); doc.close();
+    }, 50);
+
+    configureOutputTabs({ tab0: 'Final Email', showTab1: false, showTab2: false, showComposer: false });
+
+  } else if (currentMode === 'announcement' && announcementBlocksImported && announcementBlocks.length > 0) {
+    const hColor = gv('announcementHeaderCol') || '#1a237e';
+    const hTitle = gv('announcementHeaderTitle') || 'General Announcement';
+    const preText = gv('announcementIntro') || '';
+
+    const emailHtml = generateDynamicEmailHTML(announcementBlocks, s, hColor, hTitle, preText, announcementDesign);
+    const container = document.getElementById('tabContent');
+    container.innerHTML = '';
+
+    const panel = document.createElement('div');
+    panel.className = 'tab-panel active';
+    panel.id = 'panel-0';
+    panel.innerHTML = `
+      <div class="output-section">
+        <div class="output-label">Final Subject Line <button class="copy-btn" onclick="copyText('subj-0')">Copy</button></div>
+        <div class="output-box" id="subj-0">${escHtml(announcementSubject || '')}</div>
+      </div>
+      <div class="output-section">
+        <div class="output-label">Final Preheader Text <button class="copy-btn" onclick="copyText('pre-0')">Copy</button></div>
+        <div class="output-box" id="pre-0">${escHtml(announcementPreheaderText || '')}</div>
+      </div>
+      <div class="output-section">
+        <div class="output-label">Email Preview</div>
+        <iframe class="preview-frame" id="frame-0" sandbox="allow-same-origin"></iframe>
+      </div>
+      <div class="output-section">
+        <div class="output-label">Final Composite HTML <button class="copy-btn" onclick="copyText('code-0')">Copy</button></div>
+        <div class="output-box" id="code-0" style="max-height:400px">${escHtml(emailHtml)}</div>
+      </div>`;
+    container.appendChild(panel);
+
+    setTimeout(() => {
+      const frame = document.getElementById('frame-0');
+      if(frame){
+        const doc = frame.contentDocument || frame.contentWindow.document;
+        doc.open(); doc.write(emailHtml); doc.close();
+      }
     }, 50);
 
     configureOutputTabs({ tab0: 'Final Email', showTab1: false, showTab2: false, showComposer: false });
