@@ -553,15 +553,222 @@
       font-weight: 600;
       color: var(--ccor-teal-dark);
       transition: all 150ms ease;
+      cursor: pointer;
+      position: relative;
     }
     .share-idea:hover {
       background: rgba(90, 165, 156, 0.15);
       transform: translateY(-2px);
     }
+    .share-idea.copied {
+      background: var(--ccor-teal);
+      color: #fff;
+      transform: translateY(0);
+    }
     .share-idea .idea-icon {
       font-size: 1.4rem;
       display: block;
       margin-bottom: 8px;
+    }
+    .share-idea .copy-hint {
+      display: block;
+      margin-top: 8px;
+      font-size: 0.7rem;
+      color: rgba(90, 165, 156, 0.8);
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+    .share-idea.copied .idea-title,
+    .share-idea.copied .copy-hint {
+      color: #fff;
+    }
+    .share-ideas-header {
+      text-align: center;
+      margin-top: 48px;
+      margin-bottom: 24px;
+    }
+    .share-ideas-header h3 {
+      font-family: var(--font-display);
+      color: var(--ccor-blue);
+      font-size: 1.25rem;
+      margin: 0 0 8px;
+    }
+    .share-ideas-header p {
+      color: var(--ccor-grey);
+      font-size: 0.95rem;
+      margin: 0;
+    }
+
+    /* ============================
+       Script Dropdown & Mockups
+       ============================ */
+    .idea-dropdown-wrapper {
+      margin-top: 24px;
+      width: 100%;
+    }
+    .idea-dropdown {
+      display: none;
+      background: #fff;
+      border: 1px solid rgba(0,0,0,0.06);
+      border-radius: var(--radius-lg);
+      padding: 32px 24px;
+      box-shadow: 0 12px 40px rgba(0,0,0,0.06);
+      animation: slideDown 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    }
+    .idea-dropdown.active {
+      display: block;
+    }
+    @keyframes slideDown {
+      from { opacity: 0; transform: translateY(-10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .mockups-container {
+      display: flex;
+      gap: 40px;
+      justify-content: center;
+      align-items: flex-end;
+      margin-bottom: 32px;
+      flex-wrap: wrap;
+    }
+
+    /* MacBook Mockup */
+    .macbook-mockup {
+      width: 380px;
+      max-width: 100%;
+    }
+    .macbook-screen {
+      background: #111;
+      border-radius: 12px 12px 0 0;
+      padding: 12px 12px 16px;
+      border: 2px solid #ddd;
+      border-bottom: none;
+    }
+    .macbook-content {
+      background: #fff;
+      aspect-ratio: 16 / 10;
+      border-radius: 4px;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+    }
+    .macbook-base {
+      height: 12px;
+      background: #e2e2e2;
+      border-radius: 0 0 12px 12px;
+      position: relative;
+      border: 1px solid #ccc;
+    }
+    .macbook-base::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 60px;
+      height: 4px;
+      background: #bbb;
+      border-radius: 0 0 4px 4px;
+    }
+
+    /* iPhone Mockup */
+    .iphone-mockup {
+      width: 200px;
+      max-width: 100%;
+    }
+    .iphone-frame {
+      background: #111;
+      border-radius: 36px;
+      padding: 10px;
+      border: 3px solid #ccc;
+      box-shadow: inset 0 0 0 2px #555;
+      position: relative;
+    }
+    .iphone-notch {
+      position: absolute;
+      top: 10px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 80px;
+      height: 20px;
+      background: #111;
+      border-radius: 0 0 10px 10px;
+      z-index: 2;
+    }
+    .iphone-content {
+      background: #fff;
+      aspect-ratio: 9 / 19.5;
+      border-radius: 26px;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* Mockup Inner Content */
+    .mockup-flyer {
+      width: 100%;
+      object-fit: cover;
+      object-position: top;
+      flex-shrink: 0;
+      background: #f0f0f0;
+      border-bottom: 1px solid #eee;
+    }
+    .macbook-content .mockup-flyer { height: 60%; }
+    .iphone-content .mockup-flyer { height: 50%; }
+
+    .mockup-text {
+      padding: 12px;
+      font-size: 0.75rem;
+      color: #333;
+      line-height: 1.4;
+      overflow-y: auto;
+      white-space: pre-wrap;
+    }
+    .iphone-content .mockup-text {
+      font-size: 0.65rem;
+      padding: 12px 16px;
+    }
+
+    /* Copy Button */
+    .dropdown-action {
+      text-align: center;
+    }
+    .btn-copy {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 14px 32px;
+      background: var(--ccor-teal);
+      color: #fff;
+      border: none;
+      border-radius: var(--radius-full);
+      font-weight: 600;
+      font-size: 1.05rem;
+      cursor: pointer;
+      transition: all 200ms ease;
+      box-shadow: 0 4px 12px rgba(90, 165, 156, 0.3);
+    }
+    .btn-copy:hover {
+      background: var(--ccor-teal-dark);
+      transform: translateY(-2px);
+      box-shadow: 0 6px 16px rgba(90, 165, 156, 0.4);
+    }
+    .btn-copy.success {
+      background: var(--ccor-blue);
+      box-shadow: 0 4px 12px rgba(47, 70, 152, 0.3);
+    }
+
+    .share-idea.active {
+      background: var(--ccor-teal);
+      color: #fff;
+      border-color: var(--ccor-teal);
+      transform: translateY(-2px);
+      box-shadow: 0 8px 24px rgba(90, 165, 156, 0.25);
+    }
+    .share-idea.active .copy-hint,
+    .share-idea.active .idea-title {
+      color: #fff;
     }
 
     /* ============================
@@ -796,24 +1003,72 @@
       </div>
 
       <!-- Share Ideas -->
+      <div class="share-ideas-header reveal">
+        <h3>Script Templates</h3>
+        <p>Click any idea below to copy a pre-written script you can use immediately.</p>
+      </div>
+      
       <div class="share-ideas reveal">
-        <div class="share-idea">
+        <div class="share-idea" onclick="toggleDropdown(this)">
           <span class="idea-icon">🏠</span>
-          Open Houses
+          <span class="idea-title">Open Houses</span>
+          <span class="copy-hint">Click to Preview</span>
+          <textarea class="copy-text" style="display:none;">Welcome to the open house! While you're looking for your next home, it's important to protect your current one. Sign up for the Lee County Clerk's free Property Fraud Alert system to protect your title: https://leeclerk.org/fraud</textarea>
         </div>
-        <div class="share-idea">
+        <div class="share-idea" onclick="toggleDropdown(this)">
           <span class="idea-icon">🎁</span>
-          Closing Gifts
+          <span class="idea-title">Closing Gifts</span>
+          <span class="copy-hint">Click to Preview</span>
+          <textarea class="copy-text" style="display:none;">Congratulations on your closing! As your REALTOR®, I want to ensure your new home remains safe. I highly recommend taking 2 minutes to register for the free Lee County Property Fraud Alert: https://leeclerk.org/fraud</textarea>
         </div>
-        <div class="share-idea">
+        <div class="share-idea" onclick="toggleDropdown(this)">
           <span class="idea-icon">📬</span>
-          Neighborhood Mailers
+          <span class="idea-title">Neighborhood Mailers</span>
+          <span class="copy-hint">Click to Preview</span>
+          <textarea class="copy-text" style="display:none;">Hello Neighbor! Property fraud is on the rise in Southwest Florida. As your local REALTOR® and community advocate, I want to make sure your home stays protected. Register your home for free alerts with the Lee County Clerk of Courts: https://leeclerk.org/fraud</textarea>
         </div>
-        <div class="share-idea">
+        <div class="share-idea" onclick="toggleDropdown(this)">
           <span class="idea-icon">📱</span>
-          Social Media &amp; Email
+          <span class="idea-title">Social Media & Email</span>
+          <span class="copy-hint">Click to Preview</span>
+          <textarea class="copy-text" style="display:none;">Protecting your home goes beyond deadbolts and security systems. As a member of the Coconut Coast Organization of REALTORS®, I'm proud to partner with the Lee County Clerk of Courts to fight property fraud. Protect your title by signing up for free fraud alerts today: https://leeclerk.org/fraud</textarea>
         </div>
       </div>
+
+      <!-- Master Dropdown Area -->
+      <div class="idea-dropdown-wrapper" id="master-dropdown-wrapper" style="display:none;">
+        <div class="idea-dropdown" id="master-idea-dropdown">
+          <div class="mockups-container">
+            <!-- MacBook Mockup -->
+            <div class="macbook-mockup">
+              <div class="macbook-screen">
+                <div class="macbook-content">
+                  <img src="https://bonitaesterorealtors.com/wp-content/uploads/2026/04/PROTECT-OUR-HOMES-PROGRAM.png" alt="Flyer preview" class="mockup-flyer">
+                  <div class="mockup-text" id="macbook-text-preview"></div>
+                </div>
+              </div>
+              <div class="macbook-base"></div>
+            </div>
+            <!-- iPhone Mockup -->
+            <div class="iphone-mockup">
+              <div class="iphone-frame">
+                <div class="iphone-notch"></div>
+                <div class="iphone-content">
+                  <img src="https://bonitaesterorealtors.com/wp-content/uploads/2026/04/PROTECT-OUR-HOMES-PROGRAM.png" alt="Flyer preview" class="mockup-flyer">
+                  <div class="mockup-text" id="iphone-text-preview"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="dropdown-action">
+            <button class="btn-copy" id="master-copy-btn" onclick="copyMasterText()">
+              <span class="btn-icon">📋</span>
+              <span class="btn-text">Copy Script Text</span>
+            </button>
+          </div>
+        </div>
+      </div>
+
     </section>
 
   </div><!-- /.page-content -->
@@ -839,6 +1094,74 @@
 
   <!-- ===== Scroll Reveal Script ===== -->
   <script>
+    let currentActiveIdea = null;
+
+    function toggleDropdown(el) {
+      const wrapper = document.getElementById('master-dropdown-wrapper');
+      
+      // If clicking the already open one, close it
+      if (currentActiveIdea === el) {
+        el.classList.remove('active');
+        el.querySelector('.copy-hint').innerText = "Click to Preview";
+        wrapper.style.display = 'none';
+        currentActiveIdea = null;
+        return;
+      }
+
+      // Reset others
+      document.querySelectorAll('.share-idea').forEach(idea => {
+        idea.classList.remove('active');
+        idea.querySelector('.copy-hint').innerText = "Click to Preview";
+      });
+      
+      // Set this one to active
+      el.classList.add('active');
+      el.querySelector('.copy-hint').innerText = "Viewing";
+      
+      const text = el.querySelector('.copy-text').value;
+      
+      // Update mockup text
+      document.getElementById('macbook-text-preview').textContent = text;
+      document.getElementById('iphone-text-preview').textContent = text;
+      
+      // Reset copy button
+      const copyBtn = document.getElementById('master-copy-btn');
+      copyBtn.querySelector('.btn-text').textContent = "Copy Script Text";
+      copyBtn.classList.remove('success');
+      copyBtn.dataset.copyText = text;
+
+      // Show dropdown
+      wrapper.style.display = 'block';
+      const dropdown = document.getElementById('master-idea-dropdown');
+      dropdown.classList.add('active');
+      
+      // Retrigger animation
+      dropdown.style.animation = 'none';
+      dropdown.offsetHeight; /* trigger reflow */
+      dropdown.style.animation = null;
+
+      currentActiveIdea = el;
+
+      // Smooth scroll
+      setTimeout(() => {
+        wrapper.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+      }, 100);
+    }
+
+    function copyMasterText() {
+      const copyBtn = document.getElementById('master-copy-btn');
+      const text = copyBtn.dataset.copyText;
+      
+      navigator.clipboard.writeText(text).then(() => {
+        copyBtn.classList.add('success');
+        copyBtn.querySelector('.btn-text').textContent = "Copied to Clipboard!";
+        setTimeout(() => {
+          copyBtn.classList.remove('success');
+          copyBtn.querySelector('.btn-text').textContent = "Copy Script Text";
+        }, 2500);
+      }).catch(err => console.error('Failed to copy', err));
+    }
+
     document.addEventListener('DOMContentLoaded', () => {
       const observer = new IntersectionObserver((entries) => {
         entries.forEach(entry => {
