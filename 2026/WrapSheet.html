@@ -14654,13 +14654,15 @@
       const hour = now.getHours();
       let timeLabel = "AI Daily Overview";
 
-      // Logic: 8:30 AM is within 5-11 window, 12:30 PM is within 11-14 window
+      // Logic: 8:30 AM (5-11), 12:30 PM (11-14), Afternoon (14-16), EOD (16-19), Evening (19+)
       if (hour >= 5 && hour < 11) {
         timeLabel = "Morning Kickoff (8:30 AM)";
-      } else if (hour >= 11 && hour <= 14) {
+      } else if (hour >= 11 && hour < 14) {
         timeLabel = "Lunch Check-in (12:30 PM)";
-      } else if (hour > 14 && hour < 18) {
+      } else if (hour >= 14 && hour < 16) {
         timeLabel = "Afternoon Momentum";
+      } else if (hour >= 16 && hour < 19) {
+        timeLabel = "EOD Wrap-up (4:00 PM)";
       } else {
         timeLabel = "Evening Recap";
       }
@@ -14670,6 +14672,16 @@
 
       try {
         const currentUser = state.activeUser || state.currentUser || { email: "User" };
+        
+        // Find tomorrow's tasks for look-ahead
+        const tomorrow = new Date();
+        tomorrow.setDate(tomorrow.getDate() + 1);
+        const tomorrowKey = dateKey(tomorrow.getFullYear(), tomorrow.getMonth(), tomorrow.getDate());
+        const tomorrowTasks = state.dailyTasks.filter(t => 
+          t.task_date === tomorrowKey && 
+          String(t.assigned_to_id) === String(state.activeUserId)
+        );
+
         const response = await fetch(`${API_BASE}/ai/daily-overview`, {
           method: "POST",
           headers: {
@@ -14683,6 +14695,10 @@
                notes: t.notes,
                task_time: t.task_time,
                status: t.status
+             })),
+             tomorrowTasks: tomorrowTasks.map(t => ({
+               title: t.title,
+               task_time: t.task_time
              })),
              timeLabel: timeLabel,
              currentHour: hour

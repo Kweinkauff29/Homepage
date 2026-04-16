@@ -833,19 +833,20 @@ async function getDailyOverview(request, env) {
     console.log("Daily Overview requested");
     const body = await getBody(request);
     const tasks = body?.tasks || [];
+    const tomorrowTasks = body?.tomorrowTasks || [];
     const timeLabel = body?.timeLabel || "Daily Overview";
     const currentHour = Number(body?.currentHour || 0);
     const userEmail = body?.userEmail || request.headers.get("x-user-email") || "User";
     const userName = body?.userName || userEmail.split('@')[0];
     
-    console.log(`Processing ${tasks.length} tasks for ${userName} at ${timeLabel}`);
+    console.log(`Processing ${tasks.length} tasks and ${tomorrowTasks.length} tomorrow-tasks for ${userName} at ${timeLabel}`);
 
     if (!env.GEMINI_API_KEY) {
         return json({ error: "GEMINI_API_KEY not configured" }, 500);
     }
 
-    if (!tasks.length) {
-        return json({ overview: `Hi ${userName}, you have no tasks scheduled for today. Take some time to breathe and plan ahead!` });
+    if (!tasks.length && !tomorrowTasks.length) {
+        return json({ overview: `Hi ${userName}, you have no tasks scheduled for today or tomorrow. Enjoy the peace!` });
     }
 
     const taskSummary = tasks.map(t => {
@@ -855,19 +856,26 @@ async function getDailyOverview(request, env) {
         return `- ${t.title}${timeStr}${noteStr}${statusStr}`;
     }).join("\n");
 
+    const nextDaySummary = tomorrowTasks.length 
+        ? "\nTomorrow's Priority:\n" + tomorrowTasks.map(t => `- ${t.title}`).join("\n")
+        : "";
+
     let contextSpecificInstructions = "";
     if (timeLabel.toLowerCase().includes("kickoff") || currentHour < 11) {
         contextSpecificInstructions = "This is a Morning Kickoff. Focus on setting priorities, identifying high-impact tasks, and giving an encouraging start to the day.";
-    } else if (timeLabel.toLowerCase().includes("lunch") || (currentHour >= 11 && currentHour <= 14)) {
+    } else if (timeLabel.toLowerCase().includes("lunch") || (currentHour >= 11 && currentHour < 14)) {
         contextSpecificInstructions = "This is a Lunch Check-in. Acknowledge what's already done (marked [DONE]), and recommend the most important tasks to focus on for the afternoon pivot.";
+    } else if (timeLabel.toLowerCase().includes("wrap-up") || (currentHour >= 16 && currentHour < 19)) {
+        contextSpecificInstructions = "This is an EOD Wrap-up. Celebrate today's wins ([DONE]), recommend which unfinished tasks to move to tomorrow if today was busy, and give a brief look-ahead at tomorrow's priority tasks.";
     } else {
-        contextSpecificInstructions = "Provide a general end-of-day overview or mid-afternoon status update. Check if they are on track for their goals.";
+        contextSpecificInstructions = "Provide a general status update. Check if they are on track for their goals.";
     }
 
     const prompt = `
 You are the BER Wrap Sheet AI Assistant.
-Review these daily tasks for ${userName}:
+Review today's tasks for ${userName}:
 ${taskSummary}
+${nextDaySummary}
 
 ${contextSpecificInstructions}
 
