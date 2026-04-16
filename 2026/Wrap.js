@@ -63,6 +63,424 @@ async function getBody(request) {
     }
 }
 
+function pickFirstNonEmptyString(...values) {
+    for (const value of values) {
+        if (typeof value === "string" && value.trim()) return value.trim();
+    }
+    return "";
+}
+
+function extractGeminiText(payload) {
+    const parts = payload?.candidates?.[0]?.content?.parts;
+    if (!Array.isArray(parts)) return "";
+    return parts
+        .map((part) => (typeof part?.text === "string" ? part.text : ""))
+        .join("\n")
+        .trim();
+}
+
+function safeParseJsonBlock(text) {
+    if (typeof text !== "string" || !text.trim()) return null;
+
+    const cleaned = text
+        .trim()
+        .replace(/^```json\s*/i, "")
+        .replace(/^```\s*/i, "")
+        .replace(/\s*```$/, "")
+        .trim();
+
+    try {
+        return JSON.parse(cleaned);
+    } catch {
+        // Fall through and try to recover a JSON object from surrounding text.
+    }
+
+    const firstBrace = cleaned.indexOf("{");
+    const lastBrace = cleaned.lastIndexOf("}");
+    if (firstBrace !== -1 && lastBrace > firstBrace) {
+        const candidate = cleaned.slice(firstBrace, lastBrace + 1);
+        try {
+            return JSON.parse(candidate);
+        } catch {
+            return null;
+        }
+    }
+
+    return null;
+}
+
+function normalizeSuggestionType(value) {
+    const raw = String(value || "").trim().toLowerCase();
+    if (raw === "day" || raw === "daily") return "day";
+    if (raw === "week" || raw === "weekly") return "week";
+    if (raw === "month" || raw === "monthly") return "month";
+    return "backlog";
+}
+
+function normalizeConfidence(value) {
+    const raw = String(value || "").trim().toLowerCase();
+    if (raw === "high" || raw === "medium" || raw === "low") return raw;
+    return "medium";
+}
+
+function matchAllowedValue(value, allowedValues, fallback = null) {
+    if (!Array.isArray(allowedValues) || allowedValues.length === 0) return fallback;
+
+    const raw = String(value || "").trim().toLowerCase();
+    if (!raw) return fallback;
+
+    const exact = allowedValues.find((item) => String(item).trim().toLowerCase() === raw);
+    if (exact) return exact;
+
+    const partial = allowedValues.find((item) => {
+        const normalized = String(item).trim().toLowerCase();
+        return raw.includes(normalized) || normalized.includes(raw);
+    });
+    return partial || fallback;
+}
+
+function normalizeTaskTitle(taskText) {
+    const raw = String(taskText || "").replace(/\s+/g, " ").trim();
+    if (!raw) return "New task";
+    if (raw.length <= 96) return raw;
+    return raw.slice(0, 93).trim() + "...";
+}
+
+function guessMonthlyCategory(taskText, allowedCategories) {
+    const raw = String(taskText || "").toLowerCase();
+    const directMatch = matchAllowedValue(raw, allowedCategories);
+    if (directMatch) return directMatch;
+
+    const rules = [
+        {
+            category: "Marketing",
+            regex: /\b(blast|email|magazine|social|post|promotion|promo|flyer|campaign|video|announcement|media)\b/i,
+        },
+        {
+            category: "Compliance\/Audit",
+            regex: /\b(compliance|audit|policy|license|rule|rules|form|legal|fair housing|deadline)\b/i,
+        },
+        {
+            category: "Products & Tools",
+            regex: /\b(tool|tools|automation|page|site|website|api|integration|dashboard|feed|system|extension|wrap|app)\b/i,
+        },
+        {
+            category: "Team Work",
+            regex: /\b(team|staff|meeting|collab|handoff|support|committee|coordination|onboarding)\b/i,
+        },
+        {
+            category: "Personal Focus",
+            regex: /\b(training|learn|learning|class|checklist|organize|cleanup|review|follow up)\b/i,
+        },
+        {
+            category: "Moving the Needle",
+            regex: /\b(strategy|initiative|launch|growth|adoption|member|members|rollout|roadmap|project|build)\b/i,
+        },
+    ];
+
+    for (const rule of rules) {
+        const matched = matchAllowedValue(rule.category, allowedCategories);
+        if (matched && rule.regex.test(raw)) return matched;
+    }
+
+    return allowedCategories[0] || "Marketing";
+}
+
+function buildHeuristicScheduleSuggestion(taskText, snapshot) {
+    const normalizedTaskTitle = normalizeTaskTitle(taskText);
+    const weekDays = Array.isArray(snapshot?.calendarWeek?.days) ? snapshot.calendarWeek.days : [];
+    const sortedWeekDays = [...weekDays].sort((a, b) => {
+        const activeDelta = Number(a?.activeTasks || 0) - Number(b?.activeTasks || 0);
+        if (activeDelta !== 0) return activeDelta;
+        const totalDelta = Number(a?.totalTasks || 0) - Number(b?.totalTasks || 0);
+        if (totalDelta !== 0) return totalDelta;
+        return String(a?.date || "").localeCompare(String(b?.date || ""));
+    });
+    const lightestDay = sortedWeekDays[0] || null;
+
+    const openPriorityRows = Array.isArray(snapshot?.weeklyPlanner?.openPriorityRows)
+        ? snapshot.weeklyPlanner.openPriorityRows
+        : [];
+    const weekColumn = pickFirstNonEmptyString(snapshot?.weeklyPlanner?.column);
+    const allowedCategories = Array.isArray(snapshot?.month?.availableCategories)
+        ? snapshot.month.availableCategories
+        : [];
+    const monthlyCategory = guessMonthlyCategory(taskText, allowedCategories);
+
+    const backlogCount = Number(snapshot?.backlog?.count || 0);
+    const monthlyGoalCount = Number(snapshot?.month?.goalCount || 0);
+    const isBiggerWork = /\b(strategy|campaign|project|system|audit|plan|roadmap|launch|build|rollout|overhaul)\b/i.test(taskText);
+    const isQuickTask = /\b(send|post|update|check|call|email|blast|review|draft|fix|upload)\b/i.test(taskText);
+
+    const placements = [];
+
+    if (isBiggerWork && monthlyCategory) {
+        placements.push({
+            type: "month",
+            label: `Monthly strategy: ${monthlyCategory}`,
+            title: normalizedTaskTitle,
+            notes: taskText,
+            rationale: `This reads like multi-step work, so it fits best as a monthly strategy in ${monthlyCategory}.`,
+            confidence: "high",
+            monthCategory: monthlyCategory,
+        });
+    }
+
+    if (lightestDay?.date) {
+        placements.push({
+            type: "day",
+            label: `Schedule on ${lightestDay.label || lightestDay.date}`,
+            title: normalizedTaskTitle,
+            notes: taskText,
+            rationale: `That is the lightest day in the current visible week with ${Number(lightestDay.activeTasks || 0)} active tasks.`,
+            confidence: isQuickTask ? "high" : "medium",
+            date: lightestDay.date,
+        });
+    }
+
+    if (weekColumn && openPriorityRows.length > 0) {
+        placements.push({
+            type: "week",
+            label: `Weekly priorities row ${openPriorityRows[0]}`,
+            title: normalizedTaskTitle,
+            notes: taskText,
+            rationale: `There is still room in the weekly planner, so this can be parked as a week-level focus before you pin it to a day.`,
+            confidence: isQuickTask ? "medium" : "high",
+            weekRowKey: String(openPriorityRows[0]),
+            weekColumnKey: weekColumn,
+        });
+    }
+
+    placements.push({
+        type: "backlog",
+        label: "Keep it in backlog for now",
+        title: normalizedTaskTitle,
+        notes: taskText,
+        rationale: backlogCount >= 12
+            ? "The current week is already carrying a lot of work, so backlog is the safer holding area."
+            : "If timing is still fuzzy, backlog keeps the task visible without overloading a day or weekly slot.",
+        confidence: backlogCount >= 12 ? "high" : "medium",
+    });
+
+    const deduped = [];
+    const seen = new Set();
+    for (const placement of placements) {
+        const key = `${placement.type}|${placement.date || ""}|${placement.weekRowKey || ""}|${placement.monthCategory || ""}`;
+        if (seen.has(key)) continue;
+        seen.add(key);
+        deduped.push(placement);
+    }
+
+    const assistantMessage = [
+        `I checked ${snapshot?.targetUser?.name || "your"} current week and month.`,
+        lightestDay?.date
+            ? `The lightest visible day is ${lightestDay.label || lightestDay.date} with ${Number(lightestDay.activeTasks || 0)} active tasks.`
+            : "I could not find a clear low-load day in the visible week.",
+        openPriorityRows.length > 0 && weekColumn
+            ? `The weekly planner still has open priority slots for ${weekColumn}.`
+            : "The weekly planner is already fairly packed.",
+        isBiggerWork
+            ? `Because this looks larger than a one-off task, I am leaning toward a month-level strategy before daily scheduling.`
+            : `Because this looks executable in one pass, I am leaning toward a day-level placement.`,
+    ].join(" ");
+
+    return {
+        source: "heuristic",
+        normalizedTaskTitle,
+        assistantMessage,
+        overallReasoning: assistantMessage,
+        workloadSummary: {
+            backlogCount,
+            monthlyGoalCount,
+            lightestDay: lightestDay?.date || null,
+            openPriorityRows: openPriorityRows.length,
+        },
+        placements: deduped.slice(0, 3),
+    };
+}
+
+function normalizePlacement(placement, snapshot, fallbackTitle) {
+    const allowedCategories = Array.isArray(snapshot?.month?.availableCategories)
+        ? snapshot.month.availableCategories
+        : [];
+    const candidateDates = new Set(
+        (Array.isArray(snapshot?.calendarWeek?.days) ? snapshot.calendarWeek.days : [])
+            .map((day) => String(day?.date || ""))
+            .filter(Boolean)
+    );
+    const openPriorityRows = new Set(
+        (Array.isArray(snapshot?.weeklyPlanner?.openPriorityRows) ? snapshot.weeklyPlanner.openPriorityRows : [])
+            .map((row) => String(row))
+    );
+    const weekColumn = pickFirstNonEmptyString(snapshot?.weeklyPlanner?.column);
+
+    const type = normalizeSuggestionType(placement?.type);
+    const normalized = {
+        type,
+        label: pickFirstNonEmptyString(placement?.label) || type,
+        title: pickFirstNonEmptyString(placement?.title) || fallbackTitle,
+        notes: pickFirstNonEmptyString(placement?.notes),
+        rationale: pickFirstNonEmptyString(placement?.rationale),
+        confidence: normalizeConfidence(placement?.confidence),
+        date: null,
+        weekRowKey: null,
+        weekColumnKey: null,
+        monthCategory: null,
+    };
+
+    if (type === "day") {
+        const date = pickFirstNonEmptyString(placement?.date);
+        normalized.date = candidateDates.has(date) ? date : null;
+        if (!normalized.date) normalized.type = "backlog";
+    }
+
+    if (normalized.type === "week") {
+        const row = pickFirstNonEmptyString(placement?.weekRowKey);
+        normalized.weekRowKey = openPriorityRows.has(row) ? row : null;
+        normalized.weekColumnKey = matchAllowedValue(placement?.weekColumnKey, weekColumn ? [weekColumn] : [], weekColumn || null);
+        if (!normalized.weekRowKey || !normalized.weekColumnKey) {
+            normalized.type = "backlog";
+            normalized.weekRowKey = null;
+            normalized.weekColumnKey = null;
+        }
+    }
+
+    if (normalized.type === "month") {
+        normalized.monthCategory = matchAllowedValue(
+            placement?.monthCategory,
+            allowedCategories,
+            guessMonthlyCategory(fallbackTitle, allowedCategories)
+        );
+        if (!normalized.monthCategory) normalized.type = "backlog";
+    }
+
+    return normalized;
+}
+
+async function getScheduleSuggestion(request, env) {
+    const body = await getBody(request);
+    const task = pickFirstNonEmptyString(body?.task);
+    const snapshot = body?.snapshot || null;
+
+    if (!task) {
+        return json({ error: "task is required" }, 400);
+    }
+    if (!snapshot || typeof snapshot !== "object") {
+        return json({ error: "snapshot is required" }, 400);
+    }
+    if (!env.GEMINI_API_KEY) {
+        return json({ error: "GEMINI_API_KEY not configured for wrapsheet" }, 500);
+    }
+
+    const heuristic = buildHeuristicScheduleSuggestion(task, snapshot);
+    const prompt = `
+You are the BER Wrap Sheet scheduling assistant.
+
+Your job:
+- Read the user's new task request.
+- Analyze the provided week, backlog, weekly-planner, and month summaries.
+- Suggest the best place to capture the work so the user can add it quickly.
+- Balance current load. Avoid stacking new work onto the busiest day when a lighter option exists.
+
+Allowed placement types:
+- "day": use one of the provided calendarWeek.days[].date values
+- "week": only if weeklyPlanner.column exists and weeklyPlanner.openPriorityRows contains the chosen row
+- "month": only if month.availableCategories contains the chosen category
+- "backlog": use when timing is unclear or the week already looks overloaded
+
+Return ONLY valid JSON with this shape:
+{
+  "assistantMessage": "2-4 concise sentences explaining the recommendation and load tradeoff.",
+  "normalizedTaskTitle": "clean task title",
+  "overallReasoning": "1 short paragraph",
+  "placements": [
+    {
+      "type": "day|week|month|backlog",
+      "label": "short UI label",
+      "title": "task title to save",
+      "notes": "optional notes",
+      "rationale": "why this placement fits",
+      "confidence": "high|medium|low",
+      "date": "YYYY-MM-DD or null",
+      "weekRowKey": "1-5 or null",
+      "weekColumnKey": "weekly planner column or null",
+      "monthCategory": "allowed month category or null"
+    }
+  ]
+}
+
+Rules:
+- Provide 2 or 3 placement options.
+- Put the best recommendation first.
+- Be decisive and specific.
+- Do not use markdown fences.
+
+User task:
+${task}
+
+Schedule snapshot:
+${JSON.stringify(snapshot, null, 2)}
+`.trim();
+
+    const geminiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${env.GEMINI_API_KEY}`;
+    let rawText = "";
+
+    try {
+        const response = await fetch(geminiUrl, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+                contents: [{ parts: [{ text: prompt }] }],
+            }),
+        });
+
+        if (!response.ok) {
+            const details = await response.text().catch(() => "");
+            console.error("Gemini schedule assistant error:", details);
+            return json({ error: "Gemini API error", details }, 500);
+        }
+
+        const payload = await response.json();
+        rawText = extractGeminiText(payload);
+        const parsed = safeParseJsonBlock(rawText);
+        if (!parsed || !Array.isArray(parsed.placements) || parsed.placements.length === 0) {
+            const fallback = {
+                ...heuristic,
+                source: "heuristic_after_parse_failure",
+                rawText,
+            };
+            return json(fallback);
+        }
+
+        const normalizedTaskTitle = pickFirstNonEmptyString(parsed.normalizedTaskTitle) || heuristic.normalizedTaskTitle;
+        const placements = parsed.placements
+            .map((placement) => normalizePlacement(placement, snapshot, normalizedTaskTitle))
+            .filter((placement) => placement && placement.title);
+
+        if (placements.length === 0) {
+            const fallback = {
+                ...heuristic,
+                source: "heuristic_after_normalization_failure",
+                rawText,
+            };
+            return json(fallback);
+        }
+
+        return json({
+            source: "gemini",
+            normalizedTaskTitle,
+            assistantMessage: pickFirstNonEmptyString(parsed.assistantMessage) || heuristic.assistantMessage,
+            overallReasoning: pickFirstNonEmptyString(parsed.overallReasoning) || heuristic.overallReasoning,
+            workloadSummary: heuristic.workloadSummary,
+            placements: placements.slice(0, 3),
+            rawText,
+        });
+    } catch (error) {
+        console.error("Schedule assistant failure:", error);
+        return json({ error: error.message || "Schedule assistant failed" }, 500);
+    }
+}
+
 /* ---------- USERS ---------- */
 
 async function listUsers(env, params) {
@@ -2238,6 +2656,11 @@ export default {
             if (pathname === "/api/weekly-planner") {
                 if (request.method === "GET") return await getWeeklyPlan(env, searchParams);
                 if (request.method === "POST") return await updateWeeklyEntry(request, env);
+            }
+
+            // ===== AI SCHEDULE ASSISTANT =====
+            if (pathname === "/api/ai/schedule-suggest" && request.method === "POST") {
+                return await getScheduleSuggestion(request, env);
             }
 
             // ===== TICKER & REACTIONS (NEW) =====

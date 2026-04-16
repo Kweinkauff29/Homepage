@@ -3629,6 +3629,236 @@
       padding: 8px !important;
       min-height: 60px;
     }
+
+    .backlog-assistant {
+      margin: 0 10px 10px;
+      padding: 12px;
+      border: 1px solid var(--panel-border);
+      border-radius: 16px;
+      background: linear-gradient(180deg, rgba(0, 0, 0, 0.02), rgba(0, 0, 0, 0.05));
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      min-height: 320px;
+    }
+
+    body[data-theme="dark"] .backlog-assistant {
+      background: linear-gradient(180deg, rgba(255, 255, 255, 0.03), rgba(255, 255, 255, 0.06));
+    }
+
+    .backlog-assistant-header {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 12px;
+    }
+
+    .backlog-assistant-title {
+      font-size: 13px;
+      font-weight: 700;
+    }
+
+    .backlog-assistant-subtitle {
+      margin-top: 4px;
+      font-size: 11px;
+      color: var(--ink-soft);
+      line-height: 1.4;
+    }
+
+    .backlog-assistant-chip {
+      padding: 5px 8px;
+      border-radius: 999px;
+      border: 1px solid var(--panel-border);
+      background: var(--panel);
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      white-space: nowrap;
+    }
+
+    .backlog-assistant-thread {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      min-height: 120px;
+      max-height: 220px;
+      overflow: auto;
+      padding-right: 4px;
+    }
+
+    .backlog-ai-empty {
+      padding: 14px;
+      border: 1px dashed rgba(127, 127, 127, 0.35);
+      border-radius: 12px;
+      background: var(--panel);
+      font-size: 11px;
+      color: var(--ink-soft);
+      line-height: 1.5;
+    }
+
+    .backlog-ai-message {
+      max-width: 100%;
+      padding: 10px 12px;
+      border-radius: 14px;
+      border: 1px solid var(--panel-border);
+      background: var(--panel);
+      font-size: 12px;
+      line-height: 1.5;
+      white-space: pre-wrap;
+    }
+
+    .backlog-ai-message.user {
+      margin-left: auto;
+      background: #000000;
+      color: #ffffff;
+      border-color: #000000;
+    }
+
+    body[data-theme="dark"] .backlog-ai-message.user {
+      background: #ffffff;
+      color: #111111;
+      border-color: #ffffff;
+    }
+
+    .backlog-ai-message.assistant {
+      margin-right: auto;
+    }
+
+    .backlog-assistant-compose {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .backlog-assistant-compose textarea {
+      width: 100%;
+      min-height: 76px;
+      resize: vertical;
+      border: 1px solid var(--panel-border);
+      border-radius: 12px;
+      padding: 10px 12px;
+      background: var(--panel);
+      color: var(--ink);
+      font: inherit;
+      font-size: 12px;
+      line-height: 1.5;
+    }
+
+    .backlog-assistant-actions {
+      display: flex;
+      justify-content: flex-end;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .backlog-assistant-btn {
+      border-radius: 999px;
+      padding: 8px 14px;
+      font-size: 11px;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    .backlog-assistant-btn.primary {
+      border: none;
+      background: var(--accent);
+      color: #ffffff;
+    }
+
+    .backlog-assistant-btn.secondary {
+      border: 1px solid var(--panel-border);
+      background: transparent;
+      color: var(--ink);
+    }
+
+    .backlog-assistant-btn:disabled {
+      opacity: 0.55;
+      cursor: not-allowed;
+    }
+
+    .backlog-ai-results {
+      display: grid;
+      gap: 10px;
+    }
+
+    .backlog-ai-placement {
+      padding: 12px;
+      border: 1px solid var(--panel-border);
+      border-radius: 14px;
+      background: var(--panel);
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .backlog-ai-placement-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 10px;
+    }
+
+    .backlog-ai-placement-type {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--ink-soft);
+    }
+
+    .backlog-ai-placement-label {
+      margin-top: 3px;
+      font-size: 12px;
+      font-weight: 700;
+    }
+
+    .backlog-ai-placement-confidence {
+      padding: 4px 7px;
+      border-radius: 999px;
+      background: var(--accent-soft);
+      color: var(--ink);
+      font-size: 10px;
+      font-weight: 700;
+      text-transform: uppercase;
+    }
+
+    .backlog-ai-placement-title {
+      font-size: 13px;
+      font-weight: 700;
+      line-height: 1.4;
+    }
+
+    .backlog-ai-placement-meta,
+    .backlog-ai-placement-copy {
+      font-size: 11px;
+      color: var(--ink-soft);
+      line-height: 1.5;
+    }
+
+    .backlog-ai-placement-actions {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .backlog-ai-placement-apply {
+      border: none;
+      border-radius: 999px;
+      padding: 7px 12px;
+      background: var(--accent);
+      color: #ffffff;
+      font-size: 11px;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    .backlog-ai-placement-apply:disabled {
+      opacity: 0.55;
+      cursor: not-allowed;
+    }
   </style>
 </head>
 
@@ -4234,6 +4464,27 @@
             <button id="add-backlog-btn"
               style="border:none;background:var(--accent);color:#fff;border-radius:4px;padding:5px 10px;font-size:11px;cursor:pointer;">Add</button>
           </div>
+          <div class="backlog-assistant" id="backlog-ai-assistant">
+            <div class="backlog-assistant-header">
+              <div>
+                <div class="backlog-assistant-title">AI Task Planner</div>
+                <div class="backlog-assistant-subtitle" id="backlog-ai-target-label">
+                  Tell Gemini what needs to get done and it will suggest the best place to capture it.
+                </div>
+              </div>
+              <div class="backlog-assistant-chip">Gemini</div>
+            </div>
+            <div class="backlog-assistant-thread" id="backlog-ai-thread"></div>
+            <div class="backlog-assistant-compose">
+              <textarea id="backlog-ai-input"
+                placeholder="Example: Draft the Friday blast copy and figure out the landing page updates."></textarea>
+              <div class="backlog-assistant-actions">
+                <button class="backlog-assistant-btn secondary" id="backlog-ai-clear" type="button">Clear</button>
+                <button class="backlog-assistant-btn primary" id="backlog-ai-submit" type="button">Suggest Placement</button>
+              </div>
+            </div>
+            <div class="backlog-ai-results" id="backlog-ai-results"></div>
+          </div>
         </section>
 
         <!-- Gamification Section (Bird/Stats) -->
@@ -4660,6 +4911,7 @@
       },
       projects: [],               // Joint projects list
       weeklyTasks: [],           // Weekly tasks for current week
+      weeklyPlannerEntries: [],
       currentWeekKey: null,      // '2025-W52' format
       userDbPrefs: null,         // User preferences from D1
       coinBalance: 0,            // Coin reward balance (Finch-style)
@@ -4669,6 +4921,11 @@
       monthlyCategoryDefs: null, // [{key,label}]
       annualCategoryDefs: null,
       metricsRange: 'week', // NEW: 'day' | 'week' | 'month'
+      scheduleAssistant: {
+        messages: [],
+        response: null,
+        loading: false
+      },
     };
 
 
@@ -4758,6 +5015,7 @@
       renderMonthlyGoals();
       renderAnnualGoals();
       renderPillars();
+      renderScheduleAssistant();
     }
 
 
@@ -7470,6 +7728,7 @@
           emailTool.style.display = isKevin ? "flex" : "none";
         }
       }
+      renderScheduleAssistant();
     }
 
     // ===== EVENT HANDLERS =====
@@ -7496,6 +7755,7 @@
           const userOverlay = document.getElementById("user-overlay");
           if (userOverlay) userOverlay.classList.add("hidden");
           await refreshAllData();
+          initBacklogUI();
           startLiveSync(); // Start live sync after user login
         });
       }
@@ -7825,6 +8085,484 @@
 
 
     // ===== BACKLOG LOGIC =====
+    function getScheduleAssistantTargetUser() {
+      return state.activeUser || state.currentUser || null;
+    }
+
+    function trimScheduleAssistantMessages() {
+      if (!state.scheduleAssistant || !Array.isArray(state.scheduleAssistant.messages)) return;
+      if (state.scheduleAssistant.messages.length > 8) {
+        state.scheduleAssistant.messages = state.scheduleAssistant.messages.slice(-8);
+      }
+    }
+
+    function getWeeklyPlannerColumnForUser(user) {
+      if (!user || !user.name) return null;
+      const allowed = ["Erica", "Katie", "Kevin", "Jenna", "Meighan"];
+      const lower = user.name.toLowerCase();
+      return allowed.find(name => lower.includes(name.toLowerCase())) || null;
+    }
+
+    function formatAssistantShortDate(dateKeyValue) {
+      if (!dateKeyValue) return "";
+      const dateObj = parseDateKey(dateKeyValue);
+      return dateObj.toLocaleDateString("en-US", { weekday: "short", month: "short", day: "numeric" });
+    }
+
+    function buildAssistantCalendarWeekDays(monthTasks) {
+      const weekStart = getMonday(new Date(state.currentMonthDate));
+      const days = [];
+
+      for (let i = 0; i < 5; i++) {
+        const dateObj = addDays(weekStart, i);
+        const key = getLocalDateString(dateObj);
+        const tasksForDay = monthTasks.filter(task => task.task_date === key);
+        const pendingTasks = tasksForDay.filter(task => task.status === "pending").length;
+        const inProgressTasks = tasksForDay.filter(task => task.status === "in_progress").length;
+        const doneTasks = tasksForDay.filter(task => task.status === "done").length;
+
+        days.push({
+          date: key,
+          label: dateObj.toLocaleDateString("en-US", {
+            weekday: "short",
+            month: "short",
+            day: "numeric"
+          }),
+          totalTasks: tasksForDay.length,
+          activeTasks: pendingTasks + inProgressTasks,
+          pendingTasks,
+          inProgressTasks,
+          doneTasks,
+          taskTitles: tasksForDay.slice(0, 6).map(task => task.title || "(Untitled)")
+        });
+      }
+
+      return days;
+    }
+
+    function buildAssistantWeeklyPlannerSummary(weeklyEntries, targetUser) {
+      const column = getWeeklyPlannerColumnForUser(targetUser);
+      const rows = ["1", "2", "3", "4", "5"];
+
+      if (!column) {
+        return {
+          column: null,
+          openPriorityRows: [],
+          filledPriorities: []
+        };
+      }
+
+      const filledPriorities = [];
+      const openPriorityRows = [];
+
+      rows.forEach(row => {
+        const entry = weeklyEntries.find(item =>
+          item.category === "priorities" &&
+          String(item.row_key) === row &&
+          String(item.col_key) === column
+        );
+        const value = entry && entry.value ? String(entry.value).trim() : "";
+
+        if (value) {
+          filledPriorities.push({ row, value });
+        } else {
+          openPriorityRows.push(row);
+        }
+      });
+
+      return {
+        column,
+        openPriorityRows,
+        filledPriorities
+      };
+    }
+
+    function buildAssistantMonthSummary(monthKey, monthTasks, monthGoals) {
+      const countsByDate = {};
+      monthTasks.forEach(task => {
+        if (!task.task_date || !task.task_date.startsWith(monthKey)) return;
+        if (!countsByDate[task.task_date]) {
+          countsByDate[task.task_date] = { date: task.task_date, totalTasks: 0, activeTasks: 0 };
+        }
+        countsByDate[task.task_date].totalTasks += 1;
+        if (task.status === "pending" || task.status === "in_progress") {
+          countsByDate[task.task_date].activeTasks += 1;
+        }
+      });
+
+      const goalsByCategory = {};
+      MONTHLY_CATEGORIES.forEach(category => {
+        goalsByCategory[category] = {
+          category,
+          count: 0,
+          titles: []
+        };
+      });
+
+      monthGoals.forEach(goal => {
+        const category = MONTHLY_CATEGORIES.includes(goal.category) ? goal.category : MONTHLY_CATEGORIES[0];
+        if (!goalsByCategory[category]) {
+          goalsByCategory[category] = { category, count: 0, titles: [] };
+        }
+        goalsByCategory[category].count += 1;
+        if (goal.title && goalsByCategory[category].titles.length < 6) {
+          goalsByCategory[category].titles.push(goal.title);
+        }
+      });
+
+      return {
+        key: monthKey,
+        taskCount: monthTasks.length,
+        activeTaskCount: monthTasks.filter(task => task.status === "pending" || task.status === "in_progress").length,
+        goalCount: monthGoals.length,
+        availableCategories: [...MONTHLY_CATEGORIES],
+        taskCountsByDate: Object.values(countsByDate).sort((a, b) => a.date.localeCompare(b.date)),
+        goalCountsByCategory: Object.values(goalsByCategory)
+      };
+    }
+
+    async function buildScheduleAssistantSnapshot(targetUser) {
+      const monthKey = monthKeyFromDate(state.currentMonthDate);
+      const userId = targetUser.id;
+      const [monthTasks, backlogTasks, monthGoals, weeklyEntries] = await Promise.all([
+        apiGet(`/daily-tasks?month=${encodeURIComponent(monthKey)}&assignedToId=${encodeURIComponent(userId)}`),
+        apiGet(`/daily-tasks?month=1900-01&assignedToId=${encodeURIComponent(userId)}`),
+        apiGet(`/monthly-goals?month=${encodeURIComponent(monthKey)}&ownerId=${encodeURIComponent(userId)}`),
+        loadWeeklyPlan(currentWeeklyStart)
+      ]);
+
+      const calendarWeekDays = buildAssistantCalendarWeekDays(monthTasks);
+      const weeklyPlanner = buildAssistantWeeklyPlannerSummary(weeklyEntries, targetUser);
+      const visibleBacklog = backlogTasks.filter(task => task.status !== "done");
+
+      return {
+        today: getLocalDateString(new Date()),
+        targetUser: {
+          id: targetUser.id,
+          name: targetUser.name,
+          email: targetUser.email,
+          weeklyPlannerColumn: weeklyPlanner.column
+        },
+        calendarWeek: {
+          label: calendarWeekDays.length
+            ? `${calendarWeekDays[0].label} to ${calendarWeekDays[calendarWeekDays.length - 1].label}`
+            : "",
+          days: calendarWeekDays
+        },
+        weeklyPlanner,
+        month: buildAssistantMonthSummary(monthKey, monthTasks, monthGoals),
+        backlog: {
+          count: visibleBacklog.length,
+          titles: visibleBacklog.slice(0, 12).map(task => task.title || "(Untitled)")
+        }
+      };
+    }
+
+    function getScheduleAssistantApplyLabel(placement) {
+      if (!placement) return "Apply";
+      if (placement.type === "day") return "Add to day";
+      if (placement.type === "week") return "Add to weekly plan";
+      if (placement.type === "month") return "Add as monthly goal";
+      return "Add to backlog";
+    }
+
+    function matchMonthlyCategoryKey(rawCategory) {
+      const lower = String(rawCategory || "").trim().toLowerCase();
+      if (!lower) return MONTHLY_CATEGORIES[0];
+      const exact = MONTHLY_CATEGORIES.find(category => category.toLowerCase() === lower);
+      if (exact) return exact;
+      const partial = MONTHLY_CATEGORIES.find(category =>
+        lower.includes(category.toLowerCase()) || category.toLowerCase().includes(lower)
+      );
+      return partial || MONTHLY_CATEGORIES[0];
+    }
+
+    function renderScheduleAssistant() {
+      const targetLabel = document.getElementById("backlog-ai-target-label");
+      const thread = document.getElementById("backlog-ai-thread");
+      const results = document.getElementById("backlog-ai-results");
+      const submitBtn = document.getElementById("backlog-ai-submit");
+      const targetUser = getScheduleAssistantTargetUser();
+
+      if (targetLabel) {
+        if (!state.currentUser) {
+          targetLabel.textContent = "Select a user first, then ask Gemini where a task should go.";
+        } else if (targetUser && state.currentUser && targetUser.id !== state.currentUser.id) {
+          targetLabel.textContent = `Planning against ${targetUser.name}'s current load across the week, backlog, and monthly board.`;
+        } else if (targetUser) {
+          targetLabel.textContent = `Planning against ${targetUser.name}'s current load across the week, backlog, and monthly board.`;
+        } else {
+          targetLabel.textContent = "Tell Gemini what needs to get done and it will suggest the best place to capture it.";
+        }
+      }
+
+      if (submitBtn) {
+        submitBtn.disabled = state.scheduleAssistant.loading || !state.currentUser;
+      }
+
+      if (thread) {
+        thread.innerHTML = "";
+
+        if (!state.scheduleAssistant.messages.length && !state.scheduleAssistant.loading) {
+          const empty = document.createElement("div");
+          empty.className = "backlog-ai-empty";
+          empty.textContent =
+            "Type a task in plain English. The assistant will look at this week's task density, the current monthly strategies, and your backlog before suggesting where the work belongs.";
+          thread.appendChild(empty);
+        } else {
+          state.scheduleAssistant.messages.forEach(message => {
+            const bubble = document.createElement("div");
+            bubble.className = `backlog-ai-message ${message.role === "user" ? "user" : "assistant"}`;
+            bubble.textContent = message.text;
+            thread.appendChild(bubble);
+          });
+        }
+
+        if (state.scheduleAssistant.loading) {
+          const loadingBubble = document.createElement("div");
+          loadingBubble.className = "backlog-ai-message assistant";
+          loadingBubble.textContent = "Analyzing the current week, weekly planner, backlog, and monthly goals...";
+          thread.appendChild(loadingBubble);
+        }
+
+        thread.scrollTop = thread.scrollHeight;
+      }
+
+      if (!results) return;
+      results.innerHTML = "";
+
+      const response = state.scheduleAssistant.response;
+      if (!response || !Array.isArray(response.placements) || response.placements.length === 0) return;
+
+      response.placements.forEach((placement, index) => {
+        const card = document.createElement("div");
+        card.className = "backlog-ai-placement";
+
+        const top = document.createElement("div");
+        top.className = "backlog-ai-placement-top";
+
+        const topLeft = document.createElement("div");
+        const type = document.createElement("div");
+        type.className = "backlog-ai-placement-type";
+        type.textContent = placement.type || "backlog";
+        const label = document.createElement("div");
+        label.className = "backlog-ai-placement-label";
+        label.textContent = placement.label || "Suggested placement";
+        topLeft.appendChild(type);
+        topLeft.appendChild(label);
+
+        const confidence = document.createElement("div");
+        confidence.className = "backlog-ai-placement-confidence";
+        confidence.textContent = placement.confidence || "medium";
+
+        top.appendChild(topLeft);
+        top.appendChild(confidence);
+        card.appendChild(top);
+
+        const title = document.createElement("div");
+        title.className = "backlog-ai-placement-title";
+        title.textContent = placement.title || response.normalizedTaskTitle || "New task";
+        card.appendChild(title);
+
+        const meta = document.createElement("div");
+        meta.className = "backlog-ai-placement-meta";
+        const metaParts = [];
+        if (placement.type === "day" && placement.date) {
+          metaParts.push(formatAssistantShortDate(placement.date));
+        }
+        if (placement.type === "week" && placement.weekRowKey && placement.weekColumnKey) {
+          metaParts.push(`Weekly priorities row ${placement.weekRowKey} for ${placement.weekColumnKey}`);
+        }
+        if (placement.type === "month" && placement.monthCategory) {
+          metaParts.push(`Monthly category: ${placement.monthCategory}`);
+        }
+        if (placement.type === "backlog") {
+          metaParts.push("Stored as backlog until you are ready to schedule it");
+        }
+        if (response.source && response.source !== "gemini") {
+          metaParts.push("Fallback plan");
+        }
+        meta.textContent = metaParts.join(" | ");
+        card.appendChild(meta);
+
+        const rationale = document.createElement("div");
+        rationale.className = "backlog-ai-placement-copy";
+        rationale.textContent = placement.rationale || response.overallReasoning || "";
+        card.appendChild(rationale);
+
+        const actions = document.createElement("div");
+        actions.className = "backlog-ai-placement-actions";
+
+        const notes = document.createElement("div");
+        notes.className = "backlog-ai-placement-copy";
+        notes.textContent = placement.notes || "";
+        actions.appendChild(notes);
+
+        const applyBtn = document.createElement("button");
+        applyBtn.className = "backlog-ai-placement-apply";
+        applyBtn.textContent = placement.applied ? "Applied" : getScheduleAssistantApplyLabel(placement);
+        applyBtn.dataset.placementIndex = String(index);
+        applyBtn.disabled = !!placement.applied;
+        actions.appendChild(applyBtn);
+
+        card.appendChild(actions);
+        results.appendChild(card);
+      });
+    }
+
+    async function handleScheduleAssistantSubmit() {
+      const input = document.getElementById("backlog-ai-input");
+      const rawTask = input ? input.value.trim() : "";
+      const targetUser = getScheduleAssistantTargetUser();
+
+      if (!rawTask) return;
+      if (!state.currentUser) {
+        showToast("Select a user first", true);
+        return;
+      }
+      if (!targetUser) {
+        showToast("Pick who you are planning for", true);
+        return;
+      }
+
+      state.scheduleAssistant.messages.push({ role: "user", text: rawTask });
+      trimScheduleAssistantMessages();
+      state.scheduleAssistant.loading = true;
+      state.scheduleAssistant.response = null;
+      if (input) input.value = "";
+      renderScheduleAssistant();
+
+      try {
+        const snapshot = await buildScheduleAssistantSnapshot(targetUser);
+        const response = await fetch(`${API_BASE}/ai/schedule-suggest`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            "Accept": "application/json"
+          },
+          body: JSON.stringify({
+            task: rawTask,
+            snapshot
+          })
+        });
+
+        const data = await response.json().catch(() => ({}));
+        if (!response.ok) {
+          throw new Error(data.error || "AI planning failed");
+        }
+
+        state.scheduleAssistant.response = data;
+        state.scheduleAssistant.messages.push({
+          role: "assistant",
+          text: data.assistantMessage || data.overallReasoning || "I found a few placement options."
+        });
+        trimScheduleAssistantMessages();
+      } catch (error) {
+        console.error(error);
+        state.scheduleAssistant.messages.push({
+          role: "assistant",
+          text: `I could not generate a suggestion right now. ${error.message || "Please try again."}`
+        });
+        trimScheduleAssistantMessages();
+        state.scheduleAssistant.response = null;
+      } finally {
+        state.scheduleAssistant.loading = false;
+        renderScheduleAssistant();
+      }
+    }
+
+    async function applyScheduleAssistantPlacement(index) {
+      const response = state.scheduleAssistant.response;
+      const placement = response && Array.isArray(response.placements) ? response.placements[index] : null;
+      const targetUser = getScheduleAssistantTargetUser();
+
+      if (!placement || !targetUser || !state.currentUser) return;
+
+      try {
+        if (placement.type === "day" || placement.type === "backlog") {
+          await apiSend("/daily-tasks", "POST", {
+            title: placement.title || response.normalizedTaskTitle || "New task",
+            notes: placement.notes || "",
+            task_date: placement.type === "day" && placement.date ? placement.date : BACKLOG_DATE,
+            assigned_to_id: targetUser.id,
+            created_by_id: state.currentUser.id,
+            assigned_by_id: state.currentUser.id,
+            status: "pending"
+          });
+
+          await Promise.all([loadDailyTasks(), loadBacklogTasks()]);
+        } else if (placement.type === "week") {
+          await updateWeeklyEntry("priorities", placement.weekRowKey, placement.weekColumnKey, placement.title);
+          await renderWeeklyPlanner();
+        } else if (placement.type === "month") {
+          await apiSend("/monthly-goals", "POST", {
+            title: placement.title || response.normalizedTaskTitle || "New monthly goal",
+            description: placement.notes || response.overallReasoning || "",
+            category: matchMonthlyCategoryKey(placement.monthCategory),
+            month_key: monthKeyFromDate(state.currentMonthDate),
+            owner_id: targetUser.id,
+            assignee_ids: [targetUser.id]
+          });
+
+          await loadMonthlyGoals();
+        }
+
+        placement.applied = true;
+        renderScheduleAssistant();
+        showToast("Suggestion applied");
+      } catch (error) {
+        console.error(error);
+        showToast("Could not apply suggestion", true);
+      }
+    }
+
+    function clearScheduleAssistant() {
+      state.scheduleAssistant.messages = [];
+      state.scheduleAssistant.response = null;
+      state.scheduleAssistant.loading = false;
+      renderScheduleAssistant();
+    }
+
+    function initScheduleAssistantUI() {
+      const submitBtn = document.getElementById("backlog-ai-submit");
+      const clearBtn = document.getElementById("backlog-ai-clear");
+      const input = document.getElementById("backlog-ai-input");
+      const results = document.getElementById("backlog-ai-results");
+
+      if (submitBtn && !submitBtn.dataset.bound) {
+        submitBtn.dataset.bound = "true";
+        submitBtn.addEventListener("click", handleScheduleAssistantSubmit);
+      }
+
+      if (clearBtn && !clearBtn.dataset.bound) {
+        clearBtn.dataset.bound = "true";
+        clearBtn.addEventListener("click", clearScheduleAssistant);
+      }
+
+      if (input && !input.dataset.bound) {
+        input.dataset.bound = "true";
+        input.addEventListener("keydown", (event) => {
+          if ((event.ctrlKey || event.metaKey) && event.key === "Enter") {
+            event.preventDefault();
+            handleScheduleAssistantSubmit();
+          }
+        });
+      }
+
+      if (results && !results.dataset.bound) {
+        results.dataset.bound = "true";
+        results.addEventListener("click", (event) => {
+          const button = event.target.closest("[data-placement-index]");
+          if (!button) return;
+          const index = Number(button.dataset.placementIndex);
+          if (Number.isNaN(index)) return;
+          applyScheduleAssistantPlacement(index);
+        });
+      }
+
+      renderScheduleAssistant();
+    }
+
     async function loadBacklogTasks() {
       try {
         let targetId = state.calendarOwnerId;
@@ -8012,14 +8750,16 @@
       const addBtn = document.getElementById("add-backlog-btn");
       const input = document.getElementById("new-backlog-input");
 
-      if (container) {
+      if (container && !container.dataset.boundBacklogDrop) {
+        container.dataset.boundBacklogDrop = "true";
         container.addEventListener("dragover", onDayDragOver);
         container.addEventListener("dragenter", onDayDragEnter);
         container.addEventListener("dragleave", onDayDragLeave);
         container.addEventListener("drop", onBacklogDrop);
       }
 
-      if (addBtn && input) {
+      if (addBtn && input && !addBtn.dataset.boundBacklogAdd) {
+        addBtn.dataset.boundBacklogAdd = "true";
         const handler = async () => {
           const val = input.value.trim();
           if (!val) return;
@@ -8051,6 +8791,8 @@
           if (e.key === "Enter") handler();
         });
       }
+
+      initScheduleAssistantUI();
     }
 
     function onBacklogDrop(e) {
@@ -12108,9 +12850,12 @@
           // headers: { "x-user-id": state.currentUser ? state.currentUser.id : "" } // Not strictly needed for GET if public, but good practice
         });
         if (!res.ok) throw new Error("Failed to load");
-        return await res.json();
+        const data = await res.json();
+        state.weeklyPlannerEntries = Array.isArray(data) ? data : [];
+        return state.weeklyPlannerEntries;
       } catch (e) {
         console.error(e);
+        state.weeklyPlannerEntries = [];
         return [];
       }
     }
