@@ -3470,6 +3470,10 @@
       background: rgba(245, 158, 11, 0.05);
     }
 
+    .user-col-mariam {
+      background: rgba(6, 182, 212, 0.05);
+    }
+
     .user-col-meighan {
       background: rgba(139, 92, 246, 0.05);
     }
@@ -3489,6 +3493,10 @@
 
     body[data-theme="dark"] .user-col-jenna {
       background: rgba(245, 158, 11, 0.1);
+    }
+
+    body[data-theme="dark"] .user-col-mariam {
+      background: rgba(6, 182, 212, 0.1);
     }
 
     body[data-theme="dark"] .user-col-meighan {
@@ -3629,6 +3637,272 @@
       padding: 8px !important;
       min-height: 60px;
     }
+
+    .backlog-assistant {
+      margin: 0 10px 10px;
+      padding: 12px;
+      border: 1px solid var(--panel-border);
+      border-radius: 16px;
+      background: linear-gradient(180deg, rgba(0, 0, 0, 0.02), rgba(0, 0, 0, 0.05));
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      min-height: 320px;
+    }
+
+    body[data-theme="dark"] .backlog-assistant {
+      background: linear-gradient(180deg, rgba(255, 255, 255, 0.03), rgba(255, 255, 255, 0.06));
+    }
+
+    .backlog-assistant-header {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 12px;
+    }
+
+    .backlog-assistant-title {
+      font-size: 13px;
+      font-weight: 700;
+    }
+
+    .backlog-assistant-subtitle {
+      margin-top: 4px;
+      font-size: 11px;
+      color: var(--ink-soft);
+      line-height: 1.4;
+    }
+
+    .backlog-assistant-thread {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      min-height: 120px;
+      max-height: 220px;
+      overflow: auto;
+      padding-right: 4px;
+    }
+
+    .backlog-ai-empty {
+      padding: 14px;
+      border: 1px dashed rgba(127, 127, 127, 0.35);
+      border-radius: 12px;
+      background: var(--panel);
+      font-size: 11px;
+      color: var(--ink-soft);
+      line-height: 1.5;
+    }
+
+    .backlog-ai-message {
+      max-width: 100%;
+      padding: 10px 12px;
+      border-radius: 14px;
+      border: 1px solid var(--panel-border);
+      background: var(--panel);
+      font-size: 12px;
+      line-height: 1.5;
+      white-space: pre-wrap;
+    }
+
+    .backlog-ai-message.user {
+      margin-left: auto;
+      background: #000000;
+      color: #ffffff;
+      border-color: #000000;
+    }
+
+    body[data-theme="dark"] .backlog-ai-message.user {
+      background: #ffffff;
+      color: #111111;
+      border-color: #ffffff;
+    }
+
+    .backlog-ai-message.assistant {
+      margin-right: auto;
+    }
+
+    .backlog-assistant-compose {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .backlog-assistant-compose textarea {
+      width: 100%;
+      min-height: 76px;
+      resize: vertical;
+      border: 1px solid var(--panel-border);
+      border-radius: 12px;
+      padding: 10px 12px;
+      background: var(--panel);
+      color: var(--ink);
+      font: inherit;
+      font-size: 12px;
+      line-height: 1.5;
+    }
+
+    .backlog-assistant-actions {
+      display: flex;
+      justify-content: flex-end;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .backlog-assistant-tools {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .backlog-assistant-btn.voice {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .backlog-assistant-voice-indicator {
+      width: 10px;
+      height: 10px;
+      border-radius: 999px;
+      background: var(--ink-soft);
+      flex-shrink: 0;
+    }
+
+    .backlog-assistant-btn.voice[data-state="listening"] .backlog-assistant-voice-indicator {
+      background: var(--danger);
+      box-shadow: 0 0 0 4px rgba(225, 29, 72, 0.14);
+    }
+
+    .backlog-assistant-btn.voice[data-state="transcribing"] .backlog-assistant-voice-indicator,
+    .backlog-assistant-btn.voice[data-state="loading"] .backlog-assistant-voice-indicator {
+      background: var(--accent);
+    }
+
+    .backlog-assistant-voice-status {
+      flex: 1 1 240px;
+      font-size: 11px;
+      color: var(--ink-soft);
+      line-height: 1.45;
+    }
+
+    .backlog-assistant-voice-status[data-tone="active"] {
+      color: var(--ink);
+      font-weight: 600;
+    }
+
+    .backlog-assistant-voice-status[data-tone="error"] {
+      color: var(--danger);
+    }
+
+    .backlog-assistant-btn {
+      border-radius: 999px;
+      padding: 8px 14px;
+      font-size: 11px;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    .backlog-assistant-btn.primary {
+      border: none;
+      background: var(--accent);
+      color: #ffffff;
+    }
+
+    .backlog-assistant-btn.secondary {
+      border: 1px solid var(--panel-border);
+      background: transparent;
+      color: var(--ink);
+    }
+
+    .backlog-assistant-btn:disabled {
+      opacity: 0.55;
+      cursor: not-allowed;
+    }
+
+    .backlog-ai-results {
+      display: grid;
+      gap: 10px;
+    }
+
+    .backlog-ai-placement {
+      padding: 12px;
+      border: 1px solid var(--panel-border);
+      border-radius: 14px;
+      background: var(--panel);
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .backlog-ai-placement-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 10px;
+    }
+
+    .backlog-ai-placement-type {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--ink-soft);
+    }
+
+    .backlog-ai-placement-label {
+      margin-top: 3px;
+      font-size: 12px;
+      font-weight: 700;
+    }
+
+    .backlog-ai-placement-confidence {
+      padding: 4px 7px;
+      border-radius: 999px;
+      background: var(--accent-soft);
+      color: var(--ink);
+      font-size: 10px;
+      font-weight: 700;
+      text-transform: uppercase;
+    }
+
+    .backlog-ai-placement-title {
+      font-size: 13px;
+      font-weight: 700;
+      line-height: 1.4;
+    }
+
+    .backlog-ai-placement-meta,
+    .backlog-ai-placement-copy {
+      font-size: 11px;
+      color: var(--ink-soft);
+      line-height: 1.5;
+    }
+
+    .backlog-ai-placement-actions {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .backlog-ai-placement-apply {
+      border: none;
+      border-radius: 999px;
+      padding: 7px 12px;
+      background: var(--accent);
+      color: #ffffff;
+      font-size: 11px;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    .backlog-ai-placement-apply:disabled {
+      opacity: 0.55;
+      cursor: not-allowed;
+    }
   </style>
 </head>
 
@@ -3645,7 +3919,7 @@
         <option value="">Loading team...</option>
       </select>
       <button id="user-select-confirm">Open Wrap Sheet</button>
-      <small>This is internal for BER: Meighan, Kevin, Erica, Jenna & Katie.</small>
+      <small>This is internal for BER: Meighan, Kevin, Erica, Jenna, Katie & Mariam.</small>
     </div>
   </div>
 
@@ -4234,6 +4508,37 @@
             <button id="add-backlog-btn"
               style="border:none;background:var(--accent);color:#fff;border-radius:4px;padding:5px 10px;font-size:11px;cursor:pointer;">Add</button>
           </div>
+          <div class="backlog-assistant" id="backlog-ai-assistant">
+            <div class="backlog-assistant-header">
+              <div>
+                <div class="backlog-assistant-title">AI Daily Task Planner</div>
+                <div class="backlog-assistant-subtitle" id="backlog-ai-target-label">
+                  Describe the work and the planner will split it into daily tasks on the least busy days.
+                </div>
+              </div>
+            </div>
+            <div class="backlog-assistant-thread" id="backlog-ai-thread"></div>
+            <div class="backlog-assistant-compose">
+              <textarea id="backlog-ai-input"
+                placeholder="Example: I need to run MLS stats this week, teach a class on Thursday at 3pm, and this Friday at 9am I have a doctors appointment."></textarea>
+              <div class="backlog-assistant-tools">
+                <button class="backlog-assistant-btn secondary voice" id="backlog-ai-voice" type="button"
+                  data-state="idle">
+                  <span class="backlog-assistant-voice-indicator" aria-hidden="true"></span>
+                  <span id="backlog-ai-voice-label">Talk to Planner</span>
+                </button>
+                <div class="backlog-assistant-voice-status" id="backlog-ai-voice-status">
+                  Speak a plan, review the transcript in the box above, then edit or delete anything before building
+                  tasks.
+                </div>
+              </div>
+              <div class="backlog-assistant-actions">
+                <button class="backlog-assistant-btn secondary" id="backlog-ai-clear" type="button">Clear</button>
+                <button class="backlog-assistant-btn primary" id="backlog-ai-submit" type="button">Build Daily Tasks</button>
+              </div>
+            </div>
+            <div class="backlog-ai-results" id="backlog-ai-results"></div>
+          </div>
         </section>
 
         <!-- Gamification Section (Bird/Stats) -->
@@ -4370,7 +4675,7 @@
           <div class="projects-grid" id="projects-grid"></div>
         </section>
 
-        <!-- Weekly Tasks (BETA - Jenna only) -->
+        <!-- Weekly Tasks (BETA - Jenna and Mariam) -->
         <section class="panel draggable-section" id="section-weekly-tasks" draggable="true" style="display: none;">
           <div class="panel-header">
             <span class="section-drag-handle" title="Drag to reorder">⋮⋮</span>
@@ -4626,6 +4931,16 @@
       "Team Work": "var(--engage)" // Blue
     };
 
+    const CORE_TEAM_NAME_ORDER = ["Erica", "Katie", "Kevin", "Jenna", "Mariam", "Meighan"];
+    const TEAM_COLOR_BY_NAME = {
+      Erica: "#ec4899",
+      Katie: "#3b82f6",
+      Kevin: "#10b981",
+      Jenna: "#f59e0b",
+      Mariam: "#06b6d4",
+      Meighan: "#8b5cf6"
+    };
+
     const ANNUAL_CATEGORIES = [
       "Compliance/Audit",
       "Marketing",
@@ -4636,6 +4951,15 @@
     ];
 
     const BACKLOG_DATE = "1900-01-01";
+    const SCHEDULE_ASSISTANT_TRANSFORMERS_URL = "https://cdn.jsdelivr.net/npm/@huggingface/transformers@4.1.0";
+    const SCHEDULE_ASSISTANT_SPEECH_MODEL = "onnx-community/whisper-tiny.en";
+    const SCHEDULE_ASSISTANT_SPEECH_OPTIONS = {
+      device: "wasm",
+      dtype: {
+        encoder_model: "fp32",
+        decoder_model_merged: "fp32"
+      }
+    };
 
     const state = {
       users: [],
@@ -4660,6 +4984,7 @@
       },
       projects: [],               // Joint projects list
       weeklyTasks: [],           // Weekly tasks for current week
+      weeklyPlannerEntries: [],
       currentWeekKey: null,      // '2025-W52' format
       userDbPrefs: null,         // User preferences from D1
       coinBalance: 0,            // Coin reward balance (Finch-style)
@@ -4669,6 +4994,36 @@
       monthlyCategoryDefs: null, // [{key,label}]
       annualCategoryDefs: null,
       metricsRange: 'week', // NEW: 'day' | 'week' | 'month'
+      scheduleAssistant: {
+        messages: [],
+        response: null,
+        loading: false,
+        voice: {
+          loadingModel: false,
+          listening: false,
+          transcribing: false,
+          mode: "open-source",
+          status: "",
+          tone: "idle",
+          recorder: null,
+          stream: null,
+          audioChunks: [],
+          transcriber: null,
+          transcriberPromise: null,
+          recognition: null,
+          transcriptBuffer: "",
+          audioContext: null,
+          sourceNode: null,
+          processorNode: null,
+          monitorNode: null,
+          recordedSamples: [],
+          recordedLength: 0,
+          sampleRate: 0,
+          captureMode: null,
+          sessionId: 0,
+          cancelOnStop: false
+        }
+      },
     };
 
 
@@ -4676,6 +5031,22 @@
       "Compliance/Audit", "Marketing", "Products & Tools", "Personal Focus", "Moving the Needle", "Team Work"
     ];
     const DEFAULT_ANNUAL_KEYS = [...DEFAULT_MONTHLY_KEYS];
+
+    function matchesTeamName(name, teamName) {
+      return (name || "").toLowerCase().includes(teamName.toLowerCase());
+    }
+
+    function getCoreTeamUsers() {
+      return CORE_TEAM_NAME_ORDER.map(teamName => {
+        const matchingUser = (state.users || []).find(user => matchesTeamName(user.name, teamName));
+        return matchingUser || { id: `team:${teamName.toLowerCase()}`, name: teamName };
+      });
+    }
+
+    function getTeamColor(name) {
+      const matchedName = CORE_TEAM_NAME_ORDER.find(teamName => matchesTeamName(name, teamName));
+      return TEAM_COLOR_BY_NAME[matchedName] || "#9ca3af";
+    }
 
     function defaultCategoryDefs(keys) {
       return keys.map(k => ({ key: k, label: k }));
@@ -4758,6 +5129,7 @@
       renderMonthlyGoals();
       renderAnnualGoals();
       renderPillars();
+      renderScheduleAssistant();
     }
 
 
@@ -7348,7 +7720,7 @@
     async function loadUsers() {
       const allUsers = await apiGet("/users");
       // Filter to only show core BER staff
-      const allowedNames = ["kevin", "meighan", "jenna", "erica", "katie"];
+      const allowedNames = CORE_TEAM_NAME_ORDER.map(name => name.toLowerCase());
       const excludedNames = ["kevin test", "kevin weinkauff", "meighan harris", "test whale"];
       state.users = allUsers.filter(u => {
         const lower = u.name.toLowerCase();
@@ -7470,6 +7842,7 @@
           emailTool.style.display = isKevin ? "flex" : "none";
         }
       }
+      renderScheduleAssistant();
     }
 
     // ===== EVENT HANDLERS =====
@@ -7496,6 +7869,7 @@
           const userOverlay = document.getElementById("user-overlay");
           if (userOverlay) userOverlay.classList.add("hidden");
           await refreshAllData();
+          initBacklogUI();
           startLiveSync(); // Start live sync after user login
         });
       }
@@ -7825,6 +8199,1252 @@
 
 
     // ===== BACKLOG LOGIC =====
+    function getScheduleAssistantTargetUser() {
+      return state.activeUser || state.currentUser || null;
+    }
+
+    function trimScheduleAssistantMessages() {
+      if (!state.scheduleAssistant || !Array.isArray(state.scheduleAssistant.messages)) return;
+      if (state.scheduleAssistant.messages.length > 8) {
+        state.scheduleAssistant.messages = state.scheduleAssistant.messages.slice(-8);
+      }
+    }
+
+    function getScheduleAssistantVoiceState() {
+      if (!state.scheduleAssistant.voice) {
+        state.scheduleAssistant.voice = {
+          loadingModel: false,
+          listening: false,
+          transcribing: false,
+          mode: "open-source",
+          status: "",
+          tone: "idle",
+          recorder: null,
+          stream: null,
+          audioChunks: [],
+          transcriber: null,
+          transcriberPromise: null,
+          recognition: null,
+          transcriptBuffer: "",
+          audioContext: null,
+          sourceNode: null,
+          processorNode: null,
+          monitorNode: null,
+          recordedSamples: [],
+          recordedLength: 0,
+          sampleRate: 0,
+          captureMode: null,
+          sessionId: 0,
+          cancelOnStop: false
+        };
+      }
+      return state.scheduleAssistant.voice;
+    }
+
+    function canUseNativeSpeechRecognition() {
+      return typeof window !== "undefined" && !!(window.SpeechRecognition || window.webkitSpeechRecognition);
+    }
+
+    function getScheduleAssistantAudioContextClass() {
+      return typeof window === "undefined"
+        ? null
+        : (window.AudioContext || window.webkitAudioContext || null);
+    }
+
+    function canUseScheduleAssistantPcmCapture() {
+      const AudioContextClass = getScheduleAssistantAudioContextClass();
+      return !!(
+        navigator.mediaDevices &&
+        typeof navigator.mediaDevices.getUserMedia === "function" &&
+        AudioContextClass
+      );
+    }
+
+    function canUseScheduleAssistantMediaRecorder() {
+      return !!(
+        navigator.mediaDevices &&
+        typeof navigator.mediaDevices.getUserMedia === "function" &&
+        typeof MediaRecorder !== "undefined"
+      );
+    }
+
+    function getScheduleAssistantUnsupportedReason() {
+      if (typeof window !== "undefined" && !window.isSecureContext) {
+        return "Voice input requires HTTPS or localhost in this browser.";
+      }
+      if (!navigator.mediaDevices || typeof navigator.mediaDevices.getUserMedia !== "function") {
+        return "This browser does not expose microphone access through getUserMedia.";
+      }
+      return "This browser is missing the audio APIs needed for speech input.";
+    }
+
+    function formatScheduleAssistantVoiceError(error) {
+      if (!error) return "Could not start voice input.";
+      if (error.name === "NotAllowedError" || error.name === "PermissionDeniedError") {
+        return "Microphone access was blocked. Allow the mic and try again.";
+      }
+      if (error.name === "NotFoundError" || error.name === "DevicesNotFoundError") {
+        return "No microphone was found on this device.";
+      }
+      if (error.name === "NotReadableError" || error.name === "TrackStartError") {
+        return "The microphone is busy or unavailable right now.";
+      }
+      if (error.name === "AbortError") {
+        return "Voice capture was interrupted. Try again.";
+      }
+      return error.message || "Could not start voice input.";
+    }
+
+    function stopScheduleAssistantMediaStream(stream) {
+      if (!stream || typeof stream.getTracks !== "function") return;
+      stream.getTracks().forEach(track => {
+        try {
+          track.stop();
+        } catch (error) {
+          console.warn("Error stopping assistant media track", error);
+        }
+      });
+    }
+
+    function getScheduleAssistantRecorderMimeType() {
+      if (typeof MediaRecorder === "undefined" || typeof MediaRecorder.isTypeSupported !== "function") {
+        return "";
+      }
+
+      const mimeTypes = [
+        "audio/webm;codecs=opus",
+        "audio/webm",
+        "audio/mp4",
+        "audio/ogg;codecs=opus"
+      ];
+
+      return mimeTypes.find(type => MediaRecorder.isTypeSupported(type)) || "";
+    }
+
+    function flattenScheduleAssistantSamples(chunks, totalLength) {
+      if (!Array.isArray(chunks) || !chunks.length || !totalLength) {
+        return new Float32Array(0);
+      }
+
+      const merged = new Float32Array(totalLength);
+      let offset = 0;
+      chunks.forEach(chunk => {
+        merged.set(chunk, offset);
+        offset += chunk.length;
+      });
+      return merged;
+    }
+
+    function resampleScheduleAssistantSamples(samples, inputRate, outputRate = 16000) {
+      if (!(samples instanceof Float32Array) || !samples.length) {
+        return new Float32Array(0);
+      }
+      if (!inputRate || inputRate === outputRate) {
+        return samples;
+      }
+
+      const ratio = inputRate / outputRate;
+      const newLength = Math.max(1, Math.round(samples.length / ratio));
+      const result = new Float32Array(newLength);
+
+      for (let i = 0; i < newLength; i++) {
+        const start = Math.floor(i * ratio);
+        const end = Math.min(samples.length, Math.floor((i + 1) * ratio));
+
+        if (end <= start) {
+          result[i] = samples[Math.min(start, samples.length - 1)] || 0;
+          continue;
+        }
+
+        let sum = 0;
+        for (let j = start; j < end; j++) {
+          sum += samples[j];
+        }
+        result[i] = sum / (end - start);
+      }
+
+      return result;
+    }
+
+    function mixScheduleAssistantAudioBufferToMono(audioBuffer) {
+      if (!audioBuffer) return new Float32Array(0);
+      if (audioBuffer.numberOfChannels === 1) {
+        return new Float32Array(audioBuffer.getChannelData(0));
+      }
+
+      const scalingFactor = Math.sqrt(2);
+      const mono = new Float32Array(audioBuffer.length);
+      const channelCount = audioBuffer.numberOfChannels;
+
+      for (let sampleIndex = 0; sampleIndex < audioBuffer.length; sampleIndex++) {
+        let total = 0;
+        for (let channelIndex = 0; channelIndex < channelCount; channelIndex++) {
+          total += audioBuffer.getChannelData(channelIndex)[sampleIndex];
+        }
+        mono[sampleIndex] = (scalingFactor * total) / channelCount;
+      }
+
+      return mono;
+    }
+
+    async function decodeScheduleAssistantBlobToSamples(audioBlob) {
+      const AudioContextClass = getScheduleAssistantAudioContextClass();
+      if (!AudioContextClass) {
+        throw new Error("Audio decoding is not available in this browser.");
+      }
+
+      const audioContext = new AudioContextClass({ sampleRate: 16000 });
+
+      try {
+        const arrayBuffer = await audioBlob.arrayBuffer();
+        const decoded = await audioContext.decodeAudioData(arrayBuffer.slice(0));
+        const mono = mixScheduleAssistantAudioBufferToMono(decoded);
+        return resampleScheduleAssistantSamples(mono, decoded.sampleRate, 16000);
+      } finally {
+        if (typeof audioContext.close === "function") {
+          try {
+            await audioContext.close();
+          } catch (error) {
+            console.warn("Error closing assistant decode context", error);
+          }
+        }
+      }
+    }
+
+    function cleanupScheduleAssistantPcmCapture(voice) {
+      if (!voice) return;
+
+      if (voice.sourceNode && typeof voice.sourceNode.disconnect === "function") {
+        try {
+          voice.sourceNode.disconnect();
+        } catch (error) {
+          console.warn("Error disconnecting assistant source node", error);
+        }
+      }
+
+      if (voice.processorNode) {
+        voice.processorNode.onaudioprocess = null;
+        if (typeof voice.processorNode.disconnect === "function") {
+          try {
+            voice.processorNode.disconnect();
+          } catch (error) {
+            console.warn("Error disconnecting assistant processor node", error);
+          }
+        }
+      }
+
+      if (voice.monitorNode && typeof voice.monitorNode.disconnect === "function") {
+        try {
+          voice.monitorNode.disconnect();
+        } catch (error) {
+          console.warn("Error disconnecting assistant monitor node", error);
+        }
+      }
+
+      stopScheduleAssistantMediaStream(voice.stream);
+
+      if (voice.audioContext && typeof voice.audioContext.close === "function") {
+        voice.audioContext.close().catch(error => {
+          console.warn("Error closing assistant audio context", error);
+        });
+      }
+
+      voice.audioContext = null;
+      voice.sourceNode = null;
+      voice.processorNode = null;
+      voice.monitorNode = null;
+      voice.stream = null;
+      voice.captureMode = null;
+      voice.sampleRate = 0;
+    }
+
+    function appendTranscriptToScheduleAssistantInput(transcript) {
+      const cleaned = String(transcript || "").trim();
+      const input = document.getElementById("backlog-ai-input");
+      if (!input || !cleaned) return;
+
+      const existing = input.value.trim();
+      input.value = existing ? `${existing} ${cleaned}` : cleaned;
+      input.focus();
+      input.setSelectionRange(input.value.length, input.value.length);
+    }
+
+    async function ensureScheduleAssistantTranscriber() {
+      const voice = getScheduleAssistantVoiceState();
+      if (voice.transcriber) return voice.transcriber;
+      if (voice.transcriberPromise) return voice.transcriberPromise;
+
+      voice.loadingModel = true;
+      voice.status = "Loading the local voice model. The first run may take a minute.";
+      voice.tone = "active";
+      renderScheduleAssistant();
+
+      voice.transcriberPromise = (async () => {
+        const { pipeline, env } = await import(SCHEDULE_ASSISTANT_TRANSFORMERS_URL);
+        if (env) {
+          env.allowLocalModels = false;
+        }
+        const transcriber = await pipeline(
+          "automatic-speech-recognition",
+          SCHEDULE_ASSISTANT_SPEECH_MODEL,
+          SCHEDULE_ASSISTANT_SPEECH_OPTIONS
+        );
+        voice.transcriber = transcriber;
+        voice.mode = "open-source";
+        return transcriber;
+      })().catch(error => {
+        voice.transcriber = null;
+        throw error;
+      }).finally(() => {
+        voice.loadingModel = false;
+        voice.transcriberPromise = null;
+      });
+
+      return voice.transcriberPromise;
+    }
+
+    async function transcribeScheduleAssistantSamples(audioSamples) {
+      const transcriber = await ensureScheduleAssistantTranscriber();
+      const result = await transcriber(audioSamples, {
+        chunk_length_s: 30,
+        stride_length_s: 5
+      });
+      return String(result && result.text ? result.text : "").trim();
+    }
+
+    async function transcribeScheduleAssistantBlob(audioBlob) {
+      const decodedSamples = await decodeScheduleAssistantBlobToSamples(audioBlob);
+      return transcribeScheduleAssistantSamples(decodedSamples);
+    }
+
+    async function startScheduleAssistantPcmRecording() {
+      const voice = getScheduleAssistantVoiceState();
+      const AudioContextClass = getScheduleAssistantAudioContextClass();
+
+      if (!AudioContextClass) {
+        throw new Error("Web Audio is not available in this browser.");
+      }
+
+      const stream = await navigator.mediaDevices.getUserMedia({
+        audio: {
+          channelCount: 1,
+          echoCancellation: true,
+          noiseSuppression: true,
+          autoGainControl: true
+        }
+      });
+
+      const audioContext = new AudioContextClass();
+      await audioContext.resume().catch(() => { });
+
+      if (typeof audioContext.createScriptProcessor !== "function") {
+        stopScheduleAssistantMediaStream(stream);
+        throw new Error("This browser cannot create a PCM microphone recorder.");
+      }
+
+      const sourceNode = audioContext.createMediaStreamSource(stream);
+      const processorNode = audioContext.createScriptProcessor(4096, 1, 1);
+      const monitorNode = audioContext.createGain();
+      monitorNode.gain.value = 0;
+
+      voice.sessionId += 1;
+      voice.cancelOnStop = false;
+      voice.stream = stream;
+      voice.audioContext = audioContext;
+      voice.sourceNode = sourceNode;
+      voice.processorNode = processorNode;
+      voice.monitorNode = monitorNode;
+      voice.recordedSamples = [];
+      voice.recordedLength = 0;
+      voice.sampleRate = audioContext.sampleRate;
+      voice.captureMode = "pcm";
+      voice.mode = "open-source";
+      voice.listening = true;
+      voice.status = "Listening with the local planner mic. Click again when you are done talking.";
+      voice.tone = "active";
+
+      processorNode.onaudioprocess = event => {
+        if (!voice.listening || voice.captureMode !== "pcm") return;
+        const inputSamples = event.inputBuffer.getChannelData(0);
+        if (!inputSamples || !inputSamples.length) return;
+
+        voice.recordedSamples.push(new Float32Array(inputSamples));
+        voice.recordedLength += inputSamples.length;
+      };
+
+      sourceNode.connect(processorNode);
+      processorNode.connect(monitorNode);
+      monitorNode.connect(audioContext.destination);
+
+      renderScheduleAssistant();
+    }
+
+    async function finishScheduleAssistantPcmRecording(sessionId) {
+      const voice = getScheduleAssistantVoiceState();
+      const recordedSamples = flattenScheduleAssistantSamples(voice.recordedSamples, voice.recordedLength);
+      const sampleRate = voice.sampleRate || 16000;
+
+      voice.recordedSamples = [];
+      voice.recordedLength = 0;
+      cleanupScheduleAssistantPcmCapture(voice);
+
+      if (!recordedSamples.length) {
+        if (!voice.cancelOnStop) {
+          voice.status = "No speech recorded. Try again.";
+          voice.tone = "error";
+          renderScheduleAssistant();
+        }
+        return;
+      }
+
+      voice.transcribing = true;
+      voice.status = "Transcribing your voice note with the local model...";
+      voice.tone = "active";
+      renderScheduleAssistant();
+
+      try {
+        const normalizedSamples = resampleScheduleAssistantSamples(recordedSamples, sampleRate, 16000);
+        const transcript = await transcribeScheduleAssistantSamples(normalizedSamples);
+
+        if (voice.cancelOnStop || sessionId !== voice.sessionId) {
+          return;
+        }
+
+        if (!transcript) {
+          voice.status = "No speech detected. Try again.";
+          voice.tone = "error";
+          return;
+        }
+
+        appendTranscriptToScheduleAssistantInput(transcript);
+        voice.status = "Transcript added. Edit or delete anything in the box above before building tasks.";
+        voice.tone = "idle";
+      } catch (error) {
+        console.error("Schedule assistant PCM transcription failed", error);
+        if (!voice.cancelOnStop) {
+          voice.status = canUseNativeSpeechRecognition()
+            ? "Local transcription failed. Try again or use the browser fallback."
+            : "Local transcription failed. Please try again.";
+          voice.tone = "error";
+          showToast("Could not transcribe the recording", true);
+        }
+      } finally {
+        voice.transcribing = false;
+        renderScheduleAssistant();
+      }
+    }
+
+    async function startScheduleAssistantLocalRecording() {
+      const voice = getScheduleAssistantVoiceState();
+      const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+      const mimeType = getScheduleAssistantRecorderMimeType();
+      const recorder = mimeType ? new MediaRecorder(stream, { mimeType }) : new MediaRecorder(stream);
+      const sessionId = voice.sessionId + 1;
+
+      voice.sessionId = sessionId;
+      voice.cancelOnStop = false;
+      voice.stream = stream;
+      voice.recorder = recorder;
+      voice.audioChunks = [];
+      voice.captureMode = "media-recorder";
+      voice.mode = "open-source";
+      voice.listening = true;
+      voice.status = "Listening with the local planner mic. Click again when you are done talking.";
+      voice.tone = "active";
+      renderScheduleAssistant();
+
+      recorder.addEventListener("dataavailable", event => {
+        if (event.data && event.data.size > 0) {
+          voice.audioChunks.push(event.data);
+        }
+      });
+
+      recorder.addEventListener("error", event => {
+        console.error("Schedule assistant recorder error", event);
+        voice.listening = false;
+        voice.status = "The microphone stopped unexpectedly. Try again.";
+        voice.tone = "error";
+        stopScheduleAssistantMediaStream(voice.stream);
+        voice.stream = null;
+        voice.recorder = null;
+        voice.captureMode = null;
+        voice.audioChunks = [];
+        renderScheduleAssistant();
+      });
+
+      recorder.addEventListener("stop", async () => {
+        const recordedChunks = voice.audioChunks.slice();
+        const blobType = recorder.mimeType || mimeType || "audio/webm";
+
+        voice.audioChunks = [];
+        voice.listening = false;
+        stopScheduleAssistantMediaStream(voice.stream);
+        voice.stream = null;
+        voice.recorder = null;
+        voice.captureMode = null;
+
+        if (!recordedChunks.length) {
+          if (!voice.cancelOnStop) {
+            voice.status = "No speech recorded. Try again.";
+            voice.tone = "error";
+          }
+          renderScheduleAssistant();
+          return;
+        }
+
+        voice.transcribing = true;
+        voice.status = "Transcribing your voice note with the local model...";
+        voice.tone = "active";
+        renderScheduleAssistant();
+
+        try {
+          const transcript = await transcribeScheduleAssistantBlob(new Blob(recordedChunks, { type: blobType }));
+          if (voice.cancelOnStop || sessionId !== voice.sessionId) {
+            return;
+          }
+          if (!transcript) {
+            voice.status = "No speech detected. Try again.";
+            voice.tone = "error";
+            return;
+          }
+
+          appendTranscriptToScheduleAssistantInput(transcript);
+          voice.status = "Transcript added. Edit or delete anything in the box above before building tasks.";
+          voice.tone = "idle";
+        } catch (error) {
+          console.error("Schedule assistant transcription failed", error);
+          if (!voice.cancelOnStop) {
+            voice.status = canUseNativeSpeechRecognition()
+              ? "Local transcription failed. Try again or use the browser fallback."
+              : "Local transcription failed. Please try again.";
+            voice.tone = "error";
+            showToast("Could not transcribe the recording", true);
+          }
+        } finally {
+          voice.transcribing = false;
+          renderScheduleAssistant();
+        }
+      });
+
+      recorder.start();
+    }
+
+    async function startScheduleAssistantBrowserRecognition() {
+      const Recognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+      if (!Recognition) {
+        throw new Error("Speech recognition is not available in this browser.");
+      }
+
+      const voice = getScheduleAssistantVoiceState();
+      const recognition = new Recognition();
+      const sessionId = voice.sessionId + 1;
+
+      voice.sessionId = sessionId;
+      voice.cancelOnStop = false;
+      voice.recognition = recognition;
+      voice.transcriptBuffer = "";
+      voice.captureMode = "browser";
+      voice.mode = "browser";
+      voice.listening = true;
+      voice.status = "Listening in browser speech mode. Click again when you are done talking.";
+      voice.tone = "active";
+      renderScheduleAssistant();
+
+      recognition.lang = "en-US";
+      recognition.continuous = false;
+      recognition.interimResults = false;
+      recognition.maxAlternatives = 1;
+
+      recognition.onresult = event => {
+        const pieces = [];
+        for (let i = event.resultIndex; i < event.results.length; i++) {
+          const piece = event.results[i] && event.results[i][0] && event.results[i][0].transcript
+            ? event.results[i][0].transcript.trim()
+            : "";
+          if (piece) pieces.push(piece);
+        }
+        if (pieces.length) {
+          voice.transcriptBuffer = `${voice.transcriptBuffer} ${pieces.join(" ")}`.trim();
+        }
+      };
+
+      recognition.onerror = event => {
+        console.error("Schedule assistant browser speech error", event);
+        voice.listening = false;
+        voice.recognition = null;
+        voice.captureMode = null;
+        voice.status = event.error === "no-speech"
+          ? "No speech detected. Try again."
+          : "Browser speech recognition failed. Try again.";
+        voice.tone = "error";
+        renderScheduleAssistant();
+      };
+
+      recognition.onend = () => {
+        const transcript = voice.transcriptBuffer.trim();
+        voice.listening = false;
+        voice.recognition = null;
+        voice.transcriptBuffer = "";
+        voice.captureMode = null;
+
+        if (voice.cancelOnStop || sessionId !== voice.sessionId) {
+          renderScheduleAssistant();
+          return;
+        }
+
+        if (transcript) {
+          appendTranscriptToScheduleAssistantInput(transcript);
+          voice.status = "Transcript added. Edit or delete anything in the box above before building tasks.";
+          voice.tone = "idle";
+        } else if (voice.tone !== "error") {
+          voice.status = "No speech detected. Try again.";
+          voice.tone = "error";
+        }
+
+        renderScheduleAssistant();
+      };
+
+      recognition.start();
+    }
+
+    async function stopScheduleAssistantVoiceInput(options = {}) {
+      const voice = getScheduleAssistantVoiceState();
+      if (options.cancelTranscript) {
+        voice.cancelOnStop = true;
+      }
+
+      if (voice.captureMode === "pcm" && voice.listening) {
+        const sessionId = voice.sessionId;
+        voice.listening = false;
+        await finishScheduleAssistantPcmRecording(sessionId);
+        return;
+      }
+
+      if (voice.recorder && voice.listening && voice.recorder.state !== "inactive") {
+        voice.recorder.stop();
+        return;
+      }
+
+      if (voice.recognition && voice.listening) {
+        try {
+          voice.recognition.stop();
+        } catch (error) {
+          console.warn("Error stopping browser speech recognition", error);
+        }
+      }
+    }
+
+    async function handleScheduleAssistantVoiceToggle() {
+      const voice = getScheduleAssistantVoiceState();
+
+      if (voice.listening) {
+        await stopScheduleAssistantVoiceInput();
+        return;
+      }
+
+      if (voice.loadingModel || voice.transcribing || state.scheduleAssistant.loading) return;
+      let localModelError = null;
+
+      try {
+        try {
+          await ensureScheduleAssistantTranscriber();
+        } catch (error) {
+          localModelError = error;
+        }
+
+        if (!localModelError) {
+          if (canUseScheduleAssistantPcmCapture()) {
+            await startScheduleAssistantPcmRecording();
+            return;
+          }
+
+          if (canUseScheduleAssistantMediaRecorder()) {
+            await startScheduleAssistantLocalRecording();
+            return;
+          }
+        }
+
+        if (canUseNativeSpeechRecognition()) {
+          voice.status = localModelError
+            ? "The local voice model could not load here, so the planner is using browser speech recognition."
+            : "Local voice mode is unavailable here, so the planner is using browser speech recognition.";
+          voice.tone = "active";
+          renderScheduleAssistant();
+          await startScheduleAssistantBrowserRecognition();
+          return;
+        }
+
+        if (localModelError) {
+          throw localModelError;
+        }
+
+        throw new Error(getScheduleAssistantUnsupportedReason());
+      } catch (error) {
+        console.error("Unable to start speech input", error);
+        voice.loadingModel = false;
+        voice.listening = false;
+        voice.transcribing = false;
+        voice.captureMode = null;
+        voice.status = formatScheduleAssistantVoiceError(error);
+        voice.tone = "error";
+        renderScheduleAssistant();
+        showToast("Voice input is unavailable right now", true);
+      }
+    }
+
+    function getWeeklyPlannerColumnForUser(user) {
+      if (!user || !user.name) return null;
+      const allowed = CORE_TEAM_NAME_ORDER;
+      const lower = user.name.toLowerCase();
+      return allowed.find(name => lower.includes(name.toLowerCase())) || null;
+    }
+
+    function formatAssistantShortDate(dateKeyValue) {
+      if (!dateKeyValue) return "";
+      const dateObj = parseDateKey(dateKeyValue);
+      return dateObj.toLocaleDateString("en-US", { weekday: "short", month: "short", day: "numeric" });
+    }
+
+    function buildAssistantCalendarWeekDays(allFetchedTasks) {
+      const weekStart = parseDateKey(currentWeeklyStart);
+      const days = [];
+
+      for (let i = 0; i < 5; i++) {
+        const dateObj = addDays(weekStart, i);
+        const key = getLocalDateString(dateObj);
+        const tasksForDay = allFetchedTasks.filter(task => task.task_date === key);
+        const pendingTasks = tasksForDay.filter(task => task.status === "pending").length;
+        const inProgressTasks = tasksForDay.filter(task => task.status === "in_progress").length;
+        const doneTasks = tasksForDay.filter(task => task.status === "done").length;
+
+        days.push({
+          date: key,
+          weekday: dateObj.toLocaleDateString("en-US", { weekday: "long" }),
+          label: dateObj.toLocaleDateString("en-US", {
+            weekday: "short",
+            month: "short",
+            day: "numeric"
+          }),
+          totalTasks: tasksForDay.length,
+          activeTasks: pendingTasks + inProgressTasks,
+          pendingTasks,
+          inProgressTasks,
+          doneTasks,
+          taskTitles: tasksForDay.slice(0, 6).map(task => task.title || "(Untitled)")
+        });
+      }
+
+      return days;
+    }
+
+    function buildAssistantMonthSummary(monthKey, monthTasks) {
+      const countsByDate = {};
+      monthTasks.forEach(task => {
+        if (!task.task_date || !task.task_date.startsWith(monthKey)) return;
+        if (!countsByDate[task.task_date]) {
+          countsByDate[task.task_date] = {
+            date: task.task_date,
+            totalTasks: 0,
+            activeTasks: 0,
+            pendingTasks: 0,
+            inProgressTasks: 0,
+            doneTasks: 0
+          };
+        }
+
+        countsByDate[task.task_date].totalTasks += 1;
+        if (task.status === "pending") {
+          countsByDate[task.task_date].activeTasks += 1;
+          countsByDate[task.task_date].pendingTasks += 1;
+        } else if (task.status === "in_progress") {
+          countsByDate[task.task_date].activeTasks += 1;
+          countsByDate[task.task_date].inProgressTasks += 1;
+        } else if (task.status === "done") {
+          countsByDate[task.task_date].doneTasks += 1;
+        }
+      });
+
+      const [year, month] = monthKey.split("-").map(Number);
+      const lastDay = new Date(year, month, 0).getDate();
+      const businessDays = [];
+
+      for (let day = 1; day <= lastDay; day++) {
+        const dateObj = new Date(year, month - 1, day);
+        const weekday = dateObj.getDay();
+        if (weekday === 0 || weekday === 6) continue;
+
+        const date = getLocalDateString(dateObj);
+        const counts = countsByDate[date] || {
+          totalTasks: 0,
+          activeTasks: 0,
+          pendingTasks: 0,
+          inProgressTasks: 0,
+          doneTasks: 0
+        };
+
+        businessDays.push({
+          date,
+          weekday: dateObj.toLocaleDateString("en-US", { weekday: "long" }),
+          label: dateObj.toLocaleDateString("en-US", {
+            weekday: "short",
+            month: "short",
+            day: "numeric"
+          }),
+          totalTasks: counts.totalTasks,
+          activeTasks: counts.activeTasks,
+          pendingTasks: counts.pendingTasks,
+          inProgressTasks: counts.inProgressTasks,
+          doneTasks: counts.doneTasks
+        });
+      }
+
+      return {
+        key: monthKey,
+        taskCount: monthTasks.length,
+        activeTaskCount: monthTasks.filter(task => task.status === "pending" || task.status === "in_progress").length,
+        businessDays,
+        taskCountsByDate: Object.values(countsByDate).sort((a, b) => a.date.localeCompare(b.date))
+      };
+    }
+
+    async function buildScheduleAssistantSnapshot(targetUser) {
+      const userId = targetUser.id;
+      const monthKey = monthKeyFromDate(state.currentMonthDate);
+      const weekStartDate = parseDateKey(currentWeeklyStart);
+      const weekEndDate = addDays(weekStartDate, 4);
+      const monthsToLoad = [...new Set([
+        monthKey,
+        getLocalDateString(weekStartDate).slice(0, 7),
+        getLocalDateString(weekEndDate).slice(0, 7)
+      ])];
+
+      const taskSets = await Promise.all(
+        monthsToLoad.map(mk =>
+          apiGet(`/daily-tasks?month=${encodeURIComponent(mk)}&assignedToId=${encodeURIComponent(userId)}`)
+        )
+      );
+
+      const mergedTasks = [];
+      const seenIds = new Set();
+      taskSets.flat().forEach(task => {
+        if (!task || seenIds.has(task.id)) return;
+        seenIds.add(task.id);
+        mergedTasks.push(task);
+      });
+
+      const monthTasks = mergedTasks.filter(task => task.task_date && task.task_date.startsWith(monthKey));
+      const calendarWeekDays = buildAssistantCalendarWeekDays(mergedTasks);
+
+      return {
+        today: getLocalDateString(new Date()),
+        targetUser: {
+          id: targetUser.id,
+          name: targetUser.name,
+          email: targetUser.email
+        },
+        calendarWeek: {
+          label: calendarWeekDays.length
+            ? `${calendarWeekDays[0].label} to ${calendarWeekDays[calendarWeekDays.length - 1].label}`
+            : "",
+          days: calendarWeekDays
+        },
+        month: buildAssistantMonthSummary(monthKey, monthTasks)
+      };
+    }
+
+    function formatAssistantTimeLabel(taskTime) {
+      if (!taskTime) return "";
+      const [hourRaw, minuteRaw] = String(taskTime).split(":");
+      const hours = Number(hourRaw);
+      const minutes = Number(minuteRaw);
+      if (Number.isNaN(hours) || Number.isNaN(minutes)) return taskTime;
+
+      const suffix = hours >= 12 ? "PM" : "AM";
+      const hour12 = hours % 12 || 12;
+      return `${hour12}:${String(minutes).padStart(2, "0")} ${suffix}`;
+    }
+
+    function renderScheduleAssistant() {
+      const targetLabel = document.getElementById("backlog-ai-target-label");
+      const thread = document.getElementById("backlog-ai-thread");
+      const results = document.getElementById("backlog-ai-results");
+      const submitBtn = document.getElementById("backlog-ai-submit");
+      const voiceBtn = document.getElementById("backlog-ai-voice");
+      const voiceLabel = document.getElementById("backlog-ai-voice-label");
+      const voiceStatus = document.getElementById("backlog-ai-voice-status");
+      const targetUser = getScheduleAssistantTargetUser();
+      const voice = getScheduleAssistantVoiceState();
+
+      if (targetLabel) {
+        if (!state.currentUser) {
+          targetLabel.textContent = "Select a user first, then ask the planner to break work into daily tasks.";
+        } else if (targetUser) {
+          targetLabel.textContent = `Planning daily tasks against ${targetUser.name}'s current week and month load. Explicit times will be saved as reminders.`;
+        } else {
+          targetLabel.textContent = "Describe the work and the planner will split it into daily tasks on the least busy days.";
+        }
+      }
+
+      if (submitBtn) {
+        submitBtn.disabled = state.scheduleAssistant.loading || !state.currentUser || voice.listening || voice.transcribing || voice.loadingModel;
+      }
+
+      if (voiceBtn) {
+        let buttonState = "idle";
+        let buttonLabel = "Talk to Planner";
+
+        if (voice.listening) {
+          buttonState = "listening";
+          buttonLabel = "Stop Listening";
+        } else if (voice.transcribing) {
+          buttonState = "transcribing";
+          buttonLabel = "Transcribing...";
+        } else if (voice.loadingModel) {
+          buttonState = "loading";
+          buttonLabel = "Loading Voice...";
+        }
+
+        voiceBtn.dataset.state = buttonState;
+        voiceBtn.disabled = state.scheduleAssistant.loading || voice.transcribing || voice.loadingModel;
+        if (voiceLabel) voiceLabel.textContent = buttonLabel;
+      }
+
+      if (voiceStatus) {
+        const defaultVoiceCopy = "Speak a plan, review the transcript in the box above, then edit or delete anything before building tasks.";
+        voiceStatus.textContent = voice.status || defaultVoiceCopy;
+        voiceStatus.dataset.tone = voice.tone || "idle";
+      }
+
+      if (thread) {
+        thread.innerHTML = "";
+
+        if (!state.scheduleAssistant.messages.length && !state.scheduleAssistant.loading) {
+          const empty = document.createElement("div");
+          empty.className = "backlog-ai-empty";
+          empty.textContent =
+            "Describe one or more tasks in plain English. The assistant will split them into daily tasks, keep explicit days and times, and use the lightest visible day for flexible work.";
+          thread.appendChild(empty);
+        } else {
+          state.scheduleAssistant.messages.forEach(message => {
+            const bubble = document.createElement("div");
+            bubble.className = `backlog-ai-message ${message.role === "user" ? "user" : "assistant"}`;
+            bubble.textContent = message.text;
+            thread.appendChild(bubble);
+          });
+        }
+
+        if (state.scheduleAssistant.loading) {
+          const loadingBubble = document.createElement("div");
+          loadingBubble.className = "backlog-ai-message assistant";
+          loadingBubble.textContent = "Breaking this into daily tasks and checking the current week and month load...";
+          thread.appendChild(loadingBubble);
+        }
+
+        thread.scrollTop = thread.scrollHeight;
+      }
+
+      if (!results) return;
+      results.innerHTML = "";
+
+      const response = state.scheduleAssistant.response;
+      if (!response || !Array.isArray(response.tasks) || response.tasks.length === 0) return;
+
+      const remainingTasks = response.tasks.filter(task => !task.applied);
+
+      const summaryCard = document.createElement("div");
+      summaryCard.className = "backlog-ai-placement";
+
+      const summaryTop = document.createElement("div");
+      summaryTop.className = "backlog-ai-placement-top";
+
+      const summaryLeft = document.createElement("div");
+      const summaryType = document.createElement("div");
+      summaryType.className = "backlog-ai-placement-type";
+      summaryType.textContent = response.source === "gemini" ? "daily plan" : "fallback plan";
+      const summaryLabel = document.createElement("div");
+      summaryLabel.className = "backlog-ai-placement-label";
+      summaryLabel.textContent = `${response.tasks.length} daily task${response.tasks.length === 1 ? "" : "s"} ready`;
+      summaryLeft.appendChild(summaryType);
+      summaryLeft.appendChild(summaryLabel);
+
+      const summaryConfidence = document.createElement("div");
+      summaryConfidence.className = "backlog-ai-placement-confidence";
+      summaryConfidence.textContent = `${remainingTasks.length} left`;
+
+      summaryTop.appendChild(summaryLeft);
+      summaryTop.appendChild(summaryConfidence);
+      summaryCard.appendChild(summaryTop);
+
+      const summaryCopy = document.createElement("div");
+      summaryCopy.className = "backlog-ai-placement-copy";
+      summaryCopy.textContent = response.assistantMessage || response.overallReasoning || "";
+      summaryCard.appendChild(summaryCopy);
+
+      const summaryActions = document.createElement("div");
+      summaryActions.className = "backlog-ai-placement-actions";
+
+      const summaryMeta = document.createElement("div");
+      summaryMeta.className = "backlog-ai-placement-copy";
+      summaryMeta.textContent = remainingTasks.length
+        ? "Create the whole batch at once or save tasks one by one."
+        : "All proposed tasks have already been created.";
+      summaryActions.appendChild(summaryMeta);
+
+      const createAllBtn = document.createElement("button");
+      createAllBtn.className = "backlog-ai-placement-apply";
+      createAllBtn.textContent = remainingTasks.length ? "Create remaining tasks" : "All tasks created";
+      createAllBtn.dataset.assistantAction = "create-all";
+      createAllBtn.disabled = remainingTasks.length === 0;
+      summaryActions.appendChild(createAllBtn);
+
+      summaryCard.appendChild(summaryActions);
+      results.appendChild(summaryCard);
+
+      response.tasks.forEach((task, index) => {
+        const card = document.createElement("div");
+        card.className = "backlog-ai-placement";
+
+        const top = document.createElement("div");
+        top.className = "backlog-ai-placement-top";
+
+        const topLeft = document.createElement("div");
+        const type = document.createElement("div");
+        type.className = "backlog-ai-placement-type";
+        type.textContent = "daily task";
+        const label = document.createElement("div");
+        label.className = "backlog-ai-placement-label";
+        label.textContent = task.taskTime
+          ? `${formatAssistantShortDate(task.taskDate)} at ${formatAssistantTimeLabel(task.taskTime)}`
+          : formatAssistantShortDate(task.taskDate);
+        topLeft.appendChild(type);
+        topLeft.appendChild(label);
+
+        const confidence = document.createElement("div");
+        confidence.className = "backlog-ai-placement-confidence";
+        confidence.textContent = task.confidence || "medium";
+
+        top.appendChild(topLeft);
+        top.appendChild(confidence);
+        card.appendChild(top);
+
+        const title = document.createElement("div");
+        title.className = "backlog-ai-placement-title";
+        title.textContent = task.title || "New task";
+        card.appendChild(title);
+
+        const meta = document.createElement("div");
+        meta.className = "backlog-ai-placement-meta";
+        const metaParts = [];
+        metaParts.push(task.taskTime ? `Reminder: ${formatAssistantTimeLabel(task.taskTime)}` : "No reminder time set");
+        if (response.source && response.source !== "gemini") {
+          metaParts.push("Fallback plan");
+        }
+        meta.textContent = metaParts.join(" | ");
+        card.appendChild(meta);
+
+        const rationale = document.createElement("div");
+        rationale.className = "backlog-ai-placement-copy";
+        rationale.textContent = task.dateReasoning || response.overallReasoning || "";
+        card.appendChild(rationale);
+
+        const actions = document.createElement("div");
+        actions.className = "backlog-ai-placement-actions";
+
+        const notes = document.createElement("div");
+        notes.className = "backlog-ai-placement-copy";
+        notes.textContent = task.notes || (task.sourceText && task.sourceText.toLowerCase() !== (task.title || "").toLowerCase()
+          ? `From: ${task.sourceText}`
+          : "");
+        actions.appendChild(notes);
+
+        const applyBtn = document.createElement("button");
+        applyBtn.className = "backlog-ai-placement-apply";
+        applyBtn.textContent = task.applied ? "Created" : "Create task";
+        applyBtn.dataset.assistantTaskIndex = String(index);
+        applyBtn.disabled = !!task.applied;
+        actions.appendChild(applyBtn);
+
+        card.appendChild(actions);
+        results.appendChild(card);
+      });
+    }
+
+    async function handleScheduleAssistantSubmit() {
+      const input = document.getElementById("backlog-ai-input");
+      const rawTask = input ? input.value.trim() : "";
+      const targetUser = getScheduleAssistantTargetUser();
+
+      if (!rawTask) return;
+      if (!state.currentUser) {
+        showToast("Select a user first", true);
+        return;
+      }
+      if (!targetUser) {
+        showToast("Pick who you are planning for", true);
+        return;
+      }
+
+      state.scheduleAssistant.messages.push({ role: "user", text: rawTask });
+      trimScheduleAssistantMessages();
+      state.scheduleAssistant.loading = true;
+      state.scheduleAssistant.response = null;
+      if (input) input.value = "";
+      renderScheduleAssistant();
+
+      try {
+        const snapshot = await buildScheduleAssistantSnapshot(targetUser);
+        const response = await fetch(`${API_BASE}/ai/schedule-suggest`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            "Accept": "application/json"
+          },
+          body: JSON.stringify({
+            task: rawTask,
+            snapshot
+          })
+        });
+
+        const data = await response.json().catch(() => ({}));
+        if (!response.ok) {
+          throw new Error(data.error || "AI planning failed");
+        }
+
+        state.scheduleAssistant.response = data;
+        state.scheduleAssistant.messages.push({
+          role: "assistant",
+          text: data.assistantMessage || data.overallReasoning || "I broke that into daily tasks."
+        });
+        trimScheduleAssistantMessages();
+      } catch (error) {
+        console.error(error);
+        state.scheduleAssistant.messages.push({
+          role: "assistant",
+          text: `I could not build the daily task plan right now. ${error.message || "Please try again."}`
+        });
+        trimScheduleAssistantMessages();
+        state.scheduleAssistant.response = null;
+      } finally {
+        state.scheduleAssistant.loading = false;
+        renderScheduleAssistant();
+      }
+    }
+
+    function buildScheduleAssistantTaskPayload(task, targetUser) {
+      return {
+        title: task.title || "New task",
+        notes: task.notes || "",
+        task_date: task.taskDate,
+        task_time: task.taskTime || null,
+        assigned_to_id: targetUser.id,
+        created_by_id: state.currentUser.id,
+        assigned_by_id: state.currentUser.id,
+        status: "pending"
+      };
+    }
+
+    async function createScheduleAssistantTasks(index = null) {
+      const response = state.scheduleAssistant.response;
+      const targetUser = getScheduleAssistantTargetUser();
+
+      if (!response || !Array.isArray(response.tasks) || !targetUser || !state.currentUser) return;
+
+      const selected = response.tasks.filter((task, taskIndex) =>
+        !task.applied && (index === null || taskIndex === index)
+      );
+
+      if (!selected.length) return;
+
+      const payloads = selected.map(task => buildScheduleAssistantTaskPayload(task, targetUser));
+
+      try {
+        if (payloads.length === 1) {
+          await apiSend("/daily-tasks", "POST", payloads[0]);
+        } else {
+          await createMultipleTasks(payloads, {
+            main: "Creating AI-planned tasks...",
+            sub: "Dropping them onto the daily calendar"
+          });
+        }
+
+        selected.forEach(task => {
+          task.applied = true;
+        });
+
+        await Promise.all([loadDailyTasks(), loadBacklogTasks()]);
+        renderScheduleAssistant();
+        showToast(payloads.length === 1 ? "Task created" : "Daily tasks created");
+      } catch (error) {
+        console.error(error);
+        showToast("Could not create AI-planned task", true);
+      }
+    }
+
+    function clearScheduleAssistant() {
+      stopScheduleAssistantVoiceInput({ cancelTranscript: true }).catch(error => {
+        console.warn("Error stopping assistant voice input during clear", error);
+      });
+      state.scheduleAssistant.messages = [];
+      state.scheduleAssistant.response = null;
+      state.scheduleAssistant.loading = false;
+      const voice = getScheduleAssistantVoiceState();
+      voice.status = "";
+      voice.tone = "idle";
+      renderScheduleAssistant();
+    }
+
+    function initScheduleAssistantUI() {
+      const submitBtn = document.getElementById("backlog-ai-submit");
+      const clearBtn = document.getElementById("backlog-ai-clear");
+      const voiceBtn = document.getElementById("backlog-ai-voice");
+      const input = document.getElementById("backlog-ai-input");
+      const results = document.getElementById("backlog-ai-results");
+
+      if (submitBtn && !submitBtn.dataset.bound) {
+        submitBtn.dataset.bound = "true";
+        submitBtn.addEventListener("click", handleScheduleAssistantSubmit);
+      }
+
+      if (clearBtn && !clearBtn.dataset.bound) {
+        clearBtn.dataset.bound = "true";
+        clearBtn.addEventListener("click", clearScheduleAssistant);
+      }
+
+      if (voiceBtn && !voiceBtn.dataset.bound) {
+        voiceBtn.dataset.bound = "true";
+        voiceBtn.addEventListener("click", handleScheduleAssistantVoiceToggle);
+      }
+
+      if (input && !input.dataset.bound) {
+        input.dataset.bound = "true";
+        input.addEventListener("keydown", (event) => {
+          if ((event.ctrlKey || event.metaKey) && event.key === "Enter") {
+            event.preventDefault();
+            handleScheduleAssistantSubmit();
+          }
+        });
+      }
+
+      if (results && !results.dataset.bound) {
+        results.dataset.bound = "true";
+        results.addEventListener("click", (event) => {
+          const createAllButton = event.target.closest("[data-assistant-action='create-all']");
+          if (createAllButton) {
+            createScheduleAssistantTasks();
+            return;
+          }
+
+          const button = event.target.closest("[data-assistant-task-index]");
+          if (!button) return;
+          const index = Number(button.dataset.assistantTaskIndex);
+          if (Number.isNaN(index)) return;
+          createScheduleAssistantTasks(index);
+        });
+      }
+
+      renderScheduleAssistant();
+    }
+
     async function loadBacklogTasks() {
       try {
         let targetId = state.calendarOwnerId;
@@ -8012,14 +9632,16 @@
       const addBtn = document.getElementById("add-backlog-btn");
       const input = document.getElementById("new-backlog-input");
 
-      if (container) {
+      if (container && !container.dataset.boundBacklogDrop) {
+        container.dataset.boundBacklogDrop = "true";
         container.addEventListener("dragover", onDayDragOver);
         container.addEventListener("dragenter", onDayDragEnter);
         container.addEventListener("dragleave", onDayDragLeave);
         container.addEventListener("drop", onBacklogDrop);
       }
 
-      if (addBtn && input) {
+      if (addBtn && input && !addBtn.dataset.boundBacklogAdd) {
+        addBtn.dataset.boundBacklogAdd = "true";
         const handler = async () => {
           const val = input.value.trim();
           if (!val) return;
@@ -8051,6 +9673,8 @@
           if (e.key === "Enter") handler();
         });
       }
+
+      initScheduleAssistantUI();
     }
 
     function onBacklogDrop(e) {
@@ -10258,11 +11882,16 @@
     }
 
     function isWeeklyTasksUser() {
-      // Show weekly tasks for users with "jenna" in their name or email (case-insensitive)
+      // Show weekly tasks for users with "jenna" or "mariam" in their name or email.
       if (!state.currentUser) return false;
       const name = (state.currentUser.name || "").toLowerCase();
       const email = (state.currentUser.email || "").toLowerCase();
-      return name.includes("jenna") || email.includes("jenna");
+      return (
+        name.includes("jenna") ||
+        email.includes("jenna") ||
+        name.includes("mariam") ||
+        email.includes("mariam")
+      );
     }
 
     function initWeeklyTasksUI() {
@@ -12108,9 +13737,12 @@
           // headers: { "x-user-id": state.currentUser ? state.currentUser.id : "" } // Not strictly needed for GET if public, but good practice
         });
         if (!res.ok) throw new Error("Failed to load");
-        return await res.json();
+        const data = await res.json();
+        state.weeklyPlannerEntries = Array.isArray(data) ? data : [];
+        return state.weeklyPlannerEntries;
       } catch (e) {
         console.error(e);
+        state.weeklyPlannerEntries = [];
         return [];
       }
     }
@@ -12119,7 +13751,7 @@
       const container = document.getElementById("weekly-priorities-grid");
       container.innerHTML = "";
 
-      const cols = ["", "Erica", "Katie", "Kevin", "Jenna", "Meighan"];
+      const cols = ["", ...CORE_TEAM_NAME_ORDER];
       const rows = ["1", "2", "3", "4", "5"];
 
       container.style.gridTemplateColumns = `40px repeat(${cols.length - 1}, 1fr)`;
@@ -12622,13 +14254,7 @@
         }
       };
 
-      const CORE_TEAM = [
-        { id: 1, name: "Katie" },
-        { id: 2, name: "Kevin" },
-        { id: 3, name: "Erica" },
-        { id: 4, name: "Jenna" },
-        { id: 5, name: "Meighan" },
-      ];
+      const CORE_TEAM = getCoreTeamUsers();
 
       CORE_TEAM.forEach(u => ensureUser(u.id, u.name));
 
@@ -12685,9 +14311,8 @@
           const dateKey = completionDate.split('T')[0];
           if (completedByDay.hasOwnProperty(dateKey)) {
             completedByDay[dateKey]++;
-            if (userEfficiency[uid]) {
-              userEfficiency[uid][dateKey] = (userEfficiency[uid][dateKey] || 0) + 1;
-            }
+            if (!userEfficiency[uid]) userEfficiency[uid] = {};
+            userEfficiency[uid][dateKey] = (userEfficiency[uid][dateKey] || 0) + 1;
           }
         }
       });
@@ -12767,7 +14392,16 @@
         aggregated[s.name].couldnotcomplete += (s.couldnotcomplete || 0);
       });
 
-      const finalStats = Object.values(aggregated);
+      const finalStats = CORE_TEAM_NAME_ORDER.map(teamName => {
+        const matchedName = Object.keys(aggregated).find(name => matchesTeamName(name, teamName));
+        return aggregated[matchedName] || {
+          name: teamName,
+          todo: 0,
+          inprogress: 0,
+          completed: 0,
+          couldnotcomplete: 0
+        };
+      });
       const labels = finalStats.map(s => s.name);
       const todoData = finalStats.map(s => s.todo);
       const doingData = finalStats.map(s => s.inprogress);
@@ -12846,13 +14480,11 @@
 
       if (efficiencyChart) efficiencyChart.destroy();
 
-      const teamDatasets = [
-        { id: 1, label: 'Katie', color: '#ec4899' },
-        { id: 2, label: 'Kevin', color: '#3b82f6' },
-        { id: 3, label: 'Erica', color: '#10b981' },
-        { id: 4, label: 'Jenna', color: '#f59e0b' },
-        { id: 5, label: 'Meighan', color: '#8b5cf6' },
-      ];
+      const teamDatasets = getCoreTeamUsers().map(user => ({
+        id: user.id,
+        label: user.name,
+        color: getTeamColor(user.name)
+      }));
 
       const datasets = [
         {
