@@ -106,10 +106,46 @@ input[type="color"]{-webkit-appearance:none;appearance:none;width:38px;height:38
         <button class="tab" id="modeCampaign" onclick="setMode('campaign')" style="padding:6px 12px;font-size:11px">Campaign Planner</button>
         <button class="tab" id="modeFriday" onclick="setMode('friday')" style="padding:6px 12px;font-size:11px">Friday Blast</button>
         <button class="tab" id="modeTuesday" onclick="setMode('tuesday')" style="padding:6px 12px;font-size:11px">Tuesday Affiliate</button>
+        <button class="tab" id="modeAnnouncement" onclick="setMode('announcement')" style="padding:6px 12px;font-size:11px">General Announcement</button>
         <button class="tab" id="modeFlyer" onclick="setMode('flyer')" style="padding:6px 12px;font-size:11px">Flyer Creator</button>
       </div>
     </div>
     <div class="card-body">
+      <!-- ANNOUNCEMENT MODE -->
+      <div id="announcementModeFields" style="display:none">
+        <div class="form-group">
+          <label>Announcement Header Settings</label>
+          <div class="form-row">
+            <div class="form-group"><label>Header Color</label><input type="color" id="announcementHeaderCol" value="#1a237e" onchange="sv('announcementHeaderColHex',this.value)"></div>
+            <div class="form-group"><label>Hex</label><input type="text" id="announcementHeaderColHex" value="#1a237e" onchange="sv('announcementHeaderCol',this.value)"></div>
+          </div>
+          <div class="form-group"><label>Header Title/Date Text</label><input type="text" id="announcementHeaderTitle" value="General Announcement"></div>
+        </div>
+        <div class="form-group">
+          <label>Blast Intro / Preheader Text</label>
+          <textarea id="announcementIntro" style="min-height:65px">Hi {{CFirstName}} - We have an important update to share with you!</textarea>
+          <p style="font-size:10px;color:var(--text2);margin-top:4px">This text will appear inside the colored header block below the title.</p>
+        </div>
+        <div id="announcementSections">
+          <!-- Blocks will be rendered here after import -->
+        </div>
+        <div style="background:rgba(124,77,255,0.1);padding:12px;border-radius:8px;border:1px solid var(--accent2);margin-bottom:16px">
+          <label style="color:var(--accent2)">AI Content Assistant (Announcement Focus)</label>
+          <p style="font-size:11px;color:var(--text2);margin-bottom:8px">Paste the link to your article, market update, or announcement details below. The AI will extract infographics, videos, and key stats.</p>
+          <textarea id="aiRawInputAnnouncement" style="min-height:100px;font-size:13px" placeholder="Paste article link or announcement details here..."></textarea>
+          <button class="btn-sm" onclick="generateAnnouncementAIPrompt()" style="width:100%;margin-top:8px;background:var(--accent2);color:#fff;border:none">Generate AI Announcement Prompt</button>
+        </div>
+        <div class="form-group" id="importBoxAnnouncement" style="display:none">
+          <label>📥 Paste AI Response (JSON)</label>
+          <textarea id="aiResponseAnnouncement" style="min-height:80px;font-family:monospace" placeholder='Paste the JSON response from Gemini here...'></textarea>
+          <button class="btn-sm" onclick="importAIResponseAnnouncement()" style="width:100%;margin-top:4px">Import Announcement Data</button>
+        </div>
+        <div class="form-group" id="promptPreviewBoxAnnouncement" style="margin-top:16px;display:none">
+          <label>AI Prompt Preview</label>
+          <textarea id="heroPromptPreviewAnnouncement" style="min-height:120px;font-size:12px;background:rgba(0,0,0,0.05);color:var(--accent)" readonly></textarea>
+        </div>
+      </div>
+
       <!-- SINGLE CLASS MODE -->
       <div id="singleModeFields">
         <div class="form-group">
