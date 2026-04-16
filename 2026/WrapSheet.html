@@ -3470,6 +3470,10 @@
       background: rgba(245, 158, 11, 0.05);
     }
 
+    .user-col-mariam {
+      background: rgba(6, 182, 212, 0.05);
+    }
+
     .user-col-meighan {
       background: rgba(139, 92, 246, 0.05);
     }
@@ -3489,6 +3493,10 @@
 
     body[data-theme="dark"] .user-col-jenna {
       background: rgba(245, 158, 11, 0.1);
+    }
+
+    body[data-theme="dark"] .user-col-mariam {
+      background: rgba(6, 182, 212, 0.1);
     }
 
     body[data-theme="dark"] .user-col-meighan {
@@ -3911,7 +3919,7 @@
         <option value="">Loading team...</option>
       </select>
       <button id="user-select-confirm">Open Wrap Sheet</button>
-      <small>This is internal for BER: Meighan, Kevin, Erica, Jenna & Katie.</small>
+      <small>This is internal for BER: Meighan, Kevin, Erica, Jenna, Katie & Mariam.</small>
     </div>
   </div>
 
@@ -4667,7 +4675,7 @@
           <div class="projects-grid" id="projects-grid"></div>
         </section>
 
-        <!-- Weekly Tasks (BETA - Jenna only) -->
+        <!-- Weekly Tasks (BETA - Jenna and Mariam) -->
         <section class="panel draggable-section" id="section-weekly-tasks" draggable="true" style="display: none;">
           <div class="panel-header">
             <span class="section-drag-handle" title="Drag to reorder">⋮⋮</span>
@@ -4923,6 +4931,16 @@
       "Team Work": "var(--engage)" // Blue
     };
 
+    const CORE_TEAM_NAME_ORDER = ["Erica", "Katie", "Kevin", "Jenna", "Mariam", "Meighan"];
+    const TEAM_COLOR_BY_NAME = {
+      Erica: "#ec4899",
+      Katie: "#3b82f6",
+      Kevin: "#10b981",
+      Jenna: "#f59e0b",
+      Mariam: "#06b6d4",
+      Meighan: "#8b5cf6"
+    };
+
     const ANNUAL_CATEGORIES = [
       "Compliance/Audit",
       "Marketing",
@@ -5013,6 +5031,22 @@
       "Compliance/Audit", "Marketing", "Products & Tools", "Personal Focus", "Moving the Needle", "Team Work"
     ];
     const DEFAULT_ANNUAL_KEYS = [...DEFAULT_MONTHLY_KEYS];
+
+    function matchesTeamName(name, teamName) {
+      return (name || "").toLowerCase().includes(teamName.toLowerCase());
+    }
+
+    function getCoreTeamUsers() {
+      return CORE_TEAM_NAME_ORDER.map(teamName => {
+        const matchingUser = (state.users || []).find(user => matchesTeamName(user.name, teamName));
+        return matchingUser || { id: `team:${teamName.toLowerCase()}`, name: teamName };
+      });
+    }
+
+    function getTeamColor(name) {
+      const matchedName = CORE_TEAM_NAME_ORDER.find(teamName => matchesTeamName(name, teamName));
+      return TEAM_COLOR_BY_NAME[matchedName] || "#9ca3af";
+    }
 
     function defaultCategoryDefs(keys) {
       return keys.map(k => ({ key: k, label: k }));
@@ -7686,7 +7720,7 @@
     async function loadUsers() {
       const allUsers = await apiGet("/users");
       // Filter to only show core BER staff
-      const allowedNames = ["kevin", "meighan", "jenna", "erica", "katie"];
+      const allowedNames = CORE_TEAM_NAME_ORDER.map(name => name.toLowerCase());
       const excludedNames = ["kevin test", "kevin weinkauff", "meighan harris", "test whale"];
       state.users = allUsers.filter(u => {
         const lower = u.name.toLowerCase();
@@ -8860,7 +8894,7 @@
 
     function getWeeklyPlannerColumnForUser(user) {
       if (!user || !user.name) return null;
-      const allowed = ["Erica", "Katie", "Kevin", "Jenna", "Meighan"];
+      const allowed = CORE_TEAM_NAME_ORDER;
       const lower = user.name.toLowerCase();
       return allowed.find(name => lower.includes(name.toLowerCase())) || null;
     }
@@ -11848,11 +11882,16 @@
     }
 
     function isWeeklyTasksUser() {
-      // Show weekly tasks for users with "jenna" in their name or email (case-insensitive)
+      // Show weekly tasks for users with "jenna" or "mariam" in their name or email.
       if (!state.currentUser) return false;
       const name = (state.currentUser.name || "").toLowerCase();
       const email = (state.currentUser.email || "").toLowerCase();
-      return name.includes("jenna") || email.includes("jenna");
+      return (
+        name.includes("jenna") ||
+        email.includes("jenna") ||
+        name.includes("mariam") ||
+        email.includes("mariam")
+      );
     }
 
     function initWeeklyTasksUI() {
@@ -13712,7 +13751,7 @@
       const container = document.getElementById("weekly-priorities-grid");
       container.innerHTML = "";
 
-      const cols = ["", "Erica", "Katie", "Kevin", "Jenna", "Meighan"];
+      const cols = ["", ...CORE_TEAM_NAME_ORDER];
       const rows = ["1", "2", "3", "4", "5"];
 
       container.style.gridTemplateColumns = `40px repeat(${cols.length - 1}, 1fr)`;
@@ -14215,13 +14254,7 @@
         }
       };
 
-      const CORE_TEAM = [
-        { id: 1, name: "Katie" },
-        { id: 2, name: "Kevin" },
-        { id: 3, name: "Erica" },
-        { id: 4, name: "Jenna" },
-        { id: 5, name: "Meighan" },
-      ];
+      const CORE_TEAM = getCoreTeamUsers();
 
       CORE_TEAM.forEach(u => ensureUser(u.id, u.name));
 
@@ -14278,9 +14311,8 @@
           const dateKey = completionDate.split('T')[0];
           if (completedByDay.hasOwnProperty(dateKey)) {
             completedByDay[dateKey]++;
-            if (userEfficiency[uid]) {
-              userEfficiency[uid][dateKey] = (userEfficiency[uid][dateKey] || 0) + 1;
-            }
+            if (!userEfficiency[uid]) userEfficiency[uid] = {};
+            userEfficiency[uid][dateKey] = (userEfficiency[uid][dateKey] || 0) + 1;
           }
         }
       });
@@ -14360,7 +14392,16 @@
         aggregated[s.name].couldnotcomplete += (s.couldnotcomplete || 0);
       });
 
-      const finalStats = Object.values(aggregated);
+      const finalStats = CORE_TEAM_NAME_ORDER.map(teamName => {
+        const matchedName = Object.keys(aggregated).find(name => matchesTeamName(name, teamName));
+        return aggregated[matchedName] || {
+          name: teamName,
+          todo: 0,
+          inprogress: 0,
+          completed: 0,
+          couldnotcomplete: 0
+        };
+      });
       const labels = finalStats.map(s => s.name);
       const todoData = finalStats.map(s => s.todo);
       const doingData = finalStats.map(s => s.inprogress);
@@ -14439,13 +14480,11 @@
 
       if (efficiencyChart) efficiencyChart.destroy();
 
-      const teamDatasets = [
-        { id: 1, label: 'Katie', color: '#ec4899' },
-        { id: 2, label: 'Kevin', color: '#3b82f6' },
-        { id: 3, label: 'Erica', color: '#10b981' },
-        { id: 4, label: 'Jenna', color: '#f59e0b' },
-        { id: 5, label: 'Meighan', color: '#8b5cf6' },
-      ];
+      const teamDatasets = getCoreTeamUsers().map(user => ({
+        id: user.id,
+        label: user.name,
+        color: getTeamColor(user.name)
+      }));
 
       const datasets = [
         {
