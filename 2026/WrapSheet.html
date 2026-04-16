@@ -3665,18 +3665,6 @@
       line-height: 1.4;
     }
 
-    .backlog-assistant-chip {
-      padding: 5px 8px;
-      border-radius: 999px;
-      border: 1px solid var(--panel-border);
-      background: var(--panel);
-      font-size: 10px;
-      font-weight: 700;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-      white-space: nowrap;
-    }
-
     .backlog-assistant-thread {
       display: flex;
       flex-direction: column;
@@ -4517,10 +4505,9 @@
               <div>
                 <div class="backlog-assistant-title">AI Daily Task Planner</div>
                 <div class="backlog-assistant-subtitle" id="backlog-ai-target-label">
-                  Describe the work and Gemini will split it into daily tasks on the least busy days.
+                  Describe the work and the planner will split it into daily tasks on the least busy days.
                 </div>
               </div>
-              <div class="backlog-assistant-chip">Gemini</div>
             </div>
             <div class="backlog-assistant-thread" id="backlog-ai-thread"></div>
             <div class="backlog-assistant-compose">
@@ -9056,11 +9043,11 @@
 
       if (targetLabel) {
         if (!state.currentUser) {
-          targetLabel.textContent = "Select a user first, then ask Gemini to break work into daily tasks.";
+          targetLabel.textContent = "Select a user first, then ask the planner to break work into daily tasks.";
         } else if (targetUser) {
           targetLabel.textContent = `Planning daily tasks against ${targetUser.name}'s current week and month load. Explicit times will be saved as reminders.`;
         } else {
-          targetLabel.textContent = "Describe the work and Gemini will split it into daily tasks on the least busy days.";
+          targetLabel.textContent = "Describe the work and the planner will split it into daily tasks on the least busy days.";
         }
       }
 
