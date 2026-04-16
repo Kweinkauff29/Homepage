@@ -829,6 +829,80 @@ ${JSON.stringify(snapshot, null, 2)}
     }
 }
 
+async function getDailyOverview(request, env) {
+    console.log("Daily Overview requested");
+    const body = await getBody(request);
+    const tasks = body?.tasks || [];
+    const timeLabel = body?.timeLabel || "Daily Overview";
+    const currentHour = Number(body?.currentHour || 0);
+    const userEmail = body?.userEmail || request.headers.get("x-user-email") || "User";
+    const userName = body?.userName || userEmail.split('@')[0];
+    
+    console.log(`Processing ${tasks.length} tasks for ${userName} at ${timeLabel}`);
+
+    if (!env.GEMINI_API_KEY) {
+        return json({ error: "GEMINI_API_KEY not configured" }, 500);
+    }
+
+    if (!tasks.length) {
+        return json({ overview: `Hi ${userName}, you have no tasks scheduled for today. Take some time to breathe and plan ahead!` });
+    }
+
+    const taskSummary = tasks.map(t => {
+        const timeStr = t.task_time ? ` at ${t.task_time}` : "";
+        const noteStr = t.notes ? ` (Note: ${t.notes})` : "";
+        const statusStr = t.status === "done" ? " [DONE]" : "";
+        return `- ${t.title}${timeStr}${noteStr}${statusStr}`;
+    }).join("\n");
+
+    let contextSpecificInstructions = "";
+    if (timeLabel.toLowerCase().includes("kickoff") || currentHour < 11) {
+        contextSpecificInstructions = "This is a Morning Kickoff. Focus on setting priorities, identifying high-impact tasks, and giving an encouraging start to the day.";
+    } else if (timeLabel.toLowerCase().includes("lunch") || (currentHour >= 11 && currentHour <= 14)) {
+        contextSpecificInstructions = "This is a Lunch Check-in. Acknowledge what's already done (marked [DONE]), and recommend the most important tasks to focus on for the afternoon pivot.";
+    } else {
+        contextSpecificInstructions = "Provide a general end-of-day overview or mid-afternoon status update. Check if they are on track for their goals.";
+    }
+
+    const prompt = `
+You are the BER Wrap Sheet AI Assistant.
+Review these daily tasks for ${userName}:
+${taskSummary}
+
+${contextSpecificInstructions}
+
+Provide a supportive overview that is around 250-350 characters long.
+Recommend what they should tackle first based on timing or importance, and mention if they should wait on anything if it looks very busy.
+Ensure the response fits elegantly in the dashboard space without exceeding it. Keep it professional and encouraging.
+Return ONLY the text summary. No labels or markdown fences.
+`.trim();
+
+    const geminiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-lite:generateContent?key=${env.GEMINI_API_KEY}`;
+
+    try {
+        const response = await fetch(geminiUrl, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+                contents: [{ parts: [{ text: prompt }] }],
+            }),
+        });
+
+        if (!response.ok) {
+            const details = await response.text();
+            console.error("Gemini overview error:", details);
+            return json({ overview: "I couldn't generate an overview right now. Your tasks look ready to go, though!" });
+        }
+
+        const payload = await response.json();
+        const overview = extractGeminiText(payload);
+        return json({ overview: overview || "Review your tasks and have a great day!" });
+    } catch (error) {
+        console.error("Overview assistant failure:", error);
+        return json({ overview: "Your schedule is set! Tackle your tasks one by one." });
+    }
+}
+
 /* ---------- USERS ---------- */
 
 async function listUsers(env, params) {
@@ -3010,6 +3084,9 @@ export default {
             if (pathname === "/api/ai/schedule-suggest" && request.method === "POST") {
                 return await getScheduleSuggestion(request, env);
             }
+            if (pathname === "/api/ai/daily-overview" && request.method === "POST") {
+                return await getDailyOverview(request, env);
+            }
 
             // ===== TICKER & REACTIONS (NEW) =====
             if (pathname === "/api/ticker") {
@@ -3052,24 +3129,7 @@ export default {
                         .bind(userId)
                         .all();
                     if (!results.length) {
-                        
-            /* ---------- EMAIL BLAST GENERATOR ---------- */
-            if (pathname === "/tools/email-blast-generator") {
-                const key = url.searchParams.get("key");
-                if (key !== "matrixadmin") {
-                    return new Response("Unauthorized", { status: 401 });
-                }
-                return new Response(EMAIL_BLAST_HTML, {
-                    headers: { "Content-Type": "text/html; charset=utf-8", "Access-Control-Allow-Origin": "*" },
-                });
-            }
-            if (pathname === "/tools/EmailBlastGenerator.js") {
-                return new Response(EMAIL_BLAST_JS, {
-                    headers: { "Content-Type": "application/javascript; charset=utf-8", "Access-Control-Allow-Origin": "*" },
-                });
-            }
-
-            return json({ error: "Not found" }, 404);
+                        return json({ error: "User not found" }, 404);
                     }
                     return json(results[0]);
                 }

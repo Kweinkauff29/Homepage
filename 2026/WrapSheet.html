@@ -2285,6 +2285,86 @@
       box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
       border: 1px solid var(--panel-border);
     }
+
+    /* AI Daily Overview - Upgraded Matrix Style */
+    .ai-overview-container {
+      flex: 1;
+      margin: 0 16px 0 48px;
+      max-width: 750px;
+      padding: 14px 18px;
+      background: rgba(255, 255, 255, 0.5);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      border: 1px solid var(--panel-border);
+      border-radius: var(--radius-lg);
+      font-size: 13px;
+      line-height: 1.6;
+      color: var(--ink);
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      min-width: 320px;
+      height: 160px;
+      overflow-y: auto;
+      scrollbar-width: thin;
+      position: relative;
+      transition: all 0.3s ease;
+    }
+    body[data-theme="dark"] .ai-overview-container {
+      background: rgba(30,30,30, 0.4);
+    }
+    .ai-overview-container:hover {
+      border-color: var(--accent);
+      box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+    }
+    .ai-overview-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      font-size: 10px;
+      color: var(--ink-soft);
+    }
+    .ai-overview-status {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+    .ai-pulse-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--accent);
+      animation: ai-pulse 2s infinite;
+    }
+    @keyframes ai-pulse {
+      0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(3, 170, 225, 0.7); }
+      70% { transform: scale(1); box-shadow: 0 0 0 6px rgba(3, 170, 225, 0); }
+      100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(3, 170, 225, 0); }
+    }
+    .ai-overview-text {
+      font-weight: 500;
+      color: var(--ink);
+    }
+    .ai-overview-refresh {
+      cursor: pointer;
+      opacity: 0.6;
+      font-size: 14px;
+      transition: transform 0.3s ease, opacity 0.2s;
+    }
+    .ai-overview-refresh:hover {
+      opacity: 1;
+      transform: rotate(180deg);
+    }
+    .ai-overview-loading {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      color: var(--ink-soft);
+      font-style: italic;
+    }
   </style>
   <!-- Fireworks Library -->
   <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
@@ -4607,6 +4687,20 @@
                 </svg>
                 <div id="finch-hearts"
                   style="position:absolute; top:0; left:0; width:100%; height:100%; pointer-events:none;"></div>
+              </div>
+
+              <!-- AI Overview Container (Upgraded) -->
+              <div class="ai-overview-container" id="ai-daily-overview">
+                <div class="ai-overview-header">
+                  <div class="ai-overview-status">
+                    <div class="ai-pulse-dot"></div>
+                    <span id="ai-overview-label">AI Daily Overview</span>
+                  </div>
+                  <span class="ai-overview-refresh" onclick="refreshDailyOverview()" title="Refresh Overview">🔄</span>
+                </div>
+                <div id="ai-overview-content" class="ai-overview-text">
+                  ✨ AI is analyzing your day...
+                </div>
               </div>
 
               <!-- Existing Pie -->
@@ -9761,6 +9855,15 @@
           renderTeamMetrics();
         }
         renderCalendar();
+
+        // Trigger AI Overview for "Today"
+        const today = new Date();
+        const todayKey = dateKey(today.getFullYear(), today.getMonth(), today.getDate());
+        const todayTasks = state.dailyTasks.filter(t => 
+          t.task_date === todayKey && 
+          String(t.assigned_to_id) === String(state.activeUserId)
+        );
+        if (typeof fetchDailyOverview === "function") fetchDailyOverview(todayTasks);
       } catch (err) {
         console.error(err);
         showToast("Error loading daily tasks", true);
@@ -14534,6 +14637,86 @@
       });
     }
 
+    // ===== AI DAILY OVERVIEW =====
+    async function fetchDailyOverview(tasks) {
+      const contentEl = document.getElementById("ai-overview-content");
+      const labelEl = document.getElementById("ai-overview-label");
+      if (!contentEl) return;
+
+      if (!tasks || tasks.length === 0) {
+        contentEl.innerHTML = "No tasks listed for today. A great time to plan or rest!";
+        if (labelEl) labelEl.textContent = "AI Daily Overview";
+        return;
+      }
+
+      // Determine Time of Day Context
+      const now = new Date();
+      const hour = now.getHours();
+      let timeLabel = "AI Daily Overview";
+
+      // Logic: 8:30 AM is within 5-11 window, 12:30 PM is within 11-14 window
+      if (hour >= 5 && hour < 11) {
+        timeLabel = "Morning Kickoff (8:30 AM)";
+      } else if (hour >= 11 && hour <= 14) {
+        timeLabel = "Lunch Check-in (12:30 PM)";
+      } else if (hour > 14 && hour < 18) {
+        timeLabel = "Afternoon Momentum";
+      } else {
+        timeLabel = "Evening Recap";
+      }
+
+      if (labelEl) labelEl.textContent = timeLabel;
+      contentEl.innerHTML = `<div class="ai-overview-loading"><span>✨</span> AI is reading your day...</div>`;
+
+      try {
+        const currentUser = state.activeUser || state.currentUser || { email: "User" };
+        const response = await fetch(`${API_BASE}/ai/daily-overview`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify({
+             userEmail: currentUser.email,
+             userName: currentUser.first_name || currentUser.name || "User",
+             tasks: tasks.map(t => ({
+               title: t.title,
+               notes: t.notes,
+               task_time: t.task_time,
+               status: t.status
+             })),
+             timeLabel: timeLabel,
+             currentHour: hour
+          })
+        });
+
+        if (!response.ok) {
+          const errText = await response.text().catch(() => "Unknown error");
+          console.error(`AI Overview API Error (${response.status}):`, errText);
+          throw new Error(`API error ${response.status}`);
+        }
+
+        const data = await response.json();
+        contentEl.textContent = data.overview || "Your schedule looks solid. Go get 'em!";
+      } catch (err) {
+        console.error("AI Overview Load Error:", err);
+        // If it's a 404, it means the worker route isn't deployed yet
+        if (err.message.includes("404")) {
+          contentEl.innerHTML = `<span style="color:var(--ink-soft)">AI Overview route not found. Please ensure the latest worker is deployed to Cloudflare.</span>`;
+        } else {
+          contentEl.textContent = "Your day is looking busy! Focus on high-impact tasks first.";
+        }
+      }
+    }
+
+    function refreshDailyOverview() {
+      const today = new Date();
+      const todayKey = dateKey(today.getFullYear(), today.getMonth(), today.getDate());
+      const tasks = state.dailyTasks.filter(t => 
+        t.task_date === todayKey && 
+        String(t.assigned_to_id) === String(state.activeUserId)
+      );
+      fetchDailyOverview(tasks);
+    }
   </script>
 
   <div id="debug-version"
