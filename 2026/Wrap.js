@@ -186,175 +186,512 @@ function guessMonthlyCategory(taskText, allowedCategories) {
     return allowedCategories[0] || "Marketing";
 }
 
-function buildHeuristicScheduleSuggestion(taskText, snapshot) {
-    const normalizedTaskTitle = normalizeTaskTitle(taskText);
-    const weekDays = Array.isArray(snapshot?.calendarWeek?.days) ? snapshot.calendarWeek.days : [];
-    const sortedWeekDays = [...weekDays].sort((a, b) => {
-        const activeDelta = Number(a?.activeTasks || 0) - Number(b?.activeTasks || 0);
-        if (activeDelta !== 0) return activeDelta;
-        const totalDelta = Number(a?.totalTasks || 0) - Number(b?.totalTasks || 0);
-        if (totalDelta !== 0) return totalDelta;
-        return String(a?.date || "").localeCompare(String(b?.date || ""));
-    });
-    const lightestDay = sortedWeekDays[0] || null;
+function pad2(value) {
+    return String(value).padStart(2, "0");
+}
 
-    const openPriorityRows = Array.isArray(snapshot?.weeklyPlanner?.openPriorityRows)
-        ? snapshot.weeklyPlanner.openPriorityRows
+function normalizeWeekdayName(value) {
+    const raw = String(value || "").trim().toLowerCase();
+    if (!raw) return "";
+
+    const map = {
+        mon: "monday",
+        monday: "monday",
+        tue: "tuesday",
+        tues: "tuesday",
+        tuesday: "tuesday",
+        wed: "wednesday",
+        weds: "wednesday",
+        wednesday: "wednesday",
+        thu: "thursday",
+        thur: "thursday",
+        thurs: "thursday",
+        thursday: "thursday",
+        fri: "friday",
+        friday: "friday",
+        sat: "saturday",
+        saturday: "saturday",
+        sun: "sunday",
+        sunday: "sunday",
+    };
+
+    return map[raw] || map[raw.slice(0, 3)] || "";
+}
+
+function getScheduleDayWeekday(day) {
+    const raw = pickFirstNonEmptyString(day?.weekday, day?.dayOfWeek, day?.label);
+    if (!raw) return "";
+    const firstToken = raw.split(/[,\s]+/).find(Boolean) || raw;
+    return normalizeWeekdayName(firstToken);
+}
+
+function sortSchedulingDays(days) {
+    return [...days]
+        .filter((day) => pickFirstNonEmptyString(day?.date))
+        .sort((a, b) => {
+            const activeDelta = Number(a?.activeTasks || 0) - Number(b?.activeTasks || 0);
+            if (activeDelta !== 0) return activeDelta;
+
+            const totalDelta = Number(a?.totalTasks || 0) - Number(b?.totalTasks || 0);
+            if (totalDelta !== 0) return totalDelta;
+
+            return String(a?.date || "").localeCompare(String(b?.date || ""));
+        });
+}
+
+function chooseLightestSchedulingDay(days) {
+    return sortSchedulingDays(days)[0] || null;
+}
+
+function buildScheduleDayLookup(snapshot) {
+    const weekDays = Array.isArray(snapshot?.calendarWeek?.days)
+        ? snapshot.calendarWeek.days.filter(Boolean)
         : [];
-    const weekColumn = pickFirstNonEmptyString(snapshot?.weeklyPlanner?.column);
-    const allowedCategories = Array.isArray(snapshot?.month?.availableCategories)
-        ? snapshot.month.availableCategories
+    const monthDays = Array.isArray(snapshot?.month?.businessDays)
+        ? snapshot.month.businessDays.filter(Boolean)
         : [];
-    const monthlyCategory = guessMonthlyCategory(taskText, allowedCategories);
 
-    const backlogCount = Number(snapshot?.backlog?.count || 0);
-    const monthlyGoalCount = Number(snapshot?.month?.goalCount || 0);
-    const isBiggerWork = /\b(strategy|campaign|project|system|audit|plan|roadmap|launch|build|rollout|overhaul)\b/i.test(taskText);
-    const isQuickTask = /\b(send|post|update|check|call|email|blast|review|draft|fix|upload)\b/i.test(taskText);
+    const byDate = new Map();
+    const weekByWeekday = new Map();
+    const monthByWeekday = new Map();
 
-    const placements = [];
+    weekDays.forEach((day) => {
+        const date = pickFirstNonEmptyString(day?.date);
+        if (!date) return;
+        if (!byDate.has(date)) byDate.set(date, day);
 
-    if (isBiggerWork && monthlyCategory) {
-        placements.push({
-            type: "month",
-            label: `Monthly strategy: ${monthlyCategory}`,
-            title: normalizedTaskTitle,
-            notes: taskText,
-            rationale: `This reads like multi-step work, so it fits best as a monthly strategy in ${monthlyCategory}.`,
-            confidence: "high",
-            monthCategory: monthlyCategory,
-        });
-    }
-
-    if (lightestDay?.date) {
-        placements.push({
-            type: "day",
-            label: `Schedule on ${lightestDay.label || lightestDay.date}`,
-            title: normalizedTaskTitle,
-            notes: taskText,
-            rationale: `That is the lightest day in the current visible week with ${Number(lightestDay.activeTasks || 0)} active tasks.`,
-            confidence: isQuickTask ? "high" : "medium",
-            date: lightestDay.date,
-        });
-    }
-
-    if (weekColumn && openPriorityRows.length > 0) {
-        placements.push({
-            type: "week",
-            label: `Weekly priorities row ${openPriorityRows[0]}`,
-            title: normalizedTaskTitle,
-            notes: taskText,
-            rationale: `There is still room in the weekly planner, so this can be parked as a week-level focus before you pin it to a day.`,
-            confidence: isQuickTask ? "medium" : "high",
-            weekRowKey: String(openPriorityRows[0]),
-            weekColumnKey: weekColumn,
-        });
-    }
-
-    placements.push({
-        type: "backlog",
-        label: "Keep it in backlog for now",
-        title: normalizedTaskTitle,
-        notes: taskText,
-        rationale: backlogCount >= 12
-            ? "The current week is already carrying a lot of work, so backlog is the safer holding area."
-            : "If timing is still fuzzy, backlog keeps the task visible without overloading a day or weekly slot.",
-        confidence: backlogCount >= 12 ? "high" : "medium",
+        const weekday = getScheduleDayWeekday(day);
+        if (weekday && !weekByWeekday.has(weekday)) {
+            weekByWeekday.set(weekday, day);
+        }
     });
 
-    const deduped = [];
-    const seen = new Set();
-    for (const placement of placements) {
-        const key = `${placement.type}|${placement.date || ""}|${placement.weekRowKey || ""}|${placement.monthCategory || ""}`;
-        if (seen.has(key)) continue;
-        seen.add(key);
-        deduped.push(placement);
-    }
+    monthDays.forEach((day) => {
+        const date = pickFirstNonEmptyString(day?.date);
+        if (!date) return;
+        if (!byDate.has(date)) byDate.set(date, day);
 
-    const assistantMessage = [
-        `I checked ${snapshot?.targetUser?.name || "your"} current week and month.`,
-        lightestDay?.date
-            ? `The lightest visible day is ${lightestDay.label || lightestDay.date} with ${Number(lightestDay.activeTasks || 0)} active tasks.`
-            : "I could not find a clear low-load day in the visible week.",
-        openPriorityRows.length > 0 && weekColumn
-            ? `The weekly planner still has open priority slots for ${weekColumn}.`
-            : "The weekly planner is already fairly packed.",
-        isBiggerWork
-            ? `Because this looks larger than a one-off task, I am leaning toward a month-level strategy before daily scheduling.`
-            : `Because this looks executable in one pass, I am leaning toward a day-level placement.`,
-    ].join(" ");
+        const weekday = getScheduleDayWeekday(day);
+        if (weekday && !monthByWeekday.has(weekday)) {
+            monthByWeekday.set(weekday, day);
+        }
+    });
 
     return {
-        source: "heuristic",
-        normalizedTaskTitle,
-        assistantMessage,
-        overallReasoning: assistantMessage,
-        workloadSummary: {
-            backlogCount,
-            monthlyGoalCount,
-            lightestDay: lightestDay?.date || null,
-            openPriorityRows: openPriorityRows.length,
-        },
-        placements: deduped.slice(0, 3),
+        weekDays,
+        monthDays,
+        byDate,
+        weekByWeekday,
+        monthByWeekday,
     };
 }
 
-function normalizePlacement(placement, snapshot, fallbackTitle) {
-    const allowedCategories = Array.isArray(snapshot?.month?.availableCategories)
-        ? snapshot.month.availableCategories
-        : [];
-    const candidateDates = new Set(
-        (Array.isArray(snapshot?.calendarWeek?.days) ? snapshot.calendarWeek.days : [])
-            .map((day) => String(day?.date || ""))
-            .filter(Boolean)
-    );
-    const openPriorityRows = new Set(
-        (Array.isArray(snapshot?.weeklyPlanner?.openPriorityRows) ? snapshot.weeklyPlanner.openPriorityRows : [])
-            .map((row) => String(row))
-    );
-    const weekColumn = pickFirstNonEmptyString(snapshot?.weeklyPlanner?.column);
+function normalizeTaskTime(value) {
+    if (value == null) return null;
 
-    const type = normalizeSuggestionType(placement?.type);
-    const normalized = {
-        type,
-        label: pickFirstNonEmptyString(placement?.label) || type,
-        title: pickFirstNonEmptyString(placement?.title) || fallbackTitle,
-        notes: pickFirstNonEmptyString(placement?.notes),
-        rationale: pickFirstNonEmptyString(placement?.rationale),
-        confidence: normalizeConfidence(placement?.confidence),
-        date: null,
-        weekRowKey: null,
-        weekColumnKey: null,
-        monthCategory: null,
-    };
+    const raw = String(value || "")
+        .trim()
+        .toLowerCase()
+        .replace(/^at\s+/, "");
 
-    if (type === "day") {
-        const date = pickFirstNonEmptyString(placement?.date);
-        normalized.date = candidateDates.has(date) ? date : null;
-        if (!normalized.date) normalized.type = "backlog";
+    if (!raw) return null;
+    if (raw === "noon") return "12:00";
+    if (raw === "midnight") return "00:00";
+
+    let match = raw.match(/^(\d{1,2})(?::(\d{2}))?\s*(am|pm)$/i);
+    if (match) {
+        let hours = Number(match[1]);
+        const minutes = Number(match[2] || 0);
+        const meridiem = String(match[3] || "").toLowerCase();
+
+        if (hours < 1 || hours > 12 || minutes < 0 || minutes > 59) return null;
+        if (meridiem === "pm" && hours !== 12) hours += 12;
+        if (meridiem === "am" && hours === 12) hours = 0;
+
+        return `${pad2(hours)}:${pad2(minutes)}`;
     }
 
-    if (normalized.type === "week") {
-        const row = pickFirstNonEmptyString(placement?.weekRowKey);
-        normalized.weekRowKey = openPriorityRows.has(row) ? row : null;
-        normalized.weekColumnKey = matchAllowedValue(placement?.weekColumnKey, weekColumn ? [weekColumn] : [], weekColumn || null);
-        if (!normalized.weekRowKey || !normalized.weekColumnKey) {
-            normalized.type = "backlog";
-            normalized.weekRowKey = null;
-            normalized.weekColumnKey = null;
+    match = raw.match(/^(\d{1,2}):(\d{2})(?::\d{2})?$/);
+    if (match) {
+        const hours = Number(match[1]);
+        const minutes = Number(match[2]);
+        if (hours < 0 || hours > 23 || minutes < 0 || minutes > 59) return null;
+        return `${pad2(hours)}:${pad2(minutes)}`;
+    }
+
+    return null;
+}
+
+function normalizeWhenWindow(value) {
+    const raw = String(value || "").trim().toLowerCase();
+    if (raw === "specific_date" || raw === "specific-day" || raw === "specific_day") return "specific_day";
+    if (raw === "this_week" || raw === "week" || raw === "weekly") return "this_week";
+    if (raw === "this_month" || raw === "month" || raw === "monthly") return "this_month";
+    return "unspecified";
+}
+
+function shiftDateKey(dateKeyValue, days) {
+    const match = String(dateKeyValue || "").match(/^(\d{4})-(\d{2})-(\d{2})$/);
+    if (!match) return null;
+
+    const date = new Date(Number(match[1]), Number(match[2]) - 1, Number(match[3]));
+    date.setDate(date.getDate() + Number(days || 0));
+
+    return `${date.getFullYear()}-${pad2(date.getMonth() + 1)}-${pad2(date.getDate())}`;
+}
+
+function hasExplicitTimeCue(text) {
+    return !!extractTaskTimeFromText(text);
+}
+
+function hasStrongClauseScheduleCue(text) {
+    const raw = stripTaskPrefix(text).toLowerCase();
+    if (!raw) return false;
+
+    if (/^(?:today|tomorrow)\b/.test(raw)) return true;
+    if (/^(?:on\s+)?(?:(?:this|next)\s+)?(?:monday|tuesday|wednesday|thursday|friday|saturday|sunday)\b/.test(raw)) return true;
+    if (/^(?:on|by|before|after|due)\s+(?:monday|tuesday|wednesday|thursday|friday|saturday|sunday)\b/.test(raw)) return true;
+    if (/^(?:on|by|before|after|due)\s+(?:jan(?:uary)?|feb(?:ruary)?|mar(?:ch)?|apr(?:il)?|may|jun(?:e)?|jul(?:y)?|aug(?:ust)?|sep(?:t(?:ember)?)?|oct(?:ober)?|nov(?:ember)?|dec(?:ember)?|\d{1,2}\/\d{1,2})\b/.test(raw)) return true;
+    if (/^(?:jan(?:uary)?|feb(?:ruary)?|mar(?:ch)?|apr(?:il)?|may|jun(?:e)?|jul(?:y)?|aug(?:ust)?|sep(?:t(?:ember)?)?|oct(?:ober)?|nov(?:ember)?|dec(?:ember)?|\d{1,2}\/\d{1,2})\s+\d{1,2}\b/.test(raw)) return true;
+
+    return false;
+}
+
+function extractLeadingScheduleContext(taskText, snapshot, lookup = buildScheduleDayLookup(snapshot)) {
+    const raw = String(taskText || "").trim();
+    if (!raw) return null;
+
+    const normalized = raw.replace(/^[,.;:\s]+/, "");
+    const sharedTime = extractTaskTimeFromText(normalized);
+    const today = pickFirstNonEmptyString(snapshot?.today);
+
+    if (/^today\b/i.test(normalized) && today) {
+        return {
+            source: "today",
+            taskDate: today,
+            whenWindow: "specific_day",
+            taskTime: sharedTime,
+            weekday: normalizeWeekdayName(getScheduleDayWeekday(lookup.byDate.get(today))),
+        };
+    }
+
+    if (/^tomorrow\b/i.test(normalized) && today) {
+        const tomorrow = shiftDateKey(today, 1);
+        if (tomorrow && lookup.byDate.has(tomorrow)) {
+            return {
+                source: "tomorrow",
+                taskDate: tomorrow,
+                whenWindow: "specific_day",
+                taskTime: sharedTime,
+                weekday: normalizeWeekdayName(getScheduleDayWeekday(lookup.byDate.get(tomorrow))),
+            };
         }
     }
 
-    if (normalized.type === "month") {
-        normalized.monthCategory = matchAllowedValue(
-            placement?.monthCategory,
-            allowedCategories,
-            guessMonthlyCategory(fallbackTitle, allowedCategories)
-        );
-        if (!normalized.monthCategory) normalized.type = "backlog";
+    const weekdayMatch = normalized.match(/^(?:on\s+)?(?:(this|next)\s+)?(monday|tuesday|wednesday|thursday|friday|saturday|sunday)\b/i);
+    if (weekdayMatch) {
+        const weekday = normalizeWeekdayName(weekdayMatch[2]);
+        const matchedDay = lookup.weekByWeekday.get(weekday) || lookup.monthByWeekday.get(weekday);
+        if (matchedDay?.date) {
+            return {
+                source: weekdayMatch[0],
+                taskDate: matchedDay.date,
+                whenWindow: "specific_day",
+                taskTime: sharedTime,
+                weekday,
+            };
+        }
     }
 
-    return normalized;
+    if (/^this week\b/i.test(normalized)) {
+        return {
+            source: "this week",
+            taskDate: null,
+            whenWindow: "this_week",
+            taskTime: sharedTime,
+            weekday: null,
+        };
+    }
+
+    if (/^this month\b/i.test(normalized)) {
+        return {
+            source: "this month",
+            taskDate: null,
+            whenWindow: "this_month",
+            taskTime: sharedTime,
+            weekday: null,
+        };
+    }
+
+    return null;
+}
+
+function applySharedScheduleContext(task, sourceText, sharedContext, lookup) {
+    if (!sharedContext) return { ...task };
+
+    const clauseHasOwnDateCue = hasStrongClauseScheduleCue(sourceText);
+    const clauseHasOwnTimeCue = hasExplicitTimeCue(sourceText);
+    const normalizedTask = { ...task };
+    const currentTaskDate = pickFirstNonEmptyString(normalizedTask?.taskDate, normalizedTask?.date, normalizedTask?.dateKey);
+
+    if (sharedContext.whenWindow === "specific_day" && sharedContext.taskDate && !clauseHasOwnDateCue) {
+        normalizedTask.taskDate = sharedContext.taskDate;
+        normalizedTask.date = sharedContext.taskDate;
+        normalizedTask.weekday = normalizedTask.weekday || sharedContext.weekday || null;
+        normalizedTask.whenWindow = "specific_day";
+
+        if (currentTaskDate && currentTaskDate !== sharedContext.taskDate) {
+            normalizedTask.dateReasoning = `Used the leading "${sharedContext.source}" schedule context from the request instead of an event date mentioned inside the task details.`;
+        }
+    } else if (!normalizedTask.whenWindow || normalizeWhenWindow(normalizedTask.whenWindow) === "unspecified") {
+        normalizedTask.whenWindow = sharedContext.whenWindow;
+    }
+
+    if (!normalizedTask.taskTime && !normalizedTask.time && sharedContext.taskTime && !clauseHasOwnTimeCue) {
+        normalizedTask.taskTime = sharedContext.taskTime;
+    }
+
+    return normalizedTask;
+}
+
+function stripTaskPrefix(text) {
+    return String(text || "")
+        .replace(/^[,.;:\s]+|[,.;:\s]+$/g, "")
+        .replace(/^(?:and|also)\s+/i, "")
+        .replace(/^(?:please\s+)?(?:i\s+need\s+to|i\s+need|need\s+to|we\s+need\s+to|we\s+need|i\s+have\s+to|have\s+to|i\s+want\s+to|want\s+to|i\s+should|should)\s+/i, "")
+        .replace(/\s+/g, " ")
+        .trim();
+}
+
+function splitTaskClauses(taskText) {
+    const raw = String(taskText || "").replace(/\s+/g, " ").trim();
+    if (!raw) return [];
+
+    const normalized = raw
+        .replace(/\s*(?:;|•|\n)\s*/g, ", ")
+        .replace(/\b(?:and then|then|also|plus)\b/gi, ", ")
+        .replace(
+            /\s+and\s+(?=(?:this|next|on|by|before|after|monday|tuesday|wednesday|thursday|friday|saturday|sunday|i\s+(?:need|have|want|should)|need\s+to|have\s+to|run|teach|call|send|draft|update|check|review|write|post|create|schedule|meet|attend|prepare|book|go|finish|follow\s+up|plan|handle)\b)/gi,
+            ", "
+        );
+
+    const parts = normalized
+        .split(/\s*,\s*/)
+        .map((part) => stripTaskPrefix(part))
+        .filter(Boolean);
+
+    return parts.length ? parts : [stripTaskPrefix(raw)].filter(Boolean);
+}
+
+function buildTaskTitleFromSource(sourceText) {
+    let title = stripTaskPrefix(sourceText);
+
+    title = title
+        .replace(/^(?:on\s+)?(?:this|next)\s+(?:monday|tuesday|wednesday|thursday|friday|saturday|sunday)\b/i, "")
+        .replace(/^(?:on\s+)?(?:monday|tuesday|wednesday|thursday|friday|saturday|sunday)\b/i, "")
+        .replace(/\b(?:on\s+)?(?:this|next)\s+(?:monday|tuesday|wednesday|thursday|friday|saturday|sunday)\b(?:\s+at\s+\d{1,2}(?::\d{2})?\s*(?:am|pm))?/i, "")
+        .replace(/\b(?:this week|this month)\b/gi, "")
+        .replace(/\bat\s+\d{1,2}(?::\d{2})?\s*(?:am|pm)\b/gi, "")
+        .replace(/^(?:i\s+have\s+(?:an?\s+)?)?/i, "")
+        .replace(/\s+/g, " ")
+        .replace(/^[,.;:\s]+|[,.;:\s]+$/g, "")
+        .trim();
+
+    if (!title) title = normalizeTaskTitle(sourceText);
+    if (!title) return "New task";
+
+    return title.charAt(0).toUpperCase() + title.slice(1);
+}
+
+function extractWeekdayFromText(text) {
+    const match = String(text || "").match(/\b(monday|tuesday|wednesday|thursday|friday|saturday|sunday)\b/i);
+    return normalizeWeekdayName(match?.[1]);
+}
+
+function extractTaskTimeFromText(text) {
+    const raw = String(text || "");
+    if (!raw.trim()) return null;
+    if (/\bnoon\b/i.test(raw)) return "12:00";
+    if (/\bmidnight\b/i.test(raw)) return "00:00";
+
+    const amPmMatch = raw.match(/\b(?:at\s+)?(\d{1,2})(?::(\d{2}))?\s*(am|pm)\b/i);
+    if (amPmMatch) {
+        return normalizeTaskTime(`${amPmMatch[1]}:${amPmMatch[2] || "00"} ${amPmMatch[3]}`);
+    }
+
+    const twentyFourHourMatch = raw.match(/\b(\d{1,2}):(\d{2})\b/);
+    if (twentyFourHourMatch) {
+        return normalizeTaskTime(`${twentyFourHourMatch[1]}:${twentyFourHourMatch[2]}`);
+    }
+
+    return null;
+}
+
+function inferTaskWindow(text) {
+    const raw = String(text || "");
+    if (/\bthis month\b/i.test(raw)) return "this_month";
+    if (/\bthis week\b/i.test(raw)) return "this_week";
+    if (extractWeekdayFromText(raw)) return "specific_day";
+    return "unspecified";
+}
+
+function resolveTaskDate(candidate, snapshot, lookup = buildScheduleDayLookup(snapshot)) {
+    const explicitDate = pickFirstNonEmptyString(candidate?.taskDate, candidate?.date, candidate?.dateKey);
+    if (explicitDate && lookup.byDate.has(explicitDate)) {
+        return explicitDate;
+    }
+
+    const explicitWeekday = normalizeWeekdayName(
+        pickFirstNonEmptyString(candidate?.weekday, candidate?.dayOfWeek, candidate?.day, extractWeekdayFromText(candidate?.sourceText))
+    );
+
+    if (explicitWeekday) {
+        const weekMatch = lookup.weekByWeekday.get(explicitWeekday);
+        if (weekMatch?.date) return weekMatch.date;
+
+        const monthMatch = lookup.monthByWeekday.get(explicitWeekday);
+        if (monthMatch?.date) return monthMatch.date;
+    }
+
+    const whenWindow = normalizeWhenWindow(candidate?.whenWindow || inferTaskWindow(candidate?.sourceText));
+    if (whenWindow === "this_month") {
+        const lightestMonthDay = chooseLightestSchedulingDay(lookup.monthDays);
+        if (lightestMonthDay?.date) return lightestMonthDay.date;
+    }
+
+    const lightestWeekDay = chooseLightestSchedulingDay(lookup.weekDays);
+    if (lightestWeekDay?.date) return lightestWeekDay.date;
+
+    const lightestMonthDay = chooseLightestSchedulingDay(lookup.monthDays);
+    if (lightestMonthDay?.date) return lightestMonthDay.date;
+
+    return pickFirstNonEmptyString(snapshot?.today) || null;
+}
+
+function sortAssistantTasks(tasks) {
+    return [...tasks].sort((a, b) => {
+        const dateDelta = String(a?.taskDate || "9999-12-31").localeCompare(String(b?.taskDate || "9999-12-31"));
+        if (dateDelta !== 0) return dateDelta;
+        return String(a?.taskTime || "99:99").localeCompare(String(b?.taskTime || "99:99"));
+    });
+}
+
+function normalizePlannedTask(task, snapshot, fallbackSourceText, index, lookup = buildScheduleDayLookup(snapshot), sharedContext = null) {
+    const sourceText = pickFirstNonEmptyString(task?.sourceText, task?.source, fallbackSourceText);
+    const taskWithContext = applySharedScheduleContext({ ...task, sourceText }, sourceText, sharedContext, lookup);
+    const title = normalizeTaskTitle(buildTaskTitleFromSource(pickFirstNonEmptyString(taskWithContext?.title, sourceText, `Task ${index + 1}`)));
+    const taskDate = resolveTaskDate(taskWithContext, snapshot, lookup);
+    const taskTime = normalizeTaskTime(taskWithContext?.taskTime ?? taskWithContext?.time);
+    const dateReasoning = pickFirstNonEmptyString(taskWithContext?.dateReasoning, taskWithContext?.rationale);
+
+    if (!title || !taskDate) return null;
+
+    return {
+        title,
+        notes: pickFirstNonEmptyString(taskWithContext?.notes),
+        sourceText: sourceText || title,
+        taskDate,
+        taskTime,
+        confidence: normalizeConfidence(taskWithContext?.confidence),
+        dateReasoning: dateReasoning || (taskTime ? "Placed on the requested date and time." : "Placed on the lightest available workday."),
+        applied: false,
+    };
+}
+
+function buildHeuristicScheduleSuggestion(taskText, snapshot, sharedContext = null) {
+    const lookup = buildScheduleDayLookup(snapshot);
+    const clauses = splitTaskClauses(taskText);
+    const lightestWeekDay = chooseLightestSchedulingDay(lookup.weekDays);
+
+    const tasks = sortAssistantTasks(
+        clauses
+            .map((clause, index) => {
+                const sourceText = stripTaskPrefix(clause);
+                if (!sourceText) return null;
+
+                const explicitWeekday = extractWeekdayFromText(sourceText);
+                const whenWindow = inferTaskWindow(sourceText);
+                const taskDate = resolveTaskDate(
+                    {
+                        sourceText,
+                        weekday: explicitWeekday,
+                        whenWindow,
+                    },
+                    snapshot,
+                    lookup
+                );
+                const taskTime = extractTaskTimeFromText(sourceText);
+                const chosenDay = lookup.byDate.get(taskDate);
+
+                let dateReasoning = "Placed on the lightest available workday.";
+                if (explicitWeekday && chosenDay?.date) {
+                    dateReasoning = `Placed on ${chosenDay.label || chosenDay.date} because that weekday was explicitly requested.`;
+                } else if (whenWindow === "this_week" && chosenDay?.date) {
+                    dateReasoning = `Placed on ${chosenDay.label || chosenDay.date}, the least busy visible workday with ${Number(chosenDay.activeTasks || 0)} active tasks.`;
+                } else if (whenWindow === "this_month" && chosenDay?.date) {
+                    dateReasoning = `Placed on ${chosenDay.label || chosenDay.date}, one of the lighter workdays in the current month.`;
+                }
+
+                return normalizePlannedTask(
+                    {
+                        title: buildTaskTitleFromSource(sourceText),
+                        notes: "",
+                        sourceText,
+                        taskDate,
+                        taskTime,
+                        whenWindow,
+                        confidence: explicitWeekday || taskTime ? "high" : whenWindow === "this_week" ? "high" : "medium",
+                        dateReasoning,
+                    },
+                    snapshot,
+                    sourceText,
+                    index,
+                    lookup,
+                    sharedContext
+                );
+            })
+            .filter(Boolean)
+    );
+
+    const assistantMessage = tasks.length
+        ? [
+            `I split this into ${tasks.length} daily task${tasks.length === 1 ? "" : "s"}.`,
+            lightestWeekDay?.date
+                ? `Flexible work was pushed toward ${lightestWeekDay.label || lightestWeekDay.date}, which is the lightest visible weekday.`
+                : "Items without a specific day were placed on the lightest available workday I could find.",
+            tasks.some((task) => task.taskTime)
+                ? "Any explicit times were preserved as scheduled reminder times."
+                : "No explicit reminder times were found in the request.",
+        ].join(" ")
+        : "I could not split that cleanly, so I kept it as one daily task and placed it on the lightest available workday.";
+
+    return {
+        source: "heuristic",
+        assistantMessage,
+        overallReasoning: assistantMessage,
+        tasks: tasks.length
+            ? tasks
+            : [
+                normalizePlannedTask(
+                    {
+                        title: buildTaskTitleFromSource(taskText),
+                        notes: "",
+                        sourceText: taskText,
+                        taskDate: resolveTaskDate({ sourceText: taskText }, snapshot, lookup),
+                        taskTime: extractTaskTimeFromText(taskText),
+                        confidence: "medium",
+                        dateReasoning: lightestWeekDay?.date
+                            ? `Placed on ${lightestWeekDay.label || lightestWeekDay.date}, the lightest visible weekday.`
+                            : "Placed on the lightest available workday.",
+                    },
+                    snapshot,
+                    taskText,
+                    0,
+                    lookup,
+                    sharedContext
+                ),
+            ].filter(Boolean),
+    };
 }
 
 async function getScheduleSuggestion(request, env) {
@@ -372,57 +709,63 @@ async function getScheduleSuggestion(request, env) {
         return json({ error: "GEMINI_API_KEY not configured for wrapsheet" }, 500);
     }
 
-    const heuristic = buildHeuristicScheduleSuggestion(task, snapshot);
+    const lookup = buildScheduleDayLookup(snapshot);
+    const sharedContext = extractLeadingScheduleContext(task, snapshot, lookup);
+    const heuristic = buildHeuristicScheduleSuggestion(task, snapshot, sharedContext);
     const prompt = `
-You are the BER Wrap Sheet scheduling assistant.
+You are the BER Wrap Sheet AI daily task planner.
 
 Your job:
-- Read the user's new task request.
-- Analyze the provided week, backlog, weekly-planner, and month summaries.
-- Suggest the best place to capture the work so the user can add it quickly.
-- Balance current load. Avoid stacking new work onto the busiest day when a lighter option exists.
-
-Allowed placement types:
-- "day": use one of the provided calendarWeek.days[].date values
-- "week": only if weeklyPlanner.column exists and weeklyPlanner.openPriorityRows contains the chosen row
-- "month": only if month.availableCategories contains the chosen category
-- "backlog": use when timing is unclear or the week already looks overloaded
+- Split the user's message into distinct DAILY tasks.
+- Schedule each task onto an exact calendar date using the provided current week and month load summaries.
+- If the user gives a specific time, return it as a 24-hour HH:MM value in taskTime so the app can schedule reminders.
+- If the user says "this week" but does not choose a day, place that task on the lightest date in calendarWeek.days.
+- If the user says "this month" but does not choose a day, place that task on a lighter business day from month.businessDays.
+- If the user gives a weekday like Thursday, map it to the correct YYYY-MM-DD date from the current visible week whenever possible.
+- If the request starts with a shared scheduling anchor like "this Friday I need to..." or "today I need to...", that anchor applies to all split tasks unless a later clause clearly overrides it.
+- Dates mentioned as event details, class dates, launch dates, publish dates, or subject matter do NOT automatically become the task schedule date.
+- Example: "This Friday I need to promote the social at Cabana Resort April 21st and David's photography on April 30th" should create Friday tasks about those items, not tasks on April 21st and April 30th.
 
 Return ONLY valid JSON with this shape:
 {
-  "assistantMessage": "2-4 concise sentences explaining the recommendation and load tradeoff.",
-  "normalizedTaskTitle": "clean task title",
+  "assistantMessage": "2-4 concise sentences explaining how you split and scheduled the work.",
   "overallReasoning": "1 short paragraph",
-  "placements": [
+  "tasks": [
     {
-      "type": "day|week|month|backlog",
-      "label": "short UI label",
-      "title": "task title to save",
-      "notes": "optional notes",
-      "rationale": "why this placement fits",
-      "confidence": "high|medium|low",
-      "date": "YYYY-MM-DD or null",
-      "weekRowKey": "1-5 or null",
-      "weekColumnKey": "weekly planner column or null",
-      "monthCategory": "allowed month category or null"
+      "title": "short action-oriented task title",
+      "notes": "optional notes or empty string",
+      "sourceText": "the original chunk this task came from",
+      "taskDate": "YYYY-MM-DD",
+      "taskTime": "HH:MM or null",
+      "weekday": "monday|tuesday|wednesday|thursday|friday|saturday|sunday or null",
+      "whenWindow": "specific_day|this_week|this_month|unspecified",
+      "dateReasoning": "why this date was chosen",
+      "confidence": "high|medium|low"
     }
   ]
 }
 
 Rules:
-- Provide 2 or 3 placement options.
-- Put the best recommendation first.
-- Be decisive and specific.
+- Every returned item must be a daily task.
+- Split combined requests into as many daily tasks as needed.
+- Use only dates that appear in calendarWeek.days[].date or month.businessDays[].date.
+- Preserve explicit day/time commitments.
+- Prefer the user's scheduling context over dates embedded inside what the task is about.
+- Keep titles concise and usable as saved task names.
+- Leave notes empty unless extra task detail matters.
 - Do not use markdown fences.
 
-User task:
+User request:
 ${task}
+
+Detected shared schedule context:
+${sharedContext ? JSON.stringify(sharedContext, null, 2) : "null"}
 
 Schedule snapshot:
 ${JSON.stringify(snapshot, null, 2)}
 `.trim();
 
-    const geminiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${env.GEMINI_API_KEY}`;
+    const geminiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-lite:generateContent?key=${env.GEMINI_API_KEY}`;
     let rawText = "";
 
     try {
@@ -437,47 +780,52 @@ ${JSON.stringify(snapshot, null, 2)}
         if (!response.ok) {
             const details = await response.text().catch(() => "");
             console.error("Gemini schedule assistant error:", details);
-            return json({ error: "Gemini API error", details }, 500);
+            return json({
+                ...heuristic,
+                source: "heuristic_after_gemini_error",
+                rawText: details,
+            });
         }
 
         const payload = await response.json();
         rawText = extractGeminiText(payload);
         const parsed = safeParseJsonBlock(rawText);
-        if (!parsed || !Array.isArray(parsed.placements) || parsed.placements.length === 0) {
-            const fallback = {
+        if (!parsed || !Array.isArray(parsed.tasks) || parsed.tasks.length === 0) {
+            return json({
                 ...heuristic,
                 source: "heuristic_after_parse_failure",
                 rawText,
-            };
-            return json(fallback);
+            });
         }
 
-        const normalizedTaskTitle = pickFirstNonEmptyString(parsed.normalizedTaskTitle) || heuristic.normalizedTaskTitle;
-        const placements = parsed.placements
-            .map((placement) => normalizePlacement(placement, snapshot, normalizedTaskTitle))
-            .filter((placement) => placement && placement.title);
+        const normalizedTasks = sortAssistantTasks(
+            parsed.tasks
+                .map((item, index) => normalizePlannedTask(item, snapshot, heuristic.tasks?.[index]?.sourceText || task, index, lookup, sharedContext))
+                .filter(Boolean)
+        );
 
-        if (placements.length === 0) {
-            const fallback = {
+        if (normalizedTasks.length === 0) {
+            return json({
                 ...heuristic,
                 source: "heuristic_after_normalization_failure",
                 rawText,
-            };
-            return json(fallback);
+            });
         }
 
         return json({
             source: "gemini",
-            normalizedTaskTitle,
             assistantMessage: pickFirstNonEmptyString(parsed.assistantMessage) || heuristic.assistantMessage,
             overallReasoning: pickFirstNonEmptyString(parsed.overallReasoning) || heuristic.overallReasoning,
-            workloadSummary: heuristic.workloadSummary,
-            placements: placements.slice(0, 3),
+            tasks: normalizedTasks.slice(0, 12),
             rawText,
         });
     } catch (error) {
         console.error("Schedule assistant failure:", error);
-        return json({ error: error.message || "Schedule assistant failed" }, 500);
+        return json({
+            ...heuristic,
+            source: "heuristic_after_request_failure",
+            rawText,
+        });
     }
 }
 
