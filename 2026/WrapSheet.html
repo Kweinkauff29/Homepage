@@ -4947,7 +4947,14 @@
 
     const BACKLOG_DATE = "1900-01-01";
     const SCHEDULE_ASSISTANT_TRANSFORMERS_URL = "https://cdn.jsdelivr.net/npm/@huggingface/transformers@4.1.0";
-    const SCHEDULE_ASSISTANT_SPEECH_MODEL = "Xenova/whisper-tiny.en";
+    const SCHEDULE_ASSISTANT_SPEECH_MODEL = "onnx-community/whisper-tiny.en";
+    const SCHEDULE_ASSISTANT_SPEECH_OPTIONS = {
+      device: "wasm",
+      dtype: {
+        encoder_model: "fp32",
+        decoder_model_merged: "fp32"
+      }
+    };
 
     const state = {
       users: [],
@@ -8458,7 +8465,8 @@
         }
         const transcriber = await pipeline(
           "automatic-speech-recognition",
-          SCHEDULE_ASSISTANT_SPEECH_MODEL
+          SCHEDULE_ASSISTANT_SPEECH_MODEL,
+          SCHEDULE_ASSISTANT_SPEECH_OPTIONS
         );
         voice.transcriber = transcriber;
         voice.mode = "open-source";
