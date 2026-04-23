@@ -760,6 +760,7 @@ function pickStructuredScheduleTitle(block) {
 
     return stripTaskPrefix(
         String(preferred || "")
+            .replace(/^bundle\s*\d+\s*(?:-|:|\?|\u2013|\u2014)\s*/i, "")
             .replace(/^bundle\s*\d+\s*[—-]\s*/i, "")
             .replace(/^theme:\s*/i, "")
             .replace(/^goal:\s*/i, "")
