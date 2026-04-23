@@ -7,9 +7,19 @@
     --ccor-grey: #5B5A5C;
   }
 
-  body {
-    margin: 0;
-    padding: 0;
+  body,
+  body[class],
+  body.elementor-page-8 {
+    margin: 0 !important;
+    padding: 0 !important;
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+  }
+
+  /* Reset WP root padding variables that cause side margins */
+  html {
+    --wp--style--root--padding-left: 0px !important;
+    --wp--style--root--padding-right: 0px !important;
   }
 
   .ber-topbar *,
@@ -76,20 +86,26 @@
     padding: 0 !important;
   }
 
-  /* WordPress integration: kill root padding on header's parent Elementor container */
+  /* WordPress integration: kill ALL side padding/margin at every wrapper level */
+  .wp-site-blocks,
+  .has-global-padding,
+  .elementor-location-header,
   .elementor-location-header .e-con,
-  .elementor-location-header .e-con-inner {
-    padding-left: 0 !important;
-    padding-right: 0 !important;
-    max-width: 100% !important;
-  }
-
-  /* Override WP global padding that causes white margin */
-  .elementor-location-header {
+  .elementor-location-header .e-con-inner,
+  .elementor-location-header .elementor-widget-wrap,
+  .elementor-location-header .elementor-widget {
     padding-left: 0 !important;
     padding-right: 0 !important;
     margin-left: 0 !important;
     margin-right: 0 !important;
+    max-width: 100% !important;
+    width: 100% !important;
+  }
+
+  /* Ensure full-width Elementor sections inside the page body also go edge-to-edge */
+  .elementor-section.elementor-section-stretched,
+  .e-con[data-e-type="container"] {
+    max-width: 100% !important;
   }
 
   /* === TOPBAR (contact + socials) === */
