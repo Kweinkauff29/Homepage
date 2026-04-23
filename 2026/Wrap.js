@@ -190,6 +190,109 @@ function pad2(value) {
     return String(value).padStart(2, "0");
 }
 
+const MONTH_NAME_TO_NUMBER = {
+    jan: 1,
+    january: 1,
+    feb: 2,
+    february: 2,
+    mar: 3,
+    march: 3,
+    apr: 4,
+    april: 4,
+    may: 5,
+    jun: 6,
+    june: 6,
+    jul: 7,
+    july: 7,
+    aug: 8,
+    august: 8,
+    sep: 9,
+    sept: 9,
+    september: 9,
+    oct: 10,
+    october: 10,
+    nov: 11,
+    november: 11,
+    dec: 12,
+    december: 12,
+};
+
+const EXPLICIT_DATE_MONTH_PATTERN = Object.keys(MONTH_NAME_TO_NUMBER)
+    .sort((a, b) => b.length - a.length)
+    .join("|");
+
+function buildValidatedDateKey(year, monthNumber, dayNumber) {
+    if (!Number.isInteger(year) || !Number.isInteger(monthNumber) || !Number.isInteger(dayNumber)) {
+        return null;
+    }
+
+    const date = new Date(year, monthNumber - 1, dayNumber);
+    if (
+        date.getFullYear() !== year ||
+        date.getMonth() !== monthNumber - 1 ||
+        date.getDate() !== dayNumber
+    ) {
+        return null;
+    }
+
+    return `${date.getFullYear()}-${pad2(date.getMonth() + 1)}-${pad2(date.getDate())}`;
+}
+
+function inferExplicitDateYear(snapshot) {
+    const today = pickFirstNonEmptyString(snapshot?.today);
+    if (/^\d{4}-\d{2}-\d{2}$/.test(today)) {
+        return Number(today.slice(0, 4));
+    }
+    return new Date().getFullYear();
+}
+
+function normalizeTwoDigitYear(yearValue) {
+    if (!Number.isInteger(yearValue)) return null;
+    if (yearValue >= 100) return yearValue;
+    return yearValue >= 70 ? 1900 + yearValue : 2000 + yearValue;
+}
+
+function parseExplicitDateValue(value, snapshot) {
+    const raw = String(value || "").trim();
+    if (!raw) return null;
+
+    let match = raw.match(/\b(\d{4})-(\d{2})-(\d{2})\b/);
+    if (match) {
+        return buildValidatedDateKey(Number(match[1]), Number(match[2]), Number(match[3]));
+    }
+
+    match = raw.match(
+        new RegExp(
+            `\\b(?:(?:monday|tuesday|wednesday|thursday|friday|saturday|sunday)\\s*,\\s*)?(${EXPLICIT_DATE_MONTH_PATTERN})\\s+(\\d{1,2})(?:st|nd|rd|th)?(?:,\\s*(\\d{2,4}))?\\b`,
+            "i"
+        )
+    );
+    if (match) {
+        const monthNumber = MONTH_NAME_TO_NUMBER[String(match[1] || "").toLowerCase()];
+        const dayNumber = Number(match[2]);
+        const yearNumber = match[3]
+            ? normalizeTwoDigitYear(Number(match[3]))
+            : inferExplicitDateYear(snapshot);
+        return buildValidatedDateKey(yearNumber, monthNumber, dayNumber);
+    }
+
+    match = raw.match(/\b(\d{1,2})\/(\d{1,2})(?:\/(\d{2,4}))?\b/);
+    if (match) {
+        const monthNumber = Number(match[1]);
+        const dayNumber = Number(match[2]);
+        const yearNumber = match[3]
+            ? normalizeTwoDigitYear(Number(match[3]))
+            : inferExplicitDateYear(snapshot);
+        return buildValidatedDateKey(yearNumber, monthNumber, dayNumber);
+    }
+
+    return null;
+}
+
+function extractExplicitDateFromText(text, snapshot) {
+    return parseExplicitDateValue(text, snapshot);
+}
+
 function normalizeWeekdayName(value) {
     const raw = String(value || "").trim().toLowerCase();
     if (!raw) return "";
@@ -536,8 +639,11 @@ function inferTaskWindow(text) {
 }
 
 function resolveTaskDate(candidate, snapshot, lookup = buildScheduleDayLookup(snapshot)) {
-    const explicitDate = pickFirstNonEmptyString(candidate?.taskDate, candidate?.date, candidate?.dateKey);
-    if (explicitDate && lookup.byDate.has(explicitDate)) {
+    const explicitDate = parseExplicitDateValue(
+        pickFirstNonEmptyString(candidate?.taskDate, candidate?.date, candidate?.dateKey),
+        snapshot
+    );
+    if (explicitDate) {
         return explicitDate;
     }
 
@@ -578,7 +684,26 @@ function sortAssistantTasks(tasks) {
 
 function normalizePlannedTask(task, snapshot, fallbackSourceText, index, lookup = buildScheduleDayLookup(snapshot), sharedContext = null) {
     const sourceText = pickFirstNonEmptyString(task?.sourceText, task?.source, fallbackSourceText);
+    const clauseHasOwnDateCue = hasStrongClauseScheduleCue(sourceText);
     const taskWithContext = applySharedScheduleContext({ ...task, sourceText }, sourceText, sharedContext, lookup);
+    const hasExplicitTaskDate = !!pickFirstNonEmptyString(taskWithContext?.taskDate, taskWithContext?.date, taskWithContext?.dateKey);
+
+    if (!hasExplicitTaskDate) {
+        const canUseInlineExplicitDate =
+            !sharedContext ||
+            sharedContext.whenWindow !== "specific_day" ||
+            clauseHasOwnDateCue;
+
+        if (canUseInlineExplicitDate) {
+            const inlineExplicitDate = extractExplicitDateFromText(sourceText, snapshot);
+            if (inlineExplicitDate) {
+                taskWithContext.taskDate = inlineExplicitDate;
+                taskWithContext.date = inlineExplicitDate;
+                taskWithContext.whenWindow = "specific_day";
+            }
+        }
+    }
+
     const title = normalizeTaskTitle(buildTaskTitleFromSource(pickFirstNonEmptyString(taskWithContext?.title, sourceText, `Task ${index + 1}`)));
     const taskDate = resolveTaskDate(taskWithContext, snapshot, lookup);
     const taskTime = normalizeTaskTime(taskWithContext?.taskTime ?? taskWithContext?.time);
@@ -598,7 +723,133 @@ function normalizePlannedTask(task, snapshot, fallbackSourceText, index, lookup 
     };
 }
 
+function matchStructuredScheduleDateHeading(line, snapshot) {
+    const raw = String(line || "").trim();
+    if (!raw) return null;
+
+    const explicitDate = extractExplicitDateFromText(raw, snapshot);
+    if (!explicitDate) return null;
+
+    const startsWithDateCue = /^(?:(?:monday|tuesday|wednesday|thursday|friday|saturday|sunday)\s*,\s*)?(?:jan(?:uary)?|feb(?:ruary)?|mar(?:ch)?|apr(?:il)?|may|jun(?:e)?|jul(?:y)?|aug(?:ust)?|sep(?:t(?:ember)?)?|oct(?:ober)?|nov(?:ember)?|dec(?:ember)?|\d{1,2}\/\d{1,2}|\d{4}-\d{2}-\d{2})\b/i.test(raw);
+    return startsWithDateCue ? explicitDate : null;
+}
+
+function scoreStructuredScheduleBlock(block) {
+    const combined = [block?.header, ...(Array.isArray(block?.lines) ? block.lines : [])]
+        .filter(Boolean)
+        .join("\n");
+
+    let score = Math.min((block?.lines || []).length, 6);
+    if (/\bbundle\b/i.test(combined)) score += 6;
+    if (/\b(main message|goal|video focus|cta|save the date|final reminder|event day|why attend)\b/i.test(combined)) score += 4;
+    if (/\bchannels?:\b/i.test(combined)) score += 1;
+    if (combined.length > 160) score += 3;
+    return score;
+}
+
+function pickStructuredScheduleTitle(block) {
+    const lines = Array.isArray(block?.lines) ? block.lines.filter(Boolean) : [];
+    const preferred =
+        lines.find((line) => /^bundle\b/i.test(line)) ||
+        lines.find((line) => /^theme:\s*/i.test(line)) ||
+        lines.find((line) => /^goal:\s*/i.test(line)) ||
+        lines.find((line) => /^main message:\s*/i.test(line)) ||
+        lines.find((line) => line.length > 12) ||
+        block?.header ||
+        "New task";
+
+    return stripTaskPrefix(
+        String(preferred || "")
+            .replace(/^bundle\s*\d+\s*[—-]\s*/i, "")
+            .replace(/^theme:\s*/i, "")
+            .replace(/^goal:\s*/i, "")
+            .replace(/^main message:\s*/i, "")
+    );
+}
+
+function extractStructuredScheduleTasks(taskText, snapshot, sharedContext = null) {
+    const lines = String(taskText || "")
+        .split(/\r?\n/)
+        .map((line) => String(line || "").trim());
+
+    const blocks = [];
+    let currentBlock = null;
+
+    lines.forEach((line) => {
+        if (!line) return;
+
+        const headingDate = matchStructuredScheduleDateHeading(line, snapshot);
+        if (headingDate) {
+            if (currentBlock) {
+                blocks.push(currentBlock);
+            }
+
+            currentBlock = {
+                date: headingDate,
+                header: line,
+                lines: [],
+            };
+            return;
+        }
+
+        if (!currentBlock) return;
+        currentBlock.lines.push(line);
+    });
+
+    if (currentBlock) {
+        blocks.push(currentBlock);
+    }
+
+    if (blocks.length < 2) return [];
+
+    const bestBlockByDate = new Map();
+    blocks.forEach((block) => {
+        const existing = bestBlockByDate.get(block.date);
+        if (!existing || scoreStructuredScheduleBlock(block) > scoreStructuredScheduleBlock(existing)) {
+            bestBlockByDate.set(block.date, block);
+        }
+    });
+
+    const lookup = buildScheduleDayLookup(snapshot);
+    return sortAssistantTasks(
+        [...bestBlockByDate.values()]
+            .sort((a, b) => String(a?.date || "").localeCompare(String(b?.date || "")))
+            .map((block, index) => {
+                const title = pickStructuredScheduleTitle(block);
+                const notes = (block.lines || []).join("\n").trim();
+                return normalizePlannedTask(
+                    {
+                        title,
+                        notes,
+                        sourceText: `${block.header}${notes ? `\n${notes}` : ""}`,
+                        taskDate: block.date,
+                        whenWindow: "specific_day",
+                        confidence: "high",
+                        dateReasoning: `Scheduled for the explicit date block in the request: ${block.header}`,
+                    },
+                    snapshot,
+                    title,
+                    index,
+                    lookup,
+                    sharedContext
+                );
+            })
+            .filter(Boolean)
+    );
+}
+
 function buildHeuristicScheduleSuggestion(taskText, snapshot, sharedContext = null) {
+    const structuredTasks = extractStructuredScheduleTasks(taskText, snapshot, sharedContext);
+    if (structuredTasks.length >= 2) {
+        const assistantMessage = `I detected ${structuredTasks.length} explicit dated schedule blocks and kept those exact dates. Flexible rescheduling was not needed because the request already included a calendar plan.`;
+        return {
+            source: "structured_heuristic",
+            assistantMessage,
+            overallReasoning: assistantMessage,
+            tasks: structuredTasks.slice(0, 12),
+        };
+    }
+
     const lookup = buildScheduleDayLookup(snapshot);
     const clauses = splitTaskClauses(taskText);
     const lightestWeekDay = chooseLightestSchedulingDay(lookup.weekDays);
@@ -712,6 +963,17 @@ async function getScheduleSuggestion(request, env) {
     const lookup = buildScheduleDayLookup(snapshot);
     const sharedContext = extractLeadingScheduleContext(task, snapshot, lookup);
     const heuristic = buildHeuristicScheduleSuggestion(task, snapshot, sharedContext);
+    const explicitDateLines = [...new Set(
+        String(task || "")
+            .split(/\r?\n/)
+            .map((line) => String(line || "").trim())
+            .filter(Boolean)
+            .map((line) => {
+                const dateKey = extractExplicitDateFromText(line, snapshot);
+                return dateKey ? `${dateKey}: ${line}` : null;
+            })
+            .filter(Boolean)
+    )].slice(0, 20);
     const prompt = `
 You are the BER Wrap Sheet AI daily task planner.
 
@@ -722,6 +984,7 @@ Your job:
 - If the user says "this week" but does not choose a day, place that task on the lightest date in calendarWeek.days.
 - If the user says "this month" but does not choose a day, place that task on a lighter business day from month.businessDays.
 - If the user gives a weekday like Thursday, map it to the correct YYYY-MM-DD date from the current visible week whenever possible.
+- If the user gives an exact calendar date like "May 7, 2026", keep that exact date even if it falls outside the visible week/month or lands on a weekend.
 - If the request starts with a shared scheduling anchor like "this Friday I need to..." or "today I need to...", that anchor applies to all split tasks unless a later clause clearly overrides it.
 - Dates mentioned as event details, class dates, launch dates, publish dates, or subject matter do NOT automatically become the task schedule date.
 - Example: "This Friday I need to promote the social at Cabana Resort April 21st and David's photography on April 30th" should create Friday tasks about those items, not tasks on April 21st and April 30th.
@@ -748,7 +1011,8 @@ Return ONLY valid JSON with this shape:
 Rules:
 - Every returned item must be a daily task.
 - Split combined requests into as many daily tasks as needed.
-- Use only dates that appear in calendarWeek.days[].date or month.businessDays[].date.
+- Use snapshot dates for flexible scheduling when the user did not specify an exact date.
+- Exact dates from the user's request are allowed even when they fall outside the visible snapshot.
 - Preserve explicit day/time commitments.
 - Prefer the user's scheduling context over dates embedded inside what the task is about.
 - Keep titles concise and usable as saved task names.
@@ -760,6 +1024,9 @@ ${task}
 
 Detected shared schedule context:
 ${sharedContext ? JSON.stringify(sharedContext, null, 2) : "null"}
+
+Explicit date lines detected in the request:
+${explicitDateLines.length ? explicitDateLines.join("\n") : "none"}
 
 Schedule snapshot:
 ${JSON.stringify(snapshot, null, 2)}

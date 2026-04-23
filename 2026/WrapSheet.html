@@ -5092,6 +5092,8 @@
         messages: [],
         response: null,
         loading: false,
+        lastCreatedBatch: [],
+        undoLoading: false,
         voice: {
           loadingModel: false,
           listening: false,
@@ -7195,6 +7197,20 @@
             throw new Error("POST /daily-tasks failed: " + text);
           }
         }
+
+        const createdTasks = await Promise.all(
+          responses.map(async (res) => {
+            const text = await res.text().catch(() => "");
+            if (!text || !text.trim()) return null;
+            try {
+              return JSON.parse(text);
+            } catch {
+              return null;
+            }
+          })
+        );
+
+        return createdTasks;
       } finally {
         hideActionLoader();
       }
@@ -9158,6 +9174,55 @@
       return `${hour12}:${String(minutes).padStart(2, "0")} ${suffix}`;
     }
 
+    function buildScheduleAssistantUndoCard(count) {
+      const card = document.createElement("div");
+      card.className = "backlog-ai-placement";
+
+      const top = document.createElement("div");
+      top.className = "backlog-ai-placement-top";
+
+      const left = document.createElement("div");
+      const type = document.createElement("div");
+      type.className = "backlog-ai-placement-type";
+      type.textContent = "undo";
+      const label = document.createElement("div");
+      label.className = "backlog-ai-placement-label";
+      label.textContent = `${count} AI-created task${count === 1 ? "" : "s"} can be removed`;
+      left.appendChild(type);
+      left.appendChild(label);
+
+      const badge = document.createElement("div");
+      badge.className = "backlog-ai-placement-confidence";
+      badge.textContent = "last import";
+
+      top.appendChild(left);
+      top.appendChild(badge);
+      card.appendChild(top);
+
+      const copy = document.createElement("div");
+      copy.className = "backlog-ai-placement-copy";
+      copy.textContent = "If the planner placed tasks on the wrong dates, undo the last AI-created batch and rebuild it.";
+      card.appendChild(copy);
+
+      const actions = document.createElement("div");
+      actions.className = "backlog-ai-placement-actions";
+
+      const meta = document.createElement("div");
+      meta.className = "backlog-ai-placement-copy";
+      meta.textContent = "Undo removes only the most recent batch created from the planner.";
+      actions.appendChild(meta);
+
+      const undoBtn = document.createElement("button");
+      undoBtn.className = "backlog-assistant-btn secondary";
+      undoBtn.dataset.assistantAction = "undo-last";
+      undoBtn.textContent = state.scheduleAssistant.undoLoading ? "Undoing..." : `Undo Last AI Import (${count})`;
+      undoBtn.disabled = state.scheduleAssistant.undoLoading || state.scheduleAssistant.loading;
+      actions.appendChild(undoBtn);
+
+      card.appendChild(actions);
+      return card;
+    }
+
     function renderScheduleAssistant() {
       const targetLabel = document.getElementById("backlog-ai-target-label");
       const thread = document.getElementById("backlog-ai-thread");
@@ -9180,7 +9245,7 @@
       }
 
       if (submitBtn) {
-        submitBtn.disabled = state.scheduleAssistant.loading || !state.currentUser || voice.listening || voice.transcribing || voice.loadingModel;
+        submitBtn.disabled = state.scheduleAssistant.loading || state.scheduleAssistant.undoLoading || !state.currentUser || voice.listening || voice.transcribing || voice.loadingModel;
       }
 
       if (voiceBtn) {
@@ -9199,7 +9264,7 @@
         }
 
         voiceBtn.dataset.state = buttonState;
-        voiceBtn.disabled = state.scheduleAssistant.loading || voice.transcribing || voice.loadingModel;
+        voiceBtn.disabled = state.scheduleAssistant.loading || state.scheduleAssistant.undoLoading || voice.transcribing || voice.loadingModel;
         if (voiceLabel) voiceLabel.textContent = buttonLabel;
       }
 
@@ -9241,7 +9306,16 @@
       results.innerHTML = "";
 
       const response = state.scheduleAssistant.response;
-      if (!response || !Array.isArray(response.tasks) || response.tasks.length === 0) return;
+      const lastCreatedBatch = Array.isArray(state.scheduleAssistant.lastCreatedBatch)
+        ? state.scheduleAssistant.lastCreatedBatch.filter(entry => Number.isInteger(Number(entry?.id)) && Number(entry.id) > 0)
+        : [];
+
+      if (!response || !Array.isArray(response.tasks) || response.tasks.length === 0) {
+        if (lastCreatedBatch.length) {
+          results.appendChild(buildScheduleAssistantUndoCard(lastCreatedBatch.length));
+        }
+        return;
+      }
 
       const remainingTasks = response.tasks.filter(task => !task.applied);
 
@@ -9288,8 +9362,19 @@
       createAllBtn.className = "backlog-ai-placement-apply";
       createAllBtn.textContent = remainingTasks.length ? "Create remaining tasks" : "All tasks created";
       createAllBtn.dataset.assistantAction = "create-all";
-      createAllBtn.disabled = remainingTasks.length === 0;
+      createAllBtn.disabled = remainingTasks.length === 0 || state.scheduleAssistant.undoLoading;
       summaryActions.appendChild(createAllBtn);
+
+      if (lastCreatedBatch.length) {
+        const undoBtn = document.createElement("button");
+        undoBtn.className = "backlog-assistant-btn secondary";
+        undoBtn.dataset.assistantAction = "undo-last";
+        undoBtn.textContent = state.scheduleAssistant.undoLoading
+          ? "Undoing..."
+          : `Undo Last AI Import (${lastCreatedBatch.length})`;
+        undoBtn.disabled = state.scheduleAssistant.undoLoading || state.scheduleAssistant.loading;
+        summaryActions.appendChild(undoBtn);
+      }
 
       summaryCard.appendChild(summaryActions);
       results.appendChild(summaryCard);
@@ -9355,7 +9440,7 @@
         applyBtn.className = "backlog-ai-placement-apply";
         applyBtn.textContent = task.applied ? "Created" : "Create task";
         applyBtn.dataset.assistantTaskIndex = String(index);
-        applyBtn.disabled = !!task.applied;
+        applyBtn.disabled = !!task.applied || state.scheduleAssistant.undoLoading;
         actions.appendChild(applyBtn);
 
         card.appendChild(actions);
@@ -9441,36 +9526,112 @@
       const response = state.scheduleAssistant.response;
       const targetUser = getScheduleAssistantTargetUser();
 
-      if (!response || !Array.isArray(response.tasks) || !targetUser || !state.currentUser) return;
+      if (!response || !Array.isArray(response.tasks) || !targetUser || !state.currentUser || state.scheduleAssistant.undoLoading) return;
 
-      const selected = response.tasks.filter((task, taskIndex) =>
-        !task.applied && (index === null || taskIndex === index)
-      );
+      const selectedEntries = response.tasks
+        .map((task, taskIndex) => ({ task, taskIndex }))
+        .filter(({ task, taskIndex }) => !task.applied && (index === null || taskIndex === index));
 
-      if (!selected.length) return;
+      if (!selectedEntries.length) return;
 
-      const payloads = selected.map(task => buildScheduleAssistantTaskPayload(task, targetUser));
+      const payloads = selectedEntries.map(({ task }) => buildScheduleAssistantTaskPayload(task, targetUser));
 
       try {
+        let createdTasks = [];
         if (payloads.length === 1) {
-          await apiSend("/daily-tasks", "POST", payloads[0]);
+          const createdTask = await apiSend("/daily-tasks", "POST", payloads[0]);
+          createdTasks = createdTask ? [createdTask] : [];
         } else {
-          await createMultipleTasks(payloads, {
+          createdTasks = await createMultipleTasks(payloads, {
             main: "Creating AI-planned tasks...",
             sub: "Dropping them onto the daily calendar"
-          });
+          }) || [];
         }
 
-        selected.forEach(task => {
+        selectedEntries.forEach(({ task }) => {
           task.applied = true;
         });
 
+        state.scheduleAssistant.lastCreatedBatch = createdTasks
+          .map((createdTask, createdIndex) => ({
+            id: Number(createdTask?.id),
+            taskIndex: selectedEntries[createdIndex]?.taskIndex
+          }))
+          .filter(entry => Number.isInteger(entry.id) && entry.id > 0 && Number.isInteger(entry.taskIndex));
+
         await Promise.all([loadDailyTasks(), loadBacklogTasks()]);
         renderScheduleAssistant();
-        showToast(payloads.length === 1 ? "Task created" : "Daily tasks created");
+        showToast(payloads.length === 1 ? "Task created. Undo is available." : "Daily tasks created. Undo is available.");
       } catch (error) {
         console.error(error);
         showToast("Could not create AI-planned task", true);
+      }
+    }
+
+    async function undoLastScheduleAssistantTasks() {
+      const lastCreatedBatch = Array.isArray(state.scheduleAssistant.lastCreatedBatch)
+        ? state.scheduleAssistant.lastCreatedBatch.filter(entry => Number.isInteger(Number(entry?.id)) && Number(entry.id) > 0)
+        : [];
+
+      if (!lastCreatedBatch.length || state.scheduleAssistant.undoLoading) return;
+
+      state.scheduleAssistant.undoLoading = true;
+      renderScheduleAssistant();
+      showActionLoader({
+        main: "Undoing AI tasks...",
+        sub: "Removing the most recent AI-planned batch"
+      });
+
+      try {
+        const deleteResults = await Promise.allSettled(
+          lastCreatedBatch.map(entry =>
+            fetch(`${API_BASE}/daily-tasks/${entry.id}`, {
+              method: "DELETE",
+              headers: { "Accept": "application/json" }
+            })
+          )
+        );
+
+        const failedEntries = [];
+        deleteResults.forEach((result, resultIndex) => {
+          const batchEntry = lastCreatedBatch[resultIndex];
+          if (result.status !== "fulfilled") {
+            failedEntries.push(batchEntry);
+            return;
+          }
+
+          const deleteResponse = result.value;
+          if (!deleteResponse.ok && deleteResponse.status !== 404) {
+            failedEntries.push(batchEntry);
+            return;
+          }
+
+          const taskIndex = Number(batchEntry?.taskIndex);
+          if (
+            Number.isInteger(taskIndex) &&
+            state.scheduleAssistant.response &&
+            Array.isArray(state.scheduleAssistant.response.tasks) &&
+            state.scheduleAssistant.response.tasks[taskIndex]
+          ) {
+            state.scheduleAssistant.response.tasks[taskIndex].applied = false;
+          }
+        });
+
+        state.scheduleAssistant.lastCreatedBatch = failedEntries;
+
+        await Promise.all([loadDailyTasks(), loadBacklogTasks()]);
+        if (failedEntries.length) {
+          showToast("Could not undo every AI-created task", true);
+        } else {
+          showToast("Undid last AI import");
+        }
+      } catch (error) {
+        console.error(error);
+        showToast("Could not undo last AI import", true);
+      } finally {
+        state.scheduleAssistant.undoLoading = false;
+        hideActionLoader();
+        renderScheduleAssistant();
       }
     }
 
@@ -9525,6 +9686,12 @@
           const createAllButton = event.target.closest("[data-assistant-action='create-all']");
           if (createAllButton) {
             createScheduleAssistantTasks();
+            return;
+          }
+
+          const undoButton = event.target.closest("[data-assistant-action='undo-last']");
+          if (undoButton) {
+            undoLastScheduleAssistantTasks();
             return;
           }
 
