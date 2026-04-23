@@ -258,31 +258,27 @@
     height: 100%;
     pointer-events: none;
     will-change: transform;
-    transform-origin: center bottom;
   }
 
   .ber-wave {
     position: absolute;
-    bottom: -150px;
+    bottom: -280px;
     left: -50%;
     width: 200%;
-    height: 300px;
+    height: 400px;
     background: var(--ccor-teal);
-    border-radius: 40%;
-    opacity: 0.2;
+    border-radius: 43%;
+    opacity: 0.1;
     pointer-events: none;
     will-change: transform;
+    transform-origin: center bottom;
   }
 
-  .ber-wave:nth-child(1) { opacity: 0.25; animation: waveFloat 12s infinite ease-in-out; }
-  .ber-wave:nth-child(2) { opacity: 0.15; animation: waveFloat 18s infinite ease-in-out -4s; border-radius: 43%; }
-  .ber-wave:nth-child(3) { opacity: 0.1; animation: waveFloat 25s infinite ease-in-out -8s; border-radius: 38%; }
-
-  @keyframes waveFloat {
-    0% { transform: rotate(0deg) translateY(0); }
-    50% { transform: rotate(2deg) translateY(-10px); }
-    100% { transform: rotate(-1deg) translateY(0); }
-  }
+  .ber-wave:nth-child(1) { opacity: 0.08; }
+  .ber-wave:nth-child(2) { opacity: 0.12; }
+  .ber-wave:nth-child(3) { opacity: 0.16; }
+  .ber-wave:nth-child(4) { opacity: 0.20; }
+  .ber-wave:nth-child(5) { opacity: 0.25; }
 
   /* Swiss-Tech Header Accents */
   .ber-header::before {
@@ -2537,51 +2533,36 @@
     const waveContainer = document.querySelector('.ber-wave-container');
     if (!header || !waveContainer) return;
 
-    // Create wave layers
-    const numWaves = 3;
+    // Create 5 autonomous wave layers
+    const numWaves = 5;
+    const waves = [];
     for (let i = 0; i < numWaves; i++) {
       const wave = document.createElement('div');
       wave.className = 'ber-wave';
+      wave.style.borderRadius = (38 + Math.random() * 10) + '%';
       waveContainer.appendChild(wave);
+      waves.push({
+        el: wave,
+        phase: Math.random() * Math.PI * 2,
+        phaseSpeed: 0.006 + (Math.random() * 0.008),
+        drift: 0
+      });
     }
 
-    let slosh = 0;
-    let sloshV = 0;
-    let lastX = null;
-    let targetSlosh = 0;
-
-    header.addEventListener('mousemove', (e) => {
-      const rect = header.getBoundingClientRect();
-      const currentX = e.clientX - rect.left;
-      
-      if (lastX !== null) {
-        const dx = currentX - lastX;
-        // Impact slosh velocity based on mouse speed
-        sloshV += dx * 0.08;
-      }
-      lastX = currentX;
-
-      // Subtle tilt towards mouse position
-      targetSlosh = ((currentX / rect.width) - 0.5) * 5;
-    });
-
-    header.addEventListener('mouseleave', () => {
-      lastX = null;
-      targetSlosh = 0;
-    });
-
     function animate() {
-      // Spring physics for sloshing
-      const springK = 0.15;
-      const friction = 0.92;
-      
-      const acceleration = (targetSlosh - slosh) * springK;
-      sloshV += acceleration;
-      sloshV *= friction;
-      slosh += sloshV;
+      waves.forEach((w, i) => {
+        w.phase += w.phaseSpeed;
+        
+        // Continuous natural horizontal drift
+        w.drift = Math.sin(w.phase * 0.4) * 50;
 
-      // Apply slosh tilt to the whole container
-      waveContainer.style.transform = `rotate(${slosh}deg) scale(1.1)`;
+        // Autonomous undulation and layering
+        const undulation = Math.sin(w.phase) * (20 + (i * 6));
+        const totalY = undulation + (i * 15);
+        const rotation = Math.cos(w.phase * 0.7) * 2.5;
+        
+        w.el.style.transform = `translateX(${w.drift}px) translateY(${-totalY}px) rotate(${rotation}deg) scaleX(1.4)`;
+      });
 
       requestAnimationFrame(animate);
     }
