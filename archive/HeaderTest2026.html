@@ -1,6 +1,11 @@
+<!-- Load Inter Font for Swiss-Tech Aesthetic -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet" />
+
 <style>
   :root {
-    --ber-font: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", "Apple Color Emoji";
+    --ber-font: 'Inter', sans-serif;
     --ccor-blue: #1B449D;
     --ccor-teal: #64BAB0;
     --ccor-gold: #D4AC6C;
@@ -231,6 +236,33 @@
     padding: 0 25px 20px 25px;
   }
 
+  /* Swiss-Tech Header Accents */
+  .ber-header::before {
+    content: "";
+    position: absolute;
+    top: 20px;
+    left: 25px;
+    width: 20px;
+    height: 20px;
+    border-top: 2px solid rgba(255, 255, 255, 0.4);
+    border-left: 2px solid rgba(255, 255, 255, 0.4);
+    pointer-events: none;
+    z-index: 10;
+  }
+
+  .ber-header::after {
+    content: "";
+    position: absolute;
+    bottom: 20px;
+    right: 25px;
+    width: 20px;
+    height: 20px;
+    border-bottom: 2px solid rgba(255, 255, 255, 0.4);
+    border-right: 2px solid rgba(255, 255, 255, 0.4);
+    pointer-events: none;
+    z-index: 10;
+  }
+
   .ber-header .bar {
     display: flex;
     align-items: center;
@@ -333,6 +365,7 @@
     color: rgba(255,255,255,0.88);
     text-decoration: none;
     position: relative;
+    white-space: nowrap;
     transition: color .15s ease, background .15s ease;
   }
 
