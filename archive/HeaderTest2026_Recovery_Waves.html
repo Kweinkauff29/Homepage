@@ -115,17 +115,23 @@
 
   /* === TOPBAR (contact + socials) === */
   .ber-topbar {
-    position: relative;
-    overflow: hidden;
-    background: var(--ccor-blue);
+    background: linear-gradient(120deg,
+      var(--ccor-blue) 0%,
+      #2e5ab8 12%,
+      var(--ccor-teal) 28%,
+      #8dd4ca 40%,
+      var(--ccor-gold) 55%,
+      #e8c88a 68%,
+      var(--ccor-grey) 80%,
+      var(--ccor-teal) 92%,
+      var(--ccor-blue) 100%);
+    background-size: 400% 100%;
+    animation: ribbonFlow 12s ease-in-out infinite alternate;
     color: #fff;
     font-size: 14px;
     margin: 0;
     padding: env(safe-area-inset-top, 0) 25px 0 25px;
-    border-radius: 0 !important;
   }
-
-  .ber-topbar .ber-container { position: relative; z-index: 1; }
 
   @keyframes ribbonFlow {
     0% {
@@ -239,7 +245,7 @@
     height: 100%;
     background: var(--ccor-blue);
     overflow: hidden;
-    z-index: 0;
+    z-index: -1;
     pointer-events: none;
     border-radius: 0 !important;
   }
@@ -257,44 +263,22 @@
   .ber-wave {
     position: absolute;
     bottom: -280px;
-    left: -100%;
-    width: 300%;
+    left: -50%;
+    width: 200%;
     height: 400px;
-    background: linear-gradient(120deg,
-      var(--ccor-blue) 0%,
-      #2e5ab8 8%,
-      #3d6cd1 16%,
-      var(--ccor-teal) 24%,
-      #8dd4ca 32%,
-      #a6e1d9 40%,
-      var(--ccor-gold) 48%,
-      #e8c88a 56%,
-      #f2dcb3 64%,
-      var(--ccor-grey) 72%,
-      #7a7a7a 80%,
-      var(--ccor-teal) 88%,
-      #4da69a 94%,
-      var(--ccor-blue) 100%);
-    background-size: 400% 100%;
-    animation: ribbonFlow 15s ease-in-out infinite alternate;
-    border-radius: 45% 48% 43% 47%;
-    opacity: 0.12;
+    background: var(--ccor-teal);
+    border-radius: 43%;
+    opacity: 0.1;
     pointer-events: none;
-    filter: blur(2px);
-    will-change: transform, filter;
+    will-change: transform;
     transform-origin: center bottom;
   }
 
-  .ber-wave:nth-child(1) { opacity: 0.08; animation-duration: 20s; }
-  .ber-wave:nth-child(2) { opacity: 0.10; animation-duration: 24s; animation-delay: -4s; }
-  .ber-wave:nth-child(3) { opacity: 0.12; animation-duration: 28s; animation-delay: -8s; }
-  .ber-wave:nth-child(4) { opacity: 0.14; animation-duration: 32s; animation-delay: -12s; }
-  .ber-wave:nth-child(5) { opacity: 0.16; animation-duration: 36s; animation-delay: -16s; }
-  .ber-wave:nth-child(6) { opacity: 0.18; animation-duration: 40s; animation-delay: -20s; }
-  .ber-wave:nth-child(7) { opacity: 0.20; animation-duration: 44s; animation-delay: -24s; }
-  .ber-wave:nth-child(8) { opacity: 0.22; animation-duration: 48s; animation-delay: -28s; }
-
-  .ber-header .ber-container { position: relative; z-index: 1; }
+  .ber-wave:nth-child(1) { opacity: 0.08; }
+  .ber-wave:nth-child(2) { opacity: 0.12; }
+  .ber-wave:nth-child(3) { opacity: 0.16; }
+  .ber-wave:nth-child(4) { opacity: 0.20; }
+  .ber-wave:nth-child(5) { opacity: 0.25; }
 
   /* Swiss-Tech Header Accents */
   .ber-header::before {
@@ -1084,9 +1068,6 @@
 
 <!-- === TOP CONTACT BAR === -->
 <header class="ber-topbar">
-  <div class="ber-header-bg">
-    <div class="ber-wave-container"></div>
-  </div>
   <div class="ber-container">
     <div class="row">
       <div class="ber-contact">
@@ -2548,41 +2529,44 @@
 
 <script>
   document.addEventListener('DOMContentLoaded', () => {
-    const initWaves = (containerSelector) => {
-      const container = document.querySelector(containerSelector);
-      const waveContainer = container?.querySelector('.ber-wave-container');
-      if (!container || !waveContainer) return;
+    const header = document.querySelector('.ber-header');
+    const waveContainer = document.querySelector('.ber-wave-container');
+    if (!header || !waveContainer) return;
 
-      const numWaves = 8;
-      const waves = [];
-      for (let i = 0; i < numWaves; i++) {
-        const wave = document.createElement('div');
-        wave.className = 'ber-wave';
-        wave.style.borderRadius = (38 + Math.random() * 10) + '%';
-        waveContainer.appendChild(wave);
-        waves.push({
-          el: wave,
-          phase: Math.random() * Math.PI * 2,
-          phaseSpeed: 0.004 + (Math.random() * 0.006),
-          drift: 0
-        });
-      }
+    // Create 5 autonomous wave layers
+    const numWaves = 5;
+    const waves = [];
+    for (let i = 0; i < numWaves; i++) {
+      const wave = document.createElement('div');
+      wave.className = 'ber-wave';
+      wave.style.borderRadius = (38 + Math.random() * 10) + '%';
+      waveContainer.appendChild(wave);
+      waves.push({
+        el: wave,
+        phase: Math.random() * Math.PI * 2,
+        phaseSpeed: 0.006 + (Math.random() * 0.008),
+        drift: 0
+      });
+    }
 
-      function animate() {
-        waves.forEach((w, i) => {
-          w.phase += w.phaseSpeed;
-          w.drift = Math.sin(w.phase * 0.4) * 70;
-          const undulation = Math.sin(w.phase) * (15 + (i * 4));
-          const totalY = undulation + (i * 14);
-          const rotation = Math.cos(w.phase * 0.7) * 2.5;
-          w.el.style.transform = `translateX(${w.drift}px) translateY(${-totalY}px) rotate(${rotation}deg) scaleX(1.6)`;
-        });
-        requestAnimationFrame(animate);
-      }
-      animate();
-    };
+    function animate() {
+      waves.forEach((w, i) => {
+        w.phase += w.phaseSpeed;
+        
+        // Continuous natural horizontal drift
+        w.drift = Math.sin(w.phase * 0.4) * 50;
 
-    initWaves('.ber-topbar');
-    initWaves('.ber-header');
+        // Autonomous undulation and layering
+        const undulation = Math.sin(w.phase) * (20 + (i * 6));
+        const totalY = undulation + (i * 15);
+        const rotation = Math.cos(w.phase * 0.7) * 2.5;
+        
+        w.el.style.transform = `translateX(${w.drift}px) translateY(${-totalY}px) rotate(${rotation}deg) scaleX(1.4)`;
+      });
+
+      requestAnimationFrame(animate);
+    }
+
+    animate();
   });
 </script>
