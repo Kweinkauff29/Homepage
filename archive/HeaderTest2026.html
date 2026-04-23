@@ -1,6 +1,20 @@
 <style>
   :root {
     --ber-font: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", "Apple Color Emoji";
+    --ccor-blue: #1B449D;
+    --ccor-teal: #64BAB0;
+    --ccor-gold: #D4AC6C;
+    --ccor-grey: #5B5A5C;
+  }
+
+  body {
+    margin: 0;
+    padding: 0;
+  }
+
+  .ber-topbar *,
+  .ber-header * {
+    box-sizing: border-box;
   }
 
   /* Make everything in the header use the same stack as the dropdowns */
@@ -35,7 +49,11 @@
   .ber-container {
     max-width: 1200px;
     margin: 0 auto;
-    padding: 0 16px
+    padding: 0 16px;
+  }
+
+  .ber-header .ber-container {
+    padding: 0 16px;
   }
 
   .sr-only {
@@ -60,13 +78,22 @@
 
   /* === TOPBAR (contact + socials) === */
   .ber-topbar {
-    background: linear-gradient(120deg, #7EF0F0 0%, #03AAE1 18%, #0CA7A4 48%, #006b86 78%, #7EF0F0 100%);
+    background: linear-gradient(120deg,
+      var(--ccor-blue) 0%,
+      #2e5ab8 12%,
+      var(--ccor-teal) 28%,
+      #8dd4ca 40%,
+      var(--ccor-gold) 55%,
+      #e8c88a 68%,
+      var(--ccor-grey) 80%,
+      var(--ccor-teal) 92%,
+      var(--ccor-blue) 100%);
     background-size: 400% 100%;
-    animation: ribbonFlow 10s ease-in-out infinite alternate;
+    animation: ribbonFlow 12s ease-in-out infinite alternate;
     color: #fff;
     font-size: 14px;
-    margin: -5px -25px 1px -25px;
-    padding-top: env(safe-area-inset-top, 0);
+    margin: 0 -25px 0 -25px;
+    padding: env(safe-area-inset-top, 0) 25px 0 25px;
   }
 
   @keyframes ribbonFlow {
@@ -84,8 +111,8 @@
     align-items: center;
     justify-content: space-between;
     gap: 16px;
-    padding: 10px 0;
-    flex-wrap: nowrap
+    padding: 6px 0;
+    flex-wrap: nowrap;
   }
 
   .ber-topbar a {
@@ -106,9 +133,8 @@
 
   .ber-contact p {
     margin: 0;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis
+    white-space: normal;
+    text-align: center;
   }
 
   .ber-social {
@@ -120,15 +146,20 @@
 
   @media (max-width:768px) {
     .ber-topbar .row {
-      flex-wrap: wrap
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 12px;
     }
 
     .ber-contact {
-      flex: 1 1 100%
+      flex: 1 1 100%;
+      justify-content: center;
     }
 
     .ber-social {
-      margin-left: 0
+      margin-left: 0;
+      justify-content: center;
+      width: 100%;
     }
   }
 
@@ -162,9 +193,10 @@
     position: sticky;
     top: var(--topbar-h, 0px);
     z-index: 1000;
-    background: rgba(255, 255, 255, .92);
-    backdrop-filter: saturate(1.2) blur(8px);
-    border-bottom: 1px solid #ffffffaa
+    background: var(--ccor-blue);
+    border-bottom: 1px solid rgba(255,255,255,0.08);
+    margin: 0 -25px;
+    padding: 0 25px 20px 25px;
   }
 
   .ber-header .bar {
@@ -172,44 +204,69 @@
     align-items: center;
     justify-content: space-between;
     gap: 18px;
-    padding: 14px 0
+    padding: 0;
   }
 
   .ber-brand {
     display: flex;
-    align-items: center;
-    gap: 12px;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: center;
+    gap: 0;
     text-decoration: none;
-    color: inherit
+    color: #fff;
+    padding: 4px 0;
   }
 
   .ber-brand img {
-    height: 58px;
+    height: 380px;
     width: auto;
-    filter: drop-shadow(0 1px 0 rgba(0, 0, 0, .03))
+    max-width: none;
+    margin: -125px 0 -130px 0;
+    filter: brightness(0) invert(1);
+  }
+
+  .ber-brand-tagline {
+    font-family: var(--ber-font);
+    font-size: 0.62rem;
+    font-weight: 600;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--ccor-gold);
+    white-space: nowrap;
+    margin-top: 0;
+    padding-left: 2px;
   }
 
   /* Menu trigger (mobile/tablet) */
   .ber-nav-toggle {
     display: none;
     appearance: none;
-    border: 1px solid var(--line, #e5e7eb);
-    background: #fff;
+    border: 1px solid rgba(255,255,255,0.2);
+    background: rgba(255,255,255,0.08);
+    color: #fff;
     padding: 10px 14px;
     border-radius: 12px;
     font-weight: 700;
     cursor: pointer;
     min-height: 44px;
+    backdrop-filter: blur(4px);
+    transition: background .15s ease, border-color .15s ease;
+  }
+
+  .ber-nav-toggle:hover {
+    background: rgba(255,255,255,0.15);
+    border-color: rgba(255,255,255,0.35);
   }
 
   .ber-nav-toggle:focus-visible {
-    outline: 3px solid var(--brand, #03AAE1)
+    outline: 3px solid var(--ccor-teal);
   }
 
   .ber-nav-toggle svg {
     width: 18px;
     height: 18px;
-    margin-right: 8px
+    margin-right: 8px;
   }
 
   /* Primary nav */
@@ -241,9 +298,10 @@
     border: 0;
     background: transparent;
     cursor: pointer;
-    color: var(--ink, #0f172a);
+    color: rgba(255,255,255,0.88);
     text-decoration: none;
-    position: relative
+    position: relative;
+    transition: color .15s ease, background .15s ease;
   }
 
   .ber-link::after,
@@ -255,21 +313,21 @@
     bottom: 6px;
     height: 3px;
     border-radius: 3px;
-    background: linear-gradient(90deg, var(--brand, #03AAE1), var(--accent, #FBAE24));
+    background: linear-gradient(90deg, var(--ccor-teal), var(--ccor-gold));
     transform: scaleX(0);
     transform-origin: left;
-    transition: transform .18s ease
+    transition: transform .18s ease;
   }
 
   .ber-link:hover::after,
   .ber-subbtn:hover::after {
-    transform: scaleX(1)
+    transform: scaleX(1);
   }
 
   .ber-link:hover,
   .ber-subbtn:hover {
-    color: var(--brand-ink, #0CA7A4);
-    background: #f7fbff
+    color: #fff;
+    background: rgba(255,255,255,0.1);
   }
 
   .ber-caret {
@@ -278,7 +336,7 @@
     border-right: 2px solid currentColor;
     border-bottom: 2px solid currentColor;
     transform: rotate(45deg);
-    transition: transform .18s ease
+    transition: transform .18s ease;
   }
 
   .ber-subbtn[aria-expanded="true"] .ber-caret {
@@ -375,34 +433,46 @@
 
   /* Mobile / Tablet */
   @media (max-width:1024px) {
+    .ber-header .bar {
+      flex-direction: column;
+      align-items: stretch;
+      padding-bottom: 10px;
+    }
+
     .ber-nav-toggle {
-      display: inline-flex;
-      align-items: center
+      display: none !important;
+    }
+
+    .ber-brand {
+      align-items: center;
+      margin-bottom: 10px;
+    }
+
+    .ber-brand img {
+      height: 360px;
+      max-width: none;
+      margin: -118px 0 -122px 0;
+    }
+
+    .ber-brand-tagline {
+      font-size: 0.52rem;
+      text-align: center;
     }
 
     .ber-menu {
-      position: fixed;
-      left: 0;
-      right: 0;
-      top: calc(var(--topbar-h, 0px) + var(--header-h, 72px));
-      background: #fff;
-      border-top: 1px solid var(--line, #e5e7eb);
-      display: none;
+      position: static;
+      display: flex !important;
       flex-direction: column;
-      padding: 14px 16px;
-      gap: 8px;
-      z-index: 999;
-      max-height: calc(100dvh - (var(--topbar-h, 0px) + var(--header-h, 72px)));
-      overflow: auto;
-      padding-bottom: max(14px, env(safe-area-inset-bottom, 0));
-    }
-
-    .ber-menu.is-open {
-      display: flex
+      padding: 0;
+      gap: 6px;
+      background: transparent;
+      border: none;
+      max-height: none;
+      overflow: visible;
     }
 
     .ber-menu>li {
-      width: 100%
+      width: 100%;
     }
 
     .ber-link,
@@ -410,20 +480,30 @@
       width: 100%;
       justify-content: space-between;
       padding: 16px 14px;
-      border: 1px solid var(--line, #e5e7eb)
+      border: 1px solid rgba(255,255,255,0.12);
+      color: rgba(255,255,255,0.9);
+      background: rgba(255,255,255,0.04);
+      border-radius: 12px;
+    }
+
+    .ber-link:hover,
+    .ber-subbtn:hover {
+      background: rgba(255,255,255,0.1);
+      border-color: rgba(255,255,255,0.2);
     }
 
     .ber-link::after,
     .ber-subbtn::after {
       left: 12px;
       right: 12px;
-      bottom: 10px
+      bottom: 10px;
     }
 
     .ber-submenu {
       position: static;
       display: none;
-      border: 1px solid var(--line, #e5e7eb);
+      border: 1px solid rgba(255,255,255,0.1);
+      background: rgba(255,255,255,0.06);
       box-shadow: none;
       margin: 6px 0 10px;
       border-radius: 12px;
@@ -436,12 +516,21 @@
       transition: none;
     }
 
+    .ber-submenu a {
+      color: rgba(255,255,255,0.85);
+    }
+
+    .ber-submenu a:hover {
+      background: rgba(255,255,255,0.08);
+      color: #fff;
+    }
+
     .ber-submenu.is-open {
-      display: block
+      display: block;
     }
 
     .ber-submenu::before {
-      display: none
+      display: none;
     }
   }
 
@@ -452,8 +541,8 @@
   .ber-link:focus-visible,
   .ber-subbtn:focus-visible,
   .ber-submenu a:focus-visible {
-    outline: 3px solid var(--brand, #03AAE1);
-    outline-offset: 2px
+    outline: 3px solid var(--ccor-teal);
+    outline-offset: 2px;
   }
 
   @media (prefers-reduced-motion: reduce) {
@@ -464,7 +553,7 @@
 
   .ber-inline-label {
     font-weight: 700;
-    color: var(--muted, #6b7280);
+    color: rgba(255,255,255,0.7);
     white-space: nowrap;
   }
 
@@ -517,25 +606,26 @@
   .ber-inline-searchbox input {
     width: 100%;
     padding: 12px 14px 12px 40px;
-    border: 1.5px solid var(--line, #e5e7eb);
+    border: 1.5px solid rgba(255,255,255,0.2);
     border-radius: var(--radius, 14px);
     font-size: 16px;
-    background: #f7fbff;
-    box-shadow: 0 6px 18px rgba(2, 8, 20, .06);
+    background: rgba(255,255,255,0.1);
+    color: #fff;
+    box-shadow: 0 6px 18px rgba(0, 0, 0, .1);
     transition: border .15s ease, box-shadow .15s ease, background .15s ease;
     font-family: inherit;
   }
 
   .ber-inline-searchbox input::placeholder {
-    color: #6b7280;
-    opacity: .9;
+    color: rgba(255,255,255,0.5);
+    opacity: 1;
   }
 
   .ber-inline-searchbox input:focus {
     outline: none;
-    background: #fff;
-    border-color: var(--brand, #03AAE1);
-    box-shadow: 0 0 0 3px rgba(3, 170, 225, .18), 0 10px 24px rgba(2, 8, 20, .08);
+    background: rgba(255,255,255,0.15);
+    border-color: var(--ccor-teal);
+    box-shadow: 0 0 0 3px rgba(100, 186, 176, .25), 0 10px 24px rgba(0, 0, 0, .15);
   }
 
   /* Results dropdown */
@@ -562,7 +652,7 @@
     margin: 8px 12px 4px;
     font-size: 13px;
     font-weight: 700;
-    color: var(--brand-ink, #0CA7A4);
+    color: var(--ccor-teal);
     text-transform: uppercase;
   }
 
@@ -636,7 +726,7 @@
 
   .ber-suggest-chip:hover {
     background: #eff6ff;
-    border-color: var(--brand, #03AAE1);
+    border-color: var(--ccor-teal);
     transform: translateY(-1px);
   }
 
@@ -676,7 +766,7 @@
 
   .ber-more-btn:hover {
     background: #eff6ff;
-    border-color: var(--brand, #03AAE1);
+    border-color: var(--ccor-teal);
     transform: translateY(-1px);
   }
 
@@ -756,7 +846,7 @@
     bottom: 6px;
     height: 3px;
     border-radius: 3px;
-    background: linear-gradient(90deg, var(--brand, #03AAE1), var(--accent, #FBAE24));
+    background: linear-gradient(90deg, var(--ccor-blue), var(--ccor-teal));
     transform: scaleX(0);
     transform-origin: left;
     transition: transform .18s ease;
@@ -827,42 +917,37 @@
     color: #111827;
   }
 
-  :root {
-    --mls-blue: #0077C8;
-    /* MLS blue */
-    --memberportal-orange: #FFC24A;
-    /* MP lighter orange (tweak if needed) */
-  }
-
-  /* Color variants */
+  /* Color variants — CCOR brand buttons */
   .ber-cta--mls {
-    background: var(--mls-blue) !important;
+    background: var(--ccor-teal) !important;
     color: #fff !important;
+    border: 1px solid rgba(255,255,255,0.15) !important;
   }
 
   .ber-cta--portal {
-    background: var(--memberportal-orange) !important;
-    color: #111 !important;
-    /* better contrast on light orange */
+    background: var(--ccor-gold) !important;
+    color: #1a1a2e !important;
     text-shadow: none;
+    border: 1px solid rgba(255,255,255,0.1) !important;
   }
 
   .ber-cta--mls:hover {
-    filter: brightness(.95);
+    filter: brightness(1.1);
+    background: #52a89e !important;
   }
 
   .ber-cta--portal:hover {
-    filter: saturate(1.1) brightness(.98);
+    filter: brightness(1.05);
+    background: #c99e58 !important;
   }
 
   .ber-cta--mls:focus-visible,
   .ber-cta--portal:focus-visible {
-    outline: 3px solid #0000;
+    outline: 3px solid #fff;
     box-shadow: 0 0 0 3px #ffffff, 0 0 0 6px rgba(0, 0, 0, .25);
   }
 
   @media (max-width:1024px) {
-
     .ber-cta--mls,
     .ber-cta--portal {
       border: 0 !important;
@@ -887,7 +972,7 @@
           <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" style="vertical-align:-2px">
             <path d="M20 4H4a2 2 0 00-2 2v12a2 2 0 002 2h16a2 2 0 002-2V6a2 2 0 00-2-2zm0 4l-8 5L4 8V6l8 5 8-5v2z" />
           </svg>
-          &nbsp;Email: <a href="mailto:Support@BERealtors.org">Support@BERealtors.org</a>
+          &nbsp;Email: <a href="mailto:Support@BERealtors.org">Support@CCOR.org</a>
         </p>
       </div>
       <div class="ber-social" aria-label="Social links">
@@ -922,10 +1007,11 @@
   <div class="ber-container">
     <div class="bar">
       <a class="ber-brand" href="https://www.bonitaesterorealtors.com/"
-        aria-label="Bonita Springs-Estero REALTORS® Home">
+        aria-label="Coconut Coast Organization of REALTORS® Home">
         <img
-          src="https://www.bonitaesterorealtors.com/wp-content/uploads/2022/10/BonitaSpringsEsteroRealtors_Logo_Vertical.png"
-          alt="Bonita Springs-Estero REALTORS®">
+          src="https://bonitaesterorealtors.com/wp-content/uploads/2026/04/CCOR-Horz-Logo-no-tag-clr-scaled.png"
+          alt="Coconut Coast Organization of REALTORS®">
+        <span class="ber-brand-tagline">The Core of Real Estate Connections</span>
       </a>
 
       <button class="ber-nav-toggle" aria-controls="ber-primary-nav" aria-expanded="false">
@@ -965,11 +1051,11 @@
 
           <!-- About -->
           <li>
-            <button class="ber-subbtn" aria-expanded="false" aria-controls="menu-about">About BER <span
+            <button class="ber-subbtn" aria-expanded="false" aria-controls="menu-about">About CCOR <span
                 class="ber-caret" aria-hidden="true"></span></button>
             <ul id="menu-about" class="ber-submenu" role="menu">
-              <li><a href="https://www.bonitaesterorealtors.com/about/">About Bonita Springs-Estero Realtors</a></li>
-              <li><a href="https://bonitaesterorealtors.com/2025-sales-excellence-award-winners/">BER Sales
+              <li><a href="https://www.bonitaesterorealtors.com/about/">About Coconut Coast Organization of Realtors</a></li>
+              <li><a href="https://bonitaesterorealtors.com/2025-sales-excellence-award-winners/">CCOR Sales
                   Excellence Awards</a></li>
               <li><a href="https://bonitaesterorealtors.com/board-of-directors/">Board of Directors</a></li>
               <li><a href="https://www.bonitaesterorealtors.com/home-foundation/">BER Home Foundation</a></li>
@@ -988,7 +1074,7 @@
             <button class="ber-subbtn" aria-expanded="false" aria-controls="menu-membership">Membership <span
                 class="ber-caret" aria-hidden="true"></span></button>
             <ul id="menu-membership" class="ber-submenu" role="menu">
-              <li><a href="https://www.bonitaesterorealtors.com/join-bser/">Join BER</a></li>
+              <li><a href="https://www.bonitaesterorealtors.com/join-bser/">Join CCOR</a></li>
               <li><a href="https://bonitaspringsesterorealtorsfl.growthzoneapp.com/ap/Form/Fill/rJD9lS4P">Join A
                   Committee</a></li>
               <li><a href="https://bonitaesterorealtors.com/logsrequest/">Letter of Good Standing Request</a></li>
@@ -1006,7 +1092,7 @@
               <li><a href="https://bonitaesterorealtors.com/all-upcoming-events/">All Events Calendar</a></li>
               <li><a href="https://www.bonitaesterorealtors.com/2022-realtor-review-page-q1/">The Realtor Review
                   Magazine</a></li>
-              <li><a href="https://www.bonitaesterorealtors.com/ber-news-home/">BER News</a></li>
+              <li><a href="https://www.bonitaesterorealtors.com/ber-news-home/">CCOR News</a></li>
             </ul>
           </li>
 
@@ -1023,7 +1109,7 @@
               <li><a
                   href="https://bonitaspringsesterorealtorsfl.growthzoneapp.com/ap/Membership/Application/yr4lMArl">Reciprocal
                   Listings</a></li>
-              <li><a href="https://www.bonitaesterorealtors.com/our-commitment-to-diversity/">Bonita Springs-Estero
+              <li><a href="https://www.bonitaesterorealtors.com/our-commitment-to-diversity/">Coconut Coast Organization of
                   REALTORS® Global Network</a></li>
               <li><a href="https://www.bonitaesterorealtors.com/broker-manager/">Broker/Manager Resources</a></li>
               <li><a href="https://www.bonitaesterorealtors.com/florida-realtors-2/">Florida Realtors</a></li>
@@ -1031,7 +1117,7 @@
               <li><a href="https://www.bonitaesterorealtors.com/important-links-and-contacts/">Important Links &amp;
                   Resources</a></li>
               <li><a href="https://www.bonitaesterorealtors.com/homebuyerssellers/">Home Buyers &amp; Sellers</a></li>
-              <li><a href="https://join.bonitaesterorealtors.com/ber-truck">BER BOX Truck Rental</a></li>
+              <li><a href="https://join.bonitaesterorealtors.com/ber-truck">CCOR BOX Truck Rental</a></li>
               <li><a href="https://bonitaspringsesterorealtorsfl.growthzoneapp.com/ap/Form/Fill/rOxknh2p">Media Room
                   Rental</a></li>
               <li><a href="https://www.leegov.com/dhs/Documents/Housing/CDBG%20Application%2003.01.2023.pdf">Lee County
@@ -1041,7 +1127,7 @@
                   NAR
                   Membership Guide</a></li>
               <li><a href="https://bonitaesterorealtors.com/ber-shorts-library/">Video Library</a></li>
-              <li><a href="https://bonitaesterorealtors.com/ber-guided-walkthroughs/">BER Guided Walkthroughs</a></li>
+              <li><a href="https://bonitaesterorealtors.com/ber-guided-walkthroughs/">CCOR Guided Walkthroughs</a></li>
             </ul>
           </li>
         </ul>
