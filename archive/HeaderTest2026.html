@@ -230,10 +230,58 @@
     position: sticky;
     top: var(--topbar-h, 0px);
     z-index: 1000;
-    background: var(--ccor-blue);
+    /* background moved to .ber-header-bg */
     border-bottom: 1px solid rgba(255,255,255,0.08);
     margin: 0;
     padding: 0 25px 20px 25px;
+    border-radius: 0 !important;
+  }
+
+  .ber-header-bg {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: var(--ccor-blue);
+    overflow: hidden;
+    z-index: -1;
+    pointer-events: none;
+    border-radius: 0 !important;
+  }
+
+  .ber-wave-container {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    will-change: transform;
+    transform-origin: center bottom;
+  }
+
+  .ber-wave {
+    position: absolute;
+    bottom: -150px;
+    left: -50%;
+    width: 200%;
+    height: 300px;
+    background: var(--ccor-teal);
+    border-radius: 40%;
+    opacity: 0.2;
+    pointer-events: none;
+    will-change: transform;
+  }
+
+  .ber-wave:nth-child(1) { opacity: 0.25; animation: waveFloat 12s infinite ease-in-out; }
+  .ber-wave:nth-child(2) { opacity: 0.15; animation: waveFloat 18s infinite ease-in-out -4s; border-radius: 43%; }
+  .ber-wave:nth-child(3) { opacity: 0.1; animation: waveFloat 25s infinite ease-in-out -8s; border-radius: 38%; }
+
+  @keyframes waveFloat {
+    0% { transform: rotate(0deg) translateY(0); }
+    50% { transform: rotate(2deg) translateY(-10px); }
+    100% { transform: rotate(-1deg) translateY(0); }
   }
 
   /* Swiss-Tech Header Accents */
@@ -1069,6 +1117,9 @@
 
 <!-- === STICKY MAIN HEADER === -->
 <header class="ber-header" role="banner">
+  <div class="ber-header-bg">
+    <div class="ber-wave-container"></div>
+  </div>
   <div class="ber-container">
     <div class="bar">
       <a class="ber-brand" href="https://www.bonitaesterorealtors.com/"
@@ -2478,4 +2529,63 @@
       input.setAttribute('aria-expanded', 'false');
     }, { passive: true });
   })();
+</script>
+
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const header = document.querySelector('.ber-header');
+    const waveContainer = document.querySelector('.ber-wave-container');
+    if (!header || !waveContainer) return;
+
+    // Create wave layers
+    const numWaves = 3;
+    for (let i = 0; i < numWaves; i++) {
+      const wave = document.createElement('div');
+      wave.className = 'ber-wave';
+      waveContainer.appendChild(wave);
+    }
+
+    let slosh = 0;
+    let sloshV = 0;
+    let lastX = null;
+    let targetSlosh = 0;
+
+    header.addEventListener('mousemove', (e) => {
+      const rect = header.getBoundingClientRect();
+      const currentX = e.clientX - rect.left;
+      
+      if (lastX !== null) {
+        const dx = currentX - lastX;
+        // Impact slosh velocity based on mouse speed
+        sloshV += dx * 0.08;
+      }
+      lastX = currentX;
+
+      // Subtle tilt towards mouse position
+      targetSlosh = ((currentX / rect.width) - 0.5) * 5;
+    });
+
+    header.addEventListener('mouseleave', () => {
+      lastX = null;
+      targetSlosh = 0;
+    });
+
+    function animate() {
+      // Spring physics for sloshing
+      const springK = 0.15;
+      const friction = 0.92;
+      
+      const acceleration = (targetSlosh - slosh) * springK;
+      sloshV += acceleration;
+      sloshV *= friction;
+      slosh += sloshV;
+
+      // Apply slosh tilt to the whole container
+      waveContainer.style.transform = `rotate(${slosh}deg) scale(1.1)`;
+
+      requestAnimationFrame(animate);
+    }
+
+    animate();
+  });
 </script>
