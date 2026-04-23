@@ -256,7 +256,7 @@
 
   .ber-wave {
     position: absolute;
-    bottom: -280px;
+    bottom: -320px;
     left: -100%;
     width: 300%;
     height: 400px;
@@ -1084,9 +1084,6 @@
 
 <!-- === TOP CONTACT BAR === -->
 <header class="ber-topbar">
-  <div class="ber-header-bg">
-    <div class="ber-wave-container"></div>
-  </div>
   <div class="ber-container">
     <div class="row">
       <div class="ber-contact">
@@ -2571,10 +2568,10 @@
       function animate() {
         waves.forEach((w, i) => {
           w.phase += w.phaseSpeed;
-          w.drift = Math.sin(w.phase * 0.4) * 70;
-          const undulation = Math.sin(w.phase) * (15 + (i * 4));
-          const totalY = undulation + (i * 14);
-          const rotation = Math.cos(w.phase * 0.7) * 2.5;
+          w.drift = Math.sin(w.phase * 0.4) * 120;
+          const undulation = Math.sin(w.phase) * (20 + (i * 6));
+          const totalY = undulation + (i * 12);
+          const rotation = Math.cos(w.phase * 0.7) * 5;
           w.el.style.transform = `translateX(${w.drift}px) translateY(${-totalY}px) rotate(${rotation}deg) scaleX(1.6)`;
         });
         requestAnimationFrame(animate);
@@ -2582,7 +2579,6 @@
       animate();
     };
 
-    initWaves('.ber-topbar');
     initWaves('.ber-header');
   });
 </script>
