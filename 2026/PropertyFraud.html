@@ -1,13 +1,17 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8" />
   <title>Protect Our Homes Program | Coconut Coast Organization of REALTORS®</title>
-  <meta name="description" content="REALTORS® advocate to protect homeownership rights. The Coconut Coast Organization of REALTORS® has partnered with the Lee County Clerk of Courts to educate homeowners about Property Fraud Alerts." />
+  <meta name="description"
+    content="REALTORS® advocate to protect homeownership rights. The Coconut Coast Organization of REALTORS® has partnered with the Lee County Clerk of Courts to educate homeowners about Property Fraud Alerts." />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Montserrat:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Montserrat:wght@400;500;600;700;800;900&display=swap"
+    rel="stylesheet">
   <style>
     /* ============================
        CCOR Brand Tokens
@@ -42,7 +46,11 @@
       --font-body: 'Inter', system-ui, -apple-system, sans-serif;
     }
 
-    *, *::before, *::after { box-sizing: border-box; }
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+    }
 
     body {
       margin: 0;
@@ -67,12 +75,14 @@
       gap: 16px;
       flex-wrap: wrap;
     }
+
     .brand-bar img {
       height: 240px;
       width: auto;
       margin: -80px 0;
       filter: brightness(0) invert(1);
     }
+
     .brand-bar .tagline {
       font-family: var(--font-display);
       font-size: 0.72rem;
@@ -81,9 +91,16 @@
       text-transform: uppercase;
       color: var(--ccor-gold);
     }
+
     @media (max-width: 600px) {
-      .brand-bar { justify-content: center; text-align: center; }
-      .brand-bar .tagline { display: none; }
+      .brand-bar {
+        justify-content: center;
+        text-align: center;
+      }
+
+      .brand-bar .tagline {
+        display: none;
+      }
     }
 
     /* ============================
@@ -96,6 +113,7 @@
       background: var(--ccor-blue) url('https://bonitaesterorealtors.com/wp-content/uploads/2026/04/Property-Fraud-header.png') center/cover no-repeat;
       text-align: center;
     }
+
     .hero::before {
       content: '';
       position: absolute;
@@ -103,21 +121,24 @@
       background: linear-gradient(160deg, rgba(30, 48, 112, 0.88) 0%, rgba(47, 70, 152, 0.82) 40%, rgba(90, 165, 156, 0.75) 100%);
       z-index: 0;
     }
+
     .hero::after {
       content: '';
       position: absolute;
       inset: 0;
       z-index: 1;
       background: radial-gradient(ellipse at 20% 80%, rgba(199, 169, 110, 0.08) 0%, transparent 60%),
-                  radial-gradient(ellipse at 80% 20%, rgba(90, 165, 156, 0.06) 0%, transparent 50%);
+        radial-gradient(ellipse at 80% 20%, rgba(90, 165, 156, 0.06) 0%, transparent 50%);
       pointer-events: none;
     }
+
     .hero-inner {
       position: relative;
       z-index: 2;
       max-width: 860px;
       margin: 0 auto;
     }
+
     .hero-badge {
       display: flex;
       flex-direction: column;
@@ -130,12 +151,14 @@
       letter-spacing: 0.08em;
       text-transform: uppercase;
     }
+
     .hero-badge img {
       height: 280px;
       width: auto;
       margin: -80px 0 -80px 0;
       filter: brightness(0) invert(1);
     }
+
     .hero h1 {
       font-family: var(--font-display);
       font-size: clamp(2rem, 4.5vw, 3.2rem);
@@ -145,9 +168,11 @@
       letter-spacing: -0.02em;
       line-height: 1.15;
     }
+
     .hero h1 span {
       color: var(--ccor-gold-light);
     }
+
     .hero .hero-sub {
       font-size: 1.12rem;
       color: rgba(255, 255, 255, 0.85);
@@ -155,9 +180,11 @@
       margin: 0 auto 32px;
       line-height: 1.7;
     }
+
     .hero .hero-sub strong {
       color: #ffffff;
     }
+
     .hero-partnership {
       display: inline-flex;
       align-items: center;
@@ -170,6 +197,7 @@
       font-size: 0.85rem;
       font-weight: 500;
     }
+
     .hero-partnership strong {
       color: #fff;
     }
@@ -190,6 +218,7 @@
       text-align: center;
       margin-bottom: 48px;
     }
+
     .section-header .kicker {
       display: inline-block;
       font-family: var(--font-display);
@@ -200,6 +229,7 @@
       color: var(--ccor-teal);
       margin-bottom: 10px;
     }
+
     .section-header h2 {
       font-family: var(--font-display);
       font-size: clamp(1.5rem, 3vw, 2rem);
@@ -208,6 +238,7 @@
       margin: 0 0 12px;
       letter-spacing: -0.01em;
     }
+
     .section-header p {
       font-size: 1.05rem;
       color: var(--muted);
@@ -221,14 +252,19 @@
     .value-section {
       padding: 80px 0 60px;
     }
+
     .value-grid {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
       gap: 24px;
     }
+
     @media (max-width: 768px) {
-      .value-grid { grid-template-columns: 1fr; }
+      .value-grid {
+        grid-template-columns: 1fr;
+      }
     }
+
     .value-card {
       background: var(--white);
       border: 1px solid var(--border);
@@ -239,6 +275,7 @@
       position: relative;
       overflow: hidden;
     }
+
     .value-card::before {
       content: '';
       position: absolute;
@@ -250,12 +287,17 @@
       opacity: 0;
       transition: opacity 200ms ease;
     }
+
     .value-card:hover {
       transform: translateY(-4px);
       box-shadow: var(--shadow-elevated);
       border-color: var(--ccor-teal);
     }
-    .value-card:hover::before { opacity: 1; }
+
+    .value-card:hover::before {
+      opacity: 1;
+    }
+
     .value-icon {
       width: 56px;
       height: 56px;
@@ -266,9 +308,19 @@
       font-size: 1.6rem;
       margin-bottom: 20px;
     }
-    .value-icon.blue { background: rgba(47, 70, 152, 0.08); }
-    .value-icon.teal { background: rgba(90, 165, 156, 0.1); }
-    .value-icon.gold { background: rgba(199, 169, 110, 0.12); }
+
+    .value-icon.blue {
+      background: rgba(47, 70, 152, 0.08);
+    }
+
+    .value-icon.teal {
+      background: rgba(90, 165, 156, 0.1);
+    }
+
+    .value-icon.gold {
+      background: rgba(199, 169, 110, 0.12);
+    }
+
     .value-card h3 {
       font-family: var(--font-display);
       font-size: 1.1rem;
@@ -276,6 +328,7 @@
       color: var(--ink);
       margin: 0 0 10px;
     }
+
     .value-card p {
       font-size: 0.95rem;
       color: var(--muted);
@@ -289,6 +342,7 @@
     .how-section {
       padding: 60px 0 80px;
     }
+
     .how-panel {
       background: var(--white);
       border: 1px solid var(--border);
@@ -296,20 +350,30 @@
       padding: 48px 40px;
       box-shadow: var(--shadow-soft);
     }
+
     .steps-grid {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
       gap: 32px;
       margin-bottom: 40px;
     }
+
     @media (max-width: 768px) {
-      .steps-grid { grid-template-columns: 1fr; gap: 24px; }
-      .how-panel { padding: 32px 24px; }
+      .steps-grid {
+        grid-template-columns: 1fr;
+        gap: 24px;
+      }
+
+      .how-panel {
+        padding: 32px 24px;
+      }
     }
+
     .step-item {
       text-align: center;
       position: relative;
     }
+
     .step-number {
       width: 48px;
       height: 48px;
@@ -325,6 +389,7 @@
       margin: 0 auto 16px;
       box-shadow: 0 4px 12px rgba(47, 70, 152, 0.25);
     }
+
     .step-item h4 {
       font-family: var(--font-display);
       font-size: 1rem;
@@ -332,12 +397,14 @@
       color: var(--ink);
       margin: 0 0 8px;
     }
+
     .step-item p {
       font-size: 0.9rem;
       color: var(--muted);
       margin: 0;
       line-height: 1.6;
     }
+
     /* Step connector lines (desktop only) */
     @media (min-width: 769px) {
       .step-item:not(:last-child)::after {
@@ -359,6 +426,7 @@
       gap: 32px;
       flex-wrap: wrap;
     }
+
     .cta-primary {
       display: inline-flex;
       align-items: center;
@@ -376,35 +444,41 @@
       border: none;
       cursor: pointer;
     }
+
     .cta-primary:hover {
       transform: translateY(-2px);
       box-shadow: 0 8px 24px rgba(47, 70, 152, 0.4);
       background: linear-gradient(135deg, var(--ccor-blue-light), var(--ccor-blue));
     }
+
     .qr-block {
       display: flex;
       flex-direction: column;
       align-items: center;
       gap: 6px;
     }
+
     .qr-block img {
       width: 110px;
       height: 110px;
       border-radius: var(--radius-md);
       border: 2px solid var(--border);
-      box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
     }
+
     .qr-block span {
       font-size: 0.72rem;
       color: var(--ccor-grey-light);
       font-weight: 500;
     }
+
     .how-note {
       text-align: center;
       margin-top: 24px;
       font-size: 0.82rem;
       color: var(--ccor-grey-light);
     }
+
     .how-note strong {
       color: var(--ccor-teal-dark);
     }
@@ -415,6 +489,7 @@
     .flyer-section {
       padding: 60px 0 80px;
     }
+
     .flyer-panel {
       background: var(--white);
       border: 1px solid var(--border);
@@ -422,14 +497,19 @@
       box-shadow: var(--shadow-soft);
       overflow: hidden;
     }
+
     .flyer-grid {
       display: grid;
       grid-template-columns: 300px 1fr;
       align-items: stretch;
     }
+
     @media (max-width: 860px) {
-      .flyer-grid { grid-template-columns: 1fr; }
+      .flyer-grid {
+        grid-template-columns: 1fr;
+      }
     }
+
     .flyer-preview-wrap {
       background: linear-gradient(145deg, var(--ccor-blue) 0%, #1e3070 100%);
       display: flex;
@@ -438,6 +518,7 @@
       padding: 32px;
       position: relative;
     }
+
     .flyer-preview-wrap::before {
       content: '';
       position: absolute;
@@ -445,26 +526,31 @@
       background: radial-gradient(circle at 70% 30%, rgba(90, 165, 156, 0.15) 0%, transparent 60%);
       pointer-events: none;
     }
+
     .flyer-preview-wrap a {
       position: relative;
       z-index: 1;
       display: block;
     }
+
     .flyer-preview-wrap img {
       width: 220px;
       border-radius: var(--radius-md);
       box-shadow: 0 12px 32px rgba(0, 0, 0, 0.35);
       transition: transform 250ms ease;
     }
+
     .flyer-preview-wrap img:hover {
       transform: scale(1.04) rotate(-1deg);
     }
+
     .flyer-info {
       padding: 40px;
       display: flex;
       flex-direction: column;
       justify-content: center;
     }
+
     .flyer-info .kicker {
       display: inline-block;
       font-family: var(--font-display);
@@ -475,6 +561,7 @@
       color: var(--ccor-teal);
       margin-bottom: 8px;
     }
+
     .flyer-info h3 {
       font-family: var(--font-display);
       font-size: 1.4rem;
@@ -482,18 +569,21 @@
       color: var(--ink);
       margin: 0 0 12px;
     }
+
     .flyer-info p {
       font-size: 0.95rem;
       color: var(--muted);
       line-height: 1.7;
       margin: 0 0 24px;
     }
+
     .flyer-actions {
       display: flex;
       gap: 12px;
       flex-wrap: wrap;
       align-items: center;
     }
+
     .btn-download {
       display: inline-flex;
       align-items: center;
@@ -509,11 +599,13 @@
       transition: all 180ms ease;
       box-shadow: 0 3px 10px rgba(26, 26, 46, 0.15);
     }
+
     .btn-download:hover {
       background: var(--ccor-blue);
       transform: translateY(-1px);
       box-shadow: 0 6px 16px rgba(47, 70, 152, 0.25);
     }
+
     .flyer-tip {
       margin-top: 20px;
       padding: 14px 18px;
@@ -524,6 +616,7 @@
       color: var(--ccor-grey);
       line-height: 1.6;
     }
+
     .flyer-tip strong {
       color: var(--ink);
     }
@@ -537,12 +630,19 @@
       gap: 16px;
       margin-top: 32px;
     }
+
     @media (max-width: 768px) {
-      .share-ideas { grid-template-columns: repeat(2, 1fr); }
+      .share-ideas {
+        grid-template-columns: repeat(2, 1fr);
+      }
     }
+
     @media (max-width: 480px) {
-      .share-ideas { grid-template-columns: 1fr; }
+      .share-ideas {
+        grid-template-columns: 1fr;
+      }
     }
+
     .share-idea {
       background: var(--ccor-teal-soft);
       border: 1px solid rgba(90, 165, 156, 0.15);
@@ -556,20 +656,24 @@
       cursor: pointer;
       position: relative;
     }
+
     .share-idea:hover {
       background: rgba(90, 165, 156, 0.15);
       transform: translateY(-2px);
     }
+
     .share-idea.copied {
       background: var(--ccor-teal);
       color: #fff;
       transform: translateY(0);
     }
+
     .share-idea .idea-icon {
       font-size: 1.4rem;
       display: block;
       margin-bottom: 8px;
     }
+
     .share-idea .copy-hint {
       display: block;
       margin-top: 8px;
@@ -579,21 +683,25 @@
       text-transform: uppercase;
       letter-spacing: 0.05em;
     }
+
     .share-idea.copied .idea-title,
     .share-idea.copied .copy-hint {
       color: #fff;
     }
+
     .share-ideas-header {
       text-align: center;
       margin-top: 48px;
       margin-bottom: 24px;
     }
+
     .share-ideas-header h3 {
       font-family: var(--font-display);
       color: var(--ccor-blue);
       font-size: 1.25rem;
       margin: 0 0 8px;
     }
+
     .share-ideas-header p {
       color: var(--ccor-grey);
       font-size: 0.95rem;
@@ -607,21 +715,31 @@
       margin-top: 24px;
       width: 100%;
     }
+
     .idea-dropdown {
       display: none;
       background: #fff;
-      border: 1px solid rgba(0,0,0,0.06);
+      border: 1px solid rgba(0, 0, 0, 0.06);
       border-radius: var(--radius-lg);
       padding: 32px 24px;
-      box-shadow: 0 12px 40px rgba(0,0,0,0.06);
+      box-shadow: 0 12px 40px rgba(0, 0, 0, 0.06);
       animation: slideDown 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
     }
+
     .idea-dropdown.active {
       display: block;
     }
+
     @keyframes slideDown {
-      from { opacity: 0; transform: translateY(-10px); }
-      to { opacity: 1; transform: translateY(0); }
+      from {
+        opacity: 0;
+        transform: translateY(-10px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
     }
 
     .mockups-container {
@@ -638,6 +756,7 @@
       width: 380px;
       max-width: 100%;
     }
+
     .macbook-screen {
       background: #111;
       border-radius: 12px 12px 0 0;
@@ -645,6 +764,7 @@
       border: 2px solid #ddd;
       border-bottom: none;
     }
+
     .macbook-content {
       background: #fff;
       aspect-ratio: 16 / 10;
@@ -653,6 +773,7 @@
       display: flex;
       flex-direction: column;
     }
+
     .macbook-base {
       height: 12px;
       background: #e2e2e2;
@@ -660,6 +781,7 @@
       position: relative;
       border: 1px solid #ccc;
     }
+
     .macbook-base::before {
       content: "";
       position: absolute;
@@ -677,6 +799,7 @@
       width: 200px;
       max-width: 100%;
     }
+
     .iphone-frame {
       background: #111;
       border-radius: 36px;
@@ -685,6 +808,7 @@
       box-shadow: inset 0 0 0 2px #555;
       position: relative;
     }
+
     .iphone-notch {
       position: absolute;
       top: 10px;
@@ -696,6 +820,7 @@
       border-radius: 0 0 10px 10px;
       z-index: 2;
     }
+
     .iphone-content {
       background: #fff;
       aspect-ratio: 9 / 19.5;
@@ -714,8 +839,14 @@
       background: #f0f0f0;
       border-bottom: 1px solid #eee;
     }
-    .macbook-content .mockup-flyer { height: 60%; }
-    .iphone-content .mockup-flyer { height: 50%; }
+
+    .macbook-content .mockup-flyer {
+      height: 60%;
+    }
+
+    .iphone-content .mockup-flyer {
+      height: 50%;
+    }
 
     .mockup-text {
       padding: 12px;
@@ -725,6 +856,7 @@
       overflow-y: auto;
       white-space: pre-wrap;
     }
+
     .iphone-content .mockup-text {
       font-size: 0.65rem;
       padding: 12px 16px;
@@ -734,6 +866,7 @@
     .dropdown-action {
       text-align: center;
     }
+
     .btn-copy {
       display: inline-flex;
       align-items: center;
@@ -749,11 +882,13 @@
       transition: all 200ms ease;
       box-shadow: 0 4px 12px rgba(90, 165, 156, 0.3);
     }
+
     .btn-copy:hover {
       background: var(--ccor-teal-dark);
       transform: translateY(-2px);
       box-shadow: 0 6px 16px rgba(90, 165, 156, 0.4);
     }
+
     .btn-copy.success {
       background: var(--ccor-blue);
       box-shadow: 0 4px 12px rgba(47, 70, 152, 0.3);
@@ -766,6 +901,7 @@
       transform: translateY(-2px);
       box-shadow: 0 8px 24px rgba(90, 165, 156, 0.25);
     }
+
     .share-idea.active .copy-hint,
     .share-idea.active .idea-title {
       color: #fff;
@@ -779,11 +915,13 @@
       padding: 48px 24px;
       margin-top: 20px;
     }
+
     .partnership-inner {
       max-width: 900px;
       margin: 0 auto;
       text-align: center;
     }
+
     .partnership-logos {
       display: flex;
       align-items: center;
@@ -792,6 +930,7 @@
       margin-bottom: 24px;
       flex-wrap: wrap;
     }
+
     .partnership-logos img {
       height: 240px;
       width: auto;
@@ -799,11 +938,13 @@
       filter: brightness(0) invert(1);
       opacity: 0.9;
     }
+
     .partnership-logos .divider {
       width: 1px;
       height: 60px;
       background: rgba(255, 255, 255, 0.2);
     }
+
     .partnership-logos .partner-text {
       font-family: var(--font-display);
       font-size: 0.9rem;
@@ -813,6 +954,7 @@
       text-align: left;
       line-height: 1.4;
     }
+
     .partnership-statement {
       font-size: 1rem;
       color: rgba(255, 255, 255, 0.8);
@@ -820,9 +962,11 @@
       margin: 0 auto 20px;
       line-height: 1.7;
     }
+
     .partnership-statement strong {
       color: var(--ccor-gold-light);
     }
+
     .partnership-disclaimer {
       font-size: 0.78rem;
       color: rgba(255, 255, 255, 0.45);
@@ -836,15 +980,32 @@
        Animations
        ============================ */
     @keyframes fadeInUp {
-      from { opacity: 0; transform: translateY(24px); }
-      to { opacity: 1; transform: translateY(0); }
+      from {
+        opacity: 0;
+        transform: translateY(24px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
     }
+
     .animate-in {
       animation: fadeInUp 0.6s ease forwards;
     }
-    .delay-1 { animation-delay: 0.1s; }
-    .delay-2 { animation-delay: 0.2s; }
-    .delay-3 { animation-delay: 0.3s; }
+
+    .delay-1 {
+      animation-delay: 0.1s;
+    }
+
+    .delay-2 {
+      animation-delay: 0.2s;
+    }
+
+    .delay-3 {
+      animation-delay: 0.3s;
+    }
 
     /* ============================
        Intersection Observer targets
@@ -854,18 +1015,20 @@
       transform: translateY(20px);
       transition: opacity 0.6s ease, transform 0.6s ease;
     }
+
     .reveal.visible {
       opacity: 1;
       transform: translateY(0);
     }
-
   </style>
 </head>
+
 <body>
 
   <!-- ===== BRAND BAR ===== -->
   <header class="brand-bar" id="brand-bar">
-    <img src="https://bonitaesterorealtors.com/wp-content/uploads/2026/04/CCOR-Horz-Logo-no-tag-clr-scaled.png" alt="Coconut Coast Organization of REALTORS® — CCOR">
+    <img src="https://bonitaesterorealtors.com/wp-content/uploads/2026/04/CCOR-Horz-Logo-no-tag-clr-scaled.png"
+      alt="Coconut Coast Organization of REALTORS® — CCOR">
     <span class="tagline">The Core of Real Estate Connections</span>
   </header>
 
@@ -873,18 +1036,19 @@
   <section class="hero" id="hero">
     <div class="hero-inner">
       <div class="hero-badge animate-in">
-        <img src="https://bonitaesterorealtors.com/wp-content/uploads/2026/04/CCOR-Vert-Logo-no-tag-clr-scaled.png" alt="CCOR">
+        <img src="https://bonitaesterorealtors.com/wp-content/uploads/2026/04/CCOR-Vert-Logo-no-tag-clr-scaled.png"
+          alt="CCOR">
         A CCOR Community Initiative
       </div>
       <h1 class="animate-in delay-1">REALTORS® Advocate to <span>Protect Our Homes</span></h1>
       <p class="hero-sub animate-in delay-2">
-        The <strong>Coconut Coast Organization of REALTORS®</strong> has partnered with the 
-        <strong>Lee County Clerk of Courts</strong> to protect homeowners by educating them about 
-        the Property Fraud Alert Program. We are actively working to educate consumers — 
+        The <strong>Coconut Coast Organization of REALTORS®</strong> has partnered with the
+        <strong>Lee County Clerk of Courts</strong> to protect homeowners by educating them about
+        the Property Fraud Alert Program. We are actively working to educate consumers —
         <strong>one homeowner at a time</strong>.
       </p>
       <div class="hero-partnership animate-in delay-3">
-        <span>🤝</span>
+        <span></span>
         <span>In partnership with the <strong>Lee County Clerk of Courts</strong></span>
       </div>
     </div>
@@ -897,24 +1061,28 @@
       <div class="section-header reveal">
         <span class="kicker">Why CCOR?</span>
         <h2>REALTORS® Are Your Good Neighbors</h2>
-        <p>Property fraud is on the rise. REALTORS® advocate to protect our industry and homeownership rights — and knowledge like this is part of the value of working with a REALTOR®.</p>
+        <p>Property fraud is on the rise. REALTORS® advocate to protect our industry and homeownership rights — and
+          knowledge like this is part of the value of working with a REALTOR®.</p>
       </div>
 
       <div class="value-grid">
         <div class="value-card reveal">
           <div class="value-icon blue">🏡</div>
           <h3>Community Advocates</h3>
-          <p>REALTORS® advocate to protect our industry and homeownership rights. Through initiatives like the Protect Our Homes Program, CCOR is leading the charge on consumer education in Southwest Florida.</p>
+          <p>REALTORS® advocate to protect our industry and homeownership rights. Through initiatives like the Protect
+            Our Homes Program, CCOR is leading the charge on consumer education in Southwest Florida.</p>
         </div>
         <div class="value-card reveal">
           <div class="value-icon teal">🤝</div>
           <h3>Trusted Partners</h3>
-          <p>Knowledge like this is part of the value of working with a REALTOR®. When you partner with a CCOR member, you gain a neighbor who looks out for your home — even after the closing.</p>
+          <p>Knowledge like this is part of the value of working with a REALTOR®. When you partner with a CCOR member,
+            you gain a neighbor who looks out for your home — even after the closing.</p>
         </div>
         <div class="value-card reveal">
           <div class="value-icon gold">🛡️</div>
           <h3>Proactive Protection</h3>
-          <p>We've partnered with the Lee County Clerk of Courts to proactively protect homeowners by educating them about the free Property Fraud Alert Program — one homeowner at a time.</p>
+          <p>We've partnered with the Lee County Clerk of Courts to proactively protect homeowners by educating them
+            about the free Property Fraud Alert Program — one homeowner at a time.</p>
         </div>
       </div>
     </section>
@@ -924,7 +1092,8 @@
       <div class="section-header reveal">
         <span class="kicker">Simple &amp; Free</span>
         <h2>How Does It Work?</h2>
-        <p>The Lee County Clerk's Property Fraud Alert is a free service. Simply follow these three steps to protect your property.</p>
+        <p>The Lee County Clerk's Property Fraud Alert is a free service. Simply follow these three steps to protect
+          your property.</p>
       </div>
 
       <div class="how-panel reveal">
@@ -947,18 +1116,22 @@
         </div>
 
         <div class="how-cta">
-          <a href="https://www.leeclerk.org/services/property-fraud-alert" target="_blank" rel="noopener" class="cta-primary" id="register-btn">
+          <a href="https://www.leeclerk.org/services/property-fraud-alert" target="_blank" rel="noopener"
+            class="cta-primary" id="register-btn">
             Register for Property Fraud Alerts
             <span>→</span>
           </a>
           <div class="qr-block">
-            <img src="https://api.qrserver.com/v1/create-qr-code/?size=360x360&data=https://www.leeclerk.org/services/property-fraud-alert" alt="QR Code — Lee County Clerk Property Fraud Alert signup">
+            <img
+              src="https://api.qrserver.com/v1/create-qr-code/?size=360x360&data=https://www.leeclerk.org/services/property-fraud-alert"
+              alt="QR Code — Lee County Clerk Property Fraud Alert signup">
             <span>Scan to register</span>
           </div>
         </div>
 
         <p class="how-note">
-          <strong>Free service</strong> · No fees · Takes less than 2 minutes · Powered by the Lee County Clerk of Courts
+          <strong>Free service</strong> · No fees · Takes less than 2 minutes · Powered by the Lee County Clerk of
+          Courts
         </p>
       </div>
     </section>
@@ -968,35 +1141,42 @@
       <div class="section-header reveal">
         <span class="kicker">REALTOR® Toolkit</span>
         <h2>Download &amp; Share the Flyer</h2>
-        <p>REALTORS® — download the official flyer and share it with neighbors, clients, and your community. Every homeowner who signs up is one more family protected.</p>
+        <p>REALTORS® — download the official flyer and share it with neighbors, clients, and your community. Every
+          homeowner who signs up is one more family protected.</p>
       </div>
 
       <div class="flyer-panel reveal">
         <div class="flyer-grid">
           <div class="flyer-preview-wrap">
-            <a href="https://bonitaesterorealtors.com/wp-content/uploads/2026/04/PROTECT-OUR-HOMES-PROGRAM.png" target="_blank">
-              <img src="https://bonitaesterorealtors.com/wp-content/uploads/2026/04/PROTECT-OUR-HOMES-PROGRAM.png" alt="Protect Our Homes Program Flyer — official CCOR flyer for REALTORS® to distribute">
+            <a href="https://bonitaesterorealtors.com/wp-content/uploads/2026/04/PROTECT-OUR-HOMES-PROGRAM.png"
+              target="_blank">
+              <img src="https://bonitaesterorealtors.com/wp-content/uploads/2026/04/PROTECT-OUR-HOMES-PROGRAM.png"
+                alt="Protect Our Homes Program Flyer — official CCOR flyer for REALTORS® to distribute">
             </a>
           </div>
           <div class="flyer-info">
             <span class="kicker">Official Program Flyer</span>
             <h3>Protect Our Homes Program</h3>
             <p>
-              Help spread the word! Download the official flyer provided by the Lee County Clerk's Office 
-              and share it with your community. Distribute at open houses, include in closing packages, 
+              Help spread the word! Download the official flyer provided by the Lee County Clerk's Office
+              and share it with your community. Distribute at open houses, include in closing packages,
               hand out at neighborhood events, or share digitally with your sphere.
             </p>
             <div class="flyer-actions">
-              <a href="https://bonitaesterorealtors.com/wp-content/uploads/2026/04/PROTECT-OUR-HOMES-PROGRAM-1.pdf" target="_blank" class="btn-download" id="download-flyer-btn">
+              <a href="https://bonitaesterorealtors.com/wp-content/uploads/2026/04/PROTECT-OUR-HOMES-PROGRAM-1.pdf"
+                target="_blank" class="btn-download" id="download-flyer-btn">
                 <span>⬇</span> Download Flyer (PDF)
               </a>
-              <a href="https://bonitaesterorealtors.com/wp-content/uploads/2026/04/PROTECT-OUR-HOMES-PROGRAM.png" download class="btn-download" style="background: var(--ccor-teal-dark);">
+              <a href="https://bonitaesterorealtors.com/wp-content/uploads/2026/04/PROTECT-OUR-HOMES-PROGRAM.png"
+                download class="btn-download" style="background: var(--ccor-teal-dark);">
                 <span>⬇</span> Download Flyer (PNG)
               </a>
             </div>
             <div class="flyer-tip">
-              <strong>💡 Tip:</strong> This flyer links directly to the Clerk's registration page — it's designed for consumers. 
-              As a REALTOR®, you can share this flyer with homeowners to encourage them to sign up for free property fraud alerts.
+              <strong>💡 Tip:</strong> This flyer links directly to the Clerk's registration page — it's designed for
+              consumers.
+              As a REALTOR®, you can share this flyer with homeowners to encourage them to sign up for free property
+              fraud alerts.
             </div>
           </div>
         </div>
@@ -1007,31 +1187,35 @@
         <h3>Script Templates</h3>
         <p>Click any idea below to copy a pre-written script you can use immediately.</p>
       </div>
-      
+
       <div class="share-ideas reveal">
         <div class="share-idea" onclick="toggleDropdown(this)">
           <span class="idea-icon">🏠</span>
           <span class="idea-title">Open Houses</span>
           <span class="copy-hint">Click to Preview</span>
-          <textarea class="copy-text" style="display:none;">Welcome to the open house! While you're looking for your next home, it's important to protect your current one. Sign up for the Lee County Clerk's free Property Fraud Alert system to protect your title: https://leeclerk.org/fraud</textarea>
+          <textarea class="copy-text"
+            style="display:none;">Welcome to the open house! While you're looking for your next home, it's important to protect your current one. Sign up for the Lee County Clerk's free Property Fraud Alert system to protect your title: https://leeclerk.org/fraud</textarea>
         </div>
         <div class="share-idea" onclick="toggleDropdown(this)">
           <span class="idea-icon">🎁</span>
           <span class="idea-title">Closing Gifts</span>
           <span class="copy-hint">Click to Preview</span>
-          <textarea class="copy-text" style="display:none;">Congratulations on your closing! As your REALTOR®, I want to ensure your new home remains safe. I highly recommend taking 2 minutes to register for the free Lee County Property Fraud Alert: https://leeclerk.org/fraud</textarea>
+          <textarea class="copy-text"
+            style="display:none;">Congratulations on your closing! As your REALTOR®, I want to ensure your new home remains safe. I highly recommend taking 2 minutes to register for the free Lee County Property Fraud Alert: https://leeclerk.org/fraud</textarea>
         </div>
         <div class="share-idea" onclick="toggleDropdown(this)">
           <span class="idea-icon">📬</span>
           <span class="idea-title">Neighborhood Mailers</span>
           <span class="copy-hint">Click to Preview</span>
-          <textarea class="copy-text" style="display:none;">Hello Neighbor! Property fraud is on the rise in Southwest Florida. As your local REALTOR® and community advocate, I want to make sure your home stays protected. Register your home for free alerts with the Lee County Clerk of Courts: https://leeclerk.org/fraud</textarea>
+          <textarea class="copy-text"
+            style="display:none;">Hello Neighbor! Property fraud is on the rise in Southwest Florida. As your local REALTOR® and community advocate, I want to make sure your home stays protected. Register your home for free alerts with the Lee County Clerk of Courts: https://leeclerk.org/fraud</textarea>
         </div>
         <div class="share-idea" onclick="toggleDropdown(this)">
           <span class="idea-icon">📱</span>
           <span class="idea-title">Social Media & Email</span>
           <span class="copy-hint">Click to Preview</span>
-          <textarea class="copy-text" style="display:none;">Protecting your home goes beyond deadbolts and security systems. As a member of the Coconut Coast Organization of REALTORS®, I'm proud to partner with the Lee County Clerk of Courts to fight property fraud. Protect your title by signing up for free fraud alerts today: https://leeclerk.org/fraud</textarea>
+          <textarea class="copy-text"
+            style="display:none;">Protecting your home goes beyond deadbolts and security systems. As a member of the Coconut Coast Organization of REALTORS®, I'm proud to partner with the Lee County Clerk of Courts to fight property fraud. Protect your title by signing up for free fraud alerts today: https://leeclerk.org/fraud</textarea>
         </div>
       </div>
 
@@ -1043,7 +1227,8 @@
             <div class="macbook-mockup">
               <div class="macbook-screen">
                 <div class="macbook-content">
-                  <img src="https://bonitaesterorealtors.com/wp-content/uploads/2026/04/PROTECT-OUR-HOMES-PROGRAM.png" alt="Flyer preview" class="mockup-flyer">
+                  <img src="https://bonitaesterorealtors.com/wp-content/uploads/2026/04/PROTECT-OUR-HOMES-PROGRAM.png"
+                    alt="Flyer preview" class="mockup-flyer">
                   <div class="mockup-text" id="macbook-text-preview"></div>
                 </div>
               </div>
@@ -1054,7 +1239,8 @@
               <div class="iphone-frame">
                 <div class="iphone-notch"></div>
                 <div class="iphone-content">
-                  <img src="https://bonitaesterorealtors.com/wp-content/uploads/2026/04/PROTECT-OUR-HOMES-PROGRAM.png" alt="Flyer preview" class="mockup-flyer">
+                  <img src="https://bonitaesterorealtors.com/wp-content/uploads/2026/04/PROTECT-OUR-HOMES-PROGRAM.png"
+                    alt="Flyer preview" class="mockup-flyer">
                   <div class="mockup-text" id="iphone-text-preview"></div>
                 </div>
               </div>
@@ -1077,17 +1263,19 @@
   <footer class="partnership-band" id="partnership">
     <div class="partnership-inner">
       <div class="partnership-logos">
-        <img src="https://bonitaesterorealtors.com/wp-content/uploads/2026/04/CCOR-Horz-Logo-no-tag-clr-scaled.png" alt="Coconut Coast Organization of REALTORS®">
+        <img src="https://bonitaesterorealtors.com/wp-content/uploads/2026/04/CCOR-Horz-Logo-no-tag-clr-scaled.png"
+          alt="Coconut Coast Organization of REALTORS®">
         <div class="divider"></div>
         <div class="partner-text">Lee County<br>Clerk of Courts</div>
       </div>
       <p class="partnership-statement">
-        <strong>REALTORS® advocate to protect our industry and homeownership rights.</strong> 
-        This is why the Coconut Coast Organization of REALTORS® has partnered with the Lee County Clerk of Courts 
+        <strong>REALTORS® advocate to protect our industry and homeownership rights.</strong>
+        This is why the Coconut Coast Organization of REALTORS® has partnered with the Lee County Clerk of Courts
         to protect homeowners by educating them about the Property Fraud Alert Program.
       </p>
       <p class="partnership-disclaimer">
-        Educational resources only — for legal advice, contact an attorney; for suspected crimes, contact law enforcement.
+        Educational resources only — for legal advice, contact an attorney; for suspected crimes, contact law
+        enforcement.
       </p>
     </div>
   </footer>
@@ -1098,7 +1286,7 @@
 
     function toggleDropdown(el) {
       const wrapper = document.getElementById('master-dropdown-wrapper');
-      
+
       // If clicking the already open one, close it
       if (currentActiveIdea === el) {
         el.classList.remove('active');
@@ -1113,17 +1301,17 @@
         idea.classList.remove('active');
         idea.querySelector('.copy-hint').innerText = "Click to Preview";
       });
-      
+
       // Set this one to active
       el.classList.add('active');
       el.querySelector('.copy-hint').innerText = "Viewing";
-      
+
       const text = el.querySelector('.copy-text').value;
-      
+
       // Update mockup text
       document.getElementById('macbook-text-preview').textContent = text;
       document.getElementById('iphone-text-preview').textContent = text;
-      
+
       // Reset copy button
       const copyBtn = document.getElementById('master-copy-btn');
       copyBtn.querySelector('.btn-text').textContent = "Copy Script Text";
@@ -1134,7 +1322,7 @@
       wrapper.style.display = 'block';
       const dropdown = document.getElementById('master-idea-dropdown');
       dropdown.classList.add('active');
-      
+
       // Retrigger animation
       dropdown.style.animation = 'none';
       dropdown.offsetHeight; /* trigger reflow */
@@ -1151,7 +1339,7 @@
     function copyMasterText() {
       const copyBtn = document.getElementById('master-copy-btn');
       const text = copyBtn.dataset.copyText;
-      
+
       navigator.clipboard.writeText(text).then(() => {
         copyBtn.classList.add('success');
         copyBtn.querySelector('.btn-text').textContent = "Copied to Clipboard!";
@@ -1176,4 +1364,5 @@
   </script>
 
 </body>
+
 </html>
