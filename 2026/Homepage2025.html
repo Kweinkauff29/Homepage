@@ -25,13 +25,13 @@
   <link href="https://fonts.googleapis.com/css2?family=Fascinate&display=swap" rel="stylesheet">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Oswald&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family='Inter'&display=swap" rel="stylesheet">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Righteous&display=swap" rel="stylesheet">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Roboto&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family='Inter'&display=swap" rel="stylesheet">
   <link rel="preconnect" href="https://fonts.googleapis.com">
 
   <!-- Leaflet CSS -->
@@ -282,7 +282,7 @@
 
     /* Premium Gradients */
     .tier-badge.diamond {
-      background: linear-gradient(135deg, #004d57 0%, #008080 50%, #00a3a3 100%);
+      background: linear-gradient(135deg, #004d57 0%, #64BAB0 50%, #00a3a3 100%);
       border-bottom: 3px solid #00333a;
     }
 
@@ -2428,7 +2428,7 @@
 
     margin: 0 0 0 -30px;
     height: 120px;
-    /*background-image: linear-gradient(to right, #006ee2 0%, #05aae1 15%, #05aae1 85%, #006ee2 100%);*/
+    /*background-image: linear-gradient(to right, #006ee2 0%, #64BAB0 15%, #64BAB0 85%, #006ee2 100%);*/
   }
 
   #marquee-content {
@@ -3823,8 +3823,7 @@
       <div class="col-sm-7">
         <h4>Elevate Your Impact: Join a Coconut Coast Organization of REALTORS® Committee in 2025</h4>
         <p class="italics">November 15th, 2024</p>
-        <p>Looking to make an impact in the real estate industry and grow your career? Join a Bonita Springs-Estero
-          REALTORS® (CCOR) committee for 2025! With opportunities ranging from professional development to government
+        <p>Looking to make an impact in the real estate industry and grow your career? Join a Coconut Coast Organization of Realtors® (CCOR) committee for 2025! With opportunities ranging from professional development to government
           affairs, you'll help shape the future of our association while building valuable connections and leadership
           skills. Make your voice heard and be part of the change.</p>
         <a href="https://www.bonitaesterorealtors.com/elevate-your-impact-join-a-bonita-springs-estero-realtors-committee-in-2025/"
@@ -4692,6 +4691,84 @@
 
 
 
+
+
+
+<div id="ccor-waves-bg" aria-hidden="true" style="position: fixed; inset: 0; z-index: -9999; pointer-events: none; opacity: 0.25; overflow: hidden; background: #ffffff;">
+  <div class="ccor-wave-container ccor-ribbon-bottom" style="position: absolute; inset: 0;"></div>
+  <div class="ccor-wave-container ccor-ribbon-top" style="position: absolute; inset: 0; transform: rotate(180deg);"></div>
+</div>
+<style>
+  @keyframes ribbonFlow {
+    0% { background-position: 0% 0; }
+    100% { background-position: 400% 0; }
+  }
+  .ccor-wave {
+    position: absolute;
+    width: 300%;
+    height: 500px;
+    left: -100%;
+    background: linear-gradient(120deg, #1B449D 0%, #2e5ab8 8%, #3d6cd1 16%, #64BAB0 24%, #8dd4ca 32%, #a6e1d9 40%, #D4AC6C 48%, #e8c88a 56%, #f2dcb3 64%, #5B5A5C 72%, #7a7a7a 80%, #64BAB0 88%, #4da69a 94%, #1B449D 100%);
+    background-size: 400% 100%;
+    animation: ribbonFlow 15s ease-in-out infinite alternate;
+    border-radius: 45% 48% 43% 47%;
+    filter: blur(4px);
+    will-change: transform, filter;
+    transform-origin: center bottom;
+  }
+  .ccor-ribbon-bottom .ccor-wave { bottom: -350px; }
+  .ccor-ribbon-top .ccor-wave { bottom: -350px; }
+  
+  /* FORCE TRANSPARENCY ON HOST CONTAINERS */
+  /* This ensures the waves are visible behind the main content area */
+  html { background-color: #ffffff !important; }
+  body, 
+  .site, 
+  #page, 
+  .site-content, 
+  #content, 
+  .entry-content, 
+  .joinber-page, 
+  .ber-about, 
+  #main, 
+  .main-container, 
+  .wrapper {
+    background-color: transparent !important;
+    background: transparent !important;
+  }
+</style>
+<script>
+  (function() {
+    function initCcorWaves() {
+        const root = document.getElementById('ccor-waves-bg');
+        if (!root) return;
+        const containers = root.querySelectorAll('.ccor-wave-container');
+        containers.forEach(container => {
+            const waves = [];
+            for (let i = 0; i < 4; i++) {
+                const wave = document.createElement('div');
+                wave.className = 'ccor-wave';
+                wave.style.borderRadius = (38 + Math.random() * 10) + '%';
+                container.appendChild(wave);
+                waves.push({ el: wave, phase: Math.random() * Math.PI * 2, phaseSpeed: 0.003 + (Math.random() * 0.005) });
+            }
+            function animate() {
+                waves.forEach((w, i) => {
+                    w.phase += w.phaseSpeed;
+                    const drift = Math.sin(w.phase * 0.4) * 80;
+                    const undulation = Math.sin(w.phase) * (15 + (i * 5));
+                    w.el.style.transform = "translateX("+drift+"px) translateY("+(-undulation - (i*10))+"px) rotate("+(Math.cos(w.phase * 0.7) * 4)+"deg) scaleX(1.4)";
+                });
+                requestAnimationFrame(animate);
+            }
+            animate();
+        });
+    }
+    if (document.readyState === 'loading') { document.addEventListener('DOMContentLoaded', initCcorWaves); }
+    else { initCcorWaves(); }
+  })();
+</script>
 </body>
 
 </html>
+

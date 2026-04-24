@@ -1,62 +1,10 @@
-<!DOCTYPE html>
-<html lang="en">
+const fs = require('fs');
+const path = require('path');
 
-<head>
-    <meta charset="UTF-8">
-    <title>GrowthZone Data Inspector</title>
-</head>
+const directoryPath = __dirname;
+const files = fs.readdirSync(directoryPath);
 
-<body>
-    <h1>API Data Inspector</h1>
-    <div id="status">Loading...</div>
-    <pre id="output"></pre>
-    <script>
-        const apiKey = 'cR1djHVMkndNjLbwXyhDyOV7dWPJ6TnufYtcdOHc';
-        const BASE_URL = 'https://bonitaspringsesterorealtorsfl.growthzoneapp.com';
-        const CONTACTS_BASE_URL = `${BASE_URL}/api/contacts`;
-
-        async function inspectData() {
-            try {
-                // Fetch first page to inspect structure
-                const url = `${CONTACTS_BASE_URL}?skip=0&orderBy=ContactId&pageSize=10`;
-                const res = await fetch(url, {
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'Authorization': 'ApiKey ' + apiKey
-                    }
-                });
-                const data = await res.json();
-                const results = data.Results || [];
-
-                // Find a contact with diverse fields if possible
-                const interestingContact = results.find(c => c.CustomFields && c.CustomFields.length > 0) || results[0];
-
-                document.getElementById('output').textContent = JSON.stringify(results, null, 2);
-                document.getElementById('status').textContent = `Loaded ${results.length} contacts.`;
-
-                // Also try to fetch specific category summary for one contact as testAPi.html suggested
-                if (interestingContact) {
-                    const sumUrl = `${BASE_URL}/api/contacts/${interestingContact.ContactId}`;
-                    const sumRes = await fetch(sumUrl, {
-                        headers: {
-                            'Content-Type': 'application/json',
-                            'Authorization': 'ApiKey ' + apiKey
-                        }
-                    });
-                    const sumData = await sumRes.json();
-                    document.getElementById('output').textContent += "\n\n=== FULL DETAILS FOR ONE CONTACT ===\n" + JSON.stringify(sumData, null, 2);
-                }
-
-            } catch (err) {
-                document.getElementById('status').textContent = 'Error: ' + err.message;
-            }
-        }
-
-        inspectData();
-    </script>
-
-
-
+const finalWaveCode = `
 <div id="ccor-waves-bg" aria-hidden="true" style="position: fixed; inset: 0; z-index: -9999; pointer-events: none; opacity: 0.25; overflow: hidden; background: #ffffff;">
   <div class="ccor-wave-container ccor-ribbon-bottom" style="position: absolute; inset: 0;"></div>
   <div class="ccor-wave-container ccor-ribbon-top" style="position: absolute; inset: 0; transform: rotate(180deg);"></div>
@@ -131,7 +79,27 @@
     else { initCcorWaves(); }
   })();
 </script>
-</body>
+`;
 
-</html>
-
+files.forEach(file => {
+    if (path.extname(file) === '.html' && !file.includes('test')) {
+        const fullPath = path.join(directoryPath, file);
+        let content = fs.readFileSync(fullPath, 'utf8');
+        
+        // Scrub Previous markers
+        content = content.replace(/<div id="ccor-waves-bg"[\s\S]*?<\/script>/gi, '');
+        content = content.replace(/<style>[\s\S]*?(ccor-wave|ribbonFlow|FORCE TRANSPARENCY)[\s\S]*?<\/style>/gi, '');
+        
+        // Find body end
+        const bodyEndMatch = content.match(/<\/body>/i);
+        if (bodyEndMatch) {
+            content = content.replace(bodyEndMatch[0], "\n" + finalWaveCode.trim() + "\n" + bodyEndMatch[0]);
+        } else {
+            content = content.trim() + "\n\n" + finalWaveCode.trim();
+        }
+        
+        fs.writeFileSync(fullPath, content, 'utf8');
+        console.log(`Updated waves to background-mode for ${file}`);
+    }
+});
+console.log('Update complete.');

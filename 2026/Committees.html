@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Committee Meetings - Bonita Springs-Estero Realtors</title>
+    <title>Committee Meetings - Coconut Coast Organization of Realtors®</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
         integrity="sha512-9usAa10IRO0HhonpyAIVpjrylPvoDwiPUiKdWk5t3PyolY1cOd4DSE0Ga+ri4AuTroPR5aQvXU9xC6qOPnzFeg=="
         crossorigin="anonymous" referrerpolicy="no-referrer" />
@@ -37,7 +37,7 @@
         }
 
         .ber-directory {
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", 'Inter', Helvetica, Arial, sans-serif;
             background-color: var(--bg-color);
             color: var(--text-main);
             line-height: 1.5;
@@ -115,7 +115,7 @@
             --accent-magenta: #ec4899;
             --accent-alert: #f43f5e;
 
-            --font-display: 'Oswald', 'Inter', system-ui, -apple-system, sans-serif;
+            --font-display: 'Inter', 'Inter', system-ui, -apple-system, sans-serif;
             --font-body: 'Inter', system-ui, -apple-system, sans-serif;
             --font-mono: 'Fira Code', 'Courier New', Courier, monospace;
         }
@@ -1090,7 +1090,7 @@
                     const isOnline = loc.includes('zoom') || loc.includes('online') || loc.includes('webinar') || title.includes('zoom') || title.includes('online') || title.includes('webinar');
                     const isHybrid = isOnline && (loc.includes('hybrid') || loc.includes('both') || loc.includes('in-person') || title.includes('hybrid'));
 
-                    const berLogo = 'https://bonitaesterorealtors.com/wp-content/uploads/2025/12/BER-Logo.png';
+                    const berLogo = 'https://bonitaesterorealtors.com/wp-content/uploads/2026/04/CCOR-Vert-Logo-no-tag-clr-scaled-e1776958694707.png';
                     const zoomLogo = 'https://1000logos.net/wp-content/uploads/2021/06/Zoom-Logo-2014.png';
 
                     if (isHybrid) {
@@ -1196,7 +1196,7 @@
                 let mapEmbedHTML = '';
                 if (!detail.ZoomConfigured && !detail.GoToWebinarConfigured) {
                     const fallbackAddr = '25300 Bernwood Dr, Bonita Springs, FL 34135';
-                    const fallbackName = 'Bonita Springs Estero Realtors';
+                    const fallbackName = 'Coconut Coast Organization of Realtors';
                     let queryStr = '';
 
                     if (detail.Address1) {
@@ -1304,6 +1304,84 @@
 
         // Legacy backgroundMetadataIndexer removed as logic is now handled server-side in the Cloudflare Worker.
     </script>
+
+
+
+<div id="ccor-waves-bg" aria-hidden="true" style="position: fixed; inset: 0; z-index: -9999; pointer-events: none; opacity: 0.25; overflow: hidden; background: #ffffff;">
+  <div class="ccor-wave-container ccor-ribbon-bottom" style="position: absolute; inset: 0;"></div>
+  <div class="ccor-wave-container ccor-ribbon-top" style="position: absolute; inset: 0; transform: rotate(180deg);"></div>
+</div>
+<style>
+  @keyframes ribbonFlow {
+    0% { background-position: 0% 0; }
+    100% { background-position: 400% 0; }
+  }
+  .ccor-wave {
+    position: absolute;
+    width: 300%;
+    height: 500px;
+    left: -100%;
+    background: linear-gradient(120deg, #1B449D 0%, #2e5ab8 8%, #3d6cd1 16%, #64BAB0 24%, #8dd4ca 32%, #a6e1d9 40%, #D4AC6C 48%, #e8c88a 56%, #f2dcb3 64%, #5B5A5C 72%, #7a7a7a 80%, #64BAB0 88%, #4da69a 94%, #1B449D 100%);
+    background-size: 400% 100%;
+    animation: ribbonFlow 15s ease-in-out infinite alternate;
+    border-radius: 45% 48% 43% 47%;
+    filter: blur(4px);
+    will-change: transform, filter;
+    transform-origin: center bottom;
+  }
+  .ccor-ribbon-bottom .ccor-wave { bottom: -350px; }
+  .ccor-ribbon-top .ccor-wave { bottom: -350px; }
+  
+  /* FORCE TRANSPARENCY ON HOST CONTAINERS */
+  /* This ensures the waves are visible behind the main content area */
+  html { background-color: #ffffff !important; }
+  body, 
+  .site, 
+  #page, 
+  .site-content, 
+  #content, 
+  .entry-content, 
+  .joinber-page, 
+  .ber-about, 
+  #main, 
+  .main-container, 
+  .wrapper {
+    background-color: transparent !important;
+    background: transparent !important;
+  }
+</style>
+<script>
+  (function() {
+    function initCcorWaves() {
+        const root = document.getElementById('ccor-waves-bg');
+        if (!root) return;
+        const containers = root.querySelectorAll('.ccor-wave-container');
+        containers.forEach(container => {
+            const waves = [];
+            for (let i = 0; i < 4; i++) {
+                const wave = document.createElement('div');
+                wave.className = 'ccor-wave';
+                wave.style.borderRadius = (38 + Math.random() * 10) + '%';
+                container.appendChild(wave);
+                waves.push({ el: wave, phase: Math.random() * Math.PI * 2, phaseSpeed: 0.003 + (Math.random() * 0.005) });
+            }
+            function animate() {
+                waves.forEach((w, i) => {
+                    w.phase += w.phaseSpeed;
+                    const drift = Math.sin(w.phase * 0.4) * 80;
+                    const undulation = Math.sin(w.phase) * (15 + (i * 5));
+                    w.el.style.transform = "translateX("+drift+"px) translateY("+(-undulation - (i*10))+"px) rotate("+(Math.cos(w.phase * 0.7) * 4)+"deg) scaleX(1.4)";
+                });
+                requestAnimationFrame(animate);
+            }
+            animate();
+        });
+    }
+    if (document.readyState === 'loading') { document.addEventListener('DOMContentLoaded', initCcorWaves); }
+    else { initCcorWaves(); }
+  })();
+</script>
 </body>
 
 </html>
+
