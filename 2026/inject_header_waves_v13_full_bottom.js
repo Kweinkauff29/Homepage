@@ -1,79 +1,10 @@
-<!DOCTYPE html>
-<html lang="en">
+const fs = require('fs');
+const path = require('path');
 
-<head>
-    <meta charset="UTF-8">
-    <title>GrowthZone Data Inspector</title>
-</head>
+const directoryPath = __dirname;
+const files = fs.readdirSync(directoryPath);
 
-<body>
-
-    <h1>API Data Inspector</h1>
-    <div id="status">Loading...</div>
-    <pre id="output"></pre>
-    <script>
-        const apiKey = 'cR1djHVMkndNjLbwXyhDyOV7dWPJ6TnufYtcdOHc';
-        const BASE_URL = 'https://bonitaspringsesterorealtorsfl.growthzoneapp.com';
-        const CONTACTS_BASE_URL = `${BASE_URL}/api/contacts`;
-
-        async function inspectData() {
-            try {
-                // Fetch first page to inspect structure
-                const url = `${CONTACTS_BASE_URL}?skip=0&orderBy=ContactId&pageSize=10`;
-                const res = await fetch(url, {
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'Authorization': 'ApiKey ' + apiKey
-                    }
-                });
-                const data = await res.json();
-                const results = data.Results || [];
-
-                // Find a contact with diverse fields if possible
-                const interestingContact = results.find(c => c.CustomFields && c.CustomFields.length > 0) || results[0];
-
-                document.getElementById('output').textContent = JSON.stringify(results, null, 2);
-                document.getElementById('status').textContent = `Loaded ${results.length} contacts.`;
-
-                // Also try to fetch specific category summary for one contact as testAPi.html suggested
-                if (interestingContact) {
-                    const sumUrl = `${BASE_URL}/api/contacts/${interestingContact.ContactId}`;
-                    const sumRes = await fetch(sumUrl, {
-                        headers: {
-                            'Content-Type': 'application/json',
-                            'Authorization': 'ApiKey ' + apiKey
-                        }
-                    });
-                    const sumData = await sumRes.json();
-                    document.getElementById('output').textContent += "\n\n=== FULL DETAILS FOR ONE CONTACT ===\n" + JSON.stringify(sumData, null, 2);
-                }
-
-            } catch (err) {
-                document.getElementById('status').textContent = 'Error: ' + err.message;
-            }
-        }
-
-        inspectData();
-    </script>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+const finalWaveCode = `
 <div id="ccor-waves-bg" aria-hidden="true" style="position: fixed; inset: 0; z-index: -9999; pointer-events: none; opacity: 0.45; overflow: hidden; background: #ffffff;">
   <div class="ccor-wave-container ccor-ribbon-bottom" style="position: absolute; inset: 0;"></div>
 </div>
@@ -85,7 +16,7 @@
   .ccor-wave {
     position: absolute;
     width: 400%;
-    height: 600px; 
+    height: 600px; /* Increased height so bands reach the bottom of the page */
     left: -150%;
     background: linear-gradient(120deg, #1B449D 0%, #2e5ab8 8%, #3d6cd1 16%, #64BAB0 24%, #8dd4ca 32%, #a6e1d9 40%, #D4AC6C 48%, #e8c88a 56%, #f2dcb3 64%, #5B5A5C 72%, #7a7a7a 80%, #64BAB0 88%, #4da69a 94%, #1B449D 100%);
     background-size: 400% 100%;
@@ -96,7 +27,7 @@
     transform-origin: center bottom;
   }
   .ccor-ribbon-bottom .ccor-wave { 
-    bottom: -600px; 
+    bottom: -600px; /* Anchored such that the base of the wave is at the very bottom */
   }
   
   /* MOBILE OPTIMIZATIONS */
@@ -106,8 +37,7 @@
 
   /* FORCE TRANSPARENCY ON HOST CONTAINERS */
   html { background-color: #ffffff !important; }
-  body, .site, #page, .site-content, #content, .entry-content, .joinber-page, .ber-about, #main, .main-container, .wrapper, 
-  .ber-directory, .container, .main-content, .directory-grid, .controls, .section, main {
+  body, .site, #page, .site-content, #content, .entry-content, .joinber-page, .ber-about, #main, .main-container, .wrapper {
     background-color: transparent !important;
     background: transparent !important;
   }
@@ -119,13 +49,15 @@
         if (!root) return;
         const containers = root.querySelectorAll('.ccor-wave-container');
         containers.forEach(container => {
-            const waveCount = 13; 
+            const waveCount = 12; // Adjusted for better stacking
             const waves = [];
             for (let i = 0; i < waveCount; i++) {
                 const wave = document.createElement('div');
                 wave.className = 'ccor-wave';
                 wave.style.borderRadius = (38 + Math.random() * 10) + '%';
                 wave.style.opacity = 0.15 + (Math.random() * 0.3);
+                // Lower index = back, Higher index = front (higher waves should be behind or in front?)
+                // Usually highest peak is furthest back.
                 wave.style.zIndex = waveCount - i; 
                 
                 container.appendChild(wave);
@@ -161,7 +93,27 @@
     else { initCcorWaves(); }
   })();
 </script>
-</body>
+`;
 
-</html>
-
+files.forEach(file => {
+    if (path.extname(file) === '.html' && !file.includes('test')) {
+        const fullPath = path.join(directoryPath, file);
+        let content = fs.readFileSync(fullPath, 'utf8');
+        
+        // Scrub Previous
+        content = content.replace(/<div id="ccor-waves-bg"[\s\S]*?<\/script>/gi, '');
+        content = content.replace(/<style>[\s\S]*?(ccor-wave|ribbonFlow|FORCE TRANSPARENCY)[\s\S]*?<\/style>/gi, '');
+        
+        // Inject surgically near the end of body
+        const bodyEndMatch = content.match(/<\/body>/i);
+        if (bodyEndMatch) {
+            content = content.replace(bodyEndMatch[0], "\n" + finalWaveCode.trim() + "\n" + bodyEndMatch[0]);
+        } else {
+            content = content.trim() + "\n\n" + finalWaveCode.trim();
+        }
+        
+        fs.writeFileSync(fullPath, content, 'utf8');
+        console.log(`Updated to FULL-HEIGHT bottom waves for ${file}`);
+    }
+});
+console.log('Update complete.');
