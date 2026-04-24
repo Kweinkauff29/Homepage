@@ -342,7 +342,8 @@
 
     /* Quick-link buttons — CCOR brand colors, equal width, one line text, textured */
     #biglinks {
-      display: flex !important;
+      display: grid !important;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
       width: 100%;
       max-width: 1100px;
       margin: -80px auto -60px auto !important;
@@ -354,17 +355,11 @@
     }
 
     #biglinks>a {
-      flex: 1 1 25%;
-      width: 25%;
-      max-width: 25%;
       text-decoration: none !important;
       display: flex;
-    }
-
-    #biglinks .col-sm-3 {
       width: 100%;
+      min-width: 0;
       min-height: 250px;
-      display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: flex-end;
@@ -375,6 +370,10 @@
       background-size: 100% 100%;
       background-repeat: no-repeat;
       position: relative;
+    }
+
+    #biglinks h4 {
+      margin: 0;
     }
 
     #MLS {
@@ -512,7 +511,7 @@
       }
 
       .important-links {
-        margin: 500px 0 100px 0;
+        margin: 0 0 60px 0;
       }
 
       .carousel-container {
@@ -1090,8 +1089,18 @@
       }
 
       #biglinks {
-        display: block;
-        height: 920px;
+        display: flex !important;
+        flex-wrap: wrap;
+        align-items: stretch;
+        height: auto;
+        max-width: min(100%, 520px);
+        margin: -40px auto -30px auto !important;
+      }
+
+      #biglinks>a {
+        flex: 0 0 50%;
+        width: 50%;
+        max-width: 50%;
       }
 
       .video-contain {
@@ -1099,11 +1108,19 @@
       }
 
       #MLS {
-        border-radius: 15px 15px 0px 0px;
+        border-radius: 15px 0 0 0;
+      }
+
+      #MP {
+        border-radius: 0 15px 0 0;
+      }
+
+      #Events {
+        border-radius: 0 0 0 15px;
       }
 
       #Join {
-        border-radius: 0px 0px 15px 15px;
+        border-radius: 0 0 15px 0;
       }
 
       .carousel {
@@ -1223,12 +1240,47 @@
         text-align: center;
       }
 
+      #MLSlogo,
+      #MPlogo,
+      #Eventlogo,
+      #Berlogo {
+        display: block;
+        margin: 0 auto 18px auto;
+      }
+
       #MLSlogo {
-        display: none;
+        width: 78%;
+        height: 48px;
       }
 
       #MPlogo {
-        display: none;
+        width: 72%;
+        height: 70px;
+      }
+
+      #Eventlogo {
+        width: 72%;
+        height: 56px;
+      }
+
+      #Berlogo {
+        max-width: 72%;
+        height: 86px;
+      }
+
+      #MLStext,
+      #DuesText,
+      #Eventtext,
+      #Jointext {
+        font-size: 16px;
+        line-height: 1.15;
+        letter-spacing: 1px;
+        padding: 8px 0;
+        min-height: 46px;
+        white-space: normal;
+        display: flex;
+        align-items: center;
+        justify-content: center;
       }
     }
 
@@ -1238,7 +1290,35 @@
       }
     }
 
-    @media only screen and (max-width: 510px) {}
+    @media only screen and (max-width: 510px) {
+      #biglinks {
+        max-width: min(100%, 420px);
+      }
+
+      #MLSlogo {
+        height: 42px;
+      }
+
+      #MPlogo {
+        height: 62px;
+      }
+
+      #Eventlogo {
+        height: 48px;
+      }
+
+      #Berlogo {
+        height: 74px;
+      }
+
+      #MLStext,
+      #DuesText,
+      #Eventtext,
+      #Jointext {
+        font-size: 14px;
+        min-height: 42px;
+      }
+    }
 
     /* ===== CCOR Footer (Bottom Header) ===== */
     #bottom-contain .ber-footer,
@@ -1517,6 +1597,142 @@
         justify-content: center;
       }
     }
+
+    /* Final mobile override for homepage quick links */
+    @media only screen and (max-width: 768px) {
+      .important-links {
+        margin: 0 !important;
+        padding: 12px 0 32px 0 !important;
+        background-position: center top;
+      }
+
+      .important-links__container {
+        padding: 0 12px !important;
+      }
+
+      #biglinks {
+        display: grid !important;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 0 !important;
+        width: 100%;
+        max-width: none !important;
+        margin: 10px auto 14px !important;
+        border-radius: 18px;
+        overflow: hidden;
+      }
+
+      #biglinks>a {
+        display: flex;
+        width: 100% !important;
+        max-width: none !important;
+        min-width: 0;
+        min-height: 176px;
+        padding: 16px 10px 14px !important;
+        margin: 0 !important;
+        flex-direction: column;
+        align-items: center;
+        justify-content: space-between;
+        gap: 10px;
+      }
+
+      #MLS {
+        border-radius: 18px 0 0 0;
+      }
+
+      #MP {
+        border-radius: 0 18px 0 0;
+      }
+
+      #Events {
+        border-radius: 0 0 0 18px;
+      }
+
+      #Join {
+        border-radius: 0 0 18px 0;
+      }
+
+      #MLSlogo,
+      #MPlogo,
+      #Eventlogo,
+      #Berlogo {
+        display: block;
+        margin: 0 auto !important;
+      }
+
+      #MLSlogo {
+        width: 74%;
+        height: 40px;
+      }
+
+      #MPlogo {
+        width: 68%;
+        height: 62px;
+      }
+
+      #Eventlogo {
+        width: 70%;
+        height: 50px;
+      }
+
+      #Berlogo {
+        width: auto;
+        max-width: 68%;
+        height: 74px;
+      }
+
+      #MLStext,
+      #DuesText,
+      #Eventtext,
+      #Jointext {
+        width: 100%;
+        min-height: 44px;
+        margin: 0;
+        padding: 8px 6px !important;
+        white-space: normal !important;
+        text-align: center;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 15px !important;
+        line-height: 1.15;
+        letter-spacing: 0.06em;
+      }
+
+      .video-contain {
+        margin: 0 !important;
+      }
+    }
+
+    @media only screen and (max-width: 480px) {
+      .important-links__container {
+        padding: 0 10px !important;
+      }
+
+      #MLSlogo {
+        height: 34px;
+      }
+
+      #MPlogo {
+        height: 54px;
+      }
+
+      #Eventlogo {
+        height: 44px;
+      }
+
+      #Berlogo {
+        height: 66px;
+      }
+
+      #MLStext,
+      #DuesText,
+      #Eventtext,
+      #Jointext {
+        min-height: 40px;
+        font-size: 13px !important;
+        letter-spacing: 0.04em;
+      }
+    }
   </style>
 </head>
 
@@ -1668,44 +1884,32 @@
 
 <div class="important-links">
   <div class="important-links__container">
-    <div class="row" id="biglinks">
+    <div id="biglinks">
       <!-- MLS -->
-      <a href="https://matrix.swflamls.com/matrix/login.aspx" target="_blank">
-        <div class="col-sm-3" id="MLS">
-          <img id="MLSlogo" src="https://matrix.swflamls.com/matrix/images/header/logo_mls.png" alt="MLS Login">
-          <br class="br-mobile">
-          <h4 id="MLStext">MLS Login</h4>
-        </div>
+      <a id="MLS" href="https://matrix.swflamls.com/matrix/login.aspx" target="_blank">
+        <img id="MLSlogo" src="https://matrix.swflamls.com/matrix/images/header/logo_mls.png" alt="MLS Login">
+        <h4 id="MLStext">MLS Login</h4>
       </a>
 
       <!-- Member Portal -->
-      <a href="https://members.bonitaesterorealtors.com/MIC/Login" target="_blank">
-        <div class="col-sm-3" id="MP">
-          <img id="MPlogo" src="https://bonitaesterorealtors.com/wp-content/uploads/2025/12/MP.png" alt="Member Portal">
-          <br class="br-mobile">
-          <h4 id="DuesText">Member Portal</h4>
-        </div>
+      <a id="MP" href="https://members.bonitaesterorealtors.com/MIC/Login" target="_blank">
+        <img id="MPlogo" src="https://bonitaesterorealtors.com/wp-content/uploads/2025/12/MP.png" alt="Member Portal">
+        <h4 id="DuesText">Member Portal</h4>
       </a>
 
       <!-- Events & Classes -->
-      <a href="https://members.bonitaesterorealtors.com/bercalendar" target="_blank">
-        <div class="col-sm-3" id="Events">
-          <img id="Eventlogo" src="https://bonitaesterorealtors.com/wp-content/uploads/2025/12/Cal.png"
-            alt="Events &amp; Classes">
-          <br class="br-mobile">
-          <h4 id="Eventtext">Events &amp; Classes</h4>
-        </div>
+      <a id="Events" href="https://members.bonitaesterorealtors.com/bercalendar" target="_blank">
+        <img id="Eventlogo" src="https://bonitaesterorealtors.com/wp-content/uploads/2025/12/Cal.png"
+          alt="Events &amp; Classes">
+        <h4 id="Eventtext">Events &amp; Classes</h4>
       </a>
 
       <!-- Join CCOR -->
-      <a href="https://www.bonitaesterorealtors.com/join-bser/" target="_blank">
-        <div class="col-sm-3" id="Join">
-          <img id="Berlogo"
-            src="https://bonitaesterorealtors.com/wp-content/uploads/2026/04/CCOR-Vert-Logo-no-tag-clr-scaled-e1776958694707.png"
-            alt="Join Now">
-          <br class="br-mobile">
-          <h4 id="Jointext">Join Now</h4>
-        </div>
+      <a id="Join" href="https://www.bonitaesterorealtors.com/join-bser/" target="_blank">
+        <img id="Berlogo"
+          src="https://bonitaesterorealtors.com/wp-content/uploads/2026/04/CCOR-Vert-Logo-no-tag-clr-scaled-e1776958694707.png"
+          alt="Join Now">
+        <h4 id="Jointext">Join Now</h4>
       </a>
     </div>
   </div>
