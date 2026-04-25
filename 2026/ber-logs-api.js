@@ -83,6 +83,10 @@ export default {
             return handleLogsRequest(request, env);
         }
 
+        if (pathname === "/internal/send-email" && request.method === "POST") {
+            return handleInternalSendEmail(request, env);
+        }
+
         // ============ NEW ADMIN ENDPOINTS ============
 
         if (pathname === "/api/logs-requests" && request.method === "GET") {
@@ -829,6 +833,84 @@ async function sendLogsRequestEmail(env, payload) {
     return true;
 }
 
+async function handleInternalSendEmail(request, env) {
+    const relayKey = request.headers.get("X-TWS-Mail-Relay-Key");
+    if (!env.TWS_MAIL_RELAY_KEY || relayKey !== env.TWS_MAIL_RELAY_KEY) {
+        return jsonResponse({ success: false, error: "Unauthorized" }, 401);
+    }
+
+    let body;
+    try {
+        body = await request.json();
+    } catch {
+        return jsonResponse({ success: false, error: "Invalid JSON" }, 400);
+    }
+
+    const to = normalizeEmail(body.to);
+    const subject = cleanText(body.subject, 180);
+    const text = cleanText(body.text, 8000);
+    const fromName = cleanText(body.fromName, 120) || "The Wrap Sheet";
+    const fromEmail = normalizeEmail(body.fromEmail) || env.LOGS_FROM_EMAIL || "no-reply@ccorealtors.org";
+
+    if (!to || !subject || !text) {
+        return jsonResponse({ success: false, error: "to, subject, and text are required" }, 400);
+    }
+
+    const delivery = await sendMailjetEmail(env, {
+        fromEmail,
+        fromName,
+        to: [{ Email: to }],
+        subject,
+        text
+    });
+
+    return jsonResponse(delivery, delivery.success ? 200 : 502);
+}
+
+async function sendMailjetEmail(env, { fromEmail, fromName, to, subject, text }) {
+    const mjApiKey = env.MJ_API_KEY;
+    const mjApiSecret = env.MJ_API_SECRET;
+
+    if (!mjApiKey || !mjApiSecret) {
+        console.error("Mailjet API key/secret not set in environment");
+        return { success: false, error: "missing_mailjet_credentials" };
+    }
+
+    const auth = "Basic " + btoa(`${mjApiKey}:${mjApiSecret}`);
+    const body = {
+        Messages: [
+            {
+                From: {
+                    Email: fromEmail,
+                    Name: fromName,
+                },
+                To: to,
+                Subject: subject,
+                TextPart: text,
+            },
+        ],
+    };
+
+    const res = await fetch("https://api.mailjet.com/v3.1/send", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+            Authorization: auth,
+        },
+        body: JSON.stringify(body),
+    });
+
+    console.log("Mailjet relay response status", res.status, "ok:", res.ok);
+
+    if (!res.ok) {
+        const errText = await res.text().catch(() => "");
+        console.error("Mailjet relay error", res.status, errText);
+        return { success: false, error: "mailjet_rejected", status: res.status, detail: errText.slice(0, 500) };
+    }
+
+    return { success: true };
+}
+
 // ============ HELPERS ============
 
 async function gzRequest(path, method = "GET", body = null) {
@@ -901,6 +983,16 @@ async function mapGZContactToMember(contact) {
         tags: getField(70615), // Placeholder or find real Tags field
         contact_balance: contact.Balance || 0,
     };
+}
+
+function cleanText(value, max = 500) {
+    if (value == null) return "";
+    return String(value).replace(/[\u0000-\u001F\u007F]/g, "").trim().slice(0, max);
+}
+
+function normalizeEmail(value) {
+    const email = cleanText(value, 254).toLowerCase();
+    return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email) ? email : "";
 }
 
 function jsonResponse(obj, status = 200) {
