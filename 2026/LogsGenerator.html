@@ -558,13 +558,10 @@
 
       const lines = [];
       lines.push(fullName);
-      if (officeName) lines.push(officeName);
       if (addr1) lines.push(addr1);
       if (addr2) lines.push(addr2);
+      if (officeName) lines.push(officeName);
       if (nrds) lines.push(`NRDS # ${nrds}`);
-      lines.push("25300 Bernwood Drive #1");
-      lines.push("Bonita Springs, FL 34135-7881");
-      lines.push("239-992-6771");
       addressBlockEl.textContent = lines.join("\n");
 
       const memberships = (member.memberships || "").toString();
@@ -603,8 +600,7 @@
           `Your most recent Code of Ethics completion date was ` +
           `<strong>${coeFormatted}</strong>.`;
       } else {
-        line3El.textContent =
-          `Your most recent Code of Ethics completion date record is unavailable.`;
+        throw new Error("Missing Code of Ethics completion date.");
       }
 
       if (fhFormatted) {
