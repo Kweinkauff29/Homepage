@@ -438,9 +438,12 @@
     }
 
     .task-pill {
-      display: flex;
-      align-items: flex-start;
-      gap: 6px;
+      display: grid;
+      grid-template-columns: auto 1fr auto;
+      grid-template-areas: 
+        "dot title title"
+        ". assignee quick";
+      gap: 4px 6px;
       padding: 6px 8px;
       border-radius: var(--radius-sm);
       background: var(--panel);
@@ -458,11 +461,12 @@
     }
 
     .task-quick-actions {
+      grid-area: quick;
       display: inline-flex;
       align-items: center;
       gap: 4px;
-      margin-left: auto;
-      flex-shrink: 0;
+      justify-self: end;
+      align-self: center;
     }
 
     .task-quick-actions input[type="checkbox"] {
@@ -485,10 +489,11 @@
 
 
     .task-status-dot {
+      grid-area: dot;
       width: 7px;
       height: 7px;
       border-radius: 999px;
-      flex-shrink: 0;
+      margin-top: 5px;
     }
 
     .task-status-pending {
@@ -510,14 +515,16 @@
     /* ADD THIS */
 
     .task-title {
-      flex: 1;
+      grid-area: title;
       word-wrap: break-word;
       overflow-wrap: break-word;
     }
 
     .task-assignee {
+      grid-area: assignee;
       font-size: 10px;
       color: var(--ink-soft);
+      align-self: center;
     }
 
     .calendar-metrics {
