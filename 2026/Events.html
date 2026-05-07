@@ -133,6 +133,30 @@
             position: relative;
         }
 
+        /* Force GrowthZone Partners Widget to Full Width */
+        [id^="mni-partners-"] {
+            width: 100% !important;
+            max-width: 100% !important;
+            margin-bottom: 30px !important;
+            display: block !important;
+        }
+        [id^="mni-partners-"] .mni-partners-container,
+        [id^="mni-partners-"] .mni-partners-widget,
+        [id^="mni-partners-"] .partners,
+        [id^="mni-partners-"] .partner {
+            max-width: 100% !important;
+            width: 100% !important;
+            height: auto !important;
+            position: relative !important; /* Prevents overlap by taking up space */
+            display: block !important;
+        }
+        [id^="mni-partners-"] img {
+            width: 100% !important;
+            height: auto !important;
+            display: block !important;
+            border-radius: 4px;
+        }
+
         /* Technical Header Area */
         .swiss-header {
             border-bottom: 2px solid var(--swiss-text);
@@ -186,7 +210,6 @@
             gap: 24px;
             align-items: center;
             flex-wrap: wrap;
-            /* Support smaller screens */
         }
 
         .swiss-search {
@@ -212,6 +235,7 @@
             width: 220px;
             border-radius: 0;
             cursor: pointer;
+            text-align: center;
         }
 
         .swiss-date::placeholder {
@@ -223,12 +247,12 @@
             display: flex;
             align-items: center;
             gap: 12px;
+            cursor: pointer;
+            margin-left: 8px;
             font-family: var(--font-mono);
             font-size: 0.85rem;
             font-weight: bold;
             color: var(--swiss-text);
-            cursor: pointer;
-            margin-left: 8px;
         }
 
         .swiss-toggle {
@@ -360,7 +384,6 @@
             flex-direction: column;
             transition: transform 0.2s, box-shadow 0.2s;
             overflow: hidden;
-            /* Intentional CRT texture bleed */
             box-shadow: inset 0 0 40px rgba(0, 0, 0, 0.02);
             padding: 24px;
         }
@@ -474,7 +497,6 @@
             height: auto;
             max-height: 400px;
             object-fit: contain;
-            /* Mild halftone/CRT desaturation to match aesthetic unless hovered */
             filter: grayscale(40%) contrast(1.1);
             transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
         }
@@ -531,22 +553,6 @@
             white-space: nowrap;
             overflow: hidden;
             text-overflow: ellipsis;
-        }
-
-        /* Graphic Realism CE Badge */
-        .ce-credit-badge {
-            position: absolute;
-            bottom: 0;
-            right: 0;
-            background: var(--accent-cyan);
-            color: #000;
-            font-family: var(--font-mono);
-            font-size: 1rem;
-            font-weight: 800;
-            padding: 6px 12px;
-            border-top: 2px solid #000;
-            border-left: 2px solid #000;
-            z-index: 10;
         }
 
         /* Hybrid Media Container */
@@ -621,7 +627,6 @@
             width: 100vw;
             height: 100vh;
             background: rgba(0, 0, 0, 0.85);
-            /* Glitchy scanline background for modal overlay */
             background-image: repeating-linear-gradient(transparent, transparent 2px, rgba(0, 0, 0, 0.9) 2px, rgba(0, 0, 0, 0.9) 4px);
             z-index: 9990;
             display: flex;
@@ -881,6 +886,17 @@
 <body>
 
     <div class="swiss-container">
+        <!-- Partners Banner (Top) -->
+        <div id="mni-partners-c559b00f" style="width: 100%; margin-bottom: 20px;"></div>
+        <script type="text/javascript">
+            /*<![CDATA[*/
+            var _mnipartq = _mnipartq || [];
+            _mnipartq.push(["c559b00f.type", [1676,]], ["c559b00f.animation", 1], ["c559b00f.max", 5], ["c559b00f.create", "mni-partners-c559b00f"], ["c559b00f.v", 2]);
+            (function (b, d, a, c) {
+                b.getElementById(d) || (c = b.getElementsByTagName(a)[0], a = b.createElement(a), a.type = "text/javascript", a.async = !0, a.src = "https://coconutcoastrealtors.growthzoneapp.com/GZContent/PublicWidgets/Partners.js", c.parentNode.insertBefore(a, c))
+            })(document, "mni-partners-script", "script");
+            /*]]>*/
+        </script>
         <!-- Swiss Header Bar -->
         <div class="swiss-header" id="eduTop">
             <div class="swiss-title-group">
@@ -889,10 +905,10 @@
 
             <!-- Calendar Navigation -->
             <nav class="swiss-nav">
-                <a href="https://bonitaesterorealtors.com/upcoming-education/">EDUCATION</a>
-                <a href="https://bonitaesterorealtors.com/upcoming-events/" class="active">EVENTS</a>
-                <a href="https://bonitaesterorealtors.com/committee-meetings/">COMMITTEES</a>
-                <a href="https://bonitaesterorealtors.com/all-upcoming-events/">ALL EVENTS</a>
+                <a href="https://coconutcoastrealtors.org/upcoming-education/">EDUCATION</a>
+                <a href="https://coconutcoastrealtors.org/upcoming-events/" class="active">EVENTS</a>
+                <a href="https://coconutcoastrealtors.org/committee-meetings/">COMMITTEES</a>
+                <a href="https://coconutcoastrealtors.org/all-upcoming-events/">ALL EVENTS</a>
             </nav>
 
             <div class="swiss-controls">
@@ -914,7 +930,7 @@
 
         <!-- Detail Navigation Button -->
         <div style="margin-top: 40px; text-align: center;">
-            <a href="mailto:events@bonitaesterorealtors.com" class="btn-swiss">CONTACT EVENTS TEAM_</a>
+            <a href="mailto:events@coconutcoastrealtors.org" class="btn-swiss">CONTACT EVENTS TEAM_</a>
         </div>
     </div>
 
@@ -1020,17 +1036,14 @@
                     selEnd = dates[1];
                     selEnd.setHours(23, 59, 59, 999);
                 } else {
-                    // Single day selected
                     selEnd = new Date(selStart);
                     selEnd.setHours(23, 59, 59, 999);
                 }
             }
 
             const filteredList = knownClasses.filter(ev => {
-                // 1. Text Query
                 const matchText = !q || (ev.Name && ev.Name.toLowerCase().includes(q)) || (ev.Description && ev.Description.toLowerCase().includes(q));
 
-                // 2. Date Range
                 let matchDate = true;
                 if (selStart && selEnd) {
                     const evStart = new Date(ev.StartDate);
@@ -1057,41 +1070,34 @@
                 const monthName = start.toLocaleString('default', { month: 'short' }).toUpperCase();
                 const timeStr = start.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
 
-                // Truncate long names slightly to fit standard card size
                 let shortName = ev.Name || "UNDEFINED_EVENT";
                 if (shortName.length > 55) shortName = shortName.substring(0, 52) + '...';
 
-                // CE credit extraction removed per user request
-                const ceBadgeHTML = '';
-
-                // Extract flyer from Enriched URL, EventLogoUrl, Description HTML fallback, or Cache
                 let flyerURL = ev.EnrichedFlyerUrl || ev.EventLogoUrl || "";
                 if (!flyerURL && ev.Description) {
                     const imgMatch = ev.Description.match(/<img[^>]+src=["']([^"']+)["']/i);
                     if (imgMatch) flyerURL = imgMatch[1];
                 }
 
-                // Final Check: If still no flyer, check the async cache (legacy fallback)
                 if (!flyerURL || flyerURL.includes('BER-Logo') || flyerURL.includes('default') || flyerURL.includes('placeholder')) {
                     const cached = localStorage.getItem('BER_EDU_FLYER_' + ev.EventId);
                     if (cached && cached !== "NO_MEDIA") {
                         flyerURL = cached;
                     } else if (flyerURL && (flyerURL.includes('BER-Logo') || flyerURL.includes('default') || flyerURL.includes('placeholder'))) {
-                        flyerURL = ""; // Strip generic if no better cache
+                        flyerURL = "";
                     }
                 }
 
                 let flyerHTML = '';
                 if (flyerURL) {
-                    flyerHTML = `<img src="${flyerURL}" alt="Event Flyer">${ceBadgeHTML}`;
+                    flyerHTML = `<img src="${flyerURL}" alt="Event Flyer">`;
                 } else {
-                    // Apply media fallback logic based on location and title
                     const loc = (ev.Location || ev.LocationName || "").toLowerCase();
                     const title = (ev.Name || "").toLowerCase();
                     const isOnline = loc.includes('zoom') || loc.includes('online') || loc.includes('webinar') || title.includes('zoom') || title.includes('online') || title.includes('webinar');
                     const isHybrid = isOnline && (loc.includes('hybrid') || loc.includes('both') || loc.includes('in-person') || title.includes('hybrid'));
 
-                    const berLogo = 'https://bonitaesterorealtors.com/wp-content/uploads/2026/04/CCOR-Vert-Logo-no-tag-clr-scaled-e1776958694707.png';
+                    const berLogo = 'https://coconutcoastrealtors.org/wp-content/uploads/2026/04/CCOR-Vert-Logo-no-tag-clr-scaled-e1776958694707.png';
                     const zoomLogo = 'https://1000logos.net/wp-content/uploads/2021/06/Zoom-Logo-2014.png';
 
                     if (isHybrid) {
@@ -1102,10 +1108,9 @@
                         flyerHTML = `<img src="${berLogo}" alt="BER" style="object-fit:contain !important; padding:30px; background:var(--swiss-grid); width:100%; height:100%; box-sizing:border-box;">`;
                     }
 
-                    flyerHTML = `<div id="flyer-tgt-${ev.EventId}" style="width:100%; height:100%; display:flex; justify-content:center; align-items:center; overflow:hidden;">${flyerHTML}${ceBadgeHTML}</div>`;
+                    flyerHTML = `<div id="flyer-tgt-${ev.EventId}" style="width:100%; height:100%; display:flex; justify-content:center; align-items:center; overflow:hidden;">${flyerHTML}</div>`;
                 }
 
-                // Format Status
                 let statusText = "OPEN FOR REGISTRATION";
                 let statusColor = "var(--accent-cyan)";
                 if (ev.EventStatus) {
@@ -1148,7 +1153,6 @@
                                 <span class="data-key">// STATUS</span>
                                 <span class="data-val" style="color: ${statusColor}; font-weight:bold;">${statusText}</span>
                             </li>
-                            <!-- CE info removed per user request -->
                         </ul>
 
                         <div class="card-footer-flex">
@@ -1161,7 +1165,6 @@
             });
         }
 
-        // Detail Modal Fetcher
         async function openDetails(eventId) {
             const evInfo = allEvents.find(e => e.EventId === eventId);
             const publicUrl = evInfo ? evInfo.PublicUrl : "#";
@@ -1177,7 +1180,6 @@
 
                 const detail = await res.json();
 
-                // Correcting for API date inconsistency (Trust bulk data if detail seems wrong/today)
                 let start = new Date(detail.StartDateTime);
                 if (bulkDate && start.toDateString() !== bulkDate.toDateString()) {
                     start = bulkDate;
@@ -1186,14 +1188,12 @@
                 let locType = "IN-PERSON PHYSICAL";
                 if (detail.ZoomConfigured || detail.GoToWebinarConfigured) locType = "DIGITAL REMOTE / ZOOM";
 
-                // Extract Instructor from ContactName OR regex from Description
                 let instructor = detail.ContactName || "B.E.R. FACULTY";
                 if (!detail.ContactName && detail.Description) {
                     const instMatch = detail.Description.match(/Instructor:\s*([^<]+)/i);
                     if (instMatch) instructor = instMatch[1].trim();
                 }
 
-                // Append Google Maps embed for physical addresses
                 let mapEmbedHTML = '';
                 if (!detail.ZoomConfigured && !detail.GoToWebinarConfigured) {
                     const fallbackAddr = '25300 Bernwood Dr, Bonita Springs, FL 34135';
@@ -1210,32 +1210,21 @@
                         const mapQuery = encodeURIComponent(queryStr);
                         mapEmbedHTML = `
                         <div style="border: 2px solid var(--swiss-text); margin-bottom: 24px; background: var(--swiss-grid); padding: 4px;">
-                            <iframe
-                                width="100%"
-                                height="250"
-                                style="border:0;"
-                                allowfullscreen
-                                src="https://maps.google.com/maps?q=${mapQuery}&t=&z=15&ie=UTF8&iwloc=&output=embed">
-                            </iframe>
+                            <iframe width="100%" height="250" style="border:0;" allowfullscreen src="https://maps.google.com/maps?q=${mapQuery}&t=&z=15&ie=UTF8&iwloc=&output=embed"></iframe>
                         </div>`;
                     }
                 }
 
-                // Extract flyer for modal header - Prioritize Enriched data from list
                 let flyerURL = evInfo?.EnrichedFlyerUrl || detail.EventLogoUrl || "";
                 if (!flyerURL && detail.Description) {
                     const imgMatch = detail.Description.match(/<img[^>]+src=["']([^;]*)["']/i);
                     if (imgMatch) flyerURL = imgMatch[1];
                 }
 
-                // Clean the description if it contains the exact same image at the very start to avoid double-stacking
                 let cleanedDescription = detail.Description || "";
                 if (flyerURL) {
-                    // If description starts with an image tag pointing to our flyer, strip it
                     const imgTagRegex = new RegExp(`^\\s*<p>\\s*<img[^>]+src=["']${flyerURL.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}["'][^>]*>\\s*</p>`, 'i');
                     cleanedDescription = cleanedDescription.replace(imgTagRegex, '');
-
-                    // Also try without the wrapping P tag
                     const imgTagRegexRaw = new RegExp(`^\\s*<img[^>]+src=["']${flyerURL.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}["'][^>]*>`, 'i');
                     cleanedDescription = cleanedDescription.replace(imgTagRegexRaw, '');
                 }
@@ -1251,39 +1240,32 @@
 
                 modalBody.innerHTML = `
                     <h2 class="m-title">${detail.Name || evInfo?.Name}</h2>
-                    
                     <div class="m-grid">
                         <div class="m-section">
                             <span class="m-label">[// LOCATION]</span>
                             <p class="m-value">${detail.LocationName || locType}</p>
                             ${detail.Address1 ? `<p style="font-family:var(--font-mono); font-size:0.8rem; color:var(--swiss-light); margin:4px 0 0;">${detail.Address1}<br>${detail.City || ''}, ${detail.StateProvince || ''} ${detail.PostalCode || ''}</p>` : ''}
                         </div>
-                        
                         <div class="m-section">
                             <span class="m-label">[// TIMETABLE]</span>
                             <p class="m-value">${start.toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}</p>
                             <p style="font-family:var(--font-mono); font-size:0.8rem; color:var(--swiss-light); margin:4px 0 0;">${detail.HoursDescription || start.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</p>
                         </div>
-
                         <div class="m-section">
                             <span class="m-label">[// INSTRUCTOR_ID]</span>
                             <p class="m-value">${instructor}</p>
                         </div>
-
                         <div class="m-section">
-                            <span class="m-label">[// CREDITS]</span>
-                            <p class="m-value">${detail.CategoryItems?.filter(c => c.IsSelected).map(c => c.Name).join(', ') || 'GENERAL_ED'}</p>
+                            <span class="m-label">[// CATEGORY]</span>
+                            <p class="m-value">${detail.CategoryItems?.filter(c => c.IsSelected).map(c => c.Name).join(', ') || 'GENERAL_EVENT'}</p>
                         </div>
                     </div>
-
                     ${descHTML}
-                    
                     <div class="m-footer">
                         <button class="btn-swiss" onclick="closeModal()">CANCEL_</button>
                         <a href="${publicUrl}" class="btn-swiss btn-swiss-primary" target="_blank">REGISTRATION_</a>
                     </div>
                 `;
-
             } catch (err) {
                 console.error(err);
                 modalBody.innerHTML = `<div style="color:var(--accent-alert); font-family:var(--font-mono);">[CRITICAL] Error downloading datablock. Link failed.</div>`;
@@ -1296,122 +1278,57 @@
         }
 
         modalClose.addEventListener('click', closeModal);
-        modal.addEventListener('click', e => {
-            if (e.target === modal) closeModal();
-        });
-        document.addEventListener('keydown', e => {
-            if (e.key === 'Escape' && modal.classList.contains('open')) closeModal();
-        });
-
-        // Legacy backgroundMetadataIndexer removed as logic is now handled server-side in the Cloudflare Worker.
+        modal.addEventListener('click', e => { if (e.target === modal) closeModal(); });
+        document.addEventListener('keydown', e => { if (e.key === 'Escape' && modal.classList.contains('open')) closeModal(); });
     </script>
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<div id="ccor-waves-bg" aria-hidden="true" style="position: fixed; inset: 0; z-index: -9999; pointer-events: none; opacity: 0.45; overflow: hidden; background: #ffffff;">
-  <div class="ccor-wave-container ccor-ribbon-bottom" style="position: absolute; inset: 0;"></div>
-</div>
-<style>
-  @keyframes ribbonFlow {
-    0% { background-position: 0% 0; }
-    100% { background-position: 400% 0; }
-  }
-  .ccor-wave {
-    position: absolute;
-    width: 400%;
-    height: 600px; 
-    left: -150%;
-    background: linear-gradient(120deg, #1B449D 0%, #2e5ab8 8%, #3d6cd1 16%, #64BAB0 24%, #8dd4ca 32%, #a6e1d9 40%, #D4AC6C 48%, #e8c88a 56%, #f2dcb3 64%, #5B5A5C 72%, #7a7a7a 80%, #64BAB0 88%, #4da69a 94%, #1B449D 100%);
-    background-size: 400% 100%;
-    animation: ribbonFlow 15s ease-in-out infinite alternate;
-    border-radius: 42% 45% 40% 43%;
-    filter: blur(0.4px);
-    will-change: transform;
-    transform-origin: center bottom;
-  }
-  .ccor-ribbon-bottom .ccor-wave { 
-    bottom: -600px; 
-  }
-  
-  /* MOBILE OPTIMIZATIONS */
-  @media (max-width: 768px) {
-    .ccor-wave { height: 400px; bottom: -400px !important; }
-  }
-
-  /* FORCE TRANSPARENCY ON HOST CONTAINERS */
-  html { background-color: #ffffff !important; }
-  body, .site, #page, .site-content, #content, .entry-content, .joinber-page, .ber-about, #main, .main-container, .wrapper, 
-  .ber-directory, .container, .main-content, .directory-grid, .controls, .section, main {
-    background-color: transparent !important;
-    background: transparent !important;
-  }
-</style>
-<script>
-  (function() {
-    function initCcorWaves() {
-        const root = document.getElementById('ccor-waves-bg');
-        if (!root) return;
-        const containers = root.querySelectorAll('.ccor-wave-container');
-        containers.forEach(container => {
-            const waveCount = 13; 
-            const waves = [];
-            for (let i = 0; i < waveCount; i++) {
-                const wave = document.createElement('div');
-                wave.className = 'ccor-wave';
-                wave.style.borderRadius = (38 + Math.random() * 10) + '%';
-                wave.style.opacity = 0.15 + (Math.random() * 0.3);
-                wave.style.zIndex = waveCount - i; 
-                
-                container.appendChild(wave);
-                waves.push({ 
-                    el: wave, 
-                    phase: Math.random() * Math.PI * 2, 
-                    phaseSpeed: 0.0006 + (Math.random() * 0.0015), 
-                    offset: i * (window.innerWidth < 768 ? 10 : 25), 
-                    amplitude: 15 + (Math.random() * 25), 
-                    driftAmount: 60 + (Math.random() * 100),
-                    rotationOffset: (Math.random() - 0.5) * 4
+    <div id="ccor-waves-bg" aria-hidden="true" style="position: fixed; inset: 0; z-index: -9999; pointer-events: none; opacity: 0.45; overflow: hidden; background: #ffffff;">
+        <div class="ccor-wave-container ccor-ribbon-bottom" style="position: absolute; inset: 0;"></div>
+    </div>
+    <style>
+        @keyframes ribbonFlow { 0% { background-position: 0% 0; } 100% { background-position: 400% 0; } }
+        .ccor-wave { position: absolute; width: 400%; height: 600px; left: -150%; background: linear-gradient(120deg, #1B449D 0%, #2e5ab8 8%, #3d6cd1 16%, #64BAB0 24%, #8dd4ca 32%, #a6e1d9 40%, #D4AC6C 48%, #e8c88a 56%, #f2dcb3 64%, #5B5A5C 72%, #7a7a7a 80%, #64BAB0 88%, #4da69a 94%, #1B449D 100%); background-size: 400% 100%; animation: ribbonFlow 15s ease-in-out infinite alternate; border-radius: 42% 45% 40% 43%; filter: blur(0.4px); will-change: transform; transform-origin: center bottom; }
+        .ccor-ribbon-bottom .ccor-wave { bottom: -600px; }
+        @media (max-width: 768px) { .ccor-wave { height: 400px; bottom: -400px !important; } }
+        html { background-color: #ffffff !important; }
+        body, .site, #page, .site-content, #content, .entry-content, .joinber-page, .ber-about, #main, .main-container, .wrapper, .ber-directory, .container, .main-content, .directory-grid, .controls, .section, main { background-color: transparent !important; background: transparent !important; }
+    </style>
+    <script>
+        (function() {
+            function initCcorWaves() {
+                const root = document.getElementById('ccor-waves-bg');
+                if (!root) return;
+                const containers = root.querySelectorAll('.ccor-wave-container');
+                containers.forEach(container => {
+                    const waveCount = 13; 
+                    const waves = [];
+                    for (let i = 0; i < waveCount; i++) {
+                        const wave = document.createElement('div');
+                        wave.className = 'ccor-wave';
+                        wave.style.borderRadius = (38 + Math.random() * 10) + '%';
+                        wave.style.opacity = 0.15 + (Math.random() * 0.3);
+                        wave.style.zIndex = waveCount - i; 
+                        container.appendChild(wave);
+                        waves.push({ el: wave, phase: Math.random() * Math.PI * 2, phaseSpeed: 0.0006 + (Math.random() * 0.0015), offset: i * (window.innerWidth < 768 ? 10 : 25), amplitude: 15 + (Math.random() * 25), driftAmount: 60 + (Math.random() * 100), rotationOffset: (Math.random() - 0.5) * 4 });
+                    }
+                    function animate() {
+                        const isMobile = window.innerWidth < 768;
+                        waves.forEach((w, i) => {
+                            w.phase += w.phaseSpeed;
+                            const drift = Math.sin(w.phase * 0.4) * (isMobile ? w.driftAmount / 2 : w.driftAmount);
+                            const undulation = Math.sin(w.phase) * (isMobile ? w.amplitude * 0.7 : w.amplitude);
+                            const totalY = undulation + w.offset;
+                            const rot = w.rotationOffset + (Math.cos(w.phase * 0.6) * 3);
+                            w.el.style.transform = "translateX("+drift+"px) translateY("+(-totalY)+"px) rotate("+rot+"deg) scaleX("+ (isMobile ? 1.6 : 1.4) +")";
+                        });
+                        requestAnimationFrame(animate);
+                    }
+                    animate();
                 });
             }
-            function animate() {
-                const isMobile = window.innerWidth < 768;
-                waves.forEach((w, i) => {
-                    w.phase += w.phaseSpeed;
-                    const drift = Math.sin(w.phase * 0.4) * (isMobile ? w.driftAmount / 2 : w.driftAmount);
-                    const undulation = Math.sin(w.phase) * (isMobile ? w.amplitude * 0.7 : w.amplitude);
-                    
-                    const totalY = undulation + w.offset;
-                    const rot = w.rotationOffset + (Math.cos(w.phase * 0.6) * 3);
-                    const transform = "translateX("+drift+"px) translateY("+(-totalY)+"px) rotate("+rot+"deg) scaleX("+ (isMobile ? 1.6 : 1.4) +")";
-                    
-                    w.el.style.transform = transform;
-                });
-                requestAnimationFrame(animate);
-            }
-            animate();
-        });
-    }
-    if (document.readyState === 'loading') { document.addEventListener('DOMContentLoaded', initCcorWaves); }
-    else { initCcorWaves(); }
-  })();
-</script>
+            if (document.readyState === 'loading') { document.addEventListener('DOMContentLoaded', initCcorWaves); } else { initCcorWaves(); }
+        })();
+    </script>
 </body>
 
 </html>
-

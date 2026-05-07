@@ -133,6 +133,30 @@
             position: relative;
         }
 
+        /* Force GrowthZone Partners Widget to Full Width */
+        [id^="mni-partners-"] {
+            width: 100% !important;
+            max-width: 100% !important;
+            margin-bottom: 30px !important;
+            display: block !important;
+        }
+        [id^="mni-partners-"] .mni-partners-container,
+        [id^="mni-partners-"] .mni-partners-widget,
+        [id^="mni-partners-"] .partners,
+        [id^="mni-partners-"] .partner {
+            max-width: 100% !important;
+            width: 100% !important;
+            height: auto !important;
+            position: relative !important; /* Prevents overlap by taking up space */
+            display: block !important;
+        }
+        [id^="mni-partners-"] img {
+            width: 100% !important;
+            height: auto !important;
+            display: block !important;
+            border-radius: 4px;
+        }
+
         /* Technical Header Area */
         .swiss-header {
             border-bottom: 2px solid var(--swiss-text);
@@ -882,6 +906,17 @@
 <body>
 
     <div class="swiss-container">
+        <!-- Partners Banner (Top) -->
+        <div id="mni-partners-c559b00f" style="width: 100%; margin-bottom: 20px;"></div>
+        <script type="text/javascript">
+            /*<![CDATA[*/
+            var _mnipartq = _mnipartq || [];
+            _mnipartq.push(["c559b00f.type", [1676,]], ["c559b00f.animation", 1], ["c559b00f.max", 5], ["c559b00f.create", "mni-partners-c559b00f"], ["c559b00f.v", 2]);
+            (function (b, d, a, c) {
+                b.getElementById(d) || (c = b.getElementsByTagName(a)[0], a = b.createElement(a), a.type = "text/javascript", a.async = !0, a.src = "https://coconutcoastrealtors.growthzoneapp.com/GZContent/PublicWidgets/Partners.js", c.parentNode.insertBefore(a, c))
+            })(document, "mni-partners-script", "script");
+            /*]]>*/
+        </script>
         <!-- Swiss Header Bar -->
         <div class="swiss-header" id="eduTop">
             <div class="swiss-title-group">
@@ -890,10 +925,10 @@
 
             <!-- Calendar Navigation -->
             <nav class="swiss-nav">
-                <a href="https://bonitaesterorealtors.com/upcoming-education/" class="active">EDUCATION</a>
-                <a href="https://bonitaesterorealtors.com/upcoming-events/">EVENTS</a>
-                <a href="https://bonitaesterorealtors.com/committee-meetings/">COMMITTEES</a>
-                <a href="https://bonitaesterorealtors.com/all-upcoming-events/">ALL EVENTS</a>
+                <a href="https://coconutcoastrealtors.org/upcoming-education/" class="active">EDUCATION</a>
+                <a href="https://coconutcoastrealtors.org/upcoming-events/">EVENTS</a>
+                <a href="https://coconutcoastrealtors.org/committee-meetings/">COMMITTEES</a>
+                <a href="https://coconutcoastrealtors.org/all-upcoming-events/">ALL EVENTS</a>
             </nav>
 
             <div class="swiss-controls">
@@ -921,9 +956,10 @@
             <!-- Event cards inject here -->
         </div>
 
+
         <!-- Detail Navigation Button -->
         <div style="margin-top: 40px; text-align: center;">
-            <a href="mailto:education@bonitaesterorealtors.com" class="btn-swiss">CONTACT INSTRUCTOR RELATIONS_</a>
+            <a href="mailto:education@coconutcoastrealtors.org" class="btn-swiss">CONTACT INSTRUCTOR RELATIONS_</a>
         </div>
     </div>
 
@@ -1134,7 +1170,7 @@
                     const isOnline = loc.includes('zoom') || loc.includes('online') || loc.includes('webinar') || title.includes('zoom') || title.includes('online') || title.includes('webinar');
                     const isHybrid = isOnline && (loc.includes('hybrid') || loc.includes('both') || loc.includes('in-person') || title.includes('hybrid'));
 
-                    const berLogo = 'https://bonitaesterorealtors.com/wp-content/uploads/2026/04/CCOR-Vert-Logo-no-tag-clr-scaled-e1776958694707.png';
+                    const berLogo = 'https://coconutcoastrealtors.org/wp-content/uploads/2026/04/CCOR-Vert-Logo-no-tag-clr-scaled-e1776958694707.png';
                     const zoomLogo = 'https://1000logos.net/wp-content/uploads/2021/06/Zoom-Logo-2014.png';
 
                     if (isHybrid) {

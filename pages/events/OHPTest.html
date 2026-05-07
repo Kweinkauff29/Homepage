@@ -84,8 +84,8 @@
 <body>
   <header>
     <h1>Upcoming Open Houses – BSAOR</h1>
-    <a class="brand" href="https://bonitaesterorealtors.com" target="_blank" rel="noopener" aria-label="Bonita Springs-Estero Realtors website">
-      <img src="https://bonitaesterorealtors.com/wp-content/uploads/2021/07/BonitaSpringsEsteroRealtors_Logo_Horizontal-2.png" alt="Bonita Springs-Estero Realtors logo" />
+    <a class="brand" href="https://coconutcoastrealtors.org" target="_blank" rel="noopener" aria-label="Bonita Springs-Estero Realtors website">
+      <img src="https://coconutcoastrealtors.org/wp-content/uploads/2021/07/BonitaSpringsEsteroRealtors_Logo_Horizontal-2.png" alt="Bonita Springs-Estero Realtors logo" />
     </a>
     <div class="filters">
       <select id="cityFilter" aria-label="City">
@@ -104,7 +104,7 @@
     </div>
     <div class="cta-bar">
         <a id="affLink" class="cta"
-           href="https://members.bonitaesterorealtors.com/affiliatedirectory?utm_source=idx-openhouses&utm_medium=site&utm_campaign=affiliate_directory"
+           href="https://members.coconutcoastrealtors.org/affiliatedirectory?utm_source=idx-openhouses&utm_medium=site&utm_campaign=affiliate_directory"
            target="_blank" rel="noopener">Find Affiliates</a>
       
         <a id="communityLink" class="cta outline"
@@ -128,7 +128,7 @@
     <strong>Why work with a REALTOR<span aria-hidden="true">®</span>?</strong>
     Professional representation, ethics, market expertise, and local advocacy. 
     Learn more on our consumer site: 
-    <a href="https://bonitaesterorealtors.com/?s=REALTOR%20value&utm_source=idx-openhouses&utm_medium=site&utm_campaign=value_of_realtor"
+    <a href="https://coconutcoastrealtors.org/?s=REALTOR%20value&utm_source=idx-openhouses&utm_medium=site&utm_campaign=value_of_realtor"
        target="_blank" rel="noopener">resources & community guides</a>.
   </section>
   
@@ -618,8 +618,8 @@ const MEDIA_BASE      = `${API_BASE}/api/v2/${MLS_SLUG}/media`;
   const aff = document.getElementById('affLink');
   const com = document.getElementById('communityLink');
 
-  if (aff) aff.href = `https://members.bonitaesterorealtors.com/affiliatedirectory?${utm}${q ? `&q=${q}` : ''}`;
-  if (com) com.href = `https://bonitaesterorealtors.com/?s=${q}&${utm}`;
+  if (aff) aff.href = `https://members.coconutcoastrealtors.org/affiliatedirectory?${utm}${q ? `&q=${q}` : ''}`;
+  if (com) com.href = `https://coconutcoastrealtors.org/?s=${q}&${utm}`;
 }
 
 // call once at start and whenever filters change

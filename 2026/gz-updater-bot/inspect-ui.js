@@ -12,7 +12,7 @@ require('dotenv').config();
 
     // Wait for user to log in manually
     console.log('You have 60 seconds to log in and navigate to Kevin Weinkauff\'s profile...');
-    console.log('Or click this link in the browser: https://bonitaspringsesterorealtorsfl.growthzoneapp.com/a#/ContactInfo/4159518/ContactOverview');
+    console.log('Or click this link in the browser: https://coconutcoastrealtors.growthzoneapp.com/a#/ContactInfo/4159518/ContactOverview');
     await new Promise(r => setTimeout(r, 60000));
     console.log('Dumping HTML of all frames...');
     const frames = page.frames();

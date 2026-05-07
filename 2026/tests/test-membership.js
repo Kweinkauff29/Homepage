@@ -1,7 +1,7 @@
 const https = require('https');
 
 const API_KEY = 'cR1djHVMkndNjLbwXyhDyOV7dWPJ6TnufYtcdOHc';
-const BASE_URL = 'https://bonitaspringsesterorealtorsfl.growthzoneapp.com';
+const BASE_URL = 'https://coconutcoastrealtors.growthzoneapp.com';
 
 async function fetchJsonText(url) {
     return new Promise((resolve, reject) => {

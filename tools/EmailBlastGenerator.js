@@ -18,7 +18,7 @@ const ORGS = {
     addr: '25300 Bernwood Drive, Suite 1 · Bonita Springs, FL 34135',
     email: 'WCR@BERealtors.org',
     logo: 'https://www.wcr.org/wp-content/uploads/2025/03/wcrlogo.png.webp',
-    emailLogo: 'https://bonitaesterorealtors.com/wp-content/uploads/2026/04/wcr-corporate-logo.jpg',
+    emailLogo: 'https://coconutcoastrealtors.org/wp-content/uploads/2026/04/wcr-corporate-logo.jpg',
     mergeTag: '[[FIRSTNAME]]',
     trackingImage: '[[trackingImage]]',
     socialLinks: [
@@ -816,7 +816,7 @@ function renderBlockFields(block, idx){
 function renderVideoBlock(block, s, v){
   const ytId = getYouTubeId(block.url || '');
   const thumbUrl = block.imageUrl || (ytId ? `https://img.youtube.com/vi/${ytId}/maxresdefault.jpg` : '');
-  const playIcon = 'https://bonitaesterorealtors.com/wp-content/uploads/2026/04/play-button-overlay.png'; // High-end play overlay
+  const playIcon = 'https://coconutcoastrealtors.org/wp-content/uploads/2026/04/play-button-overlay.png'; // High-end play overlay
   
   return `<tr><td class="section-inner" style="padding:20px 32px">
     <a href="${block.url || '#'}" target="_blank" style="display:block;text-decoration:none;position:relative;border-radius:12px;overflow:hidden;background-color:#000;box-shadow:0 8px 24px rgba(0,0,0,0.15)">
@@ -870,9 +870,9 @@ function generateDynamicEmailHTML(blocks, settings, headerColor, headerTitle, pr
   const socialLinks = isWcr ? `
     <table cellpadding="0" cellspacing="0" style="margin:20px auto">
       <tr>
-        <td style="padding:0 8px"><a href="https://www.facebook.com/BonitaEsteroRealtors" target="_blank"><img src="https://bonitaesterorealtors.com/wp-content/uploads/2024/05/facebook-icon.png" width="28" style="width:28px;height:auto"></a></td>
-        <td style="padding:0 8px"><a href="https://www.instagram.com/bonita_estero_realtors" target="_blank"><img src="https://bonitaesterorealtors.com/wp-content/uploads/2024/05/instagram-icon.png" width="28" style="width:28px;height:auto"></a></td>
-        <td style="padding:0 8px"><a href="https://www.youtube.com/@BonitaEsteroRealtors" target="_blank"><img src="https://bonitaesterorealtors.com/wp-content/uploads/2024/05/youtube-icon.png" width="28" style="width:28px;height:auto"></a></td>
+        <td style="padding:0 8px"><a href="https://www.facebook.com/BonitaEsteroRealtors" target="_blank"><img src="https://coconutcoastrealtors.org/wp-content/uploads/2024/05/facebook-icon.png" width="28" style="width:28px;height:auto"></a></td>
+        <td style="padding:0 8px"><a href="https://www.instagram.com/bonita_estero_realtors" target="_blank"><img src="https://coconutcoastrealtors.org/wp-content/uploads/2024/05/instagram-icon.png" width="28" style="width:28px;height:auto"></a></td>
+        <td style="padding:0 8px"><a href="https://www.youtube.com/@BonitaEsteroRealtors" target="_blank"><img src="https://coconutcoastrealtors.org/wp-content/uploads/2024/05/youtube-icon.png" width="28" style="width:28px;height:auto"></a></td>
       </tr>
     </table>` : '';
 

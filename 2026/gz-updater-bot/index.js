@@ -114,7 +114,7 @@ async function focusAndType(page, inputIndex, value) {
  *   DELETE: vm.appUIFunctions.confirm(this, vm.DeferRemoveExperienceDelete(item), ...)
  */
 async function updateGrowthZoneLicense(page, contact) {
-    const profileUrl = `https://bonitaspringsesterorealtorsfl.growthzoneapp.com/a#/ContactInfo/${contact.ContactId}/ContactOverview`;
+    const profileUrl = `https://coconutcoastrealtors.growthzoneapp.com/a#/ContactInfo/${contact.ContactId}/ContactOverview`;
     console.log(`\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━`);
     console.log(`📋 ${contact.Name}  (ID: ${contact.ContactId})`);
     console.log(`   Target Exp Date: ${contact['License Expiration Date']}`);
@@ -487,7 +487,7 @@ async function updateGrowthZoneLicense(page, contact) {
     await page.goto('https://growthzoneapp.com/auth?ReturnUrl=%2fa', { waitUntil: 'domcontentloaded' });
 
     await page.waitForSelector('#check-user-name-field', { visible: true });
-    await page.type('#check-user-name-field', process.env.GZ_EMAIL || 'kevin@bonitaesterorealtors.com', { delay: 50 });
+    await page.type('#check-user-name-field', process.env.GZ_EMAIL || 'kevin@coconutcoastrealtors.org', { delay: 50 });
 
     await Promise.all([
         page.waitForNavigation({ waitUntil: 'networkidle2' }),

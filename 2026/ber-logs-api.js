@@ -15,7 +15,7 @@
  */
 
 const ADMIN_PASSWORD = "BSER1966";
-const GZ_API_BASE = "https://bonitaspringsesterorealtorsfl.growthzoneapp.com/api";
+const GZ_API_BASE = "https://coconutcoastrealtors.growthzoneapp.com/api";
 const GZ_API_KEY = "cR1djHVMkndNjLbwXyhDyOV7dWPJ6TnufYtcdOHc";
 
 const CORS_HEADERS = {

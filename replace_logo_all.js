@@ -1,7 +1,7 @@
 const fs = require('fs');
 const path = require('path');
 
-const targetUrl = 'https://bonitaesterorealtors.com/wp-content/uploads/2026/04/CCOR-Vert-Logo-no-tag-clr-scaled-e1776958694707.png';
+const targetUrl = 'https://coconutcoastrealtors.org/wp-content/uploads/2026/04/CCOR-Vert-Logo-no-tag-clr-scaled-e1776958694707.png';
 
 const regexesToReplace = [
     /https?:\/\/(?:www\.)?bonitaesterorealtors\.com\/[a-zA-Z0-9_\-\/]*\/BER-Logo\.png/gi,

@@ -20,7 +20,7 @@
  */
 
 const CORS_HEADERS = {
-    // You can tighten this to "https://bonitaesterorealtors.com" in production
+    // You can tighten this to "https://coconutcoastrealtors.org" in production
     "Access-Control-Allow-Origin": "*",
     "Access-Control-Allow-Methods": "GET, POST, OPTIONS",
     "Access-Control-Allow-Headers": "Content-Type, Authorization"

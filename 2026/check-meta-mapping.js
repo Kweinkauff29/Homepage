@@ -2,7 +2,7 @@ const fs = require('fs');
 
 async function check() {
     const apiKey = 'cR1djHVMkndNjLbwXyhDyOV7dWPJ6TnufYtcdOHc';
-    const BASE_URL = 'https://bonitaspringsesterorealtorsfl.growthzoneapp.com';
+    const BASE_URL = 'https://coconutcoastrealtors.growthzoneapp.com';
     const CONTACTS_BASE_URL = `${BASE_URL}/api/contacts`;
 
     const AFFILIATE_TYPE_IDS = [10172, 10173, 10503, 23411, 56858, 56859, 56861, 56862, 56863];

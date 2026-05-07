@@ -1,5 +1,5 @@
 const apiKey = 'cR1djHVMkndNjLbwXyhDyOV7dWPJ6TnufYtcdOHc';
-const BASE_URL = 'https://bonitaspringsesterorealtorsfl.growthzoneapp.com';
+const BASE_URL = 'https://coconutcoastrealtors.growthzoneapp.com';
 
 async function testPost() {
     const ep1 = `${BASE_URL}/api/contacts?$filter=PrimaryOrganizationId eq 4163688`;

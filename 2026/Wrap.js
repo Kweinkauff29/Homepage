@@ -2,7 +2,7 @@
 
 const CORS_HEADERS = {
     // You can lock this down later:
-    // "Access-Control-Allow-Origin": "https://bonitaesterorealtors.com",
+    // "Access-Control-Allow-Origin": "https://coconutcoastrealtors.org",
     "Access-Control-Allow-Origin": "*",
     "Access-Control-Allow-Methods": "GET, POST, PUT, PATCH, DELETE, OPTIONS",
     "Access-Control-Allow-Headers": "Content-Type, Accept, x-user-email",

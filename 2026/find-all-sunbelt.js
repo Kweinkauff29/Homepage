@@ -1,5 +1,5 @@
 const API_KEY = 'cR1djHVMkndNjLbwXyhDyOV7dWPJ6TnufYtcdOHc';
-const BASE_URL = 'https://bonitaspringsesterorealtorsfl.growthzoneapp.com';
+const BASE_URL = 'https://coconutcoastrealtors.growthzoneapp.com';
 
 async function fetchJson(url) {
     const res = await fetch(url, { headers: { 'Authorization': 'ApiKey ' + API_KEY } });
