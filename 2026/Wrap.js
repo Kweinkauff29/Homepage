@@ -3313,6 +3313,56 @@ async function sendCompletionEmail(env, task) {
     });
 }
 
+function normalizeRelayEmail(value) {
+    if (typeof value !== "string") return "";
+    const match = value.match(/<([^>]+)>/);
+    const email = (match ? match[1] : value).trim();
+    return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email) ? email : "";
+}
+
+function cleanRelayText(value, maxLength = 4000) {
+    if (typeof value !== "string") return "";
+    return value.replace(/\r\n/g, "\n").trim().slice(0, maxLength);
+}
+
+async function handleInternalSendEmail(request, env) {
+    const expectedKey = env.TWS_MAIL_RELAY_KEY;
+    const providedKey = request.headers.get("X-TWS-Mail-Relay-Key") || "";
+    if (!expectedKey || providedKey !== expectedKey) {
+        return json({ success: false, error: "unauthorized" }, 401);
+    }
+
+    const body = await getBody(request);
+    const to = normalizeRelayEmail(body.to);
+    const subject = cleanRelayText(body.subject, 200);
+    const text = cleanRelayText(body.text, 8000);
+    if (!to || !subject || !text) {
+        return json({ success: false, error: "missing_email_fields" }, 400);
+    }
+
+    const fromEmail = normalizeRelayEmail(env.MAIL_FROM) || normalizeRelayEmail(body.fromEmail) || "no-reply@ccorealtors.org";
+    const fromName = cleanRelayText(body.fromName, 80) || env.MAIL_FROM_NAME || "BER Wrap Sheet";
+    const mailPayload = {
+        personalizations: [{ to: [{ email: to, name: cleanRelayText(body.toName, 120) || undefined }] }],
+        from: { email: fromEmail, name: fromName },
+        subject,
+        content: [{ type: "text/plain", value: text }],
+    };
+
+    const response = await fetch("https://api.mailchannels.net/tx/v1/send", {
+        method: "POST",
+        headers: { "content-type": "application/json" },
+        body: JSON.stringify(mailPayload),
+    });
+
+    if (!response.ok) {
+        const detail = (await response.text()).slice(0, 500);
+        return json({ success: false, error: "mailchannels_rejected", status: response.status, detail }, 502);
+    }
+
+    return json({ success: true, provider: "mailchannels" });
+}
+
 /* ---------- MAIN DISPATCH ---------- */
 
 export default {
@@ -3327,6 +3377,10 @@ export default {
         }
 
         try {
+
+            if (pathname === "/internal/send-email" && request.method === "POST") {
+                return await handleInternalSendEmail(request, env);
+            }
 
             // ===== USERS =====
             if (pathname === "/api/users" && request.method === "GET") {

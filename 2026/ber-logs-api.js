@@ -24,6 +24,15 @@ const CORS_HEADERS = {
     "Access-Control-Allow-Headers": "Content-Type, Authorization",
 };
 
+const REALTOR_MEMBERSHIP_NAMES = [
+    "primary realtor",
+    "designated realtor",
+    "secondary realtor",
+    "secondary designated realtor",
+    "realtor - out of state",
+    "secondary designated realtor-out of state"
+];
+
 // ============ MEMBER CACHE (Worker Memory Persistence) ============
 let contactsCache = null;
 let lastSyncTime = 0;
@@ -213,7 +222,7 @@ async function handleGetMember(request, env) {
         }
 
         // mapGZContactToMember handles the discrete /moreinfo and /contactinfos fetches
-        const member = await mapGZContactToMember(match);
+        const member = await mapGZContactToMember(match, env);
 
         return jsonResponse({ success: true, member });
     } catch (err) {
@@ -231,9 +240,11 @@ async function handleSearchMembers(request, env) {
         const allContacts = await getGZContacts(env);
         const term = q.toLowerCase();
         
+        const normalizedTerm = normalizeMemberName(term);
         const filtered = allContacts.filter(c => 
-            (c.Name && c.Name.toLowerCase().includes(term)) || 
+            (c.Name && c.Name.toLowerCase().includes(term)) ||
             (c.ContactName && c.ContactName.toLowerCase().includes(term)) ||
+            (normalizedTerm && normalizeMemberName(c.Name || c.ContactName).includes(normalizedTerm)) ||
             (c.AccountNumber && c.AccountNumber.includes(term))
         ).slice(0, 20);
 
@@ -301,10 +312,11 @@ async function handleLogsRequest(request, env) {
 
         // 2. Try Name match if no NRDS match
         if (!contactId) {
-            const fullName = `${firstName} ${lastName}`.trim().toLowerCase();
+            const fullName = `${firstName} ${lastName}`.trim();
+            const normalizedFullName = normalizeMemberName(fullName);
             const match = allContacts.find(c => 
-                (c.Name && c.Name.toLowerCase() === fullName) || 
-                (c.ContactName && c.ContactName.toLowerCase() === fullName)
+                normalizeMemberName(c.Name) === normalizedFullName ||
+                normalizeMemberName(c.ContactName) === normalizedFullName
             );
             if (match) {
                 contactId = match.ContactId;
@@ -321,20 +333,24 @@ async function handleLogsRequest(request, env) {
             
             if (summaryMatch) {
                 // mapGZContactToMember will now handle fetching /moreinfo and /contactinfos
-                member = await mapGZContactToMember(summaryMatch);
+                member = await mapGZContactToMember(summaryMatch, env);
                 
                 // Check Standing
                 const tags = (member.tags || "").toLowerCase();
-                const balance = parseFloat(member.contact_balance) || 0;
+                const balance = parseMoney(member.contact_balance);
                 const status = (member.membership_status || "").toLowerCase();
+                const coeDate = normalizeDateValue(member.coe_latest_date);
 
                 if (tags.includes("no logs") || tags.includes("nologs") || tags.includes("no-logs")) {
                     requestStatus = "BLOCKED_TAGS";
-                } else if (balance > 0.01) { // 1 cent threshold
+                } else if (balance > 0.01 || (member.has_active_realtor_membership && member.realtor_membership_paid === false)) { // 1 cent threshold
                     requestStatus = "BLOCKED_BALANCE";
-                } else if (status !== "active") {
+                } else if (status !== "active" || !member.has_active_realtor_membership) {
                     requestStatus = "BLOCKED_STATUS";
+                } else if (!coeDate) {
+                    requestStatus = "BLOCKED_COE_DATE";
                 } else {
+                    member.coe_latest_date = coeDate;
                     requestStatus = "SUCCESS";
                 }
             }
@@ -421,6 +437,15 @@ async function handleLogsRequest(request, env) {
                 submitted: true,
                 errorCode: "BLOCKED_STATUS",
                 message: `Your membership status is currently "${member.membership_status}". LOGS can only be generated for Active members. Please contact membership@berealtors.org.`
+            });
+        }
+
+        if (requestStatus === "BLOCKED_COE_DATE") {
+            return jsonResponse({
+                success: false,
+                submitted: true,
+                errorCode: "BLOCKED_COE_DATE",
+                message: "LOGS cannot be generated because we could not verify a Code of Ethics completion date in GrowthZone. Please contact membership@berealtors.org."
             });
         }
 
@@ -932,7 +957,7 @@ async function gzRequest(path, method = "GET", body = null) {
     return response.json();
 }
 
-async function mapGZContactToMember(contact) {
+async function mapGZContactToMember(contact, env) {
     // 1. Fetch "More Info" for custom fields
     let fields = [];
     try {
@@ -942,8 +967,20 @@ async function mapGZContactToMember(contact) {
         console.warn(`Could not fetch moreinfo for contact ${contact.ContactId}:`, e);
     }
 
-    // 2. Fetch ContactInfos for Address (Summary list doesn't have the full address array)
+    // 2. Fetch OrgGeneral for memberships and contact info. The contact summary does not
+    // include reliable active/inactive status, and /contactinfos is not available here.
+    let orgGeneral = null;
+    try {
+        orgGeneral = await gzRequest(`/contacts/OrgGeneral/${contact.ContactId}`);
+    } catch (e) {
+        console.warn(`Could not fetch OrgGeneral for contact ${contact.ContactId}:`, e);
+    }
+
+    // 3. Fetch ContactInfos for Address (Summary list doesn't have the full address array)
     let contactInfos = contact.ContactInfos || [];
+    if (contactInfos.length === 0 && orgGeneral?.ContactInfos?.length) {
+        contactInfos = orgGeneral.ContactInfos;
+    }
     if (contactInfos.length === 0) {
         try {
             contactInfos = await gzRequest(`/contacts/${contact.ContactId}/contactinfos`);
@@ -953,36 +990,171 @@ async function mapGZContactToMember(contact) {
     }
 
     function getField(id) {
-        return fields.find(f => f.CustomFieldId === id)?.Value || "";
+        return fields.find(f => f.CustomFieldId === id || f.Id === id)?.Value || "";
     }
 
-    // 3. Extract address
+    function getFieldByName(patterns) {
+        const match = fields.find(f => {
+            const name = `${f.DisplayName || ""} ${f.Name || ""}`.toLowerCase();
+            return patterns.every(pattern => name.includes(pattern));
+        });
+        return match?.Value || "";
+    }
+
+    const uploadedMember = await getUploadedMember(env, contact);
+
+    const memberships = Array.isArray(orgGeneral?.Memberships) ? orgGeneral.Memberships : [];
+    const primaryOrganization = Array.isArray(orgGeneral?.Organizations)
+        ? orgGeneral.Organizations.find(org => org.IsPrimary) || orgGeneral.Organizations[0]
+        : null;
+    const activeRealtorMembership = memberships.find(isActiveRealtorMembership);
+    const realtorMemberships = memberships.filter(isRealtorMembership);
+    const membershipStatus = activeRealtorMembership ? "Active" : (realtorMemberships[0]?.SummaryDescription || contact.StatusName || "");
+    const membershipNames = memberships.map(m => m.Name).filter(Boolean).join(", ");
+    const membershipBalance = memberships.reduce((total, membership) => total + parseMoney(membership.Balance), 0);
+    const contactBalance = parseMoney(contact.Balance) + membershipBalance;
+    const coeLatestDate = normalizeDateValue(
+        getFieldByName(["code", "ethic"]) ||
+        getFieldByName(["coe"]) ||
+        contact.CodeOfEthicsLatestDate ||
+        contact.CodeOfEthicsDate ||
+        contact.CoeLatestDate ||
+        contact.COECompletionDate ||
+        uploadedMember?.coe_latest_date
+    );
+
+    // 4. Extract address
     let addr1 = "";
     let addr2 = "";
     if (contactInfos && contactInfos.length) {
         const primaryAddr = contactInfos.find(i => i.Type === 3 && i.IsPrimary) || contactInfos.find(i => i.Type === 3);
         if (primaryAddr && primaryAddr.Value) {
-            const parts = primaryAddr.Value.split("\n");
+            const parts = formatAddressLines(primaryAddr.Value);
             addr1 = parts[0] || "";
-            addr2 = parts.slice(1).join(", ") || "";
+            addr2 = parts.slice(1).join("\n") || "";
         }
     }
 
     return {
         contact_id: contact.ContactId,
-        nrds_id: getField(58303),
+        nrds_id: getField(58303) || contact.AccountNumber || "",
         full_name: contact.Name || contact.ContactName,
         contact_type: contact.SystemContactTypeId === 1 ? "Individual" : "Company",
-        membership_status: contact.StatusName || "Active",
-        office_name: contact.OrganizationName || "",
-        coe_latest_date: "", // Field ID TBD
+        membership_status: membershipStatus || "Unknown",
+        has_active_realtor_membership: !!activeRealtorMembership,
+        realtor_membership_paid: activeRealtorMembership ? activeRealtorMembership.IsRenewalPaid !== false : false,
+        office_name: contact.OrganizationName || primaryOrganization?.Name || "",
+        coe_latest_date: coeLatestDate,
         fair_housing_latest_date: "", // Field ID TBD
         primary_address1: addr1,
         primary_address2: addr2,
-        memberships: contact.MembershipStatus || "",
-        tags: getField(70615), // Placeholder or find real Tags field
-        contact_balance: contact.Balance || 0,
+        memberships: membershipNames || contact.MembershipStatus || "",
+        tags: uploadedMember?.tags || getField(70615),
+        contact_balance: contactBalance,
     };
+}
+
+async function getUploadedMember(env, contact) {
+    const db = env?.BER_MEMBERS;
+    if (!db) return null;
+
+    const contactId = contact?.ContactId;
+    const nrdsId = contact?.AccountNumber;
+    const fullName = normalizeMemberName(contact?.Name || contact?.ContactName);
+
+    try {
+        if (contactId) {
+            const row = await db.prepare(
+                `SELECT contact_id, nrds_id, full_name, coe_latest_date, tags
+                 FROM members
+                 WHERE CAST(contact_id AS TEXT) = ?
+                 LIMIT 1`
+            ).bind(String(contactId)).first();
+            if (row) return row;
+        }
+
+        if (nrdsId) {
+            const row = await db.prepare(
+                `SELECT contact_id, nrds_id, full_name, coe_latest_date, tags
+                 FROM members
+                 WHERE nrds_id = ?
+                 LIMIT 1`
+            ).bind(String(nrdsId)).first();
+            if (row) return row;
+        }
+
+        if (fullName) {
+            const { results } = await db.prepare(
+                `SELECT contact_id, nrds_id, full_name, coe_latest_date, tags
+                 FROM members
+                 WHERE full_name IS NOT NULL`
+            ).all();
+            return (results || []).find(row => normalizeMemberName(row.full_name) === fullName) || null;
+        }
+    } catch (e) {
+        console.warn(`Could not fetch uploaded member row for contact ${contact?.ContactId}:`, e);
+    }
+
+    return null;
+}
+
+function isRealtorMembership(membership) {
+    const name = String(membership?.Name || membership?.Type || "").toLowerCase();
+    const normalized = name.replace(/[®]/g, "").replace(/\s+/g, " ").trim();
+    return REALTOR_MEMBERSHIP_NAMES.some(type => normalized.includes(type));
+}
+
+function normalizeMemberName(value) {
+    return String(value || "")
+        .toLowerCase()
+        .replace(/[.,]/g, " ")
+        .replace(/\b(p\s*a|pa|pllc|llc|inc|corp|corporation|realtor|realtors)\b/g, " ")
+        .replace(/\s+/g, " ")
+        .trim();
+}
+
+function isActiveRealtorMembership(membership) {
+    if (!isRealtorMembership(membership)) return false;
+    if (membership.IsInactive === true || membership.InActive === true) return false;
+    if (membership.EndDate) return false;
+    if (membership.Status && String(membership.Status).toLowerCase() !== "active") return false;
+    if (membership.MembershipStatusTypeId && Number(membership.MembershipStatusTypeId) !== 2) return false;
+    return true;
+}
+
+function parseMoney(value) {
+    if (value == null || value === "") return 0;
+    const n = parseFloat(String(value).replace(/[^0-9.-]/g, ""));
+    return Number.isFinite(n) ? n : 0;
+}
+
+function normalizeDateValue(value) {
+    if (value == null || value === "") return "";
+    if (typeof value === "number") return value;
+
+    const str = String(value).trim();
+    if (!str) return "";
+
+    if (/^\d+(\.\d+)?$/.test(str)) return str;
+
+    const d = new Date(str);
+    if (!Number.isNaN(d.getTime())) return d.toISOString();
+
+    return str;
+}
+
+function formatAddressLines(value) {
+    const raw = String(value || "").replace(/\r/g, "").trim();
+    if (!raw) return [];
+
+    const explicit = raw.split("\n").map(part => part.trim()).filter(Boolean);
+    if (explicit.length > 1) return explicit;
+
+    const compact = raw.replace(/\s+/g, " ");
+    const match = compact.match(/^(.+\b(?:St|Street|Ave|Avenue|Blvd\.?|Boulevard|Cir|Circle|Dr|Drive|Ln|Lane|Rd|Road|Ct|Court|Way|Pkwy|Parkway|Trail|Trl|Pl|Place|Ter|Terrace|Hwy|Highway)(?:\s+(?:N|S|E|W|NE|NW|SE|SW)\.?)?(?:\s+(?:Apt|Apartment|Unit|Ste\.?|Suite|#)\s*[\w-]+)?)\s+(.+?)\s+([A-Z]{2})\s+(\d{5}(?:-\d{4})?)$/i);
+    if (!match) return [compact];
+
+    return [match[1].trim(), `${match[2].trim()}, ${match[3].toUpperCase()} ${match[4]}`];
 }
 
 function cleanText(value, max = 500) {

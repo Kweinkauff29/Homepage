@@ -3,7 +3,7 @@
 
 <head>
   <meta charset="UTF-8" />
-  <title>CCOR Wrap Sheet</title>
+  <title>BER Wrap Sheet</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <style>
     :root {
@@ -438,12 +438,9 @@
     }
 
     .task-pill {
-      display: grid;
-      grid-template-columns: auto 1fr auto;
-      grid-template-areas: 
-        "dot title title"
-        ". assignee quick";
-      gap: 4px 6px;
+      display: flex;
+      align-items: flex-start;
+      gap: 6px;
       padding: 6px 8px;
       border-radius: var(--radius-sm);
       background: var(--panel);
@@ -461,12 +458,11 @@
     }
 
     .task-quick-actions {
-      grid-area: quick;
       display: inline-flex;
       align-items: center;
       gap: 4px;
-      justify-self: end;
-      align-self: center;
+      margin-left: auto;
+      flex-shrink: 0;
     }
 
     .task-quick-actions input[type="checkbox"] {
@@ -489,11 +485,10 @@
 
 
     .task-status-dot {
-      grid-area: dot;
       width: 7px;
       height: 7px;
       border-radius: 999px;
-      margin-top: 5px;
+      flex-shrink: 0;
     }
 
     .task-status-pending {
@@ -515,16 +510,14 @@
     /* ADD THIS */
 
     .task-title {
-      grid-area: title;
+      flex: 1;
       word-wrap: break-word;
       overflow-wrap: break-word;
     }
 
     .task-assignee {
-      grid-area: assignee;
       font-size: 10px;
       color: var(--ink-soft);
-      align-self: center;
     }
 
     .calendar-metrics {
@@ -3995,7 +3988,6 @@
 
 <body>
 
-
   <!-- Task Ticker -->
 
   <!-- User chooser -->
@@ -4007,7 +3999,7 @@
         <option value="">Loading team...</option>
       </select>
       <button id="user-select-confirm">Open Wrap Sheet</button>
-      <small>This is internal for CCOR: Meighan, Kevin, Erica, Jenna, Katie & Mariam.</small>
+      <small>This is internal for BER: Meighan, Kevin, Erica, Jenna, Katie & Mariam.</small>
     </div>
   </div>
 
@@ -4451,7 +4443,7 @@
         <div class="branding-mark">W</div>
         <div class="branding-text">
           <h1>Wrap Sheet</h1>
-          <span>CCOR • DAILY TASKS • GOALS</span>
+          <span>BER • DAILY TASKS • GOALS</span>
         </div>
 
         <div class="header-controls">
@@ -4864,12 +4856,12 @@
               <div class="tool-name">Truck & Van Reservations</div>
               <div class="tool-desc">Student & Member Booking</div>
             </a>
-            <a href="https://bonitaesterorealtors.com/promo-calendar-internal/" target="_blank" class="tool-link-card">
+            <a href="https://coconutcoastrealtors.org/promo-calendar-internal/" target="_blank" class="tool-link-card">
               <span class="tool-icon">📅</span>
               <div class="tool-name">Class Promo Calendar</div>
               <div class="tool-desc">Internal Scheduling View</div>
             </a>
-            <a href="https://bonitaesterorealtors.com/logsrequest/" target="_blank" class="tool-link-card">
+            <a href="https://coconutcoastrealtors.org/logsrequest/" target="_blank" class="tool-link-card">
               <span class="tool-icon">✉️</span>
               <div class="tool-name">Letter of Good Standing</div>
               <div class="tool-desc">Request & Processing Form</div>
@@ -7837,7 +7829,7 @@
 
     async function loadUsers() {
       const allUsers = await apiGet("/users");
-      // Filter to only show core CCOR staff
+      // Filter to only show core BER staff
       const allowedNames = CORE_TEAM_NAME_ORDER.map(name => name.toLowerCase());
       const excludedNames = ["kevin test", "kevin weinkauff", "meighan harris", "test whale"];
       state.users = allUsers.filter(u => {
@@ -14913,113 +14905,6 @@
   <div id="debug-version"
     style="position:fixed;bottom:0;right:0;background:red;color:white;z-index:99999;padding:5px;cursor:pointer;"
     onclick="alert('Loaded 2026/WrapSheet.html - Fixes Applied - V3')">VERSION DEBUG V3</div>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<div id="ccor-waves-bg" aria-hidden="true" style="position: fixed; inset: 0; z-index: -9999; pointer-events: none; opacity: 0.45; overflow: hidden; background: #ffffff;">
-  <div class="ccor-wave-container ccor-ribbon-bottom" style="position: absolute; inset: 0;"></div>
-</div>
-<style>
-  @keyframes ribbonFlow {
-    0% { background-position: 0% 0; }
-    100% { background-position: 400% 0; }
-  }
-  .ccor-wave {
-    position: absolute;
-    width: 400%;
-    height: 600px; 
-    left: -150%;
-    background: linear-gradient(120deg, #1B449D 0%, #2e5ab8 8%, #3d6cd1 16%, #64BAB0 24%, #8dd4ca 32%, #a6e1d9 40%, #D4AC6C 48%, #e8c88a 56%, #f2dcb3 64%, #5B5A5C 72%, #7a7a7a 80%, #64BAB0 88%, #4da69a 94%, #1B449D 100%);
-    background-size: 400% 100%;
-    animation: ribbonFlow 15s ease-in-out infinite alternate;
-    border-radius: 42% 45% 40% 43%;
-    filter: blur(0.4px);
-    will-change: transform;
-    transform-origin: center bottom;
-  }
-  .ccor-ribbon-bottom .ccor-wave { 
-    bottom: -600px; 
-  }
-  
-  /* MOBILE OPTIMIZATIONS */
-  @media (max-width: 768px) {
-    .ccor-wave { height: 400px; bottom: -400px !important; }
-  }
-
-  /* FORCE TRANSPARENCY ON HOST CONTAINERS */
-  html { background-color: #ffffff !important; }
-  body, .site, #page, .site-content, #content, .entry-content, .joinber-page, .ber-about, #main, .main-container, .wrapper, 
-  .ber-directory, .container, .main-content, .directory-grid, .controls, .section, main {
-    background-color: transparent !important;
-    background: transparent !important;
-  }
-</style>
-<script>
-  (function() {
-    function initCcorWaves() {
-        const root = document.getElementById('ccor-waves-bg');
-        if (!root) return;
-        const containers = root.querySelectorAll('.ccor-wave-container');
-        containers.forEach(container => {
-            const waveCount = 13; 
-            const waves = [];
-            for (let i = 0; i < waveCount; i++) {
-                const wave = document.createElement('div');
-                wave.className = 'ccor-wave';
-                wave.style.borderRadius = (38 + Math.random() * 10) + '%';
-                wave.style.opacity = 0.15 + (Math.random() * 0.3);
-                wave.style.zIndex = waveCount - i; 
-                
-                container.appendChild(wave);
-                waves.push({ 
-                    el: wave, 
-                    phase: Math.random() * Math.PI * 2, 
-                    phaseSpeed: 0.0006 + (Math.random() * 0.0015), 
-                    offset: i * (window.innerWidth < 768 ? 10 : 25), 
-                    amplitude: 15 + (Math.random() * 25), 
-                    driftAmount: 60 + (Math.random() * 100),
-                    rotationOffset: (Math.random() - 0.5) * 4
-                });
-            }
-            function animate() {
-                const isMobile = window.innerWidth < 768;
-                waves.forEach((w, i) => {
-                    w.phase += w.phaseSpeed;
-                    const drift = Math.sin(w.phase * 0.4) * (isMobile ? w.driftAmount / 2 : w.driftAmount);
-                    const undulation = Math.sin(w.phase) * (isMobile ? w.amplitude * 0.7 : w.amplitude);
-                    
-                    const totalY = undulation + w.offset;
-                    const rot = w.rotationOffset + (Math.cos(w.phase * 0.6) * 3);
-                    const transform = "translateX("+drift+"px) translateY("+(-totalY)+"px) rotate("+rot+"deg) scaleX("+ (isMobile ? 1.6 : 1.4) +")";
-                    
-                    w.el.style.transform = transform;
-                });
-                requestAnimationFrame(animate);
-            }
-            animate();
-        });
-    }
-    if (document.readyState === 'loading') { document.addEventListener('DOMContentLoaded', initCcorWaves); }
-    else { initCcorWaves(); }
-  })();
-</script>
 </body>
 
 </html>
-
