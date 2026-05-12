@@ -1,4 +1,3 @@
-
 <html lang="en" dir="ltr">
 
 <head>
@@ -2322,7 +2321,7 @@
   <!-- LEFT: Market Stats -->
   <div class="bemSection__col">
     <div class="bemStats">
-      <h2 class="bemStats__title">March 2026 – CCOR Market Statistics</h2>
+      <h2 class="bemStats__title">April 2026 – CCOR Market Statistics</h2>
       <div class="bemStats__grid" id="bemStatsGrid"></div>
       <div class="bemStats__disclaimer">
         The data presented is based on the most accurate information available at the time
@@ -2389,12 +2388,12 @@
   /* Inject stats cards */
   (function () {
     const stats = [
-      { icon: 'fa-home', label: 'Closed Sales', value: '421', change: '+38.0% vs March 2025', up: true },
-      { icon: 'fa-tag', label: 'Median Price', value: '$523,000', change: '-0.4% vs March 2025', up: false },
-      { icon: 'fa-clock', label: 'Days on Market (Median)', value: '69 Days', change: '+64.3% vs March 2025', up: true },
-      { icon: 'fa-pencil-alt', label: 'Pending Sales', value: '527', change: '+33.8% vs March 2025', up: true },
-      { icon: 'fa-dollar-sign', label: 'SWFL Dollar Volume', value: '$3.05 Billion', change: '+13.3% vs March 2025', up: true },
-      { icon: 'fa-archive', label: 'Active Inventory', value: '1,029', change: '-24.4% vs March 2025', up: false }
+      { icon: 'fa-home', label: 'Closed Sales', value: '3,558', change: '+14.3% vs April 2025', up: true },
+      { icon: 'fa-tag', label: 'Median Price', value: '$425,000', change: '+1.2% vs April 2025', up: true },
+      { icon: 'fa-clock', label: 'Days on Market (Median)', value: '54 Days', change: '-1.8% vs April 2025', up: true },
+      { icon: 'fa-pencil-alt', label: 'Pending Sales', value: '4,443', change: '+31.6% vs April 2025', up: true },
+      { icon: 'fa-dollar-sign', label: 'SWFL Dollar Volume', value: '$2.66 Billion', change: '+9.5% vs April 2025', up: true },
+      { icon: 'fa-archive', label: 'Active Inventory', value: '19,149', change: '-20.4% vs April 2025', up: false }
     ];
     const grid = document.getElementById('bemStatsGrid');
     stats.forEach(s => {
@@ -2883,7 +2882,8 @@
       <div class="col-sm-7">
         <h4>FGCU May 2026 Regional Economic Indicators: Tourism Resilience vs. Spending and Labor Softening</h4>
         <p class="italics">May 7th, 2026</p>
-        <p>FGCU’s May 2026 report shows a mixed but active Southwest Florida economy, with strong tourism demand contrasting with cooling consumer spending and labor markets.</p>
+        <p>FGCU’s May 2026 report shows a mixed but active Southwest Florida economy, with strong tourism demand
+          contrasting with cooling consumer spending and labor markets.</p>
         <a href="https://coconutcoastrealtors.org/gcu-may-2026-regional-economic-indicators-tourism-resilience-vs-spending-and-labor-softening/"
           target="_blank">
           <button class="btn btn-primary" type="button" name="button">Read More</button>
@@ -3842,7 +3842,8 @@
       <div class="col-sm-7">
         <h4>Elevate Your Impact: Join a Coconut Coast Organization of REALTORS® Committee in 2025</h4>
         <p class="italics">November 15th, 2024</p>
-        <p>Looking to make an impact in the real estate industry and grow your career? Join a Coconut Coast Organization of Realtors® (CCOR) committee for 2025! With opportunities ranging from professional development to government
+        <p>Looking to make an impact in the real estate industry and grow your career? Join a Coconut Coast Organization
+          of Realtors® (CCOR) committee for 2025! With opportunities ranging from professional development to government
           affairs, you'll help shape the future of our association while building valuable connections and leadership
           skills. Make your voice heard and be part of the change.</p>
         <a href="https://www.coconutcoastrealtors.org/elevate-your-impact-join-a-bonita-springs-estero-realtors-committee-in-2025/"
@@ -4312,8 +4313,8 @@
         <p class="italics">October 5th, 2022</p>
         <p>Here are a list of resources for those affected by Hurricane Ian aswell as a wellness check-in and
           opportunities for you to volunteer to help our community.</p>
-        <a href="https://coconutcoastrealtors.growthzoneapp.com/ap/EmailViewer/Pe554ZVP"
-          target="_blank"><button class="btn btn-primary" type="button" name="button">Read More</button></a>
+        <a href="https://coconutcoastrealtors.growthzoneapp.com/ap/EmailViewer/Pe554ZVP" target="_blank"><button
+            class="btn btn-primary" type="button" name="button">Read More</button></a>
       </div>
     </div>
 
@@ -4729,18 +4730,25 @@
 
 
 
-<div id="ccor-waves-bg" aria-hidden="true" style="position: fixed; inset: 0; z-index: -9999; pointer-events: none; opacity: 0.45; overflow: hidden; background: #ffffff;">
+<div id="ccor-waves-bg" aria-hidden="true"
+  style="position: fixed; inset: 0; z-index: -9999; pointer-events: none; opacity: 0.45; overflow: hidden; background: #ffffff;">
   <div class="ccor-wave-container ccor-ribbon-bottom" style="position: absolute; inset: 0;"></div>
 </div>
 <style>
   @keyframes ribbonFlow {
-    0% { background-position: 0% 0; }
-    100% { background-position: 400% 0; }
+    0% {
+      background-position: 0% 0;
+    }
+
+    100% {
+      background-position: 400% 0;
+    }
   }
+
   .ccor-wave {
     position: absolute;
     width: 400%;
-    height: 600px; 
+    height: 600px;
     left: -150%;
     background: linear-gradient(120deg, #1B449D 0%, #2e5ab8 8%, #3d6cd1 16%, #64BAB0 24%, #8dd4ca 32%, #a6e1d9 40%, #D4AC6C 48%, #e8c88a 56%, #f2dcb3 64%, #5B5A5C 72%, #7a7a7a 80%, #64BAB0 88%, #4da69a 94%, #1B449D 100%);
     background-size: 400% 100%;
@@ -4750,67 +4758,90 @@
     will-change: transform;
     transform-origin: center bottom;
   }
-  .ccor-ribbon-bottom .ccor-wave { 
-    bottom: -600px; 
+
+  .ccor-ribbon-bottom .ccor-wave {
+    bottom: -600px;
   }
-  
+
   /* MOBILE OPTIMIZATIONS */
   @media (max-width: 768px) {
-    .ccor-wave { height: 400px; bottom: -400px !important; }
+    .ccor-wave {
+      height: 400px;
+      bottom: -400px !important;
+    }
   }
 
   /* FORCE TRANSPARENCY ON HOST CONTAINERS */
-  html { background-color: #ffffff !important; }
-  body, .site, #page, .site-content, #content, .entry-content, .joinber-page, .ber-about, #main, .main-container, .wrapper, 
-  .ber-directory, .container, .main-content, .directory-grid, .controls, .section, main {
+  html {
+    background-color: #ffffff !important;
+  }
+
+  body,
+  .site,
+  #page,
+  .site-content,
+  #content,
+  .entry-content,
+  .joinber-page,
+  .ber-about,
+  #main,
+  .main-container,
+  .wrapper,
+  .ber-directory,
+  .container,
+  .main-content,
+  .directory-grid,
+  .controls,
+  .section,
+  main {
     background-color: transparent !important;
     background: transparent !important;
   }
 </style>
 <script>
-  (function() {
+  (function () {
     function initCcorWaves() {
-        const root = document.getElementById('ccor-waves-bg');
-        if (!root) return;
-        const containers = root.querySelectorAll('.ccor-wave-container');
-        containers.forEach(container => {
-            const waveCount = 13; 
-            const waves = [];
-            for (let i = 0; i < waveCount; i++) {
-                const wave = document.createElement('div');
-                wave.className = 'ccor-wave';
-                wave.style.borderRadius = (38 + Math.random() * 10) + '%';
-                wave.style.opacity = 0.15 + (Math.random() * 0.3);
-                wave.style.zIndex = waveCount - i; 
-                
-                container.appendChild(wave);
-                waves.push({ 
-                    el: wave, 
-                    phase: Math.random() * Math.PI * 2, 
-                    phaseSpeed: 0.0006 + (Math.random() * 0.0015), 
-                    offset: i * (window.innerWidth < 768 ? 10 : 25), 
-                    amplitude: 15 + (Math.random() * 25), 
-                    driftAmount: 60 + (Math.random() * 100),
-                    rotationOffset: (Math.random() - 0.5) * 4
-                });
-            }
-            function animate() {
-                const isMobile = window.innerWidth < 768;
-                waves.forEach((w, i) => {
-                    w.phase += w.phaseSpeed;
-                    const drift = Math.sin(w.phase * 0.4) * (isMobile ? w.driftAmount / 2 : w.driftAmount);
-                    const undulation = Math.sin(w.phase) * (isMobile ? w.amplitude * 0.7 : w.amplitude);
-                    
-                    const totalY = undulation + w.offset;
-                    const rot = w.rotationOffset + (Math.cos(w.phase * 0.6) * 3);
-                    const transform = "translateX("+drift+"px) translateY("+(-totalY)+"px) rotate("+rot+"deg) scaleX("+ (isMobile ? 1.6 : 1.4) +")";
-                    
-                    w.el.style.transform = transform;
-                });
-                requestAnimationFrame(animate);
-            }
-            animate();
-        });
+      const root = document.getElementById('ccor-waves-bg');
+      if (!root) return;
+      const containers = root.querySelectorAll('.ccor-wave-container');
+      containers.forEach(container => {
+        const waveCount = 13;
+        const waves = [];
+        for (let i = 0; i < waveCount; i++) {
+          const wave = document.createElement('div');
+          wave.className = 'ccor-wave';
+          wave.style.borderRadius = (38 + Math.random() * 10) + '%';
+          wave.style.opacity = 0.15 + (Math.random() * 0.3);
+          wave.style.zIndex = waveCount - i;
+
+          container.appendChild(wave);
+          waves.push({
+            el: wave,
+            phase: Math.random() * Math.PI * 2,
+            phaseSpeed: 0.0006 + (Math.random() * 0.0015),
+            offset: i * (window.innerWidth < 768 ? 10 : 25),
+            amplitude: 15 + (Math.random() * 25),
+            driftAmount: 60 + (Math.random() * 100),
+            rotationOffset: (Math.random() - 0.5) * 4
+          });
+        }
+        function animate() {
+          const isMobile = window.innerWidth < 768;
+          waves.forEach((w, i) => {
+            w.phase += w.phaseSpeed;
+            const drift = Math.sin(w.phase * 0.4) * (isMobile ? w.driftAmount / 2 : w.driftAmount);
+            const undulation = Math.sin(w.phase) * (isMobile ? w.amplitude * 0.7 : w.amplitude);
+
+            const totalY = undulation + w.offset;
+            const rot = w.rotationOffset + (Math.cos(w.phase * 0.6) * 3);
+            const transform = "translateX(" + drift + "px) translateY(" + (-totalY) + "px) rotate(" + rot + "deg) scaleX(" + (isMobile ? 1.6 : 1.4) + ")";
+
+            w.el.style.transform = transform;
+          });
+          requestAnimationFrame(animate);
+        }
+        animate();
+      });
     }
     if (document.readyState === 'loading') { document.addEventListener('DOMContentLoaded', initCcorWaves); }
     else { initCcorWaves(); }
@@ -4819,4 +4850,3 @@
 </body>
 
 </html>
-

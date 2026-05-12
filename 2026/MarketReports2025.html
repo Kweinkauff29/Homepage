@@ -15,7 +15,7 @@
     :root {
       /* Dual Font System */
       --font-body: 'Inter', 'Inter', -apple-system, sans-serif;
-      --font-mono: 'Inter' Mono', 'Share Tech Mono', monospace;
+      --font-mono: 'Inter Mono', 'Share Tech Mono', monospace;
 
       /* Color System (High Contrast + Signal Accents) */
       --brand-primary: #0284c7; /* Signal Blue */
@@ -342,6 +342,12 @@
     .btn.secondary {
       background: var(--brand-accent);
       color: #fff;
+    }
+
+    .btn.tertiary {
+      background: #fff;
+      color: var(--ink);
+      border: 1px solid var(--border);
     }
 
     .btn:hover, .link-btn:hover {
@@ -784,6 +790,18 @@
 
     const REPORTS = [
       /* ===== 2026 ===== */
+      {
+        year: 2026, month: "April",
+        fastStats: "https://coconutcoastrealtors.org/wp-content/uploads/2026/05/BER_Fast_Stats-2-1.pdf",
+        indicators: "https://coconutcoastrealtors.org/wp-content/uploads/2026/05/BER_Monthly_Indicators-1-1.pdf",
+        thumb: "https://coconutcoastrealtors.org/wp-content/uploads/2026/05/Bonita-April-2026.png",
+        thumbs: [
+          "https://coconutcoastrealtors.org/wp-content/uploads/2026/05/Bonita-April-2026.png",
+          "https://coconutcoastrealtors.org/wp-content/uploads/2026/05/Fort-April-2026.png",
+          "https://coconutcoastrealtors.org/wp-content/uploads/2026/05/Naples-April-2026.png"
+        ]
+      },
+
       {
         year: 2026, month: "March",
         fastStats: "https://coconutcoastrealtors.org/wp-content/uploads/2026/04/BER_Fast_Stats-8.pdf",
@@ -1398,6 +1416,37 @@
     // ---- Mock AI Chatbot Logic ----
     // Data mapping for specific month interactions
     const AI_DATA = {
+      "2026-april-q1": `Based on the April 2026 market data, the Bonita Springs-Estero region is experiencing a notable surge in buyer activity. **Pending Sales jumped 39%** and **Closed Sales rose 20%** compared to the previous year, despite a decrease in new inventory.
+
+KEY METRICS OVERVIEW:
+* Median Sale Price: $553,750 (Down 2.0% YoY).
+* Closed Sales: 431 units (Up 20% YoY).
+* Pending Sales: Up 39% YoY.
+
+CLOSED SALES (YoY):
+[BAR: April 2025|359|83%, April 2026|431|100%]
+
+PENDING SALES GROWTH:
+[BAR: April 2025|Base|72%, April 2026|+39%|100%]`,
+
+      "2026-april-q2": `PRICING & INVENTORY DYNAMICS:
+The median sales price has seen a minor softening to **$553,750**, a 2% decrease from last April. This suggests a shift in the market toward more balanced valuations. However, supply remains constrained, with **New Listings down 17%** and total **Inventory down 26%**.
+
+INVENTORY TRAJECTORY:
+[BAR: New Listings|404|94%, Listings Sold|431|100%]
+
+DAYS ON MARKET:
+[BAR: Median DOM|56 Days|100%]
+
+With more homes selling than new ones entering the market (431 sold vs 404 new), we are seeing an absorption of existing stock.`,
+
+      "2026-april-q3": `Comparing April 2026 to the previous year shows a market that has found a second wind in terms of transaction volume. The 20% increase in closed sales is particularly impressive given the 26% reduction in homes for sale. This indicates very high buyer motivation and a "tighter" market than last year.
+
+MARKET FLOW (YoY):
+[BAR: April 2025 Volume|Base|80%, April 2026 Volume|+20%|100%]
+
+The sharp 39% rise in pending sales suggests that May and June will also likely show strong closing numbers, continuing this robust spring trend.`,
+
       "2026-february-q1": `Based on the February 2026 Florida Realtors and Fast Stats reports, the SWFL market is showing distinct behavior between product types. Single-Family Homes are entering a balanced phase with 6.1 months of supply, while the Townhouse and Condo segment is seeing a significant surge in closing volume.
 
 KEY METRICS OVERVIEW:
