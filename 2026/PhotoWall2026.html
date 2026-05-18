@@ -612,94 +612,192 @@
 
 
 
+
+
+
 <div id="ccor-waves-bg" aria-hidden="true" style="position: fixed; inset: 0; z-index: -9999; pointer-events: none; opacity: 0.45; overflow: hidden; background: #ffffff;">
   <div class="ccor-wave-container ccor-ribbon-bottom" style="position: absolute; inset: 0;"></div>
 </div>
 <style>
-  @keyframes ribbonFlow {
-    0% { background-position: 0% 0; }
+  /* ── CCOR Wave Background ── Optimized for performance ── */
+
+  /* Pure-CSS drift: no JS rAF needed for horizontal movement */
+  @keyframes waveSlide {
+    0%   { transform: translateX(0)   translateY(var(--wy,0px)) rotate(var(--wr,0deg)) scaleX(1.4); }
+    50%  { transform: translateX(var(--wx,60px)) translateY(var(--wy2,0px)) rotate(var(--wr2,0deg)) scaleX(1.4); }
+    100% { transform: translateX(0)   translateY(var(--wy,0px)) rotate(var(--wr,0deg)) scaleX(1.4); }
+  }
+  @keyframes waveSlide-mobile {
+    0%   { transform: translateX(0)   translateY(var(--wy,0px)) rotate(var(--wr,0deg)) scaleX(1.6); }
+    50%  { transform: translateX(var(--wx,30px)) translateY(var(--wy2,0px)) rotate(var(--wr2,0deg)) scaleX(1.6); }
+    100% { transform: translateX(0)   translateY(var(--wy,0px)) rotate(var(--wr,0deg)) scaleX(1.6); }
+  }
+  @keyframes gradientShift {
+    0%   { background-position: 0% 0; }
     100% { background-position: 400% 0; }
   }
+
   .ccor-wave {
     position: absolute;
-    width: 400%;
-    height: 600px; 
-    left: -150%;
-    background: linear-gradient(120deg, #1B449D 0%, #2e5ab8 8%, #3d6cd1 16%, #64BAB0 24%, #8dd4ca 32%, #a6e1d9 40%, #D4AC6C 48%, #e8c88a 56%, #f2dcb3 64%, #5B5A5C 72%, #7a7a7a 80%, #64BAB0 88%, #4da69a 94%, #1B449D 100%);
+    width: 300%;        /* ↓ from 400% — still covers viewport */
+    left: -100%;        /* ↓ from -150% */
+    /* NO filter:blur — this is the #1 GPU killer */
+    background: linear-gradient(120deg,
+      #1B449D 0%,  #2e5ab8 8%,  #3d6cd1 16%,
+      #64BAB0 24%, #8dd4ca 32%, #a6e1d9 40%,
+      #D4AC6C 48%, #e8c88a 56%, #f2dcb3 64%,
+      #5B5A5C 72%, #7a7a7a 80%, #64BAB0 88%,
+      #4da69a 94%, #1B449D 100%
+    );
     background-size: 400% 100%;
-    animation: ribbonFlow 15s ease-in-out infinite alternate;
     border-radius: 42% 45% 40% 43%;
-    filter: blur(0.4px);
-    will-change: transform;
+    will-change: transform;          /* promote to own compositor layer */
     transform-origin: center bottom;
+    /* Gradient shifts via CSS — no JS needed */
+    animation: gradientShift 18s ease-in-out infinite alternate,
+               waveSlide      var(--dur, 12s) ease-in-out infinite;
+    /* Animation-play-state toggled by JS on visibility change */
   }
-  .ccor-ribbon-bottom .ccor-wave { 
-    bottom: -600px; 
-  }
-  
-  /* MOBILE OPTIMIZATIONS */
+
+  .ccor-ribbon-bottom .ccor-wave { bottom: -520px; height: 560px; }
+
+  /* Mobile: simpler, lighter */
   @media (max-width: 768px) {
-    .ccor-wave { height: 400px; bottom: -400px !important; }
+    .ccor-wave {
+      height: 360px !important;
+      bottom: -360px !important;
+      animation-name: gradientShift, waveSlide-mobile;
+    }
+  }
+
+  /* ── Respect user preference ── */
+  @media (prefers-reduced-motion: reduce) {
+    .ccor-wave { animation: none !important; }
   }
 
   /* FORCE TRANSPARENCY ON HOST CONTAINERS */
   html { background-color: #ffffff !important; }
-  body, .site, #page, .site-content, #content, .entry-content, .joinber-page, .ber-about, #main, .main-container, .wrapper, 
-  .ber-directory, .container, .main-content, .directory-grid, .controls, .section, main {
+  body, .site, #page, .site-content, #content, .entry-content,
+  .joinber-page, .ber-about, #main, .main-container, .wrapper,
+  .ber-directory, .container, .main-content, .directory-grid,
+  .controls, .section, main {
     background-color: transparent !important;
     background: transparent !important;
   }
 </style>
 <script>
-  (function() {
+  (function () {
+    /* ── Performance-optimised wave init ── */
     function initCcorWaves() {
-        const root = document.getElementById('ccor-waves-bg');
-        if (!root) return;
-        const containers = root.querySelectorAll('.ccor-wave-container');
-        containers.forEach(container => {
-            const waveCount = 13; 
-            const waves = [];
-            for (let i = 0; i < waveCount; i++) {
-                const wave = document.createElement('div');
-                wave.className = 'ccor-wave';
-                wave.style.borderRadius = (38 + Math.random() * 10) + '%';
-                wave.style.opacity = 0.15 + (Math.random() * 0.3);
-                wave.style.zIndex = waveCount - i; 
-                
-                container.appendChild(wave);
-                waves.push({ 
-                    el: wave, 
-                    phase: Math.random() * Math.PI * 2, 
-                    phaseSpeed: 0.0006 + (Math.random() * 0.0015), 
-                    offset: i * (window.innerWidth < 768 ? 10 : 25), 
-                    amplitude: 15 + (Math.random() * 25), 
-                    driftAmount: 60 + (Math.random() * 100),
-                    rotationOffset: (Math.random() - 0.5) * 4
-                });
+      const root = document.getElementById('ccor-waves-bg');
+      if (!root) return;
+
+      /* 1. Honour reduced-motion: skip entirely */
+      if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+        root.style.display = 'none';
+        return;
+      }
+
+      /* 2. Fast-path: check sessionStorage for previous performance failure */
+      if (sessionStorage.getItem('ccor-waves-disabled') === 'true') {
+        root.style.display = 'none';
+        return;
+      }
+
+      /* 3. Fast-path hardware heuristics: low RAM or low CPU core count */
+      if (
+        (navigator.deviceMemory && navigator.deviceMemory < 4) ||
+        (navigator.hardwareConcurrency && navigator.hardwareConcurrency < 4)
+      ) {
+        console.log('CCOR Waves: Low hardware specs detected. Disabling animation for optimal page speed.');
+        root.style.display = 'none';
+        sessionStorage.setItem('ccor-waves-disabled', 'true');
+        return;
+      }
+
+      const isMobile = () => window.innerWidth < 768;
+
+      /* 4. Real-time frame-rate diagnostics:
+         Let the page settle for 200ms, then monitor the actual FPS for 500ms.
+         If the system falls below 40 FPS, remove waves, hide background, and flag it.
+      */
+      setTimeout(() => {
+        let frames = 0;
+        let startTime = performance.now();
+        
+        function checkFrame(now) {
+          frames++;
+          const elapsed = now - startTime;
+          if (elapsed < 500) {
+            requestAnimationFrame(checkFrame);
+          } else {
+            const fps = (frames * 1000) / elapsed;
+            if (fps < 40) {
+              console.log('CCOR Waves: Frame rate dropped to ' + Math.round(fps) + ' FPS. Disabling background animation to maintain responsiveness.');
+              root.style.display = 'none';
+              root.innerHTML = ''; // clean up DOM to free memory
+              sessionStorage.setItem('ccor-waves-disabled', 'true');
             }
-            function animate() {
-                const isMobile = window.innerWidth < 768;
-                waves.forEach((w, i) => {
-                    w.phase += w.phaseSpeed;
-                    const drift = Math.sin(w.phase * 0.4) * (isMobile ? w.driftAmount / 2 : w.driftAmount);
-                    const undulation = Math.sin(w.phase) * (isMobile ? w.amplitude * 0.7 : w.amplitude);
-                    
-                    const totalY = undulation + w.offset;
-                    const rot = w.rotationOffset + (Math.cos(w.phase * 0.6) * 3);
-                    const transform = "translateX("+drift+"px) translateY("+(-totalY)+"px) rotate("+rot+"deg) scaleX("+ (isMobile ? 1.6 : 1.4) +")";
-                    
-                    w.el.style.transform = transform;
-                });
-                requestAnimationFrame(animate);
-            }
-            animate();
+          }
+        }
+        requestAnimationFrame(checkFrame);
+      }, 200);
+
+      /* Reduced wave count: 5 on desktop, 3 on mobile */
+      const WAVE_COUNT = isMobile() ? 3 : 5;
+      const containers = root.querySelectorAll('.ccor-wave-container');
+      
+      containers.forEach(container => {
+        const waves = [];
+        for (let i = 0; i < WAVE_COUNT; i++) {
+          const wave = document.createElement('div');
+          wave.className = 'ccor-wave';
+
+          /* Vary shape */
+          const r1 = 38 + Math.random() * 10;
+          wave.style.borderRadius = r1 + '% ' + (r1+3) + '% ' + (r1-2) + '% ' + (r1+2) + '%';
+          wave.style.opacity      = 0.18 + (Math.random() * 0.28);
+          wave.style.zIndex       = WAVE_COUNT - i;
+
+          /* CSS custom properties drive the pure-CSS animation */
+          const offsetY  = i * (isMobile() ? 12 : 28);
+          const driftX   = (isMobile() ? 25 : 55) + Math.random() * (isMobile() ? 20 : 45);
+          const rotA     = (Math.random() - 0.5) * 3;
+          const rotB     = rotA + (Math.random() - 0.5) * 3;
+          const undA     = -(offsetY + (Math.random() * 18));
+          const undB     = -(offsetY + (Math.random() * 28));
+          const dur      = 10 + Math.random() * 8;   /* 10–18 s per wave */
+          const delay    = -(Math.random() * dur);    /* stagger start */
+
+          wave.style.setProperty('--wx',  driftX + 'px');
+          wave.style.setProperty('--wy',  undA    + 'px');
+          wave.style.setProperty('--wy2', undB    + 'px');
+          wave.style.setProperty('--wr',  rotA    + 'deg');
+          wave.style.setProperty('--wr2', rotB    + 'deg');
+          wave.style.setProperty('--dur', dur     + 's');
+          wave.style.animationDelay = delay + 's, ' + (delay * 0.7) + 's';
+
+          container.appendChild(wave);
+          waves.push(wave);
+        }
+      });
+
+      /* Pause animations when tab is hidden → saves CPU/GPU entirely */
+      document.addEventListener('visibilitychange', () => {
+        const state = document.hidden ? 'paused' : 'running';
+        root.querySelectorAll('.ccor-wave').forEach(w => {
+          w.style.animationPlayState = state;
         });
+      });
     }
-    if (document.readyState === 'loading') { document.addEventListener('DOMContentLoaded', initCcorWaves); }
-    else { initCcorWaves(); }
+
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', initCcorWaves);
+    } else {
+      initCcorWaves();
+    }
   })();
 </script>
-
 </body>
 
 </html>

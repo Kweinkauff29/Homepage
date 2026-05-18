@@ -1,279 +1,10 @@
-<!doctype html>
-<html lang="en">
+const fs = require('fs');
+const path = require('path');
 
-<head>
-  <meta charset="utf-8" />
-  <title>CCOR – Members DB Upload</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
+const directoryPath = __dirname;
+const files = fs.readdirSync(directoryPath);
 
-  <style>
-    body {
-      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-      background: #0b0c10;
-      color: #f5f7fa;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      min-height: 100vh;
-      margin: 0;
-    }
-
-    .card {
-      background: #151821;
-      border-radius: 16px;
-      padding: 24px 28px;
-      max-width: 520px;
-      width: 100%;
-      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.6);
-    }
-
-    h1 {
-      font-size: 1.4rem;
-      margin: 0 0 0.5rem;
-    }
-
-    p {
-      font-size: 0.9rem;
-      color: #b4b8c5;
-      margin: 0 0 1rem;
-    }
-
-    label {
-      display: block;
-      font-size: 0.85rem;
-      margin-bottom: 0.25rem;
-    }
-
-    input[type="file"],
-    input[type="password"] {
-      width: 100%;
-      padding: 0.45rem 0.6rem;
-      border-radius: 8px;
-      border: 1px solid #303548;
-      background: #10131a;
-      color: #f5f7fa;
-      font-size: 0.9rem;
-      box-sizing: border-box;
-      margin-bottom: 0.75rem;
-    }
-
-    button {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      gap: 0.4rem;
-      border: none;
-      border-radius: 999px;
-      padding: 0.5rem 1.4rem;
-      font-size: 0.9rem;
-      font-weight: 600;
-      cursor: pointer;
-      background: #e0002a;
-      color: #fff;
-    }
-
-    button:disabled {
-      opacity: 0.5;
-      cursor: default;
-    }
-
-    .status {
-      margin-top: 0.75rem;
-      font-size: 0.85rem;
-      min-height: 1.5em;
-    }
-
-    .status.ok {
-      color: #8bffb3;
-    }
-
-    .status.err {
-      color: #ff7a7a;
-    }
-
-    .hint {
-      font-size: 0.8rem;
-      color: #8b90a3;
-      margin-bottom: 1rem;
-    }
-  </style>
-
-  <!-- SheetJS -->
-  <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
-</head>
-
-<body>
-
-  <div class="card">
-    <h1>Members DB Upload <span style="font-size:0.6em; color:#888; margin-left:10px;">v2 (Tags Support)</span></h1>
-    <p>Upload the latest <strong>Members Report(4).xlsx</strong> to refresh the Letter of Good Standing database.</p>
-
-    <div class="hint">
-      This will <strong>replace all existing rows</strong> in the D1 database.
-    </div>
-
-    <label for="adminKey">Admin key</label>
-    <input type="password" id="adminKey" placeholder="Enter admin upload key" />
-
-    <label for="fileInput">Members report (.xlsx)</label>
-    <input type="file" id="fileInput" accept=".xlsx" />
-
-    <button id="uploadBtn">Upload &amp; Replace</button>
-
-    <div id="status" class="status"></div>
-  </div>
-
-  <script>
-    const API_BASE = "https://ber-logs-api.bonitaspringsrealtors.workers.dev";
-
-    const uploadBtn = document.getElementById("uploadBtn");
-    const fileInput = document.getElementById("fileInput");
-    const adminKeyInput = document.getElementById("adminKey");
-    const statusEl = document.getElementById("status");
-
-    function setStatus(msg, type = "") {
-      statusEl.textContent = msg;
-      statusEl.className = "status " + (type || "");
-    }
-
-    async function handleUpload() {
-      const file = fileInput.files[0];
-      const adminKey = adminKeyInput.value.trim();
-
-      if (!adminKey) {
-        setStatus("Please enter the admin key.", "err");
-        return;
-      }
-
-      if (!file) {
-        setStatus("Please select a .xlsx file to upload.", "err");
-        return;
-      }
-
-      uploadBtn.disabled = true;
-      setStatus("Reading spreadsheet...", "");
-
-      try {
-        const rows = await readXlsxFile(file);
-
-        if (!rows.length) {
-          setStatus("No rows found in the spreadsheet.", "err");
-          uploadBtn.disabled = false;
-          return;
-        }
-
-        setStatus(`Parsed ${rows.length} rows. Uploading to server...`, "");
-
-        const res = await fetch(`${API_BASE}/api/upload-members`, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            adminKey,
-            rows,
-          }),
-        });
-
-        const data = await res.json().catch(() => ({}));
-
-        if (!res.ok || !data.success) {
-          throw new Error(data.error || `Upload failed with status ${res.status}`);
-        }
-
-        setStatus(`Success! Inserted ${data.inserted} members.`, "ok");
-      } catch (err) {
-        console.error(err);
-        setStatus(`Error: ${err.message}`, "err");
-      } finally {
-        uploadBtn.disabled = false;
-      }
-    }
-
-    function readXlsxFile(file) {
-      return new Promise((resolve, reject) => {
-        const reader = new FileReader();
-
-        reader.onload = (e) => {
-          try {
-            const data = new Uint8Array(e.target.result);
-            const workbook = XLSX.read(data, { type: "array" });
-            const firstSheetName = workbook.SheetNames[0];
-            const sheet = workbook.Sheets[firstSheetName];
-
-            // Use header:1 to get array of arrays, so we can trim headers manually
-            const rawData = XLSX.utils.sheet_to_json(sheet, { header: 1, defval: "" });
-
-            if (!rawData || rawData.length < 2) {
-              resolve([]);
-              return;
-            }
-
-            // Normalize headers: trim and lowercase for easier matching
-            const headers = rawData[0].map(h => String(h || "").trim());
-            const rows = rawData.slice(1);
-
-            // Helper to get value by header name (case-insensitive)
-            const getValue = (rowArray, headerName) => {
-              const idx = headers.findIndex(h => h.toLowerCase() === headerName.toLowerCase());
-              return idx !== -1 ? rowArray[idx] : null;
-            };
-
-            const normalized = rows.map((row) => ({
-              contactId: getValue(row, "ContactId"),
-              nrdsId: getValue(row, "NRDS Id"),
-              fullName: getValue(row, "Contact Name"),
-              contactType: getValue(row, "Contact Type"),
-              membershipStatus: getValue(row, "Contact Membership Status"),
-              officeName: getValue(row, "Primary/Contact Name"),
-              coeLatestDate: getValue(row, "Code of Ethics Latest Date"),
-              primaryAddress1: getValue(row, "Primary Contact Address 1"),
-              primaryAddress2: getValue(row, "Primary Contact Address 2"),
-              memberships: getValue(row, "Memberships"),
-              tags: getValue(row, "Tags"),
-              contactBalance: getValue(row, "Contact Balance"),
-            }));
-
-            // Filter out empty rows
-            const filtered = normalized.filter((r) => r.nrdsId || r.fullName);
-
-            console.log("Parsed rows preview:", filtered.slice(0, 3));
-            resolve(filtered);
-          } catch (err) {
-            reject(err);
-          }
-        };
-
-        reader.onerror = (err) => reject(err);
-
-        reader.readAsArrayBuffer(file);
-      });
-    }
-
-    uploadBtn.addEventListener("click", handleUpload);
-  </script>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+const finalWaveCode = `
 <div id="ccor-waves-bg" aria-hidden="true" style="position: fixed; inset: 0; z-index: -9999; pointer-events: none; opacity: 0.45; overflow: hidden; background: #ffffff;">
   <div class="ccor-wave-container ccor-ribbon-bottom" style="position: absolute; inset: 0;"></div>
 </div>
@@ -457,7 +188,27 @@
     }
   })();
 </script>
-</body>
+`;
 
-</html>
-
+files.forEach(file => {
+    if (path.extname(file) === '.html' && !file.includes('test')) {
+        const fullPath = path.join(directoryPath, file);
+        let content = fs.readFileSync(fullPath, 'utf8');
+        
+        // Scrub Previous wave structures (div, styles, scripts)
+        content = content.replace(/<div id="ccor-waves-bg"[\s\S]*?<\/script>/gi, '');
+        content = content.replace(/<style>[\s\S]*?(ccor-wave|ribbonFlow|FORCE TRANSPARENCY)[\s\S]*?<\/style>/gi, '');
+        
+        // Inject surgically near the end of body
+        const bodyEndMatch = content.match(/<\/body>/i);
+        if (bodyEndMatch) {
+            content = content.replace(bodyEndMatch[0], "\n" + finalWaveCode.trim() + "\n" + bodyEndMatch[0]);
+        } else {
+            content = content.trim() + "\n\n" + finalWaveCode.trim();
+        }
+        
+        fs.writeFileSync(fullPath, content, 'utf8');
+        console.log(`Updated and injected ultra-performance waves (with smart device protection) to ${file}`);
+    }
+});
+console.log('Update complete across all non-test HTML files!');
