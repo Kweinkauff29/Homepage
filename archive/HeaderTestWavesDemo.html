@@ -2744,3 +2744,130 @@
   };
 </script>
 <script src="https://www.ccreschool.com/coco/coco-widget.js?v=5" defer></script>
+
+<!-- === WAVES DEMO SANDBOX CONTROLLER === -->
+<style>
+  .ber-waves-demo-bar {
+    position: fixed;
+    bottom: 24px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background: rgba(26, 26, 46, 0.9);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    padding: 8px 16px;
+    border-radius: 99px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    z-index: 999999;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  }
+  .ber-waves-demo-title {
+    color: #fff;
+    font-size: 13px;
+    font-weight: 700;
+    margin-right: 6px;
+    opacity: 0.95;
+    white-space: nowrap;
+  }
+  .ber-waves-demo-btn {
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    color: #fff;
+    padding: 6px 14px;
+    border-radius: 99px;
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    white-space: nowrap;
+  }
+  .ber-waves-demo-btn:hover {
+    background: rgba(255, 255, 255, 0.2);
+    border-color: rgba(255, 255, 255, 0.35);
+    transform: translateY(-1px);
+  }
+  .ber-waves-demo-btn.active {
+    background: var(--ccor-gold, #c99e58);
+    color: #1a1a2e;
+    border-color: var(--ccor-gold, #c99e58);
+    box-shadow: 0 0 12px rgba(201, 158, 88, 0.4);
+  }
+</style>
+
+<div class="ber-waves-demo-bar">
+  <span class="ber-waves-demo-title">🌊 Gulf Surf Sandbox:</span>
+  <button class="ber-waves-demo-btn" onclick="setDemoSurf(0.3, 0.3, this)">🏖️ Calm (0.3 ft)</button>
+  <button class="ber-waves-demo-btn active" onclick="setDemoSurf(0.8, 0.8, this)">🌊 Normal (0.8 ft)</button>
+  <button class="ber-waves-demo-btn" onclick="setDemoSurf(1.5, 1.5, this)">💨 Active (1.5 ft)</button>
+  <button class="ber-waves-demo-btn" onclick="setDemoSurf(2.4, 2.4, this)">⛈️ Storm Swell (2.4 ft)</button>
+</div>
+
+<script>
+  function setDemoSurf(bonita, fmb, btnEl) {
+    // Toggle active classes on buttons
+    document.querySelectorAll('.ber-waves-demo-btn').forEach(b => b.classList.remove('active'));
+    if (btnEl) btnEl.classList.add('active');
+
+    // Update the top contact bar text fields directly
+    const elBonita = document.getElementById('ber-surf-bonita');
+    const elFmb = document.getElementById('ber-surf-fmb');
+    const elContainer = document.getElementById('ber-topbar-surf');
+    
+    if (elBonita) elBonita.textContent = bonita + ' ft';
+    if (elFmb) elFmb.textContent = fmb + ' ft';
+    if (elContainer) {
+      elContainer.title = "Southwest Florida Surf Sync (Sandbox Demo Mode): Manual wave heights active.";
+    }
+
+    // Recompute wave scaling multiplier
+    const avgSurf = (bonita + fmb) / 2;
+    const waveScaleMultiplier = Math.max(0.4, Math.min(2.4, avgSurf / 0.8));
+    console.log("Waves Demo Sandbox: Setting surf average to " + avgSurf + "ft, multiplier to " + waveScaleMultiplier.toFixed(2) + "x");
+
+    // Locate header wave container
+    const waveContainer = document.querySelector('.ber-header .ber-wave-container');
+    if (!waveContainer) return;
+
+    // Clear old waves from DOM
+    waveContainer.innerHTML = '';
+
+    const isMobile = () => window.innerWidth < 768;
+    const WAVE_COUNT = isMobile() ? 2 : 4;
+
+    // Create new waves matching the selected height/speed scale factor!
+    for (let i = 0; i < WAVE_COUNT; i++) {
+      const wave = document.createElement('div');
+      wave.className = 'ber-wave';
+
+      const r1 = 38 + Math.random() * 10;
+      wave.style.borderRadius = r1 + '% ' + (r1+3) + '% ' + (r1-2) + '% ' + (r1+2) + '%';
+      wave.style.opacity      = 0.12 + (Math.random() * 0.15);
+      wave.style.zIndex       = WAVE_COUNT - i;
+
+      const amplitude = ((isMobile() ? 12 : 24) + (i * (isMobile() ? 4 : 8))) * waveScaleMultiplier;
+      const offsetY   = i * (isMobile() ? 10 : 20);
+      const driftX    = (isMobile() ? 40 : 100) + Math.random() * (isMobile() ? 20 : 50);
+      const rotA      = -4 - Math.random() * 3;
+      const rotB      = 4 + Math.random() * 3;
+      const undA      = -(offsetY + amplitude);
+      const undB      = -(offsetY - amplitude);
+      
+      const dur       = (12 + Math.random() * 8) / Math.sqrt(waveScaleMultiplier);
+      const delay     = -(Math.random() * dur);
+
+      wave.style.setProperty('--wx',  driftX + 'px');
+      wave.style.setProperty('--wy',  undA    + 'px');
+      wave.style.setProperty('--wy2', undB    + 'px');
+      wave.style.setProperty('--wr',  rotA    + 'deg');
+      wave.style.setProperty('--wr2', rotB    + 'deg');
+      wave.style.setProperty('--dur', dur     + 's');
+      wave.style.animationDelay = delay + 's, ' + (delay * 0.7) + 's';
+
+      waveContainer.appendChild(wave);
+    }
+  }
+</script>
