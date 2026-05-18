@@ -14493,7 +14493,28 @@
       const todayStr = now.toISOString().split('T')[0];
 
       // Current Week Range (visible)
-      const [startKey, endKey] = getVisibleDateRange();
+      let startKey, endKey;
+      if (state.metricsRange === 'week') {
+        const baseDate = state.currentMonthDate || now;
+        const isWorkweek = state.calendarView === "workweek" || state.calendarView === "jointweek";
+        const weekStart = getWeekStart(baseDate, isWorkweek);
+        const daysCount = isWorkweek ? 4 : 6;
+        startKey = dateKey(
+          weekStart.getFullYear(),
+          weekStart.getMonth(),
+          weekStart.getDate()
+        );
+        const weekEnd = addDays(weekStart, daysCount);
+        endKey = dateKey(
+          weekEnd.getFullYear(),
+          weekEnd.getMonth(),
+          weekEnd.getDate()
+        );
+      } else {
+        const [visStart, visEnd] = getVisibleDateRange();
+        startKey = visStart;
+        endKey = visEnd;
+      }
       const weekStartObj = new Date(startKey);
       const weekEndObj = new Date(endKey);
 
