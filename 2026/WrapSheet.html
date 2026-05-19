@@ -6962,6 +6962,11 @@
       const seriesStart = seriesStartStr ? parseDateKey(seriesStartStr) : base;
       const seriesEnd = parseDateKey(seriesEndStr);
 
+      // Validate dates to prevent infinite loops
+      if (isNaN(base.getTime()) || isNaN(seriesStart.getTime()) || isNaN(seriesEnd.getTime())) {
+        return [];
+      }
+
       // If end is before base, nothing to do
       if (seriesEnd < base) return [];
 
@@ -6971,6 +6976,10 @@
       if (repeatType === "daily") {
         // Daily (Mon-Fri): create task for each weekday between base and end
         let current = new Date(base);
+        if (seriesStart > base) {
+          // Set current to 1 day before seriesStart
+          current = new Date(seriesStart.getTime() - 24 * 3600 * 1000);
+        }
         while (true) {
           current = addDays(current, 1);
           if (current > seriesEnd || results.length >= maxOccurrences) break;
@@ -6982,6 +6991,18 @@
         }
       } else if (repeatType === "weekly") {
         let current = new Date(base);
+        if (seriesStart > base) {
+          // Skip forward in chunks of 7 days
+          const msDiff = seriesStart.getTime() - base.getTime();
+          const weeksDiff = Math.floor(msDiff / (7 * 24 * 3600 * 1000));
+          if (weeksDiff > 0) {
+            current = addDays(base, weeksDiff * 7);
+            while (current < seriesStart) {
+              current = addDays(current, 7);
+            }
+            current = addDays(current, -7);
+          }
+        }
         while (true) {
           current = addDays(current, 7);
           if (current > seriesEnd || results.length >= maxOccurrences) break;
@@ -6992,6 +7013,18 @@
       } else if (repeatType === "biweekly") {
         // Every 2 weeks (14 days)
         let current = new Date(base);
+        if (seriesStart > base) {
+          // Skip forward in chunks of 14 days
+          const msDiff = seriesStart.getTime() - base.getTime();
+          const periodsDiff = Math.floor(msDiff / (14 * 24 * 3600 * 1000));
+          if (periodsDiff > 0) {
+            current = addDays(base, periodsDiff * 14);
+            while (current < seriesStart) {
+              current = addDays(current, 14);
+            }
+            current = addDays(current, -14);
+          }
+        }
         while (true) {
           current = addDays(current, 14);
           if (current > seriesEnd || results.length >= maxOccurrences) break;
@@ -7003,6 +7036,16 @@
         const dayOfMonth = base.getDate();
         let y = base.getFullYear();
         let m = base.getMonth();
+
+        if (seriesStart > base) {
+          // Skip forward to the month before seriesStart
+          const monthsDiff = (seriesStart.getFullYear() - y) * 12 + (seriesStart.getMonth() - m);
+          if (monthsDiff > 1) {
+            m += monthsDiff - 1;
+            y += Math.floor(m / 12);
+            m = m % 12;
+          }
+        }
 
         while (true) {
           m++;
@@ -7026,6 +7069,16 @@
         let y = base.getFullYear();
         let m = base.getMonth();
 
+        if (seriesStart > base) {
+          // Skip forward to the month before seriesStart
+          const monthsDiff = (seriesStart.getFullYear() - y) * 12 + (seriesStart.getMonth() - m);
+          if (monthsDiff > 1) {
+            m += monthsDiff - 1;
+            y += Math.floor(m / 12);
+            m = m % 12;
+          }
+        }
+
         while (true) {
           m++;
           if (m > 11) {
@@ -7046,6 +7099,13 @@
         const dayOfMonth = base.getDate();
         const monthOfYear = base.getMonth();
         let y = base.getFullYear();
+
+        if (seriesStart > base) {
+          const yearsDiff = seriesStart.getFullYear() - y;
+          if (yearsDiff > 1) {
+            y += yearsDiff - 1;
+          }
+        }
 
         while (true) {
           y++;
