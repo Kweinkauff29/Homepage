@@ -10783,7 +10783,11 @@
       const taskTitle = document.getElementById("task-title-input").value.trim();
 
       // Find all tasks with the same title (for potential bulk delete)
-      const matchingTasks = (state.dailyTasks || []).filter(t =>
+      const allTasksMap = new Map();
+      (state.dailyTasks || []).forEach(t => allTasksMap.set(t.id, t));
+      (state.backlogTasks || []).forEach(t => allTasksMap.set(t.id, t));
+
+      const matchingTasks = Array.from(allTasksMap.values()).filter(t =>
         t.title && t.title.trim().toLowerCase() === taskTitle.toLowerCase()
       );
 
@@ -12260,15 +12264,13 @@
     }
 
     function isWeeklyTasksUser() {
-      // Show weekly tasks for users with "jenna" or "mariam" in their name or email.
+      // Show weekly tasks for users with "jenna" in their name or email.
       if (!state.currentUser) return false;
       const name = (state.currentUser.name || "").toLowerCase();
       const email = (state.currentUser.email || "").toLowerCase();
       return (
         name.includes("jenna") ||
-        email.includes("jenna") ||
-        name.includes("mariam") ||
-        email.includes("mariam")
+        email.includes("jenna")
       );
     }
 
