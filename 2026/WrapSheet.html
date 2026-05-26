@@ -8194,6 +8194,8 @@
         pendingDeleteInfo = null;
       });
       document.getElementById("delete-confirm-yes")?.addEventListener("click", () => {
+        const btn = document.getElementById("delete-confirm-yes");
+        if (btn) btn.disabled = true;
         const deleteAll = document.querySelector('input[name="delete-choice"]:checked')?.value === "all";
         executeTaskDelete(deleteAll);
       });
@@ -10607,6 +10609,16 @@
         showToast("Pick your user first", true);
         return;
       }
+      const saveBtn = document.getElementById("task-save-btn");
+      const deleteBtn = document.getElementById("task-delete-btn");
+      if (saveBtn) {
+        saveBtn.disabled = true;
+        saveBtn.textContent = "Saving...";
+      }
+      if (deleteBtn) {
+        deleteBtn.disabled = true;
+      }
+
       const id = document.getElementById("task-id").value;
       const title = document.getElementById("task-title-input").value.trim();
       const notes = document.getElementById("task-notes-input").value.trim();
@@ -10628,11 +10640,25 @@
 
       if (!title) {
         showToast("Task title is required", true);
+        if (saveBtn) {
+          saveBtn.disabled = false;
+          saveBtn.textContent = "Save Task";
+        }
+        if (deleteBtn) {
+          deleteBtn.disabled = false;
+        }
         return;
       }
 
       if (!assignedToId) {
         showToast("Assigned To is required", true);
+        if (saveBtn) {
+          saveBtn.disabled = false;
+          saveBtn.textContent = "Save Task";
+        }
+        if (deleteBtn) {
+          deleteBtn.disabled = false;
+        }
         return;
       }
 
@@ -10732,6 +10758,14 @@
       } catch (err) {
         console.error(err);
         showToast("Error saving task", true);
+      } finally {
+        if (saveBtn) {
+          saveBtn.disabled = false;
+          saveBtn.textContent = "Save Task";
+        }
+        if (deleteBtn) {
+          deleteBtn.disabled = false;
+        }
       }
     }
 
@@ -10779,7 +10813,11 @@
     }
 
     async function executeTaskDelete(deleteAll) {
-      if (!pendingDeleteInfo) return;
+      if (!pendingDeleteInfo) {
+        const btn = document.getElementById("delete-confirm-yes");
+        if (btn) btn.disabled = false;
+        return;
+      }
 
       const { id, taskTitle, matchingTasks } = pendingDeleteInfo;
       pendingDeleteInfo = null;
@@ -10832,6 +10870,8 @@
         showToast("Error deleting task (check Worker)", true);
       } finally {
         hideActionLoader();
+        const btn = document.getElementById("delete-confirm-yes");
+        if (btn) btn.disabled = false;
       }
     }
 
