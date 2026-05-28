@@ -2227,6 +2227,44 @@
       border-color: #fff;
       transform: scale(1.1);
     }
+
+    /* Video Tile styling */
+    .tile-video video {
+      width: auto;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+    .video-mute-btn {
+      position: absolute;
+      top: 15px;
+      right: 15px;
+      z-index: 25;
+      background: rgba(0, 0, 0, 0.6);
+      border: 1.5px solid rgba(255, 255, 255, 0.4);
+      color: #fff;
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+      transition: background 0.25s, transform 0.2s, border-color 0.2s;
+    }
+    .video-mute-btn:hover {
+      background: rgba(0, 0, 0, 0.85);
+      border-color: #fff;
+      transform: scale(1.05);
+    }
+    .video-mute-btn:active {
+      transform: scale(0.95);
+    }
+    .video-mute-btn svg {
+      vertical-align: middle;
+      pointer-events: none;
+    }
   </style>
 </head>
 
@@ -2257,14 +2295,13 @@
     // Add your own custom tiles here.
     // Set the 'spot' number (1-indexed) to force it into a specific position overall.
     const customTiles = [
-      //{
-      //  title: "Meet the Board 2027",
-      //  description: "June 5th @ 9am",
-      //  image: "https://coconutcoastrealtors.org/wp-content/uploads/2026/05/MTBHero.png",
-      //  link: "https://www.eventbrite.com/e/wcr-summer-social-meet-the-2027-board-tickets-1990455189052?aff=oddtdtcreator&keep_tld=true",
-      //  spot: 3,
-      //  tag: "Promo"
-      // }
+      {
+        title: "Jeanne and Brooke Video",
+        description: "Watch Jeanne and Brooke",
+        video: "https://coconutcoastrealtors.org/wp-content/uploads/2026/05/Jeanne-and-Brooke-video1.mp4",
+        spot: 4,
+        tag: "Video"
+      }
     ];
 
     const team = [
@@ -2534,6 +2571,7 @@
           }
 
           startAutoPlay();
+          window.checkActiveVideoTile?.();
         }
       };
 
@@ -2562,12 +2600,16 @@
       tilesData = [...mainGroup, ...group2, ...group3];
 
       await Promise.all(tilesData.map(async (tile) => {
-        if (!tile.format && !tile.isTextOnly) tile.format = await determineFormat(tile.image);
+        if (tile.video) {
+          tile.format = 'video';
+        } else if (!tile.format && !tile.isTextOnly) {
+          tile.format = await determineFormat(tile.image);
+        }
       }));
 
       for (const tile of tilesData) {
         const el = document.createElement('a');
-        const tileFormatClass = tile.isTextOnly ? 'tile-no-image' : `tile-${tile.format || 'portrait'}`;
+        const tileFormatClass = tile.video ? 'tile-video tile-portrait' : (tile.isTextOnly ? 'tile-no-image' : `tile-${tile.format || 'portrait'}`);
         el.className = `shuffling-tile ${tileFormatClass}`;
         if (tile.tag === 'Staff') el.classList.add('tile-staff');
         if (tile.fullBleed) el.classList.add('tile-full-bleed');
@@ -2624,6 +2666,26 @@
                   <a href="tel:${tile.phone.replace(/[^0-9]/g, '')}">&#9742; ${displayPhone}</a>
                 </div>
               </div>
+            </div>
+          `;
+        } else if (tile.video) {
+          el.href = tile.link || "javascript:void(0);";
+          if (!tile.link) el.removeAttribute('target');
+
+          innerHTML = `
+            ${tile.tag ? '<div class="tile-tag">' + displayTag + '</div>' : ''}
+            <video src="${tile.video}" muted playsinline webkit-playsinline preload="metadata" class="tile-video-player" style="width: auto; height: 100%; object-fit: cover; display: block;"></video>
+            <button class="video-mute-btn" aria-label="Toggle mute">
+              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="mute-icon" viewBox="0 0 16 16">
+                <path d="M6.717 3.55A.5.5 0 0 1 7 4v8a.5.5 0 0 1-.812.39L3.825 10.5H1.5A.5.5 0 0 1 1 10V6a.5.5 0 0 1 .5-.5h2.325l2.363-1.89a.5.5 0 0 1 .529-.06zm7.137 2.096a.5.5 0 0 1 0 .708L12.207 8l1.647 1.646a.5.5 0 0 1-.708.708L11.5 8.707l-1.646 1.647a.5.5 0 0 1-.708-.708L10.793 8 9.146 6.354a.5.5 0 1 1 .708-.708L11.5 7.293l1.646-1.647a.5.5 0 0 1 .708 0z"/>
+              </svg>
+              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="unmute-icon" viewBox="0 0 16 16" style="display: none;">
+                <path d="M11.536 14.01A8.47 8.47 0 0 0 14.026 8a8.47 8.47 0 0 0-2.49-6.01.5.5 0 0 0-.707.707A7.48 7.48 0 0 1 13.025 8a7.48 7.48 0 0 1-2.196 5.303.5.5 0 0 0 .707.707zm-2.378-2.378A4.98 4.98 0 0 0 10.5 8c0-1.25-.458-2.39-1.218-3.27a.5.5 0 0 0-.776.63A3.98 3.98 0 0 1 9.5 8c0 1.011-.377 1.933-.99 2.585a.5.5 0 1 0 .776.63A4.98 4.98 0 0 0 9.158 11.63zM6.717 3.55A.5.5 0 0 1 7 4v8a.5.5 0 0 1-.812.39L3.825 10.5H1.5A.5.5 0 0 1 1 10V6a.5.5 0 0 1 .5-.5h2.325l2.363-1.89a.5.5 0 0 1 .529-.06z"/>
+              </svg>
+            </button>
+            <div class="tile-info">
+              <h3>${displayTitle}</h3>
+              <p>${displayDescription}</p>
             </div>
           `;
         } else {
@@ -2763,9 +2825,116 @@
         return Math.max(1, count);
       }
 
+      let currentPlayingVideo = null;
+      let isGlobalMuted = true;
+
+      function handleVideoMetadata(video) {
+        const aspect = video.videoWidth / video.videoHeight;
+        const tile = video.closest('.shuffling-tile');
+        if (tile) {
+          tile.classList.remove('tile-portrait', 'tile-landscape');
+          tile.classList.add(aspect > 1.2 ? 'tile-landscape' : 'tile-portrait');
+        }
+      }
+
+      function syncMuteState() {
+        const allVideos = track.querySelectorAll('.tile-video-player');
+        const allMuteBtns = track.querySelectorAll('.video-mute-btn');
+        
+        allVideos.forEach(v => {
+          v.muted = isGlobalMuted;
+        });
+        
+        allMuteBtns.forEach(btn => {
+          const muteIcon = btn.querySelector('.mute-icon');
+          const unmuteIcon = btn.querySelector('.unmute-icon');
+          if (isGlobalMuted) {
+            if (muteIcon) muteIcon.style.display = 'inline-block';
+            if (unmuteIcon) unmuteIcon.style.display = 'none';
+          } else {
+            if (muteIcon) muteIcon.style.display = 'none';
+            if (unmuteIcon) unmuteIcon.style.display = 'inline-block';
+          }
+        });
+      }
+
+      function checkActiveVideoTile() {
+        const firstTile = track.children[0];
+        const allVideos = track.querySelectorAll('.tile-video-player');
+        let videoIsActive = false;
+        
+        allVideos.forEach(video => {
+          const tile = video.closest('.shuffling-tile');
+          if (tile === firstTile) {
+            videoIsActive = true;
+            video.muted = isGlobalMuted;
+            video.play().catch(err => {
+              console.log("Video play failed:", err);
+            });
+            currentPlayingVideo = video;
+            window.stopAutoPlay();
+          } else {
+            video.pause();
+            video.currentTime = 0;
+          }
+        });
+        
+        if (!videoIsActive) {
+          currentPlayingVideo = null;
+          if (!isHovering) {
+            window.startAutoPlay();
+          }
+        }
+      }
+
+      window.checkActiveVideoTile = checkActiveVideoTile;
+
+      // Capture loadedmetadata to size video tiles dynamically
+      track.addEventListener('loadedmetadata', (e) => {
+        if (e.target.classList.contains('tile-video-player')) {
+          handleVideoMetadata(e.target);
+        }
+      }, true);
+
+      // Check already loaded videos
+      track.querySelectorAll('.tile-video-player').forEach(video => {
+        if (video.readyState >= 1) {
+          handleVideoMetadata(video);
+        }
+      });
+
+      // Capturing click for mute button
+      track.addEventListener('click', (e) => {
+        const muteBtn = e.target.closest('.video-mute-btn');
+        if (muteBtn) {
+          e.preventDefault();
+          e.stopPropagation();
+          isGlobalMuted = !isGlobalMuted;
+          syncMuteState();
+        }
+      }, true);
+
+      // Capturing video ended event to move next
+      track.addEventListener('ended', (e) => {
+        if (e.target.classList.contains('tile-video-player')) {
+          console.log("Active video ended, moving next.");
+          move('next');
+        }
+      }, true);
+
+      // Initialize mute state
+      syncMuteState();
+
       function move(dir) {
         if (isAnimating) return;
         isAnimating = true;
+
+        // Pause current video immediately when moving
+        if (currentPlayingVideo) {
+          currentPlayingVideo.pause();
+          currentPlayingVideo.currentTime = 0;
+          currentPlayingVideo = null;
+        }
 
         let moveDist = 0;
         let count = dir === 'next' ? getForwardMoveCount() : getBackwardMoveCount();
@@ -2785,6 +2954,7 @@
             track.style.transition = 'none';
             track.style.transform = 'translateX(0)';
             updateSectionTitle();
+            checkActiveVideoTile();
             setTimeout(() => { isAnimating = false; }, 50);
           }, 800);
         } else {
@@ -2805,6 +2975,7 @@
 
           setTimeout(() => {
             updateSectionTitle();
+            checkActiveVideoTile();
             isAnimating = false;
           }, 800);
         }
@@ -2813,23 +2984,26 @@
       if (nextBtn) {
         nextBtn.addEventListener('click', () => {
           move('next');
-          stopAutoPlay();
-          startAutoPlay();
+          window.stopAutoPlay();
+          window.startAutoPlay();
         });
       }
       if (prevBtn) {
         prevBtn.addEventListener('click', () => {
           move('prev');
-          stopAutoPlay();
-          startAutoPlay();
+          window.stopAutoPlay();
+          window.startAutoPlay();
         });
       }
 
-      track.addEventListener('mouseenter', () => { isHovering = true; stopAutoPlay(); });
-      track.addEventListener('mouseleave', () => { isHovering = false; startAutoPlay(); });
+      track.addEventListener('mouseenter', () => { isHovering = true; window.stopAutoPlay(); });
+      track.addEventListener('mouseleave', () => { isHovering = false; window.startAutoPlay(); });
 
       window.startAutoPlay = () => {
-        stopAutoPlay();
+        window.stopAutoPlay();
+        if (currentPlayingVideo && !currentPlayingVideo.paused && !currentPlayingVideo.ended) {
+          return;
+        }
         autoPlayInterval = setInterval(() => {
           if (!isHovering) {
             move('next');
