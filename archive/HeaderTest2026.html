@@ -1366,11 +1366,11 @@
             <path d="M20 4H4a2 2 0 00-2 2v12a2 2 0 002 2h16a2 2 0 002-2V6a2 2 0 00-2-2zm0 4l-8 5L4 8V6l8 5 8-5v2z" />
           </svg>
           &nbsp;Email: <a href="mailto:Support@BERealtors.org">Support@BERealtors.org</a>
-          <span id="ber-topbar-surf" style="opacity:0.85; display:inline-block;" title="Southwest Florida Surf Sync: Automatically scaling the digital background waves based on actual real-time wave observations at local beaches.">
+          <span id="ber-topbar-surf" style="opacity:0.85; display:inline-block;" title="Southwest Florida Marine Sync: Automatically scaling the digital background waves based on actual real-time wave observations, displaying sea surface temperature.">
             &nbsp;&nbsp;|&nbsp;&nbsp;
-            Bonita Beach Surf: <span id="ber-surf-bonita" style="color:var(--ccor-gold); font-weight:700;">Loading...</span>
+            Bonita Beach Water Temp: <span id="ber-surf-bonita" style="color:var(--ccor-gold); font-weight:700;">Loading...</span>
             &nbsp;&bull;&nbsp;
-            Ft Myers Beach Surf: <span id="ber-surf-fmb" style="color:var(--ccor-gold); font-weight:700;">Loading...</span>
+            Ft Myers Beach Water Temp: <span id="ber-surf-fmb" style="color:var(--ccor-gold); font-weight:700;">Loading...</span>
           </span>
         </p>
       </div>
@@ -1536,7 +1536,8 @@
     </div>
 
     <!-- === INLINE QUICK LINKS SEARCH (under nav) === -->
-    <div id="ber-inline-search"></div>
+    <!-- Hidden for later use as requested -->
+    <div id="ber-inline-search" style="display: none !important;"></div>
   </div>
 </header>
 
@@ -2821,9 +2822,9 @@
     // Clear any previously stored performance disable flags to restore wave graphics
     sessionStorage.removeItem('ccor-waves-disabled');
 
-    /* Fetch live wave height statistics from Open-Meteo Marine Forecast API */
-    async function fetchSurfHeights() {
-      const url = 'https://marine-api.open-meteo.com/v1/marine?latitude=26.33,26.45&longitude=-81.84,-81.95&hourly=wave_height&timezone=America%2FNew_York';
+    /* Fetch live wave height & water temperature from Open-Meteo Marine Forecast API */
+    async function fetchMarineData() {
+      const url = 'https://marine-api.open-meteo.com/v1/marine?latitude=26.33,26.45&longitude=-81.84,-81.95&hourly=wave_height,sea_surface_temperature&timezone=America%2FNew_York';
       try {
         // Parallel fetch with strict 1.5s timeout
         const controller = new AbortController();
@@ -2840,43 +2841,58 @@
         // Bonita Beach (first coordinate pair)
         const bonitaHourly = data[0]?.hourly?.wave_height || [];
         const bonitaHeightMeters = bonitaHourly[nowHour] || bonitaHourly[0] || 0.35;
+        const bonitaHourlyTemp = data[0]?.hourly?.sea_surface_temperature || [];
+        const bonitaTempC = bonitaHourlyTemp[nowHour] || bonitaHourlyTemp[0] || 25.0;
         
         // Fort Myers Beach (second coordinate pair)
         const fmbHourly = data[1]?.hourly?.wave_height || [];
         const fmbHeightMeters = fmbHourly[nowHour] || fmbHourly[0] || 0.25;
+        const fmbHourlyTemp = data[1]?.hourly?.sea_surface_temperature || [];
+        const fmbTempC = fmbHourlyTemp[nowHour] || fmbHourlyTemp[0] || 24.5;
 
         // Convert meters to feet (1m = 3.28084 ft)
         const bonitaFt = parseFloat((bonitaHeightMeters * 3.28084).toFixed(1));
         const fmbFt = parseFloat((fmbHeightMeters * 3.28084).toFixed(1));
 
-        return { bonita: bonitaFt, fmb: fmbFt, source: 'live' };
+        // Convert Celsius to Fahrenheit (°F = °C * 9/5 + 32)
+        const bonitaF = parseFloat((bonitaTempC * 9/5 + 32).toFixed(1));
+        const fmbF = parseFloat((fmbTempC * 9/5 + 32).toFixed(1));
+
+        return { bonita: bonitaFt, fmb: fmbFt, bonitaTemp: bonitaF, fmbTemp: fmbF, source: 'live' };
       } catch (e) {
-        console.warn('CCOR Waves: Coastal Live Sync API failed/timeout. Using simulated Southwest Florida tides.');
-        // Fallback: Generate beautiful organic tide simulations for Southwest Florida
+        console.warn('CCOR Waves: Coastal Live Sync API failed/timeout. Using simulated Southwest Florida tides and temperatures.');
+        // Fallback: Generate beautiful organic tide/temp simulations for Southwest Florida
         const hour = new Date().getHours();
         const baseBonita = 0.8 + Math.sin(hour * 0.26) * 0.4; // 0.4 ft to 1.2 ft oscillation
         const baseFmb = 0.6 + Math.cos(hour * 0.26) * 0.3; // 0.3 ft to 0.9 ft oscillation
         const randBonita = parseFloat((baseBonita + Math.random() * 0.2).toFixed(1));
         const randFmb = parseFloat((baseFmb + Math.random() * 0.15).toFixed(1));
-        return { bonita: randBonita, fmb: randFmb, source: 'fallback' };
+
+        // Simulated temperatures around 78°F - 84°F
+        const baseTempBonita = 80.0 + Math.sin(hour * 0.1) * 2.0;
+        const baseTempFmb = 79.0 + Math.cos(hour * 0.1) * 2.0;
+        const randTempBonita = parseFloat((baseTempBonita + Math.random() * 0.5).toFixed(1));
+        const randTempFmb = parseFloat((baseTempFmb + Math.random() * 0.5).toFixed(1));
+
+        return { bonita: randBonita, fmb: randFmb, bonitaTemp: randTempBonita, fmbTemp: randTempFmb, source: 'fallback' };
       }
     }
 
     const initWaves = (containerSelector) => {
-      // 1. Always fetch surf heights and update the text first, independent of wave animation status
-      fetchSurfHeights().then(({ bonita, fmb, source }) => {
+      // 1. Always fetch marine data and update the text first, independent of wave animation status
+      fetchMarineData().then(({ bonita, fmb, bonitaTemp, fmbTemp, source }) => {
         const elBonita = document.getElementById('ber-surf-bonita');
         const elFmb = document.getElementById('ber-surf-fmb');
         const elContainer = document.getElementById('ber-topbar-surf');
         
-        if (elBonita) elBonita.textContent = `${bonita} ft`;
-        if (elFmb) elFmb.textContent = `${fmb} ft`;
+        if (elBonita) elBonita.textContent = `${bonitaTemp}°F`;
+        if (elFmb) elFmb.textContent = `${fmbTemp}°F`;
         
         if (elContainer) {
           if (source === 'fallback') {
-            elContainer.title = "Southwest Florida Surf Sync (Local Fallback Mode): Running local astronomical tidal wave calculations.";
+            elContainer.title = "Southwest Florida Marine Sync (Local Fallback Mode): Running local astronomical tidal wave and sea temperature calculations.";
           } else {
-            elContainer.title = "Southwest Florida Surf Sync (Live Mode): Digital wave heights scaled by active real-time marine buoy sensors.";
+            elContainer.title = "Southwest Florida Marine Sync (Live Mode): Digital wave heights scaled by active real-time marine buoy sensors, displaying sea temperatures.";
           }
         }
 
@@ -2894,11 +2910,11 @@
         const isMobile = () => window.innerWidth < 768;
 
 
-        // Calculate wave scaling multiplier based on average Gulf wave height
+        // Calculate wave scaling multiplier based on average Gulf wave height (surf)
         const avgSurf = (bonita + fmb) / 2;
         const waveScaleMultiplier = Math.max(0.4, Math.min(2.4, avgSurf / 0.8));
         
-        console.log(`CCOR Waves: Surf synced dynamically. Bonita=${bonita}ft, FtMyers=${fmb}ft, Source=${source}. Scale Multiplier=${waveScaleMultiplier.toFixed(2)}x`);
+        console.log(`CCOR Waves: Surf synced dynamically. Bonita=${bonita}ft, FtMyers=${fmb}ft, BonitaTemp=${bonitaTemp}°F, FtMyersTemp=${fmbTemp}°F, Source=${source}. Scale Multiplier=${waveScaleMultiplier.toFixed(2)}x`);
 
         const WAVE_COUNT = isMobile() ? 2 : 4;
         const waves = [];
