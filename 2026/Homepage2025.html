@@ -1760,7 +1760,7 @@
 
     #shuffling-tiles-container {
       position: absolute;
-      top: 10%;
+      top: calc(10% + 30px);
       bottom: 10%;
       left: 0;
       width: 100%;
@@ -1782,12 +1782,12 @@
 
     #shuffling-section-title {
       position: absolute;
-      top: 2vh;
+      top: 1vh;
       left: 4vw;
       color: #fff;
       font-size: 2.2rem;
       font-weight: 800;
-      z-index: 5;
+      z-index: 30;
       text-transform: uppercase;
       letter-spacing: 2px;
       opacity: 0;
@@ -1802,12 +1802,12 @@
 
     #shuffling-clock {
       position: absolute;
-      top: 2vh;
+      top: 1vh;
       right: 4vw;
       color: #fff;
       font-size: 1.8rem;
       font-weight: 600;
-      z-index: 5;
+      z-index: 30;
       letter-spacing: 1px;
       opacity: 0;
       transition: opacity 1.5s ease, text-shadow 0.3s ease;
@@ -1837,15 +1837,19 @@
 
     @media (max-width: 768px) {
       #shuffling-section-title {
-        font-size: 1.5rem;
-        top: 1vh;
-        left: 2vw;
+        font-size: clamp(1rem, 5vw, 1.35rem);
+        top: 6px;
+        left: 18px;
+        max-width: calc(100vw - 36px);
+        line-height: 1.1;
       }
 
       #shuffling-clock {
-        font-size: 1.2rem;
-        top: 1vh;
-        right: 2vw;
+        font-size: clamp(0.85rem, 3.5vw, 1rem);
+        top: 34px;
+        right: 18px;
+        left: 18px;
+        text-align: right;
       }
     }
 
@@ -1868,6 +1872,8 @@
       background: #111;
       text-decoration: none;
       height: 100%;
+      max-height: 100%;
+      contain: layout paint;
     }
 
     .shuffling-tile:hover {
@@ -1879,15 +1885,44 @@
     .shuffling-tile img {
       width: auto;
       height: 100%;
-      max-width: calc(100vw - 120px);
+      max-width: none;
       display: block;
-      background: #111;
-      transition: opacity 0.3s ease, filter 0.3s ease;
+      background: transparent;
+      transition: none;
       object-fit: contain;
+      object-position: center;
+      transform: none !important;
+      scale: 1 !important;
+    }
+
+    .tile-landscape {
+      aspect-ratio: auto;
+    }
+
+    .tile-portrait {
+      aspect-ratio: auto;
+    }
+
+    .tile-landscape img,
+    .tile-portrait img {
+      width: auto;
+      height: 100%;
+      object-fit: contain;
+      object-position: center;
+    }
+
+    .tile-full-bleed img {
+      width: auto;
+      height: 100%;
+      max-width: none;
+      object-fit: contain;
+      object-position: center;
     }
 
     .shuffling-tile:hover img {
-      filter: brightness(0.4);
+      filter: none !important;
+      transform: none !important;
+      scale: 1 !important;
     }
 
     .tile-info {
@@ -2006,7 +2041,7 @@
     /* Text-only Event Overrides */
     .tile-no-image {
       width: 450px;
-      height: 55vh;
+      height: 100%;
       max-width: calc(100vw - 120px);
       background: linear-gradient(135deg, #004d57 0%, #64BAB0 100%);
       display: flex;
@@ -2014,6 +2049,9 @@
       justify-content: center;
       text-align: center;
       padding: 30px;
+      aspect-ratio: 4 / 5;
+      min-height: 0;
+      max-height: 100%;
     }
 
     .tile-no-image .tile-info {
@@ -2048,6 +2086,62 @@
       border-radius: 4px;
       letter-spacing: 1px;
       z-index: 2;
+    }
+
+    @media (max-width: 768px) {
+      #shuffling-tiles-container {
+        top: 122px;
+        bottom: 48px;
+        padding: 0 18px;
+        gap: 14px;
+      }
+
+      .shuffling-track {
+        gap: 14px;
+      }
+
+      .tile-no-image {
+        max-width: calc(100vw - 56px);
+      }
+
+      .tile-landscape {
+        width: auto;
+        aspect-ratio: auto;
+      }
+
+      .tile-portrait {
+        width: auto;
+        aspect-ratio: auto;
+      }
+
+      .tile-no-image {
+        width: min(78vw, 360px);
+        aspect-ratio: 4 / 5;
+      }
+
+      .tile-info {
+        padding: 22px 16px;
+        opacity: 1;
+        transform: none;
+      }
+
+      .tile-info h3 {
+        font-size: clamp(1rem, 5vw, 1.35rem);
+        line-height: 1.15;
+      }
+
+      .tile-info p {
+        font-size: clamp(0.85rem, 3.8vw, 1rem);
+      }
+
+      .event-details,
+      .staff-details {
+        max-height: 0;
+      }
+
+      .tile-no-image {
+        padding: 24px 18px;
+      }
     }
 
     .shuffling-nav {
@@ -2112,8 +2206,7 @@
     // Type the exact name of the API events here in the order you want them to appear.
     // They will be forced to the front of the carousel, regardless of date or if they have a flyer.
     const pinnedApiEventNames = [
-      "June Membership Breakfast",
-      "Advisory Council Meeting"
+      "June Membership Breakfast"
     ];
 
     // 2. CUSTOM FLYERS / HERO IMAGES: 
@@ -2186,6 +2279,11 @@
               rawDesc: e.Description ? e.Description.replace(/<[^>]*>?/gm, '').substring(0, 100) + '...' : ''
             };
 
+            if (e.Name && e.Name.toLowerCase() === "june membership breakfast") {
+              eventObj.format = "landscape";
+              eventObj.fullBleed = true;
+            }
+
             let pinIndex = e.Name ? pinnedApiEventNames.findIndex(name => name.toLowerCase() === e.Name.toLowerCase()) : -1;
 
             if (pinIndex !== -1) {
@@ -2231,6 +2329,8 @@
       const videoEl = videoContainer ? videoContainer.querySelector('video') : null;
       let timeIsUp = false;
       let carouselIsReady = false;
+      let backgroundVideoStarted = false;
+      const carouselBackgroundVideoUrl = "https://coconutcoastrealtors.org/wp-content/uploads/2026/05/3.mp4";
 
       const titleEl = document.getElementById('shuffling-section-title');
       const clockEl = document.getElementById('shuffling-clock');
@@ -2256,29 +2356,20 @@
       const tryStart = () => {
         if (timeIsUp && carouselIsReady) {
           if (videoContainer) videoContainer.style.opacity = "0.3";
+          if (videoEl && !backgroundVideoStarted) {
+            backgroundVideoStarted = true;
+            videoEl.loop = true;
+            videoEl.src = carouselBackgroundVideoUrl;
+            videoEl.load();
+            videoEl.play().catch(() => {});
+          }
           if (tilesContainer) tilesContainer.classList.add('is-active');
           if (navContainer) navContainer.classList.add('is-active');
           if (clockEl) clockEl.classList.add('is-active');
 
           if (titleEl) {
             titleEl.classList.add('is-active');
-            let visibleStaff = new Set();
-            const observer = new IntersectionObserver((entries) => {
-              entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                  visibleStaff.add(entry.target);
-                } else {
-                  visibleStaff.delete(entry.target);
-                }
-              });
-              if (visibleStaff.size > 0) {
-                titleEl.innerText = "Our Team:";
-              } else {
-                titleEl.innerText = "Upcoming Classes/Events:";
-              }
-            }, { root: null, threshold: 0.1 });
-
-            document.querySelectorAll('.tile-staff').forEach(el => observer.observe(el));
+            window.updateShufflingSectionTitle?.();
           }
 
           startAutoPlay();
@@ -2315,9 +2406,12 @@
 
       for (const tile of tilesData) {
         const el = document.createElement('a');
-        el.className = `shuffling-tile tile-${tile.format}`;
+        const tileFormatClass = tile.isTextOnly ? 'tile-no-image' : `tile-${tile.format || 'portrait'}`;
+        el.className = `shuffling-tile ${tileFormatClass}`;
         if (tile.tag === 'Staff') el.classList.add('tile-staff');
-        if (tile.isTextOnly) el.classList.add('tile-no-image');
+        if (tile.fullBleed) el.classList.add('tile-full-bleed');
+        el.dataset.title = tile.title || "";
+        el.dataset.tag = tile.tag || "";
         el.href = tile.link || "#";
         el.target = "_blank";
 
@@ -2402,21 +2496,115 @@
 
       if (!track || !track.children[0]) return;
 
+      let teamTitleActive = false;
+      let teamTitleHasSeenKevin = false;
+
+      function titleIncludes(tile, name) {
+        return (tile?.dataset?.title || "").toLowerCase().includes(name);
+      }
+
+      function isTileVisible(tile) {
+        const container = track.parentElement;
+        if (!tile || !container) return false;
+
+        const tileRect = tile.getBoundingClientRect();
+        const containerRect = container.getBoundingClientRect();
+        return tileRect.right > containerRect.left && tileRect.left < containerRect.right;
+      }
+
+      function updateSectionTitle() {
+        const titleEl = document.getElementById('shuffling-section-title');
+        if (!titleEl) return;
+
+        const firstTile = track.children[0];
+        const kevinVisible = Array.from(track.children).some(tile => titleIncludes(tile, "kevin") && isTileVisible(tile));
+
+        if (!teamTitleActive && titleIncludes(firstTile, "meighan")) {
+          teamTitleActive = true;
+          teamTitleHasSeenKevin = kevinVisible;
+        }
+
+        if (teamTitleActive && kevinVisible) {
+          teamTitleHasSeenKevin = true;
+        }
+
+        if (teamTitleActive && teamTitleHasSeenKevin && !kevinVisible) {
+          teamTitleActive = false;
+          teamTitleHasSeenKevin = false;
+        }
+
+        titleEl.innerText = teamTitleActive ? "Our Team:" : "Upcoming Classes/Events:";
+      }
+
+      window.updateShufflingSectionTitle = updateSectionTitle;
+      updateSectionTitle();
+      window.addEventListener('resize', updateSectionTitle);
+
+      function getTrackGap() {
+        const styles = window.getComputedStyle(track);
+        return parseFloat(styles.columnGap || styles.gap || "20") || 20;
+      }
+
+      function getTileStride(tile) {
+        return tile.offsetWidth + getTrackGap();
+      }
+
+      function getForwardMoveCount() {
+        const firstTile = track.children[0];
+        if (!firstTile || !firstTile.classList.contains('tile-staff')) return 1;
+
+        const containerWidth = track.parentElement.offsetWidth;
+        let moveDist = 0;
+        let count = 0;
+
+        for (let i = 0; i < track.children.length; i++) {
+          const tile = track.children[i];
+          if (!tile.classList.contains('tile-staff')) break;
+
+          const stride = getTileStride(tile);
+          if (moveDist + stride > containerWidth && count > 0) break;
+
+          moveDist += stride;
+          count++;
+        }
+
+        return Math.max(1, count);
+      }
+
+      function getBackwardMoveCount() {
+        const lastTile = track.lastElementChild;
+        if (!lastTile || !lastTile.classList.contains('tile-staff')) return 1;
+
+        const containerWidth = track.parentElement.offsetWidth;
+        let moveDist = 0;
+        let count = 0;
+
+        for (let i = track.children.length - 1; i >= 0; i--) {
+          const tile = track.children[i];
+          if (!tile.classList.contains('tile-staff')) break;
+
+          const stride = getTileStride(tile);
+          if (moveDist + stride > containerWidth && count > 0) break;
+
+          moveDist += stride;
+          count++;
+        }
+
+        return Math.max(1, count);
+      }
+
       function move(dir) {
         if (isAnimating) return;
         isAnimating = true;
 
-        let containerWidth = track.parentElement.offsetWidth;
         let moveDist = 0;
-        let count = 0;
+        let count = dir === 'next' ? getForwardMoveCount() : getBackwardMoveCount();
 
         if (dir === 'next') {
-          for (let i = 0; i < track.children.length; i++) {
-            let w = track.children[i].offsetWidth + 20;
-            if (moveDist + w > containerWidth && count > 0) break;
-            moveDist += w;
-            count++;
+          for (let i = 0; i < count; i++) {
+            moveDist += getTileStride(track.children[i]);
           }
+
           track.style.transition = 'transform 0.8s ease-in-out';
           track.style.transform = `translateX(-${moveDist}px)`;
 
@@ -2426,15 +2614,14 @@
             }
             track.style.transition = 'none';
             track.style.transform = 'translateX(0)';
+            updateSectionTitle();
             setTimeout(() => { isAnimating = false; }, 50);
           }, 800);
         } else {
-          for (let i = track.children.length - 1; i >= 0; i--) {
-            let w = track.children[i].offsetWidth + 20;
-            if (moveDist + w > containerWidth && count > 0) break;
-            moveDist += w;
-            count++;
+          for (let i = track.children.length - 1; i >= track.children.length - count; i--) {
+            moveDist += getTileStride(track.children[i]);
           }
+
           for (let i = 0; i < count; i++) {
             track.insertBefore(track.lastElementChild, track.children[0]);
           }
@@ -2446,7 +2633,10 @@
           track.style.transition = 'transform 0.8s ease-in-out';
           track.style.transform = 'translateX(0)';
 
-          setTimeout(() => { isAnimating = false; }, 800);
+          setTimeout(() => {
+            updateSectionTitle();
+            isAnimating = false;
+          }, 800);
         }
       }
 
@@ -2563,7 +2753,7 @@
   <h2 id="shuffling-clock"></h2>
   <div id="shuffling-video-container">
     <video muted autoplay playsinline>
-      <source src="https://coconutcoastrealtors.org/wp-content/uploads/2025/11/Welcome-to.mp4" type="video/mp4">
+      <source src="https://coconutcoastrealtors.org/wp-content/uploads/2026/05/Welcome-to2.mp4" type="video/mp4">
     </video>
   </div>
 
