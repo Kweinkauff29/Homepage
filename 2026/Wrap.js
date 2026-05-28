@@ -3697,6 +3697,10 @@ export default {
                         try {
                             // Clean up dependent rows first (prevents orphan data)
                             await env.WRAP_DB
+                                .prepare(`UPDATE goal_subtasks SET linked_task_id = NULL WHERE linked_task_id = ?`)
+                                .bind(id)
+                                .run();
+                            await env.WRAP_DB
                                 .prepare(`DELETE FROM daily_task_assignees WHERE task_id = ?`)
                                 .bind(id)
                                 .run();
