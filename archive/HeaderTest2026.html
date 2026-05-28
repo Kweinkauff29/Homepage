@@ -1090,6 +1090,233 @@
       border: 0 !important;
     }
   }
+  /* === UPCOMING EVENTS POPUP (rworld-style) === */
+  .ber-events-popup,
+  .ber-events-popup * {
+    box-sizing: border-box !important;
+  }
+
+  .ber-events-popup {
+    position: fixed;
+    bottom: 24px;
+    left: 24px;
+    z-index: 99999;
+    width: 340px;
+    background: #fff;
+    border-radius: 0;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
+    border: 1px solid #e0e0e0;
+    font-family: var(--ber-font, 'Inter', sans-serif);
+    overflow: visible;
+    opacity: 0;
+    transform: translateY(30px) scale(0.95);
+    animation: berPopupSlideUp 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+    animation-delay: 0.8s;
+  }
+
+  .ber-events-popup.ber-popup-hidden {
+    opacity: 0 !important;
+    transform: translateY(30px) scale(0.95) !important;
+    animation: berPopupSlideDown 0.35s cubic-bezier(0.55, 0, 1, 0.45) forwards !important;
+    pointer-events: none;
+  }
+
+  @keyframes berPopupSlideUp {
+    from {
+      opacity: 0;
+      transform: translateY(30px) scale(0.95);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0) scale(1);
+    }
+  }
+
+  @keyframes berPopupSlideDown {
+    from {
+      opacity: 1;
+      transform: translateY(0) scale(1);
+    }
+    to {
+      opacity: 0;
+      transform: translateY(30px) scale(0.95);
+    }
+  }
+
+  .ber-popup-header {
+    position: relative;
+    padding: 35px 24px 15px;
+    border-bottom: none;
+  }
+
+  .ber-popup-close {
+    position: absolute;
+    top: 15px;
+    right: 20px;
+    background: none;
+    border: none;
+    font-size: 13px;
+    color: #8b1c1c;
+    cursor: pointer;
+    padding: 0;
+    font-weight: 500;
+    font-family: var(--ber-font, 'Inter', sans-serif);
+    transition: color 0.15s ease;
+    text-decoration: underline;
+  }
+
+  .ber-popup-close:hover {
+    background: none;
+    color: #a32a2a;
+    text-decoration: underline;
+  }
+
+  .ber-popup-title {
+    font-size: 2.1rem;
+    font-weight: 800;
+    line-height: 1.15;
+    color: #000;
+    margin: 0;
+    text-align: center;
+    letter-spacing: -0.02em;
+  }
+
+  .ber-popup-emoji {
+    display: inline-block;
+    animation: berEmojiPulse 2s ease-in-out infinite;
+  }
+
+  @keyframes berEmojiPulse {
+    0%, 100% { transform: rotate(0deg); }
+    25% { transform: rotate(-5deg) scale(1.1); }
+    75% { transform: rotate(5deg) scale(1.1); }
+  }
+
+  .ber-popup-events {
+    padding: 10px 30px 10px;
+  }
+
+  .ber-popup-event-row {
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+    padding: 8px 0;
+    border-bottom: none;
+    text-decoration: none;
+    color: #000;
+    transition: opacity 0.15s ease;
+    margin: 0;
+  }
+
+  .ber-popup-event-row:hover {
+    background: none;
+    transform: none;
+    color: #000;
+    opacity: 0.8;
+  }
+
+  .ber-popup-date {
+    flex-shrink: 0;
+    min-width: 40px;
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: #000;
+    padding-top: 1px;
+  }
+
+  .ber-popup-name {
+    flex: 1;
+    font-size: 0.95rem;
+    font-weight: 400;
+    line-height: 1.4;
+    text-decoration: underline;
+    color: #000;
+  }
+
+  .ber-popup-arrow {
+    flex-shrink: 0;
+    font-size: 1.05rem;
+    color: #000;
+    padding-top: 1px;
+    text-decoration: none;
+  }
+
+  .ber-popup-event-row:hover .ber-popup-arrow {
+    transform: none;
+  }
+
+  .ber-popup-footer {
+    padding: 15px 30px 30px;
+    text-align: center;
+  }
+
+  .ber-popup-cta {
+    display: block;
+    width: 100%;
+    padding: 14px 16px;
+    background: #000;
+    color: #fff;
+    font-family: var(--ber-font, 'Inter', sans-serif);
+    font-size: 0.9rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    text-align: center;
+    text-decoration: none;
+    border-radius: 0;
+    border: none;
+    cursor: pointer;
+    transition: opacity 0.15s ease;
+  }
+
+  .ber-popup-cta:hover {
+    background: #111;
+    color: #fff;
+    opacity: 0.9;
+  }
+
+  /* Bottom-right x-mark close pill */
+  .ber-popup-x-close {
+    position: absolute;
+    bottom: -45px;
+    right: 10px;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: #fff;
+    border: none;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.15);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    font-size: 18px;
+    color: #000;
+    transition: background 0.15s ease, transform 0.15s ease;
+    z-index: 2;
+  }
+
+  .ber-popup-x-close:hover {
+    background: #f0f0f0;
+    color: #000;
+    transform: scale(1.05);
+  }
+
+  /* Hide on small screens to avoid conflicting with Coco */
+  @media (max-width: 768px) {
+    .ber-events-popup {
+      display: none !important;
+    }
+  }
+
+  /* Slightly narrower on tablets */
+  @media (min-width: 769px) and (max-width: 1024px) {
+    .ber-events-popup {
+      width: 310px;
+      bottom: 16px;
+      left: 16px;
+    }
+  }
 </style>
 
 <a class="sr-only" href="#main">Skip to content</a>
@@ -2735,6 +2962,155 @@
 
     initWaves('.ber-header');
   });
+</script>
+
+<!-- === UPCOMING EVENTS POPUP (rworld.com-style) === -->
+<div class="ber-events-popup" id="ber-events-popup" style="display:none;">
+  <div class="ber-popup-header">
+    <button class="ber-popup-close" id="ber-popup-close-btn" aria-label="Close events popup">Close</button>
+    <p class="ber-popup-title">
+      Don't Sleep<br>
+      <span class="ber-popup-emoji">😴</span> On These<br>
+      Events!
+    </p>
+  </div>
+  <div class="ber-popup-events" id="ber-popup-events">
+    <!-- Dynamically populated -->
+  </div>
+  <div class="ber-popup-footer">
+    <a href="https://coconutcoastrealtors.org/all-upcoming-events/" class="ber-popup-cta" id="ber-popup-all-events">ALL EVENTS</a>
+  </div>
+  <button class="ber-popup-x-close" id="ber-popup-x-close" aria-label="Dismiss">×</button>
+</div>
+
+<script>
+  /* ── Upcoming Events Popup ── */
+  (function () {
+    const PROXY_URL = 'https://gz-realestate-proxy.bonitaspringsrealtors.workers.dev';
+    const SESSION_KEY = 'ber-events-popup-dismissed';
+
+    // Don't show if user already dismissed this session
+    if (sessionStorage.getItem(SESSION_KEY) === 'true') return;
+
+    const popup = document.getElementById('ber-events-popup');
+    const eventsContainer = document.getElementById('ber-popup-events');
+    const closeBtn = document.getElementById('ber-popup-close-btn');
+    const xCloseBtn = document.getElementById('ber-popup-x-close');
+    if (!popup || !eventsContainer) return;
+
+    function dismissPopup() {
+      popup.classList.add('ber-popup-hidden');
+      sessionStorage.setItem(SESSION_KEY, 'true');
+      // Remove from DOM after animation
+      setTimeout(() => { popup.style.display = 'none'; }, 400);
+    }
+
+    closeBtn?.addEventListener('click', dismissPopup);
+    xCloseBtn?.addEventListener('click', dismissPopup);
+
+    async function loadUpcomingEvents() {
+      try {
+        const res = await fetch(`${PROXY_URL}/events/all?enriched=true`);
+        if (!res.ok) throw new Error('API failed');
+        const data = await res.json();
+        const results = data.Results || [];
+
+        const now = new Date();
+        const twoWeeksOut = new Date(now.getTime() + 14 * 24 * 60 * 60 * 1000);
+
+        // Filter to future events, sort ascending
+        const future = results
+          .filter(e => new Date(e.StartDate) >= now)
+          .sort((a, b) => new Date(a.StartDate) - new Date(b.StartDate));
+
+        // Separate events vs classes
+        const events = future.filter(e => {
+          if (e.IsClass) return false;
+          const isCommittee = e.Name && /Committee|Council|Board of Directors/i.test(e.Name);
+          return !isCommittee;
+        });
+        const classes = future.filter(e => e.IsClass);
+
+        // Priority logic:
+        // 1. Check for a membership breakfast (always lead with it if upcoming)
+        // 2. If next non-class event is within 2 weeks, prioritize it
+        // 3. Fill remaining slots with classes
+        let displayItems = [];
+
+        // Check for membership breakfast first (highest priority)
+        const breakfastEvent = events.find(e =>
+          e.Name && /membership\s*breakfast/i.test(e.Name)
+        );
+
+        if (breakfastEvent) {
+          displayItems.push(breakfastEvent);
+          // Fill slots 2-3 with classes
+          displayItems.push(...classes.slice(0, 2));
+        } else {
+          const nextEvent = events[0];
+          const nextEventDate = nextEvent ? new Date(nextEvent.StartDate) : null;
+
+          if (nextEvent && nextEventDate && nextEventDate <= twoWeeksOut) {
+            // Slot 1: the upcoming event
+            displayItems.push(nextEvent);
+            // Slots 2-3: next 2 classes
+            displayItems.push(...classes.slice(0, 2));
+          } else {
+            // No event in the next 2 weeks — show 3 classes
+            displayItems.push(...classes.slice(0, 3));
+          }
+        }
+
+        // Fallback: if we still have fewer than 3, fill from the general future list
+        if (displayItems.length < 3) {
+          const usedIds = new Set(displayItems.map(e => e.EventId));
+          for (const ev of future) {
+            if (displayItems.length >= 3) break;
+            if (!usedIds.has(ev.EventId)) {
+              displayItems.push(ev);
+              usedIds.add(ev.EventId);
+            }
+          }
+        }
+
+        // If nothing at all, don't show popup
+        if (displayItems.length === 0) return;
+
+        // Render
+        eventsContainer.innerHTML = '';
+        displayItems.slice(0, 3).forEach(ev => {
+          const start = new Date(ev.StartDate);
+          const dateStr = `${start.getMonth() + 1}/${start.getDate()}`;
+          const name = ev.Name || 'Event';
+
+          const row = document.createElement('a');
+          row.className = 'ber-popup-event-row';
+          row.href = ev.PublicUrl || 'https://coconutcoastrealtors.org/all-upcoming-events/';
+          row.target = '_blank';
+          row.rel = 'noopener';
+          row.innerHTML = `
+            <span class="ber-popup-date">${dateStr}</span>
+            <span class="ber-popup-name">${name}</span>
+            <span class="ber-popup-arrow">→</span>
+          `;
+          eventsContainer.appendChild(row);
+        });
+
+        // Show the popup
+        popup.style.display = '';
+      } catch (err) {
+        console.warn('CCOR Events Popup: Failed to load events.', err);
+        // Silently fail — don't show the popup
+      }
+    }
+
+    // Load after DOM is ready
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', loadUpcomingEvents);
+    } else {
+      loadUpcomingEvents();
+    }
+  })();
 </script>
 
 <script>
