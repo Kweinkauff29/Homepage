@@ -4694,29 +4694,7 @@
   var map = L.map('leaflet-map').setView([26.367234, -81.798167], 16);
 
   // Add OpenStreetMap tiles to the map
-  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-  }).addTo(map);
 
-  // Add a marker to the map
-  L.marker([26.367234, -81.798167]).addTo(map)
-    .bindPopup('25300 Bernwood Dr, Suite 1, Bonita Springs, FL 34135')
-    .openPopup();
-</script>
-
-
-</div>
-<script>
-  // Dynamic year for copyright
-  document.getElementById('berYear').textContent = new Date().getFullYear();
-</script>
-<!-- ===== /CCOR Footer ===== -->
-
-
-
-<script>
-  window.onload = function () {
-    // Delay to ensure everything is fully loaded before executing the scroll operations
     setTimeout(function () {
       // Scroll to the top of the page
       window.scrollTo(0, 0);
@@ -4745,6 +4723,8 @@
     console.log("You are " + scrollPercentage.toFixed(2) + "% down the page.");
   };
 </script>
+
+
 
 
 
@@ -4842,6 +4822,9 @@
 </style>
 <script>
   (function () {
+    // Clear any previously stored performance disable flags to restore wave graphics
+    sessionStorage.removeItem('ccor-waves-disabled');
+
     /* ── Performance-optimised wave init ── */
     function initCcorWaves() {
       const root = document.getElementById('ccor-waves-bg');
@@ -4853,50 +4836,7 @@
         return;
       }
 
-      /* 2. Fast-path: check sessionStorage for previous performance failure */
-      if (sessionStorage.getItem('ccor-waves-disabled') === 'true') {
-        root.style.display = 'none';
-        return;
-      }
-
-      /* 3. Fast-path hardware heuristics: low RAM or low CPU core count */
-      if (
-        (navigator.deviceMemory && navigator.deviceMemory < 4) ||
-        (navigator.hardwareConcurrency && navigator.hardwareConcurrency < 4)
-      ) {
-        console.log('CCOR Waves: Low hardware specs detected. Disabling animation for optimal page speed.');
-        root.style.display = 'none';
-        sessionStorage.setItem('ccor-waves-disabled', 'true');
-        return;
-      }
-
       const isMobile = () => window.innerWidth < 768;
-
-      /* 4. Real-time frame-rate diagnostics:
-         Let the page settle for 200ms, then monitor the actual FPS for 500ms.
-         If the system falls below 40 FPS, remove waves, hide background, and flag it.
-      */
-      setTimeout(() => {
-        let frames = 0;
-        let startTime = performance.now();
-        
-        function checkFrame(now) {
-          frames++;
-          const elapsed = now - startTime;
-          if (elapsed < 500) {
-            requestAnimationFrame(checkFrame);
-          } else {
-            const fps = (frames * 1000) / elapsed;
-            if (fps < 40) {
-              console.log('CCOR Waves: Frame rate dropped to ' + Math.round(fps) + ' FPS. Disabling background animation to maintain responsiveness.');
-              root.style.display = 'none';
-              root.innerHTML = ''; // clean up DOM to free memory
-              sessionStorage.setItem('ccor-waves-disabled', 'true');
-            }
-          }
-        }
-        requestAnimationFrame(checkFrame);
-      }, 200);
 
       /* Reduced wave count: 5 on desktop, 3 on mobile */
       const WAVE_COUNT = isMobile() ? 3 : 5;

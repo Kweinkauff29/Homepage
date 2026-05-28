@@ -270,6 +270,8 @@
 
 
 
+
+
 <div id="ccor-waves-bg" aria-hidden="true" style="position: fixed; inset: 0; z-index: -9999; pointer-events: none; opacity: 0.45; overflow: hidden; background: #ffffff;">
   <div class="ccor-wave-container ccor-ribbon-bottom" style="position: absolute; inset: 0;"></div>
 </div>
@@ -342,6 +344,9 @@
 </style>
 <script>
   (function () {
+    // Clear any previously stored performance disable flags to restore wave graphics
+    sessionStorage.removeItem('ccor-waves-disabled');
+
     /* ── Performance-optimised wave init ── */
     function initCcorWaves() {
       const root = document.getElementById('ccor-waves-bg');
@@ -353,50 +358,7 @@
         return;
       }
 
-      /* 2. Fast-path: check sessionStorage for previous performance failure */
-      if (sessionStorage.getItem('ccor-waves-disabled') === 'true') {
-        root.style.display = 'none';
-        return;
-      }
-
-      /* 3. Fast-path hardware heuristics: low RAM or low CPU core count */
-      if (
-        (navigator.deviceMemory && navigator.deviceMemory < 4) ||
-        (navigator.hardwareConcurrency && navigator.hardwareConcurrency < 4)
-      ) {
-        console.log('CCOR Waves: Low hardware specs detected. Disabling animation for optimal page speed.');
-        root.style.display = 'none';
-        sessionStorage.setItem('ccor-waves-disabled', 'true');
-        return;
-      }
-
       const isMobile = () => window.innerWidth < 768;
-
-      /* 4. Real-time frame-rate diagnostics:
-         Let the page settle for 200ms, then monitor the actual FPS for 500ms.
-         If the system falls below 40 FPS, remove waves, hide background, and flag it.
-      */
-      setTimeout(() => {
-        let frames = 0;
-        let startTime = performance.now();
-        
-        function checkFrame(now) {
-          frames++;
-          const elapsed = now - startTime;
-          if (elapsed < 500) {
-            requestAnimationFrame(checkFrame);
-          } else {
-            const fps = (frames * 1000) / elapsed;
-            if (fps < 40) {
-              console.log('CCOR Waves: Frame rate dropped to ' + Math.round(fps) + ' FPS. Disabling background animation to maintain responsiveness.');
-              root.style.display = 'none';
-              root.innerHTML = ''; // clean up DOM to free memory
-              sessionStorage.setItem('ccor-waves-disabled', 'true');
-            }
-          }
-        }
-        requestAnimationFrame(checkFrame);
-      }, 200);
 
       /* Reduced wave count: 5 on desktop, 3 on mobile */
       const WAVE_COUNT = isMobile() ? 3 : 5;

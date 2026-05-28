@@ -5756,7 +5756,8 @@ Closed Sales:
 </div>
 <script>
   // Dynamic year for copyright
-  document.getElementById('berYear').textContent = new Date().getFullYear();
+  const berYearEl = document.getElementById('berYear');
+  if (berYearEl) berYearEl.textContent = new Date().getFullYear();
 </script>
 <!-- ===== /BER Footer ===== -->
 
