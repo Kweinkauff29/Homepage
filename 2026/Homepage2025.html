@@ -1780,6 +1780,50 @@
       pointer-events: auto;
     }
 
+    #shuffling-tiles-container.is-dealing .shuffling-tile {
+      animation: dealTileIn 1.15s cubic-bezier(0.18, 0.9, 0.22, 1) both;
+      animation-delay: var(--deal-delay, 0ms);
+      transform-origin: center bottom;
+      will-change: transform, opacity, filter;
+    }
+
+    @keyframes dealTileIn {
+      0% {
+        opacity: 0;
+        filter: blur(10px) saturate(0.8);
+        transform:
+          translate3d(var(--deal-x, 0), var(--deal-y, 80px), 0)
+          rotate(var(--deal-rotate, -8deg))
+          scale(0.72);
+      }
+
+      42% {
+        opacity: 1;
+        filter: blur(2px) saturate(1.08);
+        transform:
+          translate3d(var(--deal-rebound-x, 0), -18px, 0)
+          rotate(var(--deal-rebound-rotate, 3deg))
+          scale(1.04);
+      }
+
+      68% {
+        filter: blur(0) saturate(1);
+        transform: translate3d(0, 6px, 0) rotate(1deg) scale(0.99);
+      }
+
+      100% {
+        opacity: 1;
+        filter: blur(0) saturate(1);
+        transform: translate3d(0, 0, 0) rotate(0) scale(1);
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      #shuffling-tiles-container.is-dealing .shuffling-tile {
+        animation: none;
+      }
+    }
+
     #shuffling-section-title {
       position: absolute;
       top: 1vh;
@@ -2224,12 +2268,12 @@
     ];
 
     const team = [
-      { title: "Meighan Harris", description: "Chief Executive Officer", image: "https://coconutcoastrealtors.org/wp-content/uploads/2026/02/Meighan-2026.jpg", link: "mailto:CEO@BERealtors.org", phone: "(239) 992-6771 ext. 6", email: "CEO@BERealtors.org", shortBio: "Meighan leads the overall direction, operations, and member-focused strategy of the Coconut Coast Organization of REALTORSÂ®." },
-      { title: "Jenna Ripley", description: "Membership and Operations Director", image: "https://coconutcoastrealtors.org/wp-content/uploads/2026/02/Jenna-2026.jpg", link: "mailto:operations@berealtors.org", phone: "(239) 992-6771 ext. 5", email: "operations@berealtors.org", shortBio: "Jenna supports CCORâ€™s executive operations and helps keep key internal systems, member service workflows, and organizational processes moving efficiently." },
-      { title: "Katie Malooly", description: "Director of Development and Events", image: "https://coconutcoastrealtors.org/wp-content/uploads/2026/02/Katie.png", link: "mailto:Events@BERealtors.org", phone: "(239) 992-6771 ext. 2", email: "Events@BERealtors.org", shortBio: "Katie manages CCORâ€™s education and events calendar, including class planning, member events, registrations, and event logistics." },
+      { title: "Meighan Harris", description: "Chief Executive Officer", image: "https://coconutcoastrealtors.org/wp-content/uploads/2026/02/Meighan-2026.jpg", link: "mailto:CEO@BERealtors.org", phone: "(239) 992-6771 ext. 6", email: "CEO@BERealtors.org", shortBio: "Meighan leads the overall direction, operations, and member-focused strategy of the Coconut Coast Organization of REALTORS\u00ae." },
+      { title: "Jenna Ripley", description: "Membership and Operations Director", image: "https://coconutcoastrealtors.org/wp-content/uploads/2026/02/Jenna-2026.jpg", link: "mailto:operations@berealtors.org", phone: "(239) 992-6771 ext. 5", email: "operations@berealtors.org", shortBio: "Jenna supports CCOR's executive operations and helps keep key internal systems, member service workflows, and organizational processes moving efficiently." },
+      { title: "Katie Malooly", description: "Director of Development and Events", image: "https://coconutcoastrealtors.org/wp-content/uploads/2026/02/Katie.png", link: "mailto:Events@BERealtors.org", phone: "(239) 992-6771 ext. 2", email: "Events@BERealtors.org", shortBio: "Katie manages CCOR's education and events calendar, including class planning, member events, registrations, and event logistics." },
       { title: "Erica Bernhardt", description: "Director of MLS", image: "https://coconutcoastrealtors.org/wp-content/uploads/2026/02/Erica.png", link: "mailto:MLS@BERealtors.org", phone: "(239) 992-6771 ext. 3", email: "MLS@BERealtors.org", shortBio: "Erica oversees MLS support for CCOR members, including Matrix/SWFLAMLS questions, MLS issues, product updates, and MLS-related training." },
       { title: "Mariam Abdallah", description: "Director of Member Experience", image: "https://coconutcoastrealtors.org/wp-content/uploads/2026/05/Mariam-photo-Edited.png", link: "mailto:Membership@BERealtors.org", phone: "(239) 992-6771 ext. 1", email: "Membership@BERealtors.org", shortBio: "Mariam helps members from the moment they join and continues supporting them throughout their membership." },
-      { title: "Kevin Weinkauff", description: "Communications and Technology", image: "https://coconutcoastrealtors.org/wp-content/uploads/2020/10/Headshot-165x244.png", link: "mailto:Tech@BERealtors.org", phone: "(239) 992-6771 ext. 4", email: "Tech@BERealtors.org", shortBio: "Kevin supports CCORâ€™s technology, communications, marketing, website, digital platforms, and member-facing tech resources." }
+      { title: "Kevin Weinkauff", description: "Communications and Technology", image: "https://coconutcoastrealtors.org/wp-content/uploads/2020/10/Headshot-165x244.png", link: "mailto:Tech@BERealtors.org", phone: "(239) 992-6771 ext. 4", email: "Tech@BERealtors.org", shortBio: "Kevin supports CCOR's technology, communications, marketing, website, digital platforms, and member-facing tech resources." }
     ];
 
     const API_URL = 'https://gz-realestate-proxy.bonitaspringsrealtors.workers.dev/events/all?enriched=true';
@@ -2237,6 +2281,85 @@
     let currentIndex = 0;
     let autoPlayInterval;
     let isHovering = false;
+
+    const win1252ByteMap = {
+      0x20AC: 0x80,
+      0x201A: 0x82,
+      0x0192: 0x83,
+      0x201E: 0x84,
+      0x2026: 0x85,
+      0x2020: 0x86,
+      0x2021: 0x87,
+      0x02C6: 0x88,
+      0x2030: 0x89,
+      0x0160: 0x8A,
+      0x2039: 0x8B,
+      0x0152: 0x8C,
+      0x017D: 0x8E,
+      0x2018: 0x91,
+      0x2019: 0x92,
+      0x201C: 0x93,
+      0x201D: 0x94,
+      0x2022: 0x95,
+      0x2013: 0x96,
+      0x2014: 0x97,
+      0x02DC: 0x98,
+      0x2122: 0x99,
+      0x0161: 0x9A,
+      0x203A: 0x9B,
+      0x0153: 0x9C,
+      0x017E: 0x9E,
+      0x0178: 0x9F
+    };
+
+    function decodeMojibakeOnce(text) {
+      if (!window.TextDecoder || !/[\u00c2\u00c3\u00e2]/.test(text)) return text;
+
+      const bytes = [];
+      for (const char of text) {
+        const code = char.codePointAt(0);
+        if (code <= 0xFF) {
+          bytes.push(code);
+        } else if (win1252ByteMap[code]) {
+          bytes.push(win1252ByteMap[code]);
+        } else {
+          return text;
+        }
+      }
+
+      try {
+        return new TextDecoder("utf-8", { fatal: true }).decode(new Uint8Array(bytes));
+      } catch (error) {
+        return text;
+      }
+    }
+
+    function normalizeCarouselText(value) {
+      let text = String(value ?? "");
+      text = decodeMojibakeOnce(decodeMojibakeOnce(text));
+
+      return text
+        .replace(/\u00c3\u201a\u00c2\u00ae|\u00c2\u00ae/g, "\u00ae")
+        .replace(/\u00c3\u00a2\u00e2\u201a\u00ac\u00e2\u201e\u00a2|\u00e2\u20ac\u2122|\u00e2\u20ac\u02dc/g, "'")
+        .replace(/\u00c3\u00a2\u00e2\u201a\u00ac\u00c5\u201c|\u00e2\u20ac\u0153/g, '"')
+        .replace(/\u00c3\u00a2\u00e2\u201a\u00ac\u00c2\u009d|\u00c3\u00a2\u00e2\u201a\u00ac\u00ef\u00bf\u00bd|\u00e2\u20ac\u009d/g, '"')
+        .replace(/\u00c3\u00a2\u00e2\u201a\u00ac\u00e2\u20ac\u0153|\u00e2\u20ac\u201c/g, "-")
+        .replace(/\u00c3\u00a2\u00e2\u201a\u00ac\u00e2\u20ac\u009d|\u00e2\u20ac\u201d/g, "-")
+        .replace(/\u00c3\u201a\u00c2\u00b7|\u00c2\u00b7/g, "&middot;")
+        .replace(/\u00c3\u201a\u00c2\u00a0|\u00c2\u00a0/g, " ")
+        .replace(/\u00c3\u00a2\u00e2\u201a\u00ac\u00c2\u00a2|\u00e2\u20ac\u00a2/g, "&bull;")
+        .replace(/\u00c3\u00a2\u00e2\u201a\u00ac\u00c2\u00a6|\u00e2\u20ac\u00a6/g, "...")
+        .replace(/[\uFFFD]/g, "");
+    }
+
+    function escapeCarouselHtml(value) {
+      return normalizeCarouselText(value)
+        .replace(/&(?!(?:amp|lt|gt|quot|#39|middot|bull);)/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#39;");
+    }
 
     async function fetchEvents() {
       try {
@@ -2353,6 +2476,41 @@
         setInterval(updateClock, 1000);
       }
 
+      const dealInTiles = () => {
+        if (!tilesContainer || tilesContainer.dataset.dealt === "true") return;
+
+        const visiblePattern = [
+          { x: "-42vw", y: "86px", r: "-13deg" },
+          { x: "34vw", y: "118px", r: "11deg" },
+          { x: "-24vw", y: "132px", r: "7deg" },
+          { x: "22vw", y: "76px", r: "-9deg" },
+          { x: "-12vw", y: "104px", r: "5deg" },
+          { x: "16vw", y: "144px", r: "-6deg" },
+          { x: "-30vw", y: "92px", r: "10deg" },
+          { x: "28vw", y: "126px", r: "-12deg" }
+        ];
+
+        Array.from(track.children).forEach((tile, index) => {
+          const pattern = visiblePattern[index % visiblePattern.length];
+          const stagger = Math.min(index, 9) * 95;
+          tile.style.setProperty('--deal-x', pattern.x);
+          tile.style.setProperty('--deal-y', pattern.y);
+          tile.style.setProperty('--deal-rotate', pattern.r);
+          tile.style.setProperty('--deal-rebound-x', pattern.x.startsWith('-') ? '7vw' : '-7vw');
+          tile.style.setProperty('--deal-rebound-rotate', pattern.r.startsWith('-') ? '4deg' : '-4deg');
+          tile.style.setProperty('--deal-delay', `${stagger}ms`);
+        });
+
+        tilesContainer.dataset.dealt = "true";
+        tilesContainer.classList.remove('is-dealing');
+        void tilesContainer.offsetWidth;
+        tilesContainer.classList.add('is-dealing');
+
+        setTimeout(() => {
+          tilesContainer.classList.remove('is-dealing');
+        }, 2200);
+      };
+
       const tryStart = () => {
         if (timeIsUp && carouselIsReady) {
           if (videoContainer) videoContainer.style.opacity = "0.3";
@@ -2363,7 +2521,10 @@
             videoEl.load();
             videoEl.play().catch(() => {});
           }
-          if (tilesContainer) tilesContainer.classList.add('is-active');
+          if (tilesContainer) {
+            tilesContainer.classList.add('is-active');
+            dealInTiles();
+          }
           if (navContainer) navContainer.classList.add('is-active');
           if (clockEl) clockEl.classList.add('is-active');
 
@@ -2415,6 +2576,15 @@
         el.href = tile.link || "#";
         el.target = "_blank";
 
+        const displayTitle = escapeCarouselHtml(tile.title);
+        const displayDescription = escapeCarouselHtml(tile.description);
+        const displayRawDesc = escapeCarouselHtml(tile.rawDesc);
+        const displayShortBio = escapeCarouselHtml(tile.shortBio);
+        const displayEmail = escapeCarouselHtml(tile.email);
+        const displayPhone = escapeCarouselHtml(tile.phone);
+        const displayTag = escapeCarouselHtml(tile.tag);
+        const displayAlt = escapeCarouselHtml(tile.title).replace(/&quot;/g, "'");
+
         let innerHTML = '';
         if (tile.isTextOnly) {
           const colors = [
@@ -2426,11 +2596,11 @@
           const color = colors[Math.abs(tile.title.length) % colors.length];
 
           innerHTML = `
-            ${tile.tag ? '<div class="tile-tag">' + tile.tag + '</div>' : ''}
+            ${tile.tag ? '<div class="tile-tag">' + displayTag + '</div>' : ''}
             <div class="tile-info" style="background: none;">
-              <h3>${tile.title}</h3>
-              <p style="font-weight: bold; margin-bottom: 10px;">${tile.description}</p>
-              <p>${tile.rawDesc}</p>
+              <h3>${displayTitle}</h3>
+              <p style="font-weight: bold; margin-bottom: 10px;">${displayDescription}</p>
+              <p>${displayRawDesc}</p>
               <div class="event-action" style="margin-top: 15px;">
                 <span class="btn-register">Register Here</span>
               </div>
@@ -2443,28 +2613,28 @@
           }
           innerHTML = `
             <div class="tile-tag">Staff</div>
-            <img src="${tile.image}" alt="${tile.title.replace(/"/g, '&quot;')}">
+            <img src="${tile.image}" alt="${displayAlt}">
             <div class="tile-info">
-              <h3 class="staff-name">${tile.title}</h3>
-              <p>${tile.description}</p>
+              <h3 class="staff-name">${displayTitle}</h3>
+              <p>${displayDescription}</p>
               <div class="staff-details">
-                <p>${tile.shortBio}</p>
+                <p>${displayShortBio}</p>
                 <div class="staff-contact">
-                  <a href="mailto:${tile.email}">&#9993; ${tile.email}</a>
-                  <a href="tel:${tile.phone.replace(/[^0-9]/g, '')}">&#9742; ${tile.phone}</a>
+                  <a href="mailto:${tile.email}">&#9993; ${displayEmail}</a>
+                  <a href="tel:${tile.phone.replace(/[^0-9]/g, '')}">&#9742; ${displayPhone}</a>
                 </div>
               </div>
             </div>
           `;
         } else {
           innerHTML = `
-            ${tile.tag ? '<div class="tile-tag">' + tile.tag + '</div>' : ''}
-            <img src="${tile.image}" alt="${tile.title.replace(/"/g, '&quot;')}">
+            ${tile.tag ? '<div class="tile-tag">' + displayTag + '</div>' : ''}
+            <img src="${tile.image}" alt="${displayAlt}">
             <div class="tile-info">
-              <h3>${tile.title}</h3>
-              <p>${tile.description}</p>
+              <h3>${displayTitle}</h3>
+              <p>${displayDescription}</p>
               <div class="event-details">
-                <p>${tile.rawDesc}</p>
+                <p>${displayRawDesc}</p>
                 <div class="event-action">
                   <span class="btn-register">Register Here</span>
                 </div>
