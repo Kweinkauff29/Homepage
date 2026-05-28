@@ -1,3 +1,4 @@
+<!DOCTYPE html>
 <html lang="en" dir="ltr">
 
 <head>
@@ -8,7 +9,7 @@
   <!-- Existing external resources (unchanged) -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"
-    integrity="sha512-dyZ88n1Kis7J1gY9+jnuv6QylsHY2Rz+5PjqF3tU5hAnk3q1uI5wVzW+Z3G6CVJz4N97Z8vaUeQb+J6aQ1mX0g=="
+    integrity="sha512-1ycn6IcaQQ40/MKBW2W4Rhis/DbILU74C1vSrLJxCq57o941Ym01SwNsOMqvEBFlcgUa6xLiPY/NS5R+E6ztJQ=="
     crossorigin="anonymous" referrerpolicy="no-referrer" />
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -25,13 +26,13 @@
   <link href="https://fonts.googleapis.com/css2?family=Fascinate&display=swap" rel="stylesheet">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family='Inter'&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter&display=swap" rel="stylesheet">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Righteous&display=swap" rel="stylesheet">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family='Inter'&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter&display=swap" rel="stylesheet">
   <link rel="preconnect" href="https://fonts.googleapis.com">
 
   <!-- Leaflet CSS -->
@@ -1474,949 +1475,358 @@
       }
     }
 
-    #ber-featured-stage {
-      --berfs-bg: #040404;
-      --berfs-panel: rgba(0, 0, 0, 0.58);
-      --berfs-panel-strong: rgba(0, 0, 0, 0.72);
-      --berfs-line: rgba(255, 255, 255, 0.18);
-      --berfs-line-strong: rgba(255, 255, 255, 0.32);
-      --berfs-white: #ffffff;
-      --berfs-muted: rgba(255, 255, 255, 0.78);
-      --berfs-soft: rgba(255, 255, 255, 0.12);
-      --berfs-radius: 0;
-      --berfs-shadow: 0 24px 90px rgba(0, 0, 0, 0.4);
+    /* Shuffling Hero Section */
+    #shuffling-hero {
       position: relative;
-      margin: 0;
-      color: var(--berfs-white);
-      font-family: "Inter", Arial, sans-serif;
-      z-index: 1;
-    }
-
-    #ber-featured-stage,
-    #ber-featured-stage * {
-      box-sizing: border-box;
-    }
-
-    #ber-featured-stage .berfs__viewport {
-      position: relative;
-      height: clamp(420px, calc(100vh - 140px), 500px);
-      min-height: 420px;
-      max-height: 500px;
-      overflow: hidden;
-      background: var(--berfs-bg);
-      isolation: isolate;
-    }
-
-    #ber-featured-stage .berfs__media-layer,
-    #ber-featured-stage .berfs__media-slot {
-      position: absolute;
-      inset: 0;
-    }
-
-    #ber-featured-stage .berfs__media-slot {
-      opacity: 0;
-      transform: scale(1.03);
-      transition: opacity 0.8s ease, transform 1.2s ease;
-      overflow: hidden;
-    }
-
-    #ber-featured-stage .berfs__media-slot.is-active {
-      opacity: 1;
-      transform: scale(1);
-    }
-
-    #ber-featured-stage .berfs__media-asset,
-    #ber-featured-stage .berfs__media-fallback {
       width: 100%;
-      height: 100%;
-      display: block;
-    }
-
-    #ber-featured-stage .berfs__media-asset {
-      object-fit: cover;
-      object-position: center center;
-      filter: saturate(1.02) contrast(1.02) brightness(0.78);
+      height: 70vh;
+      min-height: 500px;
+      max-height: 650px;
       background: #000;
+      overflow: hidden;
+      font-family: 'Inter', sans-serif;
     }
 
-    #ber-featured-stage .berfs__media-fallback {
-      background:
-        radial-gradient(circle at 20% 20%, rgba(255, 255, 255, 0.12), transparent 32%),
-        linear-gradient(135deg, rgba(255, 255, 255, 0.08), transparent 48%),
-        linear-gradient(180deg, #080808, #020202);
-    }
-
-    #ber-featured-stage .berfs__shade {
+    #shuffling-video-container {
       position: absolute;
       inset: 0;
-      background:
-        linear-gradient(90deg, rgba(0, 0, 0, 0.82) 0%, rgba(0, 0, 0, 0.64) 35%, rgba(0, 0, 0, 0.5) 60%, rgba(0, 0, 0, 0.75) 100%),
-        linear-gradient(180deg, rgba(0, 0, 0, 0.18) 0%, rgba(0, 0, 0, 0.3) 100%);
       z-index: 1;
+      transition: opacity 1s ease;
     }
 
-    #ber-featured-stage .berfs__content-shell {
-      position: relative;
-      z-index: 2;
+    #shuffling-video-container video {
       width: 100%;
       height: 100%;
-      margin: 0;
-      padding: 0 26px;
-      display: flex;
-      align-items: stretch;
-    }
-
-    #ber-featured-stage.berfs--media-only .berfs__content-shell {
-      opacity: 0;
-      pointer-events: none;
-    }
-
-    #ber-featured-stage.berfs--media-only .berfs__shade {
-      opacity: 0;
-    }
-
-    #ber-featured-stage .berfs__panel {
-      display: grid;
-      grid-template-columns: minmax(0, 1fr) clamp(280px, 31vw, 420px);
-      gap: 0;
-      align-items: stretch;
-      background: linear-gradient(180deg, rgba(7, 10, 14, 0.82), rgba(5, 7, 10, 0.9));
-      border: 0;
-      border-radius: 0;
-      box-shadow: none;
-      backdrop-filter: blur(18px) saturate(1.1);
-      overflow: hidden;
-      width: 100%;
-      height: 100%;
-      min-height: 100%;
-      max-height: none;
-    }
-
-    #ber-featured-stage .berfs__panel-copy,
-    #ber-featured-stage .berfs__panel-side {
-      min-width: 0;
-      min-height: 0;
-      overflow-x: hidden;
-      overflow-y: auto;
-      scrollbar-width: thin;
-      scrollbar-color: rgba(23, 214, 195, 0.9) rgba(255, 255, 255, 0.06);
-    }
-
-    #ber-featured-stage .berfs__panel-copy::-webkit-scrollbar,
-    #ber-featured-stage .berfs__panel-side::-webkit-scrollbar {
-      width: 8px;
-    }
-
-    #ber-featured-stage .berfs__panel-copy::-webkit-scrollbar-track,
-    #ber-featured-stage .berfs__panel-side::-webkit-scrollbar-track {
-      background: rgba(255, 255, 255, 0.05);
-    }
-
-    #ber-featured-stage .berfs__panel-copy::-webkit-scrollbar-thumb,
-    #ber-featured-stage .berfs__panel-side::-webkit-scrollbar-thumb {
-      background: linear-gradient(180deg, #17d6c3 0%, #1474ff 100%);
-      border-radius: 999px;
-    }
-
-    #ber-featured-stage .berfs__panel-copy {
-      padding: clamp(22px, 2vw, 34px) clamp(22px, 2.2vw, 38px);
-      display: flex;
-      flex-direction: column;
-      justify-content: flex-start;
-      gap: 10px;
-      background:
-        linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px),
-        linear-gradient(180deg, rgba(7, 10, 14, 0.58), rgba(7, 10, 14, 0.34));
-      background-size: 28px 28px, 28px 28px, auto;
-      background-position: -1px -1px, -1px -1px, center;
-    }
-
-    #ber-featured-stage .berfs__panel-side {
-      padding: 0;
-      border-left: 1px solid var(--berfs-line);
-      background:
-        linear-gradient(180deg, rgba(255, 255, 255, 0.02), rgba(255, 255, 255, 0.01)),
-        linear-gradient(180deg, rgba(7, 10, 14, 0.34), rgba(7, 10, 14, 0.18));
-      display: flex;
-      flex-direction: column;
-      justify-content: stretch;
-      gap: 0;
-    }
-
-    #ber-featured-stage .berfs__visual-stage {
-      position: relative;
-      width: 100%;
-      height: 100%;
-      min-height: 100%;
-      overflow: hidden;
-      background: rgba(255, 255, 255, 0.03);
-    }
-
-    #ber-featured-stage .berfs__visual-stage img,
-    #ber-featured-stage .berfs__visual-stage .berfs__generated-poster {
-      width: 100%;
-      height: 100%;
-      display: block;
-    }
-
-    #ber-featured-stage .berfs__visual-stage img {
-      object-fit: cover;
-      object-position: center center;
-    }
-
-    #ber-featured-stage .berfs__visual-stage--contain img {
-      object-fit: contain;
-      padding: 14px;
-      background: rgba(255, 255, 255, 0.02);
-    }
-
-    #ber-featured-stage .berfs__visual-stage--portrait {
-      display: flex;
-      align-items: flex-end;
-      justify-content: center;
-      background:
-        linear-gradient(180deg, rgba(255, 255, 255, 0.04), rgba(255, 255, 255, 0.01)),
-        linear-gradient(180deg, rgba(6, 8, 12, 0.3), rgba(6, 8, 12, 0.06));
-    }
-
-    #ber-featured-stage .berfs__visual-stage--portrait img {
-      object-fit: contain;
-      object-position: center bottom;
-      padding: 10px 0 0;
-      background: transparent;
-    }
-
-    #ber-featured-stage .berfs__visual-stage--chart {
-      padding: 18px;
-      display: flex;
-      align-items: stretch;
-    }
-
-    #ber-featured-stage .berfs__visual-stage .berfs__cover-frame,
-    #ber-featured-stage .berfs__visual-stage .berfs__poster-frame,
-    #ber-featured-stage .berfs__visual-stage .berfs__portrait-frame {
-      width: 100%;
-      height: 100%;
-      min-height: 100%;
-      border: 0;
-      border-radius: 0;
-      background: transparent;
-    }
-
-    #ber-featured-stage .berfs__detail-stack {
-      display: grid;
-      gap: 12px;
-    }
-
-    #ber-featured-stage .berfs__chip,
-    #ber-featured-stage .berfs__meta-pill {
-      padding: 7px 10px;
-      border-radius: 4px;
-      border: 1px solid rgba(255, 255, 255, 0.18);
-      background: rgba(255, 255, 255, 0.05);
-      letter-spacing: 0.12em;
-      font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace;
-      font-size: 11px;
-      text-transform: uppercase;
-      color: rgba(255, 255, 255, 0.9);
-    }
-
-    #ber-featured-stage .berfs__title {
-      margin: 0;
-      font-family: "Inter", "Helvetica Neue", Arial, sans-serif;
-      font-weight: 800;
-      font-size: clamp(2.1rem, 4.2vw, 4.35rem);
-      line-height: 0.9;
-      letter-spacing: -0.06em;
-      text-transform: uppercase;
-      color: var(--berfs-white);
-      max-width: 15ch;
-    }
-
-    #ber-featured-stage .berfs__description {
-      margin: 0;
-      max-width: 62ch;
-      font-size: clamp(0.92rem, 0.98vw, 1rem);
-      line-height: 1.48;
-      color: rgba(255, 255, 255, 0.76);
-    }
-
-    #ber-featured-stage .berfs__meta-row,
-    #ber-featured-stage .berfs__kpi-strip,
-    #ber-featured-stage .berfs__cta-row,
-    #ber-featured-stage .berfs__bullet-list {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 10px;
-    }
-
-    #ber-featured-stage .berfs__cta-row {
-      padding-left: 4px;
-      overflow: visible;
-    }
-
-    #ber-featured-stage .berfs__bullet-list {
-      margin: 0;
-      padding: 0;
-      list-style: none;
-    }
-
-    #ber-featured-stage .berfs__bullet-list li {
-      width: min(100%, calc(50% - 6px));
-      min-width: 0;
-      padding: 10px 12px;
-      border: 1px solid rgba(255, 255, 255, 0.1);
-      background: rgba(255, 255, 255, 0.04);
-      border-radius: 16px;
-      color: var(--berfs-muted);
-      font-size: 0.95rem;
-      line-height: 1.4;
-    }
-
-    #ber-featured-stage .berfs__kpi {
-      min-width: 118px;
-      padding: 11px 13px;
-      border-radius: 0;
-      border: 1px solid rgba(255, 255, 255, 0.14);
-      background: rgba(255, 255, 255, 0.035);
-    }
-
-    #ber-featured-stage .berfs__kpi-value {
-      display: block;
-      font-family: "Inter", "Helvetica Neue", Arial, sans-serif;
-      font-weight: 800;
-      font-size: clamp(1.5rem, 2vw, 2rem);
-      line-height: 1;
-      letter-spacing: -0.05em;
-      color: var(--berfs-white);
-    }
-
-    #ber-featured-stage .berfs__kpi-label {
-      display: block;
-      margin-top: 6px;
-      font-size: 11px;
-      letter-spacing: 0.12em;
-      text-transform: uppercase;
-      color: rgba(255, 255, 255, 0.6);
-      font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace;
-    }
-
-    #ber-featured-stage .berfs__kpi-note {
-      display: block;
-      margin-top: 4px;
-      font-size: 11px;
-      color: rgba(255, 255, 255, 0.64);
-    }
-
-    #ber-featured-stage .berfs__cta {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      min-height: 46px;
-      padding: 0 18px;
-      border-radius: 8px;
-      border: 0;
-      background: linear-gradient(135deg, #17d6c3 0%, #1496ff 100%);
-      box-shadow: 0 10px 24px rgba(17, 121, 255, 0.24);
-      color: var(--berfs-white);
-      text-decoration: none;
-      font-weight: 700;
-      letter-spacing: 0.12em;
-      text-transform: uppercase;
-      font-size: 11px;
-      transition: transform 0.2s ease, box-shadow 0.2s ease, filter 0.2s ease;
-    }
-
-    #ber-featured-stage .berfs__cta:hover,
-    #ber-featured-stage .berfs__cta:focus-visible,
-    #ber-featured-stage .berfs__nav-btn:hover,
-    #ber-featured-stage .berfs__nav-btn:focus-visible {
-      transform: translateY(-1px);
-      filter: brightness(1.06);
-      outline: none;
-    }
-
-    #ber-featured-stage .berfs__cta:nth-child(2n) {
-      background: linear-gradient(135deg, #ff7b54 0%, #ffca3a 100%);
-      box-shadow: 0 16px 32px rgba(255, 117, 76, 0.28);
-    }
-
-    #ber-featured-stage .berfs__cta:nth-child(3n) {
-      background: linear-gradient(135deg, #9a6bff 0%, #ff5cab 100%);
-      box-shadow: 0 16px 32px rgba(154, 107, 255, 0.28);
-    }
-
-    #ber-featured-stage .berfs__poster-frame,
-    #ber-featured-stage .berfs__cover-frame,
-    #ber-featured-stage .berfs__portrait-frame,
-    #ber-featured-stage .berfs__market-frame {
-      position: relative;
-      border-radius: 0;
-      overflow: hidden;
-      border: 1px solid rgba(255, 255, 255, 0.12);
-      background: rgba(255, 255, 255, 0.02);
-      min-height: 220px;
-    }
-
-    #ber-featured-stage .berfs__poster-frame img,
-    #ber-featured-stage .berfs__cover-frame img,
-    #ber-featured-stage .berfs__portrait-frame img,
-    #ber-featured-stage .berfs__team-photo img {
-      width: 100%;
-      height: 100%;
-      display: block;
-      object-fit: contain;
-      background: rgba(255, 255, 255, 0.02);
-    }
-
-    #ber-featured-stage .berfs__poster-frame,
-    #ber-featured-stage .berfs__cover-frame {
-      aspect-ratio: 8.5 / 11;
-    }
-
-    #ber-featured-stage .berfs__generated-poster {
-      display: grid;
-      gap: 12px;
-      min-height: 100%;
-      padding: 22px;
-      background:
-        radial-gradient(circle at top right, rgba(255, 255, 255, 0.12), transparent 30%),
-        linear-gradient(135deg, rgba(255, 255, 255, 0.08), rgba(255, 255, 255, 0.03));
-    }
-
-    #ber-featured-stage .berfs__generated-poster h3,
-    #ber-featured-stage .berfs__generated-poster p {
-      margin: 0;
-    }
-
-    #ber-featured-stage .berfs__generated-poster h3 {
-      font-family: "Bebas Neue", 'Inter', Arial, sans-serif;
-      font-size: clamp(2rem, 3vw, 3rem);
-      line-height: 0.96;
-      text-transform: uppercase;
-      letter-spacing: 0.04em;
-    }
-
-    #ber-featured-stage .berfs__poster-meta,
-    #ber-featured-stage .berfs__support-grid,
-    #ber-featured-stage .berfs__team-grid,
-    #ber-featured-stage .berfs__benefits-grid,
-    #ber-featured-stage .berfs__charts-grid,
-    #ber-featured-stage .berfs__highlights-grid,
-    #ber-featured-stage .berfs__flyer-pair {
-      display: grid;
-      gap: 12px;
-    }
-
-    #ber-featured-stage .berfs__poster-meta {
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-    }
-
-    #ber-featured-stage .berfs__support-grid,
-    #ber-featured-stage .berfs__highlights-grid {
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-    }
-
-    #ber-featured-stage .berfs__benefits-grid {
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-    }
-
-    #ber-featured-stage .berfs__team-grid {
-      grid-template-columns: repeat(3, minmax(0, 1fr));
-    }
-
-    #ber-featured-stage .berfs__charts-grid {
-      grid-template-columns: repeat(3, minmax(0, 1fr));
-    }
-
-    #ber-featured-stage .berfs__flyer-pair {
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-    }
-
-    #ber-featured-stage .berfs__support-card,
-    #ber-featured-stage .berfs__team-card,
-    #ber-featured-stage .berfs__benefit-card,
-    #ber-featured-stage .berfs__highlight-card,
-    #ber-featured-stage .berfs__chart-card {
-      position: relative;
-      padding: 12px;
-      border-radius: 0;
-      border: 1px solid rgba(255, 255, 255, 0.12);
-      background: rgba(255, 255, 255, 0.03);
-      color: var(--berfs-white);
-      text-decoration: none;
-      overflow: hidden;
-    }
-
-    #ber-featured-stage .berfs__support-card h3,
-    #ber-featured-stage .berfs__team-card h3,
-    #ber-featured-stage .berfs__benefit-card h3,
-    #ber-featured-stage .berfs__highlight-card h3,
-    #ber-featured-stage .berfs__chart-card h3,
-    #ber-featured-stage .berfs__support-card p,
-    #ber-featured-stage .berfs__team-card p,
-    #ber-featured-stage .berfs__benefit-card p,
-    #ber-featured-stage .berfs__highlight-card p,
-    #ber-featured-stage .berfs__chart-card p {
-      margin: 0;
-    }
-
-    #ber-featured-stage .berfs__support-card h3,
-    #ber-featured-stage .berfs__team-card h3,
-    #ber-featured-stage .berfs__benefit-card h3,
-    #ber-featured-stage .berfs__highlight-card h3,
-    #ber-featured-stage .berfs__chart-card h3 {
-      font-size: 14px;
-      line-height: 1.32;
-      text-transform: uppercase;
-      letter-spacing: 0.04em;
-    }
-
-    #ber-featured-stage .berfs__support-card p,
-    #ber-featured-stage .berfs__team-card p,
-    #ber-featured-stage .berfs__benefit-card p,
-    #ber-featured-stage .berfs__highlight-card p,
-    #ber-featured-stage .berfs__chart-card p {
-      margin-top: 6px;
-      color: rgba(255, 255, 255, 0.7);
-      font-size: 12px;
-      line-height: 1.45;
-    }
-
-    #ber-featured-stage .berfs__benefit-card {
-      display: grid;
-      grid-template-columns: 50px minmax(0, 1fr);
-      gap: 12px;
-      align-items: center;
-    }
-
-    #ber-featured-stage .berfs__logo-badge,
-    #ber-featured-stage .berfs__team-photo {
-      width: 50px;
-      height: 50px;
-      border-radius: 14px;
-      overflow: hidden;
-      border: 1px solid rgba(255, 255, 255, 0.14);
-      background: rgba(255, 255, 255, 0.08);
-      display: grid;
-      place-items: center;
-      flex-shrink: 0;
-    }
-
-    #ber-featured-stage .berfs__logo-badge img,
-    #ber-featured-stage .berfs__team-photo img {
-      width: 100%;
-      height: 100%;
-      display: block;
       object-fit: cover;
     }
 
-    #ber-featured-stage .berfs__logo-badge span,
-    #ber-featured-stage .berfs__team-photo span {
-      display: none;
-      font-family: "Bebas Neue", 'Inter', Arial, sans-serif;
-      font-size: 1.25rem;
-      letter-spacing: 0.04em;
-    }
-
-    #ber-featured-stage .berfs__logo-badge.is-fallback img,
-    #ber-featured-stage .berfs__team-photo.is-fallback img {
-      display: none;
-    }
-
-    #ber-featured-stage .berfs__logo-badge.is-fallback span,
-    #ber-featured-stage .berfs__team-photo.is-fallback span {
-      display: block;
-    }
-
-    #ber-featured-stage[data-berfs-type="team"] .berfs__panel {
-      grid-template-columns: minmax(0, 1fr) clamp(220px, 27vw, 360px);
-    }
-
-    #ber-featured-stage[data-berfs-type="team"] .berfs__panel-copy {
-      padding-block: 16px;
-      gap: 8px;
-    }
-
-    #ber-featured-stage[data-berfs-type="team"] .berfs__title {
-      max-width: none;
-      font-size: clamp(1.8rem, 3.1vw, 3rem);
-      letter-spacing: -0.05em;
-    }
-
-    #ber-featured-stage[data-berfs-type="team"] .berfs__description {
-      max-width: 68ch;
-      font-size: 0.82rem;
-      line-height: 1.38;
-    }
-
-    #ber-featured-stage[data-berfs-type="team"] .berfs__detail-stack {
-      gap: 10px;
-    }
-
-    #ber-featured-stage[data-berfs-type="team"] .berfs__team-card {
-      padding: 10px;
-    }
-
-    #ber-featured-stage[data-berfs-type="team"] .berfs__team-card .berfs__benefit-card {
-      grid-template-columns: 42px minmax(0, 1fr);
-      gap: 10px;
-      padding: 0;
-      border: 0;
-      background: transparent;
-    }
-
-    #ber-featured-stage[data-berfs-type="team"] .berfs__team-photo {
-      width: 42px;
-      height: 42px;
-      border-radius: 50%;
-    }
-
-    #ber-featured-stage[data-berfs-type="team"] .berfs__team-card h3 {
-      font-size: 12px;
-      line-height: 1.2;
-      letter-spacing: 0.05em;
-    }
-
-    #ber-featured-stage[data-berfs-type="team"] .berfs__team-card p {
-      margin-top: 4px;
-      font-size: 11px;
-      line-height: 1.32;
-    }
-
-    #ber-featured-stage[data-berfs-type="benefits"] .berfs__featured-tool {
-      padding: 12px;
-      gap: 12px;
-    }
-
-    #ber-featured-stage[data-berfs-type="benefits"] .berfs__title {
-      max-width: none;
-      font-size: clamp(1.8rem, 3vw, 3rem);
-    }
-
-    #ber-featured-stage[data-berfs-type="benefits"] .berfs__description {
-      max-width: 62ch;
-      font-size: 0.84rem;
-      line-height: 1.38;
-    }
-
-    #ber-featured-stage[data-berfs-type="benefits"] .berfs__featured-tool p {
-      margin-top: 4px;
-      font-size: 12px;
-      line-height: 1.4;
-    }
-
-    #ber-featured-stage[data-berfs-type="benefits"] .berfs__panel,
-    #ber-featured-stage[data-berfs-type="market"] .berfs__panel {
-      grid-template-columns: minmax(0, 1fr);
-    }
-
-    #ber-featured-stage[data-berfs-type="market"] .berfs__title {
-      max-width: none;
-      font-size: clamp(1.8rem, 3vw, 3rem);
-    }
-
-    #ber-featured-stage[data-berfs-type="market"] .berfs__description {
-      max-width: 68ch;
-      font-size: 0.84rem;
-      line-height: 1.38;
-    }
-
-    #ber-featured-stage[data-berfs-type="market"] .berfs__charts-grid {
-      grid-template-columns: repeat(3, minmax(0, 1fr));
-      gap: 10px;
-    }
-
-    #ber-featured-stage[data-berfs-type="market"] .berfs__chart-card {
-      min-height: 0;
-      padding: 10px;
-    }
-
-    #ber-featured-stage[data-berfs-type="market"] .berfs__chart-shell {
-      height: 88px;
-    }
-
-    #ber-featured-stage .berfs__featured-tool {
-      display: grid;
-      grid-template-columns: 68px minmax(0, 1fr);
-      gap: 14px;
-      padding: 16px;
-      border-radius: 20px;
-      border: 1px solid rgba(255, 255, 255, 0.14);
-      background: rgba(255, 255, 255, 0.06);
-      text-decoration: none;
-      color: var(--berfs-white);
-    }
-
-    #ber-featured-stage .berfs__featured-tool .berfs__logo-badge {
-      width: 68px;
-      height: 68px;
-    }
-
-    #ber-featured-stage .berfs__featured-tool h3,
-    #ber-featured-stage .berfs__featured-tool p {
-      margin: 0;
-    }
-
-    #ber-featured-stage .berfs__featured-tool p {
-      margin-top: 6px;
-      color: rgba(255, 255, 255, 0.76);
-      line-height: 1.55;
-    }
-
-    #ber-featured-stage .berfs__tool-caption,
-    #ber-featured-stage .berfs__chart-caption,
-    #ber-featured-stage .berfs__mini-label {
-      font-size: 11px;
-      letter-spacing: 0.16em;
-      text-transform: uppercase;
-      color: rgba(255, 255, 255, 0.66);
-    }
-
-    #ber-featured-stage .berfs__chart-card {
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
-      min-height: 180px;
-    }
-
-    #ber-featured-stage .berfs__chart-shell {
-      position: relative;
-      height: 110px;
-      overflow: hidden;
-    }
-
-    #ber-featured-stage .berfs__chart-svg {
-      width: 100%;
-      height: 100%;
-      display: block;
-    }
-
-    #ber-featured-stage .berfs__chart-gridline {
-      stroke: rgba(255, 255, 255, 0.08);
-      stroke-width: 1;
-    }
-
-    #ber-featured-stage .berfs__chart-area {
-      fill: rgba(255, 255, 255, 0.08);
-      opacity: 0.2;
-    }
-
-    #ber-featured-stage .berfs__chart-line {
-      fill: none;
-      stroke: rgba(255, 255, 255, 0.92);
-      stroke-width: 3;
-      stroke-linejoin: round;
-      stroke-linecap: round;
-      stroke-dasharray: 1000;
-      stroke-dashoffset: 1000;
-      transition: stroke-dashoffset 3s cubic-bezier(0.19, 1, 0.22, 1);
-    }
-
-    #ber-featured-stage .berfs__chart-card.is-live .berfs__chart-line {
-      stroke-dashoffset: 0;
-    }
-
-    #ber-featured-stage .berfs__chart-latest {
-      display: flex;
-      align-items: baseline;
-      justify-content: space-between;
-      gap: 10px;
-    }
-
-    #ber-featured-stage .berfs__chart-latest strong {
-      font-family: "Bebas Neue", 'Inter', Arial, sans-serif;
-      font-size: 1.75rem;
-      letter-spacing: 0.03em;
-      line-height: 1;
-    }
-
-    #ber-featured-stage .berfs__nav {
+    #shuffling-tiles-container {
       position: absolute;
-      z-index: 3;
-      top: 50%;
-      pointer-events: none;
-    }
-
-    #ber-featured-stage .berfs__nav--prev {
+      top: 15%;
+      bottom: 5%;
       left: 0;
-      transform: translate(-18%, -50%);
+      width: 100%;
+      z-index: 2;
+      display: flex;
+      gap: 20px;
+      padding: 0 40px;
+      overflow: visible;
+      opacity: 0;
+      transition: opacity 1.5s ease;
+      pointer-events: none;
+      /* Initially hidden */
     }
 
-    #ber-featured-stage .berfs__nav--next {
-      right: 0;
-      transform: translate(18%, -50%);
-    }
-
-    #ber-featured-stage .berfs__nav-btn {
-      width: 58px;
-      height: 58px;
-      border-radius: 8px;
-      border: 1px solid rgba(255, 255, 255, 0.18);
-      background: rgba(0, 0, 0, 0.42);
-      box-shadow: 0 18px 40px rgba(0, 0, 0, 0.28);
-      color: var(--berfs-white);
-      display: grid;
-      place-items: center;
-      font-size: 1.55rem;
-      line-height: 1;
-      cursor: pointer;
+    #shuffling-tiles-container.is-active {
+      opacity: 1;
       pointer-events: auto;
     }
 
-    #ber-featured-stage .berfs__progress-track {
+    #shuffling-section-title {
       position: absolute;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      height: 8px;
-      overflow: hidden;
-      background: rgba(255, 255, 255, 0.08);
-      z-index: 3;
+      top: 50px;
+      left: 60px;
+      color: #fff;
+      font-size: 2.2rem;
+      font-weight: 800;
+      z-index: 5;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      opacity: 0;
+      transition: opacity 1.5s ease, text-shadow 0.3s ease;
+      text-shadow: 0 4px 15px rgba(0, 0, 0, 0.8);
+      pointer-events: none;
     }
 
-    #ber-featured-stage .berfs__progress-track span {
-      display: block;
-      width: 100%;
+    #shuffling-section-title.is-active {
+      opacity: 1;
+    }
+
+    #shuffling-clock {
+      position: absolute;
+      top: 50px;
+      right: 60px;
+      color: #fff;
+      font-size: 1.8rem;
+      font-weight: 600;
+      z-index: 5;
+      letter-spacing: 1px;
+      opacity: 0;
+      transition: opacity 1.5s ease, text-shadow 0.3s ease;
+      text-shadow: 0 4px 15px rgba(0, 0, 0, 0.8);
+      pointer-events: none;
+    }
+
+    #shuffling-clock.is-active {
+      opacity: 1;
+    }
+
+    .blink-colon {
+      animation: blink-colon-anim 1s infinite;
+    }
+
+    @keyframes blink-colon-anim {
+
+      0%,
+      100% {
+        opacity: 1;
+      }
+
+      50% {
+        opacity: 0;
+      }
+    }
+
+    @media (max-width: 768px) {
+      #shuffling-section-title {
+        font-size: 1.5rem;
+        top: 30px;
+        left: 30px;
+      }
+
+      #shuffling-clock {
+        font-size: 1.2rem;
+        top: 30px;
+        right: 30px;
+      }
+    }
+
+    .shuffling-track {
+      display: flex;
+      gap: 20px;
       height: 100%;
-      transform-origin: left center;
-      transform: scaleX(0);
-      background: linear-gradient(90deg, #17d6c3 0%, #1698ff 40%, #8f5bff 74%, #ff7a59 100%);
+      align-items: center;
+      transition: transform 0.8s ease-in-out;
     }
 
-    #ber-featured-stage .berfs__sr-status {
-      position: absolute;
-      width: 1px;
-      height: 1px;
+    .shuffling-tile {
+      position: relative;
+      flex-shrink: 0;
+      height: 95%;
+      border-radius: 12px;
       overflow: hidden;
-      clip: rect(0, 0, 0, 0);
-      clip-path: inset(50%);
-      white-space: nowrap;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+      cursor: pointer;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      background: #111;
+      text-decoration: none;
     }
 
-    #ber-featured-stage .berfs__noscript {
-      padding: 28px;
-      background: rgba(0, 0, 0, 0.8);
+    .shuffling-tile:hover {
+      transform: scale(1.03) translateY(-5px);
+      box-shadow: 0 15px 40px rgba(0, 0, 0, 0.7);
+      z-index: 10;
+    }
+
+    .shuffling-tile img {
+      height: 100%;
+      width: auto;
+      display: block;
+      object-fit: cover;
+      background: #111;
+      transition: opacity 0.3s ease, filter 0.3s ease;
+    }
+
+    .shuffling-tile:hover img {
+      filter: brightness(0.4);
+    }
+
+    .tile-info {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      padding: 30px 20px;
+      background: linear-gradient(to top, rgba(0, 0, 0, 0.95) 0%, rgba(0, 0, 0, 0.6) 60%, rgba(0, 0, 0, 0) 100%);
+      color: #fff;
+      transform: translateY(10px);
+      opacity: 0;
+      transition: all 0.3s ease;
+    }
+
+    .shuffling-tile:hover .tile-info {
+      transform: translateY(0);
+      opacity: 1;
+    }
+
+    .tile-info h3 {
+      margin: 0 0 8px 0;
+      font-size: 1.8rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1px;
       color: #fff;
     }
 
-    #ber-featured-stage .berfs__noscript a {
-      color: #fff;
+    .tile-info p {
+      margin: 0;
+      font-size: 1.3rem;
+      color: #ddd;
+    }
+
+    /* Staff Tile Overrides */
+    .tile-staff .tile-info {
+      opacity: 1;
+      transform: translateY(0);
+      background: linear-gradient(to top, rgba(0, 0, 0, 0.9) 0%, rgba(0, 0, 0, 0.7) 40%, rgba(0, 0, 0, 0) 100%);
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+    }
+
+    .tile-staff .staff-details {
+      max-height: 0;
+      opacity: 0;
+      overflow: hidden;
+      transition: all 0.3s ease;
+      font-size: 1.25rem;
+      color: #eee;
+      margin-top: 12px;
+      line-height: 1.4;
+    }
+
+    .shuffling-tile:hover .staff-details {
+      max-height: 300px;
+      opacity: 1;
+    }
+
+    .staff-contact {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      margin-top: 12px;
+      font-size: 1.15rem;
+    }
+
+    .staff-contact a {
+      color: #64BAB0;
+      text-decoration: none;
+    }
+
+    .staff-contact a:hover {
       text-decoration: underline;
     }
 
-    #ber-featured-stage .berfs__reveal {
+    /* Event Details on Hover */
+    .event-details {
+      max-height: 0;
       opacity: 0;
-      clip-path: inset(0 0 0 0);
-      transform: translate3d(0, 18px, 0);
-      transition:
-        opacity 0.55s ease,
-        transform 0.8s cubic-bezier(0.22, 1, 0.36, 1),
-        clip-path 0.8s cubic-bezier(0.22, 1, 0.36, 1);
-      transition-delay: var(--berfs-delay, 0ms);
+      overflow: hidden;
+      transition: all 0.3s ease;
+      font-size: 1.15rem;
+      color: #eee;
+      margin-top: 12px;
+      line-height: 1.4;
     }
 
-    #ber-featured-stage .berfs__panel[data-transition="split-fly"] .berfs__panel-copy .berfs__reveal {
-      transform: translate3d(-38px, 0, 0);
-    }
-
-    #ber-featured-stage .berfs__panel[data-transition="split-fly"] .berfs__panel-side .berfs__reveal {
-      transform: translate3d(38px, 0, 0);
-    }
-
-    #ber-featured-stage .berfs__panel.is-ready .berfs__reveal {
+    .shuffling-tile:hover .event-details {
+      max-height: 250px;
       opacity: 1;
+    }
+
+    .btn-register {
+      display: inline-block;
+      margin-top: 12px;
+      padding: 10px 18px;
+      background: #64BAB0;
+      /* CCOR Teal */
+      color: #fff;
+      border-radius: 4px;
+      font-weight: 700;
+      text-transform: uppercase;
+      font-size: 1.05rem;
+      letter-spacing: 1px;
+      transition: background 0.3s ease;
+    }
+
+    .shuffling-tile:hover .btn-register:hover {
+      background: #004d57;
+    }
+
+    /* Text-only Event Overrides */
+    .tile-no-image {
+      width: 450px;
+      background: linear-gradient(135deg, #004d57 0%, #64BAB0 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 30px;
+    }
+
+    .tile-no-image .tile-info {
+      position: relative;
+      background: none;
       transform: none;
-      clip-path: inset(0 0 0 0);
+      opacity: 1;
+      padding: 0;
     }
 
-    #ber-featured-stage .berfs__panel-side:empty {
-      display: none;
+    .tile-no-image .tile-info h3 {
+      font-size: 1.5rem;
+      margin-bottom: 15px;
+      line-height: 1.3;
     }
 
-    #ber-featured-stage .berfs__countup[data-ready="true"] {
-      will-change: contents;
+    .tile-no-image .tile-info p {
+      font-size: 1rem;
+      color: rgba(255, 255, 255, 0.9);
     }
 
-    @media (max-width: 1200px) {
-      #ber-featured-stage .berfs__panel {
-        grid-template-columns: minmax(0, 1fr);
-        min-height: 100%;
-      }
-
-      #ber-featured-stage .berfs__panel-side {
-        border-left: 0;
-        border-top: 1px solid var(--berfs-line);
-      }
+    .tile-tag {
+      position: absolute;
+      top: 15px;
+      left: 15px;
+      background: #64BAB0;
+      color: #fff;
+      padding: 5px 10px;
+      font-size: 0.75rem;
+      font-weight: bold;
+      text-transform: uppercase;
+      border-radius: 4px;
+      letter-spacing: 1px;
+      z-index: 2;
     }
 
-    @media (max-width: 767px) {
-      #ber-featured-stage .berfs__viewport {
-        height: clamp(360px, calc(100vh - 110px), 500px);
-        min-height: 360px;
-        max-height: 500px;
-      }
-
-      #ber-featured-stage .berfs__content-shell {
-        width: 100%;
-        padding: 0 14px;
-      }
-
-      #ber-featured-stage .berfs__panel {
-        min-height: 100%;
-      }
-
-      #ber-featured-stage .berfs__panel-copy,
-      #ber-featured-stage .berfs__panel-side {
-        padding: 16px;
-      }
-
-      #ber-featured-stage .berfs__panel-side {
-        padding: 0;
-      }
-
-      #ber-featured-stage .berfs__description {
-        max-width: none;
-      }
-
-      #ber-featured-stage .berfs__bullet-list li,
-      #ber-featured-stage .berfs__support-grid,
-      #ber-featured-stage .berfs__highlights-grid,
-      #ber-featured-stage .berfs__benefits-grid,
-      #ber-featured-stage .berfs__team-grid,
-      #ber-featured-stage .berfs__charts-grid,
-      #ber-featured-stage .berfs__flyer-pair,
-      #ber-featured-stage .berfs__poster-meta {
-        grid-template-columns: 1fr;
-      }
-
-      #ber-featured-stage .berfs__nav--prev {
-        left: 0;
-        transform: translate(-10%, -50%);
-      }
-
-      #ber-featured-stage .berfs__nav--next {
-        right: 0;
-        transform: translate(10%, -50%);
-      }
-
-      #ber-featured-stage .berfs__nav-btn {
-        width: 46px;
-        height: 46px;
-        font-size: 1.2rem;
-      }
+    .shuffling-nav {
+      position: absolute;
+      top: 50%;
+      width: 100%;
+      display: flex;
+      justify-content: space-between;
+      padding: 0 20px;
+      z-index: 3;
+      transform: translateY(-50%);
+      pointer-events: none;
+      opacity: 0;
+      transition: opacity 1.5s ease;
     }
 
-    @media (prefers-reduced-motion: reduce) {
-      #ber-featured-stage .berfs__media-slot,
-      #ber-featured-stage .berfs__reveal,
-      #ber-featured-stage .berfs__chart-line,
-      #ber-featured-stage .berfs__cta,
-      #ber-featured-stage .berfs__nav-btn {
-        transition: none !important;
-        animation: none !important;
-      }
+    .shuffling-nav.is-active {
+      opacity: 1;
+    }
+
+    .shuffling-nav-btn {
+      width: 50px;
+      height: 50px;
+      background: rgba(0, 0, 0, 0.5);
+      border: 2px solid rgba(255, 255, 255, 0.2);
+      border-radius: 50%;
+      color: #fff;
+      font-size: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      pointer-events: auto;
+      transition: all 0.2s ease;
+    }
+
+    .shuffling-nav-btn:hover {
+      background: rgba(0, 0, 0, 0.8);
+      border-color: #fff;
+      transform: scale(1.1);
     }
   </style>
 </head>
@@ -2435,468 +1845,361 @@
 
 
   (() => {
-    const initBERFeaturedStage = (rootId = "ber-featured-stage") => {
-      const root = document.getElementById(rootId);
-      if (!root || root.dataset.berfsReady) return;
-      root.dataset.berfsReady = "true";
+    // === CUSTOM & PINNED EVENTS CONFIGURATION ===
 
-      const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-      const storageKey = "berfs-autoplay-paused";
-      const esc = (v) => String(v ?? "").replace(/[&<>\"']/g, (m) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[m]));
-      const pick = (arr) => arr && arr.length ? arr[Math.floor(Math.random() * arr.length)] : "";
-      const shuffle = (arr) => { const copy = [...arr]; for (let i = copy.length - 1; i > 0; i -= 1) { const j = Math.floor(Math.random() * (i + 1)); [copy[i], copy[j]] = [copy[j], copy[i]]; } return copy; };
-      const clamp = (v, min, max) => Math.min(max, Math.max(min, v));
-      const initials = (name = "BER") => name.split(/\s+/).filter(Boolean).slice(0, 2).map((p) => p[0].toUpperCase()).join("") || "BER";
-      const eventStamp = (iso, tz = "America/New_York") => new Intl.DateTimeFormat("en-US", { month: "short", day: "numeric", year: "numeric", hour: "numeric", minute: "2-digit", timeZone: tz, timeZoneName: "short" }).format(new Date(iso));
-      const num = (value, stat = {}) => {
-        if (!Number.isFinite(value)) return stat.display || "";
-        const prefix = stat.prefix || "";
-        const suffix = stat.suffix || "";
-        const body = prefix === "$"
-          ? new Intl.NumberFormat("en-US", { maximumFractionDigits: 0 }).format(Math.round(value))
-          : Math.abs(value) >= 1000
-            ? new Intl.NumberFormat("en-US", { maximumFractionDigits: value % 1 ? 1 : 0 }).format(value)
-            : (value % 1 ? value.toFixed(1) : String(Math.round(value)));
-        return `${prefix}${body}${suffix}`;
-      };
+    // 1. PINNED API EVENTS: 
+    // Type the exact name of the API events here in the order you want them to appear.
+    // They will be forced to the front of the carousel, regardless of date or if they have a flyer.
+    const pinnedApiEventNames = [
+      "June Membership Breakfast"
+    ];
 
-      const marketRaw = `BONITA
+    // 2. CUSTOM FLYERS / HERO IMAGES: 
+    // Add your own custom tiles here.
+    // Set the 'spot' number (1-indexed) to force it into a specific position overall.
+    const customTiles = [
+      // {
+      //  title: "Meet the Board 2027",
+      //   description: "June 5th @ 9am",
+      //  image: "https://coconutcoastrealtors.org/wp-content/uploads/2026/05/MTBHero.png",
+      //  link: "https://www.eventbrite.com/e/wcr-summer-social-meet-the-2027-board-tickets-1990455189052?aff=oddtdtcreator&keep_tld=true",
+      //  spot: 3,
+      //  tag: "Promo"
+      // }
+    ];
 
-Closed Sales: +38%
-Median Days: 69
-Pending Sales: +34%
-New Listings: -22%
-Inventory New: 470
-Inventory Sold: 421
-Median Price: $520,000 (-0.4%)
-Homes For Sale: -24%
+    const team = [
+      { title: "Meighan Harris", description: "Chief Executive Officer", image: "https://coconutcoastrealtors.org/wp-content/uploads/2026/02/Meighan-2026.jpg", link: "mailto:CEO@BERealtors.org", phone: "(239) 992-6771 ext. 6", email: "CEO@BERealtors.org", shortBio: "Meighan leads the overall direction, operations, and member-focused strategy of the Coconut Coast Organization of REALTORS®." },
+      { title: "Jenna Ripley", description: "Membership and Operations Director", image: "https://coconutcoastrealtors.org/wp-content/uploads/2026/02/Jenna-2026.jpg", link: "mailto:operations@berealtors.org", phone: "(239) 992-6771 ext. 5", email: "operations@berealtors.org", shortBio: "Jenna supports CCOR’s executive operations and helps keep key internal systems, member service workflows, and organizational processes moving efficiently." },
+      { title: "Katie Malooly", description: "Director of Development and Events", image: "https://coconutcoastrealtors.org/wp-content/uploads/2026/02/Katie.png", link: "mailto:Events@BERealtors.org", phone: "(239) 992-6771 ext. 2", email: "Events@BERealtors.org", shortBio: "Katie manages CCOR’s education and events calendar, including class planning, member events, registrations, and event logistics." },
+      { title: "Erica Bernhardt", description: "Director of MLS", image: "https://coconutcoastrealtors.org/wp-content/uploads/2026/02/Erica.png", link: "mailto:MLS@BERealtors.org", phone: "(239) 992-6771 ext. 3", email: "MLS@BERealtors.org", shortBio: "Erica oversees MLS support for CCOR members, including Matrix/SWFLAMLS questions, MLS issues, product updates, and MLS-related training." },
+      { title: "Mariam Abdallah", description: "Director of Member Experience", image: "https://coconutcoastrealtors.org/wp-content/uploads/2026/05/Mariam-photo-Edited.png", link: "mailto:Membership@BERealtors.org", phone: "(239) 992-6771 ext. 1", email: "Membership@BERealtors.org", shortBio: "Mariam helps members from the moment they join and continues supporting them throughout their membership." },
+      { title: "Kevin Weinkauff", description: "Communications and Technology", image: "https://coconutcoastrealtors.org/wp-content/uploads/2020/10/Headshot-165x244.png", link: "mailto:Tech@BERealtors.org", phone: "(239) 992-6771 ext. 4", email: "Tech@BERealtors.org", shortBio: "Kevin supports CCOR’s technology, communications, marketing, website, digital platforms, and member-facing tech resources." }
+    ];
 
---- 5-YEAR HISTORY ---
-Median Price:
-  2022: $488,625
-  2023: $584,750
-  2024: $576,250
-  2025: $521,250
-  2026: $520,750
-Homes for Sale:
-  2022: 389
-  2023: 919
-  2024: 1,689
-  2025: 2,478
-  2026: 1,881
-Closed Sales:
-  2022: 378
-  2023: 344
-  2024: 321
-  2025: 306
-  2026: 421`;
+    const API_URL = 'https://gz-realestate-proxy.bonitaspringsrealtors.workers.dev/events/all?enriched=true';
+    let tilesData = [];
+    let currentIndex = 0;
+    let autoPlayInterval;
+    let isHovering = false;
 
-      const team = [
-        ["Meighan Harris", "Chief Executive Officer", "https://coconutcoastrealtors.org/wp-content/uploads/2026/02/Meighan-2026.jpg", "mailto:CEO@BERealtors.org"],
-        ["Kevin Weinkauff", "Communications and Technology", "https://coconutcoastrealtors.org/wp-content/uploads/2020/10/Headshot-165x244.png", "mailto:Tech@BERealtors.org"],
-        ["Katie Malooly", "Director of Development and Events", "https://coconutcoastrealtors.org/wp-content/uploads/2026/02/Katie.png", "mailto:Events@BERealtors.org"],
-        ["Jenna Ripley", "Membership and Operations Director", "https://coconutcoastrealtors.org/wp-content/uploads/2026/02/Jenna-2026.jpg", "mailto:operations@berealtors.org"],
-        ["Erica Bernhardt", "Director of MLS", "https://coconutcoastrealtors.org/wp-content/uploads/2026/02/Erica.png", "mailto:MLS@BERealtors.org"]
-      ].map(([name, role, image, email]) => ({ name, role, image, email }));
+    async function fetchEvents() {
+      try {
+        const res = await fetch(API_URL);
+        if (!res.ok) return { visualEvents: [], textEvents: [] };
+        const data = await res.json();
+        const results = data.Results || [];
+        const now = new Date();
 
-      const tools = {
-        memberPortal: { title: "Member Portal", body: "Billing, education, events, and account management.", url: "https://members.coconutcoastrealtors.org/MIC/Login", logo: "https://logo.clearbit.com/growthzone.com" },
-        agent3000: { title: "Agent3000", body: "Marketing and CMA tools for members.", url: "https://agent3000.com/", logo: "https://logo.clearbit.com/agent3000.com" },
-        builders: { title: "Builders Update", body: "New-construction search and referral tools.", url: "https://www.buildersupdate.com/", logo: "https://logo.clearbit.com/buildersupdate.com" },
-        realtorPlus: { title: "Realtor.com+", body: "Consumer insights and integrated prospecting tools.", url: "https://coconutcoastrealtors.org/realtor-com-launches-bonita-springs-estero-mls-among-the-first-markets/", logo: "https://logo.clearbit.com/realtor.com" },
-        tech: { title: "FR Tech Helpline", body: "Unlimited tech support for Florida Realtors members.", url: "https://www.floridarealtors.org/tools-research/tech-helpline", logo: "https://logo.clearbit.com/floridarealtors.org" },
-        trusted: { title: "TrustedOnly", body: "Vendor and affiliate network for local connections.", url: "https://coconutcoastrealtors.org/important-links-and-contacts/", logo: "https://logo.clearbit.com/trustedonly.com" },
-        truck: { title: "BER Moving Truck", body: "Member-use truck reservation support.", url: "https://www.ccreschool.com/truck-reservation/pages/", logo: "https://logo.clearbit.com/coconutcoastrealtors.org" },
-        swflamls: { title: "SWFLAMLS", body: "Core MLS login and regional data access.", url: "https://matrix.swflamls.com/matrix/login.aspx", logo: "https://coconutcoastrealtors.org/wp-content/uploads/2025/12/SWFLAMLS.png" },
-        domus: { title: "Domus Analytics", body: "Market dashboards and visual analytics.", url: "https://www.domusanalytics.com/", logo: "https://logo.clearbit.com/domusanalytics.com" },
-        showingtime: { title: "ShowingTime+", body: "Scheduling, feedback, and showing analytics.", url: "https://www.showingtimeplus.com/", logo: "https://logo.clearbit.com/showingtimeplus.com" },
-        brokerbay: { title: "BrokerBay", body: "Showing management and feedback workflows.", url: "https://dashboard.brokerbay.com/", logo: "https://logo.clearbit.com/brokerbay.com" },
-        forms: { title: "Form Simplicity", body: "Digital forms and transaction paperwork.", url: "https://www.formsimplicity.com/", logo: "https://logo.clearbit.com/formsimplicity.com" },
-        mlsAdv: { title: "MLS Advantage", body: "Statewide MLS search through Florida Realtors.", url: "https://www.floridarealtors.org/tools-research/mls-advantage", logo: "https://logo.clearbit.com/floridarealtors.org" },
-        rpr: { title: "RPR", body: "Property research and client-ready reports.", url: "https://narrpr.com/", logo: "https://logo.clearbit.com/narrpr.com" },
-        forewarn: { title: "FOREWARN", body: "Member safety and identity intelligence.", url: "https://www.forewarn.com/", logo: "https://logo.clearbit.com/forewarn.com" },
-        cubicasa: { title: "CubiCasa", body: "Floor plans and property data tools.", url: "https://www.cubi.casa/", logo: "https://logo.clearbit.com/cubi.casa" },
-        infosparks: { title: "InfoSparks", body: "Interactive local market analytics.", url: "https://www.showingtimeplus.com/products/infosparks/", logo: "https://logo.clearbit.com/showingtimeplus.com" },
-        supra: { title: "Supra eKey", body: "Lockbox setup and access support.", url: "https://coconutcoastrealtors.org/supra/", logo: "https://logo.clearbit.com/supraekey.com" }
-      };
+        let visualEvents = [];
+        let textEvents = [];
+        let pinnedEvents = [];
 
-      const rpacImages = [
-        "https://coconutcoastrealtors.org/wp-content/uploads/2026/04/1.png",
-        "https://coconutcoastrealtors.org/wp-content/uploads/2026/04/Amy-A.png",
-        "https://coconutcoastrealtors.org/wp-content/uploads/2026/04/Angie.png",
-        "https://coconutcoastrealtors.org/wp-content/uploads/2026/04/Cindy.png",
-        "https://coconutcoastrealtors.org/wp-content/uploads/2026/04/Ellen-2.png",
-        "https://coconutcoastrealtors.org/wp-content/uploads/2026/04/Jeanne.png",
-        "https://coconutcoastrealtors.org/wp-content/uploads/2026/04/Wade.png"
-      ];
-      // Edit slides, timing, and transition presets here.
-      const slides = [
-        {
-          id: "welcome", type: "welcome", title: "Welcome to CCOR", eyebrow: "Coconut Coast Organization of Realtors®",
-          description: "Creating value-driven success for our members and the communities we serve.",
-          mediaType: "video", mediaSrc: "https://coconutcoastrealtors.org/wp-content/uploads/2025/11/Welcome-to.mp4",
-          mediaPoster: "https://coconutcoastrealtors.org/wp-content/uploads/2025/12/BER-Logo-1.png",
-          featuredTag: "Featured video", transition: "fade", isEvergreen: true, videoFallbackMs: 18000,
-          stats: [{ label: "REALTORS", value: 1400, suffix: "+", display: "1400+" }, { label: "AFFILIATES", value: 160, suffix: "+", display: "160+" }, { label: "FOUNDED", value: 1966, display: "1966" }, { label: "SERVED", value: 108, suffix: " sq mi", display: "108 sq mi" }],
-          bodyPoints: ["Premium education, advocacy, MLS access, and member tools in one local association.", "The opening video runs first, then the curated featured deck takes over."],
-          sideCards: [{ title: "Education", body: "Classes, certifications, committee leadership, and local training." }, { title: "Advocacy", body: "Protecting the profession and homeownership through local, state, and national engagement." }, { title: "Member Tools", body: "MLS, analytics, safety, scheduling, and marketing platforms." }],
-          ctas: [{ label: "About CCOR", url: "https://coconutcoastrealtors.org/about/" }, { label: "Join CCOR", url: "https://www.coconutcoastrealtors.org/join-bser/" }],
-          priority: 10
-        },
-        {
-          id: "join", type: "membership", title: "Why Join CCOR", eyebrow: "Membership recruitment",
-          description: "Education, advocacy, MLS access, community programs, and a local organization with strong regional coverage all in one membership.",
-          mediaType: "image", mediaSrc: "https://coconutcoastrealtors.org/wp-content/uploads/2025/09/SWFLAMLS-Coverage.png",
-          featuredTag: "Membership", transition: "fly-in-right",
-          stats: [{ label: "REALTORS", value: 1400, suffix: "+", display: "1400+" }, { label: "AFFILIATED MEMBERS", value: 160, suffix: "+", display: "160+" }, { label: "ESTABLISHED", value: 1966, display: "1966" }, { label: "SQUARE MILES", value: 108, display: "108" }],
-          bodyPoints: ["Local classroom training and business growth resources.", "Professional advocacy that protects housing and the profession.", "MLS access plus deep member tool coverage across Southwest Florida.", "Community leadership, committees, and regional relationships."],
-          sideCards: [{ title: "Education", body: "Upcoming education, training, and certification pathways." }, { title: "Advocacy", body: "Representation on pro-housing and pro-member issues." }, { title: "Regional Reach", body: "Coverage and collaboration across Southwest Florida markets." }, { title: "Community", body: "Events, committees, and service programs built locally." }],
-          ctas: [{ label: "Join CCOR", url: "https://www.coconutcoastrealtors.org/join-bser/" }, { label: "MLS and Membership Info", url: "https://coconutcoastrealtors.org/mls-membership-information/" }],
-          priority: 9
-        },
-        {
-          id: "team", type: "team", title: "About Our Team", eyebrow: "Leadership and staff",
-          description: "BER is a local trade organization of 1400+ REALTORS and 160+ affiliated industry partners, founded in 1966 and serving 108 square miles.",
-          mediaType: "image", mediaSrc: "https://coconutcoastrealtors.org/wp-content/uploads/2025/12/BER-Logo-1.png",
-          featuredTag: "Team", transition: "wipe-up", teamMembers: team,
-          bodyPoints: ["Real people, local support, and direct department access.", "Communications, events, operations, MLS, and leadership all visible in one place."],
-          ctas: [{ label: "Meet The Team", url: "https://coconutcoastrealtors.org/about/" }, { label: "Contact CCOR", url: "https://coconutcoastrealtors.org/about/" }],
-          priority: 8
-        },
-        {
-          id: "benefits-core", type: "benefits", title: "Our Member Benefits", eyebrow: "Everyday essentials",
-          description: "The membership stack starts with portal access, prospecting, marketing, support, and local convenience tools your agents use weekly.",
-          mediaType: "image", mediaSrc: "https://coconutcoastrealtors.org/wp-content/uploads/2025/12/Untitled-design-10-scaled-1.png",
-          featuredTag: "Included with membership", transition: "staggered-reveal",
-          stats: [{ label: "BENEFITS", value: 18, suffix: "+", display: "18+" }, { label: "CORE SYSTEM", value: 1, display: "1 login hub" }, { label: "SUPPORT", value: 1, display: "Local + state" }],
-          feature: "memberPortal", tools: ["memberPortal", "agent3000", "builders", "realtorPlus", "tech", "trusted", "truck", "swflamls"],
-          ctas: [{ label: "Member Tools Hub", url: "https://coconutcoastrealtors.org/mls-membership-information/" }, { label: "Important Links", url: "https://coconutcoastrealtors.org/important-links-and-contacts/" }],
-          priority: 8
-        },
-        {
-          id: "benefits-mls", type: "benefits", title: "MLS And Analytics Stack", eyebrow: "Power tools",
-          description: "From showings and safety to analytics, floor plans, statewide search, and reporting, CCOR membership ships with serious production tools.",
-          mediaType: "image", mediaSrc: "https://coconutcoastrealtors.org/wp-content/uploads/2025/12/SWFLAMLS.png",
-          featuredTag: "Analytics and MLS", transition: "fly-in-bottom",
-          feature: "domus", tools: ["domus", "showingtime", "brokerbay", "forms", "mlsAdv", "rpr", "forewarn", "cubicasa", "infosparks", "supra"],
-          ctas: [{ label: "Open MLS Info", url: "https://coconutcoastrealtors.org/mls-membership-information/" }, { label: "MLS Login", url: "https://matrix.swflamls.com/matrix/login.aspx" }],
-          priority: 7
-        },
-        {
-          id: "market", type: "market", title: "Current Market Snapshot", eyebrow: "Manual monthly stats",
-          description: "Update one text constant each month and the charts rebuild automatically. This slide is driven by local data, not runtime scraping.",
-          mediaType: "image", mediaSrc: "https://coconutcoastrealtors.org/wp-content/uploads/2025/12/Screenshot-2025-11-24-at-12.39.34-PM.png",
-          featuredTag: "Market stats", transition: "wipe-left", rawArea: "BONITA",
-          ctas: [{ label: "Market Reports", url: "https://coconutcoastrealtors.org/market-reports/" }, { label: "About Market Reports", url: "https://coconutcoastrealtors.org/market-reports/" }],
-          priority: 10
-        },
-        {
-          id: "magazine", type: "magazine", title: "Realtor Review Magazine", eyebrow: "Winter 2026 issue",
-          description: "Feature the current issue with the front cover treatment, then pull readers into the issue highlights, market pages, leadership pieces, archive stories, and RPAC coverage.",
-          mediaType: "image", mediaSrc: "https://cdnc.heyzine.com/files/uploaded/56d5ac1ac923575dc46bfc1fe2cd67e5452bfb27.pdf-thumb.jpg", flyerSrc: "https://cdnc.heyzine.com/files/uploaded/56d5ac1ac923575dc46bfc1fe2cd67e5452bfb27.pdf-thumb.jpg",
-          featuredTag: "Current issue", transition: "staggered-reveal",
-          highlights: [{ title: "Leadership and Vision", body: "Jeanne's Journal, 60 years, and the next chapter with CCOR." }, { title: "A New Chapter", body: "BER to CCOR transition messaging and leadership direction." }, { title: "Market Snapshot", body: "Winter 2026 market stats and listing conversation support." }, { title: "Advocacy In Action", body: "RPAC wins, committee leaders, and member tools." }],
-          ctas: [{ label: "Open Magazine Page", url: "https://coconutcoastrealtors.org/2022-realtor-review-page-q1/" }, { label: "Open Full Screen", url: "https://heyzine.com/flip-book/56d5ac1ac9.html" }],
-          priority: 8
-        },
-        {
-          id: "bowling", type: "event", title: "2026 District 5 Bowling Tournament", eyebrow: "Upcoming event",
-          description: "A networking night built for teams, friendly competition, pizza, and conversation. Bowling starts at 6:00 PM and teams register together.",
-          mediaType: "image", mediaSrc: "https://coconutcoastrealtors.org/wp-content/uploads/2025/12/Untitled-design-10-scaled-1.png",
-          featuredTag: "Timed event", transition: "fly-in-right", startDate: "2026-04-25T17:15:00-04:00", endDate: "2026-04-25T21:00:00-04:00", timezone: "America/New_York",
-          detailChips: ["HeadPinz", "$30 per bowler", "Bowling starts at 6:00 PM", "Teams register together"],
-          panelNote: "No official CCOR-hosted flyer image was available from the live event source, so this slide uses a generated event poster card. Swap in flyerSrc later if you get a real 8.5x11 asset.",
-          ctas: [{ label: "View Event", url: "https://coconutcoastrealtors.growthzoneapp.com/classregistration/Details/2026-district-5-bowling-tournament-1450265?sourceTypeId=EmailInvitation" }, { label: "Upcoming Events", url: "https://coconutcoastrealtors.org/upcoming-events/" }],
-          priority: 7, isEvergreen: false
-        },
-        {
-          id: "golf", type: "event", title: "33rd Annual CCOR Golf Challenge", eyebrow: "Upcoming event",
-          description: "A full-day signature outing with sponsor visibility, on-course activity, raffles, and a flyer-led presentation that can stay in rotation until the event ends.",
-          mediaType: "image", mediaSrc: "https://res.cloudinary.com/micronetonline/image/upload/f_auto/c_crop,h_2000,w_1545,x_0,y_0/q_auto/f_auto/q_auto/v1769188072/tenants/6c24b0da-8a6e-4f2b-8547-26a8c1dc4581/9c6f49b9840a4d57a67e37febbc2dfb1/BER-Golf-Challenge-May-8.png", flyerSrc: "https://res.cloudinary.com/micronetonline/image/upload/f_auto/c_crop,h_2000,w_1545,x_0,y_0/q_auto/f_auto/q_auto/v1769188072/tenants/6c24b0da-8a6e-4f2b-8547-26a8c1dc4581/9c6f49b9840a4d57a67e37febbc2dfb1/BER-Golf-Challenge-May-8.png",
-          featuredTag: "Signature event", transition: "wipe-up", startDate: "2026-05-08T08:00:00-04:00", endDate: "2026-05-08T16:00:00-04:00", timezone: "America/New_York",
-          detailChips: ["Friday, May 8, 2026", "8:00 AM - 4:00 PM EDT", "Registration opens at 7:15 AM", "Spring Run"],
-          ctas: [{ label: "View Event", url: "https://coconutcoastrealtors.growthzoneapp.com/classregistration/Details/33rd-annual-ber-golf-challenge-1607410?sourceTypeId=EmailInvitation" }, { label: "Upcoming Events", url: "https://coconutcoastrealtors.org/upcoming-events/" }],
-          priority: 8, isEvergreen: false
-        },
-        {
-          id: "committee", type: "committee", title: "Serve On A CCOR Committee", eyebrow: "Leadership path",
-          description: "Use the committee signup slide as a leadership and involvement story. It should feel like a direct invitation to shape CCOR decisions and step into service.",
-          mediaType: "image", mediaSrc: "https://coconutcoastrealtors.org/wp-content/uploads/2026/04/MLS-Committee-Flyers.png", flyerSrc: "https://coconutcoastrealtors.org/wp-content/uploads/2026/04/MLS-Committee-Flyers.png", secondaryFlyerSrc: "https://coconutcoastrealtors.org/wp-content/uploads/2026/04/Professional-development-committee.png",
-          featuredTag: "Get involved", transition: "staggered-reveal", detailChips: ["2026 committees", "Leadership journey", "Decision-making", "Volunteer service"],
-          panelNote: "The live committee form frames service as getting involved in CCOR decision-making and starting a leadership journey.",
-          ctas: [{ label: "Committee Signup", url: "https://coconutcoastrealtors.growthzoneapp.com/ap/Form/Fill/rJD9lS4P" }, { label: "View MLS Flyer", url: "https://coconutcoastrealtors.org/wp-content/uploads/2026/04/MLS-Committee-Flyers.png" }, { label: "View Pro Development Flyer", url: "https://coconutcoastrealtors.org/wp-content/uploads/2026/04/Professional-development-committee.png" }],
-          priority: 7
-        },
-        {
-          id: "rpac", type: "rpac", title: "RPAC: Invest In Advocacy", eyebrow: "Member-driven protection",
-          description: "Use a rotating major-investor image and connect RPAC support to pro-housing, pro-member, and homeownership protections at the local, state, and national levels.",
-          mediaType: "image", mediaSrc: pick(rpacImages), featuredTag: "Advocacy", transition: "fly-in-bottom",
-          detailChips: ["REALTOR Party", "Pro-housing issues", "Recognition levels", "Homeownership protections"],
-          sideCards: [{ title: "Why It Matters", body: "Support for pro-housing and pro-member issues at the local, state, and national levels." }, { title: "Recognition", body: "BER recognizes support across multiple investment levels, including major investors." }, { title: "Member Impact", body: "Advocacy that protects business conditions, property rights, and homeownership." }],
-          ctas: [{ label: "Invest In RPAC", url: "https://coconutcoastrealtors.org/rpac/" }, { label: "Recognition Levels", url: "https://coconutcoastrealtors.org/rpac/" }],
-          priority: 8
-        }
-      ];
-      const parseMarket = (raw) => raw.replace(/\r/g, "").trim().split(/\n\s*\n(?=[A-Z][A-Z0-9 &/().-]{2,}\n)/).filter(Boolean).map((block) => {
-        const [head = "", hist = ""] = block.split(/\n---\s*5-YEAR HISTORY\s*---\n/i);
-        const lines = head.split("\n").map((l) => l.trim()).filter(Boolean);
-        if (!lines.length) return null;
-        const area = lines.shift();
-        const metrics = lines.map((line) => {
-          const i = line.indexOf(":"); if (i < 0) return null;
-          const label = line.slice(0, i).trim();
-          const display = line.slice(i + 1).trim();
-          const money = display.match(/\$[\d,]+(?:\.\d+)?/);
-          const pct = display.match(/^[+-]?\d+(?:\.\d+)?%/);
-          const first = money || pct || display.match(/^[+-]?\d[\d,]*(?:\.\d+)?/);
-          return { label, display, value: first ? parseFloat(first[0].replace(/[^\d.-]/g, "")) : null, prefix: money ? "$" : pct && pct[0].startsWith("-") ? "-" : pct && pct[0].startsWith("+") ? "+" : "", suffix: pct ? "%" : "", change: (display.match(/\(([+-]?\d+(?:\.\d+)?%)\)/) || [])[1] || "" };
-        }).filter(Boolean);
-        const series = [];
-        let active = null;
-        hist.split("\n").forEach((line) => {
-          const t = line.trim();
-          if (!t) return;
-          if (/^[A-Za-z][A-Za-z0-9 /&()+.-]+:$/.test(t)) { active = { label: t.slice(0, -1), points: [] }; series.push(active); return; }
-          const m = t.match(/^(\d{4}):\s*(.+)$/); if (!m || !active) return;
-          active.points.push({ year: m[1], raw: m[2].trim(), value: parseFloat(m[2].replace(/[^\d.-]/g, "")) });
-        });
-        return { area, metrics, series };
-      }).filter(Boolean);
+        for (const e of results) {
+          if (new Date(e.StartDate) >= now) {
+            let isExcluded = e.Name && (e.Name.toLowerCase().includes('forewarn') || e.Name.toLowerCase().includes('cubicas') || e.Name.toLowerCase().includes('cubicasa'));
+            if (isExcluded) continue;
 
-      const areaFor = (areas, name) => areas.find((a) => a.area.toUpperCase() === String(name || "").toUpperCase()) || areas[0] || null;
-      const durationFor = (slide) => slide.duration || clamp(5200 + ([slide.title, slide.eyebrow, slide.description, ...(slide.bodyPoints || []), ...((slide.highlights || []).map((x) => `${x.title} ${x.body}`)), ...((slide.sideCards || []).map((x) => `${x.title} ${x.body}`))].join(" ").trim().split(/\s+/).filter(Boolean).length * 42) + (slide.type === "market" ? 2400 : 0) + (slide.type === "team" ? 1200 : 0) + (slide.type === "benefits" ? 1600 : 0) + (slide.type === "magazine" ? 1300 : 0) + (["event", "committee"].includes(slide.type) ? 1400 : 0), 5400, 14500);
+            let flyerURL = e.EnrichedFlyerUrl || e.EventLogoUrl || "";
+            if (!flyerURL && e.Description) {
+              const match = e.Description.match(/<img[^>]+src=["']([^"']+)["']/i);
+              if (match) flyerURL = match[1];
+            }
 
-      const buildDeck = () => {
-        const areas = parseMarket(marketRaw);
-        const deck = JSON.parse(JSON.stringify(slides)).filter((s) => s.isEvergreen !== false || !s.endDate || Date.now() <= Date.parse(s.endDate)).map((s) => {
-          if (s.type === "market") {
-            const area = areaFor(areas, s.rawArea);
-            if (area) {
-              s.stats = area.metrics.slice(0, 6).map((m) => ({ label: m.label, display: m.display, value: m.value, prefix: m.prefix, suffix: m.suffix, change: m.change }));
-              s.chartData = area.series.slice(0, 3);
-              s.description = "BONITA market data is parsed from one editable text block and animated into counters and charts. If parsing fails, the slide still points users to the market reports page.";
+            if (e.Name && e.Name.toLowerCase() === "june membership breakfast") {
+              flyerURL = "https://coconutcoastrealtors.org/wp-content/uploads/2026/05/2026-District-5-Bowling-Tournament.gif";
+            }
+
+            let hasFlyer = (flyerURL && !flyerURL.includes('default') && !flyerURL.includes('placeholder') && !flyerURL.includes('BER-Logo') && !flyerURL.toLowerCase().includes('ccor-horz'));
+
+            let eventObj = {
+              title: e.Name || "Event",
+              description: new Date(e.StartDate).toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric', hour: 'numeric', minute: '2-digit' }),
+              image: flyerURL,
+              link: e.PublicUrl || `https://coconutcoastrealtors.growthzoneapp.com/ap/Events/Register/${e.EventId}`,
+              tag: "Event",
+              hasFlyer: hasFlyer,
+              isTextOnly: !hasFlyer,
+              dateObj: e.StartDate,
+              rawDesc: e.Description ? e.Description.replace(/<[^>]*>?/gm, '').substring(0, 100) + '...' : ''
+            };
+
+            let pinIndex = e.Name ? pinnedApiEventNames.findIndex(name => name.toLowerCase() === e.Name.toLowerCase()) : -1;
+
+            if (pinIndex !== -1) {
+              pinnedEvents[pinIndex] = eventObj;
+            } else if (hasFlyer) {
+              visualEvents.push(eventObj);
+            } else {
+              textEvents.push(eventObj);
             }
           }
-          if (s.type === "rpac") s.mediaSrc = pick(rpacImages);
-          s.duration = durationFor(s);
-          return s;
-        });
-        const welcome = deck.find((s) => s.id === "welcome");
-        const rest = deck.filter((s) => s.id !== "welcome");
-        const ordered = shuffle(rest.filter((s) => (s.priority || 0) >= 8)).concat(shuffle(rest.filter((s) => (s.priority || 0) < 8)));
-        const marketIndex = ordered.findIndex((s) => s.type === "market");
-        if (marketIndex > -1) ordered.splice(Math.min(2, ordered.length), 0, ordered.splice(marketIndex, 1)[0]);
-        return welcome ? [welcome, ...ordered] : ordered;
-      };
-
-      const refs = {
-        panel: root.querySelector(".berfs__panel"), copy: root.querySelector(".berfs__panel-copy"), side: root.querySelector(".berfs__panel-side"),
-        mediaSlots: root.querySelectorAll(".berfs__media-slot"), fill: root.querySelector(".berfs__progress-track span"), sr: root.querySelector(".berfs__sr-status"),
-        prev: root.querySelector('[data-action="prev"]'), next: root.querySelector('[data-action="next"]')
-      };
-
-      const state = { slides: buildDeck(), index: 0, mediaIndex: 0, timer: 0, raf: 0, video: null, paused: reduce, seenWelcome: false };
-      try { state.paused = reduce || localStorage.getItem(storageKey) === "true"; } catch (_) { state.paused = reduce; }
-
-      const chips = (slide) => {
-        const items = [...(slide.detailChips || [])];
-        if (slide.startDate) items.unshift(eventStamp(slide.startDate, slide.timezone || "America/New_York"));
-        return items.slice(0, 4).map((x) => `<span class="berfs__meta-pill">${esc(x)}</span>`).join("");
-      };
-      const ctas = (slide) => (slide.ctas || []).map((cta) => `<a class="berfs__cta" href="${esc(cta.url)}" target="_blank" rel="noopener">${esc(cta.label)}</a>`).join("");
-      const kpis = (slide) => !slide.stats?.length ? "" : `<div class="berfs__kpi-strip berfs__reveal" style="--berfs-delay:270ms">${slide.stats.map((s) => `<div class="berfs__kpi"><span class="berfs__kpi-value berfs__countup"${Number.isFinite(s.value) ? ` data-target="${esc(s.value)}" data-prefix="${esc(s.prefix || "")}" data-suffix="${esc(s.suffix || "")}" data-display="${esc(s.display || "")}" data-ready="false"` : ""}>${esc(s.display || num(s.value, s))}</span><span class="berfs__kpi-label">${esc(s.label)}</span>${s.change ? `<span class="berfs__kpi-note">${esc(s.change)}</span>` : ""}</div>`).join("")}</div>`;
-      const bullets = (slide) => !slide.bodyPoints?.length ? "" : `<ul class="berfs__bullet-list berfs__reveal" style="--berfs-delay:320ms">${slide.bodyPoints.map((x) => `<li>${esc(x)}</li>`).join("")}</ul>`;
-      const gridCards = (cards, delay = 130) => !cards?.length ? "" : `<div class="berfs__support-grid">${cards.map((card, i) => `<article class="berfs__support-card berfs__reveal" style="--berfs-delay:${delay + i * 60}ms"><h3>${esc(card.title)}</h3><p>${esc(card.body)}</p></article>`).join("")}</div>`;
-      const logo = (tool) => `<div class="berfs__logo-badge" data-fallback="${esc(initials(tool.title))}"><img src="${esc(tool.logo)}" alt="${esc(tool.title)}"><span>${esc(initials(tool.title))}</span></div>`;
-      const featureTools = (slide) => {
-        const list = (slide.tools || []).map((key) => ({ id: key, ...(tools[key] || {}) })).filter((x) => x.title);
-        if (!list.length) return "";
-        const lead = list.find((x) => x.id === slide.feature) || list[0];
-        const rest = list.filter((x) => x.id !== lead.id).slice(0, 2);
-        return `<a class="berfs__featured-tool berfs__reveal" style="--berfs-delay:110ms" href="${esc(lead.url)}" target="_blank" rel="noopener">${logo(lead)}<div><div class="berfs__tool-caption">Featured tool</div><h3>${esc(lead.title)}</h3><p>${esc(lead.body)}</p></div></a><div class="berfs__benefits-grid">${rest.map((tool, i) => `<a class="berfs__benefit-card berfs__reveal" style="--berfs-delay:${170 + i * 45}ms" href="${esc(tool.url)}" target="_blank" rel="noopener">${logo(tool)}<div><h3>${esc(tool.title)}</h3><p>${esc(tool.body)}</p></div></a>`).join("")}</div>`;
-      };
-      const chartPath = (points, w = 320, h = 110, pad = 12) => {
-        if (!points?.length) return { line: "", area: "", latest: "" };
-        const vals = points.map((p) => p.value).filter(Number.isFinite); const min = Math.min(...vals), max = Math.max(...vals), range = max - min || 1;
-        const coords = points.map((p, i) => ({ x: pad + ((w - pad * 2) * (points.length === 1 ? 0.5 : i / (points.length - 1))), y: h - pad - (((p.value - min) / range) * (h - pad * 2)) }));
-        const line = coords.map((p, i) => `${i ? "L" : "M"}${p.x.toFixed(2)} ${p.y.toFixed(2)}`).join(" ");
-        return { line, area: `${line} L${coords.at(-1).x.toFixed(2)} ${(h - pad).toFixed(2)} L${coords[0].x.toFixed(2)} ${(h - pad).toFixed(2)} Z`, latest: points.at(-1).raw || "" };
-      };
-      const marketPanel = (slide) => !slide.chartData?.length ? `<div class="berfs__support-card berfs__reveal" style="--berfs-delay:120ms"><h3>Market data fallback</h3><p>Parsing failed. Keep the CTA to the official market reports page and update the raw monthly text block in the slider script.</p></div>` : `<div class="berfs__charts-grid">${slide.chartData.map((series, i) => { const p = chartPath(series.points || []); return `<article class="berfs__chart-card berfs__reveal" style="--berfs-delay:${120 + i * 80}ms"><div class="berfs__tool-caption">${esc(series.label)}</div><div class="berfs__chart-latest"><h3>${esc(series.label)}</h3><strong>${esc(p.latest)}</strong></div><div class="berfs__chart-shell"><svg class="berfs__chart-svg" viewBox="0 0 320 110" preserveAspectRatio="none" aria-hidden="true"><line class="berfs__chart-gridline" x1="0" y1="98" x2="320" y2="98"></line><path class="berfs__chart-area" d="${esc(p.area)}"></path><path class="berfs__chart-line" d="${esc(p.line)}"></path></svg></div></article>`; }).join("")}</div>`;
-      const teamCards = (slide) => `<div class="berfs__team-grid">${slide.teamMembers.map((m, i) => `<article class="berfs__team-card berfs__reveal" style="--berfs-delay:${460 + i * 45}ms"><div class="berfs__benefit-card"><div class="berfs__team-photo" data-fallback="${esc(initials(m.name))}"><img src="${esc(m.image)}" alt="${esc(m.name)}"><span>${esc(initials(m.name))}</span></div><div><h3>${esc(m.name)}</h3><p>${esc(m.role)}</p></div></div></article>`).join("")}</div>`;
-      const magazineHighlights = (slide) => `<div class="berfs__highlights-grid">${(slide.highlights || []).slice(0, 4).map((x, i) => `<article class="berfs__highlight-card berfs__reveal" style="--berfs-delay:${460 + i * 45}ms"><h3>${esc(x.title)}</h3><p>${esc(x.body)}</p></article>`).join("")}</div>`;
-      const posterVisual = (slide, delay = 120) => slide.flyerSrc
-        ? `<div class="berfs__visual-stage berfs__visual-stage--contain berfs__reveal" style="--berfs-delay:${delay}ms"><img src="${esc(slide.flyerSrc)}" alt="${esc(slide.title)} flyer"></div>`
-        : `<div class="berfs__visual-stage berfs__visual-stage--contain berfs__reveal" style="--berfs-delay:${delay}ms"><div class="berfs__generated-poster"><div class="berfs__tool-caption">${esc(slide.eyebrow || "Event")}</div><h3>${esc(slide.title)}</h3><p>${esc(slide.description)}</p></div></div>`;
-      const supportFor = (slide) => {
-        if (slide.type === "team") return teamCards(slide);
-        if (slide.type === "benefits") return featureTools(slide);
-        if (slide.type === "magazine") return magazineHighlights(slide);
-        if (slide.type === "market") return marketPanel(slide);
-        if (slide.type === "committee") return slide.panelNote ? `<div class="berfs__support-card berfs__reveal" style="--berfs-delay:460ms"><h3>Leadership track</h3><p>${esc(slide.panelNote)}</p></div>` : "";
-        if (slide.type === "rpac") return gridCards(slide.sideCards || [], 460);
-        if (slide.type === "event") return slide.panelNote ? `<div class="berfs__support-card berfs__reveal" style="--berfs-delay:460ms"><h3>Poster note</h3><p>${esc(slide.panelNote)}</p></div>` : "";
-        return gridCards(slide.sideCards || [], 460);
-      };
-      const sideFor = (slide) => {
-        if (slide.type === "team") return `<div class="berfs__visual-stage berfs__visual-stage--portrait berfs__reveal" style="--berfs-delay:120ms"><img src="${esc(slide.teamMembers?.[0]?.image || slide.mediaSrc)}" alt="${esc(slide.teamMembers?.[0]?.name || slide.title)}"></div>`;
-        if (slide.type === "membership") return `<div class="berfs__visual-stage berfs__visual-stage--contain berfs__reveal" style="--berfs-delay:120ms"><img src="${esc(slide.mediaSrc)}" alt="${esc(slide.title)}"></div>`;
-        if (slide.type === "benefits") return ``;
-        if (slide.type === "market") return ``;
-        if (slide.type === "magazine") return `<div class="berfs__visual-stage berfs__visual-stage--contain berfs__reveal" style="--berfs-delay:120ms"><img src="${esc(slide.flyerSrc || slide.mediaSrc)}" alt="${esc(slide.title)} cover"></div>`;
-        if (slide.type === "committee") return `<div class="berfs__visual-stage berfs__visual-stage--contain berfs__reveal" style="--berfs-delay:120ms"><img src="${esc(slide.flyerSrc)}" alt="MLS committee flyer"></div>`;
-        if (slide.type === "rpac") return `<div class="berfs__visual-stage berfs__visual-stage--portrait berfs__reveal" style="--berfs-delay:120ms"><img src="${esc(slide.mediaSrc)}" alt="RPAC featured investor"></div>`;
-        if (slide.type === "event") return posterVisual(slide, 120);
-        return `<div class="berfs__visual-stage berfs__reveal" style="--berfs-delay:120ms"><img src="${esc(slide.mediaSrc)}" alt="${esc(slide.title)}"></div>`;
-      };
-      const copyFor = (slide) => {
-        const support = supportFor(slide);
-        const bulletBlock = slide.type === "team" ? "" : bullets(slide);
-        const kpiBlock = slide.type === "benefits" ? "" : kpis(slide);
-        return `<h2 class="berfs__title berfs__reveal" style="--berfs-delay:120ms">${esc(slide.title || "")}</h2><p class="berfs__description berfs__reveal" style="--berfs-delay:180ms">${esc(slide.description || "")}</p>${chips(slide) ? `<div class="berfs__meta-row berfs__reveal" style="--berfs-delay:220ms">${chips(slide)}</div>` : ""}${kpiBlock}${bulletBlock}${slide.ctas?.length ? `<div class="berfs__cta-row berfs__reveal" style="--berfs-delay:380ms">${ctas(slide)}</div>` : ""}${support ? `<div class="berfs__detail-stack">${support}</div>` : ""}`;
-      };
-      const mediaNode = (slide) => {
-        if (slide.mediaType === "video") {
-          const video = document.createElement("video");
-          video.className = "berfs__media-asset";
-          video.muted = true;
-          video.autoplay = true;
-          video.playsInline = true;
-          video.setAttribute("playsinline", "");
-          video.preload = slide.id === "welcome" ? "auto" : "metadata";
-          video.poster = slide.mediaPoster || "";
-          video.setAttribute("aria-hidden", "true");
-          const source = document.createElement("source");
-          source.src = slide.mediaSrc;
-          source.type = "video/mp4";
-          video.appendChild(source);
-          return video;
         }
-        const image = document.createElement("img");
-        image.className = "berfs__media-asset";
-        image.alt = "";
-        image.decoding = "async";
-        image.loading = "eager";
-        image.src = slide.backgroundSrc || slide.mediaSrc || slide.flyerSrc || "";
-        return image;
-      };
 
-      const preload = (slide) => [slide?.mediaSrc, slide?.flyerSrc, slide?.secondaryFlyerSrc, slide?.mediaPoster].forEach((src) => { if (!src) return; const img = new Image(); img.decoding = "async"; img.src = src; });
-      const attachFallbacks = (scope) => scope.querySelectorAll("[data-fallback]").forEach((node) => { const img = node.querySelector("img"); if (!img) return; const fail = () => node.classList.add("is-fallback"); img.addEventListener("error", fail); if (img.complete && !img.naturalWidth) fail(); });
-      const animateCounts = (scope) => scope.querySelectorAll(".berfs__countup[data-target]").forEach((node) => {
-        if (node.dataset.ready === "true") return;
-        node.dataset.ready = "true";
-        const target = parseFloat(node.dataset.target || 0);
-        const prefix = node.dataset.prefix || "";
-        const suffix = node.dataset.suffix || "";
-        const display = node.dataset.display || "";
-        const start = performance.now();
-        const frame = (now) => {
-          const p = clamp((now - start) / 3000, 0, 1);
-          const eased = 1 - (1 - p) ** 3;
-          const current = target * eased;
-          node.textContent = p >= 1 ? (display || `${prefix}${current}${suffix}`) : num(current, { prefix, suffix, display });
-          if (p < 1) requestAnimationFrame(frame);
+        pinnedEvents = pinnedEvents.filter(e => e); // Remove empty slots
+        visualEvents = visualEvents.sort((a, b) => new Date(a.dateObj) - new Date(b.dateObj)).slice(0, 10);
+        textEvents = textEvents.sort((a, b) => new Date(a.dateObj) - new Date(b.dateObj)).slice(0, 5);
+        return { pinnedEvents, visualEvents, textEvents };
+      } catch (err) {
+        console.error("Failed to fetch events", err);
+        return { visualEvents: [], textEvents: [] };
+      }
+    }
+
+    function determineFormat(imageUrl) {
+      return new Promise((resolve) => {
+        if (!imageUrl) return resolve('portrait');
+        const img = new Image();
+        img.onload = () => {
+          resolve((img.width / img.height) > 1.2 ? 'landscape' : 'portrait');
         };
-        requestAnimationFrame(frame);
+        img.onerror = () => resolve('portrait');
+        img.src = imageUrl;
       });
-      const animateCharts = (scope) => scope.querySelectorAll(".berfs__chart-card").forEach((card) => requestAnimationFrame(() => card.classList.add("is-live")));
-      const setProgress = (v) => { refs.fill.style.transform = `scaleX(${clamp(v || 0, 0, 1)})`; };
-      const stop = () => { clearTimeout(state.timer); cancelAnimationFrame(state.raf); state.timer = 0; state.raf = 0; };
-      const tick = (start, duration, video) => { cancelAnimationFrame(state.raf); const frame = (now) => { const ratio = video?.duration ? video.currentTime / video.duration : (now - start) / duration; setProgress(ratio); if (!state.paused && ratio < 1) state.raf = requestAnimationFrame(frame); }; state.raf = requestAnimationFrame(frame); };
-      const syncPlay = () => { root.dataset.berfsPaused = state.paused ? "true" : "false"; };
+    }
 
-      const schedule = () => {
-        stop();
-        setProgress(0);
-        if (state.paused) return;
-        const slide = state.slides[state.index];
-        if (!slide) return;
-        if (state.video) {
-          const fallback = slide.videoFallbackMs || 16000;
-          const length = slide.id === "welcome" ? fallback : Math.min(Math.max((state.video.duration || slide.duration / 1000 || 8) * 1000, 5000), slide.videoMaxMs || 16000);
-          state.video.onended = next;
-          state.timer = window.setTimeout(next, length + 150);
-          tick(performance.now(), length, state.video);
-          state.video.play().catch(() => {});
-          return;
-        }
-        state.timer = window.setTimeout(next, slide.duration);
-        tick(performance.now(), slide.duration);
+    async function initShufflingHero() {
+      const track = document.getElementById('shuffling-track');
+      const videoContainer = document.getElementById('shuffling-video-container');
+      const tilesContainer = document.getElementById('shuffling-tiles-container');
+      const navContainer = document.getElementById('shuffling-nav');
+
+      if (!track) return;
+
+      const videoEl = videoContainer ? videoContainer.querySelector('video') : null;
+      let timeIsUp = false;
+      let carouselIsReady = false;
+
+      const titleEl = document.getElementById('shuffling-section-title');
+      const clockEl = document.getElementById('shuffling-clock');
+
+      const updateClock = () => {
+        if (!clockEl) return;
+        const now = new Date();
+        const dateOptions = { month: 'short', day: 'numeric', year: 'numeric' };
+        let hours = now.getHours();
+        const ampm = hours >= 12 ? 'PM' : 'AM';
+        hours = hours % 12;
+        hours = hours ? hours : 12;
+        const minutes = now.getMinutes().toString().padStart(2, '0');
+
+        clockEl.innerHTML = `${now.toLocaleDateString('en-US', dateOptions)} &nbsp;|&nbsp; ${hours}<span class="blink-colon">:</span>${minutes} ${ampm}`;
       };
 
-      const swapMedia = (slide) => {
-        const nextIndex = state.mediaIndex === 0 ? 1 : 0;
-        const nextSlot = refs.mediaSlots[nextIndex];
-        const current = refs.mediaSlots[state.mediaIndex];
-        const node = mediaNode(slide);
-        nextSlot.innerHTML = "";
-        nextSlot.appendChild(node);
-        const activate = () => {
-          nextSlot.classList.add("is-active");
-          current.classList.remove("is-active");
-          state.mediaIndex = nextIndex;
-          window.setTimeout(() => { current.innerHTML = ""; }, reduce ? 0 : 850);
-          state.video = node.tagName === "VIDEO" ? node : null;
-          schedule();
-        };
-        if (node.tagName === "VIDEO") {
-          node.addEventListener("loadedmetadata", activate, { once: true });
-          node.addEventListener("canplay", () => !state.paused && node.play().catch(() => {}), { once: true });
-          window.setTimeout(() => !nextSlot.classList.contains("is-active") && activate(), 260);
-          return;
-        }
-        node.addEventListener("load", activate, { once: true });
-        node.addEventListener("error", () => { nextSlot.innerHTML = '<div class="berfs__media-fallback"></div>'; activate(); }, { once: true });
-        if (node.complete) node.naturalWidth ? activate() : (nextSlot.innerHTML = '<div class="berfs__media-fallback"></div>', activate());
-      };
+      if (clockEl) {
+        updateClock();
+        setInterval(updateClock, 1000);
+      }
 
-      const render = (index) => {
-        const slide = state.slides[index];
-        if (!slide) return;
-        const mediaOnly = slide.id === "welcome";
-        state.index = index;
-        root.dataset.berfsType = slide.type || "";
-        root.classList.toggle("berfs--media-only", mediaOnly);
-        refs.panel.dataset.transition = "split-fly";
-        refs.panel.classList.remove("is-ready");
-        refs.copy.innerHTML = mediaOnly ? "" : copyFor(slide);
-        refs.side.innerHTML = mediaOnly ? "" : sideFor(slide);
-        refs.sr.textContent = `${slide.title}. Slide ${state.index + 1} of ${state.slides.length}.`;
-        if (!mediaOnly) {
-          attachFallbacks(refs.panel);
-        }
-        requestAnimationFrame(() => requestAnimationFrame(() => {
-          refs.panel.classList.add("is-ready");
-          if (!mediaOnly) {
-            animateCounts(refs.panel);
-            animateCharts(refs.panel);
+      const tryStart = () => {
+        if (timeIsUp && carouselIsReady) {
+          if (videoContainer) videoContainer.style.opacity = "0.3";
+          if (tilesContainer) tilesContainer.classList.add('is-active');
+          if (navContainer) navContainer.classList.add('is-active');
+          if (clockEl) clockEl.classList.add('is-active');
+
+          if (titleEl) {
+            titleEl.classList.add('is-active');
+            let visibleStaff = new Set();
+            const observer = new IntersectionObserver((entries) => {
+              entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                  visibleStaff.add(entry.target);
+                } else {
+                  visibleStaff.delete(entry.target);
+                }
+              });
+              if (visibleStaff.size > 0) {
+                titleEl.innerText = "Our Team:";
+              } else {
+                titleEl.innerText = "Upcoming Classes/Events:";
+              }
+            }, { root: null, threshold: 0.1 });
+
+            document.querySelectorAll('.tile-staff').forEach(el => observer.observe(el));
           }
-        }));
-        preload(state.slides[index + 1]);
-        preload(state.slides[index + 2]);
-        swapMedia(slide);
+
+          startAutoPlay();
+        }
       };
 
-      const reshuffle = () => { state.slides = buildDeck(); };
-      const next = () => { stop(); if (!state.slides.length) return; if (state.index >= state.slides.length - 1) { state.seenWelcome = true; reshuffle(); render(state.slides.length > 1 ? 1 : 0); return; } render(state.index + 1); };
-      const prev = () => { stop(); render(state.index <= 0 ? state.slides.length - 1 : state.index - 1); };
-      const toggle = () => { state.paused = !state.paused; try { localStorage.setItem(storageKey, state.paused ? "true" : "false"); } catch (_) {} syncPlay(); if (state.video) state.paused ? state.video.pause() : state.video.play().catch(() => {}); state.paused ? stop() : schedule(); };
+      if (videoEl) {
+        setTimeout(() => {
+          timeIsUp = true;
+          tryStart();
+        }, 8000);
+      } else {
+        timeIsUp = true;
+      }
 
-      refs.prev.addEventListener("click", prev);
-      refs.next.addEventListener("click", next);
-      root.addEventListener("keydown", (e) => { const tag = document.activeElement?.tagName; if (["SELECT", "INPUT", "TEXTAREA"].includes(tag)) return; if (e.key === "ArrowRight") { e.preventDefault(); next(); } if (e.key === "ArrowLeft") { e.preventDefault(); prev(); } if (e.key === " " || e.key === "Spacebar") { e.preventDefault(); toggle(); } });
-      document.addEventListener("visibilitychange", () => { if (document.hidden) { stop(); state.video?.pause(); return; } if (!state.paused) { state.video?.play().catch(() => {}); schedule(); } });
+      const { pinnedEvents, visualEvents, textEvents } = await fetchEvents();
 
-      reshuffle();
-      syncPlay();
-      preload(state.slides[0]);
-      preload(state.slides[1]);
-      render(0);
-    };
+      let mainGroup = [...pinnedEvents, ...visualEvents];
 
-    document.addEventListener("DOMContentLoaded", () => initBERFeaturedStage());
-    window.initBERFeaturedStage = initBERFeaturedStage;
+      const sortedCustom = customTiles.sort((a, b) => a.spot - b.spot);
+      for (const ct of sortedCustom) {
+        const idx = Math.max(0, (ct.spot || 1) - 1);
+        mainGroup.splice(idx, 0, ct);
+      }
+
+      const group2 = team.map(t => ({ ...t, tag: "Staff", format: "portrait" }));
+      const group3 = textEvents;
+
+      tilesData = [...mainGroup, ...group2, ...group3];
+
+      await Promise.all(tilesData.map(async (tile) => {
+        if (!tile.format && !tile.isTextOnly) tile.format = await determineFormat(tile.image);
+      }));
+
+      for (const tile of tilesData) {
+        const el = document.createElement('a');
+        el.className = `shuffling-tile tile-${tile.format}`;
+        if (tile.tag === 'Staff') el.classList.add('tile-staff');
+        if (tile.isTextOnly) el.classList.add('tile-no-image');
+        el.href = tile.link || "#";
+        el.target = "_blank";
+
+        let innerHTML = '';
+        if (tile.isTextOnly) {
+          const colors = [
+            'linear-gradient(135deg, #02577a 0%, #05aae1 100%)', // CCOR Blue
+            'linear-gradient(135deg, #004d57 0%, #64BAB0 100%)', // CCOR Teal
+            'linear-gradient(135deg, #b38500 0%, #ffc000 100%)', // CCOR Gold
+            'linear-gradient(135deg, #1f2a44 0%, #3a4a6b 100%)'  // CCOR Navy
+          ];
+          const color = colors[Math.abs(tile.title.length) % colors.length];
+
+          innerHTML = `
+            ${tile.tag ? '<div class="tile-tag">' + tile.tag + '</div>' : ''}
+            <div class="tile-info" style="background: none;">
+              <h3>${tile.title}</h3>
+              <p style="font-weight: bold; margin-bottom: 10px;">${tile.description}</p>
+              <p>${tile.rawDesc}</p>
+              <div class="event-action" style="margin-top: 15px;">
+                <span class="btn-register">Register Here</span>
+              </div>
+            </div>
+          `;
+          el.style.background = color;
+        } else if (tile.tag === 'Staff') {
+          if (tile.title.includes('Mariam')) {
+            el.style.background = '#64BAB0'; // CCOR Teal background for Mariam
+          }
+          innerHTML = `
+            <div class="tile-tag">Staff</div>
+            <img src="${tile.image}" alt="${tile.title.replace(/"/g, '&quot;')}">
+            <div class="tile-info">
+              <h3 class="staff-name">${tile.title}</h3>
+              <p>${tile.description}</p>
+              <div class="staff-details">
+                <p>${tile.shortBio}</p>
+                <div class="staff-contact">
+                  <a href="mailto:${tile.email}">&#9993; ${tile.email}</a>
+                  <a href="tel:${tile.phone.replace(/[^0-9]/g, '')}">&#9742; ${tile.phone}</a>
+                </div>
+              </div>
+            </div>
+          `;
+        } else {
+          innerHTML = `
+            ${tile.tag ? '<div class="tile-tag">' + tile.tag + '</div>' : ''}
+            <img src="${tile.image}" alt="${tile.title.replace(/"/g, '&quot;')}">
+            <div class="tile-info">
+              <h3>${tile.title}</h3>
+              <p>${tile.description}</p>
+              <div class="event-details">
+                <p>${tile.rawDesc}</p>
+                <div class="event-action">
+                  <span class="btn-register">Register Here</span>
+                </div>
+              </div>
+            </div>
+          `;
+        }
+
+        el.innerHTML = innerHTML;
+        track.appendChild(el);
+      }
+
+      const children = Array.from(track.children);
+      children.forEach(c => {
+        track.appendChild(c.cloneNode(true));
+      });
+
+      setupCarousel();
+
+      carouselIsReady = true;
+      tryStart();
+    }
+
+    function setupCarousel() {
+      const track = document.getElementById('shuffling-track');
+      const prevBtn = document.getElementById('shuffling-prev');
+      const nextBtn = document.getElementById('shuffling-next');
+
+      if (!track || !track.children[0]) return;
+      let itemWidth = track.children[0].offsetWidth + 20;
+
+      function move(dir) {
+        if (dir === 'next') {
+          currentIndex++;
+          track.style.transition = 'transform 0.8s ease-in-out';
+          track.style.transform = `translateX(-${currentIndex * itemWidth}px)`;
+
+          setTimeout(() => {
+            track.appendChild(track.children[0]);
+            track.style.transition = 'none';
+            currentIndex--;
+            track.style.transform = `translateX(-${currentIndex * itemWidth}px)`;
+          }, 800);
+        } else {
+          track.insertBefore(track.lastElementChild, track.children[0]);
+          track.style.transition = 'none';
+          track.style.transform = `translateX(-${(currentIndex + 1) * itemWidth}px)`;
+
+          setTimeout(() => {
+            track.style.transition = 'transform 0.8s ease-in-out';
+            track.style.transform = `translateX(-${currentIndex * itemWidth}px)`;
+          }, 50);
+        }
+      }
+
+      if (nextBtn) {
+        nextBtn.addEventListener('click', () => {
+          itemWidth = track.children[0].offsetWidth + 20;
+          move('next');
+          stopAutoPlay();
+          startAutoPlay();
+        });
+      }
+      if (prevBtn) {
+        prevBtn.addEventListener('click', () => {
+          itemWidth = track.lastElementChild.offsetWidth + 20;
+          move('prev');
+          stopAutoPlay();
+          startAutoPlay();
+        });
+      }
+
+      track.addEventListener('mouseenter', () => { isHovering = true; stopAutoPlay(); });
+      track.addEventListener('mouseleave', () => { isHovering = false; startAutoPlay(); });
+
+      window.startAutoPlay = () => {
+        stopAutoPlay();
+        autoPlayInterval = setInterval(() => {
+          if (!isHovering) {
+            itemWidth = track.children[0].offsetWidth + 20;
+            move('next');
+          }
+        }, 6000);
+      };
+
+      window.stopAutoPlay = () => {
+        clearInterval(autoPlayInterval);
+      };
+    }
+
+    document.addEventListener("DOMContentLoaded", initShufflingHero);
   })();
 
 
@@ -2952,42 +2255,25 @@ Closed Sales:
               </script>
               -->
 
-<section id="ber-featured-stage" class="berfs" aria-label="BER featured stage" tabindex="0">
-  <div class="berfs__viewport">
-    <div class="berfs__media-layer" aria-hidden="true">
-      <div class="berfs__media-slot berfs__media-slot--a is-active"></div>
-      <div class="berfs__media-slot berfs__media-slot--b"></div>
-    </div>
-
-    <div class="berfs__shade"></div>
-
-    <div class="berfs__content-shell">
-      <div class="berfs__panel" data-transition="staggered-reveal">
-        <div class="berfs__panel-copy"></div>
-        <div class="berfs__panel-side"></div>
-      </div>
-    </div>
-
-    <div class="berfs__nav berfs__nav--prev">
-      <button type="button" class="berfs__nav-btn" data-action="prev" aria-label="Previous featured slide">&#10094;</button>
-    </div>
-
-    <div class="berfs__nav berfs__nav--next">
-      <button type="button" class="berfs__nav-btn" data-action="next" aria-label="Next featured slide">&#10095;</button>
-    </div>
-
-    <div class="berfs__progress-track" aria-hidden="true"><span></span></div>
-
-    <p class="berfs__sr-status" aria-live="polite"></p>
+<section id="shuffling-hero" aria-label="Featured content">
+  <h2 id="shuffling-section-title">Upcoming Classes/Events:</h2>
+  <h2 id="shuffling-clock"></h2>
+  <div id="shuffling-video-container">
+    <video muted autoplay playsinline>
+      <source src="https://coconutcoastrealtors.org/wp-content/uploads/2025/11/Welcome-to.mp4" type="video/mp4">
+    </video>
   </div>
 
-  <noscript>
-    <div class="berfs__noscript">
-      <h2>Welcome to CCOR</h2>
-      <p>Enable JavaScript to load the featured CCOR media slider.</p>
-      <a href="https://coconutcoastrealtors.org/about/" target="_blank" rel="noopener">About CCOR</a>
+  <div id="shuffling-tiles-container">
+    <div id="shuffling-track" class="shuffling-track">
+      <!-- Tiles injected here -->
     </div>
-  </noscript>
+  </div>
+
+  <div id="shuffling-nav" class="shuffling-nav">
+    <button id="shuffling-prev" class="shuffling-nav-btn">&#10094;</button>
+    <button id="shuffling-next" class="shuffling-nav-btn">&#10095;</button>
+  </div>
 </section>
 
 
@@ -3584,7 +2870,7 @@ Closed Sales:
   }
 
   #marquee-content li,
-  img:hover {
+  #marquee-content img:hover {
     cursor: pointer;
     scale: 1.1;
   }
@@ -4003,7 +3289,8 @@ Closed Sales:
       <div class="col-sm-7">
         <h4>Gas, Oil, and Housing: A Data-Led Look at Southwest Florida, Florida, and the U.S.</h4>
         <p class="italics">April 3rd, 2026</p>
-        <p>A curiosity-driven look at how energy prices (oil and gasoline) move relative to housing. The article explores
+        <p>A curiosity-driven look at how energy prices (oil and gasoline) move relative to housing. The article
+          explores
           interactive charts on HPI divergence, listing sentiment, and Naples market activity.</p>
         <a href="https://coconutcoastrealtors.org/gas-oil-and-housing-a-data-led-look-at-southwest-florida-florida-and-the-u-s/"
           target="_blank">
@@ -4040,9 +3327,9 @@ Closed Sales:
       <div class="col-sm-7">
         <h4>March 2026 Southwest Florida Real Estate Market Update</h4>
         <p class="italics">April 6th, 2026</p>
-        <p>March 2026 sales surged 38% in the Bonita Springs-Estero area, while inventory tightened and pricing remained stable—offering a clear signal for the peak spring season.</p>
-        <a href="https://coconutcoastrealtors.org/wp-content/uploads/2026/04/BER_Fast_Stats-8.pdf"
-          target="_blank">
+        <p>March 2026 sales surged 38% in the Bonita Springs-Estero area, while inventory tightened and pricing remained
+          stable—offering a clear signal for the peak spring season.</p>
+        <a href="https://coconutcoastrealtors.org/wp-content/uploads/2026/04/BER_Fast_Stats-8.pdf" target="_blank">
           <button class="btn btn-primary" type="button" name="button">Download Fast Stats</button>
         </a>
       </div>
@@ -4058,7 +3345,8 @@ Closed Sales:
       <div class="col-sm-7">
         <h4>CCOR Open House Weekend Returns March 27–29</h4>
         <p class="italics">March 19th, 2026</p>
-        <p>CCOR’s Open House Weekend returns March 27–29 with a public-facing website, print advertising, digital display
+        <p>CCOR’s Open House Weekend returns March 27–29 with a public-facing website, print advertising, digital
+          display
           ads, and direct consumer access to local open houses.</p>
         <a href="https://coconutcoastrealtors.org/ber-open-house-weekend-returns-march-27-29/" target="_blank">
           <button class="btn btn-primary" type="button" name="button">Read More</button>
@@ -4262,7 +3550,8 @@ Closed Sales:
       <div class="col-sm-7">
         <h4>Southwest Florida Real Estate Market Update – November 2025 Trends &amp; Outlook</h4>
         <p class="italics">December 18th, 2025</p>
-        <p>Coconut Coast Organization of Realtors® break down how Southwest Florida’s housing market performed in November
+        <p>Coconut Coast Organization of Realtors® break down how Southwest Florida’s housing market performed in
+          November
           2025—stronger pending and closed sales, gentle price softening in Bonita/Estero, Naples and Fort Myers,
           elevated inventory, and the early impact of this year’s Fed rate cuts on buyer and seller behavior.</p>
         <a href="https://coconutcoastrealtors.org/southwest-florida-real-estate-market-update-november-2025-trends-outlook/"
@@ -4282,7 +3571,8 @@ Closed Sales:
       <div class="col-sm-7">
         <h4>Southwest Florida Housing Market Recalibrates — December 2025 Economic Update</h4>
         <p class="italics">December 2nd, 2025</p>
-        <p>Using FGCU’s December 2025 Regional Economic Indicators, Coconut Coast Organization of Realtors® break down how
+        <p>Using FGCU’s December 2025 Regional Economic Indicators, Coconut Coast Organization of Realtors® break down
+          how
           Southwest Florida’s housing market is shifting from recovery to recalibration—home prices stabilizing,
           inventory improving, and affordability challenges shaping opportunities for buyers, sellers, and investors.
         </p>
@@ -4303,7 +3593,8 @@ Closed Sales:
       <div class="col-sm-7">
         <h4>2026 Installation &amp; Awards Banquet Recap</h4>
         <p class="italics">November 26th, 2025</p>
-        <p>Coconut Coast Organization of Realtors® celebrated the 2026 Installation & Awards Banquet with the theme 'Give Back,
+        <p>Coconut Coast Organization of Realtors® celebrated the 2026 Installation & Awards Banquet with the theme
+          'Give Back,
           Grow Forward.' View the 2025 'Of the Year' winners, meet the 2026 Board of Directors, and browse event
           highlights.</p>
         <a href="https://coconutcoastrealtors.org/2026-installation-awards-banquet-recap/" target="_blank"><button
@@ -4457,7 +3748,8 @@ Closed Sales:
           alt="Coconut Coast Organization of Realtors® Teams with Trusted Only to Modernize Vendor Recommendations Across Southwest Florida">
       </div>
       <div class="col-sm-7">
-        <h4>Coconut Coast Organization of Realtors® Teams with Trusted Only to Modernize Vendor Recommendations Across Southwest
+        <h4>Coconut Coast Organization of Realtors® Teams with Trusted Only to Modernize Vendor Recommendations Across
+          Southwest
           Florida</h4>
         <p class="italics">October 15th, 2025</p>
         <p>
@@ -4659,7 +3951,8 @@ Closed Sales:
       <div class="col-sm-7">
         <h4>Coconut Coast Organization of Realtors® Refutes Misleading “Worst Housing Market” Claims</h4>
         <p class="italics">July 14th, 2025</p>
-        <p>Get the facts—not the fear: Coconut Coast Organization of Realtors® dismantle the sensational “worst housing market”
+        <p>Get the facts—not the fear: Coconut Coast Organization of Realtors® dismantle the sensational “worst housing
+          market”
           label, showing today’s conditions are a healthy post-pandemic normalization rather than a crash. Median sale
           prices remain roughly 12 % under last year’s peak yet far above pre-2020 levels, and homes are still closing
           in about 50 days at 96-97 % of list price—clear evidence of a resilient market with active buyer demand. </p>
@@ -4713,7 +4006,8 @@ Closed Sales:
       <div class="col-sm-7">
         <h4>Helping Your Parents Navigate Downsizing with Compassion and Clarity</h4>
         <p class="italics">June 18th, 2025</p>
-        <p>Feeling the tug between nostalgia and the practical need to right-size? Our newest CCOR News feature, “Helping
+        <p>Feeling the tug between nostalgia and the practical need to right-size? Our newest CCOR News feature,
+          “Helping
           Your Parents Navigate Downsizing with Compassion and Clarity,” walks you through the emotional and logistical
           steps adult children can use to support Mom and Dad—from honoring decades of memories to choosing a safer,
           lower-maintenance home and working with trusted professionals who understand this delicate transition. Share
@@ -4803,7 +4097,8 @@ Closed Sales:
       <div class="col-sm-7">
         <h4>Southwest Florida Housing Market 2019–2024: A Tale of Two Counties</h4>
         <p class="italics">April 30th, 2025</p>
-        <p>"Southwest Florida Housing Market 2019–2024: A Tale of Two Counties" from Coconut Coast Organization of Realtors®
+        <p>"Southwest Florida Housing Market 2019–2024: A Tale of Two Counties" from Coconut Coast Organization of
+          Realtors®
           offers a comparative analysis of the real estate trends in Lee and Collier counties over the past five years.
           It highlights how each county has navigated challenges such as inventory shortages, pricing fluctuations, and
           shifting buyer demographics. The piece provides valuable insights for agents and clients aiming to understand
@@ -4859,7 +4154,8 @@ Closed Sales:
       <div class="col-sm-7">
         <h4>FR/BAR vs. NABOR: Which Contract Works Best for Your Florida Transactions?</h4>
         <p class="italics">February 20th, 2025</p>
-        <p>Coconut Coast Organization of Realtors® has once again secured the prestigious RPAC Triple Crown Award, reflecting
+        <p>Coconut Coast Organization of Realtors® has once again secured the prestigious RPAC Triple Crown Award,
+          reflecting
           their unwavering commitment to political advocacy. This accolade highlights their exceptional efforts in
           surpassing fundraising goals and achieving record-breaking member participation. Discover how their dedication
           is shaping the future of the real estate industry.</p>
@@ -4931,7 +4227,8 @@ Closed Sales:
       <div class="col-sm-7">
         <h4>Elevate Your Impact: Join a Coconut Coast Organization of Realtors® Committee in 2025</h4>
         <p class="italics">November 15th, 2024</p>
-        <p>Looking to make an impact in the real estate industry and grow your career? Join a Coconut Coast Organization of Realtors® (CCOR) committee for 2025! With opportunities ranging from professional development to government
+        <p>Looking to make an impact in the real estate industry and grow your career? Join a Coconut Coast Organization
+          of Realtors® (CCOR) committee for 2025! With opportunities ranging from professional development to government
           affairs, you'll help shape the future of our association while building valuable connections and leadership
           skills. Make your voice heard and be part of the change.</p>
         <a href="https://www.coconutcoastrealtors.org/elevate-your-impact-join-a-bonita-springs-estero-realtors-committee-in-2025/"
@@ -4966,7 +4263,8 @@ Closed Sales:
       <div class="col-sm-7">
         <h4>Coconut Coast Organization of Realtors® Wins the NAR Platinum Global Achievement Award</h4>
         <p class="italics">November 1st, 2024</p>
-        <p>Coconut Coast Organization of Realtors® has proudly won the prestigious NAR Platinum Global Achievement Award,
+        <p>Coconut Coast Organization of Realtors® has proudly won the prestigious NAR Platinum Global Achievement
+          Award,
           recognizing their outstanding commitment to global real estate initiatives. As one of only 11 local
           associations to earn this honor, CCOR continues to empower its members with top-notch international
           opportunities, education, and tools. Their partnerships, like the one with the Jamaica Association of
@@ -5143,7 +4441,8 @@ Closed Sales:
         <h4>Space to Grow: Upsizing Your Home to Facilitate a Growing Business</h4>
         <p class="italics">August 18th, 2023</p>
         <p>Upsize your space, upgrade your success! 🏡👔 Explore "Space to Grow: Upsizing Your Home to Facilitate a
-          Growing Business" by Candice Sigmon on At Home Helper. Learn expert tips from Coconut Coast Organization of Realtors®
+          Growing Business" by Candice Sigmon on At Home Helper. Learn expert tips from Coconut Coast Organization of
+          Realtors®
           on researching properties, enhancing your office, and adapting to new markets. Don't miss this guide to
           balancing business and personal growth. </p>
         <a href="https://www.coconutcoastrealtors.org/space-to-grow-upsizing-your-home-to-facilitate-a-growing-business/"
@@ -5398,8 +4697,8 @@ Closed Sales:
         <p class="italics">October 5th, 2022</p>
         <p>Here are a list of resources for those affected by Hurricane Ian aswell as a wellness check-in and
           opportunities for you to volunteer to help our community.</p>
-        <a href="https://coconutcoastrealtors.growthzoneapp.com/ap/EmailViewer/Pe554ZVP"
-          target="_blank"><button class="btn btn-primary" type="button" name="button">Read More</button></a>
+        <a href="https://coconutcoastrealtors.growthzoneapp.com/ap/EmailViewer/Pe554ZVP" target="_blank"><button
+            class="btn btn-primary" type="button" name="button">Read More</button></a>
       </div>
     </div>
 
