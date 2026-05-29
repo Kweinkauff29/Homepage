@@ -1737,7 +1737,7 @@
     #shuffling-hero {
       position: relative;
       width: 100%;
-      height: 70vh;
+      height: 60vh;
       min-height: 500px;
       max-height: 650px;
       background: #000;
@@ -1760,8 +1760,8 @@
 
     #shuffling-tiles-container {
       position: absolute;
-      top: calc(10% + 30px);
-      bottom: 10%;
+      top: calc(5% + 30px);
+      bottom: 5%;
       left: 0;
       width: 100%;
       z-index: 2;
@@ -1792,18 +1792,14 @@
         opacity: 0;
         filter: blur(10px) saturate(0.8);
         transform:
-          translate3d(var(--deal-x, 0), var(--deal-y, 80px), 0)
-          rotate(var(--deal-rotate, -8deg))
-          scale(0.72);
+          translate3d(var(--deal-x, 0), var(--deal-y, 80px), 0) rotate(var(--deal-rotate, -8deg)) scale(0.72);
       }
 
       42% {
         opacity: 1;
         filter: blur(2px) saturate(1.08);
         transform:
-          translate3d(var(--deal-rebound-x, 0), -18px, 0)
-          rotate(var(--deal-rebound-rotate, 3deg))
-          scale(1.04);
+          translate3d(var(--deal-rebound-x, 0), -18px, 0) rotate(var(--deal-rebound-rotate, 3deg)) scale(1.04);
       }
 
       68% {
@@ -2235,6 +2231,7 @@
       object-fit: cover;
       display: block;
     }
+
     .video-mute-btn {
       position: absolute;
       top: 15px;
@@ -2250,17 +2247,20 @@
       align-items: center;
       justify-content: center;
       cursor: pointer;
-      box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
       transition: background 0.25s, transform 0.2s, border-color 0.2s;
     }
+
     .video-mute-btn:hover {
       background: rgba(0, 0, 0, 0.85);
       border-color: #fff;
       transform: scale(1.05);
     }
+
     .video-mute-btn:active {
       transform: scale(0.95);
     }
+
     .video-mute-btn svg {
       vertical-align: middle;
       pointer-events: none;
@@ -2556,7 +2556,7 @@
             videoEl.loop = true;
             videoEl.src = carouselBackgroundVideoUrl;
             videoEl.load();
-            videoEl.play().catch(() => {});
+            videoEl.play().catch(() => { });
           }
           if (tilesContainer) {
             tilesContainer.classList.add('is-active');
@@ -2840,11 +2840,11 @@
       function syncMuteState() {
         const allVideos = track.querySelectorAll('.tile-video-player');
         const allMuteBtns = track.querySelectorAll('.video-mute-btn');
-        
+
         allVideos.forEach(v => {
           v.muted = isGlobalMuted;
         });
-        
+
         allMuteBtns.forEach(btn => {
           const muteIcon = btn.querySelector('.mute-icon');
           const unmuteIcon = btn.querySelector('.unmute-icon');
@@ -2862,7 +2862,7 @@
         const firstTile = track.children[0];
         const allVideos = track.querySelectorAll('.tile-video-player');
         let videoIsActive = false;
-        
+
         allVideos.forEach(video => {
           const tile = video.closest('.shuffling-tile');
           if (tile === firstTile) {
@@ -2878,7 +2878,7 @@
             video.currentTime = 0;
           }
         });
-        
+
         if (!videoIsActive) {
           currentPlayingVideo = null;
           if (!isHovering) {
