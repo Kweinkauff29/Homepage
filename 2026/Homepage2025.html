@@ -1737,7 +1737,7 @@
     #shuffling-hero {
       position: relative;
       width: 100%;
-      height: 70vh;
+      height: 60vh;
       min-height: 500px;
       max-height: 650px;
       background: #000;
@@ -1760,7 +1760,7 @@
 
     #shuffling-tiles-container {
       position: absolute;
-      top: 10%;
+      top: calc(10% + 30px);
       bottom: 10%;
       left: 0;
       width: 100%;
@@ -1780,14 +1780,54 @@
       pointer-events: auto;
     }
 
+    #shuffling-tiles-container.is-dealing .shuffling-tile {
+      animation: dealTileIn 1.15s cubic-bezier(0.18, 0.9, 0.22, 1) both;
+      animation-delay: var(--deal-delay, 0ms);
+      transform-origin: center bottom;
+      will-change: transform, opacity, filter;
+    }
+
+    @keyframes dealTileIn {
+      0% {
+        opacity: 0;
+        filter: blur(10px) saturate(0.8);
+        transform:
+          translate3d(var(--deal-x, 0), var(--deal-y, 80px), 0) rotate(var(--deal-rotate, -8deg)) scale(0.72);
+      }
+
+      42% {
+        opacity: 1;
+        filter: blur(2px) saturate(1.08);
+        transform:
+          translate3d(var(--deal-rebound-x, 0), -18px, 0) rotate(var(--deal-rebound-rotate, 3deg)) scale(1.04);
+      }
+
+      68% {
+        filter: blur(0) saturate(1);
+        transform: translate3d(0, 6px, 0) rotate(1deg) scale(0.99);
+      }
+
+      100% {
+        opacity: 1;
+        filter: blur(0) saturate(1);
+        transform: translate3d(0, 0, 0) rotate(0) scale(1);
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      #shuffling-tiles-container.is-dealing .shuffling-tile {
+        animation: none;
+      }
+    }
+
     #shuffling-section-title {
       position: absolute;
-      top: 2vh;
+      top: 1vh;
       left: 4vw;
       color: #fff;
       font-size: 2.2rem;
       font-weight: 800;
-      z-index: 5;
+      z-index: 30;
       text-transform: uppercase;
       letter-spacing: 2px;
       opacity: 0;
@@ -1802,12 +1842,12 @@
 
     #shuffling-clock {
       position: absolute;
-      top: 2vh;
+      top: 1vh;
       right: 4vw;
       color: #fff;
       font-size: 1.8rem;
       font-weight: 600;
-      z-index: 5;
+      z-index: 30;
       letter-spacing: 1px;
       opacity: 0;
       transition: opacity 1.5s ease, text-shadow 0.3s ease;
@@ -1837,15 +1877,19 @@
 
     @media (max-width: 768px) {
       #shuffling-section-title {
-        font-size: 1.5rem;
-        top: 1vh;
-        left: 2vw;
+        font-size: clamp(1rem, 5vw, 1.35rem);
+        top: 6px;
+        left: 18px;
+        max-width: calc(100vw - 36px);
+        line-height: 1.1;
       }
 
       #shuffling-clock {
-        font-size: 1.2rem;
-        top: 1vh;
-        right: 2vw;
+        font-size: clamp(0.85rem, 3.5vw, 1rem);
+        top: 34px;
+        right: 18px;
+        left: 18px;
+        text-align: right;
       }
     }
 
@@ -1868,6 +1912,8 @@
       background: #111;
       text-decoration: none;
       height: 100%;
+      max-height: 100%;
+      contain: layout paint;
     }
 
     .shuffling-tile:hover {
@@ -1879,15 +1925,44 @@
     .shuffling-tile img {
       width: auto;
       height: 100%;
-      max-width: calc(100vw - 120px);
+      max-width: none;
       display: block;
-      background: #111;
-      transition: opacity 0.3s ease, filter 0.3s ease;
+      background: transparent;
+      transition: none;
       object-fit: contain;
+      object-position: center;
+      transform: none !important;
+      scale: 1 !important;
+    }
+
+    .tile-landscape {
+      aspect-ratio: auto;
+    }
+
+    .tile-portrait {
+      aspect-ratio: auto;
+    }
+
+    .tile-landscape img,
+    .tile-portrait img {
+      width: auto;
+      height: 100%;
+      object-fit: contain;
+      object-position: center;
+    }
+
+    .tile-full-bleed img {
+      width: auto;
+      height: 100%;
+      max-width: none;
+      object-fit: contain;
+      object-position: center;
     }
 
     .shuffling-tile:hover img {
-      filter: brightness(0.4);
+      filter: none !important;
+      transform: none !important;
+      scale: 1 !important;
     }
 
     .tile-info {
@@ -2006,7 +2081,7 @@
     /* Text-only Event Overrides */
     .tile-no-image {
       width: 450px;
-      height: 55vh;
+      height: 100%;
       max-width: calc(100vw - 120px);
       background: linear-gradient(135deg, #004d57 0%, #64BAB0 100%);
       display: flex;
@@ -2014,6 +2089,9 @@
       justify-content: center;
       text-align: center;
       padding: 30px;
+      aspect-ratio: 4 / 5;
+      min-height: 0;
+      max-height: 100%;
     }
 
     .tile-no-image .tile-info {
@@ -2048,6 +2126,62 @@
       border-radius: 4px;
       letter-spacing: 1px;
       z-index: 2;
+    }
+
+    @media (max-width: 768px) {
+      #shuffling-tiles-container {
+        top: 122px;
+        bottom: 48px;
+        padding: 0 18px;
+        gap: 14px;
+      }
+
+      .shuffling-track {
+        gap: 14px;
+      }
+
+      .tile-no-image {
+        max-width: calc(100vw - 56px);
+      }
+
+      .tile-landscape {
+        width: auto;
+        aspect-ratio: auto;
+      }
+
+      .tile-portrait {
+        width: auto;
+        aspect-ratio: auto;
+      }
+
+      .tile-no-image {
+        width: min(78vw, 360px);
+        aspect-ratio: 4 / 5;
+      }
+
+      .tile-info {
+        padding: 22px 16px;
+        opacity: 1;
+        transform: none;
+      }
+
+      .tile-info h3 {
+        font-size: clamp(1rem, 5vw, 1.35rem);
+        line-height: 1.15;
+      }
+
+      .tile-info p {
+        font-size: clamp(0.85rem, 3.8vw, 1rem);
+      }
+
+      .event-details,
+      .staff-details {
+        max-height: 0;
+      }
+
+      .tile-no-image {
+        padding: 24px 18px;
+      }
     }
 
     .shuffling-nav {
@@ -2089,6 +2223,48 @@
       border-color: #fff;
       transform: scale(1.1);
     }
+
+    /* Video Tile styling */
+    .tile-video video {
+      width: auto;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    .video-mute-btn {
+      position: absolute;
+      top: 15px;
+      right: 15px;
+      z-index: 25;
+      background: rgba(0, 0, 0, 0.6);
+      border: 1.5px solid rgba(255, 255, 255, 0.4);
+      color: #fff;
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+      transition: background 0.25s, transform 0.2s, border-color 0.2s;
+    }
+
+    .video-mute-btn:hover {
+      background: rgba(0, 0, 0, 0.85);
+      border-color: #fff;
+      transform: scale(1.05);
+    }
+
+    .video-mute-btn:active {
+      transform: scale(0.95);
+    }
+
+    .video-mute-btn svg {
+      vertical-align: middle;
+      pointer-events: none;
+    }
   </style>
 </head>
 
@@ -2112,31 +2288,29 @@
     // Type the exact name of the API events here in the order you want them to appear.
     // They will be forced to the front of the carousel, regardless of date or if they have a flyer.
     const pinnedApiEventNames = [
-      "June Membership Breakfast",
-      "Advisory Council Meeting"
+      "June Membership Breakfast"
     ];
 
     // 2. CUSTOM FLYERS / HERO IMAGES: 
     // Add your own custom tiles here.
     // Set the 'spot' number (1-indexed) to force it into a specific position overall.
     const customTiles = [
-      //{
-      //  title: "Meet the Board 2027",
-      //  description: "June 5th @ 9am",
-      //  image: "https://coconutcoastrealtors.org/wp-content/uploads/2026/05/MTBHero.png",
-      //  link: "https://www.eventbrite.com/e/wcr-summer-social-meet-the-2027-board-tickets-1990455189052?aff=oddtdtcreator&keep_tld=true",
-      //  spot: 3,
-      //  tag: "Promo"
-      // }
+      {
+        title: "Jeanne and Brooke Video",
+        description: "Watch Jeanne and Brooke",
+        video: "https://coconutcoastrealtors.org/wp-content/uploads/2026/05/Jeanne-and-Brooke-video1.mp4",
+        spot: 4,
+        tag: "Video"
+      }
     ];
 
     const team = [
-      { title: "Meighan Harris", description: "Chief Executive Officer", image: "https://coconutcoastrealtors.org/wp-content/uploads/2026/02/Meighan-2026.jpg", link: "mailto:CEO@BERealtors.org", phone: "(239) 992-6771 ext. 6", email: "CEO@BERealtors.org", shortBio: "Meighan leads the overall direction, operations, and member-focused strategy of the Coconut Coast Organization of REALTORSÂ®." },
-      { title: "Jenna Ripley", description: "Membership and Operations Director", image: "https://coconutcoastrealtors.org/wp-content/uploads/2026/02/Jenna-2026.jpg", link: "mailto:operations@berealtors.org", phone: "(239) 992-6771 ext. 5", email: "operations@berealtors.org", shortBio: "Jenna supports CCORâ€™s executive operations and helps keep key internal systems, member service workflows, and organizational processes moving efficiently." },
-      { title: "Katie Malooly", description: "Director of Development and Events", image: "https://coconutcoastrealtors.org/wp-content/uploads/2026/02/Katie.png", link: "mailto:Events@BERealtors.org", phone: "(239) 992-6771 ext. 2", email: "Events@BERealtors.org", shortBio: "Katie manages CCORâ€™s education and events calendar, including class planning, member events, registrations, and event logistics." },
+      { title: "Meighan Harris", description: "Chief Executive Officer", image: "https://coconutcoastrealtors.org/wp-content/uploads/2026/02/Meighan-2026.jpg", link: "mailto:CEO@BERealtors.org", phone: "(239) 992-6771 ext. 6", email: "CEO@BERealtors.org", shortBio: "Meighan leads the overall direction, operations, and member-focused strategy of the Coconut Coast Organization of REALTORS\u00ae." },
+      { title: "Jenna Ripley", description: "Membership and Operations Director", image: "https://coconutcoastrealtors.org/wp-content/uploads/2026/02/Jenna-2026.jpg", link: "mailto:operations@berealtors.org", phone: "(239) 992-6771 ext. 5", email: "operations@berealtors.org", shortBio: "Jenna supports CCOR's executive operations and helps keep key internal systems, member service workflows, and organizational processes moving efficiently." },
+      { title: "Katie Malooly", description: "Director of Development and Events", image: "https://coconutcoastrealtors.org/wp-content/uploads/2026/02/Katie.png", link: "mailto:Events@BERealtors.org", phone: "(239) 992-6771 ext. 2", email: "Events@BERealtors.org", shortBio: "Katie manages CCOR's education and events calendar, including class planning, member events, registrations, and event logistics." },
       { title: "Erica Bernhardt", description: "Director of MLS", image: "https://coconutcoastrealtors.org/wp-content/uploads/2026/02/Erica.png", link: "mailto:MLS@BERealtors.org", phone: "(239) 992-6771 ext. 3", email: "MLS@BERealtors.org", shortBio: "Erica oversees MLS support for CCOR members, including Matrix/SWFLAMLS questions, MLS issues, product updates, and MLS-related training." },
       { title: "Mariam Abdallah", description: "Director of Member Experience", image: "https://coconutcoastrealtors.org/wp-content/uploads/2026/05/Mariam-photo-Edited.png", link: "mailto:Membership@BERealtors.org", phone: "(239) 992-6771 ext. 1", email: "Membership@BERealtors.org", shortBio: "Mariam helps members from the moment they join and continues supporting them throughout their membership." },
-      { title: "Kevin Weinkauff", description: "Communications and Technology", image: "https://coconutcoastrealtors.org/wp-content/uploads/2020/10/Headshot-165x244.png", link: "mailto:Tech@BERealtors.org", phone: "(239) 992-6771 ext. 4", email: "Tech@BERealtors.org", shortBio: "Kevin supports CCORâ€™s technology, communications, marketing, website, digital platforms, and member-facing tech resources." }
+      { title: "Kevin Weinkauff", description: "Communications and Technology", image: "https://coconutcoastrealtors.org/wp-content/uploads/2020/10/Headshot-165x244.png", link: "mailto:Tech@BERealtors.org", phone: "(239) 992-6771 ext. 4", email: "Tech@BERealtors.org", shortBio: "Kevin supports CCOR's technology, communications, marketing, website, digital platforms, and member-facing tech resources." }
     ];
 
     const API_URL = 'https://gz-realestate-proxy.bonitaspringsrealtors.workers.dev/events/all?enriched=true';
@@ -2144,6 +2318,85 @@
     let currentIndex = 0;
     let autoPlayInterval;
     let isHovering = false;
+
+    const win1252ByteMap = {
+      0x20AC: 0x80,
+      0x201A: 0x82,
+      0x0192: 0x83,
+      0x201E: 0x84,
+      0x2026: 0x85,
+      0x2020: 0x86,
+      0x2021: 0x87,
+      0x02C6: 0x88,
+      0x2030: 0x89,
+      0x0160: 0x8A,
+      0x2039: 0x8B,
+      0x0152: 0x8C,
+      0x017D: 0x8E,
+      0x2018: 0x91,
+      0x2019: 0x92,
+      0x201C: 0x93,
+      0x201D: 0x94,
+      0x2022: 0x95,
+      0x2013: 0x96,
+      0x2014: 0x97,
+      0x02DC: 0x98,
+      0x2122: 0x99,
+      0x0161: 0x9A,
+      0x203A: 0x9B,
+      0x0153: 0x9C,
+      0x017E: 0x9E,
+      0x0178: 0x9F
+    };
+
+    function decodeMojibakeOnce(text) {
+      if (!window.TextDecoder || !/[\u00c2\u00c3\u00e2]/.test(text)) return text;
+
+      const bytes = [];
+      for (const char of text) {
+        const code = char.codePointAt(0);
+        if (code <= 0xFF) {
+          bytes.push(code);
+        } else if (win1252ByteMap[code]) {
+          bytes.push(win1252ByteMap[code]);
+        } else {
+          return text;
+        }
+      }
+
+      try {
+        return new TextDecoder("utf-8", { fatal: true }).decode(new Uint8Array(bytes));
+      } catch (error) {
+        return text;
+      }
+    }
+
+    function normalizeCarouselText(value) {
+      let text = String(value ?? "");
+      text = decodeMojibakeOnce(decodeMojibakeOnce(text));
+
+      return text
+        .replace(/\u00c3\u201a\u00c2\u00ae|\u00c2\u00ae/g, "\u00ae")
+        .replace(/\u00c3\u00a2\u00e2\u201a\u00ac\u00e2\u201e\u00a2|\u00e2\u20ac\u2122|\u00e2\u20ac\u02dc/g, "'")
+        .replace(/\u00c3\u00a2\u00e2\u201a\u00ac\u00c5\u201c|\u00e2\u20ac\u0153/g, '"')
+        .replace(/\u00c3\u00a2\u00e2\u201a\u00ac\u00c2\u009d|\u00c3\u00a2\u00e2\u201a\u00ac\u00ef\u00bf\u00bd|\u00e2\u20ac\u009d/g, '"')
+        .replace(/\u00c3\u00a2\u00e2\u201a\u00ac\u00e2\u20ac\u0153|\u00e2\u20ac\u201c/g, "-")
+        .replace(/\u00c3\u00a2\u00e2\u201a\u00ac\u00e2\u20ac\u009d|\u00e2\u20ac\u201d/g, "-")
+        .replace(/\u00c3\u201a\u00c2\u00b7|\u00c2\u00b7/g, "&middot;")
+        .replace(/\u00c3\u201a\u00c2\u00a0|\u00c2\u00a0/g, " ")
+        .replace(/\u00c3\u00a2\u00e2\u201a\u00ac\u00c2\u00a2|\u00e2\u20ac\u00a2/g, "&bull;")
+        .replace(/\u00c3\u00a2\u00e2\u201a\u00ac\u00c2\u00a6|\u00e2\u20ac\u00a6/g, "...")
+        .replace(/[\uFFFD]/g, "");
+    }
+
+    function escapeCarouselHtml(value) {
+      return normalizeCarouselText(value)
+        .replace(/&(?!(?:amp|lt|gt|quot|#39|middot|bull);)/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#39;");
+    }
 
     async function fetchEvents() {
       try {
@@ -2185,6 +2438,11 @@
               dateObj: e.StartDate,
               rawDesc: e.Description ? e.Description.replace(/<[^>]*>?/gm, '').substring(0, 100) + '...' : ''
             };
+
+            if (e.Name && e.Name.toLowerCase() === "june membership breakfast") {
+              eventObj.format = "landscape";
+              eventObj.fullBleed = true;
+            }
 
             let pinIndex = e.Name ? pinnedApiEventNames.findIndex(name => name.toLowerCase() === e.Name.toLowerCase()) : -1;
 
@@ -2231,6 +2489,8 @@
       const videoEl = videoContainer ? videoContainer.querySelector('video') : null;
       let timeIsUp = false;
       let carouselIsReady = false;
+      let backgroundVideoStarted = false;
+      const carouselBackgroundVideoUrl = "https://coconutcoastrealtors.org/wp-content/uploads/2026/05/3.mp4";
 
       const titleEl = document.getElementById('shuffling-section-title');
       const clockEl = document.getElementById('shuffling-clock');
@@ -2253,35 +2513,65 @@
         setInterval(updateClock, 1000);
       }
 
+      const dealInTiles = () => {
+        if (!tilesContainer || tilesContainer.dataset.dealt === "true") return;
+
+        const visiblePattern = [
+          { x: "-42vw", y: "86px", r: "-13deg" },
+          { x: "34vw", y: "118px", r: "11deg" },
+          { x: "-24vw", y: "132px", r: "7deg" },
+          { x: "22vw", y: "76px", r: "-9deg" },
+          { x: "-12vw", y: "104px", r: "5deg" },
+          { x: "16vw", y: "144px", r: "-6deg" },
+          { x: "-30vw", y: "92px", r: "10deg" },
+          { x: "28vw", y: "126px", r: "-12deg" }
+        ];
+
+        Array.from(track.children).forEach((tile, index) => {
+          const pattern = visiblePattern[index % visiblePattern.length];
+          const stagger = Math.min(index, 9) * 95;
+          tile.style.setProperty('--deal-x', pattern.x);
+          tile.style.setProperty('--deal-y', pattern.y);
+          tile.style.setProperty('--deal-rotate', pattern.r);
+          tile.style.setProperty('--deal-rebound-x', pattern.x.startsWith('-') ? '7vw' : '-7vw');
+          tile.style.setProperty('--deal-rebound-rotate', pattern.r.startsWith('-') ? '4deg' : '-4deg');
+          tile.style.setProperty('--deal-delay', `${stagger}ms`);
+        });
+
+        tilesContainer.dataset.dealt = "true";
+        tilesContainer.classList.remove('is-dealing');
+        void tilesContainer.offsetWidth;
+        tilesContainer.classList.add('is-dealing');
+
+        setTimeout(() => {
+          tilesContainer.classList.remove('is-dealing');
+        }, 2200);
+      };
+
       const tryStart = () => {
         if (timeIsUp && carouselIsReady) {
           if (videoContainer) videoContainer.style.opacity = "0.3";
-          if (tilesContainer) tilesContainer.classList.add('is-active');
+          if (videoEl && !backgroundVideoStarted) {
+            backgroundVideoStarted = true;
+            videoEl.loop = true;
+            videoEl.src = carouselBackgroundVideoUrl;
+            videoEl.load();
+            videoEl.play().catch(() => { });
+          }
+          if (tilesContainer) {
+            tilesContainer.classList.add('is-active');
+            dealInTiles();
+          }
           if (navContainer) navContainer.classList.add('is-active');
           if (clockEl) clockEl.classList.add('is-active');
 
           if (titleEl) {
             titleEl.classList.add('is-active');
-            let visibleStaff = new Set();
-            const observer = new IntersectionObserver((entries) => {
-              entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                  visibleStaff.add(entry.target);
-                } else {
-                  visibleStaff.delete(entry.target);
-                }
-              });
-              if (visibleStaff.size > 0) {
-                titleEl.innerText = "Our Team:";
-              } else {
-                titleEl.innerText = "Upcoming Classes/Events:";
-              }
-            }, { root: null, threshold: 0.1 });
-
-            document.querySelectorAll('.tile-staff').forEach(el => observer.observe(el));
+            window.updateShufflingSectionTitle?.();
           }
 
           startAutoPlay();
+          window.checkActiveVideoTile?.();
         }
       };
 
@@ -2310,16 +2600,32 @@
       tilesData = [...mainGroup, ...group2, ...group3];
 
       await Promise.all(tilesData.map(async (tile) => {
-        if (!tile.format && !tile.isTextOnly) tile.format = await determineFormat(tile.image);
+        if (tile.video) {
+          tile.format = 'video';
+        } else if (!tile.format && !tile.isTextOnly) {
+          tile.format = await determineFormat(tile.image);
+        }
       }));
 
       for (const tile of tilesData) {
         const el = document.createElement('a');
-        el.className = `shuffling-tile tile-${tile.format}`;
+        const tileFormatClass = tile.video ? 'tile-video tile-portrait' : (tile.isTextOnly ? 'tile-no-image' : `tile-${tile.format || 'portrait'}`);
+        el.className = `shuffling-tile ${tileFormatClass}`;
         if (tile.tag === 'Staff') el.classList.add('tile-staff');
-        if (tile.isTextOnly) el.classList.add('tile-no-image');
+        if (tile.fullBleed) el.classList.add('tile-full-bleed');
+        el.dataset.title = tile.title || "";
+        el.dataset.tag = tile.tag || "";
         el.href = tile.link || "#";
         el.target = "_blank";
+
+        const displayTitle = escapeCarouselHtml(tile.title);
+        const displayDescription = escapeCarouselHtml(tile.description);
+        const displayRawDesc = escapeCarouselHtml(tile.rawDesc);
+        const displayShortBio = escapeCarouselHtml(tile.shortBio);
+        const displayEmail = escapeCarouselHtml(tile.email);
+        const displayPhone = escapeCarouselHtml(tile.phone);
+        const displayTag = escapeCarouselHtml(tile.tag);
+        const displayAlt = escapeCarouselHtml(tile.title).replace(/&quot;/g, "'");
 
         let innerHTML = '';
         if (tile.isTextOnly) {
@@ -2332,11 +2638,11 @@
           const color = colors[Math.abs(tile.title.length) % colors.length];
 
           innerHTML = `
-            ${tile.tag ? '<div class="tile-tag">' + tile.tag + '</div>' : ''}
+            ${tile.tag ? '<div class="tile-tag">' + displayTag + '</div>' : ''}
             <div class="tile-info" style="background: none;">
-              <h3>${tile.title}</h3>
-              <p style="font-weight: bold; margin-bottom: 10px;">${tile.description}</p>
-              <p>${tile.rawDesc}</p>
+              <h3>${displayTitle}</h3>
+              <p style="font-weight: bold; margin-bottom: 10px;">${displayDescription}</p>
+              <p>${displayRawDesc}</p>
               <div class="event-action" style="margin-top: 15px;">
                 <span class="btn-register">Register Here</span>
               </div>
@@ -2349,28 +2655,48 @@
           }
           innerHTML = `
             <div class="tile-tag">Staff</div>
-            <img src="${tile.image}" alt="${tile.title.replace(/"/g, '&quot;')}">
+            <img src="${tile.image}" alt="${displayAlt}">
             <div class="tile-info">
-              <h3 class="staff-name">${tile.title}</h3>
-              <p>${tile.description}</p>
+              <h3 class="staff-name">${displayTitle}</h3>
+              <p>${displayDescription}</p>
               <div class="staff-details">
-                <p>${tile.shortBio}</p>
+                <p>${displayShortBio}</p>
                 <div class="staff-contact">
-                  <a href="mailto:${tile.email}">&#9993; ${tile.email}</a>
-                  <a href="tel:${tile.phone.replace(/[^0-9]/g, '')}">&#9742; ${tile.phone}</a>
+                  <a href="mailto:${tile.email}">&#9993; ${displayEmail}</a>
+                  <a href="tel:${tile.phone.replace(/[^0-9]/g, '')}">&#9742; ${displayPhone}</a>
                 </div>
               </div>
             </div>
           `;
+        } else if (tile.video) {
+          el.href = tile.link || "javascript:void(0);";
+          if (!tile.link) el.removeAttribute('target');
+
+          innerHTML = `
+            ${tile.tag ? '<div class="tile-tag">' + displayTag + '</div>' : ''}
+            <video src="${tile.video}" muted playsinline webkit-playsinline preload="metadata" class="tile-video-player" style="width: auto; height: 100%; object-fit: cover; display: block;"></video>
+            <button class="video-mute-btn" aria-label="Toggle mute">
+              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="mute-icon" viewBox="0 0 16 16">
+                <path d="M6.717 3.55A.5.5 0 0 1 7 4v8a.5.5 0 0 1-.812.39L3.825 10.5H1.5A.5.5 0 0 1 1 10V6a.5.5 0 0 1 .5-.5h2.325l2.363-1.89a.5.5 0 0 1 .529-.06zm7.137 2.096a.5.5 0 0 1 0 .708L12.207 8l1.647 1.646a.5.5 0 0 1-.708.708L11.5 8.707l-1.646 1.647a.5.5 0 0 1-.708-.708L10.793 8 9.146 6.354a.5.5 0 1 1 .708-.708L11.5 7.293l1.646-1.647a.5.5 0 0 1 .708 0z"/>
+              </svg>
+              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="unmute-icon" viewBox="0 0 16 16" style="display: none;">
+                <path d="M11.536 14.01A8.47 8.47 0 0 0 14.026 8a8.47 8.47 0 0 0-2.49-6.01.5.5 0 0 0-.707.707A7.48 7.48 0 0 1 13.025 8a7.48 7.48 0 0 1-2.196 5.303.5.5 0 0 0 .707.707zm-2.378-2.378A4.98 4.98 0 0 0 10.5 8c0-1.25-.458-2.39-1.218-3.27a.5.5 0 0 0-.776.63A3.98 3.98 0 0 1 9.5 8c0 1.011-.377 1.933-.99 2.585a.5.5 0 1 0 .776.63A4.98 4.98 0 0 0 9.158 11.63zM6.717 3.55A.5.5 0 0 1 7 4v8a.5.5 0 0 1-.812.39L3.825 10.5H1.5A.5.5 0 0 1 1 10V6a.5.5 0 0 1 .5-.5h2.325l2.363-1.89a.5.5 0 0 1 .529-.06z"/>
+              </svg>
+            </button>
+            <div class="tile-info">
+              <h3>${displayTitle}</h3>
+              <p>${displayDescription}</p>
+            </div>
+          `;
         } else {
           innerHTML = `
-            ${tile.tag ? '<div class="tile-tag">' + tile.tag + '</div>' : ''}
-            <img src="${tile.image}" alt="${tile.title.replace(/"/g, '&quot;')}">
+            ${tile.tag ? '<div class="tile-tag">' + displayTag + '</div>' : ''}
+            <img src="${tile.image}" alt="${displayAlt}">
             <div class="tile-info">
-              <h3>${tile.title}</h3>
-              <p>${tile.description}</p>
+              <h3>${displayTitle}</h3>
+              <p>${displayDescription}</p>
               <div class="event-details">
-                <p>${tile.rawDesc}</p>
+                <p>${displayRawDesc}</p>
                 <div class="event-action">
                   <span class="btn-register">Register Here</span>
                 </div>
@@ -2402,21 +2728,222 @@
 
       if (!track || !track.children[0]) return;
 
+      let teamTitleActive = false;
+      let teamTitleHasSeenKevin = false;
+
+      function titleIncludes(tile, name) {
+        return (tile?.dataset?.title || "").toLowerCase().includes(name);
+      }
+
+      function isTileVisible(tile) {
+        const container = track.parentElement;
+        if (!tile || !container) return false;
+
+        const tileRect = tile.getBoundingClientRect();
+        const containerRect = container.getBoundingClientRect();
+        return tileRect.right > containerRect.left && tileRect.left < containerRect.right;
+      }
+
+      function updateSectionTitle() {
+        const titleEl = document.getElementById('shuffling-section-title');
+        if (!titleEl) return;
+
+        const firstTile = track.children[0];
+        const kevinVisible = Array.from(track.children).some(tile => titleIncludes(tile, "kevin") && isTileVisible(tile));
+
+        if (!teamTitleActive && titleIncludes(firstTile, "meighan")) {
+          teamTitleActive = true;
+          teamTitleHasSeenKevin = kevinVisible;
+        }
+
+        if (teamTitleActive && kevinVisible) {
+          teamTitleHasSeenKevin = true;
+        }
+
+        if (teamTitleActive && teamTitleHasSeenKevin && !kevinVisible) {
+          teamTitleActive = false;
+          teamTitleHasSeenKevin = false;
+        }
+
+        titleEl.innerText = teamTitleActive ? "Our Team:" : "Upcoming Classes/Events:";
+      }
+
+      window.updateShufflingSectionTitle = updateSectionTitle;
+      updateSectionTitle();
+      window.addEventListener('resize', updateSectionTitle);
+
+      function getTrackGap() {
+        const styles = window.getComputedStyle(track);
+        return parseFloat(styles.columnGap || styles.gap || "20") || 20;
+      }
+
+      function getTileStride(tile) {
+        return tile.offsetWidth + getTrackGap();
+      }
+
+      function getForwardMoveCount() {
+        const firstTile = track.children[0];
+        if (!firstTile || !firstTile.classList.contains('tile-staff')) return 1;
+
+        const containerWidth = track.parentElement.offsetWidth;
+        let moveDist = 0;
+        let count = 0;
+
+        for (let i = 0; i < track.children.length; i++) {
+          const tile = track.children[i];
+          if (!tile.classList.contains('tile-staff')) break;
+
+          const stride = getTileStride(tile);
+          if (moveDist + stride > containerWidth && count > 0) break;
+
+          moveDist += stride;
+          count++;
+        }
+
+        return Math.max(1, count);
+      }
+
+      function getBackwardMoveCount() {
+        const lastTile = track.lastElementChild;
+        if (!lastTile || !lastTile.classList.contains('tile-staff')) return 1;
+
+        const containerWidth = track.parentElement.offsetWidth;
+        let moveDist = 0;
+        let count = 0;
+
+        for (let i = track.children.length - 1; i >= 0; i--) {
+          const tile = track.children[i];
+          if (!tile.classList.contains('tile-staff')) break;
+
+          const stride = getTileStride(tile);
+          if (moveDist + stride > containerWidth && count > 0) break;
+
+          moveDist += stride;
+          count++;
+        }
+
+        return Math.max(1, count);
+      }
+
+      let currentPlayingVideo = null;
+      let isGlobalMuted = true;
+
+      function handleVideoMetadata(video) {
+        const aspect = video.videoWidth / video.videoHeight;
+        const tile = video.closest('.shuffling-tile');
+        if (tile) {
+          tile.classList.remove('tile-portrait', 'tile-landscape');
+          tile.classList.add(aspect > 1.2 ? 'tile-landscape' : 'tile-portrait');
+        }
+      }
+
+      function syncMuteState() {
+        const allVideos = track.querySelectorAll('.tile-video-player');
+        const allMuteBtns = track.querySelectorAll('.video-mute-btn');
+
+        allVideos.forEach(v => {
+          v.muted = isGlobalMuted;
+        });
+
+        allMuteBtns.forEach(btn => {
+          const muteIcon = btn.querySelector('.mute-icon');
+          const unmuteIcon = btn.querySelector('.unmute-icon');
+          if (isGlobalMuted) {
+            if (muteIcon) muteIcon.style.display = 'inline-block';
+            if (unmuteIcon) unmuteIcon.style.display = 'none';
+          } else {
+            if (muteIcon) muteIcon.style.display = 'none';
+            if (unmuteIcon) unmuteIcon.style.display = 'inline-block';
+          }
+        });
+      }
+
+      function checkActiveVideoTile() {
+        const firstTile = track.children[0];
+        const allVideos = track.querySelectorAll('.tile-video-player');
+        let videoIsActive = false;
+
+        allVideos.forEach(video => {
+          const tile = video.closest('.shuffling-tile');
+          if (tile === firstTile) {
+            videoIsActive = true;
+            video.muted = isGlobalMuted;
+            video.play().catch(err => {
+              console.log("Video play failed:", err);
+            });
+            currentPlayingVideo = video;
+            window.stopAutoPlay();
+          } else {
+            video.pause();
+            video.currentTime = 0;
+          }
+        });
+
+        if (!videoIsActive) {
+          currentPlayingVideo = null;
+          if (!isHovering) {
+            window.startAutoPlay();
+          }
+        }
+      }
+
+      window.checkActiveVideoTile = checkActiveVideoTile;
+
+      // Capture loadedmetadata to size video tiles dynamically
+      track.addEventListener('loadedmetadata', (e) => {
+        if (e.target.classList.contains('tile-video-player')) {
+          handleVideoMetadata(e.target);
+        }
+      }, true);
+
+      // Check already loaded videos
+      track.querySelectorAll('.tile-video-player').forEach(video => {
+        if (video.readyState >= 1) {
+          handleVideoMetadata(video);
+        }
+      });
+
+      // Capturing click for mute button
+      track.addEventListener('click', (e) => {
+        const muteBtn = e.target.closest('.video-mute-btn');
+        if (muteBtn) {
+          e.preventDefault();
+          e.stopPropagation();
+          isGlobalMuted = !isGlobalMuted;
+          syncMuteState();
+        }
+      }, true);
+
+      // Capturing video ended event to move next
+      track.addEventListener('ended', (e) => {
+        if (e.target.classList.contains('tile-video-player')) {
+          console.log("Active video ended, moving next.");
+          move('next');
+        }
+      }, true);
+
+      // Initialize mute state
+      syncMuteState();
+
       function move(dir) {
         if (isAnimating) return;
         isAnimating = true;
 
-        let containerWidth = track.parentElement.offsetWidth;
+        // Pause current video immediately when moving
+        if (currentPlayingVideo) {
+          currentPlayingVideo.pause();
+          currentPlayingVideo.currentTime = 0;
+          currentPlayingVideo = null;
+        }
+
         let moveDist = 0;
-        let count = 0;
+        let count = dir === 'next' ? getForwardMoveCount() : getBackwardMoveCount();
 
         if (dir === 'next') {
-          for (let i = 0; i < track.children.length; i++) {
-            let w = track.children[i].offsetWidth + 20;
-            if (moveDist + w > containerWidth && count > 0) break;
-            moveDist += w;
-            count++;
+          for (let i = 0; i < count; i++) {
+            moveDist += getTileStride(track.children[i]);
           }
+
           track.style.transition = 'transform 0.8s ease-in-out';
           track.style.transform = `translateX(-${moveDist}px)`;
 
@@ -2426,15 +2953,15 @@
             }
             track.style.transition = 'none';
             track.style.transform = 'translateX(0)';
+            updateSectionTitle();
+            checkActiveVideoTile();
             setTimeout(() => { isAnimating = false; }, 50);
           }, 800);
         } else {
-          for (let i = track.children.length - 1; i >= 0; i--) {
-            let w = track.children[i].offsetWidth + 20;
-            if (moveDist + w > containerWidth && count > 0) break;
-            moveDist += w;
-            count++;
+          for (let i = track.children.length - 1; i >= track.children.length - count; i--) {
+            moveDist += getTileStride(track.children[i]);
           }
+
           for (let i = 0; i < count; i++) {
             track.insertBefore(track.lastElementChild, track.children[0]);
           }
@@ -2446,30 +2973,37 @@
           track.style.transition = 'transform 0.8s ease-in-out';
           track.style.transform = 'translateX(0)';
 
-          setTimeout(() => { isAnimating = false; }, 800);
+          setTimeout(() => {
+            updateSectionTitle();
+            checkActiveVideoTile();
+            isAnimating = false;
+          }, 800);
         }
       }
 
       if (nextBtn) {
         nextBtn.addEventListener('click', () => {
           move('next');
-          stopAutoPlay();
-          startAutoPlay();
+          window.stopAutoPlay();
+          window.startAutoPlay();
         });
       }
       if (prevBtn) {
         prevBtn.addEventListener('click', () => {
           move('prev');
-          stopAutoPlay();
-          startAutoPlay();
+          window.stopAutoPlay();
+          window.startAutoPlay();
         });
       }
 
-      track.addEventListener('mouseenter', () => { isHovering = true; stopAutoPlay(); });
-      track.addEventListener('mouseleave', () => { isHovering = false; startAutoPlay(); });
+      track.addEventListener('mouseenter', () => { isHovering = true; window.stopAutoPlay(); });
+      track.addEventListener('mouseleave', () => { isHovering = false; window.startAutoPlay(); });
 
       window.startAutoPlay = () => {
-        stopAutoPlay();
+        window.stopAutoPlay();
+        if (currentPlayingVideo && !currentPlayingVideo.paused && !currentPlayingVideo.ended) {
+          return;
+        }
         autoPlayInterval = setInterval(() => {
           if (!isHovering) {
             move('next');
@@ -2563,7 +3097,7 @@
   <h2 id="shuffling-clock"></h2>
   <div id="shuffling-video-container">
     <video muted autoplay playsinline>
-      <source src="https://coconutcoastrealtors.org/wp-content/uploads/2025/11/Welcome-to.mp4" type="video/mp4">
+      <source src="https://coconutcoastrealtors.org/wp-content/uploads/2026/05/Welcome-to2.mp4" type="video/mp4">
     </video>
   </div>
 
@@ -3572,6 +4106,25 @@
   <button class="carousel-control left" style="font-size:80px;" onclick="carouselScrollLeft()">&#8249;</button>
 
   <div class="carousel2">
+
+    <!-- NEW: How to Build Wealth with Your First Vacation Rental Property -->
+    <div class="row news-row">
+      <div class="col-sm-5" id="exception">
+        <img class="article-img" style="object-fit: contain !important;"
+          src="https://images.unsplash.com/photo-1564013799919-ab600027ffc6?fm=jpg&q=60&w=3000&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+          alt="How to Build Wealth with Your First Vacation Rental Property">
+      </div>
+      <div class="col-sm-7">
+        <h4>How to Build Wealth with Your First Vacation Rental Property</h4>
+        <p class="italics">May 28th, 2026</p>
+        <p>For first-time real estate investors, a first vacation rental property can become a serious starting point
+          for long-term wealth. Learn how to launch, protect, and operate your rental successfully.</p>
+        <a href="https://coconutcoastrealtors.org/how-to-build-wealth-with-your-first-vacation-rental-property/"
+          target="_blank">
+          <button class="btn btn-primary" type="button" name="button">Read More</button>
+        </a>
+      </div>
+    </div>
 
     <!-- NEW: Buying Can Still Beat Renting in Southwest Florida — But the Local Data Says the Story Is More Nuanced -->
     <div class="row news-row">
@@ -5316,7 +5869,7 @@
 
   </div>
   <div class="col-sm-8">
-    <h3 class="resrow">Upcoming at CCOR - May 22nd</h3>
+    <h3 class="resrow">Upcoming at CCOR - May 29th</h3>
 
     <style>
       .frame-class {
@@ -5338,7 +5891,7 @@
       }
     </style>
 
-    <iframe class="frame-class" src="https://bonitaspringsesterorealtorsfl.growthzoneapp.com/ap/EmailViewer/LwjglvjP">
+    <iframe class="frame-class" src="https://bonitaspringsesterorealtorsfl.growthzoneapp.com/ap/EmailViewer/Lzjmn86L">
     </iframe>
   </div>
 </div>
