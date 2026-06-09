@@ -102,6 +102,26 @@
     padding-top: 75%; /* 4:3 Aspect Ratio */
     background: #f0f0f0;
     overflow: hidden;
+    cursor: pointer;
+  }
+
+  #ccor-silent-auction-wrapper .auction-img-wrapper::after {
+    content: '🔍 View Full Size';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: rgba(0,0,0,0.6);
+    color: white;
+    text-align: center;
+    padding: 8px;
+    font-size: 13px;
+    opacity: 0;
+    transition: opacity 0.2s;
+  }
+
+  #ccor-silent-auction-wrapper .auction-img-wrapper:hover::after {
+    opacity: 1;
   }
 
   #ccor-silent-auction-wrapper .auction-img {
@@ -197,7 +217,7 @@
   #ccor-silent-auction-wrapper .modal-overlay {
     position: fixed;
     top: 0; left: 0; right: 0; bottom: 0;
-    background: rgba(0,0,0,0.6);
+    background: rgba(0,0,0,0.8);
     display: none;
     justify-content: center;
     align-items: center;
@@ -220,17 +240,57 @@
     overflow-y: auto;
   }
 
+  #ccor-silent-auction-wrapper .image-modal {
+    background: white !important;
+    padding: 0 !important;
+    border-radius: 12px !important;
+    width: 95%;
+    max-width: 900px;
+    box-shadow: 0 20px 40px rgba(0,0,0,0.5) !important;
+    position: relative;
+    max-height: 95vh;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+  }
+
+  #ccor-silent-auction-wrapper .image-modal img {
+    width: 100%;
+    height: 60vh;
+    object-fit: contain;
+    background: #111;
+    display: block;
+  }
+
+  #ccor-silent-auction-wrapper .image-modal-info {
+    padding: 20px !important;
+    overflow-y: auto;
+    background: white;
+  }
+
   #ccor-silent-auction-wrapper .modal-close {
     position: absolute;
     top: 15px;
     right: 15px;
-    background: none !important;
+    background: rgba(0,0,0,0.5) !important;
     border: none !important;
-    font-size: 28px !important;
+    font-size: 24px !important;
     cursor: pointer !important;
-    color: #999 !important;
+    color: white !important;
     line-height: 1 !important;
     padding: 0 !important;
+    width: 36px;
+    height: 36px;
+    border-radius: 50% !important;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 10;
+  }
+  
+  #ccor-silent-auction-wrapper .bid-modal .modal-close {
+    background: none !important;
+    color: #999 !important;
   }
 
   #ccor-silent-auction-wrapper .modal-title {
@@ -302,6 +362,9 @@
       flex-direction: column;
       gap: 0;
     }
+    #ccor-silent-auction-wrapper .image-modal img {
+      height: 45vh;
+    }
   }
 </style>
 
@@ -361,6 +424,28 @@
     </form>
   </div>
 </div>
+
+<!-- Image Preview Modal -->
+<div class="modal-overlay" id="ccor-sa-image-modal-overlay">
+  <div class="image-modal">
+    <button class="modal-close" id="ccor-sa-image-modal-close">&times;</button>
+    <img id="ccor-sa-image-modal-img" src="" alt="Full Artwork">
+    <div class="image-modal-info">
+      <h3 class="auction-title" id="ccor-sa-image-modal-title">Title</h3>
+      <div class="auction-dims" id="ccor-sa-image-modal-dims">Dimensions</div>
+      <p class="auction-desc" id="ccor-sa-image-modal-desc">Description</p>
+      
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-top: 15px; border-top: 1px solid #eee; padding-top: 15px;">
+        <div>
+          <div style="font-size:13px; color:#666;">Current Bid</div>
+          <div style="font-weight:bold; font-size:24px; color:var(--auction-primary);" id="ccor-sa-image-modal-bid"></div>
+        </div>
+        <button class="btn-bid" id="ccor-sa-image-modal-btn" style="width:auto; padding:10px 25px;">Place Bid</button>
+      </div>
+    </div>
+  </div>
+</div>
+
 </div> <!-- End Wrapper -->
 
 <script>
@@ -400,14 +485,15 @@
       const card = document.createElement('div');
       card.className = 'auction-card';
       
-      const highestBidderText = isStarted ? `Highest Bidder: ${item.highest_bidder}` : `Starting Bid`;
+      const highestBidderText = isStarted ? "Highest Bidder: " + item.highest_bidder : "Starting Bid";
+      const title = item.title_placeholder !== '[Title Placeholder]' ? item.title_placeholder : item.name;
 
       card.innerHTML = `
-        <div class="auction-img-wrapper">
+        <div class="auction-img-wrapper" data-item-id="${item.id}">
           <img src="${item.image_url}" class="auction-img" alt="${item.name}">
         </div>
         <div class="auction-content">
-          <h3 class="auction-title">${item.title_placeholder !== '[Title Placeholder]' ? item.title_placeholder : item.name}</h3>
+          <h3 class="auction-title">${title}</h3>
           <div class="auction-dims">Original: ${item.original_name} | ${item.dimensions}</div>
           <p class="auction-desc">${item.desc_placeholder}</p>
           
@@ -422,12 +508,20 @@
       grid.appendChild(card);
     });
 
-    // Attach event listeners safely to new buttons
+    // Attach event listeners safely to new buttons and images
     const bidButtons = grid.querySelectorAll('.btn-bid');
     bidButtons.forEach(btn => {
       btn.addEventListener('click', (e) => {
         const id = parseInt(e.target.getAttribute('data-item-id'), 10);
         openBidModal(id);
+      });
+    });
+
+    const imgWrappers = grid.querySelectorAll('.auction-img-wrapper');
+    imgWrappers.forEach(img => {
+      img.addEventListener('click', (e) => {
+        const id = parseInt(e.currentTarget.getAttribute('data-item-id'), 10);
+        openImageModal(id);
       });
     });
   }
@@ -444,7 +538,7 @@
     timerInterval = setInterval(() => {
       secondsLeft--;
       timeSpan.innerText = secondsLeft;
-      fillBar.style.width = `${(secondsLeft / 30) * 100}%`;
+      fillBar.style.width = (secondsLeft / 30 * 100) + "%";
 
       if (secondsLeft <= 0) {
         secondsLeft = 30;
@@ -460,24 +554,57 @@
     const minBid = item.current_bid ? item.current_bid + 5 : item.starting_bid; 
 
     document.getElementById('ccor-sa-bid-item-id').value = item.id;
-    document.getElementById('ccor-sa-modal-item-name').innerText = `Bid on: ${item.name}`;
+    document.getElementById('ccor-sa-modal-item-name').innerText = "Bid on: " + item.name;
     document.querySelector('#ccor-sa-modal-min-bid span').innerText = minBid;
     document.getElementById('ccor-sa-bid-amount').min = minBid;
     document.getElementById('ccor-sa-bid-amount').value = minBid;
 
+    // Close image modal if open
+    document.getElementById('ccor-sa-image-modal-overlay').classList.remove('active');
+    
     document.getElementById('ccor-sa-modal-overlay').classList.add('active');
+  }
+
+  function openImageModal(itemId) {
+    const item = auctionItems.find(i => i.id === itemId);
+    if (!item) return;
+
+    const currentBid = item.current_bid ? item.current_bid : item.starting_bid;
+    const title = item.title_placeholder !== '[Title Placeholder]' ? item.title_placeholder : item.name;
+
+    document.getElementById('ccor-sa-image-modal-img').src = item.image_url;
+    document.getElementById('ccor-sa-image-modal-title').innerText = title;
+    document.getElementById('ccor-sa-image-modal-dims').innerText = "Original: " + item.original_name + " | " + item.dimensions;
+    document.getElementById('ccor-sa-image-modal-desc').innerText = item.desc_placeholder;
+    document.getElementById('ccor-sa-image-modal-bid').innerText = "$" + currentBid;
+
+    const btn = document.getElementById('ccor-sa-image-modal-btn');
+    btn.onclick = () => openBidModal(item.id);
+
+    document.getElementById('ccor-sa-image-modal-overlay').classList.add('active');
   }
 
   // Setup DOM event listeners safely
   document.addEventListener('DOMContentLoaded', () => {
-    const modal = document.getElementById('ccor-sa-modal-overlay');
-    const closeBtn = document.getElementById('ccor-sa-modal-close');
+    const bidModal = document.getElementById('ccor-sa-modal-overlay');
+    const bidCloseBtn = document.getElementById('ccor-sa-modal-close');
     const bidForm = document.getElementById('ccor-sa-bid-form');
 
-    if (closeBtn) closeBtn.onclick = () => modal.classList.remove('active');
-    if (modal) {
-      modal.onclick = (e) => {
-        if(e.target === modal) modal.classList.remove('active');
+    const imgModal = document.getElementById('ccor-sa-image-modal-overlay');
+    const imgCloseBtn = document.getElementById('ccor-sa-image-modal-close');
+
+    if (bidCloseBtn) bidCloseBtn.onclick = () => bidModal.classList.remove('active');
+    if (imgCloseBtn) imgCloseBtn.onclick = () => imgModal.classList.remove('active');
+    
+    if (bidModal) {
+      bidModal.onclick = (e) => {
+        if(e.target === bidModal) bidModal.classList.remove('active');
+      }
+    }
+    
+    if (imgModal) {
+      imgModal.onclick = (e) => {
+        if(e.target === imgModal) imgModal.classList.remove('active');
       }
     }
 
@@ -509,12 +636,12 @@
 
           if (response.ok) {
             alert("Bid placed successfully!");
-            modal.classList.remove('active');
+            bidModal.classList.remove('active');
             bidForm.reset();
             fetchAuctionState(); 
             secondsLeft = 30;
           } else {
-            alert(`Error: ${data.error}`);
+            alert("Error: " + data.error);
             if (data.current_highest) {
                fetchAuctionState(); 
             }
