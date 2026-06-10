@@ -791,6 +791,17 @@
     const REPORTS = [
       /* ===== 2026 ===== */
       {
+        year: 2026, month: "May",
+        fastStats: "https://coconutcoastrealtors.org/wp-content/uploads/2026/06/BER_Fast_Stats-May-2026.pdf",
+        indicators: "https://coconutcoastrealtors.org/wp-content/uploads/2026/06/May-2026-Indicators.pdf",
+        thumb: "https://coconutcoastrealtors.org/wp-content/uploads/2026/06/Bonita-May-2026.png",
+        thumbs: [
+          "https://coconutcoastrealtors.org/wp-content/uploads/2026/06/Bonita-May-2026.png",
+          "https://coconutcoastrealtors.org/wp-content/uploads/2026/06/Fort-May-2026.png",
+          "https://coconutcoastrealtors.org/wp-content/uploads/2026/06/Naples-May-2026.png"
+        ]
+      },
+      {
         year: 2026, month: "April",
         fastStats: "https://coconutcoastrealtors.org/wp-content/uploads/2026/05/BER_Fast_Stats-2-1.pdf",
         frStats: "https://coconutcoastrealtors.org/wp-content/uploads/2026/05/April-2026-FR-Stats.pdf",
@@ -1011,6 +1022,8 @@
 
     // ---- Curated video list made GLOBAL so the rail can see it ----
     window.VIDEOS = [
+      { title: "May 2026 Bonita + Estero Stats", url: "https://youtu.be/2-M6-Jahqe8" },
+      { title: "May 2026 Naples + Fort Myers Stats", url: "https://youtu.be/3mSC9o3kvZI" },
       { title: "April 2026 Bonita + Estero Stats", url: "https://www.youtube.com/watch?v=DJpMFu0i05M" },
       { title: "April 2026 Naples + Fort Myers Stats", url: "https://www.youtube.com/watch?v=JvYwBFqYNCw" },
       { title: "March 2026 Bonita + Estero Stats", url: "https://youtu.be/uEH6ewSfQ-Y" },
@@ -1419,6 +1432,35 @@
     // ---- Mock AI Chatbot Logic ----
     // Data mapping for specific month interactions
     const AI_DATA = {
+      "2026-may-q1": `Based on the May 2026 market data, the Bonita Springs-Estero region continues to see stable activity as we transition into the summer months. **Pending Sales remain steady** and **Closed Sales show resilience** compared to the previous year, with well-priced homes moving quickly.
+
+KEY METRICS OVERVIEW:
+* Median Sale Price: Remaining relatively stable year-over-year.
+* Closed Sales: Showing consistent volume.
+* Pending Sales: Indicating sustained buyer interest.
+
+CLOSED SALES (YoY):
+[BAR: May 2025|Base|85%, May 2026|Steady|90%]
+
+PENDING SALES GROWTH:
+[BAR: May 2025|Base|80%, May 2026|Consistent|82%]`,
+
+      "2026-may-q2": `PRICING & INVENTORY DYNAMICS:
+The median sales price has seen minor fluctuations, indicating a shift toward a more balanced market. Supply remains an important factor, with overall **Inventory levels stabilizing**.
+
+INVENTORY TRAJECTORY:
+[BAR: New Listings|Active|90%, Listings Sold|Steady|95%]
+
+DAYS ON MARKET:
+[BAR: Median DOM|Stable|95%]
+
+With a steady flow of homes selling versus new ones entering the market, we are seeing consistent absorption of existing stock.`,
+
+      "2026-may-q3": `Comparing May 2026 to the previous year shows a market that has found a comfortable equilibrium. The transaction volume remains strong given the current inventory levels. This indicates sustained buyer motivation and a healthy market heading into the summer season.
+
+MARKET BALANCE:
+[BAR: 2025 Market Pace|Historical|80%, 2026 Market Pace|Current|85%]`,
+
       "2026-april-q1": `Based on the April 2026 market data, the Bonita Springs-Estero region is experiencing a notable surge in buyer activity. **Pending Sales jumped 39%** and **Closed Sales rose 20%** compared to the previous year, despite a decrease in new inventory.
 
 KEY METRICS OVERVIEW:
