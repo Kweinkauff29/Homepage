@@ -1780,7 +1780,8 @@
       pointer-events: auto;
     }
 
-    #shuffling-tiles-container.is-dealing .shuffling-tile {
+    #shuffling-tiles-container.is-dealing .shuffling-track > .shuffling-tile,
+    #shuffling-tiles-container.is-dealing .shuffling-track > .shuffling-column {
       animation: dealTileIn 1.15s cubic-bezier(0.18, 0.9, 0.22, 1) both;
       animation-delay: var(--deal-delay, 0ms);
       transform-origin: center bottom;
@@ -1815,7 +1816,8 @@
     }
 
     @media (prefers-reduced-motion: reduce) {
-      #shuffling-tiles-container.is-dealing .shuffling-tile {
+      #shuffling-tiles-container.is-dealing .shuffling-track > .shuffling-tile,
+      #shuffling-tiles-container.is-dealing .shuffling-track > .shuffling-column {
         animation: none;
       }
     }
@@ -1903,6 +1905,9 @@
 
     .shuffling-tile {
       position: relative;
+      display: flex;
+      justify-content: center;
+      align-items: center;
       flex-shrink: 0;
       border-radius: 12px;
       overflow: hidden;
@@ -1923,6 +1928,8 @@
     }
 
     .shuffling-tile img {
+      position: relative;
+      z-index: 1;
       width: auto;
       height: 100%;
       max-width: none;
@@ -1933,6 +1940,18 @@
       object-position: center;
       transform: none !important;
       scale: 1 !important;
+    }
+
+    /* Blurred background for mismatching aspect ratios */
+    .tile-blur-bg {
+      position: absolute;
+      inset: 0;
+      background-size: cover;
+      background-position: center;
+      filter: blur(20px) brightness(0.45);
+      transform: scale(1.1);
+      z-index: 0;
+      pointer-events: none;
     }
 
     .tile-landscape {
@@ -1949,6 +1968,31 @@
       height: 100%;
       object-fit: contain;
       object-position: center;
+    }
+
+    /* Stacked columns for landscape tiles */
+    .shuffling-column {
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+      height: 100%;
+      flex-shrink: 0;
+      justify-content: space-between;
+      transition: z-index 0.3s ease;
+    }
+
+    .shuffling-column:hover {
+      z-index: 10;
+    }
+
+    .shuffling-column .shuffling-tile {
+      height: calc((100% - 20px) / 2);
+      max-height: calc((100% - 20px) / 2);
+    }
+
+    .shuffling-column .shuffling-tile:hover {
+      z-index: 11;
     }
 
     .tile-full-bleed img {
@@ -1976,6 +2020,7 @@
       transform: translateY(10px);
       opacity: 0;
       transition: all 0.3s ease;
+      z-index: 2;
     }
 
     .shuffling-tile:hover .tile-info {
@@ -2140,6 +2185,15 @@
         gap: 14px;
       }
 
+      .shuffling-column {
+        gap: 14px;
+      }
+
+      .shuffling-column .shuffling-tile {
+        height: calc((100% - 14px) / 2);
+        max-height: calc((100% - 14px) / 2);
+      }
+
       .tile-no-image {
         max-width: calc(100vw - 56px);
       }
@@ -2295,6 +2349,15 @@
     // Add your own custom tiles here.
     // Set the 'spot' number (1-indexed) to force it into a specific position overall.
     const customTiles = [
+      {
+        title: "7th Annual Casino Night",
+        description: "Thu, Sep 10 • 5:30 PM",
+        image: "https://coconutcoastrealtors.org/wp-content/uploads/2026/06/Screenshot-2026-06-15-133642.png",
+        link: "https://bonitaspringsesterorealtorsfl.growthzoneapp.com/ap/Events/Register/g4FYQZAtzCyCo",
+        spot: 1,
+        tag: "Event",
+        rawDesc: "A collaborative event with WCR, BER Home Foundation, and BER"
+      },
       {
         title: "Jeanne and Brooke Video",
         description: "Watch Jeanne and Brooke",
@@ -2655,6 +2718,7 @@
           }
           innerHTML = `
             <div class="tile-tag">Staff</div>
+            <div class="tile-blur-bg" style="background-image: url('${tile.image}');"></div>
             <img src="${tile.image}" alt="${displayAlt}">
             <div class="tile-info">
               <h3 class="staff-name">${displayTitle}</h3>
@@ -2691,6 +2755,7 @@
         } else {
           innerHTML = `
             ${tile.tag ? '<div class="tile-tag">' + displayTag + '</div>' : ''}
+            <div class="tile-blur-bg" style="background-image: url('${tile.image}');"></div>
             <img src="${tile.image}" alt="${displayAlt}">
             <div class="tile-info">
               <h3>${displayTitle}</h3>
@@ -2706,7 +2771,63 @@
         }
 
         el.innerHTML = innerHTML;
-        track.appendChild(el);
+        tile.el = el;
+      }
+
+      // Group into columns
+      const columns = [];
+      const used = new Set();
+
+      for (let i = 0; i < tilesData.length; i++) {
+        if (used.has(i)) continue;
+
+        const tile = tilesData[i];
+        const isLandscape = tile.format === 'landscape';
+
+        if (isLandscape) {
+          // Search forward for the next landscape tile
+          let nextLandscapeIdx = -1;
+          for (let j = i + 1; j < tilesData.length; j++) {
+            if (!used.has(j) && tilesData[j].format === 'landscape') {
+              nextLandscapeIdx = j;
+              break;
+            }
+          }
+
+          if (nextLandscapeIdx !== -1) {
+            columns.push({
+              type: 'stacked',
+              tiles: [tile, tilesData[nextLandscapeIdx]]
+            });
+            used.add(i);
+            used.add(nextLandscapeIdx);
+          } else {
+            columns.push({
+              type: 'single',
+              tile: tile
+            });
+            used.add(i);
+          }
+        } else {
+          columns.push({
+            type: 'single',
+            tile: tile
+          });
+          used.add(i);
+        }
+      }
+
+      // Append columns/tiles to track
+      for (const col of columns) {
+        if (col.type === 'single') {
+          track.appendChild(col.tile.el);
+        } else {
+          const colEl = document.createElement('div');
+          colEl.className = 'shuffling-column';
+          colEl.appendChild(col.tiles[0].el);
+          colEl.appendChild(col.tiles[1].el);
+          track.appendChild(colEl);
+        }
       }
 
       const children = Array.from(track.children);
@@ -2732,7 +2853,13 @@
       let teamTitleHasSeenKevin = false;
 
       function titleIncludes(tile, name) {
-        return (tile?.dataset?.title || "").toLowerCase().includes(name);
+        if (!tile) return false;
+        if ((tile.dataset?.title || "").toLowerCase().includes(name)) return true;
+        const subTiles = tile.querySelectorAll('.shuffling-tile');
+        for (const st of subTiles) {
+          if ((st.dataset?.title || "").toLowerCase().includes(name)) return true;
+        }
+        return false;
       }
 
       function isTileVisible(tile) {
@@ -2865,7 +2992,7 @@
 
         allVideos.forEach(video => {
           const tile = video.closest('.shuffling-tile');
-          if (tile === firstTile) {
+          if (tile === firstTile || (firstTile && firstTile.contains(tile))) {
             videoIsActive = true;
             video.muted = isGlobalMuted;
             video.play().catch(err => {
