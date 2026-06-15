@@ -92,6 +92,11 @@ export default {
             return handleLogsRequest(request, env);
         }
 
+        // front-end IDX request form endpoint
+        if (pathname === "/api/idx-feed-request" && request.method === "POST") {
+            return handleIdxFeedRequest(request, env);
+        }
+
         if (pathname === "/internal/send-email" && request.method === "POST") {
             return handleInternalSendEmail(request, env);
         }
@@ -465,6 +470,97 @@ async function handleLogsRequest(request, env) {
     }
 }
 
+async function handleIdxFeedRequest(request, env) {
+    try {
+        const body = await request.json();
+        const {
+            vendorName,
+            contactName,
+            contactEmail,
+            contactPhone,
+            bridgeEmail,
+            feedType,
+            participantName,
+            agentNames,
+            brokerageName,
+            domainName,
+            displayType,
+            reportContact,
+            intendedUse
+        } = body || {};
+
+        // Validation
+        if (!vendorName || !contactName || !contactEmail || !contactPhone || !feedType || 
+            !participantName || !brokerageName || !domainName || !displayType || 
+            !reportContact || !intendedUse) {
+            return jsonResponse({ success: false, error: "All required fields must be completed." }, 400);
+        }
+
+        const db = env.BER_MEMBERS;
+        if (!db) {
+            console.warn("Database binding BER_MEMBERS is not configured.");
+        } else {
+            // Save request to idx_requests table
+            const now = new Date().toISOString();
+            try {
+                await db.prepare(`
+                    INSERT INTO idx_requests (
+                        vendor_name, contact_name, contact_email, contact_phone,
+                        bridge_email, feed_type, participant_name, agent_names,
+                        brokerage_name, domain_name, display_type, report_contact,
+                        intended_use, created_at
+                    ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+                `).bind(
+                    vendorName,
+                    contactName,
+                    contactEmail,
+                    contactPhone,
+                    bridgeEmail || "",
+                    feedType,
+                    participantName,
+                    agentNames || "",
+                    brokerageName,
+                    domainName,
+                    displayType,
+                    reportContact,
+                    intendedUse,
+                    now
+                ).run();
+            } catch (err) {
+                console.error("Failed to save IDX request to database:", err);
+            }
+        }
+
+        // Send Email
+        const emailSent = await sendIdxRequestEmail(env, {
+            vendorName,
+            contactName,
+            contactEmail,
+            contactPhone,
+            bridgeEmail,
+            feedType,
+            participantName,
+            agentNames,
+            brokerageName,
+            domainName,
+            displayType,
+            reportContact,
+            intendedUse
+        });
+
+        return jsonResponse({
+            success: true,
+            emailSent: !!emailSent,
+            message: emailSent
+                ? "Your IDX / Broker Back Office data feed request has been submitted successfully."
+                : "Your request has been recorded in our database, but the email notification failed. Please use the fallback email option to send a copy to tech@BERealtors.org."
+        });
+    } catch (err) {
+        console.error("handleIdxFeedRequest error:", err);
+        return jsonResponse({ success: false, error: err.message || "Server error" }, 500);
+    }
+}
+
 // ============ NEW: SAVE REQUEST TO DATABASE ============
 
 async function saveLogsRequest(env, data, matched = false, requestStatus = "UNKNOWN") {
@@ -767,13 +863,7 @@ async function sendLogsRequestEmail(env, payload) {
     const { form, member, matchStatus } = payload;
 
     const fromEmail = env.LOGS_FROM_EMAIL || "no-reply@ccorealtors.org";
-    const mjApiKey = env.MJ_API_KEY;
-    const mjApiSecret = env.MJ_API_SECRET;
-
-    if (!mjApiKey || !mjApiSecret) {
-        console.error("Mailjet API key/secret not set in environment");
-        return false;
-    }
+    const subject = `[TEST] LOGS / Membership Change Request – ${form.firstName || ""} ${form.lastName || ""}`.trim();
 
     const lines = [
         "A new Letter of Good Standing / membership change request was submitted:",
@@ -812,51 +902,61 @@ async function sendLogsRequestEmail(env, payload) {
     }
 
     const text = "[TESTING - GZ API MIGRATION]\n\n" + lines.join("\n");
-    const subject =
-        `[TEST] LOGS / Membership Change Request – ${form.firstName || ""} ${form.lastName || ""}`.trim();
 
-    // Mailjet Send API v3.1 – HTTP Basic auth
-    const auth = "Basic " + btoa(`${mjApiKey}:${mjApiSecret}`);
-
-    const body = {
-        Messages: [
-            {
-                From: {
-                    Email: fromEmail,
-                    Name: "BER LOGS Requests",
-                },
-                To: [
-                    { Email: "Tech@BERealtors.org", Name: "BER Tech" },
-                    { Email: "Membership@BERealtors.org", Name: "BER Membership" },
-                    { Email: "CEO@BERealtors.org", Name: "BER CEO" }
-                ],
-                Subject: subject,
-                TextPart: text,
-            },
+    const delivery = await dispatchEmail(env, {
+        fromEmail,
+        fromName: "BER LOGS Requests",
+        to: [
+            { Email: "Tech@BERealtors.org", Name: "BER Tech" },
+            { Email: "Membership@BERealtors.org", Name: "BER Membership" },
+            { Email: "CEO@BERealtors.org", Name: "BER CEO" }
         ],
-    };
-
-    console.log("Sending LOGS email via Mailjet from", fromEmail);
-
-    const res = await fetch("https://api.mailjet.com/v3.1/send", {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json",
-            Authorization: auth,
-        },
-        body: JSON.stringify(body),
+        subject,
+        text
     });
 
-    console.log("Mailjet response status", res.status, "ok:", res.ok);
-
-    if (!res.ok) {
-        const errText = await res.text().catch(() => "");
-        console.error("Mailjet error", res.status, errText);
-        return false;
-    }
-
-    return true;
+    return delivery.success;
 }
+
+async function sendIdxRequestEmail(env, data) {
+    const fromEmail = env.LOGS_FROM_EMAIL || "no-reply@ccorealtors.org";
+    const subject = `IDX / BBO Feed Request: ${data.vendorName} - ${data.brokerageName || data.agentNames || ""}`.trim();
+    const text = [
+        "A new IDX / Broker Back Office Data Feed access request was submitted:",
+        "--------------------------------------------------",
+        `Vendor Company Name: ${data.vendorName}`,
+        `Contact Name: ${data.contactName}`,
+        `Contact Email: ${data.contactEmail}`,
+        `Contact Phone: ${data.contactPhone}`,
+        `Bridge API Account Email: ${data.bridgeEmail || "N/A"}`,
+        `Feed Type Requested: ${data.feedType}`,
+        `MLS Participant / Broker Name: ${data.participantName}`,
+        `Subscriber or Agent Name(s): ${data.agentNames || "N/A"}`,
+        `Brokerage / Office Name: ${data.brokerageName}`,
+        `Website Domain(s) / App Name(s): ${data.domainName}`,
+        `Display Scope: ${data.displayType}`,
+        `Description of Intended Use: ${data.intendedUse}`,
+        `Quarterly Reporting Contact: ${data.reportContact}`,
+        "",
+        "Confirmation: Submitter confirmed that a separate request email will be sent for each new client/user/feed addition.",
+    ].join("\n");
+
+    const delivery = await dispatchEmail(env, {
+        fromEmail,
+        fromName: "BER IDX Requests",
+        to: [
+            { Email: "Tech@BERealtors.org", Name: "BER Tech" }
+        ],
+        cc: [
+            { Email: data.contactEmail, Name: data.contactName }
+        ],
+        subject,
+        text
+    });
+
+    return delivery.success;
+}
+
 
 async function handleInternalSendEmail(request, env) {
     const relayKey = request.headers.get("X-TWS-Mail-Relay-Key");
@@ -881,7 +981,7 @@ async function handleInternalSendEmail(request, env) {
         return jsonResponse({ success: false, error: "to, subject, and text are required" }, 400);
     }
 
-    const delivery = await sendMailjetEmail(env, {
+    const delivery = await dispatchEmail(env, {
         fromEmail,
         fromName,
         to: [{ Email: to }],
@@ -892,14 +992,83 @@ async function handleInternalSendEmail(request, env) {
     return jsonResponse(delivery, delivery.success ? 200 : 502);
 }
 
-async function sendMailjetEmail(env, { fromEmail, fromName, to, subject, text }) {
+async function dispatchEmail(env, { fromEmail, fromName, to, cc = [], subject, text }) {
+    let errors = [];
+
+    // Try SendGrid if configured
+    if (env.SENDGRID_API_KEY) {
+        console.log("Attempting email dispatch via SendGrid...");
+        try {
+            const success = await sendSendGridEmail(env, { fromEmail, fromName, to, cc, subject, text });
+            if (success) {
+                return { success: true, provider: "sendgrid" };
+            }
+            errors.push("SendGrid delivery failed");
+        } catch (e) {
+            console.error("SendGrid exception:", e);
+            errors.push(`SendGrid exception: ${e.message}`);
+        }
+    }
+
+    // Try Mailjet if SendGrid not configured or failed
+    if (env.MJ_API_KEY && env.MJ_API_SECRET) {
+        console.log("Attempting email dispatch via Mailjet...");
+        try {
+            const success = await sendMailjetEmail(env, { fromEmail, fromName, to, cc, subject, text });
+            if (success) {
+                return { success: true, provider: "mailjet" };
+            }
+            errors.push("Mailjet delivery failed");
+        } catch (e) {
+            console.error("Mailjet exception:", e);
+            errors.push(`Mailjet exception: ${e.message}`);
+        }
+    }
+
+    console.error("All email providers failed to dispatch:", errors.join("; "));
+    return { success: false, errors };
+}
+
+async function sendSendGridEmail(env, { fromEmail, fromName, to, cc = [], subject, text }) {
+    const apiKey = env.SENDGRID_API_KEY;
+    
+    const toMapped = to.map(t => ({ email: t.Email, name: t.Name || "" }));
+    const ccMapped = cc && cc.length ? cc.map(c => ({ email: c.Email, name: c.Name || "" })) : [];
+
+    const personalization = { to: toMapped };
+    if (ccMapped.length) {
+        personalization.cc = ccMapped;
+    }
+
+    const body = {
+        personalizations: [personalization],
+        from: { email: fromEmail, name: fromName },
+        subject: subject,
+        content: [{ type: "text/plain", value: text }]
+    };
+
+    const res = await fetch("https://api.sendgrid.com/v3/mail/send", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+            "Authorization": `Bearer ${apiKey}`
+        },
+        body: JSON.stringify(body)
+    });
+
+    console.log("SendGrid response status", res.status, "ok:", res.ok);
+    if (!res.ok) {
+        const errText = await res.text().catch(() => "");
+        console.error("SendGrid rejection error:", res.status, errText);
+        return false;
+    }
+
+    return true;
+}
+
+async function sendMailjetEmail(env, { fromEmail, fromName, to, cc = [], subject, text }) {
     const mjApiKey = env.MJ_API_KEY;
     const mjApiSecret = env.MJ_API_SECRET;
-
-    if (!mjApiKey || !mjApiSecret) {
-        console.error("Mailjet API key/secret not set in environment");
-        return { success: false, error: "missing_mailjet_credentials" };
-    }
 
     const auth = "Basic " + btoa(`${mjApiKey}:${mjApiSecret}`);
     const body = {
@@ -910,6 +1079,7 @@ async function sendMailjetEmail(env, { fromEmail, fromName, to, subject, text })
                     Name: fromName,
                 },
                 To: to,
+                Cc: cc,
                 Subject: subject,
                 TextPart: text,
             },
@@ -925,15 +1095,15 @@ async function sendMailjetEmail(env, { fromEmail, fromName, to, subject, text })
         body: JSON.stringify(body),
     });
 
-    console.log("Mailjet relay response status", res.status, "ok:", res.ok);
+    console.log("Mailjet response status", res.status, "ok:", res.ok);
 
     if (!res.ok) {
         const errText = await res.text().catch(() => "");
-        console.error("Mailjet relay error", res.status, errText);
-        return { success: false, error: "mailjet_rejected", status: res.status, detail: errText.slice(0, 500) };
+        console.error("Mailjet rejection error", res.status, errText);
+        return false;
     }
 
-    return { success: true };
+    return true;
 }
 
 // ============ HELPERS ============

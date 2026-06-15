@@ -3378,6 +3378,10 @@ export default {
 
         try {
 
+            if (pathname === "/api/debug-mail-from" && request.method === "GET") {
+                return json({ mailFrom: env.MAIL_FROM, mailFromName: env.MAIL_FROM_NAME });
+            }
+
             if (pathname === "/internal/send-email" && request.method === "POST") {
                 return await handleInternalSendEmail(request, env);
             }
