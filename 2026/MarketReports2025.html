@@ -6,7 +6,8 @@
   <title>Coconut Coast Organization of Realtors® — Market Reports</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <!-- Fonts -->
-  <link href="https://fonts.googleapis.com/css2?family='Inter':wght@400;600&family='Inter':wght@300;400;500&display=swap"
+  <link
+    href="https://fonts.googleapis.com/css2?family='Inter':wght@400;600&family='Inter':wght@300;400;500&display=swap"
     rel="stylesheet" />
   <!-- Icons -->
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" />
@@ -18,28 +19,35 @@
       --font-mono: 'Inter Mono', 'Share Tech Mono', monospace;
 
       /* Color System (High Contrast + Signal Accents) */
-      --brand-primary: #0284c7; /* Signal Blue */
-      --brand-accent: #ca8a04; /* Signal Gold */
+      --brand-primary: #0284c7;
+      /* Signal Blue */
+      --brand-accent: #ca8a04;
+      /* Signal Gold */
       --signal-green: #16a34a;
       --signal-red: #dc2626;
 
       /* Base/Canvas */
       --bg: #ffffff;
       --bg-panel: #fafafa;
-      
+
       /* Ink/Borders */
-      --ink: #111827; 
-      --ink-2: #4b5563; /* slightly muted but high contrast */
-      --border: #111827; /* Solid structural lines */
-      
-      --card: #fafafa; /* Tech Panels */
+      --ink: #111827;
+      --ink-2: #4b5563;
+      /* slightly muted but high contrast */
+      --border: #111827;
+      /* Solid structural lines */
+
+      --card: #fafafa;
+      /* Tech Panels */
       --muted: #f3f5f7;
-      
+
       /* Structural Geometry */
-      --radius: 2px; /* Minimal engineering */
+      --radius: 2px;
+      /* Minimal engineering */
       --gap: 20px;
-      --shadow: 2px 2px 0px rgba(0,0,0,0.05); /* Sharp tile shadow */
-      --shadow-hover: 4px 4px 0px rgba(0,0,0,0.08);
+      --shadow: 2px 2px 0px rgba(0, 0, 0, 0.05);
+      /* Sharp tile shadow */
+      --shadow-hover: 4px 4px 0px rgba(0, 0, 0, 0.08);
     }
 
     * {
@@ -126,11 +134,11 @@
       border-radius: var(--radius);
       cursor: pointer;
       transition: all .1s ease-in-out;
-      box-shadow: 2px 2px 0px rgba(0,0,0,0.05);
+      box-shadow: 2px 2px 0px rgba(0, 0, 0, 0.05);
     }
 
     .year-btn:hover {
-      box-shadow: 2px 2px 0px rgba(0,0,0,0.15);
+      box-shadow: 2px 2px 0px rgba(0, 0, 0, 0.15);
       transform: translate(-1px, -1px);
     }
 
@@ -153,14 +161,17 @@
       -ms-overflow-style: none;
       height: 100%;
     }
+
     .thumbs-gallery::-webkit-scrollbar {
       display: none;
     }
+
     .thumbs-gallery img {
       flex: 0 0 100%;
       scroll-snap-align: start;
       object-fit: contain;
     }
+
     .gallery-nav {
       position: absolute;
       top: 50%;
@@ -176,19 +187,27 @@
       justify-content: center;
       cursor: pointer;
       z-index: 10;
-      box-shadow: 2px 2px 0 rgba(0,0,0,0.1);
+      box-shadow: 2px 2px 0 rgba(0, 0, 0, 0.1);
       transition: all 0.1s ease;
     }
+
     .gallery-nav:hover {
       transform: translateY(-50%) translate(-1px, -1px);
-      box-shadow: 3px 3px 0 rgba(0,0,0,0.15);
+      box-shadow: 3px 3px 0 rgba(0, 0, 0, 0.15);
     }
+
     .gallery-nav:active {
       transform: translateY(-50%) translate(0, 0);
       box-shadow: none;
     }
-    .gallery-nav.next { right: 12px; }
-    .gallery-nav.prev { left: 12px; }
+
+    .gallery-nav.next {
+      right: 12px;
+    }
+
+    .gallery-nav.prev {
+      left: 12px;
+    }
 
     /* Feature block (hero) */
     .feature {
@@ -210,21 +229,29 @@
     }
 
     /* Brackets for tech panel feel */
-    .feature-card::before, .feature-card::after,
-    .card::before, .card::after {
+    .feature-card::before,
+    .feature-card::after,
+    .card::before,
+    .card::after {
       content: "";
       position: absolute;
       width: 8px;
       height: 8px;
       border: 1px solid var(--border);
     }
-    .feature-card::before, .card::before {
-      top: -1px; left: -1px;
+
+    .feature-card::before,
+    .card::before {
+      top: -1px;
+      left: -1px;
       border-right: none;
       border-bottom: none;
     }
-    .feature-card::after, .card::after {
-      bottom: -1px; right: -1px;
+
+    .feature-card::after,
+    .card::after {
+      bottom: -1px;
+      right: -1px;
       border-left: none;
       border-top: none;
     }
@@ -255,7 +282,7 @@
       letter-spacing: 1px;
       text-transform: uppercase;
       border: 1px solid var(--border);
-      box-shadow: 2px 2px 0 rgba(0,0,0,0.1);
+      box-shadow: 2px 2px 0 rgba(0, 0, 0, 0.1);
     }
 
     .feature-body {
@@ -269,7 +296,8 @@
       text-transform: uppercase;
     }
 
-    .feature h2, .card h3 {
+    .feature h2,
+    .card h3 {
       font: 800 32px/1.2 var(--font-body);
       margin: 12px 0 12px;
       letter-spacing: -0.01em;
@@ -285,7 +313,8 @@
       margin-bottom: 16px;
     }
 
-    .chip-row, .pill-row {
+    .chip-row,
+    .pill-row {
       display: flex;
       gap: 8px;
       flex-wrap: wrap;
@@ -293,7 +322,8 @@
       margin-bottom: 16px;
     }
 
-    .chip, .pill {
+    .chip,
+    .pill {
       border: 1px solid var(--border);
       background: #fff;
       padding: 6px 10px;
@@ -304,7 +334,8 @@
       color: var(--ink);
     }
 
-    .cta-row, .links {
+    .cta-row,
+    .links {
       display: flex;
       gap: 12px;
       margin-top: 20px;
@@ -316,7 +347,8 @@
       margin-top: auto;
     }
 
-    .btn, .link-btn {
+    .btn,
+    .link-btn {
       display: inline-flex;
       align-items: center;
       gap: 8px;
@@ -329,7 +361,7 @@
       cursor: pointer;
       background: #fff;
       color: var(--ink);
-      box-shadow: 2px 2px 0 rgba(0,0,0,0.1);
+      box-shadow: 2px 2px 0 rgba(0, 0, 0, 0.1);
       transition: all 0.1s ease;
     }
 
@@ -350,16 +382,20 @@
       border: 1px solid var(--border);
     }
 
-    .btn:hover, .link-btn:hover {
+    .btn:hover,
+    .link-btn:hover {
       transform: translate(-1px, -1px);
-      box-shadow: 4px 4px 0 rgba(0,0,0,0.15);
+      box-shadow: 4px 4px 0 rgba(0, 0, 0, 0.15);
     }
-    .btn:active, .link-btn:active {
+
+    .btn:active,
+    .link-btn:active {
       transform: translate(0px, 0px);
       box-shadow: none;
     }
 
-    .btn i, .link-btn i {
+    .btn i,
+    .link-btn i {
       font-size: 14px;
     }
 
@@ -406,12 +442,12 @@
       padding: 8px;
       background: #fff;
       transition: all .1s ease-in-out;
-      box-shadow: 2px 2px 0 rgba(0,0,0,0.05);
+      box-shadow: 2px 2px 0 rgba(0, 0, 0, 0.05);
     }
 
     .vitem:hover {
       transform: translate(-1px, -1px);
-      box-shadow: 4px 4px 0 rgba(0,0,0,0.1);
+      box-shadow: 4px 4px 0 rgba(0, 0, 0, 0.1);
     }
 
     .vthumb {
@@ -430,7 +466,10 @@
       display: block;
       opacity: 0.9;
     }
-    .vitem:hover .vthumb img { opacity: 1; }
+
+    .vitem:hover .vthumb img {
+      opacity: 1;
+    }
 
     .vtitle {
       font: 600 13px/1.4 var(--font-body);
@@ -588,7 +627,7 @@
       padding-top: 16px;
       border-top: 1px dashed var(--border);
     }
-    
+
     .feature-body .ai-module {
       margin-top: 24px;
       padding-top: 20px;
@@ -636,12 +675,12 @@
       text-align: left;
       cursor: pointer;
       transition: all .1s ease;
-      box-shadow: 2px 2px 0 rgba(0,0,0,0.05);
+      box-shadow: 2px 2px 0 rgba(0, 0, 0, 0.05);
       position: relative;
     }
 
     .ai-q-btn:hover {
-      box-shadow: 3px 3px 0 rgba(0,0,0,0.1);
+      box-shadow: 3px 3px 0 rgba(0, 0, 0, 0.1);
       transform: translate(-1px, -1px);
     }
 
@@ -654,18 +693,25 @@
       font: 400 13px/1.6 var(--font-mono);
       color: #d1d5db;
       display: none;
-      box-shadow: inset 0 2px 8px rgba(0,0,0,0.2);
+      box-shadow: inset 0 2px 8px rgba(0, 0, 0, 0.2);
       min-height: 80px;
       white-space: pre-wrap;
     }
-    
-    .ai-response-area strong { color: #fff; font-weight: 700; }
-    .ai-response-area em { color: #8b949e; font-style: normal; }
+
+    .ai-response-area strong {
+      color: #fff;
+      font-weight: 700;
+    }
+
+    .ai-response-area em {
+      color: #8b949e;
+      font-style: normal;
+    }
 
     .ai-response-area.active {
       display: block;
     }
-    
+
     .ai-bar-chart {
       margin: 16px 0 8px;
       display: flex;
@@ -674,17 +720,58 @@
       font-size: 12px;
       font-family: var(--font-body);
     }
-    .ai-bar-row { display: flex; align-items: center; gap: 8px; }
-    .ai-bar-label { width: 85px; font-weight: 600; text-align: right; color: #c9d1d9; }
-    .ai-bar-track { flex: 1; height: 14px; background: #21262d; border-radius: 2px; overflow: hidden; border: 1px solid #30363d; box-shadow: inset 0 1px 3px rgba(0,0,0,0.2); display: flex; align-items: stretch; }
-    .ai-bar-fill { flex: 0 0 auto; min-height: 12px; background: #3fb950; border-radius: 0; position: relative; }
+
+    .ai-bar-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .ai-bar-label {
+      width: 85px;
+      font-weight: 600;
+      text-align: right;
+      color: #c9d1d9;
+    }
+
+    .ai-bar-track {
+      flex: 1;
+      height: 14px;
+      background: #21262d;
+      border-radius: 2px;
+      overflow: hidden;
+      border: 1px solid #30363d;
+      box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.2);
+      display: flex;
+      align-items: stretch;
+    }
+
+    .ai-bar-fill {
+      flex: 0 0 auto;
+      min-height: 12px;
+      background: #3fb950;
+      border-radius: 0;
+      position: relative;
+    }
+
     .ai-bar-fill::after {
       content: '';
       position: absolute;
-      top: 0; left: 0; right: 0; bottom: 0;
-      background: linear-gradient(180deg, rgba(255,255,255,0.1) 0%, rgba(0,0,0,0.1) 100%);
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: linear-gradient(180deg, rgba(255, 255, 255, 0.1) 0%, rgba(0, 0, 0, 0.1) 100%);
     }
-    .ai-bar-val { width: 55px; font-variant-numeric: tabular-nums; font-family: var(--font-mono); color: #79c0ff; font-weight: 700; text-align: left; }
+
+    .ai-bar-val {
+      width: 55px;
+      font-variant-numeric: tabular-nums;
+      font-family: var(--font-mono);
+      color: #79c0ff;
+      font-weight: 700;
+      text-align: left;
+    }
 
     /* Blinking cursor for typewriter effect */
     .cursor {
@@ -698,8 +785,15 @@
     }
 
     @keyframes blink {
-      0%, 100% { opacity: 1; }
-      50% { opacity: 0; }
+
+      0%,
+      100% {
+        opacity: 1;
+      }
+
+      50% {
+        opacity: 0;
+      }
     }
 
     /* Thinking dots animation */
@@ -709,7 +803,7 @@
       align-items: center;
       height: 20px;
     }
-    
+
     .thinking-dots span {
       width: 6px;
       height: 6px;
@@ -717,13 +811,28 @@
       border-radius: 50%;
       animation: pulse 1.4s infinite ease-in-out both;
     }
-    
-    .thinking-dots span:nth-child(1) { animation-delay: -0.32s; }
-    .thinking-dots span:nth-child(2) { animation-delay: -0.16s; }
+
+    .thinking-dots span:nth-child(1) {
+      animation-delay: -0.32s;
+    }
+
+    .thinking-dots span:nth-child(2) {
+      animation-delay: -0.16s;
+    }
 
     @keyframes pulse {
-      0%, 80%, 100% { transform: scale(0); opacity: 0.5; }
-      40% { transform: scale(1); opacity: 1; }
+
+      0%,
+      80%,
+      100% {
+        transform: scale(0);
+        opacity: 0.5;
+      }
+
+      40% {
+        transform: scale(1);
+        opacity: 1;
+      }
     }
 
     /* Responsive */
@@ -793,7 +902,6 @@
       {
         year: 2026, month: "May",
         fastStats: "https://coconutcoastrealtors.org/wp-content/uploads/2026/06/BER_Fast_Stats-May-2026.pdf",
-        frStats: "https://coconutcoastrealtors.org/wp-content/uploads/2026/06/May-2026-FR-Report.pdf",
         indicators: "https://coconutcoastrealtors.org/wp-content/uploads/2026/06/May-2026-Indicators.pdf",
         thumb: "https://coconutcoastrealtors.org/wp-content/uploads/2026/06/Bonita-May-2026.png",
         thumbs: [
@@ -1157,14 +1265,14 @@
 
     function appendPage(items) {
       const slice = items.slice(page * pageSize, (page + 1) * pageSize);
-      
+
       // We create a temporary parsed wrapper so we can bind the AI buttons
       const wrapper = document.createElement('div');
       wrapper.innerHTML = slice.map(r => cardTemplate(r)).join('');
-      
+
       [...wrapper.children].forEach(child => {
-         $grid.appendChild(child);
-         bindAIButtons(child); 
+        $grid.appendChild(child);
+        bindAIButtons(child);
       });
 
       page++;
@@ -1462,16 +1570,6 @@ With a steady flow of homes selling versus new ones entering the market, we are 
 MARKET BALANCE:
 [BAR: 2025 Market Pace|Historical|80%, 2026 Market Pace|Current|85%]`,
 
-      "2026-may-fr": `The May 2026 Florida Realtors report highlights strong transactional activity, particularly in pending sales, alongside tightening inventory. Single-Family Homes reached a median price of $440,000, while the Condo segment saw a slight decline to $357,600.
-
-SFH vs. CONDO MEDIAN PRICES (MAY 2026):
-[BAR: SFH Price|$440K|100%, Condo Price|$357.6K|81%]
-
-INVENTORY & SUPPLY (MAY 2026):
-[BAR: SFH Supply|5.7 Mos|85%, Condo Supply|6.7 Mos|100%]
-
-The Condo segment offers slightly more months of supply (6.7 months vs. 5.7 months for SFH), and both property types saw a drop in total inventory (SFH down 21.4% and Condos down 19.2% YoY).`,
-
       "2026-april-q1": `Based on the April 2026 market data, the Bonita Springs-Estero region is experiencing a notable surge in buyer activity. **Pending Sales jumped 39%** and **Closed Sales rose 20%** compared to the previous year, despite a decrease in new inventory.
 
 KEY METRICS OVERVIEW:
@@ -1502,8 +1600,8 @@ MARKET FLOW (YoY):
 [BAR: April 2025 Volume|Base|80%, April 2026 Volume|+20%|100%]
 
 The sharp 39% rise in pending sales suggests that May and June will also likely show strong closing numbers, continuing this robust spring trend.`,
- 
-       "2026-april-fr": `The April 2026 Florida Realtors report highlights a balanced but active market. Single-Family Homes reached a median price of $620,000, while the Townhouse/Condo segment remains a more accessible entry point at $366,000.
+
+      "2026-april-fr": `The April 2026 Florida Realtors report highlights a balanced but active market. Single-Family Homes reached a median price of $620,000, while the Townhouse/Condo segment remains a more accessible entry point at $366,000.
  
  SFH vs. CONDO DYNAMICS (APRIL 2026):
  [BAR: SFH Price|$620K|100%, Condo Price|$366K|59%]
@@ -1632,27 +1730,27 @@ While closed sales are down slightly, the total dollar volume for Single-Family 
 
     function bindAIButtons(container) {
       const btns = container.querySelectorAll('.ai-q-btn');
-      
+
       btns.forEach(btn => {
         btn.addEventListener('click', (e) => {
           const mod = btn.closest('.ai-module');
           const area = mod.querySelector('.ai-response-area');
           const key = btn.getAttribute('data-key');
-          
+
           if (mod.dataset.isTyping === 'true') {
-             clearTimeout(Number(mod.dataset.typeTimeout));
-             mod.dataset.isTyping = 'false';
+            clearTimeout(Number(mod.dataset.typeTimeout));
+            mod.dataset.isTyping = 'false';
           }
-          
+
           const fullText = AI_DATA[key] || "> ERROR: 404 DATA NOT FOUND.\n> Please download the full PDF to review these statistics.";
-          
+
           area.classList.add('active');
           area.innerHTML = '<div class="thinking-dots" style="color:#d1d5db;"><span></span><span></span><span></span></div>';
-          
+
           setTimeout(() => {
             mod.dataset.isTyping = 'true';
             area.innerHTML = '';
-            
+
             // Regex parses [BAR:...] as an exact token, whitespace as tokens, and words as tokens
             const tokens = fullText.match(/\[BAR:[^\]]+\]|\s+|\S+/g) || [];
             typeWords(tokens, 0, area, mod);
@@ -1664,18 +1762,18 @@ While closed sales are down slightly, the total dollar volume for Single-Family 
     function typeWords(tokens, i, container, mod) {
       if (i < tokens.length) {
         const currentText = tokens.slice(0, i + 1).join('');
-        
+
         let html = currentText
           .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
           .replace(/\*(.*?)\*/g, '<em>$1</em>')
           .replace(/\[BAR:([^\]]+)\]/g, (match, inner) => {
-             const parts = inner.split(',').map(s => s.trim());
-             let barsHTML = '<div class="ai-bar-chart">';
-             parts.forEach(p => {
-                const pieces = p.split('|').map(s => s.trim());
-                if(pieces.length >= 3) {
-                  const label = pieces[0], val = pieces[1], pct = pieces[2];
-                  barsHTML += `
+            const parts = inner.split(',').map(s => s.trim());
+            let barsHTML = '<div class="ai-bar-chart">';
+            parts.forEach(p => {
+              const pieces = p.split('|').map(s => s.trim());
+              if (pieces.length >= 3) {
+                const label = pieces[0], val = pieces[1], pct = pieces[2];
+                barsHTML += `
                     <div class="ai-bar-row">
                       <div class="ai-bar-label">${label}</div>
                       <div class="ai-bar-track">
@@ -1683,27 +1781,27 @@ While closed sales are down slightly, the total dollar volume for Single-Family 
                       </div>
                       <div class="ai-bar-val">${val}</div>
                     </div>`;
-                }
-             });
-             barsHTML += '</div>';
-             return barsHTML;
+              }
+            });
+            barsHTML += '</div>';
+            return barsHTML;
           });
-          
+
         container.innerHTML = html + '<span class="cursor"></span>';
-        
-        let delay = 35; 
+
+        let delay = 35;
         const token = tokens[i];
-        if (token.trim() === '') delay = 0; 
-        else if (token.startsWith('[BAR')) delay = 400; 
-        else if (token.endsWith('.') || token.endsWith(':')) delay = 250; 
+        if (token.trim() === '') delay = 0;
+        else if (token.startsWith('[BAR')) delay = 400;
+        else if (token.endsWith('.') || token.endsWith(':')) delay = 250;
 
         const timeoutId = setTimeout(() => {
-           typeWords(tokens, i + 1, container, mod);
+          typeWords(tokens, i + 1, container, mod);
         }, delay);
-        
+
         mod.dataset.typeTimeout = String(timeoutId);
       } else {
-        container.innerHTML = container.innerHTML.replace('<span class="cursor"></span>', ''); 
+        container.innerHTML = container.innerHTML.replace('<span class="cursor"></span>', '');
         mod.dataset.isTyping = 'false';
       }
     }
@@ -1733,150 +1831,197 @@ While closed sales are down slightly, the total dollar volume for Single-Family 
 
 
 
-<div id="ccor-waves-bg" aria-hidden="true" style="position: fixed; inset: 0; z-index: -9999; pointer-events: none; opacity: 0.45; overflow: hidden; background: #ffffff;">
-  <div class="ccor-wave-container ccor-ribbon-bottom" style="position: absolute; inset: 0;"></div>
-</div>
-<style>
-  /* ── CCOR Wave Background ── Optimized for performance ── */
+  <div id="ccor-waves-bg" aria-hidden="true"
+    style="position: fixed; inset: 0; z-index: -9999; pointer-events: none; opacity: 0.45; overflow: hidden; background: #ffffff;">
+    <div class="ccor-wave-container ccor-ribbon-bottom" style="position: absolute; inset: 0;"></div>
+  </div>
+  <style>
+    /* ── CCOR Wave Background ── Optimized for performance ── */
 
-  /* Pure-CSS drift: no JS rAF needed for horizontal movement */
-  @keyframes waveSlide {
-    0%   { transform: translateX(0)   translateY(var(--wy,0px)) rotate(var(--wr,0deg)) scaleX(1.4); }
-    50%  { transform: translateX(var(--wx,60px)) translateY(var(--wy2,0px)) rotate(var(--wr2,0deg)) scaleX(1.4); }
-    100% { transform: translateX(0)   translateY(var(--wy,0px)) rotate(var(--wr,0deg)) scaleX(1.4); }
-  }
-  @keyframes waveSlide-mobile {
-    0%   { transform: translateX(0)   translateY(var(--wy,0px)) rotate(var(--wr,0deg)) scaleX(1.6); }
-    50%  { transform: translateX(var(--wx,30px)) translateY(var(--wy2,0px)) rotate(var(--wr2,0deg)) scaleX(1.6); }
-    100% { transform: translateX(0)   translateY(var(--wy,0px)) rotate(var(--wr,0deg)) scaleX(1.6); }
-  }
-  @keyframes gradientShift {
-    0%   { background-position: 0% 0; }
-    100% { background-position: 400% 0; }
-  }
-
-  .ccor-wave {
-    position: absolute;
-    width: 300%;        /* ↓ from 400% — still covers viewport */
-    left: -100%;        /* ↓ from -150% */
-    /* NO filter:blur — this is the #1 GPU killer */
-    background: linear-gradient(120deg,
-      #1B449D 0%,  #2e5ab8 8%,  #3d6cd1 16%,
-      #64BAB0 24%, #8dd4ca 32%, #a6e1d9 40%,
-      #D4AC6C 48%, #e8c88a 56%, #f2dcb3 64%,
-      #5B5A5C 72%, #7a7a7a 80%, #64BAB0 88%,
-      #4da69a 94%, #1B449D 100%
-    );
-    background-size: 400% 100%;
-    border-radius: 42% 45% 40% 43%;
-    will-change: transform;          /* promote to own compositor layer */
-    transform-origin: center bottom;
-    /* Gradient shifts via CSS — no JS needed */
-    animation: gradientShift 18s ease-in-out infinite alternate,
-               waveSlide      var(--dur, 12s) ease-in-out infinite;
-    /* Animation-play-state toggled by JS on visibility change */
-  }
-
-  .ccor-ribbon-bottom .ccor-wave { bottom: -520px; height: 560px; }
-
-  /* Mobile: simpler, lighter */
-  @media (max-width: 768px) {
-    .ccor-wave {
-      height: 360px !important;
-      bottom: -360px !important;
-      animation-name: gradientShift, waveSlide-mobile;
-    }
-  }
-
-  /* ── Respect user preference ── */
-  @media (prefers-reduced-motion: reduce) {
-    .ccor-wave { animation: none !important; }
-  }
-
-  /* FORCE TRANSPARENCY ON HOST CONTAINERS */
-  html { background-color: #ffffff !important; }
-  body, .site, #page, .site-content, #content, .entry-content,
-  .joinber-page, .ber-about, #main, .main-container, .wrapper,
-  .ber-directory, .container, .main-content, .directory-grid,
-  .controls, .section, main {
-    background-color: transparent !important;
-    background: transparent !important;
-  }
-</style>
-<script>
-  (function () {
-    // Clear any previously stored performance disable flags to restore wave graphics
-    sessionStorage.removeItem('ccor-waves-disabled');
-
-    /* ── Performance-optimised wave init ── */
-    function initCcorWaves() {
-      const root = document.getElementById('ccor-waves-bg');
-      if (!root) return;
-
-      /* 1. Honour reduced-motion: skip entirely */
-      if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
-        root.style.display = 'none';
-        return;
+    /* Pure-CSS drift: no JS rAF needed for horizontal movement */
+    @keyframes waveSlide {
+      0% {
+        transform: translateX(0) translateY(var(--wy, 0px)) rotate(var(--wr, 0deg)) scaleX(1.4);
       }
 
-      const isMobile = () => window.innerWidth < 768;
+      50% {
+        transform: translateX(var(--wx, 60px)) translateY(var(--wy2, 0px)) rotate(var(--wr2, 0deg)) scaleX(1.4);
+      }
 
-      /* Reduced wave count: 5 on desktop, 3 on mobile */
-      const WAVE_COUNT = isMobile() ? 3 : 5;
-      const containers = root.querySelectorAll('.ccor-wave-container');
-      
-      containers.forEach(container => {
-        const waves = [];
-        for (let i = 0; i < WAVE_COUNT; i++) {
-          const wave = document.createElement('div');
-          wave.className = 'ccor-wave';
+      100% {
+        transform: translateX(0) translateY(var(--wy, 0px)) rotate(var(--wr, 0deg)) scaleX(1.4);
+      }
+    }
 
-          /* Vary shape */
-          const r1 = 38 + Math.random() * 10;
-          wave.style.borderRadius = r1 + '% ' + (r1+3) + '% ' + (r1-2) + '% ' + (r1+2) + '%';
-          wave.style.opacity      = 0.18 + (Math.random() * 0.28);
-          wave.style.zIndex       = WAVE_COUNT - i;
+    @keyframes waveSlide-mobile {
+      0% {
+        transform: translateX(0) translateY(var(--wy, 0px)) rotate(var(--wr, 0deg)) scaleX(1.6);
+      }
 
-          /* CSS custom properties drive the pure-CSS animation */
-          const offsetY  = i * (isMobile() ? 12 : 28);
-          const driftX   = (isMobile() ? 25 : 55) + Math.random() * (isMobile() ? 20 : 45);
-          const rotA     = (Math.random() - 0.5) * 3;
-          const rotB     = rotA + (Math.random() - 0.5) * 3;
-          const undA     = -(offsetY + (Math.random() * 18));
-          const undB     = -(offsetY + (Math.random() * 28));
-          const dur      = 10 + Math.random() * 8;   /* 10–18 s per wave */
-          const delay    = -(Math.random() * dur);    /* stagger start */
+      50% {
+        transform: translateX(var(--wx, 30px)) translateY(var(--wy2, 0px)) rotate(var(--wr2, 0deg)) scaleX(1.6);
+      }
 
-          wave.style.setProperty('--wx',  driftX + 'px');
-          wave.style.setProperty('--wy',  undA    + 'px');
-          wave.style.setProperty('--wy2', undB    + 'px');
-          wave.style.setProperty('--wr',  rotA    + 'deg');
-          wave.style.setProperty('--wr2', rotB    + 'deg');
-          wave.style.setProperty('--dur', dur     + 's');
-          wave.style.animationDelay = delay + 's, ' + (delay * 0.7) + 's';
+      100% {
+        transform: translateX(0) translateY(var(--wy, 0px)) rotate(var(--wr, 0deg)) scaleX(1.6);
+      }
+    }
 
-          container.appendChild(wave);
-          waves.push(wave);
+    @keyframes gradientShift {
+      0% {
+        background-position: 0% 0;
+      }
+
+      100% {
+        background-position: 400% 0;
+      }
+    }
+
+    .ccor-wave {
+      position: absolute;
+      width: 300%;
+      /* ↓ from 400% — still covers viewport */
+      left: -100%;
+      /* ↓ from -150% */
+      /* NO filter:blur — this is the #1 GPU killer */
+      background: linear-gradient(120deg,
+          #1B449D 0%, #2e5ab8 8%, #3d6cd1 16%,
+          #64BAB0 24%, #8dd4ca 32%, #a6e1d9 40%,
+          #D4AC6C 48%, #e8c88a 56%, #f2dcb3 64%,
+          #5B5A5C 72%, #7a7a7a 80%, #64BAB0 88%,
+          #4da69a 94%, #1B449D 100%);
+      background-size: 400% 100%;
+      border-radius: 42% 45% 40% 43%;
+      will-change: transform;
+      /* promote to own compositor layer */
+      transform-origin: center bottom;
+      /* Gradient shifts via CSS — no JS needed */
+      animation: gradientShift 18s ease-in-out infinite alternate,
+        waveSlide var(--dur, 12s) ease-in-out infinite;
+      /* Animation-play-state toggled by JS on visibility change */
+    }
+
+    .ccor-ribbon-bottom .ccor-wave {
+      bottom: -520px;
+      height: 560px;
+    }
+
+    /* Mobile: simpler, lighter */
+    @media (max-width: 768px) {
+      .ccor-wave {
+        height: 360px !important;
+        bottom: -360px !important;
+        animation-name: gradientShift, waveSlide-mobile;
+      }
+    }
+
+    /* ── Respect user preference ── */
+    @media (prefers-reduced-motion: reduce) {
+      .ccor-wave {
+        animation: none !important;
+      }
+    }
+
+    /* FORCE TRANSPARENCY ON HOST CONTAINERS */
+    html {
+      background-color: #ffffff !important;
+    }
+
+    body,
+    .site,
+    #page,
+    .site-content,
+    #content,
+    .entry-content,
+    .joinber-page,
+    .ber-about,
+    #main,
+    .main-container,
+    .wrapper,
+    .ber-directory,
+    .container,
+    .main-content,
+    .directory-grid,
+    .controls,
+    .section,
+    main {
+      background-color: transparent !important;
+      background: transparent !important;
+    }
+  </style>
+  <script>
+    (function () {
+      // Clear any previously stored performance disable flags to restore wave graphics
+      sessionStorage.removeItem('ccor-waves-disabled');
+
+      /* ── Performance-optimised wave init ── */
+      function initCcorWaves() {
+        const root = document.getElementById('ccor-waves-bg');
+        if (!root) return;
+
+        /* 1. Honour reduced-motion: skip entirely */
+        if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+          root.style.display = 'none';
+          return;
         }
-      });
 
-      /* Pause animations when tab is hidden → saves CPU/GPU entirely */
-      document.addEventListener('visibilitychange', () => {
-        const state = document.hidden ? 'paused' : 'running';
-        root.querySelectorAll('.ccor-wave').forEach(w => {
-          w.style.animationPlayState = state;
+        const isMobile = () => window.innerWidth < 768;
+
+        /* Reduced wave count: 5 on desktop, 3 on mobile */
+        const WAVE_COUNT = isMobile() ? 3 : 5;
+        const containers = root.querySelectorAll('.ccor-wave-container');
+
+        containers.forEach(container => {
+          const waves = [];
+          for (let i = 0; i < WAVE_COUNT; i++) {
+            const wave = document.createElement('div');
+            wave.className = 'ccor-wave';
+
+            /* Vary shape */
+            const r1 = 38 + Math.random() * 10;
+            wave.style.borderRadius = r1 + '% ' + (r1 + 3) + '% ' + (r1 - 2) + '% ' + (r1 + 2) + '%';
+            wave.style.opacity = 0.18 + (Math.random() * 0.28);
+            wave.style.zIndex = WAVE_COUNT - i;
+
+            /* CSS custom properties drive the pure-CSS animation */
+            const offsetY = i * (isMobile() ? 12 : 28);
+            const driftX = (isMobile() ? 25 : 55) + Math.random() * (isMobile() ? 20 : 45);
+            const rotA = (Math.random() - 0.5) * 3;
+            const rotB = rotA + (Math.random() - 0.5) * 3;
+            const undA = -(offsetY + (Math.random() * 18));
+            const undB = -(offsetY + (Math.random() * 28));
+            const dur = 10 + Math.random() * 8;   /* 10–18 s per wave */
+            const delay = -(Math.random() * dur);    /* stagger start */
+
+            wave.style.setProperty('--wx', driftX + 'px');
+            wave.style.setProperty('--wy', undA + 'px');
+            wave.style.setProperty('--wy2', undB + 'px');
+            wave.style.setProperty('--wr', rotA + 'deg');
+            wave.style.setProperty('--wr2', rotB + 'deg');
+            wave.style.setProperty('--dur', dur + 's');
+            wave.style.animationDelay = delay + 's, ' + (delay * 0.7) + 's';
+
+            container.appendChild(wave);
+            waves.push(wave);
+          }
         });
-      });
-    }
 
-    if (document.readyState === 'loading') {
-      document.addEventListener('DOMContentLoaded', initCcorWaves);
-    } else {
-      initCcorWaves();
-    }
-  })();
-</script>
+        /* Pause animations when tab is hidden → saves CPU/GPU entirely */
+        document.addEventListener('visibilitychange', () => {
+          const state = document.hidden ? 'paused' : 'running';
+          root.querySelectorAll('.ccor-wave').forEach(w => {
+            w.style.animationPlayState = state;
+          });
+        });
+      }
+
+      if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', initCcorWaves);
+      } else {
+        initCcorWaves();
+      }
+    })();
+  </script>
 </body>
 
 </html>
-
