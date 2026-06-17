@@ -1962,6 +1962,10 @@
       aspect-ratio: auto;
     }
 
+    .tile-shorts {
+      aspect-ratio: 9 / 16;
+    }
+
     .tile-landscape img,
     .tile-portrait img {
       width: auto;
@@ -2359,10 +2363,18 @@
         rawDesc: "A collaborative event with WCR, BER Home Foundation, and BER"
       },
       {
+        title: "Jeanne and Wade Promo",
+        description: "Watch Jeanne and Wade",
+        video: "https://coconutcoastrealtors.org/wp-content/uploads/2026/06/Jeanne-and-Wade-Promo.mp4",
+        spot: 3,
+        tag: "Video",
+        aspectRatio: "9/16"
+      },
+      {
         title: "Jeanne and Brooke Video",
         description: "Watch Jeanne and Brooke",
         video: "https://coconutcoastrealtors.org/wp-content/uploads/2026/05/Jeanne-and-Brooke-video1.mp4",
-        spot: 4,
+        spot: 7,
         tag: "Video"
       }
     ];
@@ -2672,7 +2684,7 @@
 
       for (const tile of tilesData) {
         const el = document.createElement('a');
-        const tileFormatClass = tile.video ? 'tile-video tile-portrait' : (tile.isTextOnly ? 'tile-no-image' : `tile-${tile.format || 'portrait'}`);
+        const tileFormatClass = tile.video ? (tile.aspectRatio === "9/16" ? 'tile-video tile-shorts' : 'tile-video tile-portrait') : (tile.isTextOnly ? 'tile-no-image' : `tile-${tile.format || 'portrait'}`);
         el.className = `shuffling-tile ${tileFormatClass}`;
         if (tile.tag === 'Staff') el.classList.add('tile-staff');
         if (tile.fullBleed) el.classList.add('tile-full-bleed');
@@ -2736,9 +2748,11 @@
           el.href = tile.link || "javascript:void(0);";
           if (!tile.link) el.removeAttribute('target');
 
+          const videoWidthStyle = tile.aspectRatio === "9/16" ? "100%" : "auto";
+
           innerHTML = `
             ${tile.tag ? '<div class="tile-tag">' + displayTag + '</div>' : ''}
-            <video src="${tile.video}" muted playsinline webkit-playsinline preload="metadata" class="tile-video-player" style="width: auto; height: 100%; object-fit: cover; display: block;"></video>
+            <video src="${tile.video}" muted playsinline webkit-playsinline preload="metadata" class="tile-video-player" style="width: ${videoWidthStyle}; height: 100%; object-fit: cover; display: block;"></video>
             <button class="video-mute-btn" aria-label="Toggle mute">
               <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="mute-icon" viewBox="0 0 16 16">
                 <path d="M6.717 3.55A.5.5 0 0 1 7 4v8a.5.5 0 0 1-.812.39L3.825 10.5H1.5A.5.5 0 0 1 1 10V6a.5.5 0 0 1 .5-.5h2.325l2.363-1.89a.5.5 0 0 1 .529-.06zm7.137 2.096a.5.5 0 0 1 0 .708L12.207 8l1.647 1.646a.5.5 0 0 1-.708.708L11.5 8.707l-1.646 1.647a.5.5 0 0 1-.708-.708L10.793 8 9.146 6.354a.5.5 0 1 1 .708-.708L11.5 7.293l1.646-1.647a.5.5 0 0 1 .708 0z"/>
@@ -2959,6 +2973,9 @@
         const aspect = video.videoWidth / video.videoHeight;
         const tile = video.closest('.shuffling-tile');
         if (tile) {
+          if (tile.classList.contains('tile-shorts')) {
+            return;
+          }
           tile.classList.remove('tile-portrait', 'tile-landscape');
           tile.classList.add(aspect > 1.2 ? 'tile-landscape' : 'tile-portrait');
         }
