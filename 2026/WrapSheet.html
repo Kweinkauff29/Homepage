@@ -2372,6 +2372,462 @@
       color: var(--ink-soft);
       font-style: italic;
     }
+
+    /* Celebration Modal Styles */
+    .full-celebration-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background: rgba(0, 0, 0, 0.7);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 100000;
+      opacity: 0;
+      transition: opacity 0.4s ease;
+      pointer-events: none;
+    }
+    .full-celebration-overlay.active {
+      opacity: 1;
+      pointer-events: auto;
+    }
+    .full-celebration-card {
+      background: var(--panel, #ffffff);
+      border: 3px solid var(--ink, #000000);
+      border-radius: var(--radius-lg, 24px);
+      padding: 24px;
+      max-width: 580px;
+      width: 90%;
+      text-align: center;
+      box-shadow: 10px 10px 0 var(--ink, #000000);
+      color: var(--ink, #000000);
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      align-items: center;
+      transform: scale(0.9) translateY(30px);
+      transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+    .full-celebration-overlay.active .full-celebration-card {
+      transform: scale(1) translateY(0);
+    }
+    .full-celebration-audio-toggle {
+      position: absolute;
+      top: 16px;
+      right: 16px;
+      background: var(--panel, #ffffff);
+      border: 2px solid var(--ink, #000000);
+      color: var(--ink, #000000);
+      border-radius: 50%;
+      width: 40px;
+      height: 40px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      font-size: 18px;
+      transition: all 0.2s;
+      z-index: 10;
+      box-shadow: 2px 2px 0 var(--ink, #000000);
+    }
+    .full-celebration-audio-toggle:hover {
+      transform: translate(-1px, -1px);
+      box-shadow: 3px 3px 0 var(--ink, #000000);
+    }
+    .full-celebration-audio-toggle:active {
+      transform: translate(1px, 1px);
+      box-shadow: 1px 1px 0 var(--ink, #000000);
+    }
+    .full-celebration-video-container {
+      width: 100%;
+      max-width: 500px;
+      border-radius: var(--radius-md, 16px);
+      overflow: hidden;
+      border: none;
+      box-shadow: none;
+      position: relative;
+      background: transparent;
+    }
+    .full-celebration-video {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+    }
+    .full-celebration-title {
+      font-size: 26px;
+      font-weight: 800;
+      margin: 8px 0 0;
+      letter-spacing: -0.02em;
+      color: var(--ink, #000000);
+      text-transform: uppercase;
+    }
+    .full-celebration-subtitle {
+      font-size: 15px;
+      color: var(--ink-soft, #555555);
+      margin: 0 0 8px;
+      font-weight: 500;
+      line-height: 1.5;
+    }
+    .full-celebration-reason {
+      font-size: 14px;
+      font-style: italic;
+      color: var(--ink, #000000);
+      background: var(--accent-soft, #e5e5e5);
+      border-left: 4px solid var(--ink, #000000);
+      padding: 10px 16px;
+      border-radius: var(--radius-sm, 8px);
+      margin-bottom: 8px;
+      max-width: 90%;
+      width: 100%;
+      text-align: left;
+      line-height: 1.4;
+    }
+    .full-celebration-btn-close {
+      background: var(--ink, #000000);
+      color: var(--bg-main, #ffffff);
+      border: 2px solid var(--ink, #000000);
+      padding: 12px 36px;
+      font-size: 14px;
+      font-weight: 700;
+      border-radius: var(--radius-btn, 999px);
+      cursor: pointer;
+      transition: all 0.2s ease;
+      box-shadow: 4px 4px 0 var(--ink-soft, #555555);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+    .full-celebration-btn-close:hover {
+      transform: translate(-2px, -2px);
+      box-shadow: 6px 6px 0 var(--ink-soft, #555555);
+    }
+    .full-celebration-btn-close:active {
+      transform: translate(0px, 0px);
+      box-shadow: 2px 2px 0 var(--ink-soft, #555555);
+    }
+    @keyframes celebrateTextGlow {
+      from {
+        text-shadow: 0 0 10px rgba(251, 191, 36, 0.2);
+      }
+      to {
+        text-shadow: 0 0 20px rgba(251, 191, 36, 0.6);
+      }
+    }
+
+    /* Send Cheer Modal Styles */
+    .send-cheer-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background: rgba(0, 0, 0, 0.7);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 100000;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+      pointer-events: none;
+    }
+    .send-cheer-overlay.active {
+      opacity: 1;
+      pointer-events: auto;
+    }
+    .send-cheer-card {
+      background: var(--panel, #ffffff);
+      border: 3px solid var(--ink, #000000);
+      border-radius: var(--radius-lg, 24px);
+      padding: 24px;
+      max-width: 500px;
+      width: 90%;
+      text-align: left;
+      box-shadow: 10px 10px 0 var(--ink, #000000);
+      color: var(--ink, #000000);
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      transform: scale(0.9) translateY(30px);
+      transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+    .send-cheer-overlay.active .send-cheer-card {
+      transform: scale(1) translateY(0);
+    }
+    .send-cheer-title {
+      font-size: 22px;
+      font-weight: 800;
+      margin: 0;
+      letter-spacing: -0.02em;
+      color: var(--ink, #000000);
+      text-transform: uppercase;
+      border-bottom: 2px solid var(--ink, #000000);
+      padding-bottom: 8px;
+    }
+    .send-cheer-subtitle {
+      font-size: 13px;
+      color: var(--ink-soft, #555555);
+      margin: 0;
+      line-height: 1.4;
+    }
+    .send-cheer-tasks-section {
+      background: var(--accent-soft, #e5e5e5);
+      border-left: 4px solid var(--ink, #000000);
+      padding: 12px 16px;
+      border-radius: var(--radius-sm, 8px);
+    }
+    .send-cheer-tasks-label {
+      font-size: 11px;
+      text-transform: uppercase;
+      font-weight: 700;
+      letter-spacing: 0.05em;
+      margin-bottom: 6px;
+      color: var(--ink, #000000);
+    }
+    .send-cheer-tasks-list {
+      margin: 0;
+      padding-left: 18px;
+      font-size: 13px;
+      line-height: 1.5;
+      color: var(--ink, #000000);
+    }
+    .send-cheer-field-label {
+      font-size: 11px;
+      text-transform: uppercase;
+      font-weight: 700;
+      letter-spacing: 0.05em;
+      color: var(--ink, #000000);
+      margin-bottom: 4px;
+      display: block;
+    }
+    .send-cheer-textarea {
+      width: 100%;
+      height: 80px;
+      padding: 10px 12px;
+      font-family: inherit;
+      font-size: 13px;
+      border: 2px solid var(--ink, #000000);
+      border-radius: var(--radius-sm, 8px);
+      background: var(--panel, #ffffff);
+      color: var(--ink, #000000);
+      resize: none;
+      outline: none;
+    }
+    .send-cheer-textarea:focus {
+      border-color: var(--ink, #000000);
+      box-shadow: 2px 2px 0 var(--ink, #000000);
+    }
+    .send-cheer-actions {
+      display: flex;
+      justify-content: flex-end;
+      gap: 12px;
+      margin-top: 8px;
+    }
+    .send-cheer-btn {
+      padding: 10px 24px;
+      font-size: 12px;
+      font-weight: 700;
+      border-radius: var(--radius-btn, 999px);
+      cursor: pointer;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      transition: all 0.2s ease;
+    }
+    .send-cheer-btn-send {
+      background: var(--ink, #000000);
+      color: var(--bg-main, #ffffff);
+      border: 2px solid var(--ink, #000000);
+      box-shadow: 3px 3px 0 var(--ink-soft, #555555);
+    }
+    .send-cheer-btn-send:hover {
+      transform: translate(-1px, -1px);
+      box-shadow: 4px 4px 0 var(--ink-soft, #555555);
+    }
+    .send-cheer-btn-send:active {
+      transform: translate(1px, 1px);
+      box-shadow: 1px 1px 0 var(--ink-soft, #555555);
+    }
+    .send-cheer-btn-cancel {
+      background: transparent;
+      color: var(--ink, #000000);
+      border: 2px solid var(--ink, #000000);
+    }
+    .send-cheer-btn-cancel:hover {
+      background: var(--accent-soft, #e5e5e5);
+    }
+
+    body[data-theme="dark"] .send-cheer-card {
+      background: var(--panel, #1e1e1e);
+      border-color: var(--panel-border, #404040);
+      box-shadow: 10px 10px 0 var(--panel-border, #404040);
+      color: var(--ink, #ffffff);
+    }
+    body[data-theme="dark"] .send-cheer-title {
+      color: var(--ink, #ffffff);
+      border-color: var(--panel-border, #404040);
+    }
+    body[data-theme="dark"] .send-cheer-tasks-section {
+      background: #2d2d2d;
+      border-left-color: var(--panel-border, #404040);
+    }
+    body[data-theme="dark"] .send-cheer-tasks-label {
+      color: #ffffff;
+    }
+    body[data-theme="dark"] .send-cheer-tasks-list {
+      color: #ffffff;
+    }
+    body[data-theme="dark"] .send-cheer-field-label {
+      color: #ffffff;
+    }
+    body[data-theme="dark"] .send-cheer-textarea {
+      background: #121212;
+      color: #ffffff;
+      border-color: var(--panel-border, #404040);
+    }
+    body[data-theme="dark"] .send-cheer-textarea:focus {
+      border-color: #ffffff;
+      box-shadow: 2px 2px 0 var(--panel-border, #404040);
+    }
+    body[data-theme="dark"] .send-cheer-btn-send {
+      background: #ffffff;
+      color: #000000;
+      border-color: #ffffff;
+      box-shadow: 3px 3px 0 #555555;
+    }
+    body[data-theme="dark"] .send-cheer-btn-cancel {
+      color: #ffffff;
+      border-color: var(--panel-border, #404040);
+    }
+    body[data-theme="dark"] .send-cheer-btn-cancel:hover {
+      background: #2d2d2d;
+    }
+
+    /* Send Cheer Styles */
+    #cheer-prompt-container {
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      margin-bottom: 12px;
+    }
+    .cheer-prompt-banner {
+      background: linear-gradient(135deg, rgba(251, 191, 36, 0.15) 0%, rgba(245, 158, 11, 0.15) 100%);
+      border: 1px solid #fbbf24;
+      border-radius: var(--radius-md, 16px);
+      padding: 12px 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      color: var(--ink, #000000);
+      font-weight: 600;
+      font-size: 13px;
+      animation: cheerPulse 2s infinite alternate;
+    }
+    body[data-theme="dark"] .cheer-prompt-banner {
+      background: linear-gradient(135deg, rgba(251, 191, 36, 0.1) 0%, rgba(245, 158, 11, 0.1) 100%);
+      border-color: #f59e0b;
+      color: #ffffff;
+    }
+    .cheer-prompt-content {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .cheer-prompt-icon {
+      font-size: 18px;
+      animation: cheerIconWiggle 0.5s ease-in-out infinite alternate;
+    }
+    .cheer-prompt-btn {
+      background: var(--ink, #000000);
+      color: var(--bg-main, #ffffff);
+      border: none;
+      padding: 6px 16px;
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      border-radius: 999px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+    .cheer-prompt-btn:hover {
+      transform: scale(1.05);
+      background: #fbbf24;
+      color: #000000;
+    }
+    .cheer-prompt-btn:disabled {
+      background: rgba(156, 163, 175, 0.4);
+      color: var(--ink-soft, #555555);
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    /* Cheer Debug Panel */
+    .cheer-debug-panel {
+      margin-top: 10px;
+      padding-top: 10px;
+      border-top: 1px dashed rgba(255, 255, 255, 0.3);
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      text-align: left;
+    }
+    .cheer-debug-panel label {
+      font-size: 10px;
+      text-transform: uppercase;
+      color: #ff9800;
+      font-weight: bold;
+    }
+    .cheer-debug-row {
+      display: flex;
+      gap: 6px;
+    }
+    .cheer-debug-select {
+      background: #333;
+      color: #fff;
+      border: 1px solid #555;
+      padding: 4px 8px;
+      font-size: 11px;
+      border-radius: 4px;
+      flex: 1;
+    }
+    .cheer-debug-btn {
+      background: #ff9800;
+      color: #000;
+      border: none;
+      padding: 4px 12px;
+      font-size: 11px;
+      font-weight: bold;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+    .cheer-debug-btn:hover {
+      background: #ffa726;
+    }
+
+    @keyframes cheerPulse {
+      from {
+        box-shadow: 0 0 5px rgba(251, 191, 36, 0.2);
+      }
+      to {
+        box-shadow: 0 0 15px rgba(251, 191, 36, 0.4);
+      }
+    }
+    @keyframes cheerIconWiggle {
+      from {
+        transform: rotate(-10deg);
+      }
+      to {
+        transform: rotate(10deg);
+      }
+    }
   </style>
   <!-- Fireworks Library -->
   <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
@@ -4510,6 +4966,7 @@
     </div>
 
     <main class="app-main">
+      <div id="cheer-prompt-container"></div>
       <!-- Section Toggle Toolbar -->
       <!-- Section Toggle Toolbar -->
       <div class="view-options-bar" id="view-options-bar" style="margin-bottom: 16px;">
@@ -5486,9 +5943,6 @@
       if (tasks.length === 0) return;
 
       const allDone = tasks.every(t => t.status === "done" || t.status === "could_not_complete");
-      // Check if we just completed the last one is tricky without previous state, 
-      // but triggering it every time the last one is clicked is acceptable gamification/affirmation.
-      // Better: check if > 0 tasks are done.
       const doneCount = tasks.filter(t => t.status === "done").length;
 
       if (allDone && doneCount > 0) {
@@ -5499,6 +5953,16 @@
             awardCoins(25, null);
             playCoinBurstSound();
           }, 600);
+        }
+
+        // Show all completed celebration modal
+        const todayStr = dateKey;
+        const celebrationKeyAllDone = `wrapsheet-celebration-alldone-${state.currentUser ? state.currentUser.id : 'anon'}-${todayStr}`;
+        if (!localStorage.getItem(celebrationKeyAllDone)) {
+          localStorage.setItem(celebrationKeyAllDone, "true");
+          setTimeout(() => {
+            showCelebrationModal(false, 'alldone', doneCount);
+          }, 1000);
         }
       } else {
         triggerFireworks('small');
@@ -5921,54 +6385,61 @@
       // Render Bird SVG (Refined "Round Blob" Finch Style)
       // Reference Colors: Pink Body (#f9a8d4), Yellow Cap/Wings (#fde047), Blue Tummy (#60a5fa)
       svgContainer.innerHTML = `
-        <g id="bird-whole" transform="translate(100, 110) scale(1.4)">
+        <g id="bird-whole" transform="translate(100, 105) scale(1.35)">
            <g class="bird-anim-wrapper">
-             <!-- Legs (Orange) -->
-             <path class="bird-foot-l" d="M -20 70 Q -30 75 -40 70 L -35 60 L -20 50" fill="#f97316" stroke="#ea580c" stroke-width="2.5" stroke-linecap="round" />
-             <path class="bird-foot-r" d="M 20 70 Q 30 75 40 70 L 35 60 L 20 50" fill="#f97316" stroke="#ea580c" stroke-width="2.5" stroke-linecap="round" />
- 
-             <!-- Body (Large Pink Blob) -->
-             <!-- Rounder, fuller bottom -->
-             <path class="bird-body" d="M -55 20 C -65 -20 -40 -60 0 -60 C 40 -60 65 -20 55 20 C 50 70 -50 70 -55 20 Z" fill="#f9a8d4" />
- 
-             <!-- Head Cap (Yellow) -->
-             <!-- Follows top contour of body, comes down to forehead -->
-             <path class="bird-head" d="M -48 -25 C -40 -50 -20 -60 0 -60 C 20 -60 40 -50 48 -25 C 25 -10 -25 -10 -48 -25 Z" fill="#fde047" />
- 
-             <!-- Tummy (Blue) -->
-             <!-- Large round oval -->
-             <ellipse class="bird-tummy" cx="0" cy="35" rx="38" ry="32" fill="#60a5fa" />
- 
-             <!-- Wings (Yellow) - Bigger and Rounder -->
-             <!-- Sticking out more noticeably -->
-             <path class="bird-wing-l" d="M -53 10 Q -85 15 -75 45 Q -60 50 -50 35" fill="#fde047" stroke="#eab308" stroke-width="1.5" />
-             <path class="bird-wing-r" d="M 53 10 Q 85 15 75 45 Q 60 50 50 35" fill="#fde047" stroke="#eab308" stroke-width="1.5" />
- 
+             <!-- Shadow/ground -->
+             <ellipse cx="0" cy="68" rx="32" ry="5" fill="rgba(0,0,0,0.08)" />
+
+             <!-- Feet (Orange, wide and flat) -->
+             <path class="bird-foot-l" d="M -14 58 L -30 65 L -36 60 L -28 56 L -20 52 L -14 58 Z" fill="#f97316" stroke="#ea580c" stroke-width="1.5" stroke-linejoin="round" />
+             <path class="bird-foot-r" d="M 14 58 L 30 65 L 36 60 L 28 56 L 20 52 L 14 58 Z" fill="#f97316" stroke="#ea580c" stroke-width="1.5" stroke-linejoin="round" />
+
+             <!-- Body (Very round egg/pear shape) -->
+             <path class="bird-body" d="M 0 -55 C -35 -55 -55 -30 -55 0 C -55 35 -45 60 0 60 C 45 60 55 35 55 0 C 55 -30 35 -55 0 -55 Z" fill="#9ca3af" />
+
+             <!-- Head Cap (Black hood wrapping from top down to mid-body on sides) -->
+             <path class="bird-head" d="M -55 0 C -55 -30 -35 -55 0 -55 C 35 -55 55 -30 55 0 C 45 5 25 10 0 10 C -25 10 -45 5 -55 0 Z" fill="#1f2937" />
+             <!-- Tuft/crest feathers on top -->
+             <path d="M -3 -55 Q -6 -68 -1 -72 Q 3 -74 5 -66 Q 2 -60 0 -55" fill="#1f2937" />
+             <path d="M 1 -56 Q 3 -65 7 -68 Q 10 -66 6 -58" fill="#1f2937" />
+             <path d="M -2 -54 Q -7 -62 -4 -66 Q -1 -64 0 -56" fill="#1f2937" />
+
+             <!-- White face patch (large round area in center of head) -->
+             <ellipse cx="0" cy="-12" rx="32" ry="28" fill="#ffffff" />
+
+             <!-- Tummy (Large white belly) -->
+             <ellipse class="bird-tummy" cx="0" cy="32" rx="34" ry="28" fill="#ffffff" />
+
+             <!-- Wings (Tiny flippers tucked at sides) -->
+             <path class="bird-wing-l" d="M -50 5 C -58 12 -56 28 -50 32 C -48 28 -52 14 -50 5 Z" fill="#9ca3af" stroke="#6b7280" stroke-width="1" />
+             <path class="bird-wing-r" d="M 50 5 C 58 12 56 28 50 32 C 48 28 52 14 50 5 Z" fill="#9ca3af" stroke="#6b7280" stroke-width="1" />
+
              <!-- Face -->
-             <g id="bird-face" transform="translate(0, -25)">
-               <!-- Cheeks (Pinker) -->
-               <circle cx="-32" cy="15" r="9" fill="#f472b6" opacity="0.6" />
-               <circle cx="32" cy="15" r="9" fill="#f472b6" opacity="0.6" />
- 
-               <!-- Beak (Orange/Yellow) -->
-               <path class="bird-beak" d="M -8 10 Q 0 18 8 10 L 0 4 Z" fill="#facc15" stroke="#ca8a04" stroke-width="1.5" />
- 
-               <!-- Eyes -->
+             <g id="bird-face" transform="translate(0, -15)">
+               <!-- Cheeks (Large, rosy pink) -->
+               <circle cx="-26" cy="10" r="11" fill="#f9a8d4" opacity="0.65" />
+               <circle cx="26" cy="10" r="11" fill="#f9a8d4" opacity="0.65" />
+
+               <!-- Beak (Orange, small diamond) -->
+               <path class="bird-beak" d="M -6 6 L 0 14 L 6 6 L 0 2 Z" fill="#f97316" stroke="#ea580c" stroke-width="1.2" stroke-linejoin="round" />
+
+               <!-- Eyes (Large, round, with highlights) -->
                <g id="eyes-open">
-                 <circle cx="-18" cy="0" r="7.5" fill="#1f2937" />
-                 <circle cx="18" cy="0" r="7.5" fill="#1f2937" />
-                 <circle cx="-15" cy="-3" r="2.5" fill="#fff" />
-                 <circle cx="21" cy="-3" r="2.5" fill="#fff" />
+                 <circle cx="-14" cy="-4" r="8" fill="#1f2937" />
+                 <circle cx="14" cy="-4" r="8" fill="#1f2937" />
+                 <circle cx="-11" cy="-7" r="3" fill="#fff" />
+                 <circle cx="17" cy="-7" r="3" fill="#fff" />
                </g>
-               
-               <!-- Eyes Closed/Happy -->
+
+               <!-- Eyes Closed -->
                <g id="eyes-closed" style="display:none">
-                 <path d="M -24 5 Q -18 10 -12 5" fill="none" stroke="#1f2937" stroke-width="3" stroke-linecap="round" />
-                 <path d="M 12 5 Q 18 10 24 5" fill="none" stroke="#1f2937" stroke-width="3" stroke-linecap="round" />
+                 <path d="M -20 0 Q -14 6 -8 0" fill="none" stroke="#1f2937" stroke-width="3" stroke-linecap="round" />
+                 <path d="M 8 0 Q 14 6 20 0" fill="none" stroke="#1f2937" stroke-width="3" stroke-linecap="round" />
                </g>
+               <!-- Eyes Happy -->
                <g id="eyes-happy" style="display:none">
-                  <path d="M -24 5 Q -18 -5 -12 5" fill="none" stroke="#1f2937" stroke-width="3" stroke-linecap="round" />
-                  <path d="M 12 5 Q 18 -5 24 5" fill="none" stroke="#1f2937" stroke-width="3" stroke-linecap="round" />
+                  <path d="M -20 0 Q -14 -8 -8 0" fill="none" stroke="#1f2937" stroke-width="3" stroke-linecap="round" />
+                  <path d="M 8 0 Q 14 -8 20 0" fill="none" stroke="#1f2937" stroke-width="3" stroke-linecap="round" />
                </g>
              </g>
            </g>
@@ -5987,10 +6458,10 @@
     // --- Bird Personality System ---
     let birdName = null;
     let birdColors = {
-      body: "#f9a8d4",
-      head: "#fde047",
-      tummy: "#60a5fa",
-      wings: "#fde047"
+      body: "#9ca3af",
+      head: "#1f2937",
+      tummy: "#ffffff",
+      wings: "#9ca3af"
     };
 
     let squeaksMuted = localStorage.getItem("bird_squeaks_muted") === "true";
@@ -6494,11 +6965,11 @@
 
     // Default Colors
     const DEFAULT_BIRD_COLORS = {
-      head: "#fde047",
-      body: "#f9a8d4",
-      tummy: "#60a5fa",
-      wings: "#fde047",
-      beak: "#facc15",
+      head: "#1f2937",
+      body: "#9ca3af",
+      tummy: "#ffffff",
+      wings: "#9ca3af",
+      beak: "#f97316",
       feet: "#f97316"
     };
 
@@ -8004,6 +8475,13 @@
       state.currentUser = user;
       document.getElementById("current-user-label").textContent =
         user ? user.name + " · " + user.email : "Not signed in";
+      
+      const isKevin = user && user.name.toLowerCase().includes("kevin") && !user.name.toLowerCase().includes("test");
+      const debugBtn = document.getElementById("debug-version");
+      if (debugBtn) {
+        debugBtn.style.display = isKevin ? "block" : "none";
+      }
+
       if (user) {
         localStorage.setItem("wrapsheet-user", JSON.stringify({ id: user.id }));
         document.getElementById("monthly-owner-filter").value = "all";
@@ -8013,10 +8491,13 @@
         setActiveUser(user.id);
         loadPillarsForCurrentUser();
 
+        // Check for received cheers!
+        if (typeof checkReceivedCheers === "function") checkReceivedCheers();
+        if (isKevin && typeof populateDebugCheerSelect === "function") populateDebugCheerSelect();
+
         // Restricted Tool Logic (Kevin Only)
         const emailTool = document.getElementById("tool-email-generator");
         if (emailTool) {
-          const isKevin = user.name.toLowerCase().includes("kevin") && !user.name.toLowerCase().includes("test");
           emailTool.style.display = isKevin ? "flex" : "none";
         }
       }
@@ -10092,6 +10573,7 @@
           renderTeamMetrics();
         }
         renderCalendar();
+        if (typeof renderCheerPrompts === "function") renderCheerPrompts();
 
         // Trigger AI Overview for "Today"
         const today = new Date();
@@ -13042,6 +13524,572 @@
 
       // Render all reminders
       renderReminders(upcomingTasks, chimesEnabled);
+      checkCelebration();
+    }
+
+    function checkCelebration() {
+      if (!state.currentUser) return;
+
+      const now = new Date();
+      const currentHours = now.getHours();
+      const currentMinutes = now.getMinutes();
+      const totalMinutes = currentHours * 60 + currentMinutes;
+      const todayStr = dateKey(now.getFullYear(), now.getMonth(), now.getDate());
+
+      // Get count of completed tasks today
+      const completedToday = (state.dailyTasks || []).filter(t =>
+        t.task_date === todayStr &&
+        t.status === "done" &&
+        (t.assigned_to_id === state.currentUser.id ||
+          (t.assignees && t.assignees.some(a => a.id === state.currentUser.id)))
+      );
+      const myCount = completedToday.length;
+
+      // Count completed tasks for today per user to determine if current user is MVP
+      const counts = {};
+      if (state.users) {
+        state.users.forEach(u => {
+          counts[String(u.id)] = 0;
+        });
+      }
+      (state.dailyTasks || []).forEach(t => {
+        if (t.task_date === todayStr && t.status === "done") {
+          if (t.assignees && t.assignees.length > 0) {
+            t.assignees.forEach(a => {
+              counts[String(a.id)] = (counts[String(a.id)] || 0) + 1;
+            });
+          } else if (t.assigned_to_id) {
+            counts[String(t.assigned_to_id)] = (counts[String(t.assigned_to_id)] || 0) + 1;
+          }
+        }
+      });
+
+      let maxCount = 0;
+      Object.values(counts).forEach(c => {
+        if (c > maxCount) maxCount = c;
+      });
+
+      const isMvp = myCount > 0 && myCount === maxCount;
+
+      // Check 100% daily completion celebration
+      const todayTasks = (state.dailyTasks || []).filter(t => t.task_date === todayStr);
+      const allDone = todayTasks.length > 0 && todayTasks.every(t => t.status === "done" || t.status === "could_not_complete");
+      const doneCount = todayTasks.filter(t => t.status === "done").length;
+      
+      if (allDone && doneCount > 0) {
+        const celebrationKeyAllDone = `wrapsheet-celebration-alldone-${state.currentUser.id}-${todayStr}`;
+        if (!localStorage.getItem(celebrationKeyAllDone)) {
+          localStorage.setItem(celebrationKeyAllDone, "true");
+          showCelebrationModal(false, 'alldone', doneCount);
+          return;
+        }
+      }
+
+      // Check 4:25 PM celebration eligibility
+      // 16:25 is 985 minutes
+      if (totalMinutes >= 985) {
+        const celebrationKey425 = `wrapsheet-celebration-425pm-${state.currentUser.id}-${todayStr}`;
+        if (!localStorage.getItem(celebrationKey425)) {
+          if (isMvp) {
+            // Prevent the noon celebration from displaying after this one
+            const celebrationKeyNoon = `wrapsheet-celebration-noon-${state.currentUser.id}-${todayStr}`;
+            localStorage.setItem(celebrationKeyNoon, "true");
+            
+            localStorage.setItem(celebrationKey425, "true");
+            showCelebrationModal(false, '425pm', myCount, true);
+            return;
+          } else if (myCount > 4) {
+            // Prevent the noon celebration from displaying after this one
+            const celebrationKeyNoon = `wrapsheet-celebration-noon-${state.currentUser.id}-${todayStr}`;
+            localStorage.setItem(celebrationKeyNoon, "true");
+            
+            localStorage.setItem(celebrationKey425, "true");
+            showCelebrationModal(false, '425pm', myCount, false);
+            return;
+          }
+        }
+      }
+
+      // Check noon celebration eligibility (> 2 tasks completed, between 12:00 PM and end of day)
+      // 12:00 PM is 720 minutes
+      if (totalMinutes >= 720) {
+        const celebrationKeyNoon = `wrapsheet-celebration-noon-${state.currentUser.id}-${todayStr}`;
+        if (myCount > 2 && !localStorage.getItem(celebrationKeyNoon)) {
+          localStorage.setItem(celebrationKeyNoon, "true");
+          showCelebrationModal(false, 'noon', myCount, false);
+          return;
+        }
+      }
+    }
+
+    function showCelebrationModal(isPreview = false, type = '425pm', count = null, isMvp = false) {
+      // Remove any existing celebration modal first to avoid duplicates
+      const existing = document.querySelector(".full-celebration-overlay");
+      if (existing) {
+        existing.remove();
+      }
+
+      const userName = state.currentUser ? state.currentUser.name.split(" ")[0] : "User";
+      
+      // Calculate tasks completed today
+      let completedTodayCount = 0;
+      if (count !== null) {
+        completedTodayCount = count;
+      } else {
+        const now = new Date();
+        const todayStr = dateKey(now.getFullYear(), now.getMonth(), now.getDate());
+        completedTodayCount = isPreview ? (type === 'noon' ? 3 : 5) : (state.dailyTasks || []).filter(t =>
+          t.task_date === todayStr &&
+          t.status === "done" &&
+          (state.currentUser && (t.assigned_to_id === state.currentUser.id ||
+            (t.assignees && t.assignees.some(a => a.id === state.currentUser.id))))
+        ).length;
+      }
+
+      // Create modal elements
+      const overlay = document.createElement("div");
+      overlay.className = "full-celebration-overlay";
+
+      const card = document.createElement("div");
+      card.className = "full-celebration-card";
+
+      // Audio toggle button
+      const audioBtn = document.createElement("button");
+      audioBtn.className = "full-celebration-audio-toggle";
+      audioBtn.innerHTML = "🔊";
+      audioBtn.title = "Mute Video";
+
+      // Video container and video element
+      const videoContainer = document.createElement("div");
+      videoContainer.className = "full-celebration-video-container";
+
+      const video = document.createElement("video");
+      video.className = "full-celebration-video";
+      video.autoplay = true;
+      video.loop = true;
+      video.muted = false; // By default not muted, just half volume
+      video.volume = 0.5;
+      video.setAttribute("playsinline", "");
+      
+      const source = document.createElement("source");
+      if (type === 'alldone') {
+        source.src = "https://coconutcoastrealtors.org/wp-content/uploads/2026/06/Animate_the_bird_climbing_onto.mp4";
+      } else if (isMvp) {
+        source.src = "https://coconutcoastrealtors.org/wp-content/uploads/2026/06/Animate_the_bird_standing_prou.mp4";
+      } else {
+        source.src = "https://coconutcoastrealtors.org/wp-content/uploads/2026/06/District-5-2026-Logo.mp4";
+      }
+      source.type = "video/mp4";
+      video.appendChild(source);
+      videoContainer.appendChild(video);
+
+      // Title
+      const title = document.createElement("h2");
+      title.className = "full-celebration-title";
+      if (type === 'alldone') {
+        title.textContent = "All Goals Crushed! 🏁";
+      } else if (isMvp) {
+        title.textContent = `${userName}, you are today's MVP! 🏆`;
+      } else {
+        title.textContent = `${userName}, you killed it today!`;
+      }
+
+      // Subtitle
+      const subtitle = document.createElement("p");
+      subtitle.className = "full-celebration-subtitle";
+      if (type === 'alldone') {
+        subtitle.textContent = `Every single task for today has been completed (${completedTodayCount} tasks total). Outstanding achievement! 🎉`;
+      } else if (isMvp) {
+        subtitle.textContent = `[EOD MVP Wrap-up] You completed the most tasks today (${completedTodayCount} tasks). You are unstoppable! 🚀`;
+      } else {
+        const timeLabel = type === 'noon' ? "Noon Check-in" : "EOD Wrap-up";
+        subtitle.textContent = `[${timeLabel}] You completed ${completedTodayCount} tasks today. Keep up the phenomenal momentum! 🚀`;
+      }
+
+      // Close button
+      const closeBtn = document.createElement("button");
+      closeBtn.className = "full-celebration-btn-close";
+      closeBtn.textContent = "Awesome!";
+
+      // Assemble card
+      card.appendChild(audioBtn);
+      card.appendChild(videoContainer);
+      card.appendChild(title);
+      card.appendChild(subtitle);
+      card.appendChild(closeBtn);
+      overlay.appendChild(card);
+
+      document.body.appendChild(overlay);
+
+      // Hook audio toggle click
+      audioBtn.addEventListener("click", (e) => {
+        e.stopPropagation();
+        if (video.muted) {
+          video.muted = false;
+          video.volume = 0.5;
+          audioBtn.innerHTML = "🔊";
+          audioBtn.title = "Mute Video";
+        } else {
+          video.muted = true;
+          audioBtn.innerHTML = "🔇";
+          audioBtn.title = "Unmute Video";
+        }
+      });
+
+      // Hook close interactions
+      const dismiss = () => {
+        overlay.classList.remove("active");
+        setTimeout(() => {
+          overlay.remove();
+        }, 500);
+      };
+
+      closeBtn.addEventListener("click", dismiss);
+      overlay.addEventListener("click", (e) => {
+        if (e.target === overlay) dismiss();
+      });
+
+      // Force autoplay on load/interaction with unmuted fallback
+      video.play().catch(err => {
+        console.log("Unmuted celebration video autoplay blocked, falling back to muted:", err);
+        video.muted = true;
+        audioBtn.innerHTML = "🔇";
+        audioBtn.title = "Unmute Video";
+        video.play().catch(e => console.error("Celebration autoplay blocked completely:", e));
+      });
+
+      // Trigger active class for transition
+      setTimeout(() => {
+        overlay.classList.add("active");
+        // Trigger Canvas Confetti if loaded
+        if (typeof confetti === "function") {
+          // Left side burst
+          confetti({
+            particleCount: 80,
+            angle: 60,
+            spread: 55,
+            origin: { x: 0, y: 0.8 }
+          });
+          // Right side burst
+          confetti({
+            particleCount: 80,
+            angle: 120,
+            spread: 55,
+            origin: { x: 1, y: 0.8 }
+          });
+        }
+      }, 50);
+    }
+
+    function renderCheerPrompts() {
+      const container = document.getElementById("cheer-prompt-container");
+      if (!container) return;
+      container.innerHTML = "";
+
+      if (!state.currentUser) return;
+
+      const today = new Date();
+      const todayStr = dateKey(today.getFullYear(), today.getMonth(), today.getDate());
+
+      // 1. Count completed tasks for today per user
+      const completedTodayByUser = {};
+      (state.dailyTasks || []).forEach(t => {
+        if (t.task_date === todayStr && t.status === "done" && t.assigned_to_id) {
+          const uid = String(t.assigned_to_id);
+          completedTodayByUser[uid] = (completedTodayByUser[uid] || 0) + 1;
+        }
+      });
+
+      // 2. Scan other users to see who has completed >= 2 tasks
+      state.users.forEach(u => {
+        if (String(u.id) === String(state.currentUser.id)) return;
+
+        const count = completedTodayByUser[String(u.id)] || 0;
+        if (count >= 2) {
+          const banner = document.createElement("div");
+          banner.className = "cheer-prompt-banner";
+
+          const content = document.createElement("div");
+          content.className = "cheer-prompt-content";
+          content.innerHTML = `
+            <span class="cheer-prompt-icon">🎉</span>
+            <span><strong>${escapeHtml(u.name)}</strong> has completed ${count} tasks today!</span>
+          `;
+
+          const btn = document.createElement("button");
+          btn.className = "cheer-prompt-btn";
+          
+          const sentKey = `sent-cheer-${u.id}-${todayStr}`;
+          if (localStorage.getItem(sentKey) === "true") {
+            btn.innerText = "Sent! ✅";
+            btn.disabled = true;
+          } else {
+            btn.innerText = "Send Cheer";
+            btn.addEventListener("click", () => sendCheer(u.id, u.name, btn));
+          }
+
+          banner.appendChild(content);
+          banner.appendChild(btn);
+          container.appendChild(banner);
+        }
+      });
+    }
+
+    async function sendCheer(recipientId, recipientName, btn) {
+      if (!state.currentUser) return;
+
+      const today = new Date();
+      const todayStr = dateKey(today.getFullYear(), today.getMonth(), today.getDate());
+
+      // Get list of tasks completed by the recipient today
+      const completedToday = (state.dailyTasks || []).filter(t =>
+        t.task_date === todayStr &&
+        t.status === "done" &&
+        (t.assigned_to_id === recipientId || 
+         (t.assignees && t.assignees.some(a => a.id === recipientId)))
+      );
+
+      const taskTitles = completedToday.map(t => t.title);
+      const tasksStr = taskTitles.length > 0 ? taskTitles.join(", ") : "";
+      const defaultReason = tasksStr ? `Completing: ${tasksStr}` : "Your hard work today!";
+
+      const reason = prompt(`Send a cheer to ${recipientName}! Enter a reason or message (optional):`, defaultReason);
+      if (reason === null) {
+        // User clicked cancel, do not send the cheer
+        return;
+      }
+
+      btn.disabled = true;
+      btn.innerText = "Sending...";
+
+      try {
+        // Fetch recipient preferences
+        const res = await apiGet(`/user-prefs?userId=${recipientId}`);
+        const prefs = res || {};
+
+        if (!prefs.cheers) prefs.cheers = [];
+
+        // Check if cheer exists for today to prevent duplicates
+        const alreadyExists = prefs.cheers.some(c => 
+          c.fromId === state.currentUser.id && 
+          new Date(c.timestamp).toISOString().split('T')[0] === todayStr
+        );
+
+        if (!alreadyExists) {
+          prefs.cheers.push({
+            id: 'cheer-' + Date.now() + '-' + Math.random().toString(36).substr(2, 5),
+            fromId: state.currentUser.id,
+            fromName: state.currentUser.name,
+            timestamp: Date.now(),
+            reason: reason.trim() || "",
+            acknowledged: false
+          });
+        }
+
+        // Save updated preferences
+        await apiSend("/user-prefs", "POST", { userId: recipientId, prefs: prefs });
+
+        localStorage.setItem(`sent-cheer-${recipientId}-${todayStr}`, "true");
+        btn.innerText = "Sent! ✅";
+      } catch (err) {
+        console.error("Error sending cheer:", err);
+        showToast("Error sending cheer", true);
+        btn.disabled = false;
+        btn.innerText = "Send Cheer";
+      }
+    }
+
+    async function checkReceivedCheers() {
+      if (!state.currentUser) return;
+
+      try {
+        const prefs = await apiGet(`/user-prefs?userId=${state.currentUser.id}`);
+        if (!prefs || !prefs.cheers || prefs.cheers.length === 0) return;
+
+        const unacknowledged = prefs.cheers.filter(c => !c.acknowledged);
+        if (unacknowledged.length === 0) return;
+
+        // Show the first unacknowledged cheer popup
+        showCheerModal(unacknowledged[0], false);
+      } catch (e) {
+        console.error("Error checking received cheers:", e);
+      }
+    }
+
+    function showCheerModal(cheer, isPreview = false) {
+      const existing = document.querySelector(".full-celebration-overlay");
+      if (existing) {
+        existing.remove();
+      }
+
+      const senderName = cheer.fromName || "A teammate";
+      
+      const messages = [
+        `${senderName} noticed your hard work!`,
+        `${senderName} is noticing your hard work!`,
+        `${senderName} is cheering you on today!`,
+        `${senderName} noticed you killing it today!`,
+        `${senderName} sent you some positive energy!`,
+        `${senderName} appreciates all your effort today!`
+      ];
+      // Select a message
+      const messageIndex = cheer.timestamp ? (cheer.timestamp % messages.length) : Math.floor(Math.random() * messages.length);
+      const messageText = messages[messageIndex];
+
+      // Create modal elements
+      const overlay = document.createElement("div");
+      overlay.className = "full-celebration-overlay";
+
+      const card = document.createElement("div");
+      card.className = "full-celebration-card";
+
+      // Audio toggle button
+      const audioBtn = document.createElement("button");
+      audioBtn.className = "full-celebration-audio-toggle";
+      audioBtn.innerHTML = "🔊";
+      audioBtn.title = "Mute Video";
+
+      // Video container and video element
+      const videoContainer = document.createElement("div");
+      videoContainer.className = "full-celebration-video-container";
+
+      const video = document.createElement("video");
+      video.className = "full-celebration-video";
+      video.autoplay = true;
+      video.loop = true;
+      video.muted = false; // By default not muted, just half volume
+      video.volume = 0.5;
+      video.setAttribute("playsinline", "");
+      
+      const source = document.createElement("source");
+      source.src = "https://coconutcoastrealtors.org/wp-content/uploads/2026/06/District-5-2026-Logo1.mp4";
+      source.type = "video/mp4";
+      video.appendChild(source);
+      videoContainer.appendChild(video);
+
+      // Title
+      const title = document.createElement("h2");
+      title.className = "full-celebration-title";
+      title.textContent = messageText;
+
+      // Subtitle
+      const subtitle = document.createElement("p");
+      subtitle.className = "full-celebration-subtitle";
+      subtitle.textContent = `You got cheer! 🎉`;
+
+      // Close button
+      const closeBtn = document.createElement("button");
+      closeBtn.className = "full-celebration-btn-close";
+      closeBtn.textContent = "Awesome!";
+
+      // Assemble card
+      card.appendChild(audioBtn);
+      card.appendChild(videoContainer);
+      card.appendChild(title);
+      card.appendChild(subtitle);
+      if (cheer.reason) {
+        const reasonEl = document.createElement("div");
+        reasonEl.className = "full-celebration-reason";
+        reasonEl.innerHTML = `&ldquo;${escapeHtml(cheer.reason)}&rdquo;`;
+        card.appendChild(reasonEl);
+      }
+      card.appendChild(closeBtn);
+      overlay.appendChild(card);
+
+      document.body.appendChild(overlay);
+
+      // Hook audio toggle click
+      audioBtn.addEventListener("click", (e) => {
+        e.stopPropagation();
+        if (video.muted) {
+          video.muted = false;
+          video.volume = 0.5;
+          audioBtn.innerHTML = "🔊";
+          audioBtn.title = "Mute Video";
+        } else {
+          video.muted = true;
+          audioBtn.innerHTML = "🔇";
+          audioBtn.title = "Unmute Video";
+        }
+      });
+
+      // Hook close interactions
+      const dismiss = () => {
+        overlay.classList.remove("active");
+        setTimeout(() => {
+          overlay.remove();
+        }, 500);
+
+        // Save acknowledged status in DB if not preview
+        if (!isPreview && state.currentUser) {
+          (async () => {
+            try {
+              const res = await apiGet(`/user-prefs?userId=${state.currentUser.id}`);
+              const p = res || {};
+              if (p.cheers) {
+                p.cheers.forEach(c => {
+                  if (c.id === cheer.id || (!cheer.id && c.fromName === cheer.fromName)) {
+                    c.acknowledged = true;
+                  }
+                });
+                // Also mark older cheers acknowledged
+                p.cheers.forEach(c => {
+                  if (c.timestamp && c.timestamp < cheer.timestamp) {
+                    c.acknowledged = true;
+                  }
+                });
+                await apiSend("/user-prefs", "POST", { userId: state.currentUser.id, prefs: p });
+              }
+            } catch (err) {
+              console.error("Error marking cheer acknowledged:", err);
+            }
+          })();
+        }
+      };
+
+      closeBtn.addEventListener("click", dismiss);
+      overlay.addEventListener("click", (e) => {
+        if (e.target === overlay) dismiss();
+      });
+
+      // Force autoplay on load/interaction with unmuted fallback
+      video.play().catch(err => {
+        console.log("Unmuted cheer video autoplay blocked, falling back to muted:", err);
+        video.muted = true;
+        audioBtn.innerHTML = "🔇";
+        audioBtn.title = "Unmute Video";
+        video.play().catch(e => console.error("Cheer autoplay blocked completely:", e));
+      });
+
+      // Trigger active class for transition
+      setTimeout(() => {
+        overlay.classList.add("active");
+        // Trigger Canvas Confetti if loaded
+        if (typeof confetti === "function") {
+          confetti({
+            particleCount: 100,
+            spread: 70,
+            origin: { y: 0.6 }
+          });
+        }
+      }, 50);
+    }
+
+    function populateDebugCheerSelect() {
+      const select = document.getElementById("debug-cheer-sender");
+      if (!select) return;
+      select.innerHTML = "";
+      
+      const names = state.users && state.users.length > 0 
+        ? state.users.map(u => u.name) 
+        : ["Erica", "Mariam", "Meighan", "Kevin"];
+
+      names.forEach(name => {
+        const opt = document.createElement("option");
+        opt.value = name;
+        opt.textContent = name;
+        select.appendChild(opt);
+      });
     }
 
     function renderReminders(upcomingTasks, chimesEnabled) {
@@ -15031,11 +16079,67 @@
       );
       fetchDailyOverview(tasks);
     }
+
+    // --- Tab Visibility: pause/resume videos when tab is hidden/active ---
+    document.addEventListener("visibilitychange", function() {
+      const videos = document.querySelectorAll("video");
+      if (document.hidden) {
+        videos.forEach(v => {
+          if (!v.paused) {
+            v.dataset.wasPlaying = "true";
+            v.pause();
+          }
+        });
+      } else {
+        videos.forEach(v => {
+          if (v.dataset.wasPlaying === "true") {
+            v.dataset.wasPlaying = "";
+            v.play().catch(() => {});
+          }
+        });
+      }
+    });
   </script>
 
   <div id="debug-version"
-    style="position:fixed;bottom:0;right:0;background:red;color:white;z-index:99999;padding:5px;cursor:pointer;"
-    onclick="alert('Loaded 2026/WrapSheet.html - Fixes Applied - V3')">VERSION DEBUG V3</div>
+    style="position:fixed;bottom:0;right:0;background:rgba(20,20,20,0.95);color:white;z-index:99999;padding:12px;display:none;border:1px solid red;max-width:250px;border-top-left-radius:12px;font-family:sans-serif;font-size:11px;">
+    <div style="font-weight:bold;margin-bottom:6px;color:red;display:flex;justify-content:space-between;align-items:center;">
+      <span>DEBUG PANEL V4</span>
+      <button style="border:none;background:red;color:white;border-radius:999px;cursor:pointer;padding:1px 5px;font-size:9px;" onclick="document.getElementById('debug-version').style.display='none'">X</button>
+    </div>
+    <button style="width:100%;background:red;color:white;border:none;padding:5px;cursor:pointer;font-weight:bold;margin-bottom:4px;border-radius:4px;" onclick="showCelebrationModal(true, 'noon')">Test Noon Celebration (>2)</button>
+    <button style="width:100%;background:red;color:white;border:none;padding:5px;cursor:pointer;font-weight:bold;margin-bottom:4px;border-radius:4px;" onclick="showCelebrationModal(true, '425pm')">Test 4:25 PM Celebration (>4)</button>
+    <button style="width:100%;background:red;color:white;border:none;padding:5px;cursor:pointer;font-weight:bold;margin-bottom:4px;border-radius:4px;" onclick="showCelebrationModal(true, '425pm', null, true)">Test 4:25 PM MVP Celebration</button>
+    <button style="width:100%;background:red;color:white;border:none;padding:5px;cursor:pointer;font-weight:bold;margin-bottom:4px;border-radius:4px;" onclick="showCelebrationModal(true, 'alldone')">Test 100% Completed Celebration</button>
+    <button style="width:100%;background:#16a34a;color:white;border:none;padding:5px;cursor:pointer;font-weight:bold;margin-bottom:8px;border-radius:4px;" onclick="
+      for (let i = localStorage.length - 1; i >= 0; i--) {
+        const key = localStorage.key(i);
+        if (key && (key.includes('celebration-noon') || key.includes('celebration-425pm') || key.includes('celebration-alldone'))) {
+          localStorage.removeItem(key);
+        }
+      }
+      showToast('Celebration triggers reset!');
+    ">Reset Celebration Triggers</button>
+    
+    <div class="cheer-debug-panel">
+      <label>Simulate Cheer Pop-Up</label>
+      <div style="margin-top:2px;font-size:9px;color:#aaa;margin-bottom:4px;">Customize who sends the cheer:</div>
+      <div class="cheer-debug-row" style="margin-bottom: 6px;">
+        <select id="debug-cheer-sender" class="cheer-debug-select" style="width: 100%;">
+          <option value="Erica">Erica</option>
+          <option value="Mariam">Mariam</option>
+          <option value="Meighan">Meighan</option>
+          <option value="Kevin">Kevin</option>
+        </select>
+      </div>
+      <div class="cheer-debug-row" style="margin-bottom: 6px;">
+        <input type="text" id="debug-cheer-reason" placeholder="Enter cheer reason..." class="cheer-debug-input" style="width: 100%; padding: 4px 6px; font-size: 11px; border-radius: 4px; border: 1px solid #555; background: #222; color: #fff;" />
+      </div>
+      <div class="cheer-debug-row">
+        <button class="cheer-debug-btn" style="width: 100%;" onclick="const s = document.getElementById('debug-cheer-sender').value; const r = document.getElementById('debug-cheer-reason').value; showCheerModal({ fromName: s, reason: r }, true);">Cheer!</button>
+      </div>
+    </div>
+  </div>
 
 
 
