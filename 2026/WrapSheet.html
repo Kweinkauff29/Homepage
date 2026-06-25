@@ -4478,7 +4478,7 @@
         <!-- Left: Preview -->
         <div class="bird-preview-col">
           <div style="width:180px; height:180px;">
-            <svg id="bird-editor-preview" viewBox="0 0 200 200" style="width:100%; height:100%; overflow:visible;">
+            <svg id="bird-editor-preview" viewBox="0 0 594 743" style="width:100%; height:100%; overflow:visible;">
               <!-- JS will copy bird SVG here -->
             </svg>
           </div>
@@ -5147,7 +5147,7 @@
                 <div id="bird-name-display"
                   style="position:absolute; top:-20px; width:100%; text-align:center; font-size:12px; font-weight:700; color:var(--ink-soft); text-shadow:0 1px 2px rgba(255,255,255,0.8);">
                 </div>
-                <svg id="finch-svg" viewBox="0 0 200 200" style="width:100%; height:100%; overflow:visible;">
+                <svg id="finch-svg" viewBox="0 0 594 743" style="width:100%; height:100%; overflow:visible;">
                   <!-- Bird Logic will inject SVG here -->
                 </svg>
                 <div id="finch-hearts"
@@ -6382,68 +6382,86 @@
       const svgContainer = document.getElementById("finch-svg");
       if (!svgContainer) return;
 
-      // Render Bird SVG (Refined "Round Blob" Finch Style)
-      // Reference Colors: Pink Body (#f9a8d4), Yellow Cap/Wings (#fde047), Blue Tummy (#60a5fa)
+      // Update viewBox for new bird coordinates
+      svgContainer.setAttribute("viewBox", "0 0 594 743");
+
       svgContainer.innerHTML = `
-        <g id="bird-whole" transform="translate(100, 105) scale(1.35)">
+        <defs>
+          <clipPath id="headClip"><ellipse cx="297" cy="225" rx="184" ry="190"/></clipPath>
+        </defs>
+        <g id="bird-whole">
            <g class="bird-anim-wrapper">
-             <!-- Shadow/ground -->
-             <ellipse cx="0" cy="68" rx="32" ry="5" fill="rgba(0,0,0,0.08)" />
+              <ellipse cx="297" cy="691" rx="198" ry="23" fill="rgba(0,0,0,0.14)" />
 
-             <!-- Feet (Orange, wide and flat) -->
-             <path class="bird-foot-l" d="M -14 58 L -30 65 L -36 60 L -28 56 L -20 52 L -14 58 Z" fill="#f97316" stroke="#ea580c" stroke-width="1.5" stroke-linejoin="round" />
-             <path class="bird-foot-r" d="M 14 58 L 30 65 L 36 60 L 28 56 L 20 52 L 14 58 Z" fill="#f97316" stroke="#ea580c" stroke-width="1.5" stroke-linejoin="round" />
+              <!-- Legs -->
+              <rect class="bird-foot-l" fill="var(--bird-feet)" x="231" y="570" width="18" height="74" rx="9" />
+              <rect class="bird-foot-r" fill="var(--bird-feet)" x="345" y="570" width="18" height="74" rx="9" />
+              <path class="bird-foot-l" fill="var(--bird-feet)" d="M186 640c13-14 30-22 52-22 20 0 36 6 48 19 7 7 4 16-7 16h-30l-22 24c-8 8-20 1-20-8v-16h-18c-10 0-14-8-3-13z" />
+              <path class="bird-foot-r" fill="var(--bird-feet)" d="M408 640c-13-14-30-22-52-22-20 0-36 6-48 19-7 7-4 16 7 16h30l22 24c8 8 20 1 20-8v-16h18c10 0 14-8 3-13z" />
 
-             <!-- Body (Very round egg/pear shape) -->
-             <path class="bird-body" d="M 0 -55 C -35 -55 -55 -30 -55 0 C -55 35 -45 60 0 60 C 45 60 55 35 55 0 C 55 -30 35 -55 0 -55 Z" fill="#9ca3af" />
+              <!-- Body -->
+              <ellipse class="bird-body" fill="var(--bird-body)" cx="297" cy="443" rx="190" ry="190" />
+              <path fill="var(--bird-body-shadow)" opacity="0.42" d="M118 483c35 80 100 124 179 124s144-44 179-124c-44 48-104 75-179 75s-135-27-179-75z" />
 
-             <!-- Head Cap (Black hood wrapping from top down to mid-body on sides) -->
-             <path class="bird-head" d="M -55 0 C -55 -30 -35 -55 0 -55 C 35 -55 55 -30 55 0 C 45 5 25 10 0 10 C -25 10 -45 5 -55 0 Z" fill="#1f2937" />
-             <!-- Tuft/crest feathers on top -->
-             <path d="M -3 -55 Q -6 -68 -1 -72 Q 3 -74 5 -66 Q 2 -60 0 -55" fill="#1f2937" />
-             <path d="M 1 -56 Q 3 -65 7 -68 Q 10 -66 6 -58" fill="#1f2937" />
-             <path d="M -2 -54 Q -7 -62 -4 -66 Q -1 -64 0 -56" fill="#1f2937" />
+              <!-- Wings -->
+              <path class="bird-wing-l" fill="var(--bird-wing)" d="M124 336c-41 24-65 74-62 126 4 45 23 81 53 100 37-35 53-94 45-151-4-31-15-56-36-75z" />
+              <path class="bird-wing-r" fill="var(--bird-wing)" d="M470 336c41 24 65 74 62 126-4 45-23 81-53 100-37-35-53-94-45-151 4-31 15-56 36-75z" />
 
-             <!-- White face patch (large round area in center of head) -->
-             <ellipse cx="0" cy="-12" rx="32" ry="28" fill="#ffffff" />
+              <!-- Head -->
+              <ellipse class="bird-head" fill="var(--bird-head)" cx="297" cy="225" rx="184" ry="190" />
 
-             <!-- Tummy (Large white belly) -->
-             <ellipse class="bird-tummy" cx="0" cy="32" rx="34" ry="28" fill="#ffffff" />
+              <!-- Top feathers/tuft -->
+              <path class="bird-head" fill="var(--bird-head)" d="M286 60c-10-20-4-36 11-36 15 0 23 13 22 31 9-19 25-30 39-23 14 7 12 27-6 49 23-12 44-11 53 1 10 13 2 29-22 37-18 6-38 5-61-4-9 5-17 8-25 8s-16-3-25-8c-23 9-43 10-61 4-24-8-32-24-22-37 9-12 30-13 53-1-18-22-20-42-6-49 14-7 30 4 39 23-1-18 7-31 22-31 15 0 21 16 11 36z" />
 
-             <!-- Wings (Tiny flippers tucked at sides) -->
-             <path class="bird-wing-l" d="M -50 5 C -58 12 -56 28 -50 32 C -48 28 -52 14 -50 5 Z" fill="#9ca3af" stroke="#6b7280" stroke-width="1" />
-             <path class="bird-wing-r" d="M 50 5 C 58 12 56 28 50 32 C 48 28 52 14 50 5 Z" fill="#9ca3af" stroke="#6b7280" stroke-width="1" />
+              <g clip-path="url(#headClip)">
+                <!-- Face lobes -->
+                <ellipse class="bird-tummy" fill="var(--bird-face)" cx="234" cy="234" rx="101" ry="131" />
+                <ellipse class="bird-tummy" fill="var(--bird-face)" cx="360" cy="234" rx="101" ry="131" />
+                <path class="bird-tummy" fill="var(--bird-face)" d="M158 256c10 98 65 158 139 158s129-60 139-158c-34 33-81 49-139 49s-105-16-139-49z" />
 
-             <!-- Face -->
-             <g id="bird-face" transform="translate(0, -15)">
-               <!-- Cheeks (Large, rosy pink) -->
-               <circle cx="-26" cy="10" r="11" fill="#f9a8d4" opacity="0.65" />
-               <circle cx="26" cy="10" r="11" fill="#f9a8d4" opacity="0.65" />
+                <!-- Dark side framing -->
+                <path class="bird-head" fill="var(--bird-head)" d="M113 243c0-93 51-165 136-189-45 42-67 99-67 175v30h-69v-16z" />
+                <path class="bird-head" fill="var(--bird-head)" d="M481 243c0-93-51-165-136-189 45 42 67 99 67 175v30h69v-16z" />
+                <path class="bird-head" fill="var(--bird-head)" d="M187 364c30 28 67 43 110 43s80-15 110-43c-31 12-67 18-110 18s-79-6-110-18z" />
 
-               <!-- Beak (Orange, small diamond) -->
-               <path class="bird-beak" d="M -6 6 L 0 14 L 6 6 L 0 2 Z" fill="#f97316" stroke="#ea580c" stroke-width="1.2" stroke-linejoin="round" />
+                <!-- Center arch -->
+                <path class="bird-head" fill="var(--bird-head)" d="M292 40c2 37-2 71-11 98-7 21-18 40-24 57-5 13-7 27-7 41 0 13 4 26 10 38 10-13 21-19 37-19s27 6 37 19c6-12 10-25 10-38 0-14-2-28-7-41-6-17-17-36-24-57-9-27-13-61-11-98h-10z" />
+                <path class="bird-head" fill="var(--bird-head)" d="M297 154c24 0 43 13 49 37 5 21-4 39-19 51-11 8-19 18-24 29-5-11-13-21-24-29-15-12-24-30-19-51 6-24 25-37 49-37h-12z" />
+              </g>
 
-               <!-- Eyes (Large, round, with highlights) -->
-               <g id="eyes-open">
-                 <circle cx="-14" cy="-4" r="8" fill="#1f2937" />
-                 <circle cx="14" cy="-4" r="8" fill="#1f2937" />
-                 <circle cx="-11" cy="-7" r="3" fill="#fff" />
-                 <circle cx="17" cy="-7" r="3" fill="#fff" />
-               </g>
+              <!-- Cheeks -->
+              <circle fill="#f6a7bc" cx="204" cy="281" r="31" />
+              <circle fill="#f6a7bc" cx="390" cy="281" r="31" />
 
-               <!-- Eyes Closed -->
-               <g id="eyes-closed" style="display:none">
-                 <path d="M -20 0 Q -14 6 -8 0" fill="none" stroke="#1f2937" stroke-width="3" stroke-linecap="round" />
-                 <path d="M 8 0 Q 14 6 20 0" fill="none" stroke="#1f2937" stroke-width="3" stroke-linecap="round" />
-               </g>
-               <!-- Eyes Happy -->
-               <g id="eyes-happy" style="display:none">
-                  <path d="M -20 0 Q -14 -8 -8 0" fill="none" stroke="#1f2937" stroke-width="3" stroke-linecap="round" />
-                  <path d="M 8 0 Q 14 -8 20 0" fill="none" stroke="#1f2937" stroke-width="3" stroke-linecap="round" />
-               </g>
-             </g>
+              <!-- Face / Eyes / Beak Group -->
+              <g id="bird-face">
+                <!-- Eyes Open -->
+                <g id="eyes-open">
+                  <circle fill="var(--bird-eye)" cx="239" cy="220" r="18" />
+                  <circle fill="var(--bird-eye)" cx="355" cy="220" r="18" />
+                  <circle fill="#ffffff" cx="244" cy="214" r="5" />
+                  <circle fill="#ffffff" cx="360" cy="214" r="5" />
+                </g>
+
+                <!-- Eyes Closed -->
+                <g id="eyes-closed" style="display:none">
+                  <path d="M 221 220 Q 239 232 257 220" fill="none" stroke="#111111" stroke-width="6" stroke-linecap="round" />
+                  <path d="M 337 220 Q 355 232 373 220" fill="none" stroke="#111111" stroke-width="6" stroke-linecap="round" />
+                </g>
+
+                <!-- Eyes Happy -->
+                <g id="eyes-happy" style="display:none">
+                  <path d="M 221 220 Q 239 208 257 220" fill="none" stroke="#111111" stroke-width="6" stroke-linecap="round" />
+                  <path d="M 337 220 Q 355 208 373 220" fill="none" stroke="#111111" stroke-width="6" stroke-linecap="round" />
+                </g>
+
+                <!-- Beak -->
+                <path class="bird-beak" fill="var(--bird-beak)" d="M297 236c-27 0-49 12-49 29 12 13 30 21 49 21s37-8 49-21c0-17-22-29-49-29z" />
+                <path fill="#dc7a00" d="M248 263c15 13 31 18 49 18s34-5 49-18c-12 20-29 31-49 31s-37-11-49-31z" />
+                <path class="bird-beak" fill="var(--bird-beak)" d="M266 249c9-7 20-11 31-11s22 4 31 11c-9 7-20 10-31 10s-22-3-31-10z" />
+              </g>
            </g>
-         </g>
+        </g>
       `;
 
       // Start interactions
@@ -7042,14 +7060,20 @@
       // Pre-fill name
       if (nameInput) nameInput.value = birdName || "";
 
+      // Set viewBox for preview
+      previewSvg.setAttribute("viewBox", "0 0 594 743");
+
       // 1. Clone current bird to preview
       const mainBirdGroup = document.getElementById("bird-whole");
       if (mainBirdGroup) {
-        previewSvg.innerHTML = ""; // Clear
+        previewSvg.innerHTML = `
+          <defs>
+            <clipPath id="headClip"><ellipse cx="297" cy="225" rx="184" ry="190"/></clipPath>
+          </defs>
+        `; // Clear and add defs
         const clone = mainBirdGroup.cloneNode(true);
         clone.id = "bird-preview-group";
-        // Scale up significantly (2.2) to fill the modal box
-        clone.setAttribute("transform", "translate(100, 110) scale(2.2)");
+        clone.removeAttribute("transform"); // Remove legacy scale transform to fill box naturally
         previewSvg.appendChild(clone);
       }
 
@@ -7096,24 +7120,19 @@
         previewColors[part] = value;
         if (currentBirdColors) currentBirdColors[part] = value;
 
-        // Force direct update if applyBirdColors is flaky
         const previewGroup = document.getElementById("bird-preview-group");
         if (previewGroup) {
-          const el = previewGroup.querySelector(`.bird-${part}`);
-          if (el) el.setAttribute("fill", value);
-          else if (label) label.textContent += " (no element)";
-
-          // Still try global apply (handles secondary parts like wings-r)
-          // applyBirdColors(previewColors, "bird-preview-group");
-          // actually let's replicate applyBirdColors for wings/feet which have pairs
           if (part === 'wings') {
             previewGroup.querySelectorAll('.bird-wing-l, .bird-wing-r').forEach(e => e.setAttribute('fill', value));
           } else if (part === 'feet') {
             previewGroup.querySelectorAll('.bird-foot-l, .bird-foot-r').forEach(e => e.setAttribute('fill', value));
           } else {
-            // single elements like head, body, tummy, beak
-            const e = previewGroup.querySelector(`.bird-${part}`);
-            if (e) e.setAttribute('fill', value);
+            // Apply fill to all elements with matching part class
+            const els = previewGroup.querySelectorAll(`.bird-${part}`);
+            els.forEach(e => e.setAttribute('fill', value));
+            if (els.length === 0 && label) {
+              label.textContent += " (no element found)";
+            }
           }
         } else {
           if (label) label.textContent += " (no group)";
