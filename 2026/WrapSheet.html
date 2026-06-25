@@ -3195,7 +3195,7 @@
       display: flex;
       flex-direction: column;
       gap: 12px;
-      max-height: 400px;
+      max-height: 500px;
       overflow-y: auto;
     }
 
@@ -3215,7 +3215,8 @@
     .color-picker-row {
       display: flex;
       align-items: center;
-      gap: 10px;
+      gap: 8px;
+      flex-wrap: wrap;
     }
 
     .color-input-styled {
@@ -3229,6 +3230,7 @@
       cursor: pointer;
       padding: 0;
       background: none;
+      flex-shrink: 0;
     }
 
     .color-input-styled::-webkit-color-swatch-wrapper {
@@ -3238,6 +3240,34 @@
     .color-input-styled::-webkit-color-swatch {
       border: 2px solid var(--panel-border);
       border-radius: 50%;
+    }
+
+    .color-swatches {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 4px;
+      max-width: 180px;
+    }
+
+    .color-swatch {
+      width: 22px;
+      height: 22px;
+      border-radius: 50%;
+      border: 2px solid transparent;
+      cursor: pointer;
+      transition: transform 0.15s, border-color 0.15s;
+      padding: 0;
+      box-shadow: inset 0 0 0 1px rgba(0,0,0,0.1);
+    }
+
+    .color-swatch:hover {
+      transform: scale(1.2);
+      border-color: var(--accent);
+    }
+
+    .color-swatch.active {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 2px var(--accent), inset 0 0 0 1px rgba(0,0,0,0.1);
     }
 
     /* Daily Energy Meter */
@@ -4469,7 +4499,7 @@
 
   <!-- Bird Editor Modal -->
   <div class="overlay" id="bird-editor-modal" style="display:none;">
-    <div class="modal-panel" style="width: 600px; max-width: 90vw;">
+    <div class="modal-panel" style="width: 700px; max-width: 92vw;">
       <div class="modal-header">
         <div class="modal-title">Customize Your Bird</div>
         <button class="modal-close" id="close-bird-editor">×</button>
@@ -6430,15 +6460,15 @@
               </g>
 
               <!-- Cheeks -->
-              <circle fill="#f6a7bc" cx="204" cy="281" r="31" />
-              <circle fill="#f6a7bc" cx="390" cy="281" r="31" />
+              <circle class="bird-cheek" fill="#f6a7bc" cx="204" cy="281" r="31" />
+              <circle class="bird-cheek" fill="#f6a7bc" cx="390" cy="281" r="31" />
 
               <!-- Face / Eyes / Beak Group -->
               <g id="bird-face">
                 <!-- Eyes Open -->
                 <g id="eyes-open">
-                  <circle fill="var(--bird-eye)" cx="239" cy="220" r="18" />
-                  <circle fill="var(--bird-eye)" cx="355" cy="220" r="18" />
+                  <circle class="bird-eye" fill="var(--bird-eye)" cx="239" cy="220" r="18" />
+                  <circle class="bird-eye" fill="var(--bird-eye)" cx="355" cy="220" r="18" />
                   <circle fill="#ffffff" cx="244" cy="214" r="5" />
                   <circle fill="#ffffff" cx="360" cy="214" r="5" />
                 </g>
@@ -6988,7 +7018,9 @@
       tummy: "#ffffff",
       wings: "#9ca3af",
       beak: "#f97316",
-      feet: "#f97316"
+      feet: "#f97316",
+      eye: "#111111",
+      cheek: "#f6a7bc"
     };
 
     let currentBirdColors = { ...DEFAULT_BIRD_COLORS };
@@ -7047,6 +7079,8 @@
       setFill("bird-beak", colors.beak);
       setFill("bird-foot-l", colors.feet);
       setFill("bird-foot-r", colors.feet);
+      if (colors.eye) setFill("bird-eye", colors.eye);
+      if (colors.cheek) setFill("bird-cheek", colors.cheek);
     }
 
     function openBirdEditor() {
@@ -7077,27 +7111,47 @@
         previewSvg.appendChild(clone);
       }
 
-      // 2. Render Color Controls
+      // 2. Render Color Controls with preset swatches
+      const presets = {
+        head: ['#1f2937','#36373b','#111827','#1e3a5f','#3b1f0b','#4a1942','#0f4c3a','#7c2d12','#991b1b','#1e40af','#ffffff','#d4d4d8'],
+        body: ['#9ca3af','#d1d5db','#e5e7eb','#b9b9b7','#93c5fd','#fda4af','#a78bfa','#fbbf24','#6ee7b7','#f9fafb','#4b5563','#fde68a'],
+        tummy: ['#ffffff','#f9fafb','#fef3c7','#fce7f3','#e0f2fe','#d1fae5','#ede9fe','#f5f5f4','#fecaca','#d4d4d8','#fff7ed','#ecfdf5'],
+        wings: ['#9ca3af','#6b7280','#4b5563','#979795','#64748b','#78716c','#a3a3a3','#737373','#93c5fd','#c084fc','#f9a8d4','#fbbf24'],
+        beak: ['#f97316','#eab308','#f59e0b','#dc2626','#fb923c','#fbbf24','#facc15','#ef4444','#d97706','#ca8a04','#ea580c','#e11d48'],
+        feet: ['#f97316','#ea580c','#d97706','#f59e0b','#dc2626','#fb923c','#fbbf24','#facc15','#ef4444','#ca8a04','#9a3412','#e11d48'],
+        eye: ['#111111','#1e3a5f','#1e40af','#166534','#7c2d12','#581c87','#0f172a','#065f46','#4338ca','#9f1239'],
+        cheek: ['#f6a7bc','#fda4af','#fb7185','#f472b6','#e879f9','#fbbf24','#fdba74','#fca5a5','#c084fc','#86efac']
+      };
+
       const parts = [
         { id: "head", label: "Head Cap" },
         { id: "body", label: "Body" },
         { id: "tummy", label: "Tummy" },
         { id: "wings", label: "Wings" },
         { id: "beak", label: "Beak" },
-        { id: "feet", label: "Feet" }
+        { id: "feet", label: "Feet" },
+        { id: "eye", label: "Eyes" },
+        { id: "cheek", label: "Cheeks" }
       ];
 
-      controls.innerHTML = parts.map(part => `
+      controls.innerHTML = parts.map(part => {
+        const currentVal = currentBirdColors[part.id] || (part.id === 'eye' ? '#111111' : part.id === 'cheek' ? '#f6a7bc' : '#999999');
+        const swatchColors = presets[part.id] || [];
+        return `
          <div class="color-control-group">
             <label>${part.label}</label>
             <div class="color-picker-row">
                <input type="color" class="color-input-styled" 
                       data-part="${part.id}" 
-                      value="${currentBirdColors[part.id]}"
+                      value="${currentVal}"
                       oninput="handleColorChange('${part.id}', this.value)">
+               <div class="color-swatches">
+                 ${swatchColors.map(c => `<button class="color-swatch${c === currentVal ? ' active' : ''}" style="background:${c}" data-color="${c}" onclick="handleColorChange('${part.id}', '${c}'); this.closest('.color-picker-row').querySelector('input').value='${c}'; this.closest('.color-swatches').querySelectorAll('.color-swatch').forEach(s=>s.classList.remove('active')); this.classList.add('active');"></button>`).join('')}
+               </div>
             </div>
          </div>
-       `).join("");
+        `;
+      }).join("");
 
       modal.style.display = "flex";
       applyBirdColors(currentBirdColors, "bird-preview-group");
@@ -14545,19 +14599,21 @@
 
         console.log(`Applying item: ${category} (id: ${itemId})`);
 
+        // Item svg_data is centered around (0,0) with coords from -25 to 25
+        // Bird head center: (297, 225), body center: (297, 443)
         switch (catLower) {
           case "hat":
-            transform = "translate(100, 10) scale(3.0)";
+            transform = "translate(297, 40) scale(4.5)";
             break;
           case "glasses":
-            transform = "translate(110, 70) scale(2.8)";
+            transform = "translate(297, 220) scale(4.0)";
             break;
           case "scarf":
-            transform = "translate(100, 120) scale(2.8)";
+            transform = "translate(297, 350) scale(4.0)";
             break;
           case "pet":
           case "companion":
-            transform = "translate(300, 200) scale(3.8)";
+            transform = "translate(500, 560) scale(4.5)";
             // Don't add class here to avoid override, add to inner wrapper
             break;
           default:
