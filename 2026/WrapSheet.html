@@ -3026,8 +3026,8 @@
 
     .bird-wrapper {
       position: relative;
-      width: 110px;
-      height: 120px;
+      width: 170px;
+      height: 180px;
       cursor: grab;
       flex-shrink: 0;
       /* background: rgba(0,0,0,0.02); Debug area */
@@ -5140,12 +5140,12 @@
               style="display:flex; justify-content:space-between; align-items:flex-start; width:100%; margin-bottom:15px;">
               <!-- Bird Container -->
               <div id="finch-container" class="bird-wrapper" title="Pet me!"
-                style="position:relative; width:100px; height:100px; flex-shrink:0; overflow:visible;">
+                style="position:relative; width:160px; height:160px; flex-shrink:0; overflow:visible;">
                 <!-- Speech Bubble - Finch Style (positioned to right) -->
                 <div id="bird-speech-bubble" class="speech-bubble hidden"></div>
                 <!-- Bird Name Display -->
                 <div id="bird-name-display"
-                  style="position:absolute; top:-20px; width:100%; text-align:center; font-size:12px; font-weight:700; color:var(--ink-soft); text-shadow:0 1px 2px rgba(255,255,255,0.8);">
+                  style="position:absolute; top:-22px; width:100%; text-align:center; font-size:13px; font-weight:700; color:var(--ink-soft); text-shadow:0 1px 2px rgba(255,255,255,0.8);">
                 </div>
                 <svg id="finch-svg" viewBox="0 0 594 743" style="width:100%; height:100%; overflow:visible;">
                   <!-- Bird Logic will inject SVG here -->
@@ -14547,17 +14547,17 @@
 
         switch (catLower) {
           case "hat":
-            transform = "translate(100, 25) scale(2.6)";
+            transform = "translate(100, 10) scale(3.0)";
             break;
           case "glasses":
-            transform = "translate(100, 65) scale(2.2)";
+            transform = "translate(110, 70) scale(2.8)";
             break;
           case "scarf":
-            transform = "translate(100, 100) scale(2.2)";
+            transform = "translate(100, 120) scale(2.8)";
             break;
           case "pet":
           case "companion":
-            transform = "translate(225, 140) scale(3.0)";
+            transform = "translate(300, 200) scale(3.8)";
             // Don't add class here to avoid override, add to inner wrapper
             break;
           default:
