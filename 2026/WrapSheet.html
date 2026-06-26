@@ -15719,7 +15719,7 @@
     function calculateTeamStats() {
       const allTasks = state.dailyTasks || [];
       const now = new Date();
-      const todayStr = now.toISOString().split('T')[0];
+      const todayStr = dateKey(now.getFullYear(), now.getMonth(), now.getDate());
 
       // Current Week Range (visible)
       let startKey, endKey;
@@ -15744,8 +15744,8 @@
         startKey = visStart;
         endKey = visEnd;
       }
-      const weekStartObj = new Date(startKey);
-      const weekEndObj = new Date(endKey);
+      const weekStartObj = parseDateKey(startKey);
+      const weekEndObj = parseDateKey(endKey);
 
       // Month Range (visible)
       const base = state.currentMonthDate;
@@ -15817,11 +15817,11 @@
       if (state.metricsRange === 'day') {
         days.push(todayStr); // Just today
       } else if (state.metricsRange === 'week' || state.metricsRange === 'month') {
-        let loopCurr = new Date(state.metricsRange === 'month' ? mStart : startKey);
-        const loopEnd = new Date(state.metricsRange === 'month' ? mEnd : endKey);
+        let loopCurr = state.metricsRange === 'month' ? new Date(mStart) : parseDateKey(startKey);
+        const loopEnd = state.metricsRange === 'month' ? new Date(mEnd) : parseDateKey(endKey);
         let cap = 0;
         while (loopCurr <= loopEnd && cap < 40) {
-          const k = loopCurr.toISOString().split('T')[0];
+          const k = formatDateKeyFromDate(loopCurr);
           days.push(k);
           loopCurr.setDate(loopCurr.getDate() + 1);
           cap++;
