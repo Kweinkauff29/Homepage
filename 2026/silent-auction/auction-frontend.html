@@ -1,554 +1,578 @@
 <!-- SILENT AUCTION FRONTEND -->
 <!-- Add this code to a Custom HTML block in WordPress -->
 <div id="ccor-silent-auction-wrapper">
-<style>
-  #ccor-silent-auction-wrapper {
-    --auction-primary: #1B449D;
-    --auction-secondary: #64BAB0;
-    --auction-bg: #f9f9f9;
-    --auction-text: #333;
-    font-family: 'Inter', sans-serif;
-    color: var(--auction-text);
-  }
+  <style>
+    #ccor-silent-auction-wrapper {
+      --auction-primary: #1B449D;
+      --auction-secondary: #64BAB0;
+      --auction-bg: #f9f9f9;
+      --auction-text: #333;
+      font-family: 'Inter', sans-serif;
+      color: var(--auction-text);
+    }
 
-  #ccor-silent-auction-wrapper * {
-    box-sizing: border-box;
-  }
+    #ccor-silent-auction-wrapper * {
+      box-sizing: border-box;
+    }
 
-  #ccor-silent-auction-wrapper .auction-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 20px;
-    padding: 20px;
-    background-color: var(--auction-primary);
-    background-image: url('https://coconutcoastrealtors.org/wp-content/uploads/2025/12/Untitled-design-10-scaled-1.png');
-    background-size: cover; 
-    background-position: center; 
-    border-radius: 8px;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-  }
-
-  #ccor-silent-auction-wrapper .auction-header-img {
-    max-height: 80px; 
-    object-fit: contain; 
-    filter: brightness(0) invert(1);
-    margin: 0 !important;
-  }
-
-  #ccor-silent-auction-wrapper .auction-header-right {
-    text-align: right;
-  }
-
-  #ccor-silent-auction-wrapper .auction-header h2 {
-    margin: 0 0 10px 0 !important; 
-    color: white !important; 
-    text-shadow: 1px 1px 3px rgba(0,0,0,0.5);
-    font-size: 28px !important;
-    font-weight: bold !important;
-    line-height: 1.2 !important;
-  }
-
-  #ccor-silent-auction-wrapper .auction-timer {
-    font-size: 16px;
-    font-weight: 600;
-    color: white;
-    text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
-    display: flex;
-    align-items: center;
-    justify-content: flex-end;
-    gap: 10px;
-  }
-
-  #ccor-silent-auction-wrapper .timer-bar {
-    width: 100px;
-    height: 8px;
-    background: rgba(255,255,255,0.3);
-    border-radius: 4px;
-    overflow: hidden;
-  }
-
-  #ccor-silent-auction-wrapper .timer-fill {
-    height: 100%;
-    background: white;
-    transition: width 1s linear;
-  }
-
-  #ccor-silent-auction-wrapper .viewing-info-banner {
-    background: #fff;
-    border-left: 4px solid var(--auction-primary);
-    padding: 15px 20px;
-    margin-bottom: 30px;
-    border-radius: 4px 12px 12px 4px;
-    box-shadow: 0 4px 15px rgba(0,0,0,0.04);
-    display: flex;
-    align-items: center;
-    gap: 15px;
-    border: 1px solid #eaeaea;
-    border-left-width: 4px;
-  }
-
-  #ccor-silent-auction-wrapper .viewing-info-icon {
-    font-size: 24px;
-  }
-
-  #ccor-silent-auction-wrapper .viewing-info-text {
-    font-size: 14px;
-    line-height: 1.6;
-    color: #555;
-  }
-
-  #ccor-silent-auction-wrapper .viewing-link {
-    color: var(--auction-primary);
-    text-decoration: underline;
-    font-weight: 600;
-  }
-
-  #ccor-silent-auction-wrapper .viewing-link:hover {
-    color: #122e6b;
-  }
-
-  #ccor-silent-auction-wrapper .viewing-hours {
-    display: block;
-    margin-top: 4px;
-    font-size: 13px;
-    color: #888;
-    font-weight: 500;
-  }
-
-  #ccor-silent-auction-wrapper .auction-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-    gap: 30px;
-  }
-
-  #ccor-silent-auction-wrapper .auction-card {
-    background: #fff !important;
-    border-radius: 12px;
-    overflow: hidden;
-    box-shadow: 0 4px 15px rgba(0,0,0,0.08) !important;
-    transition: transform 0.2s ease;
-    display: flex;
-    flex-direction: column;
-    border: 1px solid #eaeaea;
-  }
-
-  #ccor-silent-auction-wrapper .auction-card:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 8px 25px rgba(0,0,0,0.12) !important;
-  }
-
-  #ccor-silent-auction-wrapper .auction-img-wrapper {
-    position: relative;
-    width: 100%;
-    padding-top: 75%; /* 4:3 Aspect Ratio */
-    background: #f0f0f0;
-    overflow: hidden;
-    cursor: pointer;
-  }
-
-  #ccor-silent-auction-wrapper .auction-img-wrapper::after {
-    content: '🔍 View Full Size';
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    background: rgba(0,0,0,0.6);
-    color: white;
-    text-align: center;
-    padding: 8px;
-    font-size: 13px;
-    opacity: 0;
-    transition: opacity 0.2s;
-  }
-
-  #ccor-silent-auction-wrapper .auction-img-wrapper:hover::after {
-    opacity: 1;
-  }
-
-  #ccor-silent-auction-wrapper .auction-img {
-    position: absolute !important;
-    top: 0 !important; 
-    left: 0 !important; 
-    width: 100% !important;
-    height: 100% !important;
-    object-fit: cover !important;
-    margin: 0 !important;
-    max-width: none !important;
-    max-height: none !important;
-    border-radius: 0 !important;
-  }
-
-  #ccor-silent-auction-wrapper .auction-content {
-    padding: 20px !important;
-    display: flex;
-    flex-direction: column;
-    flex-grow: 1;
-    background: #fff !important;
-  }
-
-  #ccor-silent-auction-wrapper .auction-title {
-    font-size: 20px !important;
-    font-weight: 700 !important;
-    margin: 0 0 5px 0 !important;
-    color: var(--auction-primary) !important;
-    line-height: 1.3 !important;
-  }
-
-  #ccor-silent-auction-wrapper .auction-dims {
-    font-size: 13px !important;
-    color: #777 !important;
-    margin: 0 0 15px 0 !important;
-    line-height: 1.2 !important;
-  }
-
-  #ccor-silent-auction-wrapper .auction-desc {
-    font-size: 14px !important;
-    color: #555 !important;
-    line-height: 1.5 !important;
-    margin: 0 0 20px 0 !important;
-    flex-grow: 1;
-  }
-
-  #ccor-silent-auction-wrapper .auction-bid-info {
-    background: var(--auction-bg) !important;
-    padding: 15px !important;
-    border-radius: 8px !important;
-    text-align: center !important;
-    margin: 0 0 15px 0 !important;
-    border: 1px solid #eee;
-  }
-
-  #ccor-silent-auction-wrapper .current-bid {
-    font-size: 28px !important;
-    font-weight: 800 !important;
-    color: var(--auction-primary) !important;
-    margin: 0 !important;
-    line-height: 1 !important;
-  }
-
-  #ccor-silent-auction-wrapper .highest-bidder {
-    font-size: 13px !important;
-    color: #666 !important;
-    margin: 5px 0 0 0 !important;
-    line-height: 1.2 !important;
-  }
-
-  #ccor-silent-auction-wrapper .btn-bid {
-    background: var(--auction-primary) !important;
-    color: white !important;
-    border: none !important;
-    padding: 12px !important;
-    font-size: 16px !important;
-    font-weight: 600 !important;
-    border-radius: 6px !important;
-    cursor: pointer !important;
-    width: 100% !important;
-    transition: background 0.2s !important;
-    text-align: center !important;
-    display: block !important;
-    line-height: normal !important;
-    text-decoration: none !important;
-  }
-
-  #ccor-silent-auction-wrapper .btn-bid:hover {
-    background: #122e6b !important;
-  }
-
-  /* MODAL STYLES */
-  #ccor-silent-auction-wrapper .modal-overlay {
-    position: fixed;
-    top: 0; left: 0; right: 0; bottom: 0;
-    background: rgba(0,0,0,0.8);
-    display: none;
-    justify-content: center;
-    align-items: center;
-    z-index: 999999;
-  }
-
-  #ccor-silent-auction-wrapper .modal-overlay.active {
-    display: flex;
-  }
-
-  #ccor-silent-auction-wrapper .bid-modal {
-    background: white !important;
-    padding: 30px !important;
-    border-radius: 12px !important;
-    width: 90%;
-    max-width: 500px;
-    box-shadow: 0 20px 40px rgba(0,0,0,0.3) !important;
-    position: relative;
-    max-height: 90vh;
-    overflow-y: auto;
-  }
-
-  #ccor-silent-auction-wrapper .image-modal {
-    background: white !important;
-    padding: 0 !important;
-    border-radius: 12px !important;
-    width: 95%;
-    max-width: 900px;
-    box-shadow: 0 20px 40px rgba(0,0,0,0.5) !important;
-    position: relative;
-    max-height: 95vh;
-    display: flex;
-    flex-direction: column;
-    overflow: hidden;
-  }
-
-  #ccor-silent-auction-wrapper .image-modal img {
-    width: 100%;
-    height: 60vh;
-    object-fit: contain;
-    background: #111;
-    display: block;
-  }
-
-  #ccor-silent-auction-wrapper .image-modal-info {
-    padding: 20px !important;
-    overflow-y: auto;
-    background: white;
-  }
-
-  #ccor-silent-auction-wrapper .modal-close {
-    position: absolute;
-    top: 15px;
-    right: 15px;
-    background: rgba(0,0,0,0.5) !important;
-    border: none !important;
-    font-size: 24px !important;
-    cursor: pointer !important;
-    color: white !important;
-    line-height: 1 !important;
-    padding: 0 !important;
-    width: 36px;
-    height: 36px;
-    border-radius: 50% !important;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    z-index: 10;
-  }
-  
-  #ccor-silent-auction-wrapper .bid-modal .modal-close {
-    background: none !important;
-    color: #999 !important;
-  }
-
-  #ccor-silent-auction-wrapper .modal-title {
-    margin: 0 0 5px 0 !important;
-    color: var(--auction-primary) !important;
-    font-size: 24px !important;
-    font-weight: bold !important;
-  }
-
-  #ccor-silent-auction-wrapper .form-group {
-    margin-bottom: 15px !important;
-  }
-
-  #ccor-silent-auction-wrapper .form-group label {
-    display: block !important;
-    margin-bottom: 5px !important;
-    font-weight: 600 !important;
-    font-size: 14px !important;
-    color: #333 !important;
-  }
-
-  #ccor-silent-auction-wrapper .form-group input {
-    width: 100% !important;
-    padding: 10px !important;
-    border: 1px solid #ccc !important;
-    border-radius: 6px !important;
-    font-size: 16px !important;
-    box-sizing: border-box !important;
-    background: #fff !important;
-    color: #333 !important;
-    margin: 0 !important;
-  }
-
-  #ccor-silent-auction-wrapper .form-row {
-    display: flex;
-    gap: 15px;
-  }
-  #ccor-silent-auction-wrapper .form-row .form-group {
-    flex: 1;
-    margin-bottom: 15px !important;
-  }
-
-  #ccor-silent-auction-wrapper .min-bid-notice {
-    font-size: 13px !important;
-    color: #d9534f !important;
-    margin: 0 0 15px 0 !important;
-  }
-
-  /* Responsive Adjustments */
-  @media (max-width: 768px) {
     #ccor-silent-auction-wrapper .auction-header {
-      flex-direction: column;
-      text-align: center;
-      padding: 15px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+      padding: 20px;
+      background-color: var(--auction-primary);
+      background-image: url('https://coconutcoastrealtors.org/wp-content/uploads/2025/12/Untitled-design-10-scaled-1.png');
+      background-size: cover;
+      background-position: center;
+      border-radius: 8px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
     }
+
     #ccor-silent-auction-wrapper .auction-header-img {
-      margin-bottom: 15px;
+      max-height: 80px;
+      object-fit: contain;
+      filter: brightness(0) invert(1);
+      margin: 0 !important;
     }
+
     #ccor-silent-auction-wrapper .auction-header-right {
-      text-align: center;
+      text-align: right;
     }
+
+    #ccor-silent-auction-wrapper .auction-header h2 {
+      margin: 0 0 10px 0 !important;
+      color: white !important;
+      text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.5);
+      font-size: 28px !important;
+      font-weight: bold !important;
+      line-height: 1.2 !important;
+    }
+
     #ccor-silent-auction-wrapper .auction-timer {
-      justify-content: center;
+      font-size: 16px;
+      font-weight: 600;
+      color: white;
+      text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      gap: 10px;
     }
+
+    #ccor-silent-auction-wrapper .timer-bar {
+      width: 100px;
+      height: 8px;
+      background: rgba(255, 255, 255, 0.3);
+      border-radius: 4px;
+      overflow: hidden;
+    }
+
+    #ccor-silent-auction-wrapper .timer-fill {
+      height: 100%;
+      background: white;
+      transition: width 1s linear;
+    }
+
+    #ccor-silent-auction-wrapper .viewing-info-banner {
+      background: #fff;
+      border-left: 4px solid var(--auction-primary);
+      padding: 15px 20px;
+      margin-bottom: 30px;
+      border-radius: 4px 12px 12px 4px;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.04);
+      display: flex;
+      align-items: center;
+      gap: 15px;
+      border: 1px solid #eaeaea;
+      border-left-width: 4px;
+    }
+
+    #ccor-silent-auction-wrapper .viewing-info-icon {
+      font-size: 24px;
+    }
+
+    #ccor-silent-auction-wrapper .viewing-info-text {
+      font-size: 14px;
+      line-height: 1.6;
+      color: #555;
+    }
+
+    #ccor-silent-auction-wrapper .viewing-link {
+      color: var(--auction-primary);
+      text-decoration: underline;
+      font-weight: 600;
+    }
+
+    #ccor-silent-auction-wrapper .viewing-link:hover {
+      color: #122e6b;
+    }
+
+    #ccor-silent-auction-wrapper .viewing-hours {
+      display: block;
+      margin-top: 4px;
+      font-size: 13px;
+      color: #888;
+      font-weight: 500;
+    }
+
     #ccor-silent-auction-wrapper .auction-grid {
-      grid-template-columns: 1fr;
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 30px;
     }
-    #ccor-silent-auction-wrapper .form-row {
+
+    #ccor-silent-auction-wrapper .auction-card {
+      background: #fff !important;
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08) !important;
+      transition: transform 0.2s ease;
+      display: flex;
       flex-direction: column;
-      gap: 0;
+      border: 1px solid #eaeaea;
     }
+
+    #ccor-silent-auction-wrapper .auction-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.12) !important;
+    }
+
+    #ccor-silent-auction-wrapper .auction-img-wrapper {
+      position: relative;
+      width: 100%;
+      padding-top: 75%;
+      /* 4:3 Aspect Ratio */
+      background: #f0f0f0;
+      overflow: hidden;
+      cursor: pointer;
+    }
+
+    #ccor-silent-auction-wrapper .auction-img-wrapper::after {
+      content: '🔍 View Full Size';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: rgba(0, 0, 0, 0.6);
+      color: white;
+      text-align: center;
+      padding: 8px;
+      font-size: 13px;
+      opacity: 0;
+      transition: opacity 0.2s;
+    }
+
+    #ccor-silent-auction-wrapper .auction-img-wrapper:hover::after {
+      opacity: 1;
+    }
+
+    #ccor-silent-auction-wrapper .auction-img {
+      position: absolute !important;
+      top: 0 !important;
+      left: 0 !important;
+      width: 100% !important;
+      height: 100% !important;
+      object-fit: cover !important;
+      margin: 0 !important;
+      max-width: none !important;
+      max-height: none !important;
+      border-radius: 0 !important;
+    }
+
+    #ccor-silent-auction-wrapper .auction-content {
+      padding: 20px !important;
+      display: flex;
+      flex-direction: column;
+      flex-grow: 1;
+      background: #fff !important;
+    }
+
+    #ccor-silent-auction-wrapper .auction-title {
+      font-size: 20px !important;
+      font-weight: 700 !important;
+      margin: 0 0 5px 0 !important;
+      color: var(--auction-primary) !important;
+      line-height: 1.3 !important;
+    }
+
+    #ccor-silent-auction-wrapper .auction-dims {
+      font-size: 13px !important;
+      color: #777 !important;
+      margin: 0 0 15px 0 !important;
+      line-height: 1.2 !important;
+    }
+
+    #ccor-silent-auction-wrapper .auction-desc {
+      font-size: 14px !important;
+      color: #555 !important;
+      line-height: 1.5 !important;
+      margin: 0 0 20px 0 !important;
+      flex-grow: 1;
+    }
+
+    #ccor-silent-auction-wrapper .auction-bid-info {
+      background: var(--auction-bg) !important;
+      padding: 15px !important;
+      border-radius: 8px !important;
+      text-align: center !important;
+      margin: 0 0 15px 0 !important;
+      border: 1px solid #eee;
+    }
+
+    #ccor-silent-auction-wrapper .current-bid {
+      font-size: 28px !important;
+      font-weight: 800 !important;
+      color: var(--auction-primary) !important;
+      margin: 0 !important;
+      line-height: 1 !important;
+    }
+
+    #ccor-silent-auction-wrapper .highest-bidder {
+      font-size: 13px !important;
+      color: #666 !important;
+      margin: 5px 0 0 0 !important;
+      line-height: 1.2 !important;
+    }
+
+    #ccor-silent-auction-wrapper .btn-bid {
+      background: var(--auction-primary) !important;
+      color: white !important;
+      border: none !important;
+      padding: 12px !important;
+      font-size: 16px !important;
+      font-weight: 600 !important;
+      border-radius: 6px !important;
+      cursor: pointer !important;
+      width: 100% !important;
+      transition: background 0.2s !important;
+      text-align: center !important;
+      display: block !important;
+      line-height: normal !important;
+      text-decoration: none !important;
+    }
+
+    #ccor-silent-auction-wrapper .btn-bid:hover {
+      background: #122e6b !important;
+    }
+
+    /* MODAL STYLES */
+    #ccor-silent-auction-wrapper .modal-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0, 0, 0, 0.8);
+      display: none;
+      justify-content: center;
+      align-items: center;
+      z-index: 999999;
+    }
+
+    #ccor-silent-auction-wrapper .modal-overlay.active {
+      display: flex;
+    }
+
+    #ccor-silent-auction-wrapper .bid-modal {
+      background: white !important;
+      padding: 30px !important;
+      border-radius: 12px !important;
+      width: 90%;
+      max-width: 500px;
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3) !important;
+      position: relative;
+      max-height: 90vh;
+      overflow-y: auto;
+    }
+
+    #ccor-silent-auction-wrapper .image-modal {
+      background: white !important;
+      padding: 0 !important;
+      border-radius: 12px !important;
+      width: 95%;
+      max-width: 900px;
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5) !important;
+      position: relative;
+      max-height: 95vh;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+
     #ccor-silent-auction-wrapper .image-modal img {
-      height: 45vh;
+      width: 100%;
+      height: 60vh;
+      object-fit: contain;
+      background: #111;
+      display: block;
     }
-  }
-</style>
 
-<div class="auction-header">
-  <div style="display: flex; align-items: center; gap: 20px; flex-wrap: wrap;">
-    <img src="https://coconutcoastrealtors.org/wp-content/uploads/2026/04/CCOR-Vert-Logo-no-tag-clr-scaled-e1776958694707.png" class="auction-header-img" alt="CCOR Logo">
-    <div style="text-align: left; background: rgba(255,255,255,0.15); padding: 10px 15px; border-radius: 8px;">
-      <div style="font-size: 12px; color: #fff; font-weight: 600; text-transform: uppercase; margin-bottom: 5px; text-shadow: 1px 1px 2px rgba(0,0,0,0.5);">Proceeds will go to</div>
-      <a href="https://gulfcoasthumanesociety.org/" target="_blank" style="display: flex; align-items: center; gap: 10px; text-decoration: none;">
-        <img src="https://static.wixstatic.com/media/0b6856_922812e3d1084c00b0cffd82c95bf076~mv2.png" alt="Gulf Coast Humane Society" style="height: 35px; background: white; padding: 4px; border-radius: 4px;">
-        <span style="color: white; font-weight: bold; font-size: 14px; text-shadow: 1px 1px 2px rgba(0,0,0,0.5);">Gulf Coast Humane Society</span>
-      </a>
-    </div>
-  </div>
-  <div class="auction-header-right">
-    <h2>Silent Auction</h2>
-    <div class="auction-timer">
-      Updates in: <span id="ccor-sa-time-left">30</span>s
-      <div class="timer-bar"><div class="timer-fill" id="ccor-sa-timer-fill"></div></div>
-    </div>
-  </div>
-</div>
+    #ccor-silent-auction-wrapper .image-modal-info {
+      padding: 20px !important;
+      overflow-y: auto;
+      background: white;
+    }
 
-<div class="viewing-info-banner">
-  <div class="viewing-info-icon">📍</div>
-  <div class="viewing-info-text">
-    <strong>Want to view the art in person?</strong> All auction items are currently on display and can be viewed at our office: 
-    <a href="https://www.google.com/maps/search/?api=1&query=25300+Bernwood+Dr,+suite+1,+Bonita+Springs,+FL+34135" target="_blank" class="viewing-link">25300 Bernwood Dr, Suite 1, Bonita Springs, FL 34135</a>.
-    <span class="viewing-hours">Office Hours: Monday – Friday, 8:30 AM – 5:00 PM</span>
-  </div>
-</div>
+    #ccor-silent-auction-wrapper .modal-close {
+      position: absolute;
+      top: 15px;
+      right: 15px;
+      background: rgba(0, 0, 0, 0.5) !important;
+      border: none !important;
+      font-size: 24px !important;
+      cursor: pointer !important;
+      color: white !important;
+      line-height: 1 !important;
+      padding: 0 !important;
+      width: 36px;
+      height: 36px;
+      border-radius: 50% !important;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 10;
+    }
 
-<div class="auction-grid" id="ccor-sa-auction-grid">
-  <!-- Items will be injected here via JS -->
-  <h3 style="text-align:center; width:100%; grid-column: 1 / -1;">Loading auction items...</h3>
-</div>
+    #ccor-silent-auction-wrapper .bid-modal .modal-close {
+      background: none !important;
+      color: #999 !important;
+    }
 
-<!-- Bid Modal -->
-<div class="modal-overlay" id="ccor-sa-modal-overlay">
-  <div class="bid-modal">
-    <button class="modal-close" id="ccor-sa-modal-close">&times;</button>
-    <h3 class="modal-title" id="ccor-sa-modal-item-name">Place Bid</h3>
-    <p class="min-bid-notice" id="ccor-sa-modal-min-bid">Minimum next bid: $<span>0</span></p>
+    #ccor-silent-auction-wrapper .modal-title {
+      margin: 0 0 5px 0 !important;
+      color: var(--auction-primary) !important;
+      font-size: 24px !important;
+      font-weight: bold !important;
+    }
 
-    <form id="ccor-sa-bid-form">
-      <input type="hidden" id="ccor-sa-bid-item-id">
-      
-      <div class="form-group">
-        <label>Bid Amount ($)</label>
-        <input type="number" id="ccor-sa-bid-amount" required min="1">
+    #ccor-silent-auction-wrapper .form-group {
+      margin-bottom: 15px !important;
+    }
+
+    #ccor-silent-auction-wrapper .form-group label {
+      display: block !important;
+      margin-bottom: 5px !important;
+      font-weight: 600 !important;
+      font-size: 14px !important;
+      color: #333 !important;
+    }
+
+    #ccor-silent-auction-wrapper .form-group input {
+      width: 100% !important;
+      padding: 10px !important;
+      border: 1px solid #ccc !important;
+      border-radius: 6px !important;
+      font-size: 16px !important;
+      box-sizing: border-box !important;
+      background: #fff !important;
+      color: #333 !important;
+      margin: 0 !important;
+    }
+
+    #ccor-silent-auction-wrapper .form-row {
+      display: flex;
+      gap: 15px;
+    }
+
+    #ccor-silent-auction-wrapper .form-row .form-group {
+      flex: 1;
+      margin-bottom: 15px !important;
+    }
+
+    #ccor-silent-auction-wrapper .min-bid-notice {
+      font-size: 13px !important;
+      color: #d9534f !important;
+      margin: 0 0 15px 0 !important;
+    }
+
+    /* Responsive Adjustments */
+    @media (max-width: 768px) {
+      #ccor-silent-auction-wrapper .auction-header {
+        flex-direction: column;
+        text-align: center;
+        padding: 15px;
+      }
+
+      #ccor-silent-auction-wrapper .auction-header-img {
+        margin-bottom: 15px;
+      }
+
+      #ccor-silent-auction-wrapper .auction-header-right {
+        text-align: center;
+      }
+
+      #ccor-silent-auction-wrapper .auction-timer {
+        justify-content: center;
+      }
+
+      #ccor-silent-auction-wrapper .auction-grid {
+        grid-template-columns: 1fr;
+      }
+
+      #ccor-silent-auction-wrapper .form-row {
+        flex-direction: column;
+        gap: 0;
+      }
+
+      #ccor-silent-auction-wrapper .image-modal img {
+        height: 45vh;
+      }
+    }
+  </style>
+
+  <div class="auction-header">
+    <div style="display: flex; align-items: center; gap: 20px; flex-wrap: wrap;">
+      <img
+        src="https://coconutcoastrealtors.org/wp-content/uploads/2026/04/CCOR-Vert-Logo-no-tag-clr-scaled-e1776958694707.png"
+        class="auction-header-img" alt="CCOR Logo">
+      <div style="text-align: left; background: rgba(255,255,255,0.15); padding: 10px 15px; border-radius: 8px;">
+        <div
+          style="font-size: 12px; color: #fff; font-weight: 600; text-transform: uppercase; margin-bottom: 5px; text-shadow: 1px 1px 2px rgba(0,0,0,0.5);">
+          Proceeds will go to</div>
+        <a href="https://gulfcoasthumanesociety.org/" target="_blank"
+          style="display: flex; align-items: center; gap: 10px; text-decoration: none;">
+          <img src="https://static.wixstatic.com/media/0b6856_922812e3d1084c00b0cffd82c95bf076~mv2.png"
+            alt="Gulf Coast Humane Society" style="height: 35px; background: white; padding: 4px; border-radius: 4px;">
+          <span style="color: white; font-weight: bold; font-size: 14px; text-shadow: 1px 1px 2px rgba(0,0,0,0.5);">Gulf
+            Coast Humane Society</span>
+        </a>
       </div>
+    </div>
+    <div class="auction-header-right">
+      <h2>Silent Auction</h2>
+      <div class="auction-timer">
+        Updates in: <span id="ccor-sa-time-left">30</span>s
+        <div class="timer-bar">
+          <div class="timer-fill" id="ccor-sa-timer-fill"></div>
+        </div>
+      </div>
+    </div>
+  </div>
 
-      <div class="form-row">
+  <div class="viewing-info-banner">
+    <div class="viewing-info-icon">📍</div>
+    <div class="viewing-info-text">
+      <strong>Want to view the art in person?</strong> All auction items are currently on display and can be viewed at
+      our office:
+      <a href="https://www.google.com/maps/search/?api=1&query=25300+Bernwood+Dr,+suite+1,+Bonita+Springs,+FL+34135"
+        target="_blank" class="viewing-link">25300 Bernwood Dr, Suite 1, Bonita Springs, FL 34135</a>.
+      <span class="viewing-hours">Office Hours: Monday – Friday, 8:30 AM – 4:30 PM</span>
+    </div>
+  </div>
+
+  <div class="auction-grid" id="ccor-sa-auction-grid">
+    <!-- Items will be injected here via JS -->
+    <h3 style="text-align:center; width:100%; grid-column: 1 / -1;">Loading auction items...</h3>
+  </div>
+
+  <!-- Bid Modal -->
+  <div class="modal-overlay" id="ccor-sa-modal-overlay">
+    <div class="bid-modal">
+      <button class="modal-close" id="ccor-sa-modal-close">&times;</button>
+      <h3 class="modal-title" id="ccor-sa-modal-item-name">Place Bid</h3>
+      <p class="min-bid-notice" id="ccor-sa-modal-min-bid">Minimum next bid: $<span>0</span></p>
+
+      <form id="ccor-sa-bid-form">
+        <input type="hidden" id="ccor-sa-bid-item-id">
+
         <div class="form-group">
-          <label>First Name</label>
-          <input type="text" id="ccor-sa-bid-fname" required>
+          <label>Bid Amount ($)</label>
+          <input type="number" id="ccor-sa-bid-amount" required min="1">
         </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label>First Name</label>
+            <input type="text" id="ccor-sa-bid-fname" required>
+          </div>
+          <div class="form-group">
+            <label>Last Name</label>
+            <input type="text" id="ccor-sa-bid-lname" required>
+          </div>
+        </div>
+
         <div class="form-group">
-          <label>Last Name</label>
-          <input type="text" id="ccor-sa-bid-lname" required>
+          <label>Email Address</label>
+          <input type="email" id="ccor-sa-bid-email" required>
         </div>
-      </div>
 
-      <div class="form-group">
-        <label>Email Address</label>
-        <input type="email" id="ccor-sa-bid-email" required>
-      </div>
+        <div class="form-group">
+          <label>Phone Number</label>
+          <input type="tel" id="ccor-sa-bid-phone" required>
+        </div>
 
-      <div class="form-group">
-        <label>Phone Number</label>
-        <input type="tel" id="ccor-sa-bid-phone" required>
-      </div>
-
-      <button type="submit" class="btn-bid" id="ccor-sa-btn-submit-bid">Submit Bid</button>
-    </form>
+        <button type="submit" class="btn-bid" id="ccor-sa-btn-submit-bid">Submit Bid</button>
+      </form>
+    </div>
   </div>
-</div>
 
-<!-- Image Preview Modal -->
-<div class="modal-overlay" id="ccor-sa-image-modal-overlay">
-  <div class="image-modal">
-    <button class="modal-close" id="ccor-sa-image-modal-close">&times;</button>
-    <img id="ccor-sa-image-modal-img" src="" alt="Full Artwork">
-    <div class="image-modal-info">
-      <h3 class="auction-title" id="ccor-sa-image-modal-title">Title</h3>
-      <div class="auction-dims" id="ccor-sa-image-modal-dims">Dimensions</div>
-      <p class="auction-desc" id="ccor-sa-image-modal-desc">Description</p>
-      
-      <div style="display:flex; justify-content:space-between; align-items:center; margin-top: 15px; border-top: 1px solid #eee; padding-top: 15px;">
-        <div>
-          <div style="font-size:13px; color:#666;">Current Bid</div>
-          <div style="font-weight:bold; font-size:24px; color:var(--auction-primary);" id="ccor-sa-image-modal-bid"></div>
+  <!-- Image Preview Modal -->
+  <div class="modal-overlay" id="ccor-sa-image-modal-overlay">
+    <div class="image-modal">
+      <button class="modal-close" id="ccor-sa-image-modal-close">&times;</button>
+      <img id="ccor-sa-image-modal-img" src="" alt="Full Artwork">
+      <div class="image-modal-info">
+        <h3 class="auction-title" id="ccor-sa-image-modal-title">Title</h3>
+        <div class="auction-dims" id="ccor-sa-image-modal-dims">Dimensions</div>
+        <p class="auction-desc" id="ccor-sa-image-modal-desc">Description</p>
+
+        <div
+          style="display:flex; justify-content:space-between; align-items:center; margin-top: 15px; border-top: 1px solid #eee; padding-top: 15px;">
+          <div>
+            <div style="font-size:13px; color:#666;">Current Bid</div>
+            <div style="font-weight:bold; font-size:24px; color:var(--auction-primary);" id="ccor-sa-image-modal-bid">
+            </div>
+          </div>
+          <button class="btn-bid" id="ccor-sa-image-modal-btn" style="width:auto; padding:10px 25px;">Place Bid</button>
         </div>
-        <button class="btn-bid" id="ccor-sa-image-modal-btn" style="width:auto; padding:10px 25px;">Place Bid</button>
       </div>
     </div>
   </div>
-</div>
 
 </div> <!-- End Wrapper -->
 
 <script>
-// Prevent polluting global namespace and wait for DOM
-(function() {
-  const API_URL = "https://auction-api.bonitaspringsrealtors.workers.dev"; 
+  // Prevent polluting global namespace and wait for DOM
+  (function () {
+    const API_URL = "https://auction-api.bonitaspringsrealtors.workers.dev";
 
-  let auctionItems = [];
-  let refreshInterval;
-  let timerInterval;
-  let secondsLeft = 30;
+    let auctionItems = [];
+    let refreshInterval;
+    let timerInterval;
+    let secondsLeft = 30;
 
-  async function fetchAuctionState() {
-    try {
-      const response = await fetch(`${API_URL}/api/auction-state`);
-      if (!response.ok) throw new Error("Failed to fetch");
-      auctionItems = await response.json();
-      renderItems();
-    } catch (error) {
-      console.error("Error fetching auction state:", error);
-      if(auctionItems.length === 0) {
+    async function fetchAuctionState() {
+      try {
+        const response = await fetch(`${API_URL}/api/auction-state`);
+        if (!response.ok) throw new Error("Failed to fetch");
+        auctionItems = await response.json();
+        renderItems();
+      } catch (error) {
+        console.error("Error fetching auction state:", error);
+        if (auctionItems.length === 0) {
           const grid = document.getElementById('ccor-sa-auction-grid');
           if (grid) grid.innerHTML = '<p style="text-align:center;width:100%;color:red;">Error loading items. Please check your connection.</p>';
+        }
       }
     }
-  }
 
-  function renderItems() {
-    const grid = document.getElementById('ccor-sa-auction-grid');
-    if (!grid) return;
-    grid.innerHTML = '';
+    function renderItems() {
+      const grid = document.getElementById('ccor-sa-auction-grid');
+      if (!grid) return;
+      grid.innerHTML = '';
 
-    auctionItems.forEach(item => {
-      const currentBid = item.current_bid ? item.current_bid : item.starting_bid;
-      const isStarted = !!item.current_bid;
+      auctionItems.forEach(item => {
+        const currentBid = item.current_bid ? item.current_bid : item.starting_bid;
+        const isStarted = !!item.current_bid;
 
-      const card = document.createElement('div');
-      card.className = 'auction-card';
-      
-      const highestBidderText = isStarted ? "Highest Bidder: " + item.highest_bidder : "Starting Bid";
-      const title = item.title_placeholder !== '[Title Placeholder]' ? item.title_placeholder : item.name;
+        const card = document.createElement('div');
+        card.className = 'auction-card';
 
-      card.innerHTML = `
+        const highestBidderText = isStarted ? "Highest Bidder: " + item.highest_bidder : "Starting Bid";
+        const title = item.title_placeholder !== '[Title Placeholder]' ? item.title_placeholder : item.name;
+
+        card.innerHTML = `
         <div class="auction-img-wrapper" data-item-id="${item.id}">
           <img src="${item.image_url}" class="auction-img" alt="${item.name}">
         </div>
@@ -565,171 +589,171 @@
           <button class="btn-bid" data-item-id="${item.id}">Place Bid</button>
         </div>
       `;
-      grid.appendChild(card);
-    });
-
-    // Attach event listeners safely to new buttons and images
-    const bidButtons = grid.querySelectorAll('.btn-bid');
-    bidButtons.forEach(btn => {
-      btn.addEventListener('click', (e) => {
-        const id = parseInt(e.target.getAttribute('data-item-id'), 10);
-        openBidModal(id);
+        grid.appendChild(card);
       });
-    });
 
-    const imgWrappers = grid.querySelectorAll('.auction-img-wrapper');
-    imgWrappers.forEach(img => {
-      img.addEventListener('click', (e) => {
-        const id = parseInt(e.currentTarget.getAttribute('data-item-id'), 10);
-        openImageModal(id);
+      // Attach event listeners safely to new buttons and images
+      const bidButtons = grid.querySelectorAll('.btn-bid');
+      bidButtons.forEach(btn => {
+        btn.addEventListener('click', (e) => {
+          const id = parseInt(e.target.getAttribute('data-item-id'), 10);
+          openBidModal(id);
+        });
       });
-    });
-  }
 
-  function startTimer() {
-    const timeSpan = document.getElementById('ccor-sa-time-left');
-    const fillBar = document.getElementById('ccor-sa-timer-fill');
-    if (!timeSpan || !fillBar) return;
-
-    clearInterval(timerInterval);
-    
-    secondsLeft = 30;
-    
-    timerInterval = setInterval(() => {
-      secondsLeft--;
-      timeSpan.innerText = secondsLeft;
-      fillBar.style.width = (secondsLeft / 30 * 100) + "%";
-
-      if (secondsLeft <= 0) {
-        secondsLeft = 30;
-        fetchAuctionState();
-      }
-    }, 1000);
-  }
-
-  function openBidModal(itemId) {
-    const item = auctionItems.find(i => i.id === itemId);
-    if (!item) return;
-
-    const minBid = item.current_bid ? item.current_bid + 5 : item.starting_bid; 
-
-    document.getElementById('ccor-sa-bid-item-id').value = item.id;
-    document.getElementById('ccor-sa-modal-item-name').innerText = "Bid on: " + item.name;
-    document.querySelector('#ccor-sa-modal-min-bid span').innerText = minBid;
-    document.getElementById('ccor-sa-bid-amount').min = minBid;
-    document.getElementById('ccor-sa-bid-amount').value = minBid;
-
-    // Close image modal if open
-    document.getElementById('ccor-sa-image-modal-overlay').classList.remove('active');
-    
-    document.getElementById('ccor-sa-modal-overlay').classList.add('active');
-  }
-
-  function openImageModal(itemId) {
-    const item = auctionItems.find(i => i.id === itemId);
-    if (!item) return;
-
-    const currentBid = item.current_bid ? item.current_bid : item.starting_bid;
-    const title = item.title_placeholder !== '[Title Placeholder]' ? item.title_placeholder : item.name;
-
-    document.getElementById('ccor-sa-image-modal-img').src = item.image_url;
-    document.getElementById('ccor-sa-image-modal-title').innerText = title;
-    document.getElementById('ccor-sa-image-modal-dims').innerText = item.dimensions;
-    document.getElementById('ccor-sa-image-modal-desc').innerText = item.desc_placeholder;
-    document.getElementById('ccor-sa-image-modal-bid').innerText = "$" + currentBid;
-
-    const btn = document.getElementById('ccor-sa-image-modal-btn');
-    btn.onclick = () => openBidModal(item.id);
-
-    document.getElementById('ccor-sa-image-modal-overlay').classList.add('active');
-  }
-
-  // Setup DOM event listeners safely
-  document.addEventListener('DOMContentLoaded', () => {
-    const bidModal = document.getElementById('ccor-sa-modal-overlay');
-    const bidCloseBtn = document.getElementById('ccor-sa-modal-close');
-    const bidForm = document.getElementById('ccor-sa-bid-form');
-
-    const imgModal = document.getElementById('ccor-sa-image-modal-overlay');
-    const imgCloseBtn = document.getElementById('ccor-sa-image-modal-close');
-
-    if (bidCloseBtn) bidCloseBtn.onclick = () => bidModal.classList.remove('active');
-    if (imgCloseBtn) imgCloseBtn.onclick = () => imgModal.classList.remove('active');
-    
-    if (bidModal) {
-      bidModal.onclick = (e) => {
-        if(e.target === bidModal) bidModal.classList.remove('active');
-      }
-    }
-    
-    if (imgModal) {
-      imgModal.onclick = (e) => {
-        if(e.target === imgModal) imgModal.classList.remove('active');
-      }
+      const imgWrappers = grid.querySelectorAll('.auction-img-wrapper');
+      imgWrappers.forEach(img => {
+        img.addEventListener('click', (e) => {
+          const id = parseInt(e.currentTarget.getAttribute('data-item-id'), 10);
+          openImageModal(id);
+        });
+      });
     }
 
-    if (bidForm) {
-      bidForm.onsubmit = async (e) => {
-        e.preventDefault();
-        
-        const submitBtn = document.getElementById('ccor-sa-btn-submit-bid');
-        submitBtn.disabled = true;
-        submitBtn.innerText = "Submitting...";
+    function startTimer() {
+      const timeSpan = document.getElementById('ccor-sa-time-left');
+      const fillBar = document.getElementById('ccor-sa-timer-fill');
+      if (!timeSpan || !fillBar) return;
 
-        const payload = {
-          item_id: document.getElementById('ccor-sa-bid-item-id').value,
-          amount: parseInt(document.getElementById('ccor-sa-bid-amount').value, 10),
-          first_name: document.getElementById('ccor-sa-bid-fname').value,
-          last_name: document.getElementById('ccor-sa-bid-lname').value,
-          email: document.getElementById('ccor-sa-bid-email').value,
-          phone: document.getElementById('ccor-sa-bid-phone').value,
-        };
+      clearInterval(timerInterval);
 
-        try {
-          const response = await fetch(`${API_URL}/api/bid`, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(payload)
-          });
+      secondsLeft = 30;
 
-          const data = await response.json();
+      timerInterval = setInterval(() => {
+        secondsLeft--;
+        timeSpan.innerText = secondsLeft;
+        fillBar.style.width = (secondsLeft / 30 * 100) + "%";
 
-          if (response.ok) {
-            alert("Bid placed successfully!");
-            bidModal.classList.remove('active');
-            bidForm.reset();
-            fetchAuctionState(); 
-            secondsLeft = 30;
-          } else {
-            alert("Error: " + data.error);
-            if (data.current_highest) {
-               fetchAuctionState(); 
-            }
-          }
-        } catch (err) {
-          alert("Network error. Please try again.");
-        } finally {
-          submitBtn.disabled = false;
-          submitBtn.innerText = "Submit Bid";
+        if (secondsLeft <= 0) {
+          secondsLeft = 30;
+          fetchAuctionState();
         }
-      };
+      }, 1000);
     }
 
-    // Initialization
-    fetchAuctionState();
-    startTimer();
-  });
+    function openBidModal(itemId) {
+      const item = auctionItems.find(i => i.id === itemId);
+      if (!item) return;
 
-  // Fallback in case DOMContentLoaded already fired before this script loaded (often true for async blocks)
-  if (document.readyState === 'complete' || document.readyState === 'interactive') {
-      setTimeout(() => {
-          const grid = document.getElementById('ccor-sa-auction-grid');
-          if (grid && auctionItems.length === 0) {
+      const minBid = item.current_bid ? item.current_bid + 5 : item.starting_bid;
+
+      document.getElementById('ccor-sa-bid-item-id').value = item.id;
+      document.getElementById('ccor-sa-modal-item-name').innerText = "Bid on: " + item.name;
+      document.querySelector('#ccor-sa-modal-min-bid span').innerText = minBid;
+      document.getElementById('ccor-sa-bid-amount').min = minBid;
+      document.getElementById('ccor-sa-bid-amount').value = minBid;
+
+      // Close image modal if open
+      document.getElementById('ccor-sa-image-modal-overlay').classList.remove('active');
+
+      document.getElementById('ccor-sa-modal-overlay').classList.add('active');
+    }
+
+    function openImageModal(itemId) {
+      const item = auctionItems.find(i => i.id === itemId);
+      if (!item) return;
+
+      const currentBid = item.current_bid ? item.current_bid : item.starting_bid;
+      const title = item.title_placeholder !== '[Title Placeholder]' ? item.title_placeholder : item.name;
+
+      document.getElementById('ccor-sa-image-modal-img').src = item.image_url;
+      document.getElementById('ccor-sa-image-modal-title').innerText = title;
+      document.getElementById('ccor-sa-image-modal-dims').innerText = item.dimensions;
+      document.getElementById('ccor-sa-image-modal-desc').innerText = item.desc_placeholder;
+      document.getElementById('ccor-sa-image-modal-bid').innerText = "$" + currentBid;
+
+      const btn = document.getElementById('ccor-sa-image-modal-btn');
+      btn.onclick = () => openBidModal(item.id);
+
+      document.getElementById('ccor-sa-image-modal-overlay').classList.add('active');
+    }
+
+    // Setup DOM event listeners safely
+    document.addEventListener('DOMContentLoaded', () => {
+      const bidModal = document.getElementById('ccor-sa-modal-overlay');
+      const bidCloseBtn = document.getElementById('ccor-sa-modal-close');
+      const bidForm = document.getElementById('ccor-sa-bid-form');
+
+      const imgModal = document.getElementById('ccor-sa-image-modal-overlay');
+      const imgCloseBtn = document.getElementById('ccor-sa-image-modal-close');
+
+      if (bidCloseBtn) bidCloseBtn.onclick = () => bidModal.classList.remove('active');
+      if (imgCloseBtn) imgCloseBtn.onclick = () => imgModal.classList.remove('active');
+
+      if (bidModal) {
+        bidModal.onclick = (e) => {
+          if (e.target === bidModal) bidModal.classList.remove('active');
+        }
+      }
+
+      if (imgModal) {
+        imgModal.onclick = (e) => {
+          if (e.target === imgModal) imgModal.classList.remove('active');
+        }
+      }
+
+      if (bidForm) {
+        bidForm.onsubmit = async (e) => {
+          e.preventDefault();
+
+          const submitBtn = document.getElementById('ccor-sa-btn-submit-bid');
+          submitBtn.disabled = true;
+          submitBtn.innerText = "Submitting...";
+
+          const payload = {
+            item_id: document.getElementById('ccor-sa-bid-item-id').value,
+            amount: parseInt(document.getElementById('ccor-sa-bid-amount').value, 10),
+            first_name: document.getElementById('ccor-sa-bid-fname').value,
+            last_name: document.getElementById('ccor-sa-bid-lname').value,
+            email: document.getElementById('ccor-sa-bid-email').value,
+            phone: document.getElementById('ccor-sa-bid-phone').value,
+          };
+
+          try {
+            const response = await fetch(`${API_URL}/api/bid`, {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify(payload)
+            });
+
+            const data = await response.json();
+
+            if (response.ok) {
+              alert("Bid placed successfully!");
+              bidModal.classList.remove('active');
+              bidForm.reset();
               fetchAuctionState();
-              startTimer();
+              secondsLeft = 30;
+            } else {
+              alert("Error: " + data.error);
+              if (data.current_highest) {
+                fetchAuctionState();
+              }
+            }
+          } catch (err) {
+            alert("Network error. Please try again.");
+          } finally {
+            submitBtn.disabled = false;
+            submitBtn.innerText = "Submit Bid";
           }
-      }, 100);
-  }
+        };
+      }
 
-})();
+      // Initialization
+      fetchAuctionState();
+      startTimer();
+    });
+
+    // Fallback in case DOMContentLoaded already fired before this script loaded (often true for async blocks)
+    if (document.readyState === 'complete' || document.readyState === 'interactive') {
+      setTimeout(() => {
+        const grid = document.getElementById('ccor-sa-auction-grid');
+        if (grid && auctionItems.length === 0) {
+          fetchAuctionState();
+          startTimer();
+        }
+      }, 100);
+    }
+
+  })();
 </script>
