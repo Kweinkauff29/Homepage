@@ -15284,13 +15284,19 @@
 
           const textarea = document.createElement("textarea");
           const entry = data.find(d => d.category === "priorities" && d.row_key === r && d.col_key === c);
-          textarea.value = entry ? entry.value : "";
+          const initVal = entry ? entry.value : "";
+          textarea.value = initVal;
+          textarea.dataset.originalValue = initVal;
 
           let debounce = null;
           textarea.addEventListener("input", (e) => {
+            if (e.target.value === e.target.dataset.originalValue) return;
             clearTimeout(debounce);
-            debounce = setTimeout(() => {
-              updateWeeklyEntry("priorities", r, c, e.target.value);
+            debounce = setTimeout(async () => {
+              const success = await updateWeeklyEntry("priorities", r, c, e.target.value);
+              if (success) {
+                e.target.dataset.originalValue = e.target.value;
+              }
             }, 2000);
           });
           cell.appendChild(textarea);
@@ -15330,13 +15336,19 @@
           cell.className = "weekly-cell";
           const textarea = document.createElement("textarea");
           const entry = data.find(d => d.category === "marketing" && d.row_key === r && d.col_key === c);
-          textarea.value = entry ? entry.value : "";
+          const initVal = entry ? entry.value : "";
+          textarea.value = initVal;
+          textarea.dataset.originalValue = initVal;
 
           let debounce = null;
           textarea.addEventListener("input", (e) => {
+            if (e.target.value === e.target.dataset.originalValue) return;
             clearTimeout(debounce);
-            debounce = setTimeout(() => {
-              updateWeeklyEntry("marketing", r, c, e.target.value);
+            debounce = setTimeout(async () => {
+              const success = await updateWeeklyEntry("marketing", r, c, e.target.value);
+              if (success) {
+                e.target.dataset.originalValue = e.target.value;
+              }
             }, 2000);
           });
           cell.appendChild(textarea);
@@ -15410,13 +15422,19 @@
       const t1 = document.createElement("textarea");
       t1.placeholder = "Project Name...";
       const e1 = data.find(d => d.category === "projects" && d.row_key === rowKey && d.col_key === "name");
-      t1.value = e1 ? e1.value : "";
+      const initVal1 = e1 ? e1.value : "";
+      t1.value = initVal1;
+      t1.dataset.originalValue = initVal1;
 
       let d1 = null;
       t1.addEventListener("input", (e) => {
+        if (e.target.value === e.target.dataset.originalValue) return;
         clearTimeout(d1);
-        d1 = setTimeout(() => {
-          updateWeeklyEntry("projects", rowKey, "name", e.target.value);
+        d1 = setTimeout(async () => {
+          const success = await updateWeeklyEntry("projects", rowKey, "name", e.target.value);
+          if (success) {
+            e.target.dataset.originalValue = e.target.value;
+          }
         }, 2000);
       });
       c1.appendChild(t1);
@@ -15428,13 +15446,19 @@
       const t2 = document.createElement("textarea");
       t2.placeholder = "Details & Notes...";
       const e2 = data.find(d => d.category === "projects" && d.row_key === rowKey && d.col_key === "notes");
-      t2.value = e2 ? e2.value : "";
+      const initVal2 = e2 ? e2.value : "";
+      t2.value = initVal2;
+      t2.dataset.originalValue = initVal2;
 
       let d2 = null;
       t2.addEventListener("input", (e) => {
+        if (e.target.value === e.target.dataset.originalValue) return;
         clearTimeout(d2);
-        d2 = setTimeout(() => {
-          updateWeeklyEntry("projects", rowKey, "notes", e.target.value);
+        d2 = setTimeout(async () => {
+          const success = await updateWeeklyEntry("projects", rowKey, "notes", e.target.value);
+          if (success) {
+            e.target.dataset.originalValue = e.target.value;
+          }
         }, 2000);
       });
       c2.appendChild(t2);
@@ -15445,7 +15469,7 @@
       if (!state.currentUser) {
         console.warn("Cannot save: No current user");
         showToast("Error: Please select a user first!", true);
-        return;
+        return false;
       }
 
       // showToast("Saving...", false); // Optional: verbose
@@ -15468,14 +15492,17 @@
           const err = await res.text();
           console.error("Save failed:", err);
           showToast("Failed to save entry", true);
+          return false;
         } else {
           // Success
           console.log("Entry saved:", category, rowKey, colKey);
           showToast("Saved ✓");
+          return true;
         }
       } catch (err) {
         console.error("Network error saving entry:", err);
         showToast("Network error: Could not save", true);
+        return false;
       }
     }
 
