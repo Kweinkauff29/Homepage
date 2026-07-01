@@ -74,6 +74,48 @@
     transition: width 1s linear;
   }
 
+  #ccor-silent-auction-wrapper .viewing-info-banner {
+    background: #fff;
+    border-left: 4px solid var(--auction-primary);
+    padding: 15px 20px;
+    margin-bottom: 30px;
+    border-radius: 4px 12px 12px 4px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.04);
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    border: 1px solid #eaeaea;
+    border-left-width: 4px;
+  }
+
+  #ccor-silent-auction-wrapper .viewing-info-icon {
+    font-size: 24px;
+  }
+
+  #ccor-silent-auction-wrapper .viewing-info-text {
+    font-size: 14px;
+    line-height: 1.6;
+    color: #555;
+  }
+
+  #ccor-silent-auction-wrapper .viewing-link {
+    color: var(--auction-primary);
+    text-decoration: underline;
+    font-weight: 600;
+  }
+
+  #ccor-silent-auction-wrapper .viewing-link:hover {
+    color: #122e6b;
+  }
+
+  #ccor-silent-auction-wrapper .viewing-hours {
+    display: block;
+    margin-top: 4px;
+    font-size: 13px;
+    color: #888;
+    font-weight: 500;
+  }
+
   #ccor-silent-auction-wrapper .auction-grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
@@ -388,6 +430,15 @@
   </div>
 </div>
 
+<div class="viewing-info-banner">
+  <div class="viewing-info-icon">📍</div>
+  <div class="viewing-info-text">
+    <strong>Want to view the art in person?</strong> All auction items are currently on display and can be viewed at our office: 
+    <a href="https://www.google.com/maps/search/?api=1&query=25300+Bernwood+Dr,+suite+1,+Bonita+Springs,+FL+34135" target="_blank" class="viewing-link">25300 Bernwood Dr, Suite 1, Bonita Springs, FL 34135</a>.
+    <span class="viewing-hours">Office Hours: Monday – Friday, 8:30 AM – 5:00 PM</span>
+  </div>
+</div>
+
 <div class="auction-grid" id="ccor-sa-auction-grid">
   <!-- Items will be injected here via JS -->
   <h3 style="text-align:center; width:100%; grid-column: 1 / -1;">Loading auction items...</h3>
@@ -503,7 +554,7 @@
         </div>
         <div class="auction-content">
           <h3 class="auction-title">${title}</h3>
-          <div class="auction-dims">Original: ${item.original_name} | ${item.dimensions}</div>
+          <div class="auction-dims">${item.dimensions}</div>
           <p class="auction-desc">${item.desc_placeholder}</p>
           
           <div class="auction-bid-info">
@@ -583,7 +634,7 @@
 
     document.getElementById('ccor-sa-image-modal-img').src = item.image_url;
     document.getElementById('ccor-sa-image-modal-title').innerText = title;
-    document.getElementById('ccor-sa-image-modal-dims').innerText = "Original: " + item.original_name + " | " + item.dimensions;
+    document.getElementById('ccor-sa-image-modal-dims').innerText = item.dimensions;
     document.getElementById('ccor-sa-image-modal-desc').innerText = item.desc_placeholder;
     document.getElementById('ccor-sa-image-modal-bid').innerText = "$" + currentBid;
 
