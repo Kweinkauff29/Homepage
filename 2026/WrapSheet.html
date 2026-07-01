@@ -3998,24 +3998,6 @@
       flex-direction: column;
     }
 
-    .weekly-cell textarea {
-      width: 100%;
-      height: 100%;
-      min-height: 48px;
-      /* Ensure space for text */
-      border: none;
-      background: transparent;
-      resize: vertical;
-      /* Allow resize */
-      font-family: inherit;
-      font-size: inherit;
-      color: var(--ink);
-      outline: none;
-      overflow: hidden;
-      /* Hide scrollbars */
-      line-height: 1.4;
-    }
-
     .weekly-cell.header {
       background: var(--panel-elevated);
       font-weight: 600;
@@ -4091,14 +4073,19 @@
 
     .weekly-cell textarea {
       width: 100%;
-      height: 100%;
-      min-height: 24px;
+      height: auto;
+      min-height: 36px;
       background: transparent;
       border: none;
       color: var(--ink);
       resize: none;
       font-family: inherit;
+      font-size: inherit;
+      line-height: 1.4;
       outline: none;
+      overflow: hidden;
+      box-sizing: border-box;
+      padding: 4px;
     }
 
     .weekly-cell textarea:focus {
@@ -15089,6 +15076,48 @@
 
     let currentWeeklyStart = getLocalDateString(getMonday(new Date()));
 
+    function autoResizeTextarea(el) {
+      if (!el) return;
+      el.style.height = 'auto';
+      el.style.height = el.scrollHeight + 'px';
+    }
+
+    async function syncWeeklyPlannerData() {
+      // Don't sync if the user was typing recently (within 5 seconds)
+      const timeSinceTyping = Date.now() - lastUserTypingTime;
+      if (timeSinceTyping < 5000) return;
+
+      try {
+        const data = await loadWeeklyPlan(currentWeeklyStart);
+        const containers = ["weekly-priorities-grid", "weekly-marketing-grid", "weekly-projects-grid"];
+        
+        containers.forEach(id => {
+          const container = document.getElementById(id);
+          if (!container) return;
+          const textareas = container.querySelectorAll("textarea");
+          textareas.forEach(textarea => {
+            if (document.activeElement === textarea) return; // Skip currently focused textarea
+            
+            const cat = textarea.dataset.category;
+            const r = textarea.dataset.row;
+            const c = textarea.dataset.col;
+            if (!cat || !r || !c) return;
+
+            const entry = data.find(d => d.category === cat && d.row_key === r && d.col_key === c);
+            const val = entry ? entry.value : "";
+            
+            if (textarea.value !== val) {
+              textarea.value = val;
+              textarea.dataset.originalValue = val;
+              autoResizeTextarea(textarea); // Resize to fit newly loaded content
+            }
+          });
+        });
+      } catch (err) {
+        console.error("Error in syncWeeklyPlannerData:", err);
+      }
+    }
+
     function initWeeklyPlanner() {
       // Nav Buttons
       const prevBtn = document.getElementById("weekly-prev");
@@ -15099,6 +15128,14 @@
 
       // Initial render
       renderWeeklyPlanner();
+
+      // Start periodic sync (every 15 seconds)
+      setInterval(syncWeeklyPlannerData, 15000);
+
+      // Sync immediately when tab gains focus
+      window.addEventListener("focus", () => {
+        syncWeeklyPlannerData();
+      });
     }
 
     document.addEventListener("DOMContentLoaded", initWeeklyPlanner);
@@ -15283,6 +15320,10 @@
           cell.classList.add(`user-col-${c.toLowerCase()}`);
 
           const textarea = document.createElement("textarea");
+          textarea.dataset.category = "priorities";
+          textarea.dataset.row = r;
+          textarea.dataset.col = c;
+
           const entry = data.find(d => d.category === "priorities" && d.row_key === r && d.col_key === c);
           const initVal = entry ? entry.value : "";
           textarea.value = initVal;
@@ -15290,6 +15331,8 @@
 
           let debounce = null;
           textarea.addEventListener("input", (e) => {
+            lastUserTypingTime = Date.now();
+            autoResizeTextarea(e.target);
             if (e.target.value === e.target.dataset.originalValue) return;
             clearTimeout(debounce);
             debounce = setTimeout(async () => {
@@ -15301,6 +15344,7 @@
           });
           cell.appendChild(textarea);
           container.appendChild(cell);
+          setTimeout(() => autoResizeTextarea(textarea), 0);
         });
       });
     }
@@ -15335,6 +15379,10 @@
           const cell = document.createElement("div");
           cell.className = "weekly-cell";
           const textarea = document.createElement("textarea");
+          textarea.dataset.category = "marketing";
+          textarea.dataset.row = r;
+          textarea.dataset.col = c;
+
           const entry = data.find(d => d.category === "marketing" && d.row_key === r && d.col_key === c);
           const initVal = entry ? entry.value : "";
           textarea.value = initVal;
@@ -15342,6 +15390,8 @@
 
           let debounce = null;
           textarea.addEventListener("input", (e) => {
+            lastUserTypingTime = Date.now();
+            autoResizeTextarea(e.target);
             if (e.target.value === e.target.dataset.originalValue) return;
             clearTimeout(debounce);
             debounce = setTimeout(async () => {
@@ -15353,6 +15403,7 @@
           });
           cell.appendChild(textarea);
           container.appendChild(cell);
+          setTimeout(() => autoResizeTextarea(textarea), 0);
         });
       });
     }
@@ -15421,6 +15472,10 @@
       c1.className = "weekly-cell";
       const t1 = document.createElement("textarea");
       t1.placeholder = "Project Name...";
+      t1.dataset.category = "projects";
+      t1.dataset.row = rowKey;
+      t1.dataset.col = "name";
+
       const e1 = data.find(d => d.category === "projects" && d.row_key === rowKey && d.col_key === "name");
       const initVal1 = e1 ? e1.value : "";
       t1.value = initVal1;
@@ -15428,6 +15483,8 @@
 
       let d1 = null;
       t1.addEventListener("input", (e) => {
+        lastUserTypingTime = Date.now();
+        autoResizeTextarea(e.target);
         if (e.target.value === e.target.dataset.originalValue) return;
         clearTimeout(d1);
         d1 = setTimeout(async () => {
@@ -15439,12 +15496,17 @@
       });
       c1.appendChild(t1);
       container.appendChild(c1);
+      setTimeout(() => autoResizeTextarea(t1), 0);
 
       // Col 2: Notes
       const c2 = document.createElement("div");
       c2.className = "weekly-cell";
       const t2 = document.createElement("textarea");
       t2.placeholder = "Details & Notes...";
+      t2.dataset.category = "projects";
+      t2.dataset.row = rowKey;
+      t2.dataset.col = "notes";
+
       const e2 = data.find(d => d.category === "projects" && d.row_key === rowKey && d.col_key === "notes");
       const initVal2 = e2 ? e2.value : "";
       t2.value = initVal2;
@@ -15452,6 +15514,8 @@
 
       let d2 = null;
       t2.addEventListener("input", (e) => {
+        lastUserTypingTime = Date.now();
+        autoResizeTextarea(e.target);
         if (e.target.value === e.target.dataset.originalValue) return;
         clearTimeout(d2);
         d2 = setTimeout(async () => {
@@ -15463,6 +15527,7 @@
       });
       c2.appendChild(t2);
       container.appendChild(c2);
+      setTimeout(() => autoResizeTextarea(t2), 0);
     }
 
     async function updateWeeklyEntry(category, rowKey, colKey, value) {
