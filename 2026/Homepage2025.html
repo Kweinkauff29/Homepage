@@ -4258,6 +4258,42 @@
 
   <div class="carousel2">
 
+    <!-- NEW: Florida’s Proposed Property Tax Cut for Homeowners -->
+    <div class="row news-row">
+      <div class="col-sm-5" id="exception">
+        <img class="article-img" style="object-fit: contain !important;"
+          src="https://images.unsplash.com/photo-1600585154526-990dced4db0d?q=80&w=1600&auto=format&fit=crop"
+          alt="Florida’s Proposed Property Tax Cut for Homeowners: CS/HJR 1-F & CS/SB 4-F Explained">
+      </div>
+      <div class="col-sm-7">
+        <h4>Florida’s Proposed Property Tax Cut for Homeowners: CS/HJR 1-F & CS/SB 4-F Explained</h4>
+        <p class="italics">July 1st, 2026</p>
+        <p>Explore the proposed 2026 Florida constitutional amendment: homestead exemptions rising to $150,000 and $250,000, 5% assessment caps, and county-specific impact calculations for Palm Beach, Broward, and Miami-Dade.</p>
+        <a href="https://coconutcoastrealtors.org/floridas-proposed-property-tax-cut-for-homeowners-cs-hjr-1-f-cs-sb-4-f-explained/"
+          target="_blank">
+          <button class="btn btn-primary" type="button" name="button">Read More</button>
+        </a>
+      </div>
+    </div>
+
+    <!-- NEW: Sun, Space, and a Second Act -->
+    <div class="row news-row">
+      <div class="col-sm-5" id="exception">
+        <img class="article-img" style="object-fit: contain !important;"
+          src="https://images.unsplash.com/photo-1542435503-956c469947f6?auto=format&fit=crop&w=1600&q=80"
+          alt="Sun, Space, and a Second Act: How Southwest Florida's Growth Is Drawing Career Changers and What Online Education Makes Possible">
+      </div>
+      <div class="col-sm-7">
+        <h4>Sun, Space, and a Second Act: How Southwest Florida's Growth Is Drawing Career Changers and What Online Education Makes Possible</h4>
+        <p class="italics">June 25th, 2026</p>
+        <p>Southwest Florida's rapid growth has created a unique overlap between geographic relocation and career reinvention. Learn how online education functions as a bridge for working adults moving to Bonita Springs, Estero, and surrounding areas.</p>
+        <a href="https://coconutcoastrealtors.org/sun-space-and-a-second-act-how-southwest-floridas-growth-is-drawing-career-changers-and-what-online-education-makes-possible/"
+          target="_blank">
+          <button class="btn btn-primary" type="button" name="button">Read More</button>
+        </a>
+      </div>
+    </div>
+
     <!-- NEW: May 2026 Market Stats & Regional Indicators -->
     <div class="row news-row">
       <div class="col-sm-5" id="exception">
@@ -6059,7 +6095,7 @@
 
   </div>
   <div class="col-sm-8">
-    <h3 class="resrow">Upcoming at BER - June 26th</h3>
+    <h3 class="resrow">Upcoming at CCOR - July 2nd</h3>
 
     <style>
       .frame-class {
@@ -6081,7 +6117,7 @@
       }
     </style>
 
-    <iframe class="frame-class" src="https://bonitaspringsesterorealtorsfl.growthzoneapp.com/ap/EmailViewer/rABAjawp">
+    <iframe class="frame-class" src="https://bonitaspringsesterorealtorsfl.growthzoneapp.com/ap/EmailViewer/P1yajaGP">
     </iframe>
   </div>
 </div>
@@ -6140,23 +6176,32 @@
   var map = L.map('leaflet-map').setView([26.367234, -81.798167], 16);
 
   // Add OpenStreetMap tiles to the map
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+  }).addTo(map);
 
-  setTimeout(function () {
-    // Scroll to the top of the page
-    window.scrollTo(0, 0);
+  // Add a marker to the map
+  L.marker([26.367234, -81.798167]).addTo(map)
+    .bindPopup('25300 Bernwood Dr, Suite 1, Bonita Springs, FL 34135')
+    .openPopup();
 
-    // Scroll down by 5 pixels after a short delay
+  window.onload = function () {
     setTimeout(function () {
-      window.scrollTo(0, 5);
-    }, 100); // Delay of 100 milliseconds
-
-    // Scroll back up to the top after another short delay
-    setTimeout(function () {
+      // Scroll to the top of the page
       window.scrollTo(0, 0);
-    }, 200); // Delay of 200 milliseconds
-  }, 500); // Initial delay to ensure page is fully loaded
-  //document.getElementById('popup').style.display = 'fixed';
-  console.log("Got Here");
+
+      // Scroll down by 5 pixels after a short delay
+      setTimeout(function () {
+        window.scrollTo(0, 5);
+      }, 100); // Delay of 100 milliseconds
+
+      // Scroll back up to the top after another short delay
+      setTimeout(function () {
+        window.scrollTo(0, 0);
+      }, 200); // Delay of 200 milliseconds
+    }, 500); // Initial delay to ensure page is fully loaded
+    //document.getElementById('popup').style.display = 'fixed';
+    console.log("Got Here");
   };
 
   window.onscroll = function () {
