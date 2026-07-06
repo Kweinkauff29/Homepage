@@ -10,6 +10,6 @@ binding = "D1_DB"
 database_name = "gz_cache"
 database_id = "0d2676ee-02f1-4e09-952b-464c39612737"
 
-# Daily sync at 5am UTC (12am EST)
+# Sync every 15 minutes
 [triggers]
-crons = ["0 5 * * *"]
+crons = ["*/15 * * * *"]
