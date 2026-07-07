@@ -71,23 +71,15 @@ export default {
 
         console.log("Starting Scheduled Sync...");
 
-        // 1. Sync All Events List via Pagination
+        // 1. Sync All Events List
         let allResults = [];
-        let skip = 0;
-        let hasMore = true;
-        while (hasMore && skip < 5000) {
-            const listUrl = `${upstreamBase}/api/events/all?%24top=1000&%24skip=${skip}`;
-            const { res: listRes, text: listText } = await proxyGetUpstream(listUrl, apiKey);
-            if (listRes.ok) {
-                const listData = JSON.parse(listText);
-                const results = listData.Results || [];
-                allResults = allResults.concat(results);
-                if (results.length < 1000) hasMore = false;
-                else skip += 1000;
-            } else {
-                hasMore = false;
-            }
+        const listUrl = `${upstreamBase}/api/events/all?%24top=250&%24orderby=StartDate+desc`;
+        const { res: listRes, text: listText } = await proxyGetUpstream(listUrl, apiKey);
+        if (listRes.ok) {
+            const listData = JSON.parse(listText);
+            allResults = listData.Results || [];
         }
+
 
         if (allResults.length > 0) {
             const listData = { Results: allResults, TotalRecordAvailable: allResults.length };
@@ -219,27 +211,24 @@ export default {
             let allResults = [];
             let lastText = "";
             let lastStatus = 200;
+            let res = null;
+            let text = "";
 
             if (isDefaultList) {
-                let skip = 0;
-                let hasMore = true;
-                while (hasMore && skip < 5000) {
-                    const upstreamUrl = `${upstreamBase}/api/events/all?%24top=1000&%24skip=${skip}`;
-                    const { res, text } = await proxyGetUpstream(upstreamUrl, apiKey);
-                    lastStatus = res.status;
-                    lastText = text;
-                    if (res.ok) {
-                        const data = JSON.parse(text);
-                        const results = data.Results || [];
-                        allResults = allResults.concat(results);
-                        if (results.length < 1000) hasMore = false;
-                        else skip += 1000;
-                    } else {
-                        hasMore = false;
-                    }
+                const upstreamUrl = `${upstreamBase}/api/events/all?%24top=250&%24orderby=StartDate+desc`;
+                const rObj = await proxyGetUpstream(upstreamUrl, apiKey);
+                res = rObj.res;
+                text = rObj.text;
+                lastStatus = res.status;
+                lastText = text;
+                if (res.ok) {
+                    const data = JSON.parse(text);
+                    allResults = data.Results || [];
                 }
             } else {
-                const { res, text } = await proxyGetUpstream(upstreamUrl, apiKey);
+                const rObj = await proxyGetUpstream(upstreamUrl, apiKey);
+                res = rObj.res;
+                text = rObj.text;
                 lastStatus = res.status;
                 lastText = text;
                 if (res.ok) {
