@@ -2487,6 +2487,14 @@
 
         for (const e of results) {
           if (new Date(e.StartDate) >= now) {
+            let isCanceled = e.Name && (
+              e.Name.toLowerCase().trim().startsWith('** canceled **') ||
+              e.Name.toLowerCase().trim().startsWith('** cancelled **') ||
+              e.Name.toLowerCase().trim().startsWith('**canceled**') ||
+              e.Name.toLowerCase().trim().startsWith('**cancelled**')
+            );
+            if (isCanceled) continue;
+
             let isExcluded = e.Name && (e.Name.toLowerCase().includes('forewarn') || e.Name.toLowerCase().includes('cubicas') || e.Name.toLowerCase().includes('cubicasa'));
             if (isExcluded) continue;
 
