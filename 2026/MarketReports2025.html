@@ -900,6 +900,18 @@
     const REPORTS = [
       /* ===== 2026 ===== */
       {
+        year: 2026, month: "June",
+        fastStats: "https://coconutcoastrealtors.org/wp-content/uploads/2026/07/BER_Fast_Stats-3.pdf",
+        frStats: "https://coconutcoastrealtors.org/wp-content/uploads/2026/07/FR-Stats-June-2026.pdf",
+        indicators: "https://coconutcoastrealtors.org/wp-content/uploads/2026/07/BER_Monthly_Indicators-3.pdf",
+        thumb: "https://coconutcoastrealtors.org/wp-content/uploads/2026/07/Bonita-June-2026.png",
+        thumbs: [
+          "https://coconutcoastrealtors.org/wp-content/uploads/2026/07/Bonita-June-2026.png",
+          "https://coconutcoastrealtors.org/wp-content/uploads/2026/07/Fort-June-2026-True.png",
+          "https://coconutcoastrealtors.org/wp-content/uploads/2026/07/Naples-June-2026.png"
+        ]
+      },
+      {
         year: 2026, month: "May",
         fastStats: "https://coconutcoastrealtors.org/wp-content/uploads/2026/06/BER_Fast_Stats-May-2026.pdf",
         frStats: "https://coconutcoastrealtors.org/wp-content/uploads/2026/06/May-2026-FR-Report.pdf",
@@ -1542,6 +1554,52 @@
     // ---- Mock AI Chatbot Logic ----
     // Data mapping for specific month interactions
     const AI_DATA = {
+      "2026-june-q1": `Based on the June 2026 market data, the Bonita Springs-Estero region continues to show robust buyer demand and tight inventory. **Pending Sales jumped 21%** and **Closed Sales rose 20%** compared to June of last year, despite a decrease in new listings.
+
+KEY METRICS OVERVIEW (BONITA-ESTERO):
+* Median Sale Price: $555,000 (Flat/0% YoY).
+* Closed Sales: 280 units (Up 20% YoY).
+* New Listings: 257 units (Down 8% YoY).
+* Active Inventory: Down 31% YoY.
+* Median Days on Market: 69 days.
+
+CLOSED SALES (YoY):
+[BAR: June 2025|233|83%, June 2026|280|100%]
+
+PENDING SALES GROWTH:
+[BAR: June 2025|Base|83%, June 2026|+21%|100%]`,
+
+      "2026-june-q2": `PRICING & INVENTORY DYNAMICS:
+The median sales price has remained remarkably resilient and flat at **$555,000**, showing 0% change Year-over-Year. However, supply continues to contract significantly, with **New Listings down 8%** and total **Active Inventory (Homes for Sale) plunging 31%** YoY.
+
+INVENTORY TRAJECTORY (JUNE 2026):
+[BAR: New Listings|257|92%, Listings Sold|280|100%]
+
+DAYS ON MARKET:
+[BAR: Median DOM|69 Days|100%]
+
+With more homes selling than new ones entering the market (280 sold vs 257 new), we are seeing a continuous drawdown of active inventory, keeping the market competitive for buyers.`,
+
+      "2026-june-q3": `Comparing June 2026 to the previous year reveals a highly active summer market. The 20% increase in closed sales and 21% jump in pending contracts are impressive indicators of buyer demand, especially considering the 31% decline in active homes for sale compared to June 2025.
+
+MARKET TRANSACTION FLOW (YoY):
+[BAR: June 2025 Sales|233|83%, June 2026 Sales|280|100%]
+
+ACTIVE STOCK COMPARISON (YoY):
+[BAR: June 2025 Active|Base|100%, June 2026 Active|-31%|69%]
+
+The market remains significantly tighter than last year, driving swift transactions with a median of 69 days on market.`,
+
+      "2026-june-fr": `The June 2026 Florida Realtors report shows a diverging trend between Single-Family Homes and the Condo/Townhouse segment. While Single-Family closed sales decreased by 14%, the Condo segment experienced a massive 58% YoY surge in closed transactions. Single-Family Homes reached a median price of $540,000, while Condos/Townhouses rose 4.6% YoY to a median of $340,000.
+
+SFH vs. CONDO MEDIAN PRICES (JUNE 2026):
+[BAR: SFH Price|$540K|100%, Condo Price|$340K|63%]
+
+MONTHS SUPPLY OF INVENTORY (JUNE 2026):
+[BAR: SFH Supply|4.9 Mos|94%, Condo Supply|5.2 Mos|100%]
+
+Active inventory decreased across both segments, with Single-Family inventory down 20.7% (708 listings) and Condo/Townhouse inventory down 26.3% (507 listings). Months supply remains balanced at 4.9 months for Single-Family Homes (down 29%) and 5.2 months for Condos/Townhouses (down 41.6%).`,
+
       "2026-may-q1": `Based on the May 2026 market data, the Bonita Springs-Estero region continues to see stable activity as we transition into the summer months. **Pending Sales remain steady** and **Closed Sales show resilience** compared to the previous year, with well-priced homes moving quickly.
 
 KEY METRICS OVERVIEW:
