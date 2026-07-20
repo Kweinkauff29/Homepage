@@ -1265,8 +1265,15 @@
                     start = bulkDate;
                 }
 
-                let locType = "IN-PERSON PHYSICAL";
-                if (detail.ZoomConfigured || detail.GoToWebinarConfigured) locType = "DIGITAL REMOTE / ZOOM";
+                const categories = detail.CategoryItems?.filter(c => c.IsSelected).map(c => c.Name) || [];
+                const creditsVal = categories.join(', ') || 'GENERAL_ED';
+
+                const isOnline = detail.ZoomConfigured || detail.GoToWebinarConfigured || categories.some(cat => {
+                    const c = cat.toLowerCase();
+                    return c.includes('online') || c.includes('zoom') || c.includes('webinar') || c.includes('remote');
+                });
+
+                let locType = isOnline ? "DIGITAL REMOTE / ZOOM" : "IN-PERSON PHYSICAL";
 
                 // Extract Instructor from ContactName OR regex from Description
                 let instructor = detail.ContactName || "B.E.R. FACULTY";
@@ -1277,7 +1284,7 @@
 
                 // Append Google Maps embed for physical addresses
                 let mapEmbedHTML = '';
-                if (!detail.ZoomConfigured && !detail.GoToWebinarConfigured) {
+                if (!isOnline) {
                     const fallbackAddr = '25300 Bernwood Dr, Bonita Springs, FL 34135';
                     const fallbackName = 'Coconut Coast Organization of Realtors';
                     let queryStr = '';
@@ -1337,8 +1344,8 @@
                     <div class="m-grid">
                         <div class="m-section">
                             <span class="m-label">[// LOCATION]</span>
-                            <p class="m-value">${detail.LocationName || locType}</p>
-                            ${detail.Address1 ? `<p style="font-family:var(--font-mono); font-size:0.8rem; color:var(--swiss-light); margin:4px 0 0;">${detail.Address1}<br>${detail.City || ''}, ${detail.StateProvince || ''} ${detail.PostalCode || ''}</p>` : ''}
+                            <p class="m-value">${isOnline ? "DIGITAL REMOTE / ZOOM" : (detail.LocationName || locType)}</p>
+                            ${(!isOnline && detail.Address1) ? `<p style="font-family:var(--font-mono); font-size:0.8rem; color:var(--swiss-light); margin:4px 0 0;">${detail.Address1}<br>${detail.City || ''}, ${detail.StateProvince || ''} ${detail.PostalCode || ''}</p>` : ''}
                         </div>
                         
                         <div class="m-section">
@@ -1354,7 +1361,7 @@
 
                         <div class="m-section">
                             <span class="m-label">[// CREDITS]</span>
-                            <p class="m-value">${detail.CategoryItems?.filter(c => c.IsSelected).map(c => c.Name).join(', ') || 'GENERAL_ED'}</p>
+                            <p class="m-value">${creditsVal}</p>
                         </div>
                     </div>
 
