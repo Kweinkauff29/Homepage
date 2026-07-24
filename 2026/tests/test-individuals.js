@@ -1,18 +1,24 @@
+const apiKey = process.env.GZ_API_KEY;
+const BASE_URL = process.env.GZ_BASE_URL || 'https://coconutcoastrealtors.growthzoneapp.com';
 
-const apiKey = 'cR1djHVMkndNjLbwXyhDyOV7dWPJ6TnufYtcdOHc';
-const BASE_URL = 'https://coconutcoastrealtors.growthzoneapp.com';
+if (!apiKey) {
+    throw new Error('Set GZ_API_KEY in your environment before running this test.');
+}
 
-async function testFetchInd() {
-    // 4163688 is Cottrell Title
-    // Let's try to get all contacts that have OrganizationContactId = 4163688
-    // Or try fetching specific endpoints
-    const res = await fetch(`${BASE_URL}/api/contacts?$filter=OrganizationContactId eq 4163688`, {
-        headers: { 'Authorization': 'ApiKey ' + apiKey }
+async function testFetchIndividuals() {
+    // 4163688 is the organization contact ID used by this diagnostic.
+    const response = await fetch(`${BASE_URL}/api/contacts?$filter=OrganizationContactId eq 4163688`, {
+        headers: { Authorization: `ApiKey ${apiKey}` }
     });
-    const data = await res.json();
-    console.log("Individuals for Cottrell Title:", data?.Results?.length);
+    if (!response.ok) throw new Error(`GrowthZone returned ${response.status}.`);
+    const data = await response.json();
+    console.log('Individuals for organization:', data?.Results?.length || 0);
     if (data?.Results) {
-        data.Results.forEach(c => console.log(` - ${c.Name} (${c.ContactType})`));
+        data.Results.forEach(contact => console.log(` - ${contact.Name} (${contact.ContactType})`));
     }
 }
-testFetchInd().catch(console.error);
+
+testFetchIndividuals().catch(error => {
+    console.error(error);
+    process.exitCode = 1;
+});
