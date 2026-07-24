@@ -1,52 +1,57 @@
 const https = require('https');
 
-const API_KEY = 'cR1djHVMkndNjLbwXyhDyOV7dWPJ6TnufYtcdOHc';
-const BASE_URL = 'https://coconutcoastrealtors.growthzoneapp.com';
+const API_KEY = process.env.GZ_API_KEY;
+const BASE_URL = process.env.GZ_BASE_URL || 'https://coconutcoastrealtors.growthzoneapp.com';
+
+if (!API_KEY) {
+    throw new Error('Set GZ_API_KEY in your environment before running this test.');
+}
 
 async function fetchJson(url) {
     return new Promise((resolve, reject) => {
-        https.get(url, { headers: { 'Authorization': 'ApiKey ' + API_KEY } }, (res) => {
+        https.get(url, { headers: { Authorization: `ApiKey ${API_KEY}` } }, response => {
             let data = '';
-            res.on('data', chunk => data += chunk);
-            res.on('end', () => resolve(JSON.parse(data)));
+            response.on('data', chunk => { data += chunk; });
+            response.on('end', () => {
+                try {
+                    resolve(JSON.parse(data));
+                } catch (error) {
+                    reject(error);
+                }
+            });
         }).on('error', reject);
     });
 }
 
 async function run() {
-    try {
-        console.log("Fetching a few contacts...");
-        const response = await fetchJson(`${BASE_URL}/api/contacts?$top=5`);
-        const contacts = Array.isArray(response) ? response : (response.Results || response.Items || response.Data || []);
-        console.log(`Found ${contacts.length} contacts.`);
+    console.log('Fetching a few contacts...');
+    const response = await fetchJson(`${BASE_URL}/api/contacts?$top=5`);
+    const contacts = Array.isArray(response) ? response : (response.Results || response.Items || response.Data || []);
+    console.log(`Found ${contacts.length} contacts.`);
 
-        for (const c of contacts) {
-            console.log(`\n\n=== Contact: ${c.FirstName} ${c.LastName} (ID: ${c.ContactId}) ===`);
-            console.log("BASE CONTACT FIELDS =>");
-            console.log(Object.keys(c).filter(k => {
-                const val = c[k];
-                if (typeof val === 'string' && val.toLowerCase().includes('realtor')) return true;
-                if (k.toLowerCase().includes('nrds')) return true;
-                if (k.toLowerCase().includes('realtor')) return true;
-                return false;
-            }).map(k => `${k}: ${c[k]}`));
+    for (const contact of contacts) {
+        console.log(`\n\n=== Contact: ${contact.FirstName} ${contact.LastName} (ID: ${contact.ContactId}) ===`);
+        console.log('BASE CONTACT FIELDS =>');
+        console.log(Object.keys(contact).filter(key => {
+            const value = contact[key];
+            if (typeof value === 'string' && value.toLowerCase().includes('realtor')) return true;
+            if (key.toLowerCase().includes('nrds')) return true;
+            if (key.toLowerCase().includes('realtor')) return true;
+            return false;
+        }).map(key => `${key}: ${contact[key]}`));
 
-            const moreinfo = await fetchJson(`${BASE_URL}/api/contacts/${c.ContactId}/moreinfo`);
-            console.log("MOREINFO => ");
-            if (moreinfo && moreinfo.Fields) {
-                console.log(moreinfo.Fields.filter(f => {
-                    const n = (f.DisplayName || "").toLowerCase();
-                    const v = (f.Value || "").toLowerCase();
-                    return true; // Just print all to see what's there
-                }).map(f => `${f.DisplayName}: ${f.Value}`));
-            }
+        const moreInfo = await fetchJson(`${BASE_URL}/api/contacts/${contact.ContactId}/moreinfo`);
+        console.log('MOREINFO =>');
+        if (moreInfo?.Fields) console.log(moreInfo.Fields.map(field => `${field.DisplayName}: ${field.Value}`));
 
-            const org = await fetchJson(`${BASE_URL}/api/contacts/OrgGeneral/${c.ContactId}`);
-            console.log("ORG GENERAL LINKS => ");
-            if (org && org.WebPage) console.log("WebPage:", org.WebPage);
-            if (org && org.SocialNetworkLinks) console.log("Social:", org.SocialNetworkLinks);
-        }
-    } catch (e) { console.error(e); }
+        const organization = await fetchJson(`${BASE_URL}/api/contacts/OrgGeneral/${contact.ContactId}`);
+        console.log('ORG GENERAL LINKS =>');
+        if (organization?.WebPage) console.log('WebPage:', organization.WebPage);
+        if (organization?.SocialNetworkLinks) console.log('Social:', organization.SocialNetworkLinks);
+    }
 }
 
-run();
+run().catch(error => {
+    console.error(error);
+    process.exitCode = 1;
+});
