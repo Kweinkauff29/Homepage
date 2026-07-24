@@ -1,62 +1,62 @@
-const apiKey = 'cR1djHVMkndNjLbwXyhDyOV7dWPJ6TnufYtcdOHc';
-const BASE_URL = 'https://coconutcoastrealtors.growthzoneapp.com';
+const apiKey = process.env.GZ_API_KEY;
+const BASE_URL = process.env.GZ_BASE_URL || 'https://coconutcoastrealtors.growthzoneapp.com';
 
-async function testEndpoint(name, url, method = "GET", body = undefined) {
+if (!apiKey) {
+    throw new Error('Set GZ_API_KEY in your environment before running this test.');
+}
+
+async function testEndpoint(name, url, method = 'GET', body = undefined) {
     try {
-        const opts = {
+        const options = {
             method,
             headers: {
-                'Authorization': `ApiKey ${apiKey}`,
+                Authorization: `ApiKey ${apiKey}`,
                 'Content-Type': 'application/json'
             }
         };
-        if (body) opts.body = JSON.stringify(body);
-        const res = await fetch(new URL(url, BASE_URL), opts);
-        if (!res.ok) return null;
-        return await res.json();
-    } catch (e) {
+        if (body) options.body = JSON.stringify(body);
+        const response = await fetch(new URL(url, BASE_URL), options);
+        if (!response.ok) {
+            console.log(`${name} returned ${response.status}`);
+            return null;
+        }
+        return response.json();
+    } catch (error) {
+        console.error(`${name} failed:`, error.message);
         return null;
     }
 }
 
 async function runTests() {
-    console.log("Fetching top 5 active individual contacts to check fields...");
-    const contacts = await testEndpoint('POST Contacts', `/api/contacts?$top=5&$filter=Status eq 'Active' and SystemContactTypeId eq 1`);
-    if (!contacts || !contacts.Results) {
-        console.log("No contacts found.");
+    console.log('Fetching top 5 active individual contacts to check fields...');
+    const contacts = await testEndpoint('Contacts', `/api/contacts?$top=5&$filter=Status eq 'Active' and SystemContactTypeId eq 1`);
+    if (!contacts?.Results) {
+        console.log('No contacts found.');
         return;
     }
 
-    for (const c of contacts.Results) {
-        const name = c.Name;
-        const cid = c.ContactId;
-        console.log(`\n--- ${name} (${cid}) ---`);
+    for (const contact of contacts.Results) {
+        const name = contact.Name;
+        const contactId = contact.ContactId;
+        console.log(`\n--- ${name} (${contactId}) ---`);
 
-        // moreinfo
-        const more = await testEndpoint(`MoreInfo ${cid}`, `/api/contacts/${cid}/moreinfo`);
-        if (more && more.Fields) {
-            const desig = more.Fields.find(f => f.DisplayName === 'Designations');
-            if (desig) console.log(`MoreInfo Designations: ${desig.Value}`);
-            else console.log("MoreInfo: No 'Designations' field found.");
+        const moreInfo = await testEndpoint(`MoreInfo ${contactId}`, `/api/contacts/${contactId}/moreinfo`);
+        if (moreInfo?.Fields) {
+            const designation = moreInfo.Fields.find(field => field.DisplayName === 'Designations');
+            console.log(designation ? `MoreInfo Designations: ${designation.Value}` : "MoreInfo: No 'Designations' field found.");
         }
 
-        // OrgGeneral
-        const org = await testEndpoint(`OrgGeneral ${cid}`, `/api/contacts/OrgGeneral/${cid}`);
-        if (org) {
-            const groups = org.Groups || [];
-            if (groups.length > 0) {
-                console.log(`OrgGeneral Groups: ${groups.map(g => g.Name).join(", ")}`);
-            } else {
-                console.log("OrgGeneral: No Groups.");
-            }
-            const mems = org.Memberships || [];
-            if (mems.length > 0) {
-                console.log(`OrgGeneral Memberships: ${mems.map(m => m.Name).join(", ")}`);
-            } else {
-                console.log("OrgGeneral: No Memberships.");
-            }
+        const organization = await testEndpoint(`OrgGeneral ${contactId}`, `/api/contacts/OrgGeneral/${contactId}`);
+        if (organization) {
+            const groups = organization.Groups || [];
+            console.log(groups.length ? `OrgGeneral Groups: ${groups.map(group => group.Name).join(', ')}` : 'OrgGeneral: No Groups.');
+            const memberships = organization.Memberships || [];
+            console.log(memberships.length ? `OrgGeneral Memberships: ${memberships.map(membership => membership.Name).join(', ')}` : 'OrgGeneral: No Memberships.');
         }
     }
 }
 
-runTests();
+runTests().catch(error => {
+    console.error(error);
+    process.exitCode = 1;
+});

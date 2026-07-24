@@ -1,6 +1,9 @@
-const https = require('https');
-const apiKey = 'cR1djHVMkndNjLbwXyhDyOV7dWPJ6TnufYtcdOHc';
-const BASE_URL = 'https://coconutcoastrealtors.growthzoneapp.com';
+const apiKey = process.env.GZ_API_KEY;
+const BASE_URL = process.env.GZ_BASE_URL || 'https://coconutcoastrealtors.growthzoneapp.com';
+
+if (!apiKey) {
+    throw new Error('Set GZ_API_KEY in your environment before running this test.');
+}
 
 async function check() {
     const endpoints = [
@@ -10,21 +13,26 @@ async function check() {
         '/api/registration/events', '/api/modules/events',
         '/api/event', '/api/EventGroups', '/api/eventgroups'
     ];
-    for (let ep of endpoints) {
+    for (const endpoint of endpoints) {
         try {
-            const res = await fetch(`${BASE_URL}${ep}?$top=1`, {
-                headers: { 'Authorization': 'ApiKey ' + apiKey }
+            const response = await fetch(`${BASE_URL}${endpoint}?$top=1`, {
+                headers: { Authorization: `ApiKey ${apiKey}` }
             });
-            if (res.ok) {
-                console.log(`SUCCESS! Endpoint found: ${ep}`);
-                const data = await res.json();
+            if (response.ok) {
+                console.log(`SUCCESS! Endpoint found: ${endpoint}`);
+                const data = await response.json();
                 console.log(JSON.stringify(data, null, 2).slice(0, 500));
                 return;
-            } else if (res.status !== 404) {
-                console.log(`Endpoint ${ep} returned status: ${res.status}`);
             }
-        } catch (e) { }
+            if (response.status !== 404) console.log(`Endpoint ${endpoint} returned status: ${response.status}`);
+        } catch (error) {
+            console.error(`Endpoint ${endpoint} failed:`, error.message);
+        }
     }
-    console.log("None of the guessed endpoints worked.");
+    console.log('None of the tested endpoints worked.');
 }
-check();
+
+check().catch(error => {
+    console.error(error);
+    process.exitCode = 1;
+});
