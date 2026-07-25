@@ -7,7 +7,7 @@ on:
       - feature/member-controlled-realtor-directory
 
 permissions:
-  contents: write
+  contents: read
   issues: write
 
 jobs:
@@ -17,12 +17,11 @@ jobs:
       - uses: actions/checkout@v4
         with:
           ref: feature/member-controlled-realtor-directory
-      - name: Apply page cleanup
-        run: python '2026/patch_directory_page.py'
       - name: Validate directory source
         shell: bash
         run: |
           set -o pipefail
+          exec > >(tee directory-validation.log) 2>&1
           page='2026/AGENT DIRECTORY/index.html'
           legacy='2026/AGENTDIRECTORY.html'
           grep -q '/api/public/directory' "$page"
@@ -38,20 +37,12 @@ jobs:
           import re
           text=Path('2026/AGENT DIRECTORY/index.html').read_text()
           scripts=re.findall(r'<script>([\s\S]*?)</script>',text)
+          if not scripts:
+              raise SystemExit('No inline directory script found')
           Path('/tmp/directory.js').write_text('\n'.join(scripts))
           PY
           node --check /tmp/directory.js
-          echo 'Public directory HTML and JavaScript validation passed.' | tee directory-validation.log
-      - name: Commit cleaned page
-        run: |
-          git config user.name 'github-actions[bot]'
-          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
-          git add '2026/AGENT DIRECTORY/index.html'
-          if ! git diff --cached --quiet; then
-            git commit -m 'Fix initial directory loading placeholders'
-            git pull --rebase origin feature/member-controlled-realtor-directory
-            git push origin HEAD:feature/member-controlled-realtor-directory
-          fi
+          echo 'Public directory HTML and JavaScript validation passed.'
       - name: Publish result
         if: always()
         env:
@@ -60,7 +51,7 @@ jobs:
         run: |
           {
             echo '```text'
-            cat directory-validation.log 2>/dev/null || echo 'Directory validation failed before the success marker.'
+            tail -n 100 directory-validation.log 2>/dev/null || echo 'Directory validation failed before creating a log.'
             echo '```'
           } > report.md
           issue=$(gh issue list --repo "$REPOSITORY" --state all --search 'Member-managed REALTOR directory validation in:title' --json number,title --jq '.[] | select(.title == "Member-managed REALTOR directory validation") | .number' | head -n 1)
