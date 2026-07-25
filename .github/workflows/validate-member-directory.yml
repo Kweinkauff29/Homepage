@@ -20,17 +20,19 @@ jobs:
       - name: Validate directory source
         shell: bash
         run: |
-          set -o pipefail
+          set +e
           exec > >(tee directory-validation.log) 2>&1
           page='2026/AGENT DIRECTORY/index.html'
           legacy='2026/AGENTDIRECTORY.html'
-          grep -q '/api/public/directory' "$page"
-          grep -q 'Edit my directory profile' "$page"
-          grep -q 'youtube-nocookie.com' "$page"
-          grep -q 'featuredListings' "$page"
-          if grep -E 'ApiKey|apiKey[[:space:]]*=' "$page" "$legacy"; then
-            echo 'Browser-visible GrowthZone credential code remains.'
-            exit 1
+          failed=0
+          for pattern in '/api/public/directory' 'Edit my directory profile' 'youtube-nocookie.com' 'featuredListings'; do
+            if grep -nF "$pattern" "$page" | head -n 1; then echo "PASS: $pattern"; else echo "FAIL: $pattern"; failed=1; fi
+          done
+          if grep -nE 'ApiKey|apiKey[[:space:]]*=' "$page" "$legacy"; then
+            echo 'FAIL: browser-visible GrowthZone credential code remains.'
+            failed=1
+          else
+            echo 'PASS: no browser-visible GrowthZone credential code.'
           fi
           python - <<'PY'
           from pathlib import Path
@@ -40,8 +42,13 @@ jobs:
           if not scripts:
               raise SystemExit('No inline directory script found')
           Path('/tmp/directory.js').write_text('\n'.join(scripts))
+          print(f'Extracted {len(scripts)} inline script block(s).')
           PY
+          py_status=$?
           node --check /tmp/directory.js
+          node_status=$?
+          if [ "$py_status" -ne 0 ] || [ "$node_status" -ne 0 ]; then failed=1; else echo 'PASS: directory JavaScript syntax.'; fi
+          if [ "$failed" -ne 0 ]; then exit 1; fi
           echo 'Public directory HTML and JavaScript validation passed.'
       - name: Publish result
         if: always()
@@ -51,7 +58,7 @@ jobs:
         run: |
           {
             echo '```text'
-            tail -n 100 directory-validation.log 2>/dev/null || echo 'Directory validation failed before creating a log.'
+            tail -n 120 directory-validation.log 2>/dev/null || echo 'Directory validation failed before creating a log.'
             echo '```'
           } > report.md
           issue=$(gh issue list --repo "$REPOSITORY" --state all --search 'Member-managed REALTOR directory validation in:title' --json number,title --jq '.[] | select(.title == "Member-managed REALTOR directory validation") | .number' | head -n 1)
