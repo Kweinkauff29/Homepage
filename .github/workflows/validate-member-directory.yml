@@ -1,0 +1,67 @@
+name: Validate Member-Managed REALTOR Directory
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - feature/member-controlled-realtor-directory
+
+permissions:
+  contents: write
+  issues: write
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: feature/member-controlled-realtor-directory
+      - name: Apply page cleanup
+        run: python '2026/patch_directory_page.py'
+      - name: Validate directory source
+        shell: bash
+        run: |
+          set -o pipefail
+          page='2026/AGENT DIRECTORY/index.html'
+          legacy='2026/AGENTDIRECTORY.html'
+          grep -q '/api/public/directory' "$page"
+          grep -q 'Edit my directory profile' "$page"
+          grep -q 'youtube-nocookie.com' "$page"
+          grep -q 'featuredListings' "$page"
+          if grep -E 'ApiKey|apiKey[[:space:]]*=' "$page" "$legacy"; then
+            echo 'Browser-visible GrowthZone credential code remains.'
+            exit 1
+          fi
+          python - <<'PY'
+          from pathlib import Path
+          import re
+          text=Path('2026/AGENT DIRECTORY/index.html').read_text()
+          scripts=re.findall(r'<script>([\s\S]*?)</script>',text)
+          Path('/tmp/directory.js').write_text('\n'.join(scripts))
+          PY
+          node --check /tmp/directory.js
+          echo 'Public directory HTML and JavaScript validation passed.' | tee directory-validation.log
+      - name: Commit cleaned page
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add '2026/AGENT DIRECTORY/index.html'
+          if ! git diff --cached --quiet; then
+            git commit -m 'Fix initial directory loading placeholders'
+            git pull --rebase origin feature/member-controlled-realtor-directory
+            git push origin HEAD:feature/member-controlled-realtor-directory
+          fi
+      - name: Publish result
+        if: always()
+        env:
+          GH_TOKEN: ${{ github.token }}
+          REPOSITORY: ${{ github.repository }}
+        run: |
+          {
+            echo '```text'
+            cat directory-validation.log 2>/dev/null || echo 'Directory validation failed before the success marker.'
+            echo '```'
+          } > report.md
+          issue=$(gh issue list --repo "$REPOSITORY" --state all --search 'Member-managed REALTOR directory validation in:title' --json number,title --jq '.[] | select(.title == "Member-managed REALTOR directory validation") | .number' | head -n 1)
+          if [ -n "$issue" ]; then gh issue edit "$issue" --repo "$REPOSITORY" --body-file report.md; else gh issue create --repo "$REPOSITORY" --title 'Member-managed REALTOR directory validation' --body-file report.md; fi
