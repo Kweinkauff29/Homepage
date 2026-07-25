@@ -25,7 +25,7 @@ jobs:
           page='2026/AGENT DIRECTORY/index.html'
           legacy='2026/AGENTDIRECTORY.html'
           failed=0
-          for pattern in '/api/public/directory' 'Edit my directory profile' 'youtube-nocookie.com' 'featuredListings'; do
+          for pattern in '/api/public/directory' 'Edit my directory profile' 'video.embedUrl' 'featuredListings'; do
             if grep -nF "$pattern" "$page" | head -n 1; then echo "PASS: $pattern"; else echo "FAIL: $pattern"; failed=1; fi
           done
           if grep -nE 'ApiKey|apiKey[[:space:]]*=' "$page" "$legacy"; then
