@@ -1,4 +1,7 @@
-const apiKey = 'cR1djHVMkndNjLbwXyhDyOV7dWPJ6TnufYtcdOHc';
+const apiKey = process.env.GZ_API_KEY;
+if (!apiKey) {
+  throw new Error('Set GZ_API_KEY in the process environment before running this diagnostic.');
+}
 const BASE_URL = 'https://coconutcoastrealtors.growthzoneapp.com';
 
 async function testPost() {

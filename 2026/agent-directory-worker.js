@@ -9,7 +9,7 @@
  */
 
 const GZ_API_BASE = "https://coconutcoastrealtors.growthzoneapp.com/api";
-const GZ_API_KEY = "cR1djHVMkndNjLbwXyhDyOV7dWPJ6TnufYtcdOHc";
+const GZ_API_KEY = (typeof process !== 'undefined' && process.env.GZ_API_KEY) ? process.env.GZ_API_KEY : '';
 
 const CORS_HEADERS = {
   "Access-Control-Allow-Origin": "*",

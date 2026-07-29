@@ -1,6 +1,9 @@
 const https = require('https');
 
-const API_KEY = 'cR1djHVMkndNjLbwXyhDyOV7dWPJ6TnufYtcdOHc';
+const API_KEY = process.env.GZ_API_KEY;
+if (!API_KEY) {
+  throw new Error('Set GZ_API_KEY in the process environment before running this diagnostic.');
+}
 const BASE_URL = 'https://coconutcoastrealtors.growthzoneapp.com';
 
 async function fetchJsonText(url) {
