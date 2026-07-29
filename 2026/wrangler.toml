@@ -12,6 +12,6 @@ database_id = "fbba489f-fc17-4472-b70f-578ce5fd9933"
 binding = "GZ_PROXY"
 service = "gz-realestate-proxy"
 
-# Daily cron at 5am UTC (12am EST)
+# Background sync from GrowthZone to D1 every 30 minutes
 [triggers]
-crons = ["0 5 * * *"]
+crons = ["*/30 * * * *"]

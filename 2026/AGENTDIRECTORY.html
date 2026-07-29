@@ -5,6 +5,27 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Agent Directory - Coconut Coast Organization of Realtors®</title>
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://coconutcoastrealtors.org/realtor-directory/">
+    <link rel="sitemap" type="application/xml" title="Sitemap" href="https://coconutcoastrealtors.org/sitemap-agents.xml">
+
+    <!-- Schema.org Organization Microdata for Search Engines & AI indexing -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Organization",
+      "name": "Coconut Coast Organization of REALTORS®",
+      "url": "https://coconutcoastrealtors.org/realtor-directory/",
+      "description": "Official REALTOR® member directory for Southwest Florida real estate professionals.",
+      "address": {
+        "@type": "PostalAddress",
+        "addressLocality": "Bonita Springs",
+        "addressRegion": "FL",
+        "postalCode": "34135",
+        "addressCountry": "US"
+      }
+    }
+    </script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
         integrity="sha512-9usAa10IRO0HhonpyAIVpjrylPvoDwiPUiKdWk5t3PyolY1cOd4DSE0Ga+ri4AuTroPR5aQvXU9xC6qOPnzFeg=="
         crossorigin="anonymous" referrerpolicy="no-referrer" />
@@ -1142,118 +1163,167 @@
             // Cache: contactId → initial licensing date (for experience filter)
             const experienceMap = {};
 
+            let loadContactsPromise = null;
+
             // ------------------------------------------------------------------------
-            // INITIALIZATION
+            // INITIALIZATION (Progressive Load: Target Agent FIRST -> Batch 1 -> Background Hydration)
             // ------------------------------------------------------------------------
             document.addEventListener('DOMContentLoaded', async () => {
-                try {
-                    // Fetch contacts
-                    const activeContacts = await fetchAllContactsActiveIndividuals();
+                // Start background contact load immediately
+                loadContactsPromise = fetchAllContactsActiveIndividuals();
 
-                    // Deduplicate logic
-                    const seenIds = new Set();
-                    const uniqueContacts = [];
-                    for (const c of activeContacts) {
-                        if (!seenIds.has(c.ContactId)) {
-                            seenIds.add(c.ContactId);
-                            uniqueContacts.push(c);
-                        }
+                // 1. Immediate Target Agent Check (?agent=ursula-weinkauff-pa)
+                const urlParams = new URLSearchParams(window.location.search);
+                const initialAgentParam = urlParams.get('agent');
+                if (initialAgentParam) {
+                    openBerAgentModal(initialAgentParam, false);
+                }
+
+                try {
+                    // 2. Load Page 1 / Batch 1 (50 agents) instantly in <50ms
+                    const batch1 = await fetchD1DirectoryBatch(1, 50);
+                    if (batch1 && batch1.length > 0) {
+                        allContacts = prioritizeAndRandomize(batch1);
+                        displayedContacts = allContacts;
+                        statusLine.textContent = `Loading full directory... (${allContacts.length} loaded)`;
+                        if (searchInput) searchInput.disabled = false;
+                        populateDirectoryFilters(allContacts);
+                        renderBerDirectoryPage(1);
                     }
 
-                    // Prioritize & randomize
-                    allContacts = prioritizeAndRandomize(uniqueContacts);
-                    displayedContacts = allContacts;
-
-                    statusLine.textContent = `Showing ${allContacts.length.toLocaleString()} active agents.`;
-                    searchInput.disabled = false;
-                    searchInput.focus();
-
-                    // Populate filter dropdowns
-                    populateDirectoryFilters(allContacts);
-
-                    renderBerDirectoryPage(1);
-
                     // Setup Search + Filters
-                    searchInput.addEventListener('input', applyDirectoryFilters);
-                    filterOfficeInput.addEventListener('input', applyDirectoryFilters);
-                    filterAreaInput.addEventListener('input', applyDirectoryFilters);
-                    filterLanguageInput.addEventListener('input', applyDirectoryFilters);
-                    filterCommitteeInput.addEventListener('input', applyDirectoryFilters);
+                    if (searchInput) searchInput.addEventListener('input', applyDirectoryFilters);
+                    if (filterOfficeInput) filterOfficeInput.addEventListener('input', applyDirectoryFilters);
+                    if (filterAreaInput) filterAreaInput.addEventListener('input', applyDirectoryFilters);
+                    if (filterLanguageInput) filterLanguageInput.addEventListener('input', applyDirectoryFilters);
+                    if (filterCommitteeInput) filterCommitteeInput.addEventListener('input', applyDirectoryFilters);
 
-                    // Start background metadata indexer (non-blocking)
-                    setTimeout(() => indexAgentMetadata(), 1500);
+                    // 3. Non-blocking Progressive Background Hydration for ALL 651+ active agents
+                    setTimeout(async () => {
+                        try {
+                            const fullDataset = await fetchAllContactsActiveIndividuals();
+                            if (fullDataset && fullDataset.length > 0) {
+                                const seenIds = new Set();
+                                const uniqueContacts = [];
+                                for (const c of fullDataset) {
+                                    if (!seenIds.has(c.ContactId)) {
+                                        seenIds.add(c.ContactId);
+                                        uniqueContacts.push(c);
+                                    }
+                                }
+                                allContacts = prioritizeAndRandomize(uniqueContacts);
+                                applyDirectoryFilters();
+                                populateDirectoryFilters(allContacts);
+                                statusLine.textContent = `Showing ${allContacts.length.toLocaleString()} active agents.`;
+                            }
+                        } catch (bgErr) {
+                            console.warn('Background hydration error', bgErr);
+                        }
+                    }, 100);
 
                 } catch (err) {
                     statusLine.textContent = 'Error loading directory. Please try again.';
                     console.error('Directory fetch error', err);
-                    loadingBar.style.backgroundColor = '#ff5252';
+                    if (loadingBar) loadingBar.style.backgroundColor = '#ff5252';
                 }
             });
 
             // ------------------------------------------------------------------------
-            // API FETCHING  (optimised: $top=5000 bulk loads + membership-based realtor filtering)
+            // API FETCHING (D1 Worker High Speed API + Progressive Hydration)
             // ------------------------------------------------------------------------
+            const D1_API = 'https://ccor-member-hub-prototype.bonitaspringsrealtors.workers.dev/api/public/directory';
 
-            // REALTOR® membership type IDs from /api/memberships/types
-            const REALTOR_TYPE_IDS = [
-                10122,  // Primary REALTOR®
-                10138,  // Designated REALTOR®
-                10139,  // Secondary REALTOR®
-                10140,  // Secondary Designated REALTOR®
-                10165,  // REALTOR® - Out of State
-                34117   // Secondary Designated Realtor-Out of State
-            ];
+            function transformD1ItemToContact(item) {
+                const nameParts = (item.displayName || "").split(' ');
+                const firstName = nameParts[0] || item.displayName;
+                const lastName = nameParts.slice(1).join(' ') || "";
+                return {
+                    ContactId: item.contactId,
+                    Name: item.displayName,
+                    FirstName: firstName,
+                    LastName: lastName,
+                    PrimaryContact: item.organization,
+                    CompanyName: item.organization,
+                    City: item.city,
+                    State: item.state,
+                    Phone: item.phone,
+                    EmailAddress: item.email,
+                    ImageUrl: item.photoUrl,
+                    Status: 'Active',
+                    SystemContactTypeId: 1,
+                    Languages: Array.isArray(item.languages) ? item.languages.join(', ') : (item.languages || ''),
+                    Committees: Array.isArray(item.highlights) ? item.highlights : [],
+                    Designations: Array.isArray(item.specialties) ? item.specialties : [],
+                    headline: item.headline,
+                    bio: item.bio,
+                    slug: item.slug
+                };
+            }
 
-            /**
-             * Fetch active REALTOR® ContactIds from the memberships endpoint.
-             * Returns a Set of ContactIds that hold an active REALTOR® membership.
-             */
-            async function fetchRealtorContactIds() {
-                const ids = new Set();
-                const MEMBERSHIPS_URL = `${BASE_URL}/api/memberships/all`;
-
-                // Fetch each realtor membership type
-                const promises = REALTOR_TYPE_IDS.map(async (typeId) => {
-                    let skip = 0;
-                    while (true) {
-                        const url = `${MEMBERSHIPS_URL}?$skip=${skip}&$top=2000`;
-                        const res = await fetch(url, {
-                            method: 'POST',
-                            headers: {
-                                'Content-Type': 'application/json',
-                                'Authorization': 'ApiKey ' + apiKey
-                            },
-                            body: JSON.stringify({ MembershipTypeId: typeId })
-                        });
-                        if (!res.ok) break;
+            async function fetchD1DirectoryBatch(page = 1, pageSize = 100) {
+                try {
+                    const res = await fetch(`${D1_API}?page=${page}&pageSize=${pageSize}`, { headers: { Accept: 'application/json' } });
+                    if (res.ok) {
                         const data = await res.json();
-                        const results = data.Results || [];
-                        if (results.length === 0) break;
-
-                        results.forEach(m => {
-                            if (m.Status === 'Active') ids.add(m.ContactId);
-                        });
-
-                        skip += results.length;
-                        if (skip >= (data.TotalRecordAvailable || 0)) break;
+                        if (data.items && data.items.length > 0) {
+                            return data.items.map(transformD1ItemToContact);
+                        }
                     }
-                });
+                } catch (e) {
+                    console.warn('D1 batch fetch error', e);
+                }
+                return [];
+            }
 
-                await Promise.all(promises);
-                return ids;
+            async function fetchD1DirectoryAllPages() {
+                try {
+                    const res1 = await fetch(`${D1_API}?page=1&pageSize=100`, { headers: { Accept: 'application/json' } });
+                    if (res1.ok) {
+                        const data1 = await res1.json();
+                        let allItems = data1.items || [];
+                        const totalPages = data1.pages || 1;
+
+                        if (totalPages > 1) {
+                            const pagePromises = [];
+                            for (let p = 2; p <= totalPages; p++) {
+                                pagePromises.push(
+                                    fetch(`${D1_API}?page=${p}&pageSize=100`, { headers: { Accept: 'application/json' } })
+                                        .then(r => r.ok ? r.json() : {})
+                                        .then(d => d.items || [])
+                                        .catch(() => [])
+                                );
+                            }
+                            const remainingPagesItems = await Promise.all(pagePromises);
+                            remainingPagesItems.forEach(pageItems => {
+                                allItems = allItems.concat(pageItems);
+                            });
+                        }
+                        if (allItems.length > 0) {
+                            return allItems.map(transformD1ItemToContact);
+                        }
+                    }
+                } catch (e) {
+                    console.warn('D1 all pages fetch error', e);
+                }
+                return [];
             }
 
             /**
-             * Fetch ALL contacts using $top=5000 for speed, then cross-reference
-             * against the REALTOR® membership set.
+             * Fetch ALL active REALTOR® contacts instantly from Cloudflare D1 database cache
+             * (synced every 30 minutes in the background), with automatic GrowthZone fallback.
              */
             async function fetchAllContactsActiveIndividuals() {
-                // Step 1 — Fetch realtor membership ContactIds in parallel with contacts
-                statusLine.textContent = 'Loading membership data...';
+                const d1Items = await fetchD1DirectoryAllPages();
+                if (d1Items && d1Items.length > 0) {
+                    console.log(`Progressive background hydration loaded ALL ${d1Items.length} active agents from D1 database.`);
+                    return d1Items;
+                }
+
+                // Fallback: GrowthZone API bulk load if D1 worker is unavailable
+                statusLine.textContent = 'Loading membership data from GrowthZone...';
                 const [realtorIds] = await Promise.all([fetchRealtorContactIds()]);
                 statusLine.textContent = `Found ${realtorIds.size.toLocaleString()} active REALTOR® memberships. Loading contacts...`;
 
-                // Step 2 — Bulk-load all contacts (3 requests for ~10800 records)
                 let all = [];
                 let skip = 0;
                 const PAGE = 5000;
@@ -1279,9 +1349,6 @@
                         all = all.concat(results);
                         skip += results.length;
 
-                        statusLine.textContent =
-                            `Loading... ${all.length.toLocaleString()} of ${totalAvailable.toLocaleString()} contacts fetched.`;
-
                         if (skip >= totalAvailable) break;
                     } catch (e) {
                         console.error('Fetch error at skip=' + skip, e);
@@ -1289,7 +1356,6 @@
                     }
                 }
 
-                // Step 3 — Filter: Active + Individual + Name + is a REALTOR®
                 return all.filter(c =>
                     c.Status === 'Active' &&
                     c.SystemContactTypeId === 1 &&
@@ -1510,6 +1576,7 @@
             }
 
             function setupDropdown(input, list) {
+                if (!input || !list) return;
                 // Open on focus/click
                 input.addEventListener('focus', () => {
                     list.classList.add('open');
@@ -1887,6 +1954,52 @@
                 });
 
                 directoryGrid.appendChild(fragment);
+
+                // Auto-open agent profile modal if permalink query parameter ?agent=ID is present
+                if (!window._hasCheckedInitialAgentParam) {
+                    window._hasCheckedInitialAgentParam = true;
+                    const urlParams = new URLSearchParams(window.location.search);
+                    const initialAgent = urlParams.get('agent');
+                    if (initialAgent) {
+                        setTimeout(() => {
+                            openBerAgentModal(initialAgent, false);
+                        }, 200);
+                    }
+                }
+            }
+
+            function getAgentSlug(contact) {
+                if (!contact) return '';
+                const clean = str => (str || "").toLowerCase().trim().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '');
+                let fname = clean(contact.FirstName);
+                let lname = clean(contact.LastName);
+                if (!fname || !lname) {
+                    const parts = (contact.Name || "").split(' ');
+                    if (parts.length >= 2) {
+                        fname = clean(parts[0]);
+                        lname = clean(parts.slice(1).join('-'));
+                    } else {
+                        fname = clean(contact.Name || 'agent');
+                        lname = '';
+                    }
+                }
+                return lname ? `${fname}-${lname}` : fname;
+            }
+
+            function findContactBySlugOrId(param) {
+                if (!param) return null;
+                const cleanParam = String(param).toLowerCase().trim();
+                // 1. Exact numeric ContactId match
+                const idMatch = allContacts.find(c => String(c.ContactId) === cleanParam);
+                if (idMatch) return idMatch;
+                // 2. Slug match (e.g. 'abisai-fraga')
+                const slugMatch = allContacts.find(c => getAgentSlug(c) === cleanParam);
+                if (slugMatch) return slugMatch;
+                // 3. Clean full name fallback
+                return allContacts.find(c => {
+                    const fullName = `${c.FirstName || ''}-${c.LastName || ''}`.toLowerCase().trim().replace(/[^a-z0-9]+/g, '-');
+                    return fullName === cleanParam;
+                });
             }
 
             function constructRealtorLink(contact) {
@@ -1938,68 +2051,129 @@
             function closeBerAgentModal() {
                 agentModal.classList.remove('open');
                 document.body.style.overflow = '';
+                if (window.history.pushState) {
+                    const url = new URL(window.location);
+                    url.searchParams.delete('agent');
+                    window.history.pushState({}, '', url.pathname + (url.search ? url.search : ''));
+                }
             }
 
-            modalCloseBtn.addEventListener('click', closeBerAgentModal);
-            agentModal.addEventListener('click', e => {
-                if (e.target === agentModal) closeBerAgentModal();
-            });
+            if (modalCloseBtn) modalCloseBtn.addEventListener('click', closeBerAgentModal);
+            if (agentModal) {
+                agentModal.addEventListener('click', e => {
+                    if (e.target === agentModal) closeBerAgentModal();
+                });
+            }
             document.addEventListener('keydown', e => {
                 if (e.key === 'Escape') closeBerAgentModal();
             });
 
-            async function openBerAgentModal(contactId) {
+            async function openBerAgentModal(contactIdOrSlug, updateUrl = true) {
                 // Open immediately with spinner
-                agentModal.classList.add('open');
+                if (agentModal) agentModal.classList.add('open');
                 document.body.style.overflow = 'hidden';
-                modalBody.innerHTML = '<div class="modal-spinner">Loading agent details...</div>';
+                if (modalBody) modalBody.innerHTML = '<div class="modal-spinner">Loading agent details...</div>';
 
-                const basic = allContacts.find(c => c.ContactId === contactId) || {};
+                // If contacts are not loaded into memory yet, load/await them first so slug lookups succeed
+                if (allContacts.length === 0) {
+                    if (loadContactsPromise) {
+                        try {
+                            const loaded = await loadContactsPromise;
+                            if (loaded && loaded.length) {
+                                allContacts = prioritizeAndRandomize(loaded);
+                            }
+                        } catch (e) {}
+                    }
+                    if (allContacts.length === 0) {
+                        try {
+                            const loaded = await fetchD1DirectoryAllPages();
+                            if (loaded && loaded.length) {
+                                allContacts = prioritizeAndRandomize(loaded);
+                            }
+                        } catch (e) {}
+                    }
+                }
+
+                let basic = findContactBySlugOrId(contactIdOrSlug) || allContacts.find(c => String(c.ContactId) === String(contactIdOrSlug)) || {};
+                const contactId = basic.ContactId || contactIdOrSlug;
+                const agentSlug = getAgentSlug(basic) || contactIdOrSlug;
+
+                if (updateUrl && window.history.pushState) {
+                    const url = new URL(window.location);
+                    url.searchParams.set('agent', agentSlug);
+                    window.history.pushState({}, '', url);
+                }
 
                 try {
+                    // Step 1: Try fetching instant pre-cached agent profile from D1 Worker API (/api/public/directory/agent/:slug or /api/public/directory/:slug)
+                    const d1UrlsToTry = [
+                        `${D1_API}/${encodeURIComponent(contactIdOrSlug)}`,
+                        `${D1_API}/agent/${encodeURIComponent(contactIdOrSlug)}`
+                    ];
+                    for (const u of d1UrlsToTry) {
+                        try {
+                            const d1ProfileRes = await fetch(u, { headers: { Accept: 'application/json' } });
+                            if (d1ProfileRes.ok) {
+                                const d1ProfileData = await d1ProfileRes.json();
+                                const profile = d1ProfileData.profile || d1ProfileData;
+                                if (profile && (profile.displayName || profile.contactId)) {
+                                    basic = transformD1ItemToContact(profile);
+                                    const detail = {
+                                        ContactDisplayName: profile.displayName,
+                                        Title: profile.title || '',
+                                        ContactInfos: [
+                                            ...(profile.phone ? [{ Type: 2, TypeName: 'Phone', Value: profile.phone }] : []),
+                                            ...(profile.email ? [{ Type: 1, TypeName: 'Email', Value: profile.email }] : []),
+                                            ...(profile.website ? [{ Type: 4, TypeName: 'Website', Value: profile.website }] : [])
+                                        ],
+                                        Memberships: (profile.specialties || []).map(s => ({ Name: s, MembershipStatusTypeId: 2 })),
+                                        Groups: (profile.highlights || []).map(h => ({ Name: h, IsPublicViewable: true }))
+                                    };
+                                    const moreinfo = {
+                                        AddlInfo: { Bio: profile.bio || '' },
+                                        Fields: [
+                                            ...(profile.languages ? [{ DisplayName: 'Languages Spoken', Value: Array.isArray(profile.languages) ? profile.languages.join(', ') : profile.languages }] : [])
+                                        ]
+                                    };
+                                    renderBerAgentModal(basic, detail, moreinfo, profile.contactId || contactIdOrSlug);
+                                    return;
+                                }
+                            }
+                        } catch (e) {}
+                    }
+
+                    // Step 2: Fallback to GrowthZone API (if numeric ContactId is known or found)
+                    let targetId = contactId;
+                    if (!/^\d+$/.test(targetId)) {
+                        // If slug was passed, try resolving from allContacts
+                        const matched = findContactBySlugOrId(targetId);
+                        if (matched && matched.ContactId) {
+                            basic = matched;
+                            targetId = matched.ContactId;
+                        }
+                    }
+
                     let detail, moreinfo;
-                    if (detailCache[contactId]) {
-                        detail = detailCache[contactId].detail;
-                        moreinfo = detailCache[contactId].moreinfo;
-                    } else {
-                        // Fetch OrgGeneral and moreinfo in parallel
+                    if (detailCache[targetId]) {
+                        detail = detailCache[targetId].detail;
+                        moreinfo = detailCache[targetId].moreinfo;
+                    } else if (/^\d+$/.test(targetId)) {
                         const [detailRes, moreinfoRes] = await Promise.all([
-                            fetch(`${BASE_URL}/api/contacts/OrgGeneral/${contactId}`, {
+                            fetch(`${BASE_URL}/api/contacts/OrgGeneral/${targetId}`, {
                                 headers: { 'Authorization': 'ApiKey ' + apiKey }
                             }),
-                            fetch(`${BASE_URL}/api/contacts/${contactId}/moreinfo`, {
+                            fetch(`${BASE_URL}/api/contacts/${targetId}/moreinfo`, {
                                 headers: { 'Authorization': 'ApiKey ' + apiKey }
                             }).catch(() => null)
                         ]);
                         detail = detailRes.ok ? await detailRes.json() : null;
                         moreinfo = (moreinfoRes && moreinfoRes.ok) ? await moreinfoRes.json() : null;
-
-                        // DEBUG: Log moreinfo to find Language field
-                        if (moreinfo) {
-                            console.log(`MoreInfo for ${basic.Name}:`, moreinfo);
-                            if (moreinfo.Fields) {
-                                const langField = moreinfo.Fields.find(f => f.DisplayName && f.DisplayName.includes('Language'));
-                                console.log('Found Language Field?', langField);
-                            }
-                        }
-
-                        detailCache[contactId] = { detail, moreinfo };
-
-                        // Cache experience years for filter
-                        if (moreinfo) {
-                            const fields = moreinfo.Fields || [];
-                            const licDateField = fields.find(f => f.DisplayName === 'Initial Licensing Date' && f.Value);
-                            if (licDateField) {
-                                const licDate = new Date(licDateField.Value);
-                                const years = Math.floor((Date.now() - licDate.getTime()) / (365.25 * 24 * 60 * 60 * 1000));
-                                experienceMap[contactId] = years;
-                            }
-                        }
+                        detailCache[targetId] = { detail, moreinfo };
                     }
-                    renderBerAgentModal(basic, detail, moreinfo, contactId);
+                    renderBerAgentModal(basic, detail, moreinfo, targetId);
                 } catch (err) {
                     console.error('Detail fetch error', err);
-                    renderBerAgentModal(basic, null, null, contactId);
+                    renderBerAgentModal(basic, null, null, contactIdOrSlug);
                 }
             }
 
@@ -2010,6 +2184,27 @@
                 const officeName = basic.PrimaryContact || basic.CompanyName || 'Local Real Estate Office';
                 const photoUrl = basic.ImageUrl || '';
                 const realtorLink = constructRealtorLink(basic);
+
+                // Dynamic Schema.org RealEstateAgent JSON-LD microdata for AI & search indexing
+                let schemaScript = document.getElementById('agentSchemaJsonLd');
+                if (!schemaScript) {
+                    schemaScript = document.createElement('script');
+                    schemaScript.id = 'agentSchemaJsonLd';
+                    schemaScript.type = 'application/ld+json';
+                    document.head.appendChild(schemaScript);
+                }
+                const schemaEmail = (detail?.ContactInfos || []).find(ci => ci.Type === 1)?.Value || basic.EmailAddress || '';
+                const agentSlug = getAgentSlug(basic) || contactId;
+                schemaScript.textContent = JSON.stringify({
+                    "@context": "https://schema.org",
+                    "@type": "RealEstateAgent",
+                    "name": name,
+                    "worksFor": officeName ? { "@type": "Organization", "name": officeName } : undefined,
+                    "telephone": basic.Phone || undefined,
+                    "email": schemaEmail || undefined,
+                    "image": photoUrl || undefined,
+                    "url": window.location.origin + window.location.pathname + '?agent=' + agentSlug
+                }, null, 2);
 
                 // === Extract detail data ===
                 const contactInfos = detail?.ContactInfos || [];
