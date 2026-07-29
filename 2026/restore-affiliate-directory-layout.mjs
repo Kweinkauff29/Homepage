@@ -6,7 +6,7 @@ import { dirname, resolve } from 'node:path';
 const ORIGINAL_LAYOUT_COMMIT = 'f8867fa03ce066a22af830346b57ee53cbe34f27';
 const ORIGINAL_LAYOUT_PATH = '2026/AFFILIATEDIRECTORY.html';
 const here = dirname(fileURLToPath(import.meta.url));
-const controllerPath = resolve(here, 'affiliate-directory-secure-api.js');
+const controllerPath = resolve(here, 'affiliate-directory-secure-api-v2.js');
 const outputPath = resolve(here, 'AFFILIATEDIRECTORY.html');
 
 const original = execFileSync(
@@ -43,4 +43,4 @@ if (!restored.includes('ccor-member-hub-prototype.bonitaspringsrealtors.workers.
 }
 
 writeFileSync(outputPath, restored, 'utf8');
-console.log('Restored the original Affiliate Directory layout with the secured Worker API controller.');
+console.log('Restored the original Affiliate Directory layout with the indexed secure Worker API controller v2.');
