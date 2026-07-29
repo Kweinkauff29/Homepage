@@ -2,7 +2,9 @@ name: Restore Affiliate Directory layout
 
 on:
   push:
-    branches: [main]
+    branches:
+      - main
+      - agent/restore-affiliate-layout-secure-api
     paths:
       - '2026/affiliate-directory-secure-api.js'
       - '2026/restore-affiliate-directory-layout.mjs'
