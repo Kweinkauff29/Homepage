@@ -167,6 +167,21 @@ export default {
       return handleSingleAgent(env, request, slugOrId, isCrawler(userAgent));
     }
 
+    // 4. Trigger Sync Endpoint (/api/sync-agents or /api/admin/sync-agents)
+    if (pathname === "/api/sync-agents" || pathname === "/api/admin/sync-agents") {
+      try {
+        await syncGrowthZoneToD1(env);
+        return new Response(JSON.stringify({ success: true, message: "GrowthZone to D1 Agent Sync Completed." }), {
+          headers: { ...CORS_HEADERS, "Content-Type": "application/json" }
+        });
+      } catch (err) {
+        return new Response(JSON.stringify({ error: err.message }), {
+          status: 500,
+          headers: { ...CORS_HEADERS, "Content-Type": "application/json" }
+        });
+      }
+    }
+
     return new Response(JSON.stringify({ error: "Endpoint not found" }), { status: 404, headers: { ...CORS_HEADERS, "Content-Type": "application/json" } });
   },
 
@@ -300,8 +315,8 @@ async function handleDirectoryList(env, url) {
   let params = [];
 
   if (q) {
-    whereClauses.push("(display_name LIKE ? OR organization LIKE ? OR city LIKE ?)");
-    params.push(`%${q}%`, `%${q}%`, `%${q}%`);
+    whereClauses.push("(display_name LIKE ? OR organization LIKE ? OR city LIKE ? OR bio LIKE ?)");
+    params.push(`%${q}%`, `%${q}%`, `%${q}%`, `%${q}%`);
   }
   if (office) {
     whereClauses.push("organization = ?");
@@ -320,7 +335,7 @@ async function handleDirectoryList(env, url) {
     total = countRes ? countRes.count : 0;
 
     const listRes = await db.prepare(
-      `SELECT contact_id, slug, display_name, organization, headline, city, state, photo_url, specialties, languages, service_areas
+      `SELECT contact_id, slug, display_name, organization, headline, bio, city, state, phone, email, website, photo_url, banner_url, specialties, languages, service_areas, highlights
        FROM agents_directory WHERE ${whereSql} ORDER BY display_name ASC LIMIT ? OFFSET ?`
     ).bind(...params, pageSize, offset).all();
 
@@ -330,12 +345,18 @@ async function handleDirectoryList(env, url) {
       displayName: row.display_name,
       organization: row.organization,
       headline: row.headline,
+      bio: row.bio,
       city: row.city,
       state: row.state,
+      phone: row.phone,
+      email: row.email,
+      website: row.website,
       photoUrl: row.photo_url,
+      bannerUrl: row.banner_url,
       specialties: safeParseJson(row.specialties),
       languages: safeParseJson(row.languages),
-      serviceAreas: safeParseJson(row.service_areas)
+      serviceAreas: safeParseJson(row.service_areas),
+      highlights: safeParseJson(row.highlights)
     }));
   }
 
@@ -355,9 +376,10 @@ async function syncGrowthZoneToD1(env) {
   const db = env.WRAP_DB;
   if (!db) return;
 
+  const apiKey = env.GZ_API_KEY || GZ_API_KEY;
   console.log("Starting GrowthZone to D1 Agent Sync...");
   const response = await fetch(`${GZ_API_BASE}/contacts?\$skip=0&\$top=11000`, {
-    headers: { "Authorization": `Bearer ${GZ_API_KEY}`, "Accept": "application/json" }
+    headers: { "Authorization": `Bearer ${apiKey}`, "Accept": "application/json" }
   });
 
   if (!response.ok) throw new Error(`GrowthZone API Error: ${response.status}`);
@@ -370,30 +392,91 @@ async function syncGrowthZoneToD1(env) {
     if (!c.Id || !c.DisplayName) continue;
 
     const slug = generateSlug(c.DisplayName, c.Id);
-    const phone = c.Phone || (c.Phones && c.Phones[0]?.Number) || null;
-    const email = c.Email || (c.Emails && c.Emails[0]?.Address) || null;
+    const phone = c.Phone || (c.Phones && (c.Phones[0]?.Number || c.Phones[0]?.Value)) || null;
+    const email = c.Email || c.EmailAddress || (c.Emails && (c.Emails[0]?.Address || c.Emails[0]?.Value)) || null;
     const city = c.City || (c.Addresses && c.Addresses[0]?.City) || "Bonita Springs";
     const state = c.State || (c.Addresses && c.Addresses[0]?.State) || "FL";
-    const org = c.CompanyName || c.OrganizationName || null;
+    const org = c.CompanyName || c.OrganizationName || c.PrimaryContact || null;
+
+    const bio = c.Bio || c.Description || c.About || c.Biography || (c.AddlInfo && c.AddlInfo.Bio) || null;
+    const headline = c.Headline || c.Tagline || c.Title || null;
+    const photoUrl = c.PhotoUrl || c.ImageUrl || c.PictureUrl || c.ProfileImage || null;
+    const bannerUrl = c.BannerUrl || c.CoverImageUrl || null;
+    const website = c.Website || c.WebAddress || c.WebsiteUrl || (c.WebAddresses && c.WebAddresses[0]?.Value) || null;
+
+    // Parse Languages
+    let languages = [];
+    if (Array.isArray(c.Languages)) languages = c.Languages;
+    else if (typeof c.Languages === 'string' && c.Languages.trim()) languages = c.Languages.split(',').map(s => s.trim()).filter(Boolean);
+    else if (c.SpokenLanguages) languages = Array.isArray(c.SpokenLanguages) ? c.SpokenLanguages : String(c.SpokenLanguages).split(',').map(s => s.trim()).filter(Boolean);
+
+    // Parse Specialties
+    let specialties = [];
+    if (Array.isArray(c.Specialties)) specialties = c.Specialties;
+    else if (Array.isArray(c.Designations)) specialties = c.Designations;
+    else if (typeof c.Specialties === 'string' && c.Specialties.trim()) specialties = c.Specialties.split(',').map(s => s.trim()).filter(Boolean);
+    else if (typeof c.Designations === 'string' && c.Designations.trim()) specialties = c.Designations.split(',').map(s => s.trim()).filter(Boolean);
+
+    // Parse Service Areas
+    let serviceAreas = [];
+    if (Array.isArray(c.ServiceAreas)) serviceAreas = c.ServiceAreas;
+    else if (typeof c.ServiceAreas === 'string' && c.ServiceAreas.trim()) serviceAreas = c.ServiceAreas.split(',').map(s => s.trim()).filter(Boolean);
+    else if (c.FarmingArea) serviceAreas = [String(c.FarmingArea).trim()];
+
+    // Parse Highlights / Committees
+    let highlights = [];
+    if (Array.isArray(c.Committees)) highlights = c.Committees;
+    else if (Array.isArray(c.Groups)) highlights = c.Groups.map(g => typeof g === 'string' ? g : (g.Name || '')).filter(Boolean);
+
+    // Parse Custom Fields
+    const fields = c.CustomFields || c.Fields || [];
+    if (Array.isArray(fields)) {
+      fields.forEach(f => {
+        const fieldName = (f.DisplayName || f.Name || '').toLowerCase();
+        const val = (f.Value || '').trim();
+        if (!val) return;
+
+        if (fieldName.includes('language')) {
+          languages = [...new Set([...languages, ...val.split(',').map(s => s.trim()).filter(Boolean)])];
+        }
+        if (fieldName.includes('expertise') || fieldName.includes('specialt') || fieldName.includes('designation')) {
+          specialties = [...new Set([...specialties, ...val.split(',').map(s => s.trim()).filter(Boolean)])];
+        }
+        if (fieldName.includes('neighborhood') || fieldName.includes('farming') || fieldName.includes('area')) {
+          serviceAreas = [...new Set([...serviceAreas, ...val.split(',').map(s => s.trim()).filter(Boolean)])];
+        }
+      });
+    }
 
     await db.prepare(`
       INSERT INTO agents_directory (
         contact_id, slug, display_name, first_name, last_name, organization,
-        city, state, phone, email, status, updated_at, indexed_at
-      ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 'Active', datetime('now'), datetime('now'))
+        headline, bio, city, state, phone, email, website, photo_url, banner_url,
+        specialties, languages, service_areas, highlights, status, updated_at, indexed_at
+      ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 'Active', datetime('now'), datetime('now'))
       ON CONFLICT(contact_id) DO UPDATE SET
         slug = excluded.slug,
         display_name = excluded.display_name,
         organization = excluded.organization,
+        headline = COALESCE(excluded.headline, agents_directory.headline),
+        bio = COALESCE(excluded.bio, agents_directory.bio),
         city = excluded.city,
         state = excluded.state,
         phone = excluded.phone,
         email = excluded.email,
+        website = COALESCE(excluded.website, agents_directory.website),
+        photo_url = COALESCE(excluded.photo_url, agents_directory.photo_url),
+        banner_url = COALESCE(excluded.banner_url, agents_directory.banner_url),
+        specialties = COALESCE(excluded.specialties, agents_directory.specialties),
+        languages = COALESCE(excluded.languages, agents_directory.languages),
+        service_areas = COALESCE(excluded.service_areas, agents_directory.service_areas),
+        highlights = COALESCE(excluded.highlights, agents_directory.highlights),
         status = 'Active',
         updated_at = datetime('now')
     `).bind(
       c.Id, slug, c.DisplayName, c.FirstName || null, c.LastName || null, org,
-      city, state, phone, email
+      headline, bio, city, state, phone, email, website, photoUrl, bannerUrl,
+      JSON.stringify(specialties), JSON.stringify(languages), JSON.stringify(serviceAreas), JSON.stringify(highlights)
     ).run();
   }
 

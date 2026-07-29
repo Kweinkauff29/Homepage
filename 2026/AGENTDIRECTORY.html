@@ -1248,12 +1248,15 @@
                     State: item.state,
                     Phone: item.phone,
                     EmailAddress: item.email,
+                    Website: item.website,
                     ImageUrl: item.photoUrl,
+                    BannerUrl: item.bannerUrl,
                     Status: 'Active',
                     SystemContactTypeId: 1,
                     Languages: Array.isArray(item.languages) ? item.languages.join(', ') : (item.languages || ''),
-                    Committees: Array.isArray(item.highlights) ? item.highlights : [],
-                    Designations: Array.isArray(item.specialties) ? item.specialties : [],
+                    Committees: Array.isArray(item.highlights) ? item.highlights : (item.highlights || []),
+                    Designations: Array.isArray(item.specialties) ? item.specialties : (item.specialties || []),
+                    ServiceAreas: Array.isArray(item.serviceAreas) ? item.serviceAreas : (item.serviceAreas || []),
                     headline: item.headline,
                     bio: item.bio,
                     slug: item.slug
@@ -2132,7 +2135,9 @@
                                     const moreinfo = {
                                         AddlInfo: { Bio: profile.bio || '' },
                                         Fields: [
-                                            ...(profile.languages ? [{ DisplayName: 'Languages Spoken', Value: Array.isArray(profile.languages) ? profile.languages.join(', ') : profile.languages }] : [])
+                                            ...(profile.languages ? [{ DisplayName: 'Languages Spoken', Value: Array.isArray(profile.languages) ? profile.languages.join(', ') : profile.languages }] : []),
+                                            ...(profile.serviceAreas ? [{ DisplayName: 'Neighborhood of Expertise', Value: Array.isArray(profile.serviceAreas) ? profile.serviceAreas.join(', ') : profile.serviceAreas }] : []),
+                                            ...(profile.specialties ? [{ DisplayName: 'Area of Expertise', Value: Array.isArray(profile.specialties) ? profile.specialties.join(', ') : profile.specialties }] : [])
                                         ]
                                     };
                                     renderBerAgentModal(basic, detail, moreinfo, profile.contactId || contactIdOrSlug);
