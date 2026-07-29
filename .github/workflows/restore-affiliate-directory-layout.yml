@@ -1,0 +1,46 @@
+name: Restore Affiliate Directory layout
+
+on:
+  push:
+    branches:
+      - main
+      - agent/restore-affiliate-layout-secure-api
+    paths:
+      - '2026/affiliate-directory-secure-api.js'
+      - '2026/restore-affiliate-directory-layout.mjs'
+      - '2026/validate-affiliate-directory.mjs'
+      - '.github/workflows/restore-affiliate-directory-layout.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  restore-layout:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out full repository history
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Verify secure controller syntax
+        run: node --check 2026/affiliate-directory-secure-api.js
+
+      - name: Restore original layout and inject secure controller
+        run: node 2026/restore-affiliate-directory-layout.mjs
+
+      - name: Validate presentation, indexing, and credential isolation
+        run: node 2026/validate-affiliate-directory.mjs
+
+      - name: Commit generated directory page
+        run: |
+          if git diff --quiet -- 2026/AFFILIATEDIRECTORY.html; then
+            echo 'Affiliate Directory is already current.'
+            exit 0
+          fi
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add 2026/AFFILIATEDIRECTORY.html
+          git commit -m 'Restore original Affiliate Directory layout with secure API'
+          git push
