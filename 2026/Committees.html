@@ -1,13 +1,1182 @@
-<!doctype html>
-<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Committee Meetings - Coconut Coast Organization of REALTORS®</title>
-<link rel="preconnect" href="https://www.ccreschool.com"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css"><link rel="stylesheet" href="https://kweinkauff29.github.io/Homepage/2026/assets/ccor-events.css?v=20260803"></head>
-<body data-ccor-events-page="committee"><main class="ccor-events" id="ccorEventsApp">
-<div class="ccor-sponsor"><div id="mni-partners-c559b00f"></div></div>
-<header class="ccor-head"><div><p class="ccor-kicker">CCOR calendar // live GrowthZone feed</p><h1 class="ccor-title" id="pageTitle">Committee Meetings</h1></div><nav class="ccor-nav" aria-label="Calendar pages"><a data-page="education" href="https://coconutcoastrealtors.org/upcoming-education/">Education</a><a data-page="event" href="https://coconutcoastrealtors.org/upcoming-events/">Events</a><a data-page="committee" href="https://coconutcoastrealtors.org/committee-meetings/">Committees</a><a data-page="all" href="https://coconutcoastrealtors.org/all-upcoming-events/">All events</a></nav></header>
-<div class="ccor-status"><span id="statusText">Initializing current feed…</span><strong id="sourceText">Connecting</strong></div>
-<section class="ccor-featured" aria-labelledby="featuredTitle"><div class="ccor-section-head"><div><p class="ccor-section-code">01 // Featured now</p><h2 id="featuredTitle">Featured classes and events</h2><p id="pageCopy"></p></div><span class="ccor-chip" id="featuredRule">Automatic fallback</span></div><div class="ccor-featured-grid" id="featuredGrid"><div class="ccor-empty">Loading featured items…</div></div></section>
-<section class="ccor-calendar-wrap" aria-labelledby="calendarTitle"><div class="ccor-calendar"><div class="ccor-calendar-head"><button class="ccor-icon-button" id="prevMonth" type="button" aria-label="Previous month">←</button><h3 id="monthLabel">Calendar</h3><button class="ccor-icon-button" id="nextMonth" type="button" aria-label="Next month">→</button></div><div class="ccor-calendar-week" aria-hidden="true"><span>Sun</span><span>Mon</span><span>Tue</span><span>Wed</span><span>Thu</span><span>Fri</span><span>Sat</span></div><div class="ccor-calendar-grid" id="calendarGrid" aria-label="Interactive upcoming calendar"></div></div><aside class="ccor-agenda"><p class="ccor-section-code">02 // Selected date</p><h3 id="calendarTitle">Daily agenda</h3><p class="ccor-agenda-date" id="agendaDate"></p><div class="ccor-agenda-list" id="agendaList"></div></aside></section>
-<section aria-labelledby="upcomingTitle"><div class="ccor-section-head" style="padding-top:28px"><div><p class="ccor-section-code">03 // Complete feed</p><h2 id="upcomingTitle">More upcoming opportunities</h2><p id="resultCount">Loading upcoming items…</p></div></div><div class="ccor-tools"><label class="ccor-field"><span>Search</span><input id="eventSearch" type="search" placeholder="Class, event, topic or location"></label><label class="ccor-field"><span>Date range</span><input id="dateRange" type="text" placeholder="Select dates"></label><label class="ccor-field"><span>Format</span><select id="formatFilter"><option value="all">All formats</option><option value="in-person">In person</option><option value="online">Online / Zoom</option><option value="hybrid">Hybrid</option></select></label><label class="ccor-toggle" id="ceToggleWrap"><input id="ceOnly" type="checkbox"> CE only</label></div><div class="ccor-upcoming" id="upcomingGrid"></div><div class="ccor-load"><button class="ccor-button" id="loadMore" type="button" hidden>Load more</button></div></section>
-<div class="ccor-contact"><a class="ccor-button" href="mailto:membership@coconutcoastrealtors.org">Contact Membership Team</a></div></main>
-<script>window._mnipartq=window._mnipartq||[];window._mnipartq.push(["c559b00f.type",[1676]],["c559b00f.animation",1],["c559b00f.max",5],["c559b00f.create","mni-partners-c559b00f"],["c559b00f.v",2]);(function(d,id){if(d.getElementById(id))return;const s=d.createElement('script');s.id=id;s.async=true;s.src='https://coconutcoastrealtors.growthzoneapp.com/GZContent/PublicWidgets/Partners.js';d.head.appendChild(s)})(document,'mni-partners-script');</script><script src="https://cdn.jsdelivr.net/npm/flatpickr"></script><script src="https://kweinkauff29.github.io/Homepage/2026/assets/ccor-events.js?v=20260803"></script></body></html>
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Committees & Meetings - Coconut Coast Organization of Realtors®</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
+        integrity="sha512-9usAa10IRO0HhonpyAIVpjrylPvoDwiPUiKdWk5t3PyolY1cOd4DSE0Ga+ri4AuTroPR5aQvXU9xC6qOPnzFeg=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <!-- Flatpickr for Modern Date Range Filtering -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+
+    <style>
+        :root {
+            --primary: #1e3a8a;
+            --primary-hover: #1e40af;
+            --secondary: #64748b;
+            --secondary-hover: #475569;
+            --bg: #f8fafc;
+            --border: #e2e8f0;
+
+            /* Sponsor Accents */
+            --diamond-bg: linear-gradient(90deg, #00c2b7, #13a1ff);
+            --platinum-bg: linear-gradient(90deg, #00a1ff, #6fffe0);
+            --gold-bg: #f2c200;
+            --silver-bg: #c3ccd9;
+            --photo-bg: #2d3748;
+            --bg-color: #f9f9fb;
+            --card-bg: #ffffff;
+            --text-main: #2a2a33;
+            --text-secondary: #595966;
+            --border-color: #e5e5ea;
+            --shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+            --shadow-hover: 0 8px 16px rgba(0, 0, 0, 0.1);
+        }
+
+        .ber-directory {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", 'Inter', Helvetica, Arial, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            line-height: 1.5;
+        }
+
+        .ber-directory *,
+        .ber-directory *::before,
+        .ber-directory *::after {
+            box-sizing: border-box;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .controls {
+            margin-bottom: 3rem;
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            align-items: center;
+            text-align: center;
+        }
+
+        .controls h1 {
+            margin: 0 0 0.5rem 0;
+            font-size: 2rem;
+            font-weight: 700;
+        }
+
+        .controls p {
+            color: var(--text-secondary);
+            margin: 0;
+        }
+
+        .search-bar {
+            position: relative;
+            width: 100%;
+            max-width: 600px;
+            margin-top: 1.5rem;
+        }
+
+        .search-bar input {
+            width: 100%;
+            padding: 1rem 1rem 1rem 3rem;
+            font-size: 1rem;
+            border: 1px solid var(--border-color);
+            border-radius: 99px;
+            outline: none;
+            transition: border-color 0.2s, box-shadow 0.2s;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.02);
+        }
+
+        .search-bar input:focus {
+            border-color: var(--primary);
+        }
+
+        .search-icon {
+            position: absolute;
+            left: 1.2rem;
+        }
+
+        /* ===== SWISS-TECH INTERFACE REALISM CORE ===== */
+        :root {
+            --swiss-bg: #f8f9fa;
+            --swiss-text: #1a1a1a;
+            --swiss-light: #8a8a8a;
+            --swiss-grid: rgba(0, 0, 0, 0.08);
+
+            /* Neon Access Colors */
+            --accent-yellow: #facc15;
+            --accent-cyan: #06b6d4;
+            --accent-magenta: #ec4899;
+            --accent-alert: #f43f5e;
+
+            --font-display: 'Inter', 'Inter', system-ui, -apple-system, sans-serif;
+            --font-body: 'Inter', system-ui, -apple-system, sans-serif;
+            --font-mono: 'Fira Code', 'Courier New', Courier, monospace;
+        }
+
+        body {
+            background-color: var(--swiss-bg);
+            color: var(--swiss-text);
+            font-family: var(--font-body);
+        }
+
+        .swiss-container {
+            max-width: 1300px;
+            margin: 40px auto;
+            padding: 0 24px;
+            position: relative;
+        }
+
+        /* Force GrowthZone Partners Widget to Full Width */
+        [id^="mni-partners-"] {
+            width: 100% !important;
+            max-width: 100% !important;
+            margin-bottom: 30px !important;
+            display: block !important;
+        }
+        [id^="mni-partners-"] .mni-partners-container,
+        [id^="mni-partners-"] .mni-partners-widget,
+        [id^="mni-partners-"] .partners,
+        [id^="mni-partners-"] .partner {
+            max-width: 100% !important;
+            width: 100% !important;
+            height: auto !important;
+            position: relative !important; /* Prevents overlap by taking up space */
+            display: block !important;
+        }
+        [id^="mni-partners-"] img {
+            width: 100% !important;
+            height: auto !important;
+            display: block !important;
+            border-radius: 4px;
+        }
+
+        /* Technical Header Area */
+        .swiss-header {
+            border-bottom: 2px solid var(--swiss-text);
+            padding: 20px 0 40px 0;
+            margin-bottom: 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+            position: relative;
+            gap: 48px;
+        }
+
+        /* Schematic corner bracket */
+        .swiss-header::before {
+            content: '';
+            position: absolute;
+            top: -15px;
+            left: -15px;
+            width: 20px;
+            height: 20px;
+            border-top: 2px solid var(--swiss-text);
+            border-left: 2px solid var(--swiss-text);
+        }
+
+        .swiss-title-group {
+            max-width: 60%;
+        }
+
+        .swiss-h1 {
+            font-family: var(--font-display);
+            font-size: 4rem;
+            line-height: 0.9;
+            text-transform: uppercase;
+            letter-spacing: -0.02em;
+            margin: 0 0 20px 0;
+            color: var(--swiss-text);
+        }
+
+        .swiss-subtitle {
+            font-family: var(--font-mono);
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: var(--swiss-light);
+            margin: 0;
+        }
+
+        /* Filter Controls */
+        .swiss-controls {
+            display: flex;
+            gap: 24px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .swiss-search {
+            font-family: var(--font-mono);
+            font-size: 0.9rem;
+            padding: 14px 24px;
+            border: 1px solid var(--swiss-grid);
+            background: transparent;
+            color: var(--swiss-text);
+            width: 250px;
+            border-radius: 0;
+            transition: all 0.2s;
+        }
+
+        /* Date Range Picker Styling */
+        .swiss-date {
+            font-family: var(--font-mono);
+            font-size: 0.9rem;
+            padding: 14px 24px;
+            border: 1px solid var(--swiss-grid);
+            background: #fff;
+            color: var(--swiss-text);
+            width: 220px;
+            border-radius: 0;
+            cursor: pointer;
+            text-align: center;
+        }
+
+        .swiss-date::placeholder {
+            color: var(--swiss-light);
+        }
+
+        /* Flatpickr Custom Swiss Theme Overrides */
+        .flatpickr-calendar {
+            font-family: var(--font-body);
+            border-radius: 0 !important;
+            border: 1px solid var(--swiss-text) !important;
+            box-shadow: 4px 4px 0 rgba(0, 0, 0, 0.1) !important;
+        }
+
+        .flatpickr-day.selected,
+        .flatpickr-day.startRange,
+        .flatpickr-day.endRange,
+        .flatpickr-day.selected.inRange,
+        .flatpickr-day.startRange.inRange,
+        .flatpickr-day.endRange.inRange,
+        .flatpickr-day.selected:focus,
+        .flatpickr-day.startRange:focus,
+        .flatpickr-day.endRange:focus,
+        .flatpickr-day.selected:hover,
+        .flatpickr-day.startRange:hover,
+        .flatpickr-day.endRange:hover,
+        .flatpickr-day.selected.prevMonthDay,
+        .flatpickr-day.startRange.prevMonthDay,
+        .flatpickr-day.endRange.prevMonthDay,
+        .flatpickr-day.selected.nextMonthDay,
+        .flatpickr-day.startRange.nextMonthDay,
+        .flatpickr-day.endRange.nextMonthDay {
+            background: var(--swiss-text) !important;
+            border-color: var(--swiss-text) !important;
+        }
+
+        .swiss-search:focus {
+            outline: none;
+            border-color: var(--swiss-text);
+            background: #fff;
+        }
+
+        /* Status Bar (Microtext) */
+        .swiss-status {
+            font-family: var(--font-mono);
+            font-size: 0.75rem;
+            color: var(--swiss-light);
+            display: flex;
+            justify-content: space-between;
+            border-bottom: 1px solid var(--swiss-grid);
+            padding-bottom: 8px;
+            margin-bottom: 24px;
+            text-transform: uppercase;
+        }
+
+        .swiss-status-glitch {
+            color: var(--accent-magenta);
+            animation: pulse-op 2s infinite;
+        }
+
+        @keyframes pulse-op {
+            0%,
+            100% {
+                opacity: 1;
+            }
+            50% {
+                opacity: 0.5;
+            }
+        }
+
+        /* Modular Grid */
+        .swiss-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(380px, 1fr));
+            gap: 32px;
+            position: relative;
+        }
+
+        /* Class Card: The Swiss Grid Object */
+        .swiss-card {
+            background: #fff;
+            border: 1px solid var(--swiss-grid);
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            transition: transform 0.2s, box-shadow 0.2s;
+            overflow: hidden;
+            box-shadow: inset 0 0 40px rgba(0, 0, 0, 0.02);
+            padding: 24px;
+        }
+
+        .swiss-card:hover {
+            transform: translateY(-4px);
+            border-color: var(--swiss-text);
+            box-shadow: 4px 4px 0 var(--swiss-text);
+        }
+
+        /* Corner Marks */
+        .swiss-card::before,
+        .swiss-card::after {
+            content: '';
+            position: absolute;
+            width: 10px;
+            height: 10px;
+            border: 1px solid var(--swiss-light);
+            pointer-events: none;
+        }
+
+        .swiss-card::before {
+            top: 8px;
+            left: 8px;
+            border-right: 0;
+            border-bottom: 0;
+        }
+
+        .swiss-card::after {
+            bottom: 8px;
+            right: 8px;
+            border-left: 0;
+            border-top: 0;
+        }
+
+        /* Card Anchor Numeral */
+        .card-numeral {
+            position: absolute;
+            top: -15px;
+            right: -10px;
+            font-family: var(--font-display);
+            font-size: 8rem;
+            font-weight: 700;
+            line-height: 1;
+            color: var(--swiss-grid);
+            z-index: 0;
+            pointer-events: none;
+            user-select: none;
+        }
+
+        /* Card Content Group */
+        .card-content {
+            position: relative;
+            z-index: 1;
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .card-meta-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 16px;
+            border-bottom: 1px solid var(--swiss-grid);
+            padding-bottom: 12px;
+        }
+
+        .card-label-badge {
+            background: var(--swiss-text);
+            color: #fff;
+            font-family: var(--font-mono);
+            font-size: 0.65rem;
+            padding: 4px 8px;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .card-title {
+            font-family: var(--font-body);
+            font-weight: 700;
+            font-size: 1.25rem;
+            line-height: 1.3;
+            color: var(--swiss-text);
+            margin: 0 0 16px 0;
+        }
+
+        .card-flyer-box {
+            width: 100%;
+            min-height: 160px;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            border: 1px solid var(--swiss-grid);
+            position: relative;
+            background: transparent;
+        }
+
+        .card-flyer-box img {
+            width: 100%;
+            height: auto;
+            max-height: 400px;
+            object-fit: contain;
+            filter: grayscale(40%) contrast(1.1);
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .swiss-card:hover .card-flyer-box img {
+            filter: grayscale(0%) contrast(1);
+            transform: scale(1.05);
+        }
+
+        /* Micro Data List */
+        .card-data-list {
+            margin: 0 0 24px 0;
+            padding: 0;
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .card-data-row {
+            display: flex;
+            justify-content: space-between;
+            font-family: var(--font-mono);
+            font-size: 0.75rem;
+            border-bottom: 1px dotted var(--swiss-grid);
+            padding-bottom: 4px;
+        }
+
+        .data-key {
+            color: var(--swiss-light);
+            text-transform: uppercase;
+        }
+
+        .data-val {
+            color: var(--swiss-text);
+            font-weight: 600;
+            text-align: right;
+            max-width: 60%;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        /* Hybrid Media Container */
+        .hybrid-media {
+            display: flex;
+            width: 100%;
+            height: 100%;
+            align-items: center;
+            justify-content: center;
+            background: var(--swiss-bg);
+        }
+
+        .hybrid-media img {
+            width: 40%;
+            max-height: 80%;
+            object-fit: contain;
+        }
+
+        .hybrid-divider {
+            color: var(--swiss-light);
+            font-family: var(--font-display);
+            font-size: 2rem;
+            margin: 0 16px;
+        }
+
+        /* Footer Action Bar */
+        .card-footer-flex {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: auto;
+            border-top: 2px solid var(--swiss-text);
+            padding-top: 16px;
+        }
+
+        .btn-swiss {
+            background: transparent;
+            border: 1px solid var(--swiss-text);
+            font-family: var(--font-mono);
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            padding: 8px 16px;
+            cursor: pointer;
+            transition: all 0.2s;
+            color: var(--swiss-text);
+            text-decoration: none;
+        }
+
+        .btn-swiss:hover {
+            background: var(--swiss-text);
+            color: #fff;
+        }
+
+        .btn-swiss-primary {
+            background: var(--accent-yellow);
+            border-color: var(--accent-yellow);
+            color: #000;
+            font-weight: 700;
+        }
+
+        .btn-swiss-primary:hover {
+            background: #000;
+            border-color: #000;
+            color: var(--accent-yellow);
+        }
+
+        /* Swiss Detail Modal */
+        .swiss-modal-overlay {
+            position: fixed;
+            inset: 0;
+            width: 100vw;
+            height: 100vh;
+            background: rgba(0, 0, 0, 0.85);
+            background-image: repeating-linear-gradient(transparent, transparent 2px, rgba(0, 0, 0, 0.9) 2px, rgba(0, 0, 0, 0.9) 4px);
+            z-index: 9990;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s;
+            padding: 20px;
+        }
+
+        .swiss-modal-overlay.open {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .swiss-modal {
+            background: #fff;
+            width: 100%;
+            max-width: 800px;
+            max-height: 90vh;
+            border: 4px solid var(--accent-cyan);
+            box-shadow: 20px 20px 0 rgba(6, 182, 212, 0.2);
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            transform: scale(0.98);
+            transition: transform 0.3s;
+        }
+
+        .swiss-modal-overlay.open .swiss-modal {
+            transform: scale(1);
+        }
+
+        .modal-header-swiss {
+            background: #000;
+            color: var(--accent-cyan);
+            font-family: var(--font-mono);
+            font-size: 0.85rem;
+            padding: 12px 24px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            border-bottom: 2px solid var(--accent-cyan);
+        }
+
+        .modal-close-swiss {
+            background: transparent;
+            border: none;
+            color: #fff;
+            font-size: 1.5rem;
+            cursor: pointer;
+            line-height: 1;
+            padding: 0;
+        }
+
+        .modal-close-swiss:hover {
+            color: var(--accent-alert);
+        }
+
+        .modal-body-swiss {
+            padding: 40px;
+            overflow-y: auto;
+            position: relative;
+        }
+
+        .modal-body-swiss::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: radial-gradient(circle at center, transparent 0%, rgba(0, 0, 0, 0.03) 100%);
+            pointer-events: none;
+        }
+
+        .m-title {
+            font-family: var(--font-display);
+            font-size: 2.5rem;
+            line-height: 1.1;
+            text-transform: uppercase;
+            margin: 0 0 24px 0;
+        }
+
+        .m-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 32px;
+            margin-bottom: 32px;
+        }
+
+        .m-section {
+            border-top: 2px solid var(--swiss-text);
+            padding-top: 16px;
+        }
+
+        .m-label {
+            font-family: var(--font-mono);
+            font-size: 0.75rem;
+            color: var(--swiss-light);
+            text-transform: uppercase;
+            margin-bottom: 8px;
+            display: block;
+        }
+
+        .m-value {
+            font-family: var(--font-body);
+            font-size: 1.1rem;
+            font-weight: 500;
+            color: var(--swiss-text);
+            margin: 0;
+        }
+
+        .m-description {
+            font-family: var(--font-body);
+            font-size: 1rem;
+            line-height: 1.6;
+            color: var(--swiss-text);
+            border-top: 1px dotted var(--swiss-grid);
+            padding-top: 24px;
+        }
+
+        .m-description p {
+            margin-top: 0;
+        }
+
+        .m-footer {
+            background: #f8f9fa;
+            border-top: 2px solid var(--swiss-grid);
+            padding: 24px 40px;
+            display: flex;
+            justify-content: flex-end;
+            gap: 16px;
+        }
+
+        /* Loading Animation (Terminal Style) */
+        .terminal-loader {
+            font-family: var(--font-mono);
+            font-size: 0.9rem;
+            color: var(--swiss-light);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .terminal-loader::after {
+            content: '[]';
+            animation: terminal-spin 1s steps(4) infinite;
+        }
+
+        @keyframes terminal-spin {
+            0% {
+                content: '[/]'
+            }
+            25% {
+                content: '[-]'
+            }
+            50% {
+                content: '[\\]'
+            }
+            75% {
+                content: '[|]'
+            }
+        }
+
+        @media (max-width: 900px) {
+            .swiss-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 24px;
+            }
+            .swiss-title-group {
+                max-width: 100%;
+            }
+            .swiss-search,
+            .swiss-date {
+                width: 100%;
+            }
+            .m-grid {
+                grid-template-columns: 1fr;
+                gap: 16px;
+            }
+            .swiss-h1 {
+                font-size: 2.5rem;
+            }
+            .card-numeral {
+                font-size: 6rem;
+                right: -5px;
+            }
+        }
+
+        /* Calendar Navigation Tabs */
+        .swiss-nav {
+            display: flex;
+            gap: 0;
+            margin-bottom: 0;
+        }
+
+        .swiss-nav a {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 16px 28px;
+            font-family: var(--font-mono);
+            font-size: 0.8rem;
+            font-weight: 700;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            text-decoration: none;
+            color: var(--swiss-light);
+            background: var(--swiss-grid);
+            border: 1px solid var(--swiss-grid);
+            border-bottom: 2px solid var(--swiss-light);
+            transition: all 0.2s;
+            cursor: pointer;
+        }
+
+        .swiss-nav a:hover {
+            color: var(--swiss-text);
+            background: #fff;
+            border-bottom-color: var(--swiss-text);
+        }
+
+        .swiss-nav a.active {
+            color: #000;
+            background: #fff;
+            border: 2px solid var(--accent-cyan);
+            border-bottom: 3px solid var(--accent-cyan);
+            position: relative;
+        }
+
+        .swiss-nav a.active::after {
+            content: '◂';
+            margin-left: 8px;
+            color: var(--accent-cyan);
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="swiss-container">
+        <!-- Partners Banner (Top) -->
+        <div id="mni-partners-c559b00f" style="width: 100%; margin-bottom: 20px;"></div>
+        <script type="text/javascript">
+            /*<![CDATA[*/
+            var _mnipartq = _mnipartq || [];
+            _mnipartq.push(["c559b00f.type", [1676,]], ["c559b00f.animation", 1], ["c559b00f.max", 5], ["c559b00f.create", "mni-partners-c559b00f"], ["c559b00f.v", 2]);
+            (function (b, d, a, c) {
+                b.getElementById(d) || (c = b.getElementsByTagName(a)[0], a = b.createElement(a), a.type = "text/javascript", a.async = !0, a.src = "https://coconutcoastrealtors.growthzoneapp.com/GZContent/PublicWidgets/Partners.js", c.parentNode.insertBefore(a, c))
+            })(document, "mni-partners-script", "script");
+            /*]]>*/
+        </script>
+        <!-- Swiss Header Bar -->
+        <div class="swiss-header" id="eduTop">
+            <div class="swiss-title-group">
+                <h1 class="swiss-h1">COMMITTEE MEETINGS</h1>
+            </div>
+
+            <!-- Calendar Navigation -->
+            <nav class="swiss-nav">
+                <a href="https://coconutcoastrealtors.org/upcoming-education/">EDUCATION</a>
+                <a href="https://coconutcoastrealtors.org/upcoming-events/">EVENTS</a>
+                <a href="https://coconutcoastrealtors.org/committee-meetings/" class="active">COMMITTEES</a>
+                <a href="https://coconutcoastrealtors.org/all-upcoming-events/">ALL EVENTS</a>
+            </nav>
+
+            <div class="swiss-controls">
+                <input type="text" id="searchInput" class="swiss-search" placeholder="QUERY NAME OR DESC..."
+                    autocomplete="off">
+                <input type="text" id="dateFilter" class="swiss-date" placeholder="SELECT DATE RANGE">
+            </div>
+        </div>
+
+        <!-- Terminal Status Bar -->
+        <div class="swiss-status">
+            <span id="sysStatus">INITIALIZING CONNECTION TO GZ-DATACENTER...</span>
+            <span class="swiss-status-glitch">DATASTREAM LINK: OFFLINE</span>
+        </div>
+
+        <div class="swiss-grid" id="eventsGrid">
+            <!-- Event cards inject here -->
+        </div>
+
+        <!-- Detail Navigation Button -->
+        <div style="margin-top: 40px; text-align: center;">
+            <a href="mailto:events@coconutcoastrealtors.org" class="btn-swiss">CONTACT EVENTS TEAM_</a>
+        </div>
+    </div>
+
+    <!-- Swiss Detail Modal -->
+    <div class="swiss-modal-overlay" id="eventModal">
+        <div class="swiss-modal">
+            <div class="modal-header-swiss">
+                <span>[LOG] MEETING_DETAILS</span>
+                <button class="modal-close-swiss" id="modalClose">&times;</button>
+            </div>
+            <div class="modal-body-swiss" id="modalBody">
+                <div class="terminal-loader">FETCHING REMOTE DATABLOCK</div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const BASE_URL = 'https://gz-realestate-proxy.bonitaspringsrealtors.workers.dev';
+        const eventsGrid = document.getElementById('eventsGrid');
+        const sysStatus = document.getElementById('sysStatus');
+        const linkStatus = document.querySelector('.swiss-status-glitch');
+        const searchInput = document.getElementById('searchInput');
+        const dateFilter = document.getElementById('dateFilter');
+        const modal = document.getElementById('eventModal');
+        const modalClose = document.getElementById('modalClose');
+        const modalBody = document.getElementById('modalBody');
+
+        let allEvents = [];
+        let knownClasses = [];
+
+        document.addEventListener('DOMContentLoaded', async () => {
+            try {
+                sysStatus.textContent = "SYNCHRONIZING SECURE EVENT FEED...";
+                const now = new Date();
+                const res = await fetch(`${BASE_URL}/events/all?enriched=true`);
+                if (!res.ok) throw new Error("API Connection Failed");
+                const data = await res.json();
+                const results = data.Results || [];
+                for (const e of results) {
+                    const evDate = new Date(e.StartDate);
+                    if (evDate >= now) { allEvents.push(e); }
+                }
+                allEvents.sort((a, b) => new Date(a.StartDate) - new Date(b.StartDate));
+                
+                // Committees Filter
+                knownClasses = allEvents.filter(ev => ev.Name && /Committee|Council|Board of Directors/i.test(ev.Name));
+
+                linkStatus.textContent = "DATASTREAM LINK: SECURE";
+                linkStatus.style.color = "var(--accent-cyan)";
+                linkStatus.style.animation = "none";
+                sysStatus.textContent = `SYSTEM ACTIVE: ${knownClasses.length} UPCOMING MEETINGS LOADED.`;
+                renderGrid(knownClasses);
+
+                let fpInstance = flatpickr(dateFilter, { mode: "range", dateFormat: "Y-m-d", onChange: applyFilters });
+                searchInput.addEventListener('input', applyFilters);
+            } catch (err) {
+                console.error(err);
+                sysStatus.textContent = "SYS_ERROR: FAILURE TO FETCH EVENTS.";
+                linkStatus.textContent = "CRITICAL / OFFLINE";
+            }
+        });
+
+        function applyFilters() {
+            const q = searchInput.value.toLowerCase();
+            let selStart = null, selEnd = null;
+            const dates = document.getElementById('dateFilter')._flatpickr?.selectedDates || [];
+            if (dates.length > 0) {
+                selStart = dates[0]; selStart.setHours(0, 0, 0, 0);
+                if (dates.length === 2) { selEnd = dates[1]; selEnd.setHours(23, 59, 59, 999); }
+                else { selEnd = new Date(selStart); selEnd.setHours(23, 59, 59, 999); }
+            }
+            const filteredList = knownClasses.filter(ev => {
+                const matchText = !q || (ev.Name && ev.Name.toLowerCase().includes(q)) || (ev.Description && ev.Description.toLowerCase().includes(q));
+                let matchDate = true;
+                if (selStart && selEnd) {
+                    const evStart = new Date(ev.StartDate);
+                    matchDate = (evStart >= selStart && evStart <= selEnd);
+                }
+                return matchText && matchDate;
+            });
+            renderGrid(filteredList);
+        }
+
+        function renderGrid(eventsArr) {
+            eventsGrid.innerHTML = '';
+            if (eventsArr.length === 0) {
+                eventsGrid.innerHTML = `<div style="grid-column: 1/-1; padding: 40px; border: 1px dashed var(--swiss-light); font-family: var(--font-mono); color: var(--swiss-light); text-align: center;">SYS_MESSAGE: NO MATCHING RECORDS FOUND IN DATABASE.</div>`;
+                return;
+            }
+            eventsArr.forEach(ev => {
+                const start = new Date(ev.StartDate);
+                const dayNum = start.getDate().toString().padStart(2, '0');
+                const monthName = start.toLocaleString('default', { month: 'short' }).toUpperCase();
+                const timeStr = start.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+                let shortName = ev.Name || "UNDEFINED_MEETING";
+                if (shortName.length > 55) shortName = shortName.substring(0, 52) + '...';
+
+                let flyerURL = ev.EnrichedFlyerUrl || ev.EventLogoUrl || "";
+                if (!flyerURL && ev.Description) {
+                    const imgMatch = ev.Description.match(/<img[^>]+src=["']([^"']+)["']/i);
+                    if (imgMatch) flyerURL = imgMatch[1];
+                }
+                if (!flyerURL || flyerURL.includes('BER-Logo') || flyerURL.includes('default') || flyerURL.includes('placeholder')) {
+                    const cached = localStorage.getItem('BER_EDU_FLYER_' + ev.EventId);
+                    if (cached && cached !== "NO_MEDIA") { flyerURL = cached; }
+                    else if (flyerURL && (flyerURL.includes('BER-Logo') || flyerURL.includes('default') || flyerURL.includes('placeholder'))) { flyerURL = ""; }
+                }
+
+                let flyerHTML = '';
+                if (flyerURL) { flyerHTML = `<img src="${flyerURL}" alt="Meeting Flyer">`; }
+                else {
+                    const berLogo = 'https://coconutcoastrealtors.org/wp-content/uploads/2026/04/CCOR-Vert-Logo-no-tag-clr-scaled-e1776958694707.png';
+                    flyerHTML = `<img src="${berLogo}" alt="BER" style="object-fit:contain !important; padding:30px; background:var(--swiss-grid); width:100%; height:100%; box-sizing:border-box;">`;
+                    flyerHTML = `<div id="flyer-tgt-${ev.EventId}" style="width:100%; height:100%; display:flex; justify-content:center; align-items:center; overflow:hidden;">${flyerHTML}</div>`;
+                }
+
+                const card = document.createElement('div');
+                card.className = 'swiss-card';
+                card.innerHTML = `
+                    <div class="card-numeral" style="font-size: 8rem; color: var(--swiss-light); opacity: 0.05; position: absolute; top: -20px; left: -10px; z-index: 0;">${dayNum}</div>
+                    <div class="card-content" style="position: relative; z-index: 1;">
+                        <div class="card-meta-top" style="display: flex; align-items: center; gap: 8px;">
+                            <span style="font-size: 1.5rem; font-weight: 800; line-height: 1;">${dayNum}</span>
+                            <span class="card-label-badge">${monthName} SCHEDULE</span>
+                        </div>
+                        <h3 class="card-title">${shortName}</h3>
+                        <div class="card-flyer-box">${flyerHTML}</div>
+                        <ul class="card-data-list">
+                            <li class="card-data-row"><span class="data-key">// DATE</span><span class="data-val">${start.toLocaleDateString()}</span></li>
+                            <li class="card-data-row"><span class="data-key">// START_TIME</span><span class="data-val">${timeStr}</span></li>
+                        </ul>
+                        <div class="card-footer-flex">
+                            <button class="btn-swiss" onclick="openDetails(${ev.EventId})">+ DETAILS</button>
+                            <a href="${ev.PublicUrl}" target="_blank" class="btn-swiss btn-swiss-primary">REGISTER_</a>
+                        </div>
+                    </div>
+                `;
+                eventsGrid.appendChild(card);
+            });
+        }
+
+        async function openDetails(eventId) {
+            const evInfo = allEvents.find(e => e.EventId === eventId);
+            const publicUrl = evInfo ? evInfo.PublicUrl : "#";
+            const bulkDate = evInfo ? new Date(evInfo.StartDate) : null;
+            modal.classList.add('open');
+            modalBody.innerHTML = `<div class="terminal-loader">FETCHING REMOTE DATABLOCK: ${eventId}</div>`;
+            document.body.style.overflow = 'hidden';
+            try {
+                const res = await fetch(`${BASE_URL}/events/${eventId}`);
+                if (!res.ok) throw new Error("Failed to load details");
+                const detail = await res.json();
+                let start = new Date(detail.StartDateTime);
+                if (bulkDate && start.toDateString() !== bulkDate.toDateString()) { start = bulkDate; }
+                let locType = "IN-PERSON PHYSICAL";
+                if (detail.ZoomConfigured || detail.GoToWebinarConfigured) locType = "DIGITAL REMOTE / ZOOM";
+
+                let flyerURL = evInfo?.EnrichedFlyerUrl || detail.EventLogoUrl || "";
+                if (!flyerURL && detail.Description) {
+                    const imgMatch = detail.Description.match(/<img[^>]+src=["']([^;]*)["']/i);
+                    if (imgMatch) flyerURL = imgMatch[1];
+                }
+                let cleanedDescription = detail.Description || "";
+                if (flyerURL) {
+                    const imgTagRegex = new RegExp(`^\\s*<p>\\s*<img[^>]+src=["']${flyerURL.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}["'][^>]*>\\s*</p>`, 'i');
+                    cleanedDescription = cleanedDescription.replace(imgTagRegex, '');
+                    const imgTagRegexRaw = new RegExp(`^\\s*<img[^>]+src=["']${flyerURL.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}["'][^>]*>`, 'i');
+                    cleanedDescription = cleanedDescription.replace(imgTagRegexRaw, '');
+                }
+                const flyerHeaderHTML = flyerURL ? `<div style="margin-bottom: 24px; border: 2px solid var(--swiss-text); background: var(--swiss-grid); overflow:hidden;"><img src="${flyerURL}" alt="Flyer" style="width:100%; display:block; object-fit:contain;"></div>` : '';
+                const descHTML = cleanedDescription ? `<div class="m-description">${flyerHeaderHTML}${cleanedDescription}</div>` : (flyerHeaderHTML ? `<div class="m-description">${flyerHeaderHTML}</div>` : '');
+
+                modalBody.innerHTML = `
+                    <h2 class="m-title">${detail.Name || evInfo?.Name}</h2>
+                    <div class="m-grid">
+                        <div class="m-section"><span class="m-label">[// LOCATION]</span><p class="m-value">${detail.LocationName || locType}</p></div>
+                        <div class="m-section"><span class="m-label">[// TIMETABLE]</span><p class="m-value">${start.toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}</p><p style="font-family:var(--font-mono); font-size:0.8rem; color:var(--swiss-light); margin:4px 0 0;">${detail.HoursDescription || start.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</p></div>
+                        <div class="m-section"><span class="m-label">[// CHAIR/CONTACT]</span><p class="m-value">${detail.ContactName || 'B.E.R. LIAISON'}</p></div>
+                        <div class="m-section"><span class="m-label">[// CATEGORY]</span><p class="m-value">${detail.CategoryItems?.filter(c => c.IsSelected).map(c => c.Name).join(', ') || 'COMMITTEE_MTG'}</p></div>
+                    </div>
+                    ${descHTML}
+                    <div class="m-footer"><button class="btn-swiss" onclick="closeModal()">CANCEL_</button><a href="${publicUrl}" class="btn-swiss btn-swiss-primary" target="_blank">REGISTRATION_</a></div>
+                `;
+            } catch (err) {
+                console.error(err);
+                modalBody.innerHTML = `<div style="color:var(--accent-alert); font-family:var(--font-mono);">[CRITICAL] Error downloading datablock. Link failed.</div>`;
+            }
+        }
+
+        function closeModal() { modal.classList.remove('open'); document.body.style.overflow = ''; }
+        modalClose.addEventListener('click', closeModal);
+        modal.addEventListener('click', e => { if (e.target === modal) closeModal(); });
+        document.addEventListener('keydown', e => { if (e.key === 'Escape' && modal.classList.contains('open')) closeModal(); });
+    </script>
+
+    
+
+
+
+
+<div id="ccor-waves-bg" aria-hidden="true" style="position: fixed; inset: 0; z-index: -9999; pointer-events: none; opacity: 0.45; overflow: hidden; background: #ffffff;">
+  <div class="ccor-wave-container ccor-ribbon-bottom" style="position: absolute; inset: 0;"></div>
+</div>
+<style>
+  /* ── CCOR Wave Background ── Optimized for performance ── */
+
+  /* Pure-CSS drift: no JS rAF needed for horizontal movement */
+  @keyframes waveSlide {
+    0%   { transform: translateX(0)   translateY(var(--wy,0px)) rotate(var(--wr,0deg)) scaleX(1.4); }
+    50%  { transform: translateX(var(--wx,60px)) translateY(var(--wy2,0px)) rotate(var(--wr2,0deg)) scaleX(1.4); }
+    100% { transform: translateX(0)   translateY(var(--wy,0px)) rotate(var(--wr,0deg)) scaleX(1.4); }
+  }
+  @keyframes waveSlide-mobile {
+    0%   { transform: translateX(0)   translateY(var(--wy,0px)) rotate(var(--wr,0deg)) scaleX(1.6); }
+    50%  { transform: translateX(var(--wx,30px)) translateY(var(--wy2,0px)) rotate(var(--wr2,0deg)) scaleX(1.6); }
+    100% { transform: translateX(0)   translateY(var(--wy,0px)) rotate(var(--wr,0deg)) scaleX(1.6); }
+  }
+  @keyframes gradientShift {
+    0%   { background-position: 0% 0; }
+    100% { background-position: 400% 0; }
+  }
+
+  .ccor-wave {
+    position: absolute;
+    width: 300%;        /* ↓ from 400% — still covers viewport */
+    left: -100%;        /* ↓ from -150% */
+    /* NO filter:blur — this is the #1 GPU killer */
+    background: linear-gradient(120deg,
+      #1B449D 0%,  #2e5ab8 8%,  #3d6cd1 16%,
+      #64BAB0 24%, #8dd4ca 32%, #a6e1d9 40%,
+      #D4AC6C 48%, #e8c88a 56%, #f2dcb3 64%,
+      #5B5A5C 72%, #7a7a7a 80%, #64BAB0 88%,
+      #4da69a 94%, #1B449D 100%
+    );
+    background-size: 400% 100%;
+    border-radius: 42% 45% 40% 43%;
+    will-change: transform;          /* promote to own compositor layer */
+    transform-origin: center bottom;
+    /* Gradient shifts via CSS — no JS needed */
+    animation: gradientShift 18s ease-in-out infinite alternate,
+               waveSlide      var(--dur, 12s) ease-in-out infinite;
+    /* Animation-play-state toggled by JS on visibility change */
+  }
+
+  .ccor-ribbon-bottom .ccor-wave { bottom: -520px; height: 560px; }
+
+  /* Mobile: simpler, lighter */
+  @media (max-width: 768px) {
+    .ccor-wave {
+      height: 360px !important;
+      bottom: -360px !important;
+      animation-name: gradientShift, waveSlide-mobile;
+    }
+  }
+
+  /* ── Respect user preference ── */
+  @media (prefers-reduced-motion: reduce) {
+    .ccor-wave { animation: none !important; }
+  }
+
+  /* FORCE TRANSPARENCY ON HOST CONTAINERS */
+  html { background-color: #ffffff !important; }
+  body, .site, #page, .site-content, #content, .entry-content,
+  .joinber-page, .ber-about, #main, .main-container, .wrapper,
+  .ber-directory, .container, .main-content, .directory-grid,
+  .controls, .section, main {
+    background-color: transparent !important;
+    background: transparent !important;
+  }
+</style>
+<script>
+  (function () {
+    // Clear any previously stored performance disable flags to restore wave graphics
+    sessionStorage.removeItem('ccor-waves-disabled');
+
+    /* ── Performance-optimised wave init ── */
+    function initCcorWaves() {
+      const root = document.getElementById('ccor-waves-bg');
+      if (!root) return;
+
+      /* 1. Honour reduced-motion: skip entirely */
+      if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+        root.style.display = 'none';
+        return;
+      }
+
+      const isMobile = () => window.innerWidth < 768;
+
+      /* Reduced wave count: 5 on desktop, 3 on mobile */
+      const WAVE_COUNT = isMobile() ? 3 : 5;
+      const containers = root.querySelectorAll('.ccor-wave-container');
+      
+      containers.forEach(container => {
+        const waves = [];
+        for (let i = 0; i < WAVE_COUNT; i++) {
+          const wave = document.createElement('div');
+          wave.className = 'ccor-wave';
+
+          /* Vary shape */
+          const r1 = 38 + Math.random() * 10;
+          wave.style.borderRadius = r1 + '% ' + (r1+3) + '% ' + (r1-2) + '% ' + (r1+2) + '%';
+          wave.style.opacity      = 0.18 + (Math.random() * 0.28);
+          wave.style.zIndex       = WAVE_COUNT - i;
+
+          /* CSS custom properties drive the pure-CSS animation */
+          const offsetY  = i * (isMobile() ? 12 : 28);
+          const driftX   = (isMobile() ? 25 : 55) + Math.random() * (isMobile() ? 20 : 45);
+          const rotA     = (Math.random() - 0.5) * 3;
+          const rotB     = rotA + (Math.random() - 0.5) * 3;
+          const undA     = -(offsetY + (Math.random() * 18));
+          const undB     = -(offsetY + (Math.random() * 28));
+          const dur      = 10 + Math.random() * 8;   /* 10–18 s per wave */
+          const delay    = -(Math.random() * dur);    /* stagger start */
+
+          wave.style.setProperty('--wx',  driftX + 'px');
+          wave.style.setProperty('--wy',  undA    + 'px');
+          wave.style.setProperty('--wy2', undB    + 'px');
+          wave.style.setProperty('--wr',  rotA    + 'deg');
+          wave.style.setProperty('--wr2', rotB    + 'deg');
+          wave.style.setProperty('--dur', dur     + 's');
+          wave.style.animationDelay = delay + 's, ' + (delay * 0.7) + 's';
+
+          container.appendChild(wave);
+          waves.push(wave);
+        }
+      });
+
+      /* Pause animations when tab is hidden → saves CPU/GPU entirely */
+      document.addEventListener('visibilitychange', () => {
+        const state = document.hidden ? 'paused' : 'running';
+        root.querySelectorAll('.ccor-wave').forEach(w => {
+          w.style.animationPlayState = state;
+        });
+      });
+    }
+
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', initCcorWaves);
+    } else {
+      initCcorWaves();
+    }
+  })();
+</script>
+</body>
+
+</html>
