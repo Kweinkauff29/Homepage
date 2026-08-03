@@ -1,0 +1,113 @@
+name: Extract Education instructor candidates
+
+on:
+  push:
+    branches:
+      - agent/audit-education-calendar-data
+    paths:
+      - .github/workflows/extract-education-instructor-candidates.yml
+
+permissions:
+  contents: write
+
+jobs:
+  extract:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: agent/audit-education-calendar-data
+      - name: Extract canonical instructor candidates
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p audit
+          python - <<'PY'
+          import json,re,html
+          from collections import defaultdict,Counter
+          from pathlib import Path
+
+          data=json.loads(Path('audit/education-history-details.json').read_text())
+          events=[]
+          for ev in data.get('history_events',[]):
+              events.append({'eventId':ev.get('eventId'),'title':ev.get('name'),'start':ev.get('start'),'description':ev.get('description') or '','contact':''})
+          for ev in data.get('detail_samples',[]):
+              if ev.get('error'): continue
+              relevant=ev.get('relevantFields') or {}
+              contact=''
+              for key,val in relevant.items():
+                  if re.search(r'contactname|instructor|presenter|speaker|teacher',key,re.I) and isinstance(val,str) and val.strip():
+                      contact=val.strip(); break
+              events.append({'eventId':ev.get('eventId'),'title':ev.get('title'),'start':ev.get('start'),'description':ev.get('description') or '','contact':contact})
+
+          patterns=[
+              ('label',re.compile(r'\b(?:instructor|presenter|speaker|facilitator|trainer|teacher)\s*[:\-–—]\s*([^\n|;<]{2,120})',re.I)),
+              ('by',re.compile(r'\b(?:presented|taught|led|hosted|facilitated|instructed)\s+by\s+([A-Z][A-Za-zÀ-ÖØ-öø-ÿ.'"'"'’\-]+(?:\s+(?:[A-Z][A-Za-zÀ-ÖØ-öø-ÿ.'"'"'’\-]+|Esq\.?|Jr\.?|Sr\.?|III|II|IV)){1,6})',re.I)),
+              ('will',re.compile(r'\b([A-Z][A-Za-zÀ-ÖØ-öø-ÿ.'"'"'’\-]+(?:\s+(?:[A-Z][A-Za-zÀ-ÖØ-öø-ÿ.'"'"'’\-]+|Esq\.?|Jr\.?|Sr\.?|III|II|IV)){1,6})\s+(?:will|is going to)\s+(?:teach|present|lead|facilitate|instruct|host)\b')),
+              ('invite',re.compile(r'\b([A-Z][A-Za-zÀ-ÖØ-öø-ÿ.'"'"'’\-]+(?:\s+(?:[A-Z][A-Za-zÀ-ÖØ-öø-ÿ.'"'"'’\-]+|Esq\.?|Jr\.?|Sr\.?|III|II|IV)){1,5})\s+is\s+(?:excited|pleased)\s+to\s+invite\b')),
+              ('join',re.compile(r'\bJoin\s+(?:us\s+and\s+)?([A-Z][A-Za-zÀ-ÖØ-öø-ÿ.'"'"'’\-]+(?:\s+(?:[A-Z][A-Za-zÀ-ÖØ-öø-ÿ.'"'"'’\-]+|Esq\.?|Jr\.?|Sr\.?|III|II|IV)){1,5})(?=\s+(?:for|as|to|on)\b|[,.])')),
+              ('with',re.compile(r'\b(?:class|course|session|webinar|workshop)\s+with\s+([A-Z][A-Za-zÀ-ÖØ-öø-ÿ.'"'"'’\-]+(?:\s+(?:[A-Z][A-Za-zÀ-ÖØ-öø-ÿ.'"'"'’\-]+|Esq\.?|Jr\.?|Sr\.?|III|II|IV)){1,5})(?=\s+(?:for|as|to|on)\b|[,.])',re.I)),
+          ]
+          suffix_cut=re.compile(r'\s+(?:designed|who|and\s+learn|for\s+this|for\s+Florida|to\s+teach|will\s+teach|is\s+an?|from\s+the)\b.*$',re.I)
+          reject=re.compile(r'\b(?:Real Estate|Florida Realtors|Board Certified Real Estate Attorney$|The Class|This Course|Our Upcoming|Your Business|Social Media|Market Data|RPR|Matrix|Forewarn|RentSpree|CubiCasa|Home Buyers|Home Sellers|Code of Ethics|General Education|CE Credit|Affiliate Member)\b',re.I)
+          title_words={'Esq','Esq.','Jr','Jr.','Sr','Sr.','II','III','IV'}
+
+          def clean_name(raw):
+              s=html.unescape(str(raw or ''))
+              s=re.sub(r'<[^>]+>',' ',s)
+              s=suffix_cut.sub('',s)
+              s=re.sub(r'\s+',' ',s).strip(' .,:;–—-')
+              # remove credentials after keeping common suffixes
+              s=re.sub(r'\s*,?\s+(?:P\.A\.|PA|LLC|Realtor®?|REALTOR®?|Attorney at Law|Board Certified.*)$','',s,flags=re.I)
+              words=s.split()
+              if len(words)>6: words=words[:6]
+              s=' '.join(words).strip()
+              if len(s.split())<2 or reject.search(s): return ''
+              if any(ch.isdigit() for ch in s): return ''
+              return s
+
+          by_name=defaultdict(lambda:{'events':{},'signals':Counter()})
+          unmatched=[]
+          for ev in events:
+              found=[]
+              if ev.get('contact'):
+                  name=clean_name(ev['contact'])
+                  if name: found.append(('contact',name,'ContactName'))
+              text=f"{ev.get('title') or ''}. {ev.get('description') or ''}"
+              for kind,pat in patterns:
+                  for match in pat.finditer(text):
+                      name=clean_name(match.group(1))
+                      if name:
+                          context=text[max(0,match.start()-100):min(len(text),match.end()+150)]
+                          found.append((kind,name,context))
+              # explicit known-name patterns that often appear as sentence subjects, without a teaching verb
+              for known in ['Sam Saad','Sam J. Saad III','Caroline Boland','Sam Colburn','Ned Hale']:
+                  if re.search(r'\b'+re.escape(known)+r'\b',text,re.I): found.append(('known-alias',known,'name appears in class description'))
+              dedupe=set()
+              for kind,name,context in found:
+                  key=name.lower().replace('.','')
+                  if (key,ev.get('eventId')) in dedupe: continue
+                  dedupe.add((key,ev.get('eventId')))
+                  record={'eventId':ev.get('eventId'),'title':ev.get('title'),'start':ev.get('start'),'signal':kind,'context':context}
+                  by_name[name]['events'][str(ev.get('eventId'))]=record
+                  by_name[name]['signals'][kind]+=1
+              if not found and re.search(r'\b(instructor|presented by|taught by|will teach|speaker|facilitator|hosted by|is excited to invite)\b',text,re.I):
+                  unmatched.append({'eventId':ev.get('eventId'),'title':ev.get('title'),'start':ev.get('start'),'description':text[:1800]})
+
+          candidates=[]
+          for name,data in sorted(by_name.items(),key=lambda item:(-len(item[1]['events']),item[0])):
+              candidates.append({'name':name,'event_count':len(data['events']),'signals':dict(data['signals']),'events':list(data['events'].values())})
+          report={'candidate_count':len(candidates),'candidates':candidates,'unmatched_keyword_events':unmatched,'detail_relevant_field_names':data if False else data}
+          report['detail_relevant_field_names']=json.loads(Path('audit/education-history-details.json').read_text()).get('detail_relevant_field_names',[])
+          Path('audit/education-instructor-candidates.json').write_text(json.dumps(report,indent=2,ensure_ascii=False))
+          PY
+      - name: Commit report
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add audit/education-instructor-candidates.json
+          if git diff --cached --quiet; then exit 0; fi
+          git commit -m "Record Education instructor candidates"
+          git push origin HEAD:agent/audit-education-calendar-data
