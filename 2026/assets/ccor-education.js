@@ -46,7 +46,13 @@
 
   function asDate(value) {
     if (!value) return null;
-    const date = value instanceof Date ? value : new Date(value);
+    if (value instanceof Date) return Number.isNaN(value.getTime()) ? null : value;
+    if (typeof value === 'string' && /^\d{4}-\d{2}-\d{2}$/.test(value)) {
+      const [year, month, day] = value.split('-').map(Number);
+      const localDate = new Date(year, month - 1, day, 12, 0, 0, 0);
+      return Number.isNaN(localDate.getTime()) ? null : localDate;
+    }
+    const date = new Date(value);
     return Number.isNaN(date.getTime()) ? null : date;
   }
 
