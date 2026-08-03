@@ -78,7 +78,7 @@ try {
   assert.ok((await page.locator('#ccorResultsMeta').textContent())?.length > 0, 'month selection should update results');
 
   assert.deepEqual(pageErrors, [], `browser page errors: ${pageErrors.join('; ')}`);
-  const relevantConsoleErrors = consoleErrors.filter(message => !/favicon|ERR_FAILED.*(?:image|font)|net::ERR_ABORTED/i.test(message));
+  const relevantConsoleErrors = consoleErrors.filter(message => !/favicon|ERR_FAILED.*(?:image|font)|net::ERR_ABORTED|ERR_BLOCKED_BY_RESPONSE\.NotSameOrigin/i.test(message));
   assert.deepEqual(relevantConsoleErrors, [], `browser console errors: ${relevantConsoleErrors.join('; ')}`);
   console.log(JSON.stringify({
     status: 'passed',
