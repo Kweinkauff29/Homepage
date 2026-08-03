@@ -1,10 +1,10 @@
 import { chromium } from 'playwright';
 import assert from 'node:assert/strict';
+import fs from 'node:fs';
 
 const API_URL = 'https://www.ccreschool.com/api/public-events?page=education';
-const apiResponse = await fetch(API_URL, { headers: { Accept: 'application/json', 'Cache-Control': 'no-cache' } });
-assert.equal(apiResponse.ok, true, `live Education API returned ${apiResponse.status}`);
-const apiBody = await apiResponse.text();
+const apiBody = fs.readFileSync('/tmp/education-api.json', 'utf8');
+assert.doesNotThrow(() => JSON.parse(apiBody), 'Education browser fixture must be valid JSON');
 
 const browser = await chromium.launch({ headless: true });
 const page = await browser.newPage({ viewport: { width: 1440, height: 1200 } });
@@ -16,9 +16,8 @@ page.on('console', message => {
 });
 
 try {
-  // The production API intentionally allows CCOR and GitHub Pages origins, not
-  // localhost. Inject the exact live payload before page JavaScript starts so
-  // this local browser test exercises the real data without weakening CORS.
+  // Production CORS remains restricted to CCOR and GitHub Pages. The workflow
+  // downloads the exact live payload with Python and injects it before page JS.
   await page.addInitScript(({ apiUrl, body }) => {
     const nativeFetch = window.fetch.bind(window);
     window.fetch = (input, init) => {
