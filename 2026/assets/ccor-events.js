@@ -164,7 +164,7 @@
     const [label, copy] = PAGE_LABELS[state.page];
     heading.innerHTML = filtered
       ? '<div><span class="ccor-featured-code">FILTERED RESULTS</span><strong>Matching upcoming items</strong></div>'
-      : `<div><span class="ccor-featured-code">★ CURATED FIRST ROW</span><strong>${escapeHtml(label)}</strong><small>${escapeHtml(copy)}</small></div>`;
+      : `<div><span class="ccor-featured-code">★ COMING SOON</span><strong>${escapeHtml(label)}</strong><small>${escapeHtml(copy)}</small></div>`;
   }
 
   function clearFeaturedMarks(cards) {
@@ -180,7 +180,7 @@
     if (!target.querySelector('.ccor-feature-star')) {
       const badge = document.createElement('span');
       badge.className = 'ccor-feature-star';
-      badge.textContent = '★ FEATURED';
+      badge.textContent = '★ HIGHLIGHTED';
       target.appendChild(badge);
     }
   }
