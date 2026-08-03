@@ -1611,7 +1611,7 @@
         })();
     </script>
 
-    <!-- CCOR INLINE FAVORITES + CALENDAR START -->
+    <!-- CCOR INLINE HIGHLIGHTS + CALENDAR START -->
     <style data-ccor-calendar-injection="inline">
         /* Non-destructive additions for the original CCOR event-page layouts. */
         .ccor-featured-heading {
@@ -1894,10 +1894,10 @@
             const API_URL = 'https://www.ccreschool.com/api/public-events';
             const FALLBACK_URL = 'https://gz-realestate-proxy.bonitaspringsrealtors.workers.dev/events/all?enriched=true';
             const PAGE_LABELS = {
-                education: ['FAVORITE CLASSES', 'Closest upcoming in-person CE classes appear first unless staff stars other classes.'],
-                event: ['FAVORITE EVENTS', 'Staff-starred events appear first.'],
-                committee: ['FAVORITE COMMITTEE MEETINGS', 'Staff-starred committee meetings appear first.'],
-                all: ['FAVORITES AT CCOR', 'Staff-starred classes, events and meetings appear first.']
+                education: ['HIGHLIGHTED CLASSES', 'Upcoming in-person CE classes are highlighted first, followed by other classes coming soon.'],
+                event: ['HIGHLIGHTED EVENTS', 'Selected upcoming events are highlighted here.'],
+                committee: ['HIGHLIGHTED COMMITTEE MEETINGS', 'Selected upcoming committee meetings are highlighted here.'],
+                all: ['HIGHLIGHTED AT CCOR', 'Selected upcoming classes, events and meetings are highlighted here.']
             };
 
             const state = {
@@ -2044,7 +2044,7 @@
                 const [label, copy] = PAGE_LABELS[state.page];
                 heading.innerHTML = filtered
                     ? '<div><span class="ccor-featured-code">FILTERED RESULTS</span><strong>Matching upcoming items</strong></div>'
-                    : `<div><span class="ccor-featured-code">★ FAVORITES FIRST</span><strong>${escapeHtml(label)}</strong><small>${escapeHtml(copy)}</small></div>`;
+                    : `<div><span class="ccor-featured-code">★ COMING SOON</span><strong>${escapeHtml(label)}</strong><small>${escapeHtml(copy)}</small></div>`;
             }
 
             function clearFeaturedMarks(cards) {
@@ -2060,7 +2060,7 @@
                 if (!target.querySelector('.ccor-feature-star')) {
                     const badge = document.createElement('span');
                     badge.className = 'ccor-feature-star';
-                    badge.textContent = '★ FAVORITE';
+                    badge.textContent = '★ HIGHLIGHTED';
                     target.appendChild(badge);
                 }
             }
@@ -2282,7 +2282,7 @@
             else init();
         })();
     </script>
-    <!-- CCOR INLINE FAVORITES + CALENDAR END -->
+    <!-- CCOR INLINE HIGHLIGHTS + CALENDAR END -->
 </body>
 
 </html>
