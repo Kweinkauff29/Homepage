@@ -2,6 +2,10 @@ import { chromium } from 'playwright';
 import assert from 'node:assert/strict';
 
 const API_URL = 'https://www.ccreschool.com/api/public-events?page=education';
+const apiResponse = await fetch(API_URL, { headers: { Accept: 'application/json', 'Cache-Control': 'no-cache' } });
+assert.equal(apiResponse.ok, true, `live Education API returned ${apiResponse.status}`);
+const apiBody = await apiResponse.text();
+
 const browser = await chromium.launch({ headless: true });
 const page = await browser.newPage({ viewport: { width: 1440, height: 1200 } });
 const pageErrors = [];
@@ -13,27 +17,38 @@ page.on('console', message => {
 
 try {
   // The production API intentionally allows CCOR and GitHub Pages origins, not
-  // localhost. Proxy the exact live payload into this local-only browser test.
-  await page.route(API_URL, async route => {
-    const response = await fetch(API_URL, { headers: { Accept: 'application/json', 'Cache-Control': 'no-cache' } });
-    const body = await response.text();
-    await route.fulfill({
-      status: response.status,
-      contentType: 'application/json; charset=utf-8',
-      headers: {
-        'access-control-allow-origin': 'http://127.0.0.1:8765',
-        'cache-control': 'no-store'
-      },
-      body
-    });
-  });
+  // localhost. Inject the exact live payload before page JavaScript starts so
+  // this local browser test exercises the real data without weakening CORS.
+  await page.addInitScript(({ apiUrl, body }) => {
+    const nativeFetch = window.fetch.bind(window);
+    window.fetch = (input, init) => {
+      const url = typeof input === 'string' ? input : input?.url;
+      if (url === apiUrl) {
+        return Promise.resolve(new Response(body, {
+          status: 200,
+          headers: { 'Content-Type': 'application/json; charset=utf-8' }
+        }));
+      }
+      return nativeFetch(input, init);
+    };
+  }, { apiUrl: API_URL, body: apiBody });
 
   await page.goto('http://127.0.0.1:8765/2026/Education.smoke.html', {
     waitUntil: 'domcontentloaded',
     timeout: 120000
   });
   await page.waitForSelector('#ccorEducationApp', { timeout: 30000 });
-  await page.waitForFunction(() => document.querySelector('#sysStatus')?.textContent?.includes('SYSTEM ACTIVE'), null, { timeout: 60000 });
+  try {
+    await page.waitForFunction(() => document.querySelector('#sysStatus')?.textContent?.includes('SYSTEM ACTIVE'), null, { timeout: 30000 });
+  } catch (error) {
+    console.error(JSON.stringify({
+      statusText: await page.locator('#sysStatus').textContent().catch(() => null),
+      linkStatus: await page.locator('.swiss-status-glitch').textContent().catch(() => null),
+      pageErrors,
+      consoleErrors
+    }, null, 2));
+    throw error;
+  }
 
   assert.equal(await page.locator('.ccor-month-card').count(), 12, 'year calendar should render twelve months');
   assert.equal(await page.locator('.ccor-instructor-card').count(), 10, 'all ten verified instructor profiles should render');
