@@ -1,0 +1,86 @@
+name: Verify live Education deployment
+
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - .github/workflows/verify-live-education-page.yml
+
+permissions:
+  contents: read
+
+jobs:
+  verify-live:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Verify GitHub Pages assets
+        shell: bash
+        run: |
+          python - <<'PY'
+          import urllib.request
+
+          checks = [
+              ('https://kweinkauff29.github.io/Homepage/2026/assets/ccor-education.js?v=20260803a', 'ccorEducationApp'),
+              ('https://kweinkauff29.github.io/Homepage/2026/assets/ccor-education.css?v=20260803a', '.ccor-education')
+          ]
+          for url, marker in checks:
+              req = urllib.request.Request(url, headers={'User-Agent':'CCOR-Live-Education-Check/1.0'})
+              with urllib.request.urlopen(req, timeout=90) as response:
+                  body = response.read().decode('utf-8', errors='replace')
+              print(url, response.status, len(body), marker in body)
+              assert response.status == 200
+              assert marker in body, f'{marker} missing from {url}'
+          PY
+
+      - name: Install Chromium runtime
+        shell: bash
+        run: |
+          rm -rf node_modules
+          npm install --no-save --ignore-scripts playwright@1.49.1
+          npx playwright install --with-deps chromium
+
+      - name: Verify live WordPress page
+        shell: bash
+        run: |
+          cat > /tmp/verify-live-education.mjs <<'JS'
+          import { chromium } from 'playwright';
+          import assert from 'node:assert/strict';
+
+          const browser = await chromium.launch({ headless: true });
+          const page = await browser.newPage({ viewport: { width: 1440, height: 1200 } });
+          const consoleMessages = [];
+          const requests = [];
+          page.on('console', msg => consoleMessages.push(`${msg.type()}: ${msg.text()}`));
+          page.on('request', req => {
+            if (/ccor-education\.(?:js|css)|public-events\?page=education/.test(req.url())) requests.push(req.url());
+          });
+          try {
+            await page.goto('https://coconutcoastrealtors.org/upcoming-education/', {
+              waitUntil: 'domcontentloaded',
+              timeout: 120000
+            });
+            await page.waitForTimeout(10000);
+            const report = {
+              title: await page.title(),
+              appPresent: await page.locator('#ccorEducationApp').count() > 0,
+              buildMarkerPresent: (await page.content()).includes('CCOR EDUCATION YEAR + INSTRUCTOR DIRECTORY BUILD: 2026-08-03a'),
+              featuredPresent: await page.locator('#ccorFeaturedSection').count() > 0,
+              instructorDirectoryPresent: await page.locator('#ccorInstructorSection').count() > 0,
+              systemStatus: await page.locator('#sysStatus').textContent().catch(() => null),
+              matchingRequests: requests,
+              relevantConsole: consoleMessages.filter(line => /education|error|failed|cors/i.test(line)).slice(-30)
+            };
+            console.log(JSON.stringify(report, null, 2));
+            assert.equal(report.appPresent, true, 'New Education app is not present on WordPress');
+            assert.equal(report.buildMarkerPresent, true, 'New Education build marker is not present on WordPress');
+            assert.equal(report.featuredPresent, true, 'Featured Education section is not present');
+            assert.equal(report.instructorDirectoryPresent, true, 'Instructor directory is not present');
+            assert.match(report.systemStatus || '', /SYSTEM ACTIVE/i, 'Education data did not become active');
+          } finally {
+            await browser.close();
+          }
+          JS
+          node /tmp/verify-live-education.mjs
