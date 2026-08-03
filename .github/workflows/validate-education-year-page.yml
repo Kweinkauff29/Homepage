@@ -1,0 +1,84 @@
+name: Validate full-year Education page
+
+on:
+  push:
+    branches:
+      - agent/education-year-instructor-directory
+
+permissions:
+  contents: write
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: agent/education-year-instructor-directory
+
+      - name: Apply page integration
+        run: python scripts/patch-education-page.py
+
+      - name: Validate JavaScript syntax
+        run: node --check 2026/assets/ccor-education.js
+
+      - name: Validate page structure and assets
+        shell: bash
+        run: |
+          set -euo pipefail
+          grep -q 'CCOR EDUCATION YEAR + INSTRUCTOR DIRECTORY BUILD' 2026/Education.html
+          grep -q 'ccor-education.css?v=20260803a' 2026/Education.html
+          grep -q 'ccor-education.js?v=20260803a' 2026/Education.html
+          grep -q 'data-legacy-education-renderer' 2026/Education.html
+          grep -q 'data-legacy-education-calendar' 2026/Education.html
+          test "$(grep -c 'data-legacy-education-renderer' 2026/Education.html)" -eq 1
+          test "$(grep -c 'data-legacy-education-calendar' 2026/Education.html)" -eq 1
+          grep -q 'api/public-events?page=education' 2026/assets/ccor-education.js
+          grep -q 'ccorYearCalendar' 2026/assets/ccor-education.js
+          grep -q 'ccorInstructorGrid' 2026/assets/ccor-education.js
+          grep -q 'data-logo-url' 2026/assets/ccor-education.js
+          grep -q 'object-fit: contain' 2026/assets/ccor-education.css
+          grep -q '#eventsGrid.ccor-class-grid' 2026/assets/ccor-education.css
+
+      - name: Validate HTML essentials
+        shell: bash
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          from html.parser import HTMLParser
+
+          class Parser(HTMLParser):
+              def __init__(self):
+                  super().__init__()
+                  self.ids = set()
+                  self.scripts = []
+                  self.links = []
+              def handle_starttag(self, tag, attrs):
+                  attrs = dict(attrs)
+                  if attrs.get('id'): self.ids.add(attrs['id'])
+                  if tag == 'script': self.scripts.append(attrs)
+                  if tag == 'link': self.links.append(attrs)
+
+          text = Path('2026/Education.html').read_text()
+          parser = Parser(); parser.feed(text)
+          required = {'eduTop','searchInput','dateFilter','ceToggle','sysStatus','eventsGrid','eventModal','modalBody','modalClose'}
+          missing = required - parser.ids
+          assert not missing, f'Missing required Education shell IDs: {sorted(missing)}'
+          active_external = [s.get('src','') for s in parser.scripts if s.get('src')]
+          assert any('ccor-education.js' in src for src in active_external), 'Unified Education JS missing'
+          assert any('ccor-education.css' in link.get('href','') for link in parser.links), 'Unified Education CSS missing'
+          assert text.count('<script type="text/plain" data-legacy-education-renderer>') == 1
+          assert text.count('<script type="text/plain" data-legacy-education-calendar') == 1
+          print('HTML shell validation passed')
+          PY
+
+      - name: Commit integrated page
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add 2026/Education.html
+          if git diff --cached --quiet; then exit 0; fi
+          git commit -m "Connect full-year Education calendar and instructor directory"
+          git push origin HEAD:agent/education-year-instructor-directory
