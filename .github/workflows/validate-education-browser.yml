@@ -1,9 +1,6 @@
 name: Validate Education page in Chromium
 
 on:
-  push:
-    branches:
-      - agent/education-year-instructor-directory
   pull_request:
     branches: [main]
     paths:
@@ -14,7 +11,7 @@ on:
       - .github/workflows/validate-education-browser.yml
 
 permissions:
-  contents: write
+  contents: read
 
 jobs:
   browser-smoke:
@@ -22,11 +19,6 @@ jobs:
     timeout-minutes: 20
     steps:
       - uses: actions/checkout@v4
-        with:
-          ref: agent/education-year-instructor-directory
-
-      - name: Apply local-date fix
-        run: python scripts/fix-education-local-dates.py
 
       - name: Validate JavaScript syntax
         run: node --check 2026/assets/ccor-education.js
@@ -97,15 +89,3 @@ jobs:
 
       - name: Run Education browser smoke test
         run: node tests/education-page-smoke.mjs
-
-      - name: Commit local-date fix
-        if: github.event_name == 'push'
-        shell: bash
-        run: |
-          set -euo pipefail
-          git config user.name "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add 2026/assets/ccor-education.js
-          if git diff --cached --quiet; then exit 0; fi
-          git commit -m "Parse Education calendar dates in local time"
-          git push origin HEAD:agent/education-year-instructor-directory
