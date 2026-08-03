@@ -1,0 +1,207 @@
+name: Finish calendar injection
+
+on:
+  push:
+    branches:
+      - agent/restore-calendar-layout
+    paths:
+      - .github/workflows/finish-calendar-injection.yml
+
+permissions:
+  contents: write
+
+jobs:
+  finish:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: agent/restore-calendar-layout
+          fetch-depth: 0
+
+      - name: Apply scoped HTML and injector updates
+        shell: bash
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          import re
+
+          html_loaders = {
+              '2026/Education.html': '<script src="https://kweinkauff29.github.io/Homepage/2026/assets/ccor-events.js?v=20260803c" data-ccor-page="education"></script>',
+              '2026/Events.html': '<script src="https://kweinkauff29.github.io/Homepage/2026/assets/ccor-events.js?v=20260803c" data-ccor-page="event"></script>',
+              '2026/Committees.html': '<script src="https://kweinkauff29.github.io/Homepage/2026/assets/ccor-events.js?v=20260803c" data-ccor-page="committee"></script>',
+              '2026/AllEvents.html': '<script src="https://kweinkauff29.github.io/Homepage/2026/assets/ccor-events.js?v=20260803c" data-ccor-page="all"></script>',
+          }
+
+          for filename, loader in html_loaders.items():
+              path = Path(filename)
+              text = path.read_text(encoding='utf-8')
+              text = re.sub(r'\n?\s*<script[^>]+ccor-events\.js[^>]*></script>\s*(?=</body>)', '\n', text)
+              if '</body>' not in text:
+                  raise SystemExit(f'{filename}: final </body> not found')
+              before, after = text.rsplit('</body>', 1)
+              text = before.rstrip() + '\n' + loader + '\n</body>' + after
+              path.write_text(text, encoding='utf-8')
+
+          js_path = Path('2026/assets/ccor-events.js')
+          js = js_path.read_text(encoding='utf-8')
+
+          js = js.replace(
+              "  const API_URL = 'https://www.ccreschool.com/api/public-events';\n",
+              "  const API_URL = 'https://www.ccreschool.com/api/public-events';\n  const FALLBACK_URL = 'https://gz-realestate-proxy.bonitaspringsrealtors.workers.dev/events/all?enriched=true';\n",
+              1,
+          )
+
+          normalize_pattern = re.compile(r"  function normalize\(raw\) \{.*?\n  \}\n\n  function loadStyles", re.S)
+          normalize_replacement = r'''  function categoryOf(raw, source) {
+    const declared = String(raw.category || '').toLowerCase();
+    if (['education', 'event', 'committee'].includes(declared)) return declared;
+    if (first(raw, ['isClass', 'IsClass'], false)) return 'education';
+    if (/committee|advisory council|board of directors|task force/i.test(source)) return 'committee';
+    if (/education|class|course|webinar|seminar|training|matrix|rpr|cubi|core law|contract|gri|\bce\b|cips|hecm/i.test(source)) return 'education';
+    return 'event';
+  }
+
+  function formatOf(source) {
+    if (/hybrid|in[- ]person\s*(?:and|&|\+)\s*(?:zoom|virtual|online)/i.test(source)) return 'hybrid';
+    if (/\bzoom\b|webinar|virtual|online|remote/i.test(source)) return 'online';
+    return 'in-person';
+  }
+
+  function normalize(raw) {
+    const name = text(first(raw, ['name', 'title', 'Name', 'EventName'], 'CCOR class or event'));
+    const description = text(first(raw, ['description', 'Description', 'LongDescription', 'ShortDescription']));
+    const location = text(first(raw, ['location', 'Location', 'LocationName', 'AddressString']));
+    const categories = text(first(raw, ['categories', 'Categories', 'CategoryName', 'CalendarName']));
+    const start = asDate(first(raw, ['startDate', 'StartDate', 'StartDateLocal', 'EventStartDate']));
+    const id = Number(first(raw, ['eventId', 'EventId', 'Id', 'id'], 0)) || null;
+    const source = `${name} ${description} ${location} ${categories}`;
+    return {
+      id,
+      key: String(first(raw, ['key', 'EventDetailId', 'eventDetailId', 'EventId', 'eventId', 'Id', 'id'], `${name}|${start?.toISOString() || ''}`)),
+      name,
+      description,
+      location,
+      start,
+      url: first(raw, ['publicUrl', 'url', 'PublicUrl', 'PublicRegisterUrl', 'RegistrationUrl'], '#'),
+      ce: raw.ce === true || /(?:\(|\b)(?:\d+(?:\.\d+)?\s*(?:hr\s*)?)?ce(?:\)|\b)|continuing education/i.test(source),
+      category: categoryOf(raw, source),
+      format: raw.format || formatOf(source)
+    };
+  }
+
+  function automaticFeatured(events) {
+    const sorted = [...events].sort((a, b) => (a.start?.getTime() || 9e15) - (b.start?.getTime() || 9e15));
+    if (state.page !== 'education') return sorted.slice(0, 3);
+    const selected = [];
+    const take = list => list.forEach(event => {
+      if (selected.length < 3 && !selected.some(item => item.key === event.key)) selected.push(event);
+    });
+    take(sorted.filter(event => event.ce && event.format === 'in-person'));
+    take(sorted.filter(event => event.ce));
+    take(sorted);
+    return selected;
+  }
+
+  function loadStyles'''
+          js, count = normalize_pattern.subn(normalize_replacement, js, count=1)
+          if count != 1:
+              raise SystemExit('Could not replace normalize block')
+
+          ordered_pattern = re.compile(r"  function orderedCards\(cards, filtered\) \{.*?\n  \}\n\n  function createCalendar", re.S)
+          ordered_replacement = r'''  function normalizedName(value) {
+    return text(value).toLowerCase().replace(/[^a-z0-9]+/g, ' ').trim();
+  }
+
+  function orderedCards(cards, filtered) {
+    if (filtered || !state.featured.length) return cards;
+    const byId = new Map(cards.map(card => [cardEventId(card), card]).filter(([id]) => id));
+    const selected = [];
+    for (const event of state.featured) {
+      let card = event.id ? byId.get(event.id) : null;
+      if (!card) {
+        const target = normalizedName(event.name);
+        card = cards.find(candidate => {
+          if (selected.includes(candidate)) return false;
+          const candidateName = normalizedName(candidate.querySelector('.card-title')?.textContent || '');
+          return candidateName === target || candidateName.startsWith(target) || target.startsWith(candidateName);
+        });
+      }
+      if (card && !selected.includes(card)) selected.push(card);
+    }
+    return [...selected, ...cards.filter(card => !selected.includes(card))];
+  }
+
+  function createCalendar'''
+          js, count = ordered_pattern.subn(ordered_replacement, js, count=1)
+          if count != 1:
+              raise SystemExit('Could not replace card ordering block')
+
+          old_placement = """      const columns = Math.min(gridColumnCount(grid), ordered.length);\n      if (!filterState.active) ordered.slice(0, columns).forEach(markFeatured);\n      const anchor = ordered[Math.max(0, columns - 1)];\n      anchor.after(state.calendar);"""
+          new_placement = """      const featuredCount = filterState.active\n        ? Math.min(gridColumnCount(grid), ordered.length)\n        : Math.min(3, ordered.length);\n      if (!filterState.active) ordered.slice(0, featuredCount).forEach(markFeatured);\n      const anchor = ordered[Math.max(0, featuredCount - 1)];\n      anchor.after(state.calendar);"""
+          if old_placement not in js:
+              raise SystemExit('Could not find calendar placement block')
+          js = js.replace(old_placement, new_placement, 1)
+
+          load_pattern = re.compile(r"  async function loadData\(\) \{.*?\n  \}\n\n  async function init", re.S)
+          load_replacement = r'''  async function loadData() {
+    let payload = null;
+    try {
+      const response = await fetch(`${API_URL}?page=${encodeURIComponent(state.page)}`, { headers: { Accept: 'application/json' } });
+      if (response.ok) payload = await response.json();
+    } catch (error) {
+      console.warn('Featured calendar API unavailable; using GrowthZone fallback.', error);
+    }
+
+    if (payload?.events?.length) {
+      state.events = payload.events.map(normalize).filter(event => event.start);
+      state.featured = (payload.featured || []).map(normalize).filter(event => event.start);
+    } else {
+      const response = await fetch(FALLBACK_URL, { headers: { Accept: 'application/json' } });
+      if (!response.ok) throw new Error(`GrowthZone fallback returned ${response.status}`);
+      const fallback = await response.json();
+      state.events = (fallback.Results || fallback.events || [])
+        .map(normalize)
+        .filter(event => event.start)
+        .filter(event => state.page === 'all' || event.category === state.page);
+      state.featured = [];
+    }
+
+    state.events.sort((a, b) => (a.start?.getTime() || 9e15) - (b.start?.getTime() || 9e15));
+    if (!state.featured.length) state.featured = automaticFeatured(state.events);
+
+    const firstEvent = state.events[0]?.start;
+    if (firstEvent && firstEvent > new Date(state.month.getFullYear(), state.month.getMonth() + 1, 0)) {
+      state.month = new Date(firstEvent.getFullYear(), firstEvent.getMonth(), 1);
+    }
+  }
+
+  async function init'''
+          js, count = load_pattern.subn(load_replacement, js, count=1)
+          if count != 1:
+              raise SystemExit('Could not replace data loader block')
+
+          js_path.write_text(js, encoding='utf-8')
+          PY
+
+      - name: Validate scoped changes
+        shell: bash
+        run: |
+          node --check 2026/assets/ccor-events.js
+          for file in 2026/Education.html 2026/Events.html 2026/Committees.html 2026/AllEvents.html; do
+            test "$(grep -c 'ccor-events.js?v=20260803c' "$file")" -eq 1
+            grep -q 'id="eventsGrid"' "$file"
+            grep -q 'class="swiss-container"' "$file"
+            grep -q 'ccor-waves-bg' "$file"
+          done
+          git diff --check
+
+      - name: Commit completed injection
+        shell: bash
+        run: |
+          git config user.name "CCOR Calendar Automation"
+          git config user.email "actions@users.noreply.github.com"
+          git rm .github/workflows/finish-calendar-injection.yml
+          git add 2026/Education.html 2026/Events.html 2026/Committees.html 2026/AllEvents.html 2026/assets/ccor-events.js
+          git commit -m "Complete calendar and featured injection"
+          git push origin HEAD:agent/restore-calendar-layout
