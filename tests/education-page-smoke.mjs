@@ -1,18 +1,39 @@
 import { chromium } from 'playwright';
 import assert from 'node:assert/strict';
 
+const API_URL = 'https://www.ccreschool.com/api/public-events?page=education';
 const browser = await chromium.launch({ headless: true });
 const page = await browser.newPage({ viewport: { width: 1440, height: 1200 } });
 const pageErrors = [];
+const consoleErrors = [];
 page.on('pageerror', error => pageErrors.push(error.message));
+page.on('console', message => {
+  if (message.type() === 'error') consoleErrors.push(message.text());
+});
 
 try {
+  // The production API intentionally allows CCOR and GitHub Pages origins, not
+  // localhost. Proxy the exact live payload into this local-only browser test.
+  await page.route(API_URL, async route => {
+    const response = await fetch(API_URL, { headers: { Accept: 'application/json', 'Cache-Control': 'no-cache' } });
+    const body = await response.text();
+    await route.fulfill({
+      status: response.status,
+      contentType: 'application/json; charset=utf-8',
+      headers: {
+        'access-control-allow-origin': 'http://127.0.0.1:8765',
+        'cache-control': 'no-store'
+      },
+      body
+    });
+  });
+
   await page.goto('http://127.0.0.1:8765/2026/Education.smoke.html', {
     waitUntil: 'domcontentloaded',
     timeout: 120000
   });
   await page.waitForSelector('#ccorEducationApp', { timeout: 30000 });
-  await page.waitForFunction(() => document.querySelector('#sysStatus')?.textContent?.includes('SYSTEM ACTIVE'), null, { timeout: 120000 });
+  await page.waitForFunction(() => document.querySelector('#sysStatus')?.textContent?.includes('SYSTEM ACTIVE'), null, { timeout: 60000 });
 
   assert.equal(await page.locator('.ccor-month-card').count(), 12, 'year calendar should render twelve months');
   assert.equal(await page.locator('.ccor-instructor-card').count(), 10, 'all ten verified instructor profiles should render');
@@ -43,6 +64,8 @@ try {
   assert.ok((await page.locator('#ccorResultsMeta').textContent())?.length > 0, 'month selection should update results');
 
   assert.deepEqual(pageErrors, [], `browser page errors: ${pageErrors.join('; ')}`);
+  const relevantConsoleErrors = consoleErrors.filter(message => !/favicon|ERR_FAILED.*(?:image|font)|net::ERR_ABORTED/i.test(message));
+  assert.deepEqual(relevantConsoleErrors, [], `browser console errors: ${relevantConsoleErrors.join('; ')}`);
   console.log(JSON.stringify({
     status: 'passed',
     instructorCount: names.length,
