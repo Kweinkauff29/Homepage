@@ -1,0 +1,146 @@
+name: Audit Education instructor patterns
+
+on:
+  push:
+    branches:
+      - agent/audit-education-calendar-data
+    paths:
+      - .github/workflows/audit-education-instructors.yml
+
+permissions:
+  contents: write
+
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: agent/audit-education-calendar-data
+
+      - name: Build compact instructor and coverage report
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p audit
+          python - <<'PY'
+          import json, re, urllib.request, html
+          from collections import Counter, defaultdict
+          from datetime import datetime, timezone
+
+          URL = "https://gz-realestate-proxy.bonitaspringsrealtors.workers.dev/events/all?enriched=true"
+          req = urllib.request.Request(URL, headers={"Accept":"application/json","User-Agent":"CCOR-Education-Audit/1.0"})
+          with urllib.request.urlopen(req, timeout=90) as r:
+              payload = json.loads(r.read().decode())
+          rows = payload.get("Results") or payload.get("events") or payload.get("results") or []
+
+          def first(d, names, default=None):
+              for n in names:
+                  if d.get(n) not in (None,""): return d.get(n)
+              return default
+
+          def clean(v):
+              s = html.unescape(str(v or ""))
+              s = re.sub(r"<br\s*/?>", "\n", s, flags=re.I)
+              s = re.sub(r"<[^>]+>", " ", s)
+              s = re.sub(r"[ \t]+", " ", s)
+              return s.strip()
+
+          def parse_date(v):
+              if not v: return None
+              s=str(v).replace("Z","+00:00")
+              try: return datetime.fromisoformat(s)
+              except: return None
+
+          education=[]
+          all_fields=Counter()
+          for row in rows:
+              if not isinstance(row,dict): continue
+              all_fields.update(row.keys())
+              title=clean(first(row,["Name","name","title","EventName"]))
+              desc=clean(first(row,["Description","description","LongDescription","ShortDescription"]))
+              cats=clean(first(row,["Categories","categories","CategoryName","CalendarName","category"]))
+              start=parse_date(first(row,["StartDate","startDate","StartDateLocal","EventStartDate","start"]))
+              hay=f"{title} {cats} {desc}".lower()
+              if not ("education" in cats.lower() or re.search(r"\b(class|course|webinar|training|orientation|workshop|gri|ce\b|matrix|contract|ethics|law)\b",hay)):
+                  continue
+              education.append({
+                  "id": first(row,["Id","id","EventId","EventID","key"]),
+                  "title": title,
+                  "description": desc,
+                  "categories": cats,
+                  "start": start.isoformat() if start else None,
+                  "flyer": first(row,["FlyerUrl","flyerUrl","ImageUrl","ImageURL","PhotoUrl","photoUrl","image","imageUrl"]),
+                  "raw_fields": {k:row.get(k) for k in row.keys() if re.search(r"instructor|speaker|presenter|teacher|contact|photo|image|flyer",k,re.I)}
+              })
+
+          explicit_patterns = [
+              ("label", re.compile(r"\b(?:instructor|presenter|speaker|facilitator|trainer)\s*[:\-–—]\s*([^\n|;<>]{2,100})", re.I)),
+              ("presented_by", re.compile(r"\b(?:presented|taught|led|hosted|facilitated)\s+by\s+([A-Z][A-Za-z.'’\-]+(?:\s+(?:[A-Z][A-Za-z.'’\-]+|Esq\.?|Jr\.?|Sr\.?|III|II)){1,5})", re.I)),
+              ("will_teach", re.compile(r"\b([A-Z][A-Za-z.'’\-]+(?:\s+(?:[A-Z][A-Za-z.'’\-]+|Esq\.?|Jr\.?|Sr\.?|III|II)){1,5})\s+will\s+(?:teach|present|lead|facilitate|instruct)\b")),
+              ("join", re.compile(r"\bJoin\s+([A-Z][A-Za-z.'’\-]+(?:\s+(?:[A-Z][A-Za-z.'’\-]+|Esq\.?|Jr\.?|Sr\.?|III|II)){1,5})(?:\s+(?:for|as|to)\b|[,.])")),
+              ("with", re.compile(r"\bwith\s+([A-Z][A-Za-z.'’\-]+(?:\s+(?:[A-Z][A-Za-z.'’\-]+|Esq\.?|Jr\.?|Sr\.?|III|II)){1,4})(?:\s+(?:for|as|to)\b|[,.])")),
+          ]
+          stop_fragments = re.compile(r"\b(?:confidence|clients|buyers|sellers|rpr|matrix|forewarn|rent spree|data|market|tools|your business|the class|this course)\b",re.I)
+          candidate_counts=Counter()
+          matches=[]
+          keyword_events=[]
+          for ev in education:
+              desc=ev["description"]
+              event_matches=[]
+              for kind,pat in explicit_patterns:
+                  for m in pat.finditer(desc):
+                      name=re.sub(r"\s+"," ",m.group(1)).strip(" .,:;–—-")
+                      name=re.sub(r"\s+(?:will|for|as|to)$","",name,flags=re.I)
+                      if len(name.split()) < 2 or stop_fragments.search(name): continue
+                      if name not in [x["name"] for x in event_matches]:
+                          event_matches.append({"kind":kind,"name":name,"context":desc[max(0,m.start()-100):min(len(desc),m.end()+140)]})
+                          candidate_counts[name]+=1
+              if event_matches:
+                  matches.append({"id":ev["id"],"title":ev["title"],"start":ev["start"],"matches":event_matches,"raw_fields":ev["raw_fields"]})
+              elif re.search(r"\b(instructor|presenter|speaker|teach|taught|led by|presented by|join us|join [A-Z])\b",desc,re.I):
+                  keyword_events.append({"id":ev["id"],"title":ev["title"],"start":ev["start"],"description":desc[:1800],"raw_fields":ev["raw_fields"]})
+
+          years=Counter()
+          month_counts=Counter()
+          for ev in education:
+              if ev["start"]:
+                  dt=datetime.fromisoformat(ev["start"])
+                  years[str(dt.year)]+=1
+                  month_counts[dt.strftime("%Y-%m")]+=1
+
+          logo_markers=("CCOR-Horz-Logo","Coconut-Coast","logo")
+          image_counts={"with_image":0,"logo_placeholder":0,"without_image":0}
+          for ev in education:
+              u=str(ev.get("flyer") or "")
+              if not u: image_counts["without_image"]+=1
+              elif any(x.lower() in u.lower() for x in logo_markers): image_counts["logo_placeholder"]+=1
+              else: image_counts["with_image"]+=1
+
+          report={
+              "feed_count":len(rows),
+              "education_count":len(education),
+              "year_counts":dict(sorted(years.items())),
+              "month_counts":dict(sorted(month_counts.items())),
+              "earliest":min((e["start"] for e in education if e["start"]),default=None),
+              "latest":max((e["start"] for e in education if e["start"]),default=None),
+              "image_counts":image_counts,
+              "candidate_counts":candidate_counts.most_common(),
+              "matched_events":matches,
+              "keyword_unmatched_events":keyword_events,
+              "relevant_field_names":[x for x,n in all_fields.most_common() if re.search(r"instructor|speaker|presenter|teacher|contact|photo|image|flyer",x,re.I)]
+          }
+          with open("audit/education-instructor-report.json","w",encoding="utf-8") as f:
+              json.dump(report,f,indent=2,ensure_ascii=False)
+          PY
+
+      - name: Commit report
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add audit/education-instructor-report.json
+          if git diff --cached --quiet; then exit 0; fi
+          git commit -m "Record Education instructor pattern audit"
+          git push origin HEAD:agent/audit-education-calendar-data
