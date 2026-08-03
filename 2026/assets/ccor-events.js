@@ -3,6 +3,7 @@
 
   const loader = document.currentScript;
   const API_URL = 'https://www.ccreschool.com/api/public-events';
+  const FALLBACK_URL = 'https://gz-realestate-proxy.bonitaspringsrealtors.workers.dev/events/all?enriched=true';
   const CSS_URL = loader?.src ? new URL('ccor-events.css', loader.src).href : './assets/ccor-events.css';
   const PAGE_LABELS = {
     education: ['FEATURED CLASSES', 'Closest upcoming in-person CE classes appear first unless staff stars other classes.'],
@@ -38,6 +39,7 @@
   const escapeHtml = value => String(value ?? '').replace(/[&<>"']/g, character => ({
     '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
   })[character]);
+  const normalizedName = value => text(value).toLowerCase().replace(/[^a-z0-9]+/g, ' ').trim();
 
   function detectPage() {
     const declared = loader?.dataset.ccorPage;
@@ -49,6 +51,21 @@
     return 'event';
   }
 
+  function categoryOf(raw, source) {
+    const declared = String(raw.category || '').toLowerCase();
+    if (['education', 'event', 'committee'].includes(declared)) return declared;
+    if (first(raw, ['isClass', 'IsClass'], false)) return 'education';
+    if (/committee|advisory council|board of directors|task force/i.test(source)) return 'committee';
+    if (/education|class|course|webinar|seminar|training|matrix|rpr|cubi|core law|contract|gri|\bce\b|cips|hecm/i.test(source)) return 'education';
+    return 'event';
+  }
+
+  function formatOf(source) {
+    if (/hybrid|in[- ]person\s*(?:and|&|\+)\s*(?:zoom|virtual|online)/i.test(source)) return 'hybrid';
+    if (/\bzoom\b|webinar|virtual|online|remote/i.test(source)) return 'online';
+    return 'in-person';
+  }
+
   function normalize(raw) {
     const name = text(first(raw, ['name', 'title', 'Name', 'EventName'], 'CCOR class or event'));
     const description = text(first(raw, ['description', 'Description', 'LongDescription', 'ShortDescription']));
@@ -56,7 +73,7 @@
     const categories = text(first(raw, ['categories', 'Categories', 'CategoryName', 'CalendarName']));
     const start = asDate(first(raw, ['startDate', 'StartDate', 'StartDateLocal', 'EventStartDate']));
     const id = Number(first(raw, ['eventId', 'EventId', 'Id', 'id'], 0)) || null;
-    const source = `${name} ${description} ${categories}`;
+    const source = `${name} ${description} ${location} ${categories}`;
     return {
       id,
       key: String(first(raw, ['key', 'EventDetailId', 'eventDetailId', 'EventId', 'eventId', 'Id', 'id'], `${name}|${start?.toISOString() || ''}`)),
@@ -65,8 +82,23 @@
       location,
       start,
       url: first(raw, ['publicUrl', 'url', 'PublicUrl', 'PublicRegisterUrl', 'RegistrationUrl'], '#'),
-      ce: raw.ce === true || /(?:\(|\b)(?:\d+(?:\.\d+)?\s*(?:hr\s*)?)?ce(?:\)|\b)|continuing education/i.test(source)
+      ce: raw.ce === true || /(?:\(|\b)(?:\d+(?:\.\d+)?\s*(?:hr\s*)?)?ce(?:\)|\b)|continuing education/i.test(source),
+      category: categoryOf(raw, source),
+      format: raw.format || formatOf(source)
     };
+  }
+
+  function automaticFeatured(events) {
+    const sorted = [...events].sort((a, b) => (a.start?.getTime() || 9e15) - (b.start?.getTime() || 9e15));
+    if (state.page !== 'education') return sorted.slice(0, 3);
+    const selected = [];
+    const take = list => list.forEach(event => {
+      if (selected.length < 3 && !selected.some(item => item.key === event.key)) selected.push(event);
+    });
+    take(sorted.filter(event => event.ce && event.format === 'in-person'));
+    take(sorted.filter(event => event.ce));
+    take(sorted);
+    return selected;
   }
 
   function loadStyles() {
@@ -158,7 +190,15 @@
     const byId = new Map(cards.map(card => [cardEventId(card), card]).filter(([id]) => id));
     const selected = [];
     for (const event of state.featured) {
-      const card = event.id ? byId.get(event.id) : null;
+      let card = event.id ? byId.get(event.id) : null;
+      if (!card) {
+        const target = normalizedName(event.name);
+        card = cards.find(candidate => {
+          if (selected.includes(candidate)) return false;
+          const candidateName = normalizedName(candidate.querySelector('.card-title')?.textContent || '');
+          return candidateName === target || candidateName.startsWith(target) || target.startsWith(candidateName);
+        });
+      }
       if (card && !selected.includes(card)) selected.push(card);
     }
     return [...selected, ...cards.filter(card => !selected.includes(card))];
@@ -259,7 +299,6 @@
     const grid = document.getElementById('eventsGrid');
     if (!grid) return;
     const cards = [...grid.children].filter(element => element.classList.contains('swiss-card'));
-    if (!cards.length) return;
 
     state.applying = true;
     state.observer?.disconnect();
@@ -269,13 +308,24 @@
       clearFeaturedMarks(cards);
 
       const filterState = currentFilterState();
-      const ordered = orderedCards(cards, filterState.active);
-      ordered.forEach(card => grid.appendChild(card));
       ensureFeaturedHeading(grid, filterState.active);
 
-      const columns = Math.min(gridColumnCount(grid), ordered.length);
-      if (!filterState.active) ordered.slice(0, columns).forEach(markFeatured);
-      const anchor = ordered[Math.max(0, columns - 1)];
+      if (!cards.length) {
+        const anchor = grid.lastElementChild;
+        if (anchor) anchor.after(state.calendar);
+        else grid.appendChild(state.calendar);
+        renderCalendar();
+        return;
+      }
+
+      const ordered = orderedCards(cards, filterState.active);
+      ordered.forEach(card => grid.appendChild(card));
+
+      const featuredCount = filterState.active
+        ? Math.min(gridColumnCount(grid), ordered.length)
+        : Math.min(3, ordered.length);
+      if (!filterState.active) ordered.slice(0, featuredCount).forEach(markFeatured);
+      const anchor = ordered[Math.max(0, featuredCount - 1)];
       anchor.after(state.calendar);
       renderCalendar();
     } finally {
@@ -300,11 +350,31 @@
   }
 
   async function loadData() {
-    const response = await fetch(`${API_URL}?page=${encodeURIComponent(state.page)}`, { headers: { Accept: 'application/json' } });
-    if (!response.ok) throw new Error(`Featured calendar API returned ${response.status}`);
-    const payload = await response.json();
-    state.events = (payload.events || []).map(normalize).filter(event => event.start);
-    state.featured = (payload.featured || []).map(normalize);
+    let payload = null;
+    try {
+      const response = await fetch(`${API_URL}?page=${encodeURIComponent(state.page)}`, { headers: { Accept: 'application/json' } });
+      if (response.ok) payload = await response.json();
+    } catch (error) {
+      console.warn('Featured calendar API unavailable; using GrowthZone fallback.', error);
+    }
+
+    if (payload?.events?.length) {
+      state.events = payload.events.map(normalize).filter(event => event.start);
+      state.featured = (payload.featured || []).map(normalize).filter(event => event.start);
+    } else {
+      const response = await fetch(FALLBACK_URL, { headers: { Accept: 'application/json' } });
+      if (!response.ok) throw new Error(`GrowthZone fallback returned ${response.status}`);
+      const fallback = await response.json();
+      state.events = (fallback.Results || fallback.events || [])
+        .map(normalize)
+        .filter(event => event.start)
+        .filter(event => state.page === 'all' || event.category === state.page);
+      state.featured = [];
+    }
+
+    state.events.sort((a, b) => (a.start?.getTime() || 9e15) - (b.start?.getTime() || 9e15));
+    if (!state.featured.length) state.featured = automaticFeatured(state.events);
+
     const firstEvent = state.events[0]?.start;
     if (firstEvent && firstEvent > new Date(state.month.getFullYear(), state.month.getMonth() + 1, 0)) {
       state.month = new Date(firstEvent.getFullYear(), firstEvent.getMonth(), 1);
