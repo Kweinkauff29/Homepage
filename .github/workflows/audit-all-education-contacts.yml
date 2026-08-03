@@ -1,0 +1,114 @@
+name: Audit all Education event contacts
+
+on:
+  push:
+    branches:
+      - agent/audit-education-calendar-data
+    paths:
+      - .github/workflows/audit-all-education-contacts.yml
+
+permissions:
+  contents: write
+
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: agent/audit-education-calendar-data
+      - name: Fetch all recent and upcoming education details
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p audit
+          python - <<'PY'
+          import json,re,urllib.request,html,time
+          from pathlib import Path
+          from collections import Counter,defaultdict
+          from datetime import datetime,timezone,timedelta
+
+          BASE='https://gz-realestate-proxy.bonitaspringsrealtors.workers.dev'
+          def fetch(path,retries=4):
+              last=None
+              for i in range(retries):
+                  try:
+                      req=urllib.request.Request(BASE+path,headers={'Accept':'application/json','User-Agent':'CCOR-Education-Audit/1.0'})
+                      with urllib.request.urlopen(req,timeout=90) as r:return json.loads(r.read().decode())
+                  except Exception as e:
+                      last=e; time.sleep(.4*(2**i))
+              raise last
+          def clean(v):
+              s=html.unescape(str(v or ''));s=re.sub(r'<br\s*/?>','\n',s,flags=re.I);s=re.sub(r'<[^>]+>',' ',s);return re.sub(r'\s+',' ',s).strip()
+          def dt(v):
+              try:return datetime.fromisoformat(str(v).replace('Z','+00:00'))
+              except:return None
+          def is_education(r):
+              src=' '.join(clean(r.get(k)) for k in ['Name','Description','ShortDescription','Categories','CategoryName']).lower()
+              return bool(r.get('IsClass')) or bool(re.search(r'education|class|course|webinar|seminar|training|matrix|rpr|cubi|core law|contract|gri|\bce\b|cips|hecm|orientation',src))
+
+          merged={}
+          for skip in [1,251,501,751]:
+              payload=fetch(f'/events/all?%24top=250&%24skip={skip}&%24orderby=StartDate%20desc')
+              for r in payload.get('Results') or []:
+                  key=str(r.get('EventId') or r.get('Id') or f"{r.get('Name')}|{r.get('StartDate')}")
+                  merged[key]=r
+          current=fetch('/events/all?enriched=true')
+          for r in current.get('Results') or []:
+              key=str(r.get('EventId') or r.get('Id') or f"{r.get('Name')}|{r.get('StartDate')}")
+              merged[key]=r
+
+          now=datetime.now(timezone.utc); start=now-timedelta(days=366); end=now+timedelta(days=550)
+          rows=[]
+          for r in merged.values():
+              d=dt(r.get('StartDate'))
+              if d and start<=d<=end and is_education(r): rows.append(r)
+          rows.sort(key=lambda r:r.get('StartDate') or '')
+
+          contacts=Counter(); contact_events=defaultdict(list); details=[]; failures=[]
+          for idx,r in enumerate(rows):
+              eid=r.get('EventId') or r.get('Id')
+              if not eid:continue
+              try:
+                  d=fetch(f'/events/{eid}')
+                  name=clean(d.get('ContactName'))
+                  if name:
+                      contacts[name]+=1
+                      contact_events[name].append({'eventId':eid,'title':clean(r.get('Name')),'start':r.get('StartDate'),'description':clean(d.get('Description') or r.get('Description'))[:1400]})
+                  details.append({
+                      'eventId':eid,
+                      'title':clean(r.get('Name')),
+                      'start':r.get('StartDate'),
+                      'contactName':name,
+                      'contactId':d.get('ContactId'),
+                      'organizationContactId':d.get('OrganizationContactId'),
+                      'contactDescription':clean(d.get('ContactDescription')),
+                      'description':clean(d.get('Description') or r.get('Description'))[:2200],
+                      'eventLogoUrl':d.get('EventLogoUrl') or r.get('EnrichedFlyerUrl') or '',
+                      'categories':[clean(c.get('Name')) for c in (d.get('CategoryItems') or []) if c.get('IsSelected')]
+                  })
+                  time.sleep(.04)
+              except Exception as e: failures.append({'eventId':eid,'title':clean(r.get('Name')),'error':repr(e)})
+
+          report={
+              'event_count':len(rows),
+              'detail_count':len(details),
+              'failure_count':len(failures),
+              'contact_counts':contacts.most_common(),
+              'contact_events':dict(contact_events),
+              'details':details,
+              'failures':failures
+          }
+          Path('audit/all-education-contacts.json').write_text(json.dumps(report,indent=2,ensure_ascii=False))
+          PY
+      - name: Commit report
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add audit/all-education-contacts.json
+          if git diff --cached --quiet; then exit 0; fi
+          git commit -m "Record all Education event contacts"
+          git push origin HEAD:agent/audit-education-calendar-data
