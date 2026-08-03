@@ -4,6 +4,14 @@ on:
   push:
     branches:
       - agent/education-year-instructor-directory
+  pull_request:
+    branches: [main]
+    paths:
+      - 2026/Education.html
+      - 2026/assets/ccor-education.css
+      - 2026/assets/ccor-education.js
+      - tests/education-page-smoke.mjs
+      - .github/workflows/validate-education-browser.yml
 
 permissions:
   contents: write
@@ -60,6 +68,7 @@ jobs:
         run: node tests/education-page-smoke.mjs
 
       - name: Commit local-date fix
+        if: github.event_name == 'push'
         shell: bash
         run: |
           set -euo pipefail
