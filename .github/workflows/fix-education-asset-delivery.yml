@@ -4,6 +4,12 @@ on:
   push:
     branches:
       - agent/fix-education-asset-delivery
+  pull_request:
+    branches: [main]
+    paths:
+      - 2026/Education.html
+      - .github/workflows/fix-education-asset-delivery.yml
+      - scripts/fix-education-asset-urls.py
 
 permissions:
   contents: write
@@ -53,6 +59,7 @@ jobs:
           ! grep -q 'kweinkauff29.github.io/Homepage/2026/assets/ccor-education' 2026/Education.html
 
       - name: Commit production page fix
+        if: github.event_name == 'push'
         shell: bash
         run: |
           set -euo pipefail
