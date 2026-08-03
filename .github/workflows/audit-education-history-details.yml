@@ -1,0 +1,104 @@
+name: Audit historical Education events and details
+
+on:
+  push:
+    branches:
+      - agent/audit-education-calendar-data
+    paths:
+      - .github/workflows/audit-education-history-details.yml
+
+permissions:
+  contents: write
+
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: agent/audit-education-calendar-data
+      - name: Inspect archive pages and event details
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p audit
+          python - <<'PY'
+          import json,re,urllib.request,html,time
+          from datetime import datetime,timezone,timedelta
+          from collections import Counter
+
+          BASE='https://gz-realestate-proxy.bonitaspringsrealtors.workers.dev'
+          def fetch(path):
+              req=urllib.request.Request(BASE+path,headers={'Accept':'application/json','User-Agent':'CCOR-Education-Audit/1.0'})
+              with urllib.request.urlopen(req,timeout=90) as r: return json.loads(r.read().decode())
+          def clean(v):
+              s=html.unescape(str(v or ''))
+              s=re.sub(r'<br\s*/?>','\n',s,flags=re.I); s=re.sub(r'<[^>]+>',' ',s); return re.sub(r'\s+',' ',s).strip()
+          def date(v):
+              if not v:return None
+              try:return datetime.fromisoformat(str(v).replace('Z','+00:00'))
+              except:return None
+          def education(row):
+              source=' '.join(clean(row.get(k)) for k in ['Name','EventName','Title','Description','ShortDescription','CategoryName','Categories','CalendarName']).lower()
+              return bool(row.get('IsClass')) or bool(re.search(r'education|class|course|webinar|seminar|training|matrix|rpr|cubi|core law|contract|gri|\bce\b|cips|hecm|orientation',source))
+
+          pages=[]; merged={}
+          # skip=1 avoids the proxy's special default-list trimming path; later pages preserve archive access.
+          for skip in [1,251,501,751,1001]:
+              path=f'/events/all?%24top=250&%24skip={skip}&%24orderby=StartDate%20desc'
+              try:
+                  payload=fetch(path); rows=payload.get('Results') or []
+                  pages.append({'skip':skip,'count':len(rows),'earliest':min((r.get('StartDate') for r in rows if r.get('StartDate')),default=None),'latest':max((r.get('StartDate') for r in rows if r.get('StartDate')),default=None)})
+                  for r in rows:
+                      key=str(r.get('EventId') or r.get('Id') or f"{r.get('Name')}|{r.get('StartDate')}")
+                      merged[key]=r
+                  if len(rows)<250: break
+              except Exception as e:
+                  pages.append({'skip':skip,'error':repr(e)})
+                  break
+
+          now=datetime.now(timezone.utc); cutoff=now-timedelta(days=366)
+          history=[]
+          for row in merged.values():
+              d=date(row.get('StartDate'))
+              if d and cutoff<=d<=now and education(row):
+                  history.append(row)
+          history.sort(key=lambda r:r.get('StartDate') or '')
+
+          detail_field_counts=Counter(); detail_samples=[]
+          # prioritize events whose descriptions mention teaching/presenting plus a cross-section
+          prioritized=sorted(history,key=lambda r:(0 if re.search(r'instructor|presented by|taught by|will teach|speaker|facilitator',clean(r.get('Description')),re.I) else 1,r.get('StartDate') or ''))[:60]
+          for row in prioritized:
+              event_id=row.get('EventId') or row.get('Id')
+              if not event_id: continue
+              try:
+                  detail=fetch(f'/events/{event_id}')
+                  relevant={k:v for k,v in detail.items() if re.search(r'instructor|speaker|presenter|teacher|contact|photo|image|logo|flyer|category|description',k,re.I)}
+                  detail_field_counts.update(detail.keys())
+                  detail_samples.append({'eventId':event_id,'title':clean(row.get('Name')),'start':row.get('StartDate'),'description':clean(detail.get('Description') or row.get('Description'))[:2500],'relevantFields':relevant})
+                  time.sleep(.08)
+              except Exception as e:
+                  detail_samples.append({'eventId':event_id,'title':clean(row.get('Name')),'error':repr(e)})
+
+          report={
+              'pages':pages,
+              'merged_count':len(merged),
+              'past_year_education_count':len(history),
+              'past_year_earliest':history[0].get('StartDate') if history else None,
+              'past_year_latest':history[-1].get('StartDate') if history else None,
+              'history_events':[{'eventId':r.get('EventId'),'name':clean(r.get('Name')),'start':r.get('StartDate'),'description':clean(r.get('Description'))[:1600]} for r in history],
+              'detail_relevant_field_names':[k for k,n in detail_field_counts.most_common() if re.search(r'instructor|speaker|presenter|teacher|contact|photo|image|logo|flyer|category|description',k,re.I)],
+              'detail_samples':detail_samples
+          }
+          with open('audit/education-history-details.json','w',encoding='utf-8') as f: json.dump(report,f,indent=2,ensure_ascii=False)
+          PY
+      - name: Commit audit
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add audit/education-history-details.json
+          if git diff --cached --quiet; then exit 0; fi
+          git commit -m "Record Education archive and detail audit"
+          git push origin HEAD:agent/audit-education-calendar-data
