@@ -4695,6 +4695,42 @@
     </div>
   </div>
 
+  <!-- Overdue Tasks Rollover Modal -->
+  <div id="overdue-tasks-modal" class="modal hidden">
+    <div class="modal-panel" style="width: min(640px, 100% - 32px); max-height: 85vh; display: flex; flex-direction: column;">
+      <div class="modal-header">
+        <div>
+          <div class="modal-title" style="display: flex; align-items: center; gap: 8px; font-size: 16px;">
+            <span>🌅</span> Morning Check-In: Unfinished Tasks
+          </div>
+          <div style="font-size: 12px; color: var(--muted); margin-top: 4px;">
+            You have open tasks from previous days. Choose whether to move each task to <strong>Today</strong> or send it to the <strong>Backlog</strong>.
+          </div>
+        </div>
+        <button class="modal-close" id="overdue-modal-close">&times;</button>
+      </div>
+
+      <!-- Quick Action Controls -->
+      <div style="padding: 10px 14px; background: var(--chip, rgba(255, 255, 255, 0.04)); border-radius: 8px; border: 1px solid var(--rule-soft, rgba(148, 163, 184, 0.2)); display: flex; justify-content: space-between; align-items: center; gap: 12px; flex-wrap: wrap; margin-top: 6px;">
+        <span style="font-size: 12px; font-weight: 600; color: var(--ink);">Batch Select All:</span>
+        <div style="display: flex; gap: 8px;">
+          <button type="button" class="button-secondary" id="overdue-all-today" style="padding: 4px 10px; font-size: 12px;">☀️ All to Today</button>
+          <button type="button" class="button-secondary" id="overdue-all-backlog" style="padding: 4px 10px; font-size: 12px;">📥 All to Backlog</button>
+        </div>
+      </div>
+
+      <div class="modal-body" id="overdue-tasks-list" style="flex: 1; overflow-y: auto; padding: 12px 0; display: flex; flex-direction: column; gap: 10px; margin-top: 6px;">
+        <!-- Overdue task items rendered here -->
+      </div>
+
+      <div class="modal-footer" style="padding-top: 10px; border-top: 1px solid var(--rule-soft, rgba(148, 163, 184, 0.2)); display: flex; justify-content: flex-end; gap: 10px; margin-top: 4px;">
+        <button class="button-primary" id="overdue-modal-confirm" style="min-width: 150px;">
+          Confirm Choices
+        </button>
+      </div>
+    </div>
+  </div>
+
   <!-- Goal Create Modal -->
   <div id="goal-create-modal" class="modal hidden">
     <div class="modal-panel" style="width: min(500px, 100% - 32px);">
@@ -5561,6 +5597,7 @@
       monthlyCategoryDefs: null, // [{key,label}]
       annualCategoryDefs: null,
       metricsRange: 'week', // NEW: 'day' | 'week' | 'month'
+      hasCheckedOverdue: false,
       scheduleAssistant: {
         messages: [],
         response: null,
@@ -8528,6 +8565,7 @@
 
     function setCurrentUser(user) {
       state.currentUser = user;
+      state.hasCheckedOverdue = false;
       document.getElementById("current-user-label").textContent =
         user ? user.name + " · " + user.email : "Not signed in";
       
@@ -10463,33 +10501,164 @@
       renderPaginationControls("backlog-list", paginationState.backlog, totalPages, 'backlog');
     }
 
+    let currentOverdueTasks = [];
+
+    function formatFriendlyOverdueDate(dateStr) {
+      if (!dateStr) return "";
+      const parts = dateStr.split("-").map(Number);
+      if (parts.length < 3) return dateStr;
+      const [y, m, d] = parts;
+      const dt = new Date(y, m - 1, d);
+      const now = new Date();
+      const yesterday = new Date(now.getFullYear(), now.getMonth(), now.getDate() - 1);
+      if (dt.toDateString() === yesterday.toDateString()) {
+        return "Yesterday";
+      }
+      return dt.toLocaleDateString(undefined, { month: "short", day: "numeric" });
+    }
+
     async function checkAndMigrateOverdueTasks() {
       if (state.hasCheckedOverdue) return;
-      state.hasCheckedOverdue = true;
 
       const today = new Date();
       const todayKey = dateKey(today.getFullYear(), today.getMonth(), today.getDate());
 
+      const activeId = state.activeUserId || state.currentUser?.id;
+
       const overdue = state.dailyTasks.filter(t => {
-        return t.task_date < todayKey && t.task_date !== BACKLOG_DATE &&
+        const isOverdue = t.task_date < todayKey && t.task_date !== BACKLOG_DATE &&
           t.status !== 'done' && t.status !== 'could_not_complete';
+        if (!isOverdue) return false;
+        if (activeId) {
+          return String(t.assigned_to_id) === String(activeId) || String(t.assigned_by_id) === String(activeId);
+        }
+        return true;
       });
 
       if (overdue.length === 0) return;
 
-      showActionLoader({ main: "Organizing...", sub: `Moving ${overdue.length} overdue tasks to backlog` });
+      state.hasCheckedOverdue = true;
+      showOverdueTasksModal(overdue, todayKey);
+    }
 
-      try {
-        await Promise.all(overdue.map(t =>
-          apiSend(`/daily-tasks/${t.id}`, "PATCH", { task_date: BACKLOG_DATE })
-        ));
+    function showOverdueTasksModal(overdueTasks, todayKey) {
+      const modal = document.getElementById("overdue-tasks-modal");
+      const listContainer = document.getElementById("overdue-tasks-list");
+      if (!modal || !listContainer) return;
 
-        showToast(`Moved ${overdue.length} tasks to backlog`);
-        await Promise.all([loadDailyTasks(), loadBacklogTasks()]);
-      } catch (err) {
-        console.error("Migration failed", err);
-      } finally {
-        hideActionLoader();
+      currentOverdueTasks = overdueTasks;
+      listContainer.innerHTML = "";
+
+      overdueTasks.forEach(task => {
+        const card = document.createElement("div");
+        card.className = "overdue-task-card";
+        card.dataset.taskId = task.id;
+        card.style.cssText = `
+          border: 1px solid var(--rule-soft, rgba(148, 163, 184, 0.3));
+          border-radius: 12px;
+          padding: 12px 14px;
+          background: var(--chip, rgba(255, 255, 255, 0.05));
+          display: flex;
+          flex-direction: column;
+          gap: 10px;
+        `;
+
+        const formattedDate = formatFriendlyOverdueDate(task.task_date);
+
+        card.innerHTML = `
+          <div style="display: flex; justify-content: space-between; align-items: flex-start; gap: 12px;">
+            <div style="font-weight: 600; font-size: 13.5px; color: var(--ink); line-height: 1.35;">
+              ${escapeHtml(task.title || "Untitled Task")}
+            </div>
+            <div style="font-size: 11px; padding: 2px 8px; border-radius: 10px; background: rgba(224, 0, 42, 0.12); color: var(--accent, #e0002a); font-weight: 600; white-space: nowrap;">
+              📅 ${formattedDate}
+            </div>
+          </div>
+          <div style="display: flex; gap: 16px; align-items: center; padding-top: 6px; border-top: 1px dashed var(--rule-soft, rgba(148, 163, 184, 0.2)); flex-wrap: wrap;">
+            <label style="display: flex; align-items: center; gap: 6px; font-size: 12.5px; cursor: pointer; font-weight: 500; margin: 0; color: var(--ink);">
+              <input type="radio" name="overdue-choice-${task.id}" value="today" checked style="cursor: pointer; accent-color: var(--teal, #0ea5a0);" />
+              <span>☀️ Move to Today</span>
+            </label>
+            <label style="display: flex; align-items: center; gap: 6px; font-size: 12.5px; cursor: pointer; font-weight: 500; margin: 0; color: var(--ink);">
+              <input type="radio" name="overdue-choice-${task.id}" value="backlog" style="cursor: pointer; accent-color: var(--teal, #0ea5a0);" />
+              <span>📥 Move to Backlog</span>
+            </label>
+          </div>
+        `;
+
+        listContainer.appendChild(card);
+      });
+
+      modal.classList.remove("hidden");
+    }
+
+    function initOverdueTasksModalUI() {
+      const modal = document.getElementById("overdue-tasks-modal");
+      const closeBtn = document.getElementById("overdue-modal-close");
+      const allTodayBtn = document.getElementById("overdue-all-today");
+      const allBacklogBtn = document.getElementById("overdue-all-backlog");
+      const confirmBtn = document.getElementById("overdue-modal-confirm");
+
+      if (closeBtn) {
+        closeBtn.addEventListener("click", () => {
+          if (modal) modal.classList.add("hidden");
+        });
+      }
+
+      if (allTodayBtn) {
+        allTodayBtn.addEventListener("click", () => {
+          const list = document.getElementById("overdue-tasks-list");
+          if (!list) return;
+          list.querySelectorAll('input[type="radio"][value="today"]').forEach(r => r.checked = true);
+        });
+      }
+
+      if (allBacklogBtn) {
+        allBacklogBtn.addEventListener("click", () => {
+          const list = document.getElementById("overdue-tasks-list");
+          if (!list) return;
+          list.querySelectorAll('input[type="radio"][value="backlog"]').forEach(r => r.checked = true);
+        });
+      }
+
+      if (confirmBtn) {
+        confirmBtn.addEventListener("click", async () => {
+          if (!modal) return;
+          modal.classList.add("hidden");
+
+          const today = new Date();
+          const todayKey = dateKey(today.getFullYear(), today.getMonth(), today.getDate());
+
+          const updates = [];
+          let toTodayCount = 0;
+          let toBacklogCount = 0;
+
+          currentOverdueTasks.forEach(task => {
+            const radio = document.querySelector(`input[name="overdue-choice-${task.id}"]:checked`);
+            const choice = radio ? radio.value : "today";
+
+            const targetDate = choice === "today" ? todayKey : BACKLOG_DATE;
+            if (choice === "today") toTodayCount++;
+            else toBacklogCount++;
+
+            updates.push(apiSend(`/daily-tasks/${task.id}`, "PATCH", { task_date: targetDate }));
+          });
+
+          if (updates.length === 0) return;
+
+          showActionLoader({ main: "Updating Tasks...", sub: `Moving ${toTodayCount} to Today, ${toBacklogCount} to Backlog` });
+
+          try {
+            await Promise.all(updates);
+            showToast(`Updated ${updates.length} task${updates.length > 1 ? 's' : ''}`);
+            await Promise.all([loadDailyTasks(), loadBacklogTasks()]);
+          } catch (err) {
+            console.error("Failed updating overdue tasks choices:", err);
+            showToast("Error updating tasks", true);
+          } finally {
+            hideActionLoader();
+          }
+        });
       }
     }
 
@@ -10542,6 +10711,7 @@
       }
 
       initScheduleAssistantUI();
+      initOverdueTasksModalUI();
     }
 
     function onBacklogDrop(e) {
