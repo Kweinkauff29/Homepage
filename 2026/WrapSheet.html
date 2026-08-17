@@ -4021,7 +4021,7 @@
       background: rgba(245, 158, 11, 0.05);
     }
 
-    .user-col-mariam {
+    .user-col-monica {
       background: rgba(6, 182, 212, 0.05);
     }
 
@@ -4042,7 +4042,7 @@
       background: rgba(245, 158, 11, 0.1);
     }
 
-    body[data-theme="dark"] .user-col-mariam {
+    body[data-theme="dark"] .user-col-monica {
       background: rgba(6, 182, 212, 0.1);
     }
 
@@ -4472,7 +4472,7 @@
         <option value="">Loading team...</option>
       </select>
       <button id="user-select-confirm">Open Wrap Sheet</button>
-      <small>This is internal for CCOR: Meighan, Kevin, Erica, Jenna & Mariam.</small>
+      <small>This is internal for CCOR: Meighan, Kevin, Erica, Jenna & Monica.</small>
     </div>
   </div>
 
@@ -5279,7 +5279,7 @@
           <div class="projects-grid" id="projects-grid"></div>
         </section>
 
-        <!-- Weekly Tasks (BETA - Jenna and Mariam) -->
+        <!-- Weekly Tasks (BETA - Jenna and Monica) -->
         <section class="panel draggable-section" id="section-weekly-tasks" draggable="true" style="display: none;">
           <div class="panel-header">
             <span class="section-drag-handle" title="Drag to reorder">⋮⋮</span>
@@ -5535,12 +5535,12 @@
       "Team Work": "var(--engage)" // Blue
     };
 
-    const CORE_TEAM_NAME_ORDER = ["Erica", "Kevin", "Jenna", "Mariam", "Meighan"];
+    const CORE_TEAM_NAME_ORDER = ["Erica", "Kevin", "Jenna", "Monica", "Meighan"];
     const TEAM_COLOR_BY_NAME = {
       Erica: "#ec4899",
       Kevin: "#10b981",
       Jenna: "#f59e0b",
-      Mariam: "#06b6d4",
+      Monica: "#06b6d4",
       Meighan: "#8b5cf6"
     };
 
@@ -14307,7 +14307,7 @@
       
       const names = state.users && state.users.length > 0 
         ? state.users.map(u => u.name) 
-        : ["Erica", "Mariam", "Meighan", "Kevin"];
+        : ["Erica", "Monica", "Meighan", "Kevin"];
 
       names.forEach(name => {
         const opt = document.createElement("option");
@@ -16459,7 +16459,7 @@
       <div class="cheer-debug-row" style="margin-bottom: 6px;">
         <select id="debug-cheer-sender" class="cheer-debug-select" style="width: 100%;">
           <option value="Erica">Erica</option>
-          <option value="Mariam">Mariam</option>
+          <option value="Monica">Monica</option>
           <option value="Meighan">Meighan</option>
           <option value="Kevin">Kevin</option>
         </select>
