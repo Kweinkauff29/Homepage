@@ -114,14 +114,16 @@ async function focusAndType(page, inputIndex, value) {
  *   DELETE: vm.appUIFunctions.confirm(this, vm.DeferRemoveExperienceDelete(item), ...)
  */
 async function updateGrowthZoneLicense(page, contact) {
-    const profileUrl = `https://coconutcoastrealtors.growthzoneapp.com/a#/ContactInfo/${contact.ContactId}/ContactOverview`;
+    const contactHash = `/ContactInfo/${contact.ContactId}/ContactOverview`;
     console.log(`\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━`);
     console.log(`📋 ${contact.Name}  (ID: ${contact.ContactId})`);
     console.log(`   Target Exp Date: ${contact['License Expiration Date']}`);
     console.log(`━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━`);
 
-    // Navigate and wait for Angular to render the widget
-    await page.goto(profileUrl, { waitUntil: 'domcontentloaded', timeout: 30000 });
+    // Navigate using hash change (SPA) to preserve session — avoid full page.goto
+    await page.evaluate((hash) => {
+        window.location.hash = '#' + hash;
+    }, contactHash);
     await waitForWidget(page);
 
     // ── STEP 1: Count License rows INSIDE #ContactExperienceTableWidget ─────
@@ -484,10 +486,11 @@ async function updateGrowthZoneLicense(page, contact) {
 
     // ── Login ───────────────────────────────────────────────────────────────
     console.log('🔐 Logging in...');
-    await page.goto('https://growthzoneapp.com/auth?ReturnUrl=%2fa', { waitUntil: 'domcontentloaded' });
+    // Login on the SAME subdomain used for contact URLs so cookies persist
+    await page.goto('https://coconutcoastrealtors.growthzoneapp.com/auth?ReturnUrl=%2fa', { waitUntil: 'domcontentloaded' });
 
     await page.waitForSelector('#check-user-name-field', { visible: true });
-    await page.type('#check-user-name-field', process.env.GZ_EMAIL || 'kevin@coconutcoastrealtors.org', { delay: 50 });
+    await page.type('#check-user-name-field', process.env.GZ_USERNAME || 'kevin@bonitaesterorealtors.com', { delay: 50 });
 
     await Promise.all([
         page.waitForNavigation({ waitUntil: 'networkidle2' }),
