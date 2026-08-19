@@ -900,6 +900,13 @@
     const REPORTS = [
       /* ===== 2026 ===== */
       {
+        year: 2026, month: "July",
+        fastStats: "https://coconutcoastrealtors.org/wp-content/uploads/2026/08/BER_Fast_Stats-10.pdf",
+        frStats: "https://coconutcoastrealtors.org/wp-content/uploads/2026/08/July-2026-fr-stats.pdf",
+        indicators: "https://coconutcoastrealtors.org/wp-content/uploads/2026/08/BER_Monthly_Indicators-8.pdf",
+        thumb: DEFAULT_THUMB
+      },
+      {
         year: 2026, month: "June",
         fastStats: "https://coconutcoastrealtors.org/wp-content/uploads/2026/07/BER_Fast_Stats-3.pdf",
         frStats: "https://coconutcoastrealtors.org/wp-content/uploads/2026/07/FR-Stats-June-2026.pdf",
@@ -1554,6 +1561,54 @@
     // ---- Mock AI Chatbot Logic ----
     // Data mapping for specific month interactions
     const AI_DATA = {
+      "2026-july-q1": `Based on the July 2026 market data across Southwest Florida (Bonita Springs-Estero / Lee, Collier, Hendry), buyer demand accelerated significantly with **Pending Sales surging 39.3%** and **Closed Sales rising 7.2%** Year-over-Year. Strong buyer absorption drove total **Active Inventory down 17.3%** to 22,406 units.
+
+KEY METRICS OVERVIEW (ALL PROPERTIES):
+* Median Sale Price: $344,106 (Up 3.1% YoY).
+* Closed Sales: 3,026 units (Up 7.2% YoY).
+* Pending Sales: 4,084 units (Up 39.3% YoY).
+* New Listings: 4,368 units (Down 3.8% YoY).
+* Active Inventory: 22,406 units (Down 17.3% YoY).
+* Months Supply: 9 Months (Down from 11 Months).
+* Median Days on Market: 67 days (Down 1.4%).
+
+CLOSED SALES (YoY):
+[BAR: July 2025|2,822|93%, July 2026|3,026|100%]
+
+PENDING SALES GROWTH:
+[BAR: July 2025|2,932|72%, July 2026|4,084|100%]`,
+
+      "2026-july-q2": `PRICING & INVENTORY DYNAMICS:
+The overall median sales price climbed **3.1% to $344,106** ($440,000 for Single-Family Homes, up 4.8%). At the same time, available supply tightened substantially with **New Listings dipping 3.8%** and total **Active Inventory falling 17.3%** Year-over-Year.
+
+INVENTORY & SALES FLOW (JULY 2026):
+[BAR: New Listings|4,368|100%, Pending Sales|4,084|93%]
+
+MONTHS SUPPLY TRAJECTORY:
+[BAR: July 2025|11 Mos|100%, July 2026|9 Mos|82%]
+
+With 4,084 contracts placed under pending status against 4,368 new listings, market inventory is being drawn down rapidly, reducing months of supply to 9 months across the regional market.`,
+
+      "2026-july-q3": `Comparing July 2026 to July 2025 reveals an exceptionally strong mid-summer market. The 39.3% spike in pending sales (4,084 vs 2,932) and 7.2% increase in closed sales (3,026 vs 2,822) indicate accelerating momentum as buyers actively absorb available stock.
+
+PENDING SALES COMPARISON (YoY):
+[BAR: July 2025 Pending|2,932|72%, July 2026 Pending|4,084|100%]
+
+ACTIVE INVENTORY LEVEL (YoY):
+[BAR: July 2025 Active|27,101|100%, July 2026 Active|22,406|83%]
+
+The regional inventory fell by over 4,690 listings compared to last July, while median days on market held swift at 67 days.`,
+
+      "2026-july-fr": `The July 2026 Florida Realtors and Fast Stats reports show strong pending demand across both Single-Family and Condo sectors. Single-Family Homes recorded a median price of **$440,000 (+4.8% YoY)** with pending sales jumping 39.4% (2,425 units). Condos and Townhomes recorded a median price of **$305,000 (-6.2% YoY)**, but experienced a massive **19.3% surge in closed sales** (765 units) and a **31.9% rise in pending contracts** (1,059 units).
+
+SFH vs. CONDO MEDIAN PRICES (JULY 2026):
+[BAR: SFH Price|$440K|100%, Condo Price|$305K|69%]
+
+MONTHS SUPPLY OF INVENTORY (JULY 2026):
+[BAR: SFH Supply|5.2 Mos|73%, Condo Supply|7.1 Mos|100%]
+
+Single-Family inventory decreased 22.2% to 9,255 active listings (5.2 months supply), while Condo/Townhome inventory fell 21.7% to 5,435 active listings (7.1 months supply), reflecting balanced and active summer conditions across Southwest Florida.`,
+
       "2026-june-q1": `Based on the June 2026 market data, the Bonita Springs-Estero region continues to show robust buyer demand and tight inventory. **Pending Sales jumped 21%** and **Closed Sales rose 20%** compared to June of last year, despite a decrease in new listings.
 
 KEY METRICS OVERVIEW (BONITA-ESTERO):
@@ -1836,13 +1891,14 @@ While closed sales are down slightly, the total dollar volume for Single-Family 
           .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
           .replace(/\*(.*?)\*/g, '<em>$1</em>')
           .replace(/\[BAR:([^\]]+)\]/g, (match, inner) => {
-            const parts = inner.split(',').map(s => s.trim());
             let barsHTML = '<div class="ai-bar-chart">';
-            parts.forEach(p => {
-              const pieces = p.split('|').map(s => s.trim());
-              if (pieces.length >= 3) {
-                const label = pieces[0], val = pieces[1], pct = pieces[2];
-                barsHTML += `
+            const barRegex = /([^|]+?)\s*\|\s*([^|]+?)\s*\|\s*(\d+(?:\.\d+)?%?)(?:,|$)/g;
+            let m;
+            while ((m = barRegex.exec(inner)) !== null) {
+              const label = m[1].trim();
+              const val = m[2].trim();
+              const pct = m[3].endsWith('%') ? m[3] : m[3] + '%';
+              barsHTML += `
                     <div class="ai-bar-row">
                       <div class="ai-bar-label">${label}</div>
                       <div class="ai-bar-track">
@@ -1850,8 +1906,7 @@ While closed sales are down slightly, the total dollar volume for Single-Family 
                       </div>
                       <div class="ai-bar-val">${val}</div>
                     </div>`;
-              }
-            });
+            }
             barsHTML += '</div>';
             return barsHTML;
           });
