@@ -2495,6 +2495,10 @@
               if (match) flyerURL = match[1];
             }
 
+            if (e.Name && e.Name.toLowerCase().includes("september") && e.Name.toLowerCase().includes("breakfast")) {
+              flyerURL = "https://coconutcoastrealtors.org/wp-content/uploads/2026/08/2026-District-5-Bowling-Tournament-scaled.png";
+            }
+
             let hasFlyer = (flyerURL && !flyerURL.includes('default') && !flyerURL.includes('placeholder') && !flyerURL.includes('BER-Logo') && !flyerURL.toLowerCase().includes('ccor-horz'));
 
             let eventObj = {
@@ -2508,6 +2512,11 @@
               dateObj: e.StartDate,
               rawDesc: e.Description ? e.Description.replace(/<br\s*[\/]?>/gi, ' ').replace(/<\/p>/gi, ' ').replace(/<[^>]*>?/gm, '').replace(/\s+/g, ' ').trim().substring(0, 120) + '...' : ''
             };
+
+            if (e.Name && e.Name.toLowerCase().includes("september") && e.Name.toLowerCase().includes("breakfast")) {
+              eventObj.format = "landscape";
+              eventObj.fullBleed = true;
+            }
 
             let pinIndex = e.Name ? pinnedApiEventNames.findIndex(name => name.toLowerCase() === e.Name.toLowerCase()) : -1;
 
