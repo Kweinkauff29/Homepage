@@ -2347,40 +2347,14 @@
     // Type the exact name of the API events here in the order you want them to appear.
     // They will be forced to the front of the carousel, regardless of date or if they have a flyer.
     const pinnedApiEventNames = [
-      "June Membership Breakfast"
+      "7th Annual Casino Night",
+      "September Membership Breakfast"
     ];
 
     // 2. CUSTOM FLYERS / HERO IMAGES: 
     // Add your own custom tiles here.
     // Set the 'spot' number (1-indexed) to force it into a specific position overall.
     const customTiles = [
-      {
-        title: "Music Bingo for 4KIDS",
-        description: "Fri, Aug 7 • 3:00 PM",
-        image: "https://coconutcoastrealtors.org/wp-content/uploads/2026/07/image5.png",
-        link: "https://bonitaspringsesterorealtorsfl.growthzoneapp.com/ap/Events/Register/yEFxvDlTeCoCR",
-        spot: 1,
-        tag: "Event",
-        rawDesc: "Back-to-School Fundraiser at Disco Bean Cafe. DJ music bingo, prizes, and back-to-school giving benefiting 4KIDS."
-      },
-      {
-        title: "CCOR Kickoff + Member Tool Lab",
-        description: "Thu, Aug 13 • 2:00 PM",
-        image: "https://coconutcoastrealtors.org/wp-content/uploads/2026/07/0C1E5B19-scaled.png",
-        link: "https://bonitaspringsesterorealtorsfl.growthzoneapp.com/ap/Events/Register/9eF4a0vsWC9Cx",
-        spot: 2,
-        tag: "Event",
-        rawDesc: "See the technology, meet tool partners, live music, food, networking, silent auction & ribbon cutting."
-      },
-      {
-        title: "7th Annual Casino Night",
-        description: "Thu, Sep 10 • 5:30 PM",
-        image: "https://coconutcoastrealtors.org/wp-content/uploads/2026/06/Screenshot-2026-06-15-133642.png",
-        link: "https://coconutcoastrealtors.growthzoneapp.com/ap/Events/Register/g4FYQZAtzCyCo",
-        spot: 3,
-        tag: "Event",
-        rawDesc: "A collaborative event with WCR, BER Home Foundation, and BER"
-      },
       {
         title: "Jeanne and Wade Promo",
         description: "Watch Jeanne and Wade",
@@ -2399,10 +2373,9 @@
     ];
 
     const team = [
-      { title: "Meighan Harris", description: "Chief Executive Officer", image: "https://coconutcoastrealtors.org/wp-content/uploads/2026/02/Meighan-2026.jpg", link: "mailto:CEO@BERealtors.org", phone: "(239) 992-6771 ext. 6", email: "CEO@BERealtors.org", shortBio: "Meighan leads the overall direction, operations, and member-focused strategy of the Coconut Coast Organization of REALTORS\u00ae." },
+      { title: "Meighan Harris", description: "Chief Executive Officer", image: "https://coconutcoastrealtors.org/wp-content/uploads/2026/02/Meighan-2026.jpg", link: "mailto:CEO@BERealtors.org", phone: "(239) 992-6771 ext. 6", email: "CEO@BERealtors.org", shortBio: "Meighan leads the overall direction, operations, and member-focused strategy of the Coconut Coast Organization of REALTORS®." },
       { title: "Jenna Ripley", description: "Membership and Operations Director", image: "https://coconutcoastrealtors.org/wp-content/uploads/2026/02/Jenna-2026.jpg", link: "mailto:operations@berealtors.org", phone: "(239) 992-6771 ext. 5", email: "operations@berealtors.org", shortBio: "Jenna supports CCOR's executive operations and helps keep key internal systems, member service workflows, and organizational processes moving efficiently." },
       { title: "Erica Bernhardt", description: "Director of MLS", image: "https://coconutcoastrealtors.org/wp-content/uploads/2026/02/Erica.png", link: "mailto:MLS@BERealtors.org", phone: "(239) 992-6771 ext. 3", email: "MLS@BERealtors.org", shortBio: "Erica oversees MLS support for CCOR members, including Matrix/SWFLAMLS questions, MLS issues, product updates, and MLS-related training." },
-      { title: "Mariam Abdallah", description: "Director of Member Experience", image: "https://coconutcoastrealtors.org/wp-content/uploads/2026/05/Mariam-photo-Edited.png", link: "mailto:Membership@BERealtors.org", phone: "(239) 992-6771 ext. 1", email: "Membership@BERealtors.org", shortBio: "Mariam helps members from the moment they join and continues supporting them throughout their membership." },
       { title: "Kevin Weinkauff", description: "Communications and Technology", image: "https://coconutcoastrealtors.org/wp-content/uploads/2020/10/Headshot-165x244.png", link: "mailto:Tech@BERealtors.org", phone: "(239) 992-6771 ext. 4", email: "Tech@BERealtors.org", shortBio: "Kevin supports CCOR's technology, communications, marketing, website, digital platforms, and member-facing tech resources." }
     ];
 
@@ -2522,10 +2495,6 @@
               if (match) flyerURL = match[1];
             }
 
-            if (e.Name && e.Name.toLowerCase() === "june membership breakfast") {
-              flyerURL = "https://coconutcoastrealtors.org/wp-content/uploads/2026/05/2026-District-5-Bowling-Tournament.gif";
-            }
-
             let hasFlyer = (flyerURL && !flyerURL.includes('default') && !flyerURL.includes('placeholder') && !flyerURL.includes('BER-Logo') && !flyerURL.toLowerCase().includes('ccor-horz'));
 
             let eventObj = {
@@ -2537,13 +2506,8 @@
               hasFlyer: hasFlyer,
               isTextOnly: !hasFlyer,
               dateObj: e.StartDate,
-              rawDesc: e.Description ? e.Description.replace(/<[^>]*>?/gm, '').substring(0, 100) + '...' : ''
+              rawDesc: e.Description ? e.Description.replace(/<br\s*[\/]?>/gi, ' ').replace(/<\/p>/gi, ' ').replace(/<[^>]*>?/gm, '').replace(/\s+/g, ' ').trim().substring(0, 120) + '...' : ''
             };
-
-            if (e.Name && e.Name.toLowerCase() === "june membership breakfast") {
-              eventObj.format = "landscape";
-              eventObj.fullBleed = true;
-            }
 
             let pinIndex = e.Name ? pinnedApiEventNames.findIndex(name => name.toLowerCase() === e.Name.toLowerCase()) : -1;
 
@@ -2751,9 +2715,6 @@
           `;
           el.style.background = color;
         } else if (tile.tag === 'Staff') {
-          if (tile.title.includes('Mariam')) {
-            el.style.background = '#64BAB0'; // CCOR Teal background for Mariam
-          }
           innerHTML = `
             <div class="tile-tag">Staff</div>
             <div class="tile-blur-bg" style="background-image: url('${tile.image}');"></div>
