@@ -2347,40 +2347,14 @@
     // Type the exact name of the API events here in the order you want them to appear.
     // They will be forced to the front of the carousel, regardless of date or if they have a flyer.
     const pinnedApiEventNames = [
-      "June Membership Breakfast"
+      "7th Annual Casino Night",
+      "September Membership Breakfast"
     ];
 
     // 2. CUSTOM FLYERS / HERO IMAGES: 
     // Add your own custom tiles here.
     // Set the 'spot' number (1-indexed) to force it into a specific position overall.
     const customTiles = [
-      {
-        title: "Music Bingo for 4KIDS",
-        description: "Fri, Aug 7 • 3:00 PM",
-        image: "https://coconutcoastrealtors.org/wp-content/uploads/2026/07/image5.png",
-        link: "https://bonitaspringsesterorealtorsfl.growthzoneapp.com/ap/Events/Register/yEFxvDlTeCoCR",
-        spot: 1,
-        tag: "Event",
-        rawDesc: "Back-to-School Fundraiser at Disco Bean Cafe. DJ music bingo, prizes, and back-to-school giving benefiting 4KIDS."
-      },
-      {
-        title: "CCOR Kickoff + Member Tool Lab",
-        description: "Thu, Aug 13 • 2:00 PM",
-        image: "https://coconutcoastrealtors.org/wp-content/uploads/2026/07/0C1E5B19-scaled.png",
-        link: "https://bonitaspringsesterorealtorsfl.growthzoneapp.com/ap/Events/Register/9eF4a0vsWC9Cx",
-        spot: 2,
-        tag: "Event",
-        rawDesc: "See the technology, meet tool partners, live music, food, networking, silent auction & ribbon cutting."
-      },
-      {
-        title: "7th Annual Casino Night",
-        description: "Thu, Sep 10 • 5:30 PM",
-        image: "https://coconutcoastrealtors.org/wp-content/uploads/2026/06/Screenshot-2026-06-15-133642.png",
-        link: "https://coconutcoastrealtors.growthzoneapp.com/ap/Events/Register/g4FYQZAtzCyCo",
-        spot: 3,
-        tag: "Event",
-        rawDesc: "A collaborative event with WCR, BER Home Foundation, and BER"
-      },
       {
         title: "Jeanne and Wade Promo",
         description: "Watch Jeanne and Wade",
@@ -2399,10 +2373,9 @@
     ];
 
     const team = [
-      { title: "Meighan Harris", description: "Chief Executive Officer", image: "https://coconutcoastrealtors.org/wp-content/uploads/2026/02/Meighan-2026.jpg", link: "mailto:CEO@BERealtors.org", phone: "(239) 992-6771 ext. 6", email: "CEO@BERealtors.org", shortBio: "Meighan leads the overall direction, operations, and member-focused strategy of the Coconut Coast Organization of REALTORS\u00ae." },
+      { title: "Meighan Harris", description: "Chief Executive Officer", image: "https://coconutcoastrealtors.org/wp-content/uploads/2026/02/Meighan-2026.jpg", link: "mailto:CEO@BERealtors.org", phone: "(239) 992-6771 ext. 6", email: "CEO@BERealtors.org", shortBio: "Meighan leads the overall direction, operations, and member-focused strategy of the Coconut Coast Organization of REALTORS®." },
       { title: "Jenna Ripley", description: "Membership and Operations Director", image: "https://coconutcoastrealtors.org/wp-content/uploads/2026/02/Jenna-2026.jpg", link: "mailto:operations@berealtors.org", phone: "(239) 992-6771 ext. 5", email: "operations@berealtors.org", shortBio: "Jenna supports CCOR's executive operations and helps keep key internal systems, member service workflows, and organizational processes moving efficiently." },
       { title: "Erica Bernhardt", description: "Director of MLS", image: "https://coconutcoastrealtors.org/wp-content/uploads/2026/02/Erica.png", link: "mailto:MLS@BERealtors.org", phone: "(239) 992-6771 ext. 3", email: "MLS@BERealtors.org", shortBio: "Erica oversees MLS support for CCOR members, including Matrix/SWFLAMLS questions, MLS issues, product updates, and MLS-related training." },
-      { title: "Mariam Abdallah", description: "Director of Member Experience", image: "https://coconutcoastrealtors.org/wp-content/uploads/2026/05/Mariam-photo-Edited.png", link: "mailto:Membership@BERealtors.org", phone: "(239) 992-6771 ext. 1", email: "Membership@BERealtors.org", shortBio: "Mariam helps members from the moment they join and continues supporting them throughout their membership." },
       { title: "Kevin Weinkauff", description: "Communications and Technology", image: "https://coconutcoastrealtors.org/wp-content/uploads/2020/10/Headshot-165x244.png", link: "mailto:Tech@BERealtors.org", phone: "(239) 992-6771 ext. 4", email: "Tech@BERealtors.org", shortBio: "Kevin supports CCOR's technology, communications, marketing, website, digital platforms, and member-facing tech resources." }
     ];
 
@@ -2522,8 +2495,8 @@
               if (match) flyerURL = match[1];
             }
 
-            if (e.Name && e.Name.toLowerCase() === "june membership breakfast") {
-              flyerURL = "https://coconutcoastrealtors.org/wp-content/uploads/2026/05/2026-District-5-Bowling-Tournament.gif";
+            if (e.Name && e.Name.toLowerCase().includes("september") && e.Name.toLowerCase().includes("breakfast")) {
+              flyerURL = "https://coconutcoastrealtors.org/wp-content/uploads/2026/08/2026-District-5-Bowling-Tournament-scaled.png";
             }
 
             let hasFlyer = (flyerURL && !flyerURL.includes('default') && !flyerURL.includes('placeholder') && !flyerURL.includes('BER-Logo') && !flyerURL.toLowerCase().includes('ccor-horz'));
@@ -2537,10 +2510,10 @@
               hasFlyer: hasFlyer,
               isTextOnly: !hasFlyer,
               dateObj: e.StartDate,
-              rawDesc: e.Description ? e.Description.replace(/<[^>]*>?/gm, '').substring(0, 100) + '...' : ''
+              rawDesc: e.Description ? e.Description.replace(/<br\s*[\/]?>/gi, ' ').replace(/<\/p>/gi, ' ').replace(/<[^>]*>?/gm, '').replace(/\s+/g, ' ').trim().substring(0, 120) + '...' : ''
             };
 
-            if (e.Name && e.Name.toLowerCase() === "june membership breakfast") {
+            if (e.Name && e.Name.toLowerCase().includes("september") && e.Name.toLowerCase().includes("breakfast")) {
               eventObj.format = "landscape";
               eventObj.fullBleed = true;
             }
@@ -2751,9 +2724,6 @@
           `;
           el.style.background = color;
         } else if (tile.tag === 'Staff') {
-          if (tile.title.includes('Mariam')) {
-            el.style.background = '#64BAB0'; // CCOR Teal background for Mariam
-          }
           innerHTML = `
             <div class="tile-tag">Staff</div>
             <div class="tile-blur-bg" style="background-image: url('${tile.image}');"></div>
@@ -4283,6 +4253,63 @@
 
   <div class="carousel2">
 
+    <!-- NEW: Balancing Family Ties and Your Freedom When Moving Nearby -->
+    <div class="row news-row">
+      <div class="col-sm-5" id="exception">
+        <img class="article-img" style="object-fit: contain !important;"
+          src="https://images.unsplash.com/photo-1511895426328-dc8714191300?auto=format&fit=crop&w=1600&q=80"
+          alt="Balancing Family Ties and Your Freedom When Moving Nearby">
+      </div>
+      <div class="col-sm-7">
+        <h4>Balancing Family Ties and Your Freedom When Moving Nearby</h4>
+        <p class="italics">August 20th, 2026</p>
+        <p>Learn how to balance family ties and your personal freedom when moving nearby. A practical guide on choosing
+          neighborhoods, setting boundaries, career resets, and healthy routines.</p>
+        <a href="https://coconutcoastrealtors.org/balancing-family-ties-and-your-freedom-when-moving-nearby/"
+          target="_blank">
+          <button class="btn btn-primary" type="button" name="button">Read More</button>
+        </a>
+      </div>
+    </div>
+
+    <!-- NEW: How Real Estate Agents Can Beat Sunday Night Stress and Start Monday Fresh -->
+    <div class="row news-row">
+      <div class="col-sm-5" id="exception">
+        <img class="article-img" style="object-fit: contain !important;"
+          src="https://images.unsplash.com/photo-1499750310107-5fef28a66643?auto=format&fit=crop&w=1600&q=80"
+          alt="How Real Estate Agents Can Beat Sunday Night Stress and Start Monday Fresh">
+      </div>
+      <div class="col-sm-7">
+        <h4>How Real Estate Agents Can Beat Sunday Night Stress and Start Monday Fresh</h4>
+        <p class="italics">August 20th, 2026</p>
+        <p>Turn Sunday Scaries from a threat into a plan. Practical 20-minute Sunday resets, Monday shock-absorber
+          buffers, and daily resilience routines for real estate professionals.</p>
+        <a href="https://coconutcoastrealtors.org/how-real-estate-agents-can-beat-sunday-night-stress-and-start-monday-fresh/"
+          target="_blank">
+          <button class="btn btn-primary" type="button" name="button">Read More</button>
+        </a>
+      </div>
+    </div>
+
+    <!-- NEW: July 2026 Southwest Florida Market Stats -->
+    <div class="row news-row">
+      <div class="col-sm-5" id="exception">
+        <img class="article-img" style="object-fit: contain !important;"
+          src="https://coconutcoastrealtors.org/wp-content/uploads/2026/08/Bonita-July-2026.png"
+          alt="July 2026 Southwest Florida Market Stats: Inventory Tightened, Turnover Improved, Prices Split">
+      </div>
+      <div class="col-sm-7">
+        <h4>July 2026 Southwest Florida Market Stats: Inventory Tightened, Turnover Improved, Prices Split</h4>
+        <p class="italics">August 6th, 2026</p>
+        <p>July 2026 Southwest Florida real estate data shows inventory falling across Bonita Springs, Estero, Naples
+          and Fort Myers while the sales-to-stock relationship improved and prices remained sharply local.</p>
+        <a href="https://coconutcoastrealtors.org/july-2026-southwest-florida-market-stats-inventory-tightened-turnover-improved-prices-split/"
+          target="_blank">
+          <button class="btn btn-primary" type="button" name="button">Read More</button>
+        </a>
+      </div>
+    </div>
+
     <!-- NEW: Greater Estero Is Growing—and Mobility Is Part of the Housing Conversation -->
     <div class="row news-row">
       <div class="col-sm-5" id="exception">
@@ -4293,7 +4320,8 @@
       <div class="col-sm-7">
         <h4>Greater Estero Is Growing—and Mobility Is Part of the Housing Conversation</h4>
         <p class="italics">July 23rd, 2026</p>
-        <p>Smart signals cannot erase every backup, but understanding how the network works can help buyers, sellers and REALTORS® make better decisions about access, reliability and everyday life.</p>
+        <p>Smart signals cannot erase every backup, but understanding how the network works can help buyers, sellers and
+          REALTORS® make better decisions about access, reliability and everyday life.</p>
         <a href="https://coconutcoastrealtors.org/greater-estero-is-growing-and-mobility-is-part-of-the-housing-conversation/"
           target="_blank">
           <button class="btn btn-primary" type="button" name="button">Read More</button>
@@ -4311,7 +4339,8 @@
       <div class="col-sm-7">
         <h4>Gifting Smart for New Homeowners: A Practical Guide to Meaningful Presents</h4>
         <p class="italics">July 16th, 2026</p>
-        <p>Celebrate new homeowners with thoughtful housewarming gifts that match their lifestyle, add comfort, and avoid clutter. A practical guide by Amber Ramsey.</p>
+        <p>Celebrate new homeowners with thoughtful housewarming gifts that match their lifestyle, add comfort, and
+          avoid clutter. A practical guide by Amber Ramsey.</p>
         <a href="https://coconutcoastrealtors.org/gifting-smart-for-new-homeowners-a-practical-guide-to-meaningful-presents/"
           target="_blank">
           <button class="btn btn-primary" type="button" name="button">Read More</button>
@@ -4329,7 +4358,9 @@
       <div class="col-sm-7">
         <h4>June 2026 Market Stats: Contracts Converted, Inventory Compressed, Local Markets Split</h4>
         <p class="italics">July 8th, 2026</p>
-        <p>June 2026 Southwest Florida market stats show contract strength converting to closed sales, inventory compressing 17.1%, and key differences between single-family and condos across Naples, Bonita Springs, and Fort Myers.</p>
+        <p>June 2026 Southwest Florida market stats show contract strength converting to closed sales, inventory
+          compressing 17.1%, and key differences between single-family and condos across Naples, Bonita Springs, and
+          Fort Myers.</p>
         <a href="https://coconutcoastrealtors.org/june-2026-market-stats-contracts-converted-inventory-compressed-local-markets-split/"
           target="_blank">
           <button class="btn btn-primary" type="button" name="button">Read More</button>
@@ -6179,7 +6210,7 @@
 
   </div>
   <div class="col-sm-8">
-    <h3 class="resrow">Upcoming at CCOR - August 14th</h3>
+    <h3 class="resrow">Upcoming at CCOR - August 28th</h3>
 
     <style>
       .frame-class {
@@ -6201,7 +6232,7 @@
       }
     </style>
 
-    <iframe class="frame-class" src="https://bonitaspringsesterorealtorsfl.growthzoneapp.com/ap/EmailViewer/LygWRV1p">
+    <iframe class="frame-class" src="https://bonitaspringsesterorealtorsfl.growthzoneapp.com/ap/EmailViewer/LEAmaRGL">
     </iframe>
   </div>
 </div>
