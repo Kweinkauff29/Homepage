@@ -1152,6 +1152,240 @@
       color: var(--ink-soft);
     }
 
+    /* Favorite AI Prompts Section */
+    .ai-prompts-count-badge {
+      font-size: 11px;
+      font-weight: 700;
+      background: var(--accent-soft);
+      color: var(--ink);
+      padding: 2px 8px;
+      border-radius: var(--radius-btn);
+      border: 1px solid var(--panel-border);
+    }
+
+    .ai-prompts-search-input {
+      padding: 6px 12px;
+      border-radius: var(--radius-btn);
+      border: 1px solid var(--panel-border);
+      background: var(--bg-main);
+      color: var(--ink);
+      font-size: 12px;
+      outline: none;
+      width: 180px;
+      transition: all 0.2s ease;
+    }
+
+    .ai-prompts-search-input:focus {
+      border-color: var(--accent);
+      width: 220px;
+      box-shadow: 0 0 0 2px rgba(0, 0, 0, 0.08);
+    }
+
+    body[data-theme="dark"] .ai-prompts-search-input:focus {
+      box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.12);
+    }
+
+    .ai-prompts-categories-bar {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      padding: 0 16px 12px;
+      overflow-x: auto;
+      scrollbar-width: thin;
+      flex-wrap: wrap;
+    }
+
+    .ai-prompts-filter-pill {
+      font-size: 11px;
+      font-weight: 600;
+      padding: 4px 12px;
+      border-radius: var(--radius-btn);
+      border: 1px solid var(--panel-border);
+      background: var(--bg-main);
+      color: var(--ink-soft);
+      cursor: pointer;
+      white-space: nowrap;
+      transition: all 0.15s ease;
+    }
+
+    .ai-prompts-filter-pill:hover {
+      color: var(--ink);
+      border-color: var(--ink-soft);
+    }
+
+    .ai-prompts-filter-pill.active {
+      background: var(--ink);
+      color: var(--bg-main);
+      border-color: var(--ink);
+    }
+
+    .ai-prompts-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(360px, 1fr));
+      gap: 16px;
+      padding: 16px;
+    }
+
+    .ai-prompt-card {
+      background: var(--panel);
+      border: 1px solid var(--panel-border);
+      border-radius: var(--radius-lg);
+      padding: 18px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+      position: relative;
+    }
+
+    .ai-prompt-card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.06);
+    }
+
+    body[data-theme="dark"] .ai-prompt-card:hover {
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35);
+    }
+
+    .ai-prompt-card-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 8px;
+    }
+
+    .ai-prompt-tag {
+      font-size: 10px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      padding: 3px 8px;
+      border-radius: 6px;
+      border: 1px solid var(--panel-border);
+      background: var(--accent-soft);
+      color: var(--ink);
+    }
+
+    .ai-prompt-card-actions {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .ai-prompt-icon-btn {
+      background: transparent;
+      border: 1px solid transparent;
+      color: var(--ink-soft);
+      border-radius: 6px;
+      padding: 4px 6px;
+      font-size: 13px;
+      cursor: pointer;
+      transition: all 0.15s ease;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .ai-prompt-icon-btn:hover {
+      color: var(--ink);
+      background: var(--accent-soft);
+      border-color: var(--panel-border);
+    }
+
+    .ai-prompt-icon-btn.delete-btn:hover {
+      color: var(--danger);
+      background: rgba(225, 29, 72, 0.1);
+      border-color: rgba(225, 29, 72, 0.3);
+    }
+
+    .ai-prompt-card-title {
+      font-size: 15px;
+      font-weight: 700;
+      color: var(--ink);
+      line-height: 1.3;
+      margin: 0;
+    }
+
+    .ai-prompt-card-desc {
+      font-size: 12px;
+      color: var(--ink-soft);
+      line-height: 1.4;
+      margin: 0;
+    }
+
+    .ai-prompt-content-preview {
+      background: var(--bg-main);
+      border: 1px solid var(--panel-border);
+      border-radius: var(--radius-md);
+      padding: 12px;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+      font-size: 12px;
+      line-height: 1.5;
+      color: var(--ink);
+      max-height: 160px;
+      overflow-y: auto;
+      white-space: pre-wrap;
+      word-break: break-word;
+      scrollbar-width: thin;
+      position: relative;
+    }
+
+    .ai-prompt-card-bottom {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      margin-top: auto;
+      padding-top: 4px;
+    }
+
+    .ai-prompt-meta-text {
+      font-size: 11px;
+      color: var(--ink-soft);
+    }
+
+    .ai-prompt-copy-btn {
+      background: var(--ink);
+      color: var(--bg-main);
+      border: 1px solid var(--panel-border);
+      border-radius: var(--radius-btn);
+      padding: 7px 16px;
+      font-size: 12px;
+      font-weight: 600;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .ai-prompt-copy-btn:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+      background: var(--accent);
+      color: #ffffff;
+      border-color: var(--accent);
+    }
+
+    .ai-prompt-copy-btn.copied {
+      background: var(--success) !important;
+      color: #ffffff !important;
+      border-color: var(--success) !important;
+    }
+
+    .ai-prompts-empty-state {
+      grid-column: 1 / -1;
+      text-align: center;
+      padding: 48px 24px;
+      background: var(--panel);
+      border: 1px dashed var(--panel-border);
+      border-radius: var(--radius-lg);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 12px;
+    }
+
     .project-progress-fill.complete {
       background: var(--success);
     }
@@ -4996,6 +5230,8 @@
             class="drag-handle">⋮⋮</span></div>
         <div class="view-option" draggable="true" data-target="section-internal-tools">Internal Tools <span
             class="drag-handle">⋮⋮</span></div>
+        <div class="view-option" draggable="true" data-target="section-ai-prompts" id="view-opt-ai-prompts" style="display:none;">AI Prompts <span
+            class="drag-handle">⋮⋮</span></div>
       </div>
 
       <!-- Draggable Sections Container -->
@@ -5300,13 +5536,14 @@
           </div>
         </section>
 
-        <!-- Core Pillars (per-user) -->
+        <!-- Strategic Pillars (Elevate, Engage, Evolve, Excite) -->
         <section class="panel draggable-section" id="section-pillars" draggable="true">
           <div class="panel-header">
             <span class="section-drag-handle" title="Drag to reorder">⋮⋮</span>
-            <div class="panel-title">Core Pillars</div>
-            <div class="pillars-sub" id="pillars-subtitle"
-              style="margin-left:auto;font-size:11px;color:var(--ink-soft);">Personal to you</div>
+            <div class="panel-title">Strategic Pillars</div>
+            <div style="font-size: 11px; color: var(--ink-soft);" id="pillars-owner-label"></div>
+            <button class="button-primary" id="new-pillar-task-btn" style="padding: 4px 12px; font-size: 12px;">+ Add
+              Task</button>
           </div>
           <!-- Subheader removed in favor of panel-header layout -->
 
@@ -5348,7 +5585,98 @@
             </a>
           </div>
         </section>
+
+        <!-- Favorite AI Prompts Section (Kevin Only) -->
+        <section class="panel draggable-section" id="section-ai-prompts" draggable="true" style="display:none;">
+          <div class="panel-header" style="flex-wrap: wrap; gap: 10px;">
+            <div style="display:flex; align-items:center; gap:8px;">
+              <span class="section-drag-handle" title="Drag to reorder">⋮⋮</span>
+              <div class="panel-title" style="display:flex; align-items:center; gap:6px;">
+                <span>🤖</span>
+                <span>Favorite AI Prompts</span>
+                <span class="ai-prompts-count-badge" id="ai-prompts-count">0</span>
+              </div>
+            </div>
+
+            <div class="ai-prompts-header-actions" style="display:flex; align-items:center; gap:8px; margin-left:auto; flex-wrap:wrap;">
+              <div class="ai-prompts-search-wrap" style="position:relative;">
+                <input type="text" id="ai-prompts-search" placeholder="🔍 Search prompts..." class="ai-prompts-search-input" />
+              </div>
+              <button class="button-primary" id="ai-prompts-add-btn" style="padding:6px 14px; font-size:12px; border-radius:var(--radius-btn); display:flex; align-items:center; gap:4px;">
+                <span>+</span> New Prompt
+              </button>
+            </div>
+          </div>
+
+          <div class="ai-prompts-categories-bar" id="ai-prompts-categories-bar">
+            <!-- Filter category pills rendered dynamically -->
+          </div>
+
+          <div class="ai-prompts-grid" id="ai-prompts-grid">
+            <!-- Prompt cards rendered dynamically -->
+          </div>
+        </section>
       </div> <!-- End sections-container -->
+
+      <!-- Favorite AI Prompt Modal -->
+      <div id="ai-prompt-modal" class="modal hidden">
+        <div class="modal-panel" style="width: min(640px, 100% - 32px);">
+          <div class="modal-header">
+            <div>
+              <div class="modal-title" id="ai-prompt-modal-title">New AI Prompt</div>
+              <div id="ai-prompt-modal-meta" style="font-size:11px;color:var(--ink-soft);">Save your favorite prompt for easy access & 1-click copying</div>
+            </div>
+            <button class="modal-close" id="ai-prompt-modal-close">&times;</button>
+          </div>
+
+          <div class="modal-body">
+            <input type="hidden" id="ai-prompt-id" />
+
+            <label>
+              Prompt Title
+              <input id="ai-prompt-title" placeholder="e.g., Email Blast Hero Copy & Image Generator" />
+            </label>
+
+            <div style="display:grid; grid-template-columns: 1fr 1fr; gap: 8px;">
+              <label>
+                Category
+                <select id="ai-prompt-category-select">
+                  <option value="Email Blasts">Email Blasts</option>
+                  <option value="Flyers & Visuals">Flyers & Visuals</option>
+                  <option value="Strategy & Planning">Strategy & Planning</option>
+                  <option value="Copywriting">Copywriting</option>
+                  <option value="Social Media">Social Media</option>
+                  <option value="Coding & Tech">Coding & Tech</option>
+                  <option value="General">General</option>
+                  <option value="_custom_">+ Add Custom Category...</option>
+                </select>
+              </label>
+              <label id="ai-prompt-custom-cat-wrapper" style="display:none;">
+                Custom Category Name
+                <input id="ai-prompt-custom-cat" placeholder="e.g., MLS Rules" />
+              </label>
+            </div>
+
+            <label>
+              Description / Usage Notes (Optional)
+              <input id="ai-prompt-desc" placeholder="e.g., Best for Claude 3.7 or ChatGPT 4o when drafting weekly member blasts" />
+            </label>
+
+            <label>
+              Prompt Content
+              <textarea id="ai-prompt-content" rows="9" style="min-height: 180px; font-family: monospace; font-size: 12px; line-height: 1.5;" placeholder="Paste or write your AI prompt here... (Tip: use {{Placeholders}} for dynamic values)"></textarea>
+            </label>
+          </div>
+
+          <div class="modal-footer">
+            <button class="button-secondary" id="ai-prompt-modal-cancel">Cancel</button>
+            <div style="display:flex;gap:6px;align-items:center;">
+              <button class="button-danger" id="ai-prompt-delete-btn" style="display:none;">Delete</button>
+              <button class="button-primary" id="ai-prompt-save-btn">Save Prompt</button>
+            </div>
+          </div>
+        </div>
+      </div>
 
       <!-- Pillar Task Modal -->
       <div id="pillar-modal" class="modal hidden">
@@ -5555,6 +5883,9 @@
       currentWeekKey: null,      // '2025-W52' format
       userDbPrefs: null,         // User preferences from D1
       coinBalance: 0,            // Coin reward balance (Finch-style)
+      favoritePrompts: [],       // Favorite AI prompts (Kevin only)
+      aiPromptsFilter: "all",    // Active category filter
+      aiPromptsSearch: "",       // Active search term
       activeUserId: null,     // who we are currently "working on" (driven by calendar owner select)
       activeUser: null,
       userPrefs: null,        // prefs for activeUserId (titles, category labels, etc.)
@@ -8537,6 +8868,22 @@
         debugBtn.style.display = isKevin ? "block" : "none";
       }
 
+      // Restricted Tool Logic (Kevin Only)
+      const emailTool = document.getElementById("tool-email-generator");
+      if (emailTool) {
+        emailTool.style.display = isKevin ? "flex" : "none";
+      }
+
+      // Favorite AI Prompts Section & View Option (Kevin Only)
+      const aiPromptsSection = document.getElementById("section-ai-prompts");
+      const aiPromptsViewOpt = document.getElementById("view-opt-ai-prompts");
+      if (aiPromptsSection) {
+        aiPromptsSection.style.display = isKevin ? "block" : "none";
+      }
+      if (aiPromptsViewOpt) {
+        aiPromptsViewOpt.style.display = isKevin ? "flex" : "none";
+      }
+
       if (user) {
         localStorage.setItem("wrapsheet-user", JSON.stringify({ id: user.id }));
         document.getElementById("monthly-owner-filter").value = "all";
@@ -8550,17 +8897,575 @@
         if (typeof checkReceivedCheers === "function") checkReceivedCheers();
         if (isKevin && typeof populateDebugCheerSelect === "function") populateDebugCheerSelect();
 
-        // Restricted Tool Logic (Kevin Only)
-        const emailTool = document.getElementById("tool-email-generator");
-        if (emailTool) {
-          emailTool.style.display = isKevin ? "flex" : "none";
+        // Load AI Prompts for Kevin
+        if (isKevin) {
+          loadAiPrompts();
         }
       }
       renderScheduleAssistant();
     }
 
+    // ===== FAVORITE AI PROMPTS (KEVIN ONLY) =====
+    const AI_PROMPT_CATEGORIES = [
+      "Email Blasts",
+      "Flyers & Visuals",
+      "Strategy & Planning",
+      "Copywriting",
+      "Social Media",
+      "Coding & Tech",
+      "General"
+    ];
+
+    function getStarterPrompts() {
+      return [
+        {
+          id: "prompt_email_blast_generator",
+          title: "Email Blast Hero Copy & Image Generator",
+          category: "Email Blasts",
+          description: "Generates 3 variations of clean HTML email blast copy, preheaders, and Midjourney/Ideogram hero image prompts.",
+          content: `Act as an expert real estate marketing copywriter. Create a promotional email campaign for:
+[INSERT EVENT / TOPIC / DATE]
+
+Requirements:
+1. Generate 3 distinct subject line variations with compelling open hooks (under 50 chars).
+2. Write 3 preview text / preheader lines.
+3. Write clean, professional email body copy focusing on value for Realtors (CE credits, networking, broker benefits).
+4. Include 2 Midjourney / Ideogram image prompts (730x315 aspect ratio, clean modern aesthetic, no distorted text, high contrast).
+5. Generate a clear, high-converting Call To Action button text.`,
+          createdAt: new Date().toISOString(),
+          updatedAt: new Date().toISOString()
+        },
+        {
+          id: "prompt_weekly_strategy_planner",
+          title: "Weekly High-Impact Action Planner",
+          category: "Strategy & Planning",
+          description: "Breaks down broad association goals into actionable daily subtasks and milestones.",
+          content: `You are an executive productivity strategist. Review the following high-level goals and milestones for the week:
+[INSERT WEEKLY GOALS & PRIORITIES]
+
+Provide:
+1. Top 3 "Needle-Moving" focus items for the week.
+2. Daily breakdown (Monday through Friday) of specific, 30-to-60 minute action steps.
+3. Potential blockers or dependencies to clear early.
+4. End-of-week definition of done for each goal.`,
+          createdAt: new Date().toISOString(),
+          updatedAt: new Date().toISOString()
+        },
+        {
+          id: "prompt_swiss_tech_flyer",
+          title: "Swiss-Tech Event Flyer & Visual Generator",
+          category: "Flyers & Visuals",
+          description: "Creates strict 8.5x11 aspect ratio Swiss-style flyer generation prompts for DALL-E 3, Midjourney, or Ideogram.",
+          content: `Generate an ultra-high-resolution promotional flyer design prompt for Midjourney/Ideogram:
+Topic: [INSERT EVENT / CLASS NAME]
+Audience: Southwest Florida Realtors & Brokers
+
+Visual Style:
+- Strict 8.5x11 aspect ratio (--ar 17:22)
+- Swiss modernist design, clean grid typography, architectural photography of coastal Florida modern buildings
+- Color palette: Deep navy/black, emerald accents (#10b981), crisp white negative space
+- Sophisticated corporate feel, vector geometric badge accents, professional high-end aesthetic
+- Text-free background canvas with dedicated visual focal point in top 60% and clean negative space in bottom 40%`,
+          createdAt: new Date().toISOString(),
+          updatedAt: new Date().toISOString()
+        },
+        {
+          id: "prompt_member_announcement",
+          title: "Member Update & Newsletter Teaser",
+          category: "Copywriting",
+          description: "Converts MLS rules or Board announcements into engaging, punchy member communications.",
+          content: `Please transform the following internal board update / MLS notice into a member-facing announcement:
+[PASTE DETAILS / RAW NOTES]
+
+Format:
+1. Catchy headline (Under 8 words)
+2. "Why this matters to you" bullet points (focused on time savings, compliance safety, and member tools)
+3. 2-3 concise paragraphs in an energetic, supportive tone
+4. Quick FAQ section (3 common questions answered simply)
+5. Clear contact / support footer`,
+          createdAt: new Date().toISOString(),
+          updatedAt: new Date().toISOString()
+        },
+        {
+          id: "prompt_json_extractor",
+          title: "Unstructured Text to JSON Data Extractor",
+          category: "Coding & Tech",
+          description: "Extracts names, emails, dates, addresses, and license IDs from messy emails into clean JSON.",
+          content: `Extract all structured entities from the following text into valid JSON format with keys:
+{
+  "eventName": "",
+  "instructor": "",
+  "date": "YYYY-MM-DD",
+  "time": "HH:MM AM/PM",
+  "location": "",
+  "credits": 0,
+  "pricing": { "members": 0, "nonMembers": 0 },
+  "registrationUrl": "",
+  "keyHighlights": []
+}
+
+Raw Text:
+[PASTE UNSTRUCTURED TEXT HERE]`,
+          createdAt: new Date().toISOString(),
+          updatedAt: new Date().toISOString()
+        }
+      ];
+    }
+
+    async function loadAiPrompts() {
+      if (!state.currentUser) return;
+      const userId = state.currentUser.id;
+
+      let loaded = null;
+
+      // 1. Check if userPrefs already has favoritePrompts
+      if (state.userPrefs && Array.isArray(state.userPrefs.favoritePrompts)) {
+        loaded = state.userPrefs.favoritePrompts;
+      }
+
+      // 2. Fetch from DB if not loaded yet
+      if (!loaded || loaded.length === 0) {
+        try {
+          const res = await apiSend(`/user-prefs?userId=${userId}`);
+          if (res && Array.isArray(res.favoritePrompts)) {
+            loaded = res.favoritePrompts;
+            state.userPrefs = { ...(state.userPrefs || {}), ...res };
+          }
+        } catch (e) {
+          console.warn("Could not fetch user-prefs for AI prompts:", e);
+        }
+      }
+
+      // 3. Fallback to localStorage
+      if (!loaded || loaded.length === 0) {
+        try {
+          const local = localStorage.getItem(`wrapsheet-favorite-prompts-${userId}`);
+          if (local) {
+            loaded = JSON.parse(local);
+          }
+        } catch (e) {
+          console.warn("LocalStorage load error for AI prompts:", e);
+        }
+      }
+
+      // 4. Default to starter prompts if brand new
+      if (!loaded || loaded.length === 0) {
+        loaded = getStarterPrompts();
+        state.favoritePrompts = loaded;
+        await saveAiPromptsToDb();
+      } else {
+        state.favoritePrompts = loaded;
+      }
+
+      renderAiPrompts();
+    }
+
+    async function saveAiPromptsToDb() {
+      if (!state.currentUser) return;
+      const userId = state.currentUser.id;
+      const prompts = state.favoritePrompts || [];
+
+      // 1. LocalStorage backup
+      try {
+        localStorage.setItem(`wrapsheet-favorite-prompts-${userId}`, JSON.stringify(prompts));
+      } catch (e) {
+        console.warn("LocalStorage save error for AI prompts:", e);
+      }
+
+      // 2. Database save
+      try {
+        const currentPrefs = state.userPrefs || {};
+        const updatedPrefs = { ...currentPrefs, favoritePrompts: prompts };
+        state.userPrefs = updatedPrefs;
+
+        await apiSend("/user-prefs", "POST", {
+          userId: userId,
+          prefs: updatedPrefs
+        });
+      } catch (err) {
+        console.error("Error saving favorite prompts to DB:", err);
+        showToast("Error saving prompts to database", true);
+      }
+    }
+
+    function renderAiPrompts() {
+      const grid = document.getElementById("ai-prompts-grid");
+      const catsBar = document.getElementById("ai-prompts-categories-bar");
+      const countBadge = document.getElementById("ai-prompts-count");
+      if (!grid || !catsBar) return;
+
+      const allPrompts = state.favoritePrompts || [];
+      const currentFilter = state.aiPromptsFilter || "all";
+      const searchQuery = (state.aiPromptsSearch || "").toLowerCase().trim();
+
+      // Get list of categories
+      const categorySet = new Set();
+      allPrompts.forEach(p => {
+        if (p.category) categorySet.add(p.category);
+      });
+      AI_PROMPT_CATEGORIES.forEach(c => categorySet.add(c));
+      const categories = Array.from(categorySet);
+
+      // Render Category Filter Pills
+      catsBar.innerHTML = "";
+      const allPill = document.createElement("button");
+      allPill.className = `ai-prompts-filter-pill ${currentFilter === "all" ? "active" : ""}`;
+      allPill.textContent = `All (${allPrompts.length})`;
+      allPill.onclick = () => {
+        state.aiPromptsFilter = "all";
+        renderAiPrompts();
+      };
+      catsBar.appendChild(allPill);
+
+      categories.forEach(cat => {
+        const count = allPrompts.filter(p => p.category === cat).length;
+        if (count === 0 && currentFilter !== cat) return; // Only show non-empty categories or active filter
+
+        const pill = document.createElement("button");
+        pill.className = `ai-prompts-filter-pill ${currentFilter === cat ? "active" : ""}`;
+        pill.textContent = `${cat} (${count})`;
+        pill.onclick = () => {
+          state.aiPromptsFilter = cat;
+          renderAiPrompts();
+        };
+        catsBar.appendChild(pill);
+      });
+
+      // Filter prompts
+      const filtered = allPrompts.filter(p => {
+        const matchCategory = currentFilter === "all" || p.category === currentFilter;
+        if (!matchCategory) return false;
+
+        if (!searchQuery) return true;
+        const matchTitle = (p.title || "").toLowerCase().includes(searchQuery);
+        const matchCategoryText = (p.category || "").toLowerCase().includes(searchQuery);
+        const matchDesc = (p.description || "").toLowerCase().includes(searchQuery);
+        const matchContent = (p.content || "").toLowerCase().includes(searchQuery);
+        return matchTitle || matchCategoryText || matchDesc || matchContent;
+      });
+
+      if (countBadge) {
+        countBadge.textContent = filtered.length;
+      }
+
+      grid.innerHTML = "";
+
+      if (filtered.length === 0) {
+        grid.innerHTML = `
+          <div class="ai-prompts-empty-state">
+            <div style="font-size: 36px;">🤖</div>
+            <div style="font-size: 15px; font-weight: 700; color: var(--ink);">
+              ${searchQuery ? "No matching AI prompts found" : "No prompts in this category"}
+            </div>
+            <div style="font-size: 12px; color: var(--ink-soft); max-width: 320px;">
+              ${searchQuery ? `Try clearing your search "${escapeHtml(searchQuery)}" or create a new prompt.` : "Click the button below to add your first prompt for this category."}
+            </div>
+            <div style="display:flex; gap:8px; margin-top: 4px;">
+              ${searchQuery || currentFilter !== "all" ? `
+                <button class="button-secondary" onclick="state.aiPromptsSearch=''; state.aiPromptsFilter='all'; document.getElementById('ai-prompts-search').value=''; renderAiPrompts();" style="padding:6px 14px; font-size:12px; border-radius:var(--radius-btn);">
+                  Clear Filters
+                </button>
+              ` : ''}
+              <button class="button-primary" onclick="openAiPromptModal()" style="padding:6px 14px; font-size:12px; border-radius:var(--radius-btn);">
+                + Add Prompt
+              </button>
+            </div>
+          </div>
+        `;
+        return;
+      }
+
+      filtered.forEach(prompt => {
+        const card = document.createElement("div");
+        card.className = "ai-prompt-card";
+
+        const updatedDate = prompt.updatedAt ? new Date(prompt.updatedAt).toLocaleDateString("en-US", { month: "short", day: "numeric" }) : "";
+
+        card.innerHTML = `
+          <div class="ai-prompt-card-top">
+            <span class="ai-prompt-tag">${escapeHtml(prompt.category || "General")}</span>
+            <div class="ai-prompt-card-actions">
+              <button class="ai-prompt-icon-btn edit-btn" title="Edit Prompt" data-id="${escapeHtml(prompt.id)}">
+                ✏️
+              </button>
+              <button class="ai-prompt-icon-btn delete-btn" title="Delete Prompt" data-id="${escapeHtml(prompt.id)}">
+                🗑️
+              </button>
+            </div>
+          </div>
+
+          <div>
+            <h3 class="ai-prompt-card-title">${escapeHtml(prompt.title || "Untitled Prompt")}</h3>
+            ${prompt.description ? `<p class="ai-prompt-card-desc" style="margin-top:4px;">${escapeHtml(prompt.description)}</p>` : ""}
+          </div>
+
+          <div class="ai-prompt-content-preview">${escapeHtml(prompt.content || "")}</div>
+
+          <div class="ai-prompt-card-bottom">
+            <span class="ai-prompt-meta-text">${updatedDate ? `Updated ${updatedDate}` : ""}</span>
+            <button class="ai-prompt-copy-btn" data-id="${escapeHtml(prompt.id)}" title="Copy prompt to clipboard">
+              <span>📋</span> Copy Prompt
+            </button>
+          </div>
+        `;
+
+        // Event listeners
+        const copyBtn = card.querySelector(".ai-prompt-copy-btn");
+        if (copyBtn) {
+          copyBtn.onclick = (e) => {
+            e.stopPropagation();
+            copyAiPrompt(prompt.id, copyBtn);
+          };
+        }
+
+        const editBtn = card.querySelector(".edit-btn");
+        if (editBtn) {
+          editBtn.onclick = (e) => {
+            e.stopPropagation();
+            openAiPromptModal(prompt.id);
+          };
+        }
+
+        const delBtn = card.querySelector(".delete-btn");
+        if (delBtn) {
+          delBtn.onclick = (e) => {
+            e.stopPropagation();
+            deleteAiPrompt(prompt.id);
+          };
+        }
+
+        grid.appendChild(card);
+      });
+    }
+
+    async function copyAiPrompt(promptId, btnElement) {
+      const prompt = (state.favoritePrompts || []).find(p => String(p.id) === String(promptId));
+      if (!prompt) return;
+
+      const text = prompt.content || "";
+      let success = false;
+
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        try {
+          await navigator.clipboard.writeText(text);
+          success = true;
+        } catch (err) {
+          console.warn("navigator.clipboard error:", err);
+        }
+      }
+
+      if (!success) {
+        const textarea = document.createElement("textarea");
+        textarea.value = text;
+        textarea.style.position = "fixed";
+        textarea.style.opacity = "0";
+        document.body.appendChild(textarea);
+        textarea.select();
+        try {
+          document.execCommand("copy");
+          success = true;
+        } catch (e) {
+          console.error("execCommand error:", e);
+        } finally {
+          document.body.removeChild(textarea);
+        }
+      }
+
+      if (success) {
+        if (btnElement) {
+          const origHtml = btnElement.innerHTML;
+          btnElement.innerHTML = `<span>✓</span> Copied!`;
+          btnElement.classList.add("copied");
+          setTimeout(() => {
+            btnElement.innerHTML = origHtml;
+            btnElement.classList.remove("copied");
+          }, 2000);
+        }
+        showCelebration("Copied Prompt!", "Ready to paste into ChatGPT or Gemini");
+        showToast(`"${prompt.title}" copied to clipboard!`);
+      } else {
+        showToast("Could not copy prompt to clipboard", true);
+      }
+    }
+
+    function openAiPromptModal(promptId = null) {
+      const modal = document.getElementById("ai-prompt-modal");
+      const titleEl = document.getElementById("ai-prompt-modal-title");
+      const idInput = document.getElementById("ai-prompt-id");
+      const titleInput = document.getElementById("ai-prompt-title");
+      const catSelect = document.getElementById("ai-prompt-category-select");
+      const customCatInput = document.getElementById("ai-prompt-custom-cat");
+      const customCatWrap = document.getElementById("ai-prompt-custom-cat-wrapper");
+      const descInput = document.getElementById("ai-prompt-desc");
+      const contentInput = document.getElementById("ai-prompt-content");
+      const deleteBtn = document.getElementById("ai-prompt-delete-btn");
+
+      if (!modal) return;
+
+      if (promptId) {
+        const prompt = (state.favoritePrompts || []).find(p => String(p.id) === String(promptId));
+        if (!prompt) return;
+
+        titleEl.textContent = "Edit AI Prompt";
+        idInput.value = prompt.id;
+        titleInput.value = prompt.title || "";
+        descInput.value = prompt.description || "";
+        contentInput.value = prompt.content || "";
+
+        if (AI_PROMPT_CATEGORIES.includes(prompt.category)) {
+          catSelect.value = prompt.category;
+          customCatWrap.style.display = "none";
+          customCatInput.value = "";
+        } else {
+          catSelect.value = "_custom_";
+          customCatWrap.style.display = "block";
+          customCatInput.value = prompt.category || "";
+        }
+
+        if (deleteBtn) {
+          deleteBtn.style.display = "inline-block";
+          deleteBtn.onclick = () => deleteAiPrompt(prompt.id);
+        }
+      } else {
+        titleEl.textContent = "New AI Prompt";
+        idInput.value = "";
+        titleInput.value = "";
+        descInput.value = "";
+        contentInput.value = "";
+        catSelect.value = "Email Blasts";
+        customCatWrap.style.display = "none";
+        customCatInput.value = "";
+        if (deleteBtn) deleteBtn.style.display = "none";
+      }
+
+      modal.classList.remove("hidden");
+      setTimeout(() => titleInput.focus(), 50);
+    }
+
+    function closeAiPromptModal() {
+      const modal = document.getElementById("ai-prompt-modal");
+      if (modal) modal.classList.add("hidden");
+    }
+
+    async function saveAiPromptFromModal() {
+      const id = document.getElementById("ai-prompt-id").value;
+      const title = document.getElementById("ai-prompt-title").value.trim();
+      const catSelect = document.getElementById("ai-prompt-category-select").value;
+      const customCat = document.getElementById("ai-prompt-custom-cat").value.trim();
+      const description = document.getElementById("ai-prompt-desc").value.trim();
+      const content = document.getElementById("ai-prompt-content").value.trim();
+
+      if (!title) {
+        showToast("Please enter a prompt title", true);
+        return;
+      }
+      if (!content) {
+        showToast("Please enter the prompt content", true);
+        return;
+      }
+
+      let category = catSelect;
+      if (catSelect === "_custom_") {
+        category = customCat || "General";
+      }
+
+      if (!state.favoritePrompts) state.favoritePrompts = [];
+
+      if (id) {
+        const idx = state.favoritePrompts.findIndex(p => String(p.id) === String(id));
+        if (idx !== -1) {
+          state.favoritePrompts[idx] = {
+            ...state.favoritePrompts[idx],
+            title,
+            category,
+            description,
+            content,
+            updatedAt: new Date().toISOString()
+          };
+          showToast("Prompt updated!");
+        }
+      } else {
+        const newPrompt = {
+          id: "prompt_" + Date.now() + "_" + Math.random().toString(36).substr(2, 5),
+          title,
+          category,
+          description,
+          content,
+          createdAt: new Date().toISOString(),
+          updatedAt: new Date().toISOString()
+        };
+        state.favoritePrompts.unshift(newPrompt);
+        showToast("Prompt saved!");
+      }
+
+      closeAiPromptModal();
+      renderAiPrompts();
+      await saveAiPromptsToDb();
+    }
+
+    async function deleteAiPrompt(promptId) {
+      const prompt = (state.favoritePrompts || []).find(p => String(p.id) === String(promptId));
+      if (!prompt) return;
+
+      if (!confirm(`Are you sure you want to delete "${prompt.title}"?`)) {
+        return;
+      }
+
+      state.favoritePrompts = state.favoritePrompts.filter(p => String(p.id) !== String(promptId));
+      closeAiPromptModal();
+      renderAiPrompts();
+      showToast("Prompt deleted");
+      await saveAiPromptsToDb();
+    }
+
+    function initAiPromptsUI() {
+      // Search input
+      const searchInput = document.getElementById("ai-prompts-search");
+      if (searchInput) {
+        searchInput.addEventListener("input", (e) => {
+          state.aiPromptsSearch = e.target.value;
+          renderAiPrompts();
+        });
+      }
+
+      // Add Prompt Button
+      const addBtn = document.getElementById("ai-prompts-add-btn");
+      if (addBtn) {
+        addBtn.addEventListener("click", () => openAiPromptModal());
+      }
+
+      // Category select in modal
+      const catSelect = document.getElementById("ai-prompt-category-select");
+      const customCatWrap = document.getElementById("ai-prompt-custom-cat-wrapper");
+      if (catSelect && customCatWrap) {
+        catSelect.addEventListener("change", () => {
+          customCatWrap.style.display = catSelect.value === "_custom_" ? "block" : "none";
+        });
+      }
+
+      // Modal buttons
+      const closeBtn = document.getElementById("ai-prompt-modal-close");
+      if (closeBtn) closeBtn.addEventListener("click", closeAiPromptModal);
+
+      const cancelBtn = document.getElementById("ai-prompt-modal-cancel");
+      if (cancelBtn) cancelBtn.addEventListener("click", closeAiPromptModal);
+
+      const saveBtn = document.getElementById("ai-prompt-save-btn");
+      if (saveBtn) saveBtn.addEventListener("click", saveAiPromptFromModal);
+
+      // Close on backdrop click
+      const modal = document.getElementById("ai-prompt-modal");
+      if (modal) {
+        modal.addEventListener("click", (e) => {
+          if (e.target === modal) closeAiPromptModal();
+        });
+      }
+    }
+
     // ===== EVENT HANDLERS =====
     function attachEventHandlers() {
+      initAiPromptsUI();
+
       const themeSelect = document.getElementById("theme-select");
       if (themeSelect) {
         themeSelect.addEventListener("change", () => {
