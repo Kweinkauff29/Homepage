@@ -155,6 +155,22 @@ const API_URL = window.location.origin.includes('workers.dev')
   ? window.location.origin 
   : "https://auction-api.bonitaspringsrealtors.workers.dev";
 
+const EXCLUDED_ITEMS = new Set([
+  "canine canvas",
+  "the creator's tool",
+  "the creator’s tool",
+  "shaded gaze",
+  "blush portrait",
+  "bubblegum dreams",
+  "chromatic flora"
+]);
+
+function isBidExcluded(bid) {
+  if (!bid) return false;
+  const name = (bid.item_name || '').toLowerCase().trim();
+  return EXCLUDED_ITEMS.has(name);
+}
+
 let cachedBids = [];
 
 async function fetchBids() {
@@ -165,7 +181,8 @@ async function fetchBids() {
     const response = await fetch(\`\${API_URL}/api/admin/bids\`);
     if (!response.ok) throw new Error("Failed to fetch bids from server.");
 
-    cachedBids = await response.json();
+    const allBids = await response.json();
+    cachedBids = Array.isArray(allBids) ? allBids.filter(b => !isBidExcluded(b)) : [];
     renderBids(cachedBids);
     updateStats(cachedBids);
 
