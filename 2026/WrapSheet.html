@@ -6020,6 +6020,11 @@
       if (mo) mo.value = ownerVal;
       if (ao) ao.value = ownerVal;
 
+      // Update AI Prompts visibility: only visible on KEVIN's wrap sheet
+      if (typeof updateAiPromptsVisibility === "function") {
+        updateAiPromptsVisibility();
+      }
+
       // Load prefs + pillars for whoever we're working on
       await Promise.all([
         loadUserPrefsForActiveUser(),
@@ -8325,10 +8330,12 @@
       const grid = document.getElementById("pillar-grid");
       if (!grid) return;
 
-      const subtitle = document.getElementById("pillars-subtitle");
-      subtitle.textContent = state.currentUser
-        ? `Synced for ${state.currentUser.name}`
-        : "Pick a user to edit your pillars";
+      const subtitle = document.getElementById("pillars-subtitle") || document.getElementById("pillars-owner-label");
+      if (subtitle) {
+        subtitle.textContent = state.currentUser
+          ? `Synced for ${state.currentUser.name}`
+          : "Pick a user to edit your pillars";
+      }
 
       grid.innerHTML = "";
 
@@ -8862,7 +8869,7 @@
       document.getElementById("current-user-label").textContent =
         user ? user.name + " · " + user.email : "Not signed in";
       
-      const isKevin = user && user.name.toLowerCase().includes("kevin") && !user.name.toLowerCase().includes("test");
+      const isKevin = isKevinUser(user);
       const debugBtn = document.getElementById("debug-version");
       if (debugBtn) {
         debugBtn.style.display = isKevin ? "block" : "none";
@@ -8874,18 +8881,12 @@
         emailTool.style.display = isKevin ? "flex" : "none";
       }
 
-      // Favorite AI Prompts Section & View Option (Kevin Only)
-      const aiPromptsSection = document.getElementById("section-ai-prompts");
-      const aiPromptsViewOpt = document.getElementById("view-opt-ai-prompts");
-      if (aiPromptsSection) {
-        aiPromptsSection.style.display = isKevin ? "block" : "none";
-      }
-      if (aiPromptsViewOpt) {
-        aiPromptsViewOpt.style.display = isKevin ? "flex" : "none";
-      }
+      // Favorite AI Prompts Section & View Option (Kevin Only on Kevin's Wrap Sheet)
+      updateAiPromptsVisibility();
 
       if (user) {
         localStorage.setItem("wrapsheet-user", JSON.stringify({ id: user.id }));
+        localStorage.setItem("wrapsheet-user-id", String(user.id));
         document.getElementById("monthly-owner-filter").value = "all";
         document.getElementById("annual-owner-filter").value = "all";
         state.calendarOwnerId = user.id;
@@ -8906,6 +8907,77 @@
     }
 
     // ===== FAVORITE AI PROMPTS (KEVIN ONLY) =====
+    function isKevinUser(user) {
+      if (!user || !user.name) return false;
+      const lower = user.name.toLowerCase();
+      return lower.includes("kevin") && !lower.includes("test");
+    }
+
+    function isKevinWrapSheet() {
+      // Must be Kevin signed in
+      if (!isKevinUser(state.currentUser)) return false;
+
+      // If viewing a specific calendar owner / active user, it must be Kevin or "me" or everyone
+      if (state.activeUserId) {
+        if (state.currentUser && String(state.activeUserId) === String(state.currentUser.id)) {
+          return true;
+        }
+        if (state.activeUser && isKevinUser(state.activeUser)) {
+          return true;
+        }
+        // Viewing another staff member's wrap sheet
+        return false;
+      }
+      return true;
+    }
+
+    function updateAiPromptsVisibility() {
+      const section = document.getElementById("section-ai-prompts");
+      const viewOpt = document.getElementById("view-opt-ai-prompts");
+      if (!section) return;
+
+      const isKevin = isKevinWrapSheet();
+
+      if (!isKevin) {
+        section.style.display = "none";
+        if (viewOpt) {
+          viewOpt.style.display = "none";
+          viewOpt.classList.remove("active");
+        }
+        return;
+      }
+
+      // Kevin's wrap sheet: ensure toggle button in view options bar is visible
+      if (viewOpt) {
+        viewOpt.style.display = "flex";
+      }
+
+      // Check saved visibility preference
+      let isVisible = true;
+      if (state.userDbPrefs && state.userDbPrefs.section_visibility && state.userDbPrefs.section_visibility["section-ai-prompts"] !== undefined) {
+        isVisible = Boolean(state.userDbPrefs.section_visibility["section-ai-prompts"]);
+      } else {
+        try {
+          const local = localStorage.getItem("wrapSheet_visibility");
+          if (local) {
+            const parsed = JSON.parse(local);
+            if (parsed && parsed["section-ai-prompts"] !== undefined) {
+              isVisible = Boolean(parsed["section-ai-prompts"]);
+            }
+          }
+        } catch (e) {}
+      }
+
+      if (isVisible) {
+        section.style.display = "block";
+        section.classList.remove("hidden");
+        if (viewOpt) viewOpt.classList.add("active");
+      } else {
+        section.style.display = "none";
+        if (viewOpt) viewOpt.classList.remove("active");
+      }
+    }
+
     const AI_PROMPT_CATEGORIES = [
       "Email Blasts",
       "Flyers & Visuals",
@@ -9013,34 +9085,35 @@ Raw Text:
     }
 
     async function loadAiPrompts() {
-      if (!state.currentUser) return;
+      if (!state.currentUser || !isKevinUser(state.currentUser)) return;
       const userId = state.currentUser.id;
 
       let loaded = null;
 
-      // 1. Check if userPrefs already has favoritePrompts
-      if (state.userPrefs && Array.isArray(state.userPrefs.favoritePrompts)) {
+      // 1. Fetch from DB using apiGet for clean, non-intrusive retrieval
+      try {
+        const res = await apiGet(`/user-prefs?userId=${userId}`);
+        if (res && typeof res === "object") {
+          // Merge fetched prefs into state.userPrefs for Kevin
+          state.userPrefs = { ...(state.userPrefs || {}), ...res };
+          if (Array.isArray(res.favoritePrompts)) {
+            loaded = res.favoritePrompts;
+          }
+        }
+      } catch (e) {
+        console.warn("Could not fetch user-prefs for AI prompts:", e);
+      }
+
+      // 2. Check if state.userPrefs already has favoritePrompts in memory
+      if (loaded === null && state.userPrefs && Array.isArray(state.userPrefs.favoritePrompts)) {
         loaded = state.userPrefs.favoritePrompts;
       }
 
-      // 2. Fetch from DB if not loaded yet
-      if (!loaded || loaded.length === 0) {
-        try {
-          const res = await apiSend(`/user-prefs?userId=${userId}`);
-          if (res && Array.isArray(res.favoritePrompts)) {
-            loaded = res.favoritePrompts;
-            state.userPrefs = { ...(state.userPrefs || {}), ...res };
-          }
-        } catch (e) {
-          console.warn("Could not fetch user-prefs for AI prompts:", e);
-        }
-      }
-
-      // 3. Fallback to localStorage
-      if (!loaded || loaded.length === 0) {
+      // 3. Fallback to localStorage cache
+      if (loaded === null) {
         try {
           const local = localStorage.getItem(`wrapsheet-favorite-prompts-${userId}`);
-          if (local) {
+          if (local !== null && local !== undefined) {
             loaded = JSON.parse(local);
           }
         } catch (e) {
@@ -9048,43 +9121,72 @@ Raw Text:
         }
       }
 
-      // 4. Default to starter prompts if brand new
-      if (!loaded || loaded.length === 0) {
+      // 4. Default to starter prompts ONLY if completely uninitialized (never saved before)
+      if (loaded === null || loaded === undefined) {
         loaded = getStarterPrompts();
         state.favoritePrompts = loaded;
         await saveAiPromptsToDb();
       } else {
-        state.favoritePrompts = loaded;
+        state.favoritePrompts = Array.isArray(loaded) ? loaded : [];
       }
+
+      // Keep localStorage cache synced
+      try {
+        localStorage.setItem(`wrapsheet-favorite-prompts-${userId}`, JSON.stringify(state.favoritePrompts));
+      } catch (e) {}
 
       renderAiPrompts();
     }
 
     async function saveAiPromptsToDb() {
-      if (!state.currentUser) return;
+      if (!state.currentUser || !isKevinUser(state.currentUser)) return false;
       const userId = state.currentUser.id;
       const prompts = state.favoritePrompts || [];
 
-      // 1. LocalStorage backup
+      // 1. LocalStorage instant backup
       try {
         localStorage.setItem(`wrapsheet-favorite-prompts-${userId}`, JSON.stringify(prompts));
       } catch (e) {
         console.warn("LocalStorage save error for AI prompts:", e);
       }
 
-      // 2. Database save
+      // 2. Safe Database Save (preserves customCategoryNames, birdColors, cheers, etc.)
       try {
-        const currentPrefs = state.userPrefs || {};
+        let currentPrefs = {};
+        try {
+          const res = await apiGet(`/user-prefs?userId=${userId}`);
+          if (res && typeof res === "object") {
+            currentPrefs = res;
+          }
+        } catch (e) {
+          currentPrefs = state.userPrefs || {};
+        }
+
         const updatedPrefs = { ...currentPrefs, favoritePrompts: prompts };
         state.userPrefs = updatedPrefs;
 
-        await apiSend("/user-prefs", "POST", {
-          userId: userId,
-          prefs: updatedPrefs
+        const response = await fetch(`${API_BASE}/user-prefs`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            "Accept": "application/json"
+          },
+          body: JSON.stringify({
+            userId: userId,
+            prefs: updatedPrefs
+          })
         });
+
+        if (!response.ok) {
+          const errText = await response.text().catch(() => "");
+          throw new Error(`HTTP ${response.status}: ${errText}`);
+        }
+
+        return true;
       } catch (err) {
         console.error("Error saving favorite prompts to DB:", err);
         showToast("Error saving prompts to database", true);
+        return false;
       }
     }
 
@@ -9150,6 +9252,14 @@ Raw Text:
 
       grid.innerHTML = "";
 
+      const safeEscape = (str) => {
+        if (typeof escapeHtml === "function") return escapeHtml(str);
+        if (!str) return "";
+        return String(str).replace(/[&<>"']/g, m => ({
+          "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;"
+        })[m]);
+      };
+
       if (filtered.length === 0) {
         grid.innerHTML = `
           <div class="ai-prompts-empty-state">
@@ -9158,7 +9268,7 @@ Raw Text:
               ${searchQuery ? "No matching AI prompts found" : "No prompts in this category"}
             </div>
             <div style="font-size: 12px; color: var(--ink-soft); max-width: 320px;">
-              ${searchQuery ? `Try clearing your search "${escapeHtml(searchQuery)}" or create a new prompt.` : "Click the button below to add your first prompt for this category."}
+              ${searchQuery ? `Try clearing your search "${safeEscape(searchQuery)}" or create a new prompt.` : "Click the button below to add your first prompt for this category."}
             </div>
             <div style="display:flex; gap:8px; margin-top: 4px;">
               ${searchQuery || currentFilter !== "all" ? `
@@ -9183,27 +9293,27 @@ Raw Text:
 
         card.innerHTML = `
           <div class="ai-prompt-card-top">
-            <span class="ai-prompt-tag">${escapeHtml(prompt.category || "General")}</span>
+            <span class="ai-prompt-tag">${safeEscape(prompt.category || "General")}</span>
             <div class="ai-prompt-card-actions">
-              <button class="ai-prompt-icon-btn edit-btn" title="Edit Prompt" data-id="${escapeHtml(prompt.id)}">
+              <button class="ai-prompt-icon-btn edit-btn" title="Edit Prompt" data-id="${safeEscape(prompt.id)}">
                 ✏️
               </button>
-              <button class="ai-prompt-icon-btn delete-btn" title="Delete Prompt" data-id="${escapeHtml(prompt.id)}">
+              <button class="ai-prompt-icon-btn delete-btn" title="Delete Prompt" data-id="${safeEscape(prompt.id)}">
                 🗑️
               </button>
             </div>
           </div>
 
           <div>
-            <h3 class="ai-prompt-card-title">${escapeHtml(prompt.title || "Untitled Prompt")}</h3>
-            ${prompt.description ? `<p class="ai-prompt-card-desc" style="margin-top:4px;">${escapeHtml(prompt.description)}</p>` : ""}
+            <h3 class="ai-prompt-card-title">${safeEscape(prompt.title || "Untitled Prompt")}</h3>
+            ${prompt.description ? `<p class="ai-prompt-card-desc" style="margin-top:4px;">${safeEscape(prompt.description)}</p>` : ""}
           </div>
 
-          <div class="ai-prompt-content-preview">${escapeHtml(prompt.content || "")}</div>
+          <div class="ai-prompt-content-preview">${safeEscape(prompt.content || "")}</div>
 
           <div class="ai-prompt-card-bottom">
             <span class="ai-prompt-meta-text">${updatedDate ? `Updated ${updatedDate}` : ""}</span>
-            <button class="ai-prompt-copy-btn" data-id="${escapeHtml(prompt.id)}" title="Copy prompt to clipboard">
+            <button class="ai-prompt-copy-btn" data-id="${safeEscape(prompt.id)}" title="Copy prompt to clipboard">
               <span>📋</span> Copy Prompt
             </button>
           </div>
@@ -9281,7 +9391,9 @@ Raw Text:
             btnElement.classList.remove("copied");
           }, 2000);
         }
-        showCelebration("Copied Prompt!", "Ready to paste into ChatGPT or Gemini");
+        if (typeof showCelebration === "function") {
+          showCelebration("Copied Prompt!", "Ready to paste into ChatGPT or Gemini");
+        }
         showToast(`"${prompt.title}" copied to clipboard!`);
       } else {
         showToast("Could not copy prompt to clipboard", true);
@@ -9357,10 +9469,14 @@ Raw Text:
 
       if (!title) {
         showToast("Please enter a prompt title", true);
+        const titleInput = document.getElementById("ai-prompt-title");
+        if (titleInput) titleInput.focus();
         return;
       }
       if (!content) {
         showToast("Please enter the prompt content", true);
+        const contentInput = document.getElementById("ai-prompt-content");
+        if (contentInput) contentInput.focus();
         return;
       }
 
@@ -9371,36 +9487,50 @@ Raw Text:
 
       if (!state.favoritePrompts) state.favoritePrompts = [];
 
-      if (id) {
-        const idx = state.favoritePrompts.findIndex(p => String(p.id) === String(id));
-        if (idx !== -1) {
-          state.favoritePrompts[idx] = {
-            ...state.favoritePrompts[idx],
+      const saveBtn = document.getElementById("ai-prompt-save-btn");
+      if (saveBtn) {
+        saveBtn.disabled = true;
+        saveBtn.textContent = "Saving…";
+      }
+
+      try {
+        if (id) {
+          const idx = state.favoritePrompts.findIndex(p => String(p.id) === String(id));
+          if (idx !== -1) {
+            state.favoritePrompts[idx] = {
+              ...state.favoritePrompts[idx],
+              title,
+              category,
+              description,
+              content,
+              updatedAt: new Date().toISOString()
+            };
+          }
+        } else {
+          const newPrompt = {
+            id: "prompt_" + Date.now() + "_" + Math.random().toString(36).substr(2, 5),
             title,
             category,
             description,
             content,
+            createdAt: new Date().toISOString(),
             updatedAt: new Date().toISOString()
           };
-          showToast("Prompt updated!");
+          state.favoritePrompts.unshift(newPrompt);
         }
-      } else {
-        const newPrompt = {
-          id: "prompt_" + Date.now() + "_" + Math.random().toString(36).substr(2, 5),
-          title,
-          category,
-          description,
-          content,
-          createdAt: new Date().toISOString(),
-          updatedAt: new Date().toISOString()
-        };
-        state.favoritePrompts.unshift(newPrompt);
-        showToast("Prompt saved!");
-      }
 
-      closeAiPromptModal();
-      renderAiPrompts();
-      await saveAiPromptsToDb();
+        closeAiPromptModal();
+        renderAiPrompts();
+        const saved = await saveAiPromptsToDb();
+        if (saved) {
+          showToast(id ? "Prompt updated & saved to database!" : "Prompt created & saved to database!");
+        }
+      } finally {
+        if (saveBtn) {
+          saveBtn.disabled = false;
+          saveBtn.textContent = "Save Prompt";
+        }
+      }
     }
 
     async function deleteAiPrompt(promptId) {
@@ -9414,8 +9544,10 @@ Raw Text:
       state.favoritePrompts = state.favoritePrompts.filter(p => String(p.id) !== String(promptId));
       closeAiPromptModal();
       renderAiPrompts();
-      showToast("Prompt deleted");
-      await saveAiPromptsToDb();
+      const saved = await saveAiPromptsToDb();
+      if (saved) {
+        showToast("Prompt deleted from database");
+      }
     }
 
     function initAiPromptsUI() {
@@ -9436,10 +9568,16 @@ Raw Text:
 
       // Category select in modal
       const catSelect = document.getElementById("ai-prompt-category-select");
+      const customCatInput = document.getElementById("ai-prompt-custom-cat");
       const customCatWrap = document.getElementById("ai-prompt-custom-cat-wrapper");
       if (catSelect && customCatWrap) {
         catSelect.addEventListener("change", () => {
-          customCatWrap.style.display = catSelect.value === "_custom_" ? "block" : "none";
+          if (catSelect.value === "_custom_") {
+            customCatWrap.style.display = "block";
+            if (customCatInput) customCatInput.focus();
+          } else {
+            customCatWrap.style.display = "none";
+          }
         });
       }
 
@@ -9460,6 +9598,16 @@ Raw Text:
           if (e.target === modal) closeAiPromptModal();
         });
       }
+
+      // Close on Escape key
+      window.addEventListener("keydown", (e) => {
+        if (e.key === "Escape") {
+          const m = document.getElementById("ai-prompt-modal");
+          if (m && !m.classList.contains("hidden")) {
+            closeAiPromptModal();
+          }
+        }
+      });
     }
 
     // ===== EVENT HANDLERS =====
@@ -9486,7 +9634,10 @@ Raw Text:
           if (!user) return;
           setCurrentUser(user);
           const userOverlay = document.getElementById("user-overlay");
-          if (userOverlay) userOverlay.classList.add("hidden");
+          if (userOverlay) {
+            userOverlay.classList.add("hidden");
+            userOverlay.style.display = "none";
+          }
           await refreshAllData();
           initBacklogUI();
           startLiveSync(); // Start live sync after user login
@@ -14284,16 +14435,18 @@ Raw Text:
             await saveCoinBalanceToServer(); // Save current user's coins NOW
           }
 
-          // Force update state
-          state.currentUser = user;
-          state.activeUser = user;
-          state.activeUserId = user.id;
+          // Force update state & permissions
+          setCurrentUser(user);
 
           localStorage.setItem("wrapsheet-user-id", user.id);
+          localStorage.setItem("wrapsheet-user", JSON.stringify({ id: user.id }));
 
           // Reset UI
           document.getElementById("current-user-label").textContent = user.name;
-          if (overlay) overlay.style.display = "none";
+          if (overlay) {
+            overlay.style.display = "none";
+            overlay.classList.add("hidden");
+          }
 
           // RELOAD ALL DATA
           showActionLoader({ main: "Switching User…", sub: "Loading your coins & bird" });
@@ -16142,6 +16295,11 @@ Raw Text:
           }
         }
       });
+
+      // Ensure AI Prompts section visibility strictly respects Kevin's wrap sheet only
+      if (typeof updateAiPromptsVisibility === "function") {
+        updateAiPromptsVisibility();
+      }
     }
 
     function changeWeeklyWeek(days) {
