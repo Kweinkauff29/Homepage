@@ -49,22 +49,107 @@
       line-height: 1.2 !important;
     }
 
-    #ccor-silent-auction-wrapper .auction-timer {
-      font-size: 16px;
+    #ccor-silent-auction-wrapper .auction-countdown-panel {
+      background: rgba(0, 0, 0, 0.4);
+      backdrop-filter: blur(8px);
+      border: 1px solid rgba(255, 255, 255, 0.25);
+      border-radius: 10px;
+      padding: 10px 14px;
+      text-align: center;
+      margin-bottom: 8px;
+    }
+
+    #ccor-silent-auction-wrapper .countdown-heading {
+      font-size: 11px;
+      font-weight: 800;
+      letter-spacing: 0.8px;
+      color: #fed7aa;
+      text-transform: uppercase;
+      margin-bottom: 6px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+    }
+
+    #ccor-silent-auction-wrapper .countdown-digits {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 5px;
+    }
+
+    #ccor-silent-auction-wrapper .cd-box {
+      background: rgba(255, 255, 255, 0.18);
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      border-radius: 6px;
+      padding: 4px 6px;
+      min-width: 44px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    #ccor-silent-auction-wrapper .cd-val {
+      font-size: 20px;
+      font-weight: 800;
+      color: #ffffff;
+      line-height: 1;
+      font-variant-numeric: tabular-nums;
+    }
+
+    #ccor-silent-auction-wrapper .cd-lbl {
+      font-size: 9px;
       font-weight: 600;
+      text-transform: uppercase;
+      color: rgba(255, 255, 255, 0.8);
+      margin-top: 2px;
+      letter-spacing: 0.5px;
+    }
+
+    #ccor-silent-auction-wrapper .cd-divider {
+      font-size: 18px;
+      font-weight: 800;
+      color: rgba(255, 255, 255, 0.75);
+      margin-top: -6px;
+    }
+
+    #ccor-silent-auction-wrapper .countdown-target-note {
+      font-size: 11px;
+      color: rgba(255, 255, 255, 0.85);
+      margin-top: 6px;
+      font-weight: 500;
+    }
+
+    #ccor-silent-auction-wrapper .auction-closed-pill {
+      background: #dc2626;
       color: white;
-      text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+      padding: 8px 16px;
+      border-radius: 8px;
+      font-size: 15px;
+      font-weight: 800;
+      letter-spacing: 0.5px;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      box-shadow: 0 4px 12px rgba(220, 38, 38, 0.4);
+    }
+
+    #ccor-silent-auction-wrapper .auction-sync-bar {
       display: flex;
       align-items: center;
       justify-content: flex-end;
-      gap: 10px;
+      gap: 8px;
+      font-size: 11px;
+      color: rgba(255, 255, 255, 0.8);
+      margin-top: 4px;
     }
 
     #ccor-silent-auction-wrapper .timer-bar {
-      width: 100px;
-      height: 8px;
+      width: 70px;
+      height: 6px;
       background: rgba(255, 255, 255, 0.3);
-      border-radius: 4px;
+      border-radius: 3px;
       overflow: hidden;
     }
 
@@ -73,6 +158,7 @@
       background: white;
       transition: width 1s linear;
     }
+
 
     #ccor-silent-auction-wrapper .viewing-info-banner {
       background: #fff;
@@ -220,6 +306,20 @@
       border: 1px solid #eee;
     }
 
+    #ccor-silent-auction-wrapper .bid-pricing-container {
+      display: flex;
+      align-items: baseline;
+      justify-content: center;
+      gap: 8px;
+    }
+
+    #ccor-silent-auction-wrapper .original-strikethrough {
+      font-size: 18px !important;
+      font-weight: 600 !important;
+      color: #94a3b8 !important;
+      text-decoration: line-through;
+    }
+
     #ccor-silent-auction-wrapper .current-bid {
       font-size: 28px !important;
       font-weight: 800 !important;
@@ -228,11 +328,233 @@
       line-height: 1 !important;
     }
 
+    #ccor-silent-auction-wrapper .discount-save-tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      font-size: 11px;
+      font-weight: 700;
+      color: #c2410c;
+      background: #fff7ed;
+      border: 1px solid #ffedd5;
+      padding: 3px 8px;
+      border-radius: 4px;
+      margin-bottom: 6px;
+    }
+
+    #ccor-silent-auction-wrapper .card-charity-footnote {
+      margin-top: 8px;
+      font-size: 11px;
+      color: #0f766e;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 4px;
+      font-weight: 600;
+    }
+
     #ccor-silent-auction-wrapper .highest-bidder {
       font-size: 13px !important;
       color: #666 !important;
       margin: 5px 0 0 0 !important;
       line-height: 1.2 !important;
+    }
+
+    #ccor-silent-auction-wrapper .card-badge-discount {
+      position: absolute;
+      top: 10px;
+      left: 10px;
+      background: #ea580c;
+      color: #fff;
+      font-size: 11px;
+      font-weight: 800;
+      padding: 5px 10px;
+      border-radius: 6px;
+      letter-spacing: 0.4px;
+      z-index: 2;
+      box-shadow: 0 2px 8px rgba(234, 88, 12, 0.4);
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+
+    /* 25% OFF PRICE DROP BANNER */
+    #ccor-silent-auction-wrapper .price-drop-alert-banner {
+      background: linear-gradient(135deg, #fff7ed 0%, #ffedd5 100%);
+      border: 1.5px solid #fb923c;
+      border-left: 6px solid #ea580c;
+      padding: 16px 20px;
+      border-radius: 10px;
+      margin-bottom: 20px;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      box-shadow: 0 4px 12px rgba(234, 88, 12, 0.08);
+      flex-wrap: wrap;
+    }
+
+    #ccor-silent-auction-wrapper .price-drop-badge {
+      background: #ea580c;
+      color: #fff;
+      font-weight: 800;
+      font-size: 13px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      padding: 6px 12px;
+      border-radius: 6px;
+      white-space: nowrap;
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      box-shadow: 0 2px 4px rgba(234, 88, 12, 0.3);
+    }
+
+    #ccor-silent-auction-wrapper .price-drop-text {
+      font-size: 14px;
+      color: #7c2d12;
+      line-height: 1.5;
+      flex: 1;
+      min-width: 260px;
+    }
+
+    #ccor-silent-auction-wrapper .price-drop-text strong {
+      color: #9a3412;
+    }
+
+    /* GULF COAST HUMANE SOCIETY CHARITY SPOTLIGHT */
+    #ccor-silent-auction-wrapper .charity-spotlight-card {
+      background: #ffffff;
+      border: 1px solid #e2e8f0;
+      border-top: 4px solid var(--auction-secondary);
+      border-radius: 12px;
+      padding: 22px 24px;
+      margin-bottom: 22px;
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.04);
+    }
+
+    #ccor-silent-auction-wrapper .charity-spotlight-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
+      flex-wrap: wrap;
+      padding-bottom: 16px;
+      border-bottom: 1px solid #f1f5f9;
+    }
+
+    #ccor-silent-auction-wrapper .charity-branding {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+
+    #ccor-silent-auction-wrapper .charity-logo-frame {
+      background: #ffffff;
+      padding: 8px 12px;
+      border-radius: 10px;
+      border: 1px solid #e2e8f0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.04);
+    }
+
+    #ccor-silent-auction-wrapper .charity-logo-frame img {
+      height: 48px;
+      max-width: 140px;
+      object-fit: contain;
+    }
+
+    #ccor-silent-auction-wrapper .charity-info-text .charity-eyebrow {
+      font-size: 11px;
+      font-weight: 800;
+      color: #0f766e;
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+      margin-bottom: 2px;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+
+    #ccor-silent-auction-wrapper .charity-info-text h3 {
+      margin: 0 !important;
+      color: var(--auction-primary) !important;
+      font-size: 22px !important;
+      font-weight: 800 !important;
+      line-height: 1.2 !important;
+    }
+
+    #ccor-silent-auction-wrapper .charity-info-text p {
+      margin: 4px 0 0 0 !important;
+      font-size: 13px !important;
+      color: #64748b !important;
+    }
+
+    #ccor-silent-auction-wrapper .charity-verified-badge {
+      background: #f0fdfa;
+      border: 1px solid #99f6e4;
+      color: #0d9488;
+      padding: 6px 14px;
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: 700;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    #ccor-silent-auction-wrapper .charity-pillars-row {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 14px;
+      margin-top: 16px;
+    }
+
+    #ccor-silent-auction-wrapper .charity-pillar-item {
+      background: #f8fafc;
+      border: 1px solid #f1f5f9;
+      padding: 12px 14px;
+      border-radius: 8px;
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+    }
+
+    #ccor-silent-auction-wrapper .charity-pillar-icon {
+      font-size: 22px;
+      line-height: 1;
+      margin-top: 2px;
+    }
+
+    #ccor-silent-auction-wrapper .charity-pillar-item strong {
+      display: block;
+      font-size: 13px;
+      color: #1e293b;
+      margin-bottom: 2px;
+    }
+
+    #ccor-silent-auction-wrapper .charity-pillar-item span {
+      font-size: 12px;
+      color: #64748b;
+      line-height: 1.4;
+    }
+
+    #ccor-silent-auction-wrapper .modal-charity-note {
+      background: #f0fdfa;
+      border: 1px solid #ccfbf1;
+      border-left: 4px solid #0d9488;
+      padding: 10px 14px;
+      border-radius: 6px;
+      font-size: 12px;
+      color: #115e59;
+      margin-bottom: 16px;
+      line-height: 1.4;
+      display: flex;
+      align-items: center;
+      gap: 10px;
     }
 
     #ccor-silent-auction-wrapper .btn-bid {
@@ -256,7 +578,17 @@
       background: #122e6b !important;
     }
 
+    #ccor-silent-auction-wrapper .btn-bid:disabled,
+    #ccor-silent-auction-wrapper .btn-bid.btn-bid-closed {
+      background: #94a3b8 !important;
+      cursor: not-allowed !important;
+      opacity: 0.8 !important;
+      box-shadow: none !important;
+    }
+
+
     /* MODAL STYLES */
+
     #ccor-silent-auction-wrapper .modal-overlay {
       position: fixed;
       top: 0;
@@ -441,10 +773,89 @@
     </div>
     <div class="auction-header-right">
       <h2>Silent Auction</h2>
-      <div class="auction-timer">
-        Updates in: <span id="ccor-sa-time-left">30</span>s
+      <div class="auction-countdown-panel" id="ccor-sa-countdown-panel">
+        <div class="countdown-heading" id="ccor-sa-countdown-heading">⏳ AUCTION CLOSES IN:</div>
+        <div class="countdown-digits" id="ccor-sa-countdown-digits">
+          <div class="cd-box">
+            <span class="cd-val" id="ccor-cd-days">00</span>
+            <span class="cd-lbl">Days</span>
+          </div>
+          <span class="cd-divider">:</span>
+          <div class="cd-box">
+            <span class="cd-val" id="ccor-cd-hours">00</span>
+            <span class="cd-lbl">Hours</span>
+          </div>
+          <span class="cd-divider">:</span>
+          <div class="cd-box">
+            <span class="cd-val" id="ccor-cd-mins">00</span>
+            <span class="cd-lbl">Mins</span>
+          </div>
+          <span class="cd-divider">:</span>
+          <div class="cd-box">
+            <span class="cd-val" id="ccor-cd-secs">00</span>
+            <span class="cd-lbl">Secs</span>
+          </div>
+        </div>
+        <div class="countdown-target-note" id="ccor-sa-countdown-deadline">Ends: Wednesday, Sept 30 @ 4:30 PM EDT</div>
+      </div>
+      <div class="auction-sync-bar">
+        <span>⟳ Auto-updates in <span id="ccor-sa-time-left">30</span>s</span>
         <div class="timer-bar">
           <div class="timer-fill" id="ccor-sa-timer-fill"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- 25% OFF PRICE DROP NOTICE BANNER -->
+  <div class="price-drop-alert-banner">
+    <div class="price-drop-badge">🔥 25% OFF STARTING BIDS</div>
+    <div class="price-drop-text">
+      <strong>Special Auction Price Drop!</strong> All starting minimum bids have just been <strong>lowered by 25%</strong> across all available artwork pieces. Every dollar raised directly funds animal rescue and veterinary care. Place your bids today!
+    </div>
+  </div>
+
+  <!-- GULF COAST HUMANE SOCIETY BENEFIT SHOWCASE -->
+  <div class="charity-spotlight-card">
+    <div class="charity-spotlight-top">
+      <div class="charity-branding">
+        <div class="charity-logo-frame">
+          <a href="https://gulfcoasthumanesociety.org/" target="_blank" rel="noopener">
+            <img src="https://static.wixstatic.com/media/0b6856_922812e3d1084c00b0cffd82c95bf076~mv2.png"
+              alt="Gulf Coast Humane Society Logo">
+          </a>
+        </div>
+        <div class="charity-info-text">
+          <div class="charity-eyebrow">🐾 100% OF AUCTION PROCEEDS BENEFIT</div>
+          <h3>Gulf Coast Humane Society</h3>
+          <p>Saving lives, restoring health, and finding forever homes for abandoned and shelter animals in SWFL.</p>
+        </div>
+      </div>
+      <div class="charity-verified-badge">
+        <span>🐕‍🦺 501(c)(3) No-Kill Shelter Partner</span>
+      </div>
+    </div>
+    <div class="charity-pillars-row">
+      <div class="charity-pillar-item">
+        <span class="charity-pillar-icon">🏥</span>
+        <div>
+          <strong>Life-Saving Veterinary Care</strong>
+          <span>Provides critical surgery, wound care, vaccinations, and medications for sick & injured rescues.</span>
+        </div>
+      </div>
+      <div class="charity-pillar-item">
+        <span class="charity-pillar-icon">🏡</span>
+        <div>
+          <strong>Shelter & Loving Adoptions</strong>
+          <span>Offers safe shelter, daily nutrition, and enrichment until each pet finds their forever family.</span>
+        </div>
+      </div>
+      <div class="charity-pillar-item">
+        <span class="charity-pillar-icon">🐾</span>
+        <div>
+          <strong>Community & Pet Food Pantry</strong>
+          <span>Helps local families keep pets fed and at home through pet pantry and spay/neuter assistance.</span>
         </div>
       </div>
     </div>
@@ -471,6 +882,10 @@
     <div class="bid-modal">
       <button class="modal-close" id="ccor-sa-modal-close">&times;</button>
       <h3 class="modal-title" id="ccor-sa-modal-item-name">Place Bid</h3>
+      <div class="modal-charity-note">
+        <span style="font-size:20px;">🐾</span>
+        <div><strong>100% of your bid</strong> directly supports life-saving medical care, shelter, and forever adoptions at <strong>Gulf Coast Humane Society</strong>.</div>
+      </div>
       <p class="min-bid-notice" id="ccor-sa-modal-min-bid">Minimum next bid: $<span>0</span></p>
 
       <form id="ccor-sa-bid-form">
@@ -576,23 +991,145 @@
       }
     }
 
+    const ORIGINAL_STARTING_BIDS = {
+      "transit miniature": 35,
+      "prismatic petals": 275,
+      "roseate bloom": 75,
+      "spectrum tresses": 300,
+      "smokescreen silhouette": 125,
+      "metropolitan transit": 335,
+      "echoes of the underground": 75,
+      "violet blossom": 75
+    };
+
+    // AUCTION DEADLINE: End of September — Wednesday, September 30, 2026 @ 4:30 PM EDT
+    const AUCTION_END_TIMESTAMP = new Date("2026-09-30T16:30:00-04:00").getTime();
+
+    function isAuctionClosed() {
+      return Date.now() >= AUCTION_END_TIMESTAMP;
+    }
+
+    let countdownInterval;
+
+    function updateCountdown() {
+      const now = Date.now();
+      const distance = AUCTION_END_TIMESTAMP - now;
+
+      const heading = document.getElementById('ccor-sa-countdown-heading');
+      const digits = document.getElementById('ccor-sa-countdown-digits');
+      const deadline = document.getElementById('ccor-sa-countdown-deadline');
+
+      if (distance <= 0) {
+        if (countdownInterval) clearInterval(countdownInterval);
+        if (heading) heading.innerHTML = `🔒 AUCTION CONCLUDED`;
+        if (digits) {
+          digits.innerHTML = `<div class="auction-closed-pill">BIDDING CLOSED</div>`;
+        }
+        if (deadline) {
+          deadline.innerText = `Bidding ended September 30 @ 4:30 PM EDT`;
+        }
+
+        // Update announcement banner to ended state
+        const bannerBadge = document.querySelector('.price-drop-alert-banner .price-drop-badge');
+        const bannerText = document.querySelector('.price-drop-alert-banner .price-drop-text');
+        if (bannerBadge && !bannerBadge.dataset.closed) {
+          bannerBadge.dataset.closed = "true";
+          bannerBadge.style.background = "#dc2626";
+          bannerBadge.innerHTML = `🏆 AUCTION CLOSED`;
+          if (bannerText) {
+            bannerText.innerHTML = `<strong>Bidding has officially closed!</strong> The silent auction ended on September 30, 2026 at 4:30 PM. Thank you to all who supported the Gulf Coast Humane Society!`;
+          }
+        }
+
+        // Disable any active bid buttons
+        const bidButtons = document.querySelectorAll('.btn-bid:not(.btn-bid-closed)');
+        bidButtons.forEach(btn => {
+          btn.disabled = true;
+          btn.classList.add('btn-bid-closed');
+          btn.innerText = "Bidding Closed";
+        });
+        return;
+      }
+
+      const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+      const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+      const minutes = Math.floor((distance % (1000 * 60)) / (1000 * 60));
+      const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+      const dEl = document.getElementById('ccor-cd-days');
+      const hEl = document.getElementById('ccor-cd-hours');
+      const mEl = document.getElementById('ccor-cd-mins');
+      const sEl = document.getElementById('ccor-cd-secs');
+
+      if (dEl) dEl.innerText = String(days).padStart(2, '0');
+      if (hEl) hEl.innerText = String(hours).padStart(2, '0');
+      if (mEl) mEl.innerText = String(minutes).padStart(2, '0');
+      if (sEl) sEl.innerText = String(seconds).padStart(2, '0');
+    }
+
+    function startAuctionCountdown() {
+      updateCountdown();
+      if (!isAuctionClosed()) {
+        countdownInterval = setInterval(updateCountdown, 1000);
+      }
+    }
+
     function renderItems() {
       const grid = document.getElementById('ccor-sa-auction-grid');
       if (!grid) return;
       grid.innerHTML = '';
 
+      const closed = isAuctionClosed();
+
       auctionItems.forEach(item => {
-        const currentBid = item.current_bid ? item.current_bid : item.starting_bid;
-        const isStarted = !!item.current_bid;
+        const isStarted = Number(item.current_bid) > 0;
+        const currentBid = isStarted ? item.current_bid : item.starting_bid;
 
         const card = document.createElement('div');
         card.className = 'auction-card';
 
-        const highestBidderText = isStarted ? "Highest Bidder: " + item.highest_bidder : "Starting Bid";
+        let highestBidderText;
+        if (closed) {
+          highestBidderText = isStarted 
+            ? `Winning Bid: $${currentBid} (${item.highest_bidder})`
+            : "Bidding ended with no bids";
+        } else {
+          highestBidderText = isStarted 
+            ? "Highest Bidder: " + item.highest_bidder 
+            : "Starting Bid &bull; No bids yet &mdash; Be first!";
+        }
+
         const title = item.title_placeholder !== '[Title Placeholder]' ? item.title_placeholder : item.name;
+
+        const key = (item.name || item.creative_name || '').toLowerCase().trim();
+        const origBid = ORIGINAL_STARTING_BIDS[key] || Math.round(item.starting_bid / 0.75);
+
+        // Only keep the 25% OFF badge on the image (removed 100% to GCHS badge on image per request)
+        const discountBadgeHtml = !isStarted 
+          ? `<div class="card-badge-discount">🔥 25% OFF STARTING BID</div>` 
+          : ``;
+
+        const bidDisplayHtml = !isStarted ? `
+          <div class="discount-save-tag">✨ Starting Bid Lowered by 25%</div>
+          <div class="bid-pricing-container">
+            <span class="original-strikethrough">$${origBid}</span>
+            <p class="current-bid" style="color: #16a34a !important;">$${currentBid}</p>
+          </div>
+          <p class="highest-bidder">${highestBidderText}</p>
+          <div class="card-charity-footnote">🐾 100% of proceeds support GCHS pets</div>
+        ` : `
+          <p class="current-bid">$${currentBid}</p>
+          <p class="highest-bidder">${highestBidderText}</p>
+          <div class="card-charity-footnote">🐾 100% of proceeds support GCHS pets</div>
+        `;
+
+        const actionButtonHtml = closed
+          ? `<button class="btn-bid btn-bid-closed" disabled>Bidding Closed</button>`
+          : `<button class="btn-bid" data-item-id="${item.id}">Place Bid</button>`;
 
         card.innerHTML = `
         <div class="auction-img-wrapper" data-item-id="${item.id}">
+          ${discountBadgeHtml}
           <img src="${item.image_url}" class="auction-img" alt="${item.name}">
         </div>
         <div class="auction-content">
@@ -601,24 +1138,25 @@
           <p class="auction-desc">${item.desc_placeholder}</p>
           
           <div class="auction-bid-info">
-            <p class="current-bid">$${currentBid}</p>
-            <p class="highest-bidder">${highestBidderText}</p>
+            ${bidDisplayHtml}
           </div>
 
-          <button class="btn-bid" data-item-id="${item.id}">Place Bid</button>
+          ${actionButtonHtml}
         </div>
       `;
         grid.appendChild(card);
       });
 
       // Attach event listeners safely to new buttons and images
-      const bidButtons = grid.querySelectorAll('.btn-bid');
-      bidButtons.forEach(btn => {
-        btn.addEventListener('click', (e) => {
-          const id = parseInt(e.target.getAttribute('data-item-id'), 10);
-          openBidModal(id);
+      if (!closed) {
+        const bidButtons = grid.querySelectorAll('.btn-bid:not(.btn-bid-closed)');
+        bidButtons.forEach(btn => {
+          btn.addEventListener('click', (e) => {
+            const id = parseInt(e.target.getAttribute('data-item-id'), 10);
+            openBidModal(id);
+          });
         });
-      });
+      }
 
       const imgWrappers = grid.querySelectorAll('.auction-img-wrapper');
       imgWrappers.forEach(img => {
@@ -651,14 +1189,29 @@
     }
 
     function openBidModal(itemId) {
+      if (isAuctionClosed()) {
+        alert("Bidding for this silent auction closed on September 30 at 4:30 PM. Thank you for your support!");
+        return;
+      }
+
       const item = auctionItems.find(i => i.id === itemId);
       if (!item) return;
 
-      const minBid = item.current_bid ? item.current_bid + 5 : item.starting_bid;
+      const isStarted = Number(item.current_bid) > 0;
+      const minBid = isStarted ? item.current_bid + 5 : item.starting_bid;
+      const key = (item.name || item.creative_name || '').toLowerCase().trim();
+      const origBid = ORIGINAL_STARTING_BIDS[key] || Math.round(item.starting_bid / 0.75);
 
       document.getElementById('ccor-sa-bid-item-id').value = item.id;
-      document.getElementById('ccor-sa-modal-item-name').innerText = "Bid on: " + item.name;
-      document.querySelector('#ccor-sa-modal-min-bid span').innerText = minBid;
+      document.getElementById('ccor-sa-modal-item-name').innerText = "Bid on: " + (item.title_placeholder !== '[Title Placeholder]' ? item.title_placeholder : item.name);
+
+      const minBidNotice = document.getElementById('ccor-sa-modal-min-bid');
+      if (!isStarted) {
+        minBidNotice.innerHTML = `Minimum Starting Bid: <strong style="color:#16a34a; font-size:16px;">$${minBid}</strong> <span style="text-decoration:line-through; color:#94a3b8; margin-left:6px;">$${origBid}</span> <span style="background:#ea580c; color:#fff; font-size:10px; font-weight:700; padding:2px 6px; border-radius:4px; margin-left:6px;">25% OFF</span>`;
+      } else {
+        minBidNotice.innerHTML = `Minimum next bid: $<span>${minBid}</span>`;
+      }
+
       document.getElementById('ccor-sa-bid-amount').min = minBid;
       document.getElementById('ccor-sa-bid-amount').value = minBid;
 
@@ -672,20 +1225,42 @@
       const item = auctionItems.find(i => i.id === itemId);
       if (!item) return;
 
-      const currentBid = item.current_bid ? item.current_bid : item.starting_bid;
+      const closed = isAuctionClosed();
+      const isStarted = Number(item.current_bid) > 0;
+      const currentBid = isStarted ? item.current_bid : item.starting_bid;
       const title = item.title_placeholder !== '[Title Placeholder]' ? item.title_placeholder : item.name;
+      const key = (item.name || item.creative_name || '').toLowerCase().trim();
+      const origBid = ORIGINAL_STARTING_BIDS[key] || Math.round(item.starting_bid / 0.75);
 
       document.getElementById('ccor-sa-image-modal-img').src = item.image_url;
       document.getElementById('ccor-sa-image-modal-title').innerText = title;
       document.getElementById('ccor-sa-image-modal-dims').innerText = item.dimensions;
       document.getElementById('ccor-sa-image-modal-desc').innerText = item.desc_placeholder;
-      document.getElementById('ccor-sa-image-modal-bid').innerText = "$" + currentBid;
+
+      const bidDisplay = document.getElementById('ccor-sa-image-modal-bid');
+      if (!isStarted) {
+        bidDisplay.innerHTML = `<span style="font-size:16px; text-decoration:line-through; color:#94a3b8; margin-right:6px;">$${origBid}</span><span style="color:#16a34a;">$${currentBid}</span> <span style="font-size:11px; background:#ea580c; color:#fff; padding:2px 6px; border-radius:4px; vertical-align:middle;">25% OFF</span>`;
+      } else {
+        bidDisplay.innerText = "$" + currentBid;
+      }
 
       const btn = document.getElementById('ccor-sa-image-modal-btn');
-      btn.onclick = () => openBidModal(item.id);
+      if (closed) {
+        btn.disabled = true;
+        btn.classList.add('btn-bid-closed');
+        btn.innerText = "Bidding Closed";
+        btn.onclick = null;
+      } else {
+        btn.disabled = false;
+        btn.classList.remove('btn-bid-closed');
+        btn.innerText = "Place Bid";
+        btn.onclick = () => openBidModal(item.id);
+      }
 
       document.getElementById('ccor-sa-image-modal-overlay').classList.add('active');
     }
+
+
 
     // Setup DOM event listeners safely
     document.addEventListener('DOMContentLoaded', () => {
@@ -714,6 +1289,11 @@
       if (bidForm) {
         bidForm.onsubmit = async (e) => {
           e.preventDefault();
+
+          if (isAuctionClosed()) {
+            alert("Bidding is now closed. The auction concluded on September 30 at 4:30 PM. Thank you for your support!");
+            return;
+          }
 
           const submitBtn = document.getElementById('ccor-sa-btn-submit-bid');
           submitBtn.disabled = true;
@@ -761,6 +1341,7 @@
       // Initialization
       fetchAuctionState();
       startTimer();
+      startAuctionCountdown();
     });
 
     // Fallback in case DOMContentLoaded already fired before this script loaded (often true for async blocks)
@@ -771,8 +1352,10 @@
           fetchAuctionState();
           startTimer();
         }
+        startAuctionCountdown();
       }, 100);
     }
+
 
   })();
 </script>

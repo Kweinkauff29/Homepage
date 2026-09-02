@@ -105,6 +105,16 @@ const ADMIN_HTML = `<!DOCTYPE html>
   </div>
 
   <!-- Summary Statistics -->
+  <div style="background: linear-gradient(135deg, #fff7ed 0%, #ffedd5 100%); border: 1px solid #fed7aa; border-left: 5px solid #ea580c; padding: 14px 20px; border-radius: 10px; margin-bottom: 20px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 10px;">
+    <div>
+      <strong style="color: #9a3412;">🔥 Active Promo: 25% Off Starting Bids</strong>
+      <p style="color: #7c2d12; font-size: 13px; margin: 2px 0 0 0;">All minimum starting bids have been discounted by 25% to maximize donor engagement and fund rescue efforts.</p>
+    </div>
+    <div style="background: #ffffff; padding: 6px 14px; border-radius: 20px; font-size: 12px; font-weight: 700; color: #0d9488; border: 1px solid #99f6e4;">
+      🐾 100% Proceeds Support Gulf Coast Humane Society
+    </div>
+  </div>
+
   <div class="stats-grid">
     <div class="stat-card">
       <div class="stat-label">Total Bids Placed</div>
@@ -118,7 +128,12 @@ const ADMIN_HTML = `<!DOCTYPE html>
       <div class="stat-label">Unique Bidders</div>
       <div class="stat-value" id="stat-unique-bidders">0</div>
     </div>
+    <div class="stat-card" style="border-left-color: #ea580c;">
+      <div class="stat-label">Benefiting Charity</div>
+      <div class="stat-value" style="font-size: 16px; color: #0f766e; margin-top: 6px; font-weight: 700;">Gulf Coast Humane Society 🐾</div>
+    </div>
   </div>
+
 
   <!-- Controls Bar -->
   <div class="controls-bar">
@@ -436,6 +451,14 @@ export default {
       }
 
       if (request.method === 'POST' && path === '/api/bid') {
+        // Enforce auction end deadline: Wednesday, September 30, 2026 @ 4:30 PM EDT
+        const AUCTION_END_TIMESTAMP = new Date("2026-09-30T16:30:00-04:00").getTime();
+        if (Date.now() >= AUCTION_END_TIMESTAMP) {
+          return new Response(JSON.stringify({ 
+            error: 'Bidding is now closed. The silent auction concluded on September 30, 2026 at 4:30 PM.' 
+          }), { status: 400, headers: corsHeaders });
+        }
+
         const body = await request.json();
         const { item_id, amount, first_name, last_name, email, phone } = body;
 

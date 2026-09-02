@@ -4255,7 +4255,7 @@
       background: rgba(245, 158, 11, 0.05);
     }
 
-    .user-col-mariam {
+    .user-col-monica {
       background: rgba(6, 182, 212, 0.05);
     }
 
@@ -4276,7 +4276,7 @@
       background: rgba(245, 158, 11, 0.1);
     }
 
-    body[data-theme="dark"] .user-col-mariam {
+    body[data-theme="dark"] .user-col-monica {
       background: rgba(6, 182, 212, 0.1);
     }
 
@@ -4706,7 +4706,7 @@
         <option value="">Loading team...</option>
       </select>
       <button id="user-select-confirm">Open Wrap Sheet</button>
-      <small>This is internal for CCOR: Meighan, Kevin, Erica, Jenna & Mariam.</small>
+      <small>This is internal for CCOR: Meighan, Kevin, Erica, Jenna & Monica.</small>
     </div>
   </div>
 
@@ -5479,7 +5479,7 @@
           <div class="projects-grid" id="projects-grid"></div>
         </section>
 
-        <!-- Weekly Tasks (BETA - Jenna and Mariam) -->
+        <!-- Weekly Tasks (BETA - Jenna and Monica) -->
         <section class="panel draggable-section" id="section-weekly-tasks" draggable="true" style="display: none;">
           <div class="panel-header">
             <span class="section-drag-handle" title="Drag to reorder">⋮⋮</span>
@@ -5827,12 +5827,12 @@
       "Team Work": "var(--engage)" // Blue
     };
 
-    const CORE_TEAM_NAME_ORDER = ["Erica", "Kevin", "Jenna", "Mariam", "Meighan"];
+    const CORE_TEAM_NAME_ORDER = ["Erica", "Kevin", "Jenna", "Monica", "Meighan"];
     const TEAM_COLOR_BY_NAME = {
       Erica: "#ec4899",
       Kevin: "#10b981",
       Jenna: "#f59e0b",
-      Mariam: "#06b6d4",
+      Monica: "#06b6d4",
       Meighan: "#8b5cf6"
     };
 
@@ -13857,13 +13857,15 @@ Raw Text:
     }
 
     function isWeeklyTasksUser() {
-      // Show weekly tasks for users with "jenna" in their name or email.
+      // Show weekly tasks for users with "jenna" or "monica" in their name or email.
       if (!state.currentUser) return false;
       const name = (state.currentUser.name || "").toLowerCase();
       const email = (state.currentUser.email || "").toLowerCase();
       return (
         name.includes("jenna") ||
-        email.includes("jenna")
+        name.includes("monica") ||
+        email.includes("jenna") ||
+        email.includes("monica")
       );
     }
 
@@ -15035,7 +15037,8 @@ Raw Text:
         existing.remove();
       }
 
-      const senderName = cheer.fromName || "A teammate";
+      let senderName = cheer.fromName || "A teammate";
+      if (senderName.toLowerCase().includes("mariam")) senderName = "Monica";
       
       const messages = [
         `${senderName} noticed your hard work!`,
@@ -15101,9 +15104,10 @@ Raw Text:
       card.appendChild(title);
       card.appendChild(subtitle);
       if (cheer.reason) {
+        const cleanedReason = String(cheer.reason).replace(/Mariam/gi, "Monica");
         const reasonEl = document.createElement("div");
         reasonEl.className = "full-celebration-reason";
-        reasonEl.innerHTML = `&ldquo;${escapeHtml(cheer.reason)}&rdquo;`;
+        reasonEl.innerHTML = `&ldquo;${escapeHtml(cleanedReason)}&rdquo;`;
         card.appendChild(reasonEl);
       }
       card.appendChild(closeBtn);
@@ -15195,7 +15199,7 @@ Raw Text:
       
       const names = state.users && state.users.length > 0 
         ? state.users.map(u => u.name) 
-        : ["Erica", "Mariam", "Meighan", "Kevin"];
+        : ["Erica", "Jenna", "Monica", "Meighan", "Kevin"];
 
       names.forEach(name => {
         const opt = document.createElement("option");
@@ -16378,7 +16382,7 @@ Raw Text:
           textarea.dataset.row = r;
           textarea.dataset.col = c;
 
-          const entry = data.find(d => d.category === "priorities" && d.row_key === r && d.col_key === c);
+          const entry = data.find(d => d.category === "priorities" && d.row_key === r && (d.col_key === c || (c === "Monica" && d.col_key === "Mariam")));
           const initVal = entry ? entry.value : "";
           textarea.value = initVal;
           textarea.dataset.originalValue = initVal;
@@ -17352,7 +17356,8 @@ Raw Text:
       <div class="cheer-debug-row" style="margin-bottom: 6px;">
         <select id="debug-cheer-sender" class="cheer-debug-select" style="width: 100%;">
           <option value="Erica">Erica</option>
-          <option value="Mariam">Mariam</option>
+          <option value="Jenna">Jenna</option>
+          <option value="Monica">Monica</option>
           <option value="Meighan">Meighan</option>
           <option value="Kevin">Kevin</option>
         </select>

@@ -3550,7 +3550,7 @@
       background: rgba(245, 158, 11, 0.05);
     }
 
-    .user-col-mariam {
+    .user-col-Monica {
       background: rgba(6, 182, 212, 0.05);
     }
 
@@ -3575,7 +3575,7 @@
       background: rgba(245, 158, 11, 0.1);
     }
 
-    body[data-theme="dark"] .user-col-mariam {
+    body[data-theme="dark"] .user-col-Monica {
       background: rgba(6, 182, 212, 0.1);
     }
 
@@ -3999,7 +3999,7 @@
         <option value="">Loading team...</option>
       </select>
       <button id="user-select-confirm">Open Wrap Sheet</button>
-      <small>This is internal for BER: Meighan, Kevin, Erica, Jenna, Katie & Mariam.</small>
+      <small>This is internal for BER: Meighan, Kevin, Erica, Jenna, Katie & Monica.</small>
     </div>
   </div>
 
@@ -4769,7 +4769,7 @@
           <div class="projects-grid" id="projects-grid"></div>
         </section>
 
-        <!-- Weekly Tasks (BETA - Jenna and Mariam) -->
+        <!-- Weekly Tasks (BETA - Jenna and Monica) -->
         <section class="panel draggable-section" id="section-weekly-tasks" draggable="true" style="display: none;">
           <div class="panel-header">
             <span class="section-drag-handle" title="Drag to reorder">⋮⋮</span>
@@ -5025,13 +5025,13 @@
       "Team Work": "var(--engage)" // Blue
     };
 
-    const CORE_TEAM_NAME_ORDER = ["Erica", "Katie", "Kevin", "Jenna", "Mariam", "Meighan"];
+    const CORE_TEAM_NAME_ORDER = ["Erica", "Katie", "Kevin", "Jenna", "Monica", "Meighan"];
     const TEAM_COLOR_BY_NAME = {
       Erica: "#ec4899",
       Katie: "#3b82f6",
       Kevin: "#10b981",
       Jenna: "#f59e0b",
-      Mariam: "#06b6d4",
+      Monica: "#06b6d4",
       Meighan: "#8b5cf6"
     };
 
@@ -12152,15 +12152,15 @@
     }
 
     function isWeeklyTasksUser() {
-      // Show weekly tasks for users with "jenna" or "mariam" in their name or email.
+      // Show weekly tasks for users with "jenna" or "Monica" in their name or email.
       if (!state.currentUser) return false;
       const name = (state.currentUser.name || "").toLowerCase();
       const email = (state.currentUser.email || "").toLowerCase();
       return (
         name.includes("jenna") ||
         email.includes("jenna") ||
-        name.includes("mariam") ||
-        email.includes("mariam")
+        name.includes("Monica") ||
+        email.includes("Monica")
       );
     }
 

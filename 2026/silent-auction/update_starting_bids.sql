@@ -1,10 +1,18 @@
--- Update script to set starting bids and artwork descriptions without dropping the database
-UPDATE items SET starting_bid = 35, desc_placeholder = 'A small-scale, atmospheric depiction of an urban transit scene. Capturing the motion, lights, and gritty charm of the city subway system, this miniature brings a slice of metropolitan life to your collection.' WHERE creative_name = 'Transit Miniature';
-UPDATE items SET starting_bid = 275, desc_placeholder = 'A stunning explosion of colors, this piece features a detailed arrangement of multi-colored flowers. The intricate details and vivid color palette create a lively, refreshing focal point.' WHERE creative_name = 'Prismatic Petals';
-UPDATE items SET starting_bid = 75, desc_placeholder = 'A delicate, elegant close-up of a pink flower in full bloom. Its soft petals, gentle lighting, and pastel hues bring a sense of serenity, natural beauty, and calm to your home.' WHERE creative_name = 'Roseate Bloom';
-UPDATE items SET starting_bid = 650, desc_placeholder = 'A breathtaking, large-scale contemporary painting featuring cascading waves of vibrant, rainbow-colored hair. The dynamic movement and brilliant color spectrum make this a showstopping center of attention.' WHERE creative_name = 'Spectrum Tresses';
-UPDATE items SET starting_bid = 125, desc_placeholder = 'A stylish and dramatic portrait featuring a subject surrounded by wisps of smoke. Its high-contrast, moody aesthetic evokes vintage cinema and mysterious allure.' WHERE creative_name = 'Smokescreen Silhouette';
-UPDATE items SET starting_bid = 335, desc_placeholder = 'A large, striking representation of a bustling metropolitan subway station. Bold lines and deep perspective draw the viewer into the rhythmic, energetic heartbeat of city transit.' WHERE creative_name = 'Metropolitan Transit';
-UPDATE items SET starting_bid = 75, desc_placeholder = 'An intriguing and atmospheric depiction of a tunnel, playing with light, shadow, and deep perspective. A captivating abstract study of journey, transition, and architectural depth.' WHERE creative_name = 'Echoes of the Underground';
-UPDATE items SET starting_bid = 75, desc_placeholder = 'A rich and dramatic floral portrait showcasing a purple flower in exquisite detail. The deep violet tones and velvet textures create a sophisticated, elegant, and timeless botanical statement.' WHERE creative_name = 'Violet Blossom';
+-- 25% Off Starting Bids Update Script for auction-db (D1)
+-- Spectrum Tresses: $300 -> $225 (25% off)
+-- Transit Miniature: $35 -> $25
+-- Prismatic Petals: $275 -> $205
+-- Roseate Bloom: $75 -> $55
+-- Smokescreen Silhouette: $125 -> $95
+-- Metropolitan Transit: $335 -> $250
+-- Echoes of the Underground: $75 -> $55
+-- Violet Blossom: $75 -> $55
 
+UPDATE items SET starting_bid = 25 WHERE creative_name = 'Transit Miniature';
+UPDATE items SET starting_bid = 205 WHERE creative_name = 'Prismatic Petals';
+UPDATE items SET starting_bid = 55 WHERE creative_name = 'Roseate Bloom';
+UPDATE items SET starting_bid = 225 WHERE creative_name = 'Spectrum Tresses';
+UPDATE items SET starting_bid = 95 WHERE creative_name = 'Smokescreen Silhouette';
+UPDATE items SET starting_bid = 250 WHERE creative_name = 'Metropolitan Transit';
+UPDATE items SET starting_bid = 55 WHERE creative_name = 'Echoes of the Underground';
+UPDATE items SET starting_bid = 55 WHERE creative_name = 'Violet Blossom';
