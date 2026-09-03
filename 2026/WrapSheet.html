@@ -2408,78 +2408,222 @@
       background: #e0f2fe;
     }
 
-    /* View Options Toolbar */
+    /* ==========================================================================
+       CUSTOMIZE / DRAG TO REORDER BAR
+       ========================================================================== */
     .view-options-bar {
       display: flex;
       flex-wrap: wrap;
       gap: 8px;
-      padding: 8px;
-
-      /* Match .panel style */
+      padding: 8px 10px;
       background: var(--panel-elevated);
       border: 1px solid var(--panel-border);
       border-radius: var(--radius-lg);
       box-shadow: var(--shadow-md);
-
-      margin-bottom: 24px;
+      margin-bottom: 20px;
       align-items: center;
-      justify-content: space-between;
-      /* Full width distribution */
+    }
+
+    .customize-legend-block {
+      display: flex;
+      flex-direction: column;
+      gap: 1px;
+      padding: 6px 12px;
+      background: var(--bg-main, #f8fafc);
+      border: 1px solid var(--panel-border, #e2e8f0);
+      border-radius: var(--radius-md, 6px);
+      user-select: none;
+      margin-right: 4px;
+    }
+
+    .customize-legend-title {
+      font-size: 11px;
+      font-weight: 800;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      color: var(--ink);
+      line-height: 1.2;
+    }
+
+    .customize-legend-subtitle {
+      font-size: 9px;
+      font-weight: 500;
+      color: var(--ink-soft);
+      white-space: nowrap;
+      line-height: 1.2;
     }
 
     .view-option {
       background: transparent;
-      border: 1px solid var(--panel-border);
+      border: 1px dashed var(--panel-border);
       color: var(--ink-soft);
-      padding: 8px 16px;
-      border-radius: var(--radius-md);
+      padding: 7px 14px;
+      border-radius: var(--radius-md, 8px);
       cursor: pointer;
-      font-size: 0.9rem;
-      font-weight: 500;
+      font-size: 0.85rem;
+      font-weight: 600;
       transition: all 0.2s ease;
-      display: flex;
+      display: inline-flex;
       align-items: center;
       justify-content: center;
-      gap: 8px;
+      gap: 6px;
       user-select: none;
-      flex: 1;
-      /* Grow to fill space */
+      flex: 1 1 auto;
       text-align: center;
-      min-width: 140px;
-      /* Prevent too smushed */
+      min-width: 125px;
+      opacity: 0.55;
     }
 
     .view-option:hover {
-      background: var(--bg-main);
+      opacity: 0.9;
       color: var(--ink);
-      border-color: var(--ink-soft);
     }
 
     .view-option.active {
-      background: rgba(3, 170, 225, 0.15);
-      color: var(--accent);
-      border-color: var(--accent);
-      box-shadow: none;
+      opacity: 1;
+      border-style: solid;
+      box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
     }
 
     .view-option.active::after {
       content: "✓";
-      font-weight: bold;
-      margin-left: 6px;
+      font-weight: 800;
+      font-size: 0.85rem;
+      margin-left: 4px;
+      line-height: 1;
     }
 
     .drag-handle {
       margin-left: 4px;
-      color: var(--ink-soft);
-      font-size: 14px;
-      opacity: 0.4;
+      color: inherit;
+      font-size: 13px;
+      opacity: 0.45;
       cursor: grab;
       line-height: 1;
+      user-select: none;
     }
 
     .view-option:hover .drag-handle {
-      opacity: 0.8;
-      color: var(--theme-primary);
+      opacity: 0.85;
+    }
+
+    .view-option.dragging {
+      opacity: 0.45 !important;
+      cursor: grabbing !important;
+      transform: scale(0.97);
+      box-shadow: var(--shadow-md);
+    }
+
+    /* Light mode tints */
+    .view-option.opt-daily.active {
+      background: #DDF4FB;
+      border-color: #60C4DF;
+      color: #0c4a6e;
+    }
+    .view-option.opt-daily:hover {
+      border-color: #60C4DF;
+    }
+
+    .view-option.opt-metrics.active {
+      background: #DDF5EF;
+      border-color: #61BFA8;
+      color: #064e3b;
+    }
+    .view-option.opt-metrics:hover {
+      border-color: #61BFA8;
+    }
+
+    .view-option.opt-strategy.active {
+      background: #E9E7FA;
+      border-color: #9187D8;
+      color: #312e81;
+    }
+    .view-option.opt-strategy:hover {
+      border-color: #9187D8;
+    }
+
+    .view-option.opt-class-tracker.active {
+      background: #FFF0D8;
+      border-color: #E8A64E;
+      color: #78350f;
+    }
+    .view-option.opt-class-tracker:hover {
+      border-color: #E8A64E;
+    }
+
+    .view-option.opt-goals.active {
+      background: #E5F4DF;
+      border-color: #83B96F;
+      color: #14532d;
+    }
+    .view-option.opt-goals:hover {
+      border-color: #83B96F;
+    }
+
+    .view-option.opt-tools.active {
+      background: #E8EEF3;
+      border-color: #91A5B5;
+      color: #1e293b;
+    }
+    .view-option.opt-tools:hover {
+      border-color: #91A5B5;
+    }
+
+    .view-option.opt-ai-prompts.active {
+      background: #F1E5F5;
+      border-color: #B27ABB;
+      color: #581c87;
+    }
+    .view-option.opt-ai-prompts:hover {
+      border-color: #B27ABB;
+    }
+
+    /* Dark mode tints */
+    body[data-theme="dark"] .customize-legend-block {
+      background: #181818;
+      border-color: #333333;
+    }
+
+    body[data-theme="dark"] .view-option.opt-daily.active {
+      background: rgba(96, 196, 223, 0.18);
+      border-color: #60C4DF;
+      color: #bae6fd;
+    }
+
+    body[data-theme="dark"] .view-option.opt-metrics.active {
+      background: rgba(97, 191, 168, 0.18);
+      border-color: #61BFA8;
+      color: #a7f3d0;
+    }
+
+    body[data-theme="dark"] .view-option.opt-strategy.active {
+      background: rgba(145, 135, 216, 0.22);
+      border-color: #9187D8;
+      color: #ddd6fe;
+    }
+
+    body[data-theme="dark"] .view-option.opt-class-tracker.active {
+      background: rgba(232, 166, 78, 0.22);
+      border-color: #E8A64E;
+      color: #fde68a;
+    }
+
+    body[data-theme="dark"] .view-option.opt-goals.active {
+      background: rgba(131, 185, 111, 0.20);
+      border-color: #83B96F;
+      color: #bbf7d0;
+    }
+
+    body[data-theme="dark"] .view-option.opt-tools.active {
+      background: rgba(145, 165, 181, 0.20);
+      border-color: #91A5B5;
+      color: #cbd5e1;
+    }
+
+    body[data-theme="dark"] .view-option.opt-ai-prompts.active {
+      background: rgba(178, 122, 187, 0.22);
+      border-color: #B27ABB;
+      color: #f5d0fe;
     }
 
     /* Dashboard Layout Overhaul (Flex) */
@@ -5937,6 +6081,232 @@
   color: #a78bfa;
 }
 
+/* ==========================================================================
+   CUSTOMIZE / DRAG TO REORDER BAR COLOR CODING
+   ========================================================================== */
+.view-options-bar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  padding: 8px 10px;
+  background: var(--panel-elevated);
+  border: 1px solid var(--panel-border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-md);
+  margin-bottom: 20px;
+  align-items: center;
+}
+
+.customize-legend-block {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  padding: 6px 12px;
+  background: var(--bg-main, #f8fafc);
+  border: 1px solid var(--panel-border, #e2e8f0);
+  border-radius: var(--radius-md, 6px);
+  user-select: none;
+  margin-right: 4px;
+}
+
+.customize-legend-title {
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--ink);
+  line-height: 1.2;
+}
+
+.customize-legend-subtitle {
+  font-size: 9px;
+  font-weight: 500;
+  color: var(--ink-soft);
+  white-space: nowrap;
+  line-height: 1.2;
+}
+
+.view-option {
+  background: transparent;
+  border: 1px dashed var(--panel-border);
+  color: var(--ink-soft);
+  padding: 7px 14px;
+  border-radius: var(--radius-md, 8px);
+  cursor: pointer;
+  font-size: 0.85rem;
+  font-weight: 600;
+  transition: all 0.2s ease;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  user-select: none;
+  flex: 1 1 auto;
+  text-align: center;
+  min-width: 125px;
+  opacity: 0.55;
+}
+
+.view-option:hover {
+  opacity: 0.9;
+  color: var(--ink);
+}
+
+.view-option.active {
+  opacity: 1;
+  border-style: solid;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
+}
+
+.view-option.active::after {
+  content: "✓";
+  font-weight: 800;
+  font-size: 0.85rem;
+  margin-left: 4px;
+  line-height: 1;
+}
+
+.drag-handle {
+  margin-left: 4px;
+  color: inherit;
+  font-size: 13px;
+  opacity: 0.45;
+  cursor: grab;
+  line-height: 1;
+  user-select: none;
+}
+
+.view-option:hover .drag-handle {
+  opacity: 0.85;
+}
+
+.view-option.dragging {
+  opacity: 0.45 !important;
+  cursor: grabbing !important;
+  transform: scale(0.97);
+  box-shadow: var(--shadow-md);
+}
+
+/* Light mode tints */
+.view-option.opt-daily.active {
+  background: #DDF4FB;
+  border-color: #60C4DF;
+  color: #0c4a6e;
+}
+.view-option.opt-daily:hover {
+  border-color: #60C4DF;
+}
+
+.view-option.opt-metrics.active {
+  background: #DDF5EF;
+  border-color: #61BFA8;
+  color: #064e3b;
+}
+.view-option.opt-metrics:hover {
+  border-color: #61BFA8;
+}
+
+.view-option.opt-strategy.active {
+  background: #E9E7FA;
+  border-color: #9187D8;
+  color: #312e81;
+}
+.view-option.opt-strategy:hover {
+  border-color: #9187D8;
+}
+
+.view-option.opt-class-tracker.active {
+  background: #FFF0D8;
+  border-color: #E8A64E;
+  color: #78350f;
+}
+.view-option.opt-class-tracker:hover {
+  border-color: #E8A64E;
+}
+
+.view-option.opt-goals.active {
+  background: #E5F4DF;
+  border-color: #83B96F;
+  color: #14532d;
+}
+.view-option.opt-goals:hover {
+  border-color: #83B96F;
+}
+
+.view-option.opt-tools.active {
+  background: #E8EEF3;
+  border-color: #91A5B5;
+  color: #1e293b;
+}
+.view-option.opt-tools:hover {
+  border-color: #91A5B5;
+}
+
+.view-option.opt-ai-prompts.active {
+  background: #F1E5F5;
+  border-color: #B27ABB;
+  color: #581c87;
+}
+.view-option.opt-ai-prompts:hover {
+  border-color: #B27ABB;
+}
+
+/* Dark mode tints */
+body[data-theme="dark"] .customize-legend-block,
+[data-theme="dark"] .customize-legend-block {
+  background: #181818;
+  border-color: #333333;
+}
+
+body[data-theme="dark"] .view-option.opt-daily.active,
+[data-theme="dark"] .view-option.opt-daily.active {
+  background: rgba(96, 196, 223, 0.18);
+  border-color: #60C4DF;
+  color: #bae6fd;
+}
+
+body[data-theme="dark"] .view-option.opt-metrics.active,
+[data-theme="dark"] .view-option.opt-metrics.active {
+  background: rgba(97, 191, 168, 0.18);
+  border-color: #61BFA8;
+  color: #a7f3d0;
+}
+
+body[data-theme="dark"] .view-option.opt-strategy.active,
+[data-theme="dark"] .view-option.opt-strategy.active {
+  background: rgba(145, 135, 216, 0.22);
+  border-color: #9187D8;
+  color: #ddd6fe;
+}
+
+body[data-theme="dark"] .view-option.opt-class-tracker.active,
+[data-theme="dark"] .view-option.opt-class-tracker.active {
+  background: rgba(232, 166, 78, 0.22);
+  border-color: #E8A64E;
+  color: #fde68a;
+}
+
+body[data-theme="dark"] .view-option.opt-goals.active,
+[data-theme="dark"] .view-option.opt-goals.active {
+  background: rgba(131, 185, 111, 0.20);
+  border-color: #83B96F;
+  color: #bbf7d0;
+}
+
+body[data-theme="dark"] .view-option.opt-tools.active,
+[data-theme="dark"] .view-option.opt-tools.active {
+  background: rgba(145, 165, 181, 0.20);
+  border-color: #91A5B5;
+  color: #cbd5e1;
+}
+
+body[data-theme="dark"] .view-option.opt-ai-prompts.active,
+[data-theme="dark"] .view-option.opt-ai-prompts.active {
+  background: rgba(178, 122, 187, 0.22);
+  border-color: #B27ABB;
+  color: #f5d0fe;
+}
+
 </style>
 </head>
 
@@ -6461,24 +6831,26 @@
       <!-- Section Toggle Toolbar -->
       <!-- Section Toggle Toolbar -->
       <div class="view-options-bar" id="view-options-bar" style="margin-bottom: 16px;">
-        <div style="display:flex; flex-direction:column; gap:2px; margin-right:auto; padding-left: 4px;">
-          <span style="font-size:12px; font-weight:700; color:var(--ink);">Customize</span>
-          <span style="font-size:10px; color:var(--ink-soft);">Drag to reorder</span>
+        <div class="customize-legend-block">
+          <span class="customize-legend-title">Customize</span>
+          <span class="customize-legend-subtitle">Drag to reorder</span>
         </div>
 
         <!-- Grouped Buttons -->
-        <div class="view-option" draggable="true" data-target="section-daily-tasks,section-backlog">Daily & Backlog
+        <div class="view-option opt-daily" draggable="true" data-target="section-daily-tasks,section-backlog">Daily & Backlog
           <span class="drag-handle">⋮⋮</span>
         </div>
-        <div class="view-option" draggable="true" data-target="section-gamification">Metrics <span
+        <div class="view-option opt-metrics" draggable="true" data-target="section-gamification">Metrics <span
             class="drag-handle">⋮⋮</span></div>
-        <div class="view-option" draggable="true" data-target="section-weekly-strategy,section-projects">Strategy &
+        <div class="view-option opt-strategy" draggable="true" data-target="section-weekly-strategy,section-projects">Strategy &
           Projects <span class="drag-handle">⋮⋮</span></div>
-        <div class="view-option" draggable="true" data-target="section-goals,section-pillars">Goals & Pillars <span
+        <div class="view-option opt-class-tracker" draggable="true" data-target="section-class-tracker">📚 Class Tracker <span
             class="drag-handle">⋮⋮</span></div>
-        <div class="view-option" draggable="true" data-target="section-internal-tools">Internal Tools <span
+        <div class="view-option opt-goals" draggable="true" data-target="section-goals,section-pillars">Goals & Pillars <span
             class="drag-handle">⋮⋮</span></div>
-        <div class="view-option" draggable="true" data-target="section-ai-prompts" id="view-opt-ai-prompts" style="display:none;">AI Prompts <span
+        <div class="view-option opt-tools" draggable="true" data-target="section-internal-tools">Internal Tools <span
+            class="drag-handle">⋮⋮</span></div>
+        <div class="view-option opt-ai-prompts" draggable="true" data-target="section-ai-prompts" id="view-opt-ai-prompts" style="display:none;">AI Prompts <span
             class="drag-handle">⋮⋮</span></div>
       </div>
 
@@ -15412,6 +15784,46 @@ Raw Text:
 
       if (!savedOrder || !Array.isArray(savedOrder)) return;
 
+      // Gracefully upgrade existing staff arrangements:
+      // If saved order does not contain section-class-tracker, insert it non-destructively
+      // after Strategy & Projects (section-projects / section-weekly-strategy) and before Goals & Pillars (section-goals / section-pillars)
+      if (!savedOrder.includes("section-class-tracker")) {
+        const upgraded = [...savedOrder];
+        let insertIdx = -1;
+
+        const projIdx = upgraded.indexOf("section-projects");
+        if (projIdx !== -1) {
+          insertIdx = projIdx + 1;
+        } else {
+          const stratIdx = upgraded.indexOf("section-weekly-strategy");
+          if (stratIdx !== -1) {
+            insertIdx = stratIdx + 1;
+          } else {
+            const goalsIdx = upgraded.indexOf("section-goals");
+            if (goalsIdx !== -1) {
+              insertIdx = goalsIdx;
+            } else {
+              const pillarsIdx = upgraded.indexOf("section-pillars");
+              if (pillarsIdx !== -1) {
+                insertIdx = pillarsIdx;
+              } else {
+                const toolsIdx = upgraded.indexOf("section-internal-tools");
+                if (toolsIdx !== -1) {
+                  insertIdx = toolsIdx;
+                }
+              }
+            }
+          }
+        }
+
+        if (insertIdx !== -1) {
+          upgraded.splice(insertIdx, 0, "section-class-tracker");
+        } else {
+          upgraded.push("section-class-tracker");
+        }
+        savedOrder = upgraded;
+      }
+
       // Reorder sections
       savedOrder.forEach(id => {
         const section = document.getElementById(id);
@@ -17588,20 +18000,41 @@ Raw Text:
       if (typeof prefs === 'string') {
         try { prefs = JSON.parse(prefs); } catch (e) { }
       }
+      if (!prefs || typeof prefs !== "object") return;
 
-      Object.keys(prefs).forEach(sectionId => {
-        const section = document.getElementById(sectionId);
-        const toggle = document.querySelector(`.view-option[data-target="${sectionId}"]`);
+      const toggles = document.querySelectorAll(".view-option");
+      toggles.forEach(toggle => {
+        const targetIds = (toggle.dataset.target || "").split(',').map(s => s.trim()).filter(Boolean);
+        if (targetIds.length === 0) return;
 
-        // If we have a stored preference for this section
-        if (section && toggle && prefs[sectionId] !== undefined) {
-          const isVisible = prefs[sectionId];
-          if (isVisible) {
-            section.style.display = "";
-            section.classList.remove("hidden");
+        // Check if any target in this button has a saved preference
+        let hasSavedPref = false;
+        let shouldBeVisible = true;
+        for (const id of targetIds) {
+          if (prefs[id] !== undefined) {
+            hasSavedPref = true;
+            shouldBeVisible = Boolean(prefs[id]);
+            break;
+          }
+        }
+
+        if (hasSavedPref) {
+          targetIds.forEach(id => {
+            const section = document.getElementById(id);
+            if (section) {
+              if (shouldBeVisible) {
+                section.style.display = "";
+                section.classList.remove("hidden");
+              } else {
+                section.style.display = "none";
+                section.classList.add("hidden");
+              }
+            }
+          });
+
+          if (shouldBeVisible) {
             toggle.classList.add("active");
           } else {
-            section.style.display = "none";
             toggle.classList.remove("active");
           }
         }
