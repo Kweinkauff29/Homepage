@@ -5677,6 +5677,266 @@
   gap: 8px;
 }
 
+/* ===== NMO — NEW MEMBER ORIENTATION ===== */
+
+/* NMO Badge on timeline cards */
+.ct-nmo-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  padding: 2px 7px;
+  border-radius: 4px;
+  background: linear-gradient(135deg, #7c3aed, #a78bfa);
+  color: #fff;
+  white-space: nowrap;
+}
+
+/* NMO Prep progress badge on cards */
+.ct-nmo-prep-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 9px;
+  font-weight: 600;
+  padding: 2px 6px;
+  border-radius: 4px;
+  background: rgba(124, 58, 237, 0.12);
+  color: #7c3aed;
+}
+
+[data-theme="dark"] .ct-nmo-prep-badge {
+  background: rgba(167, 139, 250, 0.15);
+  color: #c4b5fd;
+}
+
+.ct-nmo-prep-badge.prep-needed {
+  background: rgba(245, 158, 11, 0.12);
+  color: #d97706;
+}
+
+[data-theme="dark"] .ct-nmo-prep-badge.prep-needed {
+  background: rgba(245, 158, 11, 0.15);
+  color: #fbbf24;
+}
+
+/* NMO Presenter Panel inside class drawer */
+.ct-presenters-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: 4px;
+}
+
+.ct-presenters-title {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: #7c3aed;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+[data-theme="dark"] .ct-presenters-title {
+  color: #a78bfa;
+}
+
+.ct-presenter-card {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 10px;
+  border-radius: var(--radius-md);
+  background: rgba(124, 58, 237, 0.04);
+  border: 1px solid rgba(124, 58, 237, 0.12);
+}
+
+[data-theme="dark"] .ct-presenter-card {
+  background: rgba(124, 58, 237, 0.08);
+  border-color: rgba(167, 139, 250, 0.15);
+}
+
+.ct-presenter-info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.ct-presenter-name {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--ink);
+}
+
+.ct-presenter-role {
+  font-size: 10px;
+  color: var(--ink-soft);
+  text-transform: capitalize;
+}
+
+.ct-presenter-status {
+  font-size: 10px;
+  font-weight: 600;
+  padding: 2px 6px;
+  border-radius: 4px;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.ct-presenter-status.status-not_notified {
+  background: rgba(239, 68, 68, 0.1);
+  color: #dc2626;
+}
+
+.ct-presenter-status.status-notified {
+  background: rgba(59, 130, 246, 0.1);
+  color: #2563eb;
+}
+
+.ct-presenter-status.status-confirmed {
+  background: rgba(34, 197, 94, 0.1);
+  color: #16a34a;
+}
+
+.ct-presenter-status.status-not_attending {
+  background: rgba(107, 114, 128, 0.1);
+  color: #6b7280;
+}
+
+[data-theme="dark"] .ct-presenter-status.status-not_notified {
+  background: rgba(239, 68, 68, 0.15);
+  color: #f87171;
+}
+
+[data-theme="dark"] .ct-presenter-status.status-notified {
+  background: rgba(59, 130, 246, 0.15);
+  color: #60a5fa;
+}
+
+[data-theme="dark"] .ct-presenter-status.status-confirmed {
+  background: rgba(34, 197, 94, 0.15);
+  color: #4ade80;
+}
+
+[data-theme="dark"] .ct-presenter-status.status-not_attending {
+  background: rgba(107, 114, 128, 0.15);
+  color: #9ca3af;
+}
+
+.ct-presenter-actions {
+  display: flex;
+  gap: 4px;
+  flex-wrap: wrap;
+}
+
+.ct-presenter-actions button {
+  font-size: 10px;
+  padding: 3px 8px;
+  border-radius: 4px;
+  border: 1px solid var(--panel-border);
+  background: transparent;
+  color: var(--ink-soft);
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.ct-presenter-actions button:hover {
+  background: var(--highlight-bg);
+  color: var(--ink);
+}
+
+.ct-add-presenter-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 11px;
+  padding: 5px 10px;
+  border-radius: var(--radius-md);
+  border: 1px dashed var(--panel-border);
+  background: transparent;
+  color: var(--ink-soft);
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.ct-add-presenter-btn:hover {
+  border-color: #7c3aed;
+  color: #7c3aed;
+  background: rgba(124, 58, 237, 0.04);
+}
+
+/* NMO Desk Warning Section */
+.ct-nmo-desk-warning {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 10px 12px;
+  border-radius: var(--radius-md);
+  background: rgba(124, 58, 237, 0.06);
+  border: 1px solid rgba(124, 58, 237, 0.15);
+  margin-top: 8px;
+}
+
+[data-theme="dark"] .ct-nmo-desk-warning {
+  background: rgba(124, 58, 237, 0.1);
+  border-color: rgba(167, 139, 250, 0.2);
+}
+
+.ct-nmo-desk-warning-title {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #7c3aed;
+}
+
+[data-theme="dark"] .ct-nmo-desk-warning-title {
+  color: #a78bfa;
+}
+
+.ct-nmo-desk-warning-item {
+  font-size: 12px;
+  color: var(--ink);
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.ct-nmo-desk-warning-meta {
+  font-size: 10px;
+  color: var(--ink-soft);
+}
+
+.ct-nmo-desk-outstanding {
+  font-size: 11px;
+  color: var(--ink-soft);
+  padding-left: 12px;
+  list-style: disc;
+}
+
+/* NMO Prep task grouping */
+.ct-nmo-prep-header {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: #7c3aed;
+  padding: 6px 0 2px 0;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+[data-theme="dark"] .ct-nmo-prep-header {
+  color: #a78bfa;
+}
+
 </style>
 </head>
 
@@ -18810,6 +19070,20 @@ We need these on file to complete Florida DBPR CE compliance.
 Thank you,
 CCOR Education Team`,
     },
+    nmo_presenter_reminder: {
+      label: "NMO Presenter Reminder",
+      subject: "New Member Orientation — {{class_date}}",
+      body: `Hi {{presenter_name}},
+
+Just a reminder that our New Member Orientation is coming up on {{class_date}} from {{start_time}}–{{end_time}} at CCOR.
+
+We have {{registration_count}} new members registered.
+
+Please let us know if you need anything from us before orientation.
+
+Thanks!
+CCOR Education Team`,
+    },
   });
 
   function renderEmailTemplate(templateKey, tokens = {}) {
@@ -18824,6 +19098,7 @@ CCOR Education Team`,
       location: tokens.location || "CCOR Classroom (25201 Paseo Del Prado, Bonita Springs, FL)",
       zoom_link: tokens.zoom_link || "Link will be emailed prior to class",
       instructor_name: tokens.instructor_name || "Instructor",
+      presenter_name: tokens.presenter_name || "Presenter",
       registration_count: String(tokens.registration_count ?? 0),
       registration_goal: String(tokens.registration_goal ?? 36),
       registration_link: tokens.registration_link || "https://coconutcoastrealtors.growthzoneapp.com",
@@ -18854,6 +19129,7 @@ CCOR Education Team`,
     let next7DaysCount = 0;
     const waitingOnOthersList = [];
     const needsCloseoutList = [];
+    const nmoWarnings = [];
     const now = new Date();
 
     for (const c of classes) {
@@ -18922,6 +19198,24 @@ CCOR Education Team`,
           });
         }
       }
+
+      // 5. NMO Operational Readiness Warnings (separate from Promotion Priority)
+      if (c.program_type === "nmo" && daysUntil >= 0 && daysUntil <= 14) {
+        const nmoPrepProgress = c.nmoPrepProgress || { completed: 0, total: 0 };
+        if (nmoPrepProgress.total > 0 && nmoPrepProgress.completed < nmoPrepProgress.total) {
+          const outstandingTasks = c.nmoPrepOutstanding || [];
+          nmoWarnings.push({
+            id: c.id,
+            title: c.title,
+            daysUntil,
+            registeredCount: c.registered_count || 0,
+            prepCompleted: nmoPrepProgress.completed,
+            prepTotal: nmoPrepProgress.total,
+            outstandingTasks,
+            action: "Complete NMO preparation",
+          });
+        }
+      }
     }
 
     return {
@@ -18932,6 +19226,21 @@ CCOR Education Team`,
       waitingOnOthersItems: waitingOnOthersList,
       needsCloseoutCount: needsCloseoutList.length,
       needsCloseoutItems: needsCloseoutList,
+      nmoWarningCount: nmoWarnings.length,
+      nmoWarnings,
+    };
+  }
+
+  function calculateNmoPrepProgress(tasks = []) {
+    const nmoTasks = tasks.filter((t) => t.phase === "nmo_prep" && t.is_active);
+    const completed = nmoTasks.filter((t) => t.status === "completed").length;
+    const outstanding = nmoTasks
+      .filter((t) => t.status !== "completed")
+      .map((t) => t.title);
+    return {
+      completed,
+      total: nmoTasks.length,
+      outstanding,
     };
   }
 
@@ -19169,6 +19478,30 @@ CCOR Education Team`,
           .join("");
       }
 
+      let nmoWarningsHtml = "";
+      if (kpis.nmoWarnings && kpis.nmoWarnings.length > 0) {
+        nmoWarningsHtml = `
+          <div class="ct-nmo-desk-warning">
+            <div class="ct-nmo-desk-warning-title">⚠️ New Member Orientation Readiness Alert</div>
+            ${kpis.nmoWarnings
+              .map(
+                (w) => `
+              <div class="ct-nmo-desk-warning-item" style="cursor:pointer;" onclick="ClassTracker.expandAndScroll(${w.id})">
+                <div style="display:flex;justify-content:space-between;align-items:center;">
+                  <strong>${this.escapeHtml(w.title)}</strong>
+                  <span class="ct-nmo-prep-badge prep-needed">NMO Prep ${w.prepCompleted}/${w.prepTotal}</span>
+                </div>
+                <div class="ct-nmo-desk-warning-meta">
+                  ${w.daysUntil === 0 ? "Today" : w.daysUntil === 1 ? "Tomorrow" : `${w.daysUntil} days away`} • ${w.registeredCount} registered • Outstanding: ${this.escapeHtml(w.outstandingTasks.join(", ") || "Prep incomplete")}
+                </div>
+              </div>
+            `
+              )
+              .join("")}
+          </div>
+        `;
+      }
+
       deskEl.innerHTML = `
         <div class="class-desk-title">
           <span>Today's Class Desk</span>
@@ -19197,6 +19530,7 @@ CCOR Education Team`,
           </div>
         </div>
         ${actionRowsHtml ? `<div class="class-desk-action-items">${actionRowsHtml}</div>` : ""}
+        ${nmoWarningsHtml}
       `;
     },
 
@@ -19333,6 +19667,7 @@ CCOR Education Team`,
             <div class="class-info-block">
               <div class="class-title-row">
                 <span class="class-card-title">${this.escapeHtml(c.title)}</span>
+                ${c.program_type === "nmo" ? '<span class="ct-nmo-badge">NEW MEMBER ORIENTATION</span>' : ""}
                 ${isToday ? '<span class="class-today-pill">TODAY</span>' : ""}
                 ${c.is_canceled ? '<span class="class-badge" style="background:#fee2e2;color:#ef4444;">CANCELED</span>' : ""}
                 ${c.closed_at ? '<span class="class-badge" style="background:#f3f4f6;color:#6b7280;">CLOSED</span>' : ""}
@@ -19342,6 +19677,11 @@ CCOR Education Team`,
                 <span class="class-badge badge-format-${(c.format || "in_person").replace("_", "")}">${formatLabel}</span>
                 <span>${timeRange}</span>
                 ${c.ce_hours ? `<span class="class-badge" style="background:#e0f2fe;color:#0284c7;">${c.ce_hours} CE</span>` : ""}
+                ${
+                  c.program_type === "nmo" && c.nmoPrepProgress
+                    ? `<span class="ct-nmo-prep-badge ${c.nmoPrepProgress.completed < c.nmoPrepProgress.total ? "prep-needed" : ""}">NMO Prep ${c.nmoPrepProgress.completed}/${c.nmoPrepProgress.total}</span>`
+                    : ""
+                }
                 <span>• ${daysUntil >= 0 ? `${daysUntil}d away` : `${Math.abs(daysUntil)}d ago`}</span>
               </div>
             </div>
@@ -19461,15 +19801,21 @@ CCOR Education Team`,
         { key: "intake", label: "Intake" },
         { key: "marketing", label: "Marketing" },
         { key: "sponsor", label: "Sponsor" },
+      ];
+      if (d.program_type === "nmo") {
+        phases.push({ key: "nmo_prep", label: "NMO Preparation" });
+      }
+      phases.push(
         { key: "pre_class", label: "Pre-Class" },
         { key: "class_day", label: "Class Day" },
-        { key: "closeout", label: "Closeout" },
-      ];
+        { key: "closeout", label: "Closeout" }
+      );
 
       const tasksByPhase = {};
       for (const p of phases) tasksByPhase[p.key] = [];
       for (const t of d.tasks || []) {
         if (tasksByPhase[t.phase]) tasksByPhase[t.phase].push(t);
+        else if (t.phase === "nmo_prep" && tasksByPhase.nmo_prep) tasksByPhase.nmo_prep.push(t);
         else tasksByPhase.pre_class.push(t);
       }
 
@@ -19508,6 +19854,14 @@ CCOR Education Team`,
 
         <!-- Quick Class Info Form Grid -->
         <div class="class-info-grid">
+          <div class="form-group">
+            <label>Program Type</label>
+            <select onchange="ClassTracker.updateProgramType(${d.id}, this.value)">
+              <option value="general" ${d.program_type !== "nmo" ? "selected" : ""}>General Class</option>
+              <option value="nmo" ${d.program_type === "nmo" ? "selected" : ""}>New Member Orientation (NMO)</option>
+            </select>
+          </div>
+
           <div class="form-group">
             <label>Class Classification</label>
             <select onchange="ClassTracker.updateClassType(${d.id}, this.value)">
@@ -19621,6 +19975,9 @@ CCOR Education Team`,
               : ""
           }
         </div>
+
+        <!-- NMO Presenters Panel (if NMO class) -->
+        ${d.program_type === "nmo" ? this.renderPresentersPanel(d) : ""}
 
         <!-- Workflow Phases & Tasks -->
         <div class="workflow-phases-container">
@@ -20343,6 +20700,169 @@ CCOR Education Team`,
         document.body.insertAdjacentHTML("beforeend", modalHtml);
       } catch (err) {
         this.showToast(`Failed to load activity: ${err.message}`, true);
+      }
+    },
+
+    // Render NMO Presenters Panel
+    renderPresentersPanel(d) {
+      const presenters = d.presenters || [];
+      return `
+        <div class="ct-presenters-panel" style="background:rgba(124, 58, 237, 0.04);border:1px solid rgba(124, 58, 237, 0.15);border-radius:var(--radius-md);padding:12px;margin-bottom:12px;">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">
+            <div class="ct-presenters-title">
+              <span>🎤 NMO Presenters & Instructors</span>
+              <span style="font-size:10px;font-weight:normal;color:var(--ink-soft);text-transform:none;">(${presenters.filter((p) => p.status === "confirmed").length} of ${presenters.length} confirmed)</span>
+            </div>
+            <button class="ct-add-presenter-btn" onclick="ClassTracker.openAddPresenterModal(${d.id})">+ Add Presenter</button>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:6px;">
+            ${
+              presenters.length === 0
+                ? '<div style="font-size:11px;color:var(--ink-soft);padding:4px 0;">No presenters added. Click "+ Add Presenter" above.</div>'
+                : presenters
+                    .map(
+                      (p) => `
+              <div class="ct-presenter-card" id="presenter-card-${p.id}">
+                <div class="ct-presenter-info">
+                  <div style="display:flex;align-items:center;gap:6px;">
+                    <span class="ct-presenter-name">${this.escapeHtml(p.name)}</span>
+                    <span class="ct-presenter-status status-${p.status || "not_notified"}">${(p.status || "not_notified").replace("_", " ")}</span>
+                  </div>
+                  <div class="ct-presenter-role">${this.escapeHtml(p.role || "presenter")} ${p.email ? `• ${this.escapeHtml(p.email)}` : ""}</div>
+                </div>
+                <div class="ct-presenter-actions">
+                  <button onclick="ClassTracker.openPresenterEmailModal(${d.id}, ${p.id})" title="Draft reminder email to presenter">✉️ Reminder</button>
+                  <button onclick="ClassTracker.updatePresenterStatus(${d.id}, ${p.id}, 'notified')">Notified</button>
+                  <button style="color:#16a34a;font-weight:bold;" onclick="ClassTracker.updatePresenterStatus(${d.id}, ${p.id}, 'confirmed')">Confirm</button>
+                  <button style="color:#6b7280;" onclick="ClassTracker.updatePresenterStatus(${d.id}, ${p.id}, 'not_attending')">Not Attending</button>
+                  <button style="color:#ef4444;" onclick="ClassTracker.removePresenter(${d.id}, ${p.id})" title="Remove presenter">✕</button>
+                </div>
+              </div>
+            `
+                    )
+                    .join("")
+            }
+          </div>
+        </div>
+      `;
+    },
+
+    openPresenterEmailModal(classId, presenterId) {
+      const classObj = this.state.classDetailsCache.get(classId);
+      if (!classObj) return;
+      const presenter = (classObj.presenters || []).find((p) => p.id === presenterId);
+      if (!presenter) return;
+
+      const tokens = {
+        class_title: classObj.title,
+        class_date: formatEasternDate(classObj.start_date),
+        relative_date: `on ${formatEasternDate(classObj.start_date)}`,
+        start_time: formatEasternTime(classObj.start_date),
+        end_time: formatEasternTime(classObj.end_date),
+        format: classObj.format,
+        location: classObj.location,
+        zoom_link: classObj.zoom_link,
+        instructor_name: presenter.name,
+        presenter_name: presenter.name,
+        registration_count: classObj.registered_count,
+        registration_goal: classObj.registration_goal,
+        registration_link: classObj.public_url,
+      };
+
+      const rendered = renderEmailTemplate("nmo_presenter_reminder", tokens);
+
+      const modalHtml = `
+        <div class="class-tracker-modal-backdrop" id="email-modal-backdrop">
+          <div class="class-tracker-modal">
+            <div class="class-tracker-modal-header">
+              <span class="class-tracker-modal-title">Draft Email: ${rendered.label} (${this.escapeHtml(presenter.name)})</span>
+              <button class="button-secondary" onclick="document.getElementById('email-modal-backdrop').remove()">✕</button>
+            </div>
+            <div class="class-tracker-modal-body">
+              <div class="form-group">
+                <label>Subject</label>
+                <input type="text" id="email-draft-subject" value="${this.escapeHtml(rendered.subject)}">
+              </div>
+              <div class="form-group">
+                <label>Message Body</label>
+                <textarea id="email-draft-body" style="height:180px;font-family:inherit;font-size:12px;padding:8px;border:1px solid var(--panel-border);border-radius:4px;background:var(--panel);color:var(--ink);">${this.escapeHtml(rendered.body)}</textarea>
+              </div>
+            </div>
+            <div class="class-tracker-modal-footer">
+              <button class="button-secondary" onclick="ClassTracker.copyEmailSubject()">Copy Subject</button>
+              <button class="button-secondary" onclick="ClassTracker.copyEmailBody()">Copy Message</button>
+              <button class="button-secondary" onclick="ClassTracker.copyEmailAll()">Copy All</button>
+              <button class="button-primary" style="background:#2563eb;" onclick="ClassTracker.markPresenterNotified(${classId}, ${presenterId})">✓ Mark Notified</button>
+            </div>
+          </div>
+        </div>
+      `;
+
+      const existing = document.getElementById("email-modal-backdrop");
+      if (existing) existing.remove();
+      document.body.insertAdjacentHTML("beforeend", modalHtml);
+    },
+
+    async markPresenterNotified(classId, presenterId) {
+      await this.updatePresenterStatus(classId, presenterId, "notified");
+      const modal = document.getElementById("email-modal-backdrop");
+      if (modal) modal.remove();
+    },
+
+    async updatePresenterStatus(classId, presenterId, newStatus) {
+      try {
+        await this.api(`/classes/presenters/${presenterId}`, {
+          method: "PATCH",
+          body: JSON.stringify({ status: newStatus }),
+        });
+        this.showToast(`Presenter status updated to ${newStatus.replace("_", " ")}!`);
+        await this.refreshClassDetail(classId);
+      } catch (err) {
+        this.showToast(`Status update failed: ${err.message}`, true);
+      }
+    },
+
+    async openAddPresenterModal(classId) {
+      const name = window.prompt("Enter presenter name (e.g. Sam, Dena):");
+      if (!name || !name.trim()) return;
+      const role = window.prompt("Enter presenter role (optional, defaults to 'presenter'):", "presenter") || "presenter";
+
+      try {
+        await this.api(`/classes/${classId}/presenters`, {
+          method: "POST",
+          body: JSON.stringify({ name: name.trim(), role: role.trim() }),
+        });
+        this.showToast(`Added presenter "${name.trim()}"!`);
+        await this.refreshClassDetail(classId);
+      } catch (err) {
+        this.showToast(`Failed to add presenter: ${err.message}`, true);
+      }
+    },
+
+    async removePresenter(classId, presenterId) {
+      if (!confirm("Are you sure you want to remove this presenter?")) return;
+      try {
+        await this.api(`/classes/presenters/${presenterId}`, {
+          method: "DELETE",
+        });
+        this.showToast("Presenter removed.");
+        await this.refreshClassDetail(classId);
+      } catch (err) {
+        this.showToast(`Failed to remove presenter: ${err.message}`, true);
+      }
+    },
+
+    async updateProgramType(classId, programType) {
+      try {
+        await this.api(`/classes/${classId}`, {
+          method: "PATCH",
+          body: JSON.stringify({ program_type: programType }),
+        });
+        this.showToast(`Program type updated to ${programType === "nmo" ? "New Member Orientation" : "General"}!`);
+        await this.refreshClassDetail(classId);
+        await this.loadClasses();
+      } catch (err) {
+        this.showToast(`Failed to update program type: ${err.message}`, true);
       }
     },
 
