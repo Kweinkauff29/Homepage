@@ -4690,6 +4690,994 @@
       cursor: not-allowed;
     }
   </style>
+<style id="class-tracker-inlined-styles">
+/* ==========================================================================
+   CLASS TRACKER — STYLESHEET
+   Education • Promotion • Logistics • CE Compliance
+   Seamlessly integrates with BER Wrap Sheet Light & Dark Themes
+   ========================================================================== */
+
+/* Main Container & Header */
+#section-class-tracker {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  position: relative;
+}
+
+.class-tracker-header-actions {
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.panel-subtitle {
+  font-size: 11px;
+  font-weight: normal;
+  color: var(--ink-soft);
+  margin-left: 8px;
+}
+
+/* ===== TODAY'S CLASS DESK (KPI BAR) ===== */
+.class-tracker-desk {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  background: rgba(15, 23, 42, 0.03);
+  border: 1px solid var(--panel-border);
+  border-radius: var(--radius-md);
+  padding: 12px 14px;
+}
+
+[data-theme="dark"] .class-tracker-desk {
+  background: rgba(30, 41, 59, 0.4);
+}
+
+.class-desk-title {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.class-desk-kpi-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+  gap: 10px;
+}
+
+.class-desk-kpi-card {
+  display: flex;
+  flex-direction: column;
+  padding: 10px 12px;
+  background: var(--panel);
+  border: 1px solid var(--panel-border);
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  transition: transform 0.15s ease, border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.class-desk-kpi-card:hover {
+  transform: translateY(-2px);
+  border-color: var(--accent);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+
+.class-desk-kpi-card.active-filter {
+  border-color: var(--accent);
+  background: rgba(3, 170, 225, 0.06);
+}
+
+.kpi-card-count {
+  font-size: 22px;
+  font-weight: 800;
+  line-height: 1.1;
+  color: var(--ink);
+}
+
+.kpi-card-label {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+  margin-top: 4px;
+}
+
+.kpi-card-attention .kpi-card-count { color: #f59e0b; }
+.kpi-card-urgent .kpi-card-count { color: var(--danger); }
+.kpi-card-upcoming .kpi-card-count { color: var(--accent); }
+.kpi-card-waiting .kpi-card-count { color: #8b5cf6; }
+.kpi-card-closeout .kpi-card-count { color: #ec4899; }
+
+/* Desk Actionable Recommendations */
+.class-desk-action-items {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-top: 4px;
+  border-top: 1px dashed var(--panel-border);
+  padding-top: 8px;
+}
+
+.class-desk-action-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 6px 10px;
+  border-radius: var(--radius-sm);
+  background: var(--panel);
+  font-size: 12px;
+  gap: 12px;
+  border: 1px solid var(--panel-border);
+  cursor: pointer;
+}
+
+.class-desk-action-row:hover {
+  background: rgba(3, 170, 225, 0.05);
+  border-color: var(--accent);
+}
+
+.class-desk-action-left {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex: 1;
+  min-width: 0;
+}
+
+.class-desk-action-badge {
+  font-size: 10px;
+  font-weight: 700;
+  padding: 2px 6px;
+  border-radius: 4px;
+  text-transform: uppercase;
+  white-space: nowrap;
+  background: #fef3c7;
+  color: #b45309;
+}
+
+[data-theme="dark"] .class-desk-action-badge {
+  background: rgba(245, 158, 11, 0.2);
+  color: #fbbf24;
+}
+
+.class-desk-action-title {
+  font-weight: 600;
+  color: var(--ink);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.class-desk-action-rec {
+  font-size: 11px;
+  color: var(--ink-soft);
+  white-space: nowrap;
+}
+
+/* ===== CONTROLS & FILTERS BAR ===== */
+.class-tracker-controls {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  padding: 4px 0;
+}
+
+.class-tracker-controls input[type="search"],
+.class-tracker-controls select {
+  font-size: 12px;
+  padding: 6px 10px;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--panel-border);
+  background: var(--panel);
+  color: var(--ink);
+  outline: none;
+}
+
+.class-tracker-controls input[type="search"]:focus,
+.class-tracker-controls select:focus {
+  border-color: var(--accent);
+}
+
+.class-tracker-search {
+  flex: 1;
+  min-width: 180px;
+}
+
+.class-tracker-sync-status {
+  font-size: 11px;
+  color: var(--ink-soft);
+  margin-left: auto;
+  white-space: nowrap;
+}
+
+/* ===== TIMELINE & CARDS ===== */
+.class-tracker-timeline {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.class-card {
+  background: var(--panel);
+  border: 1px solid var(--panel-border);
+  border-radius: var(--radius-md);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.04);
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+  overflow: hidden;
+}
+
+.class-card:hover {
+  border-color: rgba(3, 170, 225, 0.5);
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.08);
+}
+
+.class-card.is-today {
+  border-left: 5px solid #22c55e;
+}
+
+.class-card.is-priority-top {
+  border-left: 5px solid #ef4444;
+}
+
+.class-card.is-unclassified {
+  border-left: 5px solid #f59e0b;
+}
+
+.class-card.is-canceled {
+  opacity: 0.65;
+  border-left: 5px solid #9ca3af;
+}
+
+.class-card.is-closed {
+  opacity: 0.8;
+  border-left: 5px solid #6b7280;
+}
+
+/* Main Card Summary Header (Always Clickable) */
+.class-card-summary {
+  display: grid;
+  grid-template-columns: 64px 1fr auto;
+  gap: 16px;
+  align-items: center;
+  padding: 12px 16px;
+  cursor: pointer;
+  user-select: none;
+}
+
+@media (max-width: 768px) {
+  .class-card-summary {
+    grid-template-columns: 56px 1fr;
+    gap: 10px;
+  }
+}
+
+/* Date Box (Left Side) */
+.class-date-box {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: rgba(15, 23, 42, 0.05);
+  border: 1px solid var(--panel-border);
+  border-radius: var(--radius-sm);
+  padding: 6px 4px;
+  text-align: center;
+  width: 60px;
+  height: 56px;
+}
+
+[data-theme="dark"] .class-date-box {
+  background: rgba(30, 41, 59, 0.5);
+}
+
+.class-date-month {
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  color: var(--accent);
+  text-transform: uppercase;
+}
+
+.class-date-day {
+  font-size: 20px;
+  font-weight: 800;
+  line-height: 1;
+  color: var(--ink);
+}
+
+/* Card Main Info */
+.class-info-block {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 0;
+}
+
+.class-title-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.class-card-title {
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--ink);
+  line-height: 1.25;
+}
+
+.class-today-pill {
+  font-size: 10px;
+  font-weight: 800;
+  padding: 2px 6px;
+  background: #22c55e;
+  color: white;
+  border-radius: 999px;
+  letter-spacing: 0.08em;
+}
+
+.class-meta-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  font-size: 12px;
+  color: var(--ink-soft);
+}
+
+.class-badge {
+  display: inline-flex;
+  align-items: center;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  padding: 2px 6px;
+  border-radius: 4px;
+  border: 1px solid transparent;
+}
+
+.badge-type-ccor { background: rgba(3, 170, 225, 0.12); color: #0284c7; border-color: rgba(3, 170, 225, 0.3); }
+.badge-type-fr { background: rgba(139, 92, 246, 0.12); color: #7c3aed; border-color: rgba(139, 92, 246, 0.3); }
+.badge-type-instructor { background: rgba(16, 185, 129, 0.12); color: #059669; border-color: rgba(16, 185, 129, 0.3); }
+.badge-type-nonce { background: rgba(107, 114, 128, 0.12); color: #4b5563; border-color: rgba(107, 114, 128, 0.3); }
+.badge-type-unclassified { background: rgba(245, 158, 11, 0.18); color: #d97706; border-color: rgba(245, 158, 11, 0.4); }
+
+.badge-format-inperson { background: rgba(59, 130, 246, 0.1); color: #2563eb; }
+.badge-format-online { background: rgba(168, 85, 247, 0.1); color: #9333ea; }
+.badge-format-hybrid { background: rgba(14, 165, 233, 0.1); color: #0284c7; }
+
+/* Right Metrics Block */
+.class-metrics-block {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+@media (max-width: 768px) {
+  .class-metrics-block {
+    grid-column: 1 / -1;
+    justify-content: space-between;
+    border-top: 1px dashed var(--panel-border);
+    padding-top: 8px;
+    margin-top: 4px;
+  }
+}
+
+/* Registration Bar */
+.class-reg-stats {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  width: 140px;
+}
+
+.class-reg-text {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--ink);
+}
+
+.class-reg-bar {
+  height: 6px;
+  background: rgba(15, 23, 42, 0.1);
+  border-radius: 999px;
+  overflow: hidden;
+  position: relative;
+}
+
+[data-theme="dark"] .class-reg-bar {
+  background: rgba(255, 255, 255, 0.15);
+}
+
+.class-reg-fill {
+  height: 100%;
+  border-radius: 999px;
+  transition: width 0.3s ease;
+}
+
+/* Health Bands */
+.health-needs-help { color: #d97706; }
+.health-needs-help .class-reg-fill { background: #f59e0b; }
+
+.health-good { color: #0284c7; }
+.health-good .class-reg-fill { background: #0ea5e9; }
+
+.health-great { color: #0d9488; }
+.health-great .class-reg-fill { background: #14b8a6; }
+
+.health-fantastic { color: #16a34a; }
+.health-fantastic .class-reg-fill { background: #22c55e; }
+
+.health-full { color: #7c3aed; }
+.health-full .class-reg-fill { background: #a855f7; }
+
+/* Promotion Priority Display */
+.class-priority-badge {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 4px 8px;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--panel-border);
+  min-width: 80px;
+  text-align: center;
+}
+
+.priority-score {
+  font-size: 14px;
+  font-weight: 800;
+  color: var(--ink);
+}
+
+.priority-rank {
+  font-size: 10px;
+  font-weight: 700;
+  color: var(--ink-soft);
+  text-transform: uppercase;
+}
+
+.priority-high {
+  background: rgba(239, 68, 68, 0.1);
+  border-color: rgba(239, 68, 68, 0.3);
+}
+.priority-high .priority-score { color: #dc2626; }
+
+/* Phase Pipeline Icons */
+.class-phase-pills {
+  display: flex;
+  gap: 4px;
+  font-size: 11px;
+}
+
+.phase-pill {
+  padding: 2px 5px;
+  border-radius: 4px;
+  font-size: 10px;
+  font-weight: 600;
+  background: rgba(15, 23, 42, 0.05);
+  color: var(--ink-soft);
+}
+
+[data-theme="dark"] .phase-pill {
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.phase-pill.phase-complete {
+  background: rgba(34, 197, 94, 0.15);
+  color: #16a34a;
+}
+
+.phase-pill.phase-active {
+  background: rgba(3, 170, 225, 0.15);
+  color: var(--accent);
+}
+
+/* Card Expand Toggle */
+.class-expand-btn {
+  background: transparent;
+  border: none;
+  font-size: 14px;
+  color: var(--ink-soft);
+  padding: 4px;
+  cursor: pointer;
+}
+
+/* ===== EXPANDED CLASS DRAWER ===== */
+.class-card-detail {
+  padding: 16px 20px;
+  border-top: 1px solid var(--panel-border);
+  background: rgba(15, 23, 42, 0.015);
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+[data-theme="dark"] .class-card-detail {
+  background: rgba(15, 23, 42, 0.25);
+}
+
+/* Important Notes Banner */
+.class-important-notes-banner {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  background: #fffbeb;
+  border: 1px solid #fde68a;
+  border-radius: var(--radius-sm);
+  padding: 10px 14px;
+}
+
+[data-theme="dark"] .class-important-notes-banner {
+  background: rgba(245, 158, 11, 0.1);
+  border-color: rgba(245, 158, 11, 0.3);
+}
+
+.important-notes-header {
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #b45309;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+[data-theme="dark"] .important-notes-header {
+  color: #fbbf24;
+}
+
+.important-notes-textarea {
+  width: 100%;
+  border: 1px solid rgba(245, 158, 11, 0.4);
+  border-radius: 4px;
+  background: var(--panel);
+  color: var(--ink);
+  font-size: 12px;
+  padding: 6px 8px;
+  resize: vertical;
+  min-height: 48px;
+}
+
+/* Quick Class Info Form Grid */
+.class-info-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 12px;
+  background: var(--panel);
+  border: 1px solid var(--panel-border);
+  border-radius: var(--radius-sm);
+  padding: 12px 14px;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.form-group label {
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--ink-soft);
+}
+
+.form-group input,
+.form-group select {
+  font-size: 12px;
+  padding: 6px 8px;
+  border: 1px solid var(--panel-border);
+  border-radius: 4px;
+  background: var(--panel);
+  color: var(--ink);
+}
+
+.form-group input[readonly] {
+  background: rgba(15, 23, 42, 0.04);
+  color: var(--ink-soft);
+}
+
+[data-theme="dark"] .form-group input[readonly] {
+  background: rgba(255, 255, 255, 0.04);
+}
+
+/* Sponsor Details Box */
+.sponsor-details-box {
+  grid-column: 1 / -1;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 10px;
+  background: rgba(3, 170, 225, 0.04);
+  border: 1px dashed rgba(3, 170, 225, 0.3);
+  border-radius: 6px;
+  padding: 10px 12px;
+  margin-top: 4px;
+}
+
+/* Classification Callout for Unclassified */
+.unclassified-callout {
+  background: #fff7ed;
+  border: 1px solid #fed7aa;
+  border-radius: var(--radius-md);
+  padding: 12px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+[data-theme="dark"] .unclassified-callout {
+  background: rgba(234, 88, 12, 0.1);
+  border-color: rgba(234, 88, 12, 0.3);
+}
+
+.unclassified-callout-title {
+  font-size: 12px;
+  font-weight: 800;
+  color: #c2410c;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+[data-theme="dark"] .unclassified-callout-title {
+  color: #fb923c;
+}
+
+.unclassified-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+/* Workflow Stage Tabs */
+.workflow-phases-container {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.phase-accordion-card {
+  border: 1px solid var(--panel-border);
+  border-radius: var(--radius-sm);
+  background: var(--panel);
+  overflow: hidden;
+}
+
+.phase-accordion-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 12px;
+  background: rgba(15, 23, 42, 0.02);
+  cursor: pointer;
+  user-select: none;
+  border-bottom: 1px solid transparent;
+}
+
+[data-theme="dark"] .phase-accordion-header {
+  background: rgba(255, 255, 255, 0.03);
+}
+
+.phase-accordion-header.is-open {
+  border-bottom-color: var(--panel-border);
+}
+
+.phase-title-text {
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--ink);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.phase-progress-count {
+  font-size: 11px;
+  color: var(--ink-soft);
+  font-weight: normal;
+}
+
+/* Task Checklist Rows */
+.phase-task-list {
+  display: flex;
+  flex-direction: column;
+}
+
+.class-task-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 12px;
+  border-bottom: 1px solid var(--panel-border);
+  font-size: 12px;
+  gap: 12px;
+  transition: background 0.1s ease;
+}
+
+.class-task-row:last-child {
+  border-bottom: none;
+}
+
+.class-task-row:hover {
+  background: rgba(3, 170, 225, 0.03);
+}
+
+.class-task-row.task-completed {
+  opacity: 0.75;
+}
+
+.class-task-left {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex: 1;
+  min-width: 0;
+}
+
+.class-task-title {
+  font-weight: 600;
+  color: var(--ink);
+}
+
+.task-completed .class-task-title {
+  text-decoration: line-through;
+  color: var(--ink-soft);
+}
+
+.class-task-due {
+  font-size: 11px;
+  color: var(--ink-soft);
+}
+
+.class-task-due.due-overdue {
+  color: var(--danger);
+  font-weight: 700;
+}
+
+.class-task-assignee-tag {
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--accent);
+  cursor: pointer;
+  padding: 2px 6px;
+  border-radius: 4px;
+  background: rgba(3, 170, 225, 0.08);
+}
+
+.class-task-assignee-tag:hover {
+  background: rgba(3, 170, 225, 0.16);
+}
+
+.class-task-actions {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.btn-task-claim {
+  font-size: 10px;
+  font-weight: 700;
+  padding: 2px 8px;
+  border-radius: 999px;
+  border: 1px solid var(--accent);
+  background: transparent;
+  color: var(--accent);
+  cursor: pointer;
+}
+
+.btn-task-claim:hover {
+  background: var(--accent);
+  color: white;
+}
+
+.btn-task-email {
+  font-size: 10px;
+  font-weight: 700;
+  padding: 2px 8px;
+  border-radius: 999px;
+  border: 1px solid #8b5cf6;
+  background: transparent;
+  color: #8b5cf6;
+  cursor: pointer;
+}
+
+.btn-task-email:hover {
+  background: #8b5cf6;
+  color: white;
+}
+
+/* Materials Center Table */
+.class-materials-section {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  background: var(--panel);
+  border: 1px solid var(--panel-border);
+  border-radius: var(--radius-sm);
+  padding: 12px 14px;
+}
+
+.materials-category-title {
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+  margin-top: 6px;
+}
+
+.materials-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 12px;
+}
+
+.materials-table th {
+  text-align: left;
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--ink-soft);
+  padding: 6px 8px;
+  border-bottom: 1px solid var(--panel-border);
+}
+
+.materials-table td {
+  padding: 8px 8px;
+  border-bottom: 1px solid var(--panel-border);
+  vertical-align: middle;
+}
+
+.materials-table tr:last-child td {
+  border-bottom: none;
+}
+
+/* Registration Trend & History Section */
+.class-history-section {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+@media (max-width: 768px) {
+  .class-history-section {
+    grid-template-columns: 1fr;
+  }
+}
+
+.history-card {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  background: var(--panel);
+  border: 1px solid var(--panel-border);
+  border-radius: var(--radius-sm);
+  padding: 12px 14px;
+  font-size: 12px;
+}
+
+.history-title {
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.snapshot-table {
+  width: 100%;
+  font-size: 11px;
+  border-collapse: collapse;
+}
+
+.snapshot-table td {
+  padding: 4px 6px;
+  border-bottom: 1px solid var(--panel-border);
+}
+
+.activity-feed {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  max-height: 200px;
+  overflow-y: auto;
+}
+
+.activity-feed-item {
+  font-size: 11px;
+  color: var(--ink);
+  line-height: 1.4;
+  border-bottom: 1px dashed var(--panel-border);
+  padding-bottom: 4px;
+}
+
+.activity-time {
+  font-size: 10px;
+  color: var(--ink-soft);
+}
+
+/* ===== MODALS ===== */
+.class-tracker-modal-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(15, 23, 42, 0.6);
+  backdrop-filter: blur(4px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+  padding: 16px;
+}
+
+.class-tracker-modal {
+  background: var(--panel);
+  border: 1px solid var(--panel-border);
+  border-radius: var(--radius-lg);
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.25);
+  width: 100%;
+  max-width: 600px;
+  max-height: 90vh;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  animation: modalPop 0.18s ease-out;
+}
+
+@keyframes modalPop {
+  from { opacity: 0; transform: scale(0.96); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+.class-tracker-modal-header {
+  padding: 14px 18px;
+  border-bottom: 1px solid var(--panel-border);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.class-tracker-modal-title {
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--ink);
+}
+
+.class-tracker-modal-body {
+  padding: 16px 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  overflow-y: auto;
+}
+
+.class-tracker-modal-footer {
+  padding: 12px 18px;
+  border-top: 1px solid var(--panel-border);
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 8px;
+}
+
+</style>
 </head>
 
 <body>
@@ -5470,6 +6458,61 @@
         </section>
 
         <!-- Joint Projects Section -->
+        
+        <!-- ==================== CLASS TRACKER SECTION ==================== -->
+        <section class="panel draggable-section" id="section-class-tracker" draggable="true">
+          <div class="panel-header">
+            <span class="section-drag-handle" title="Drag to reorder">⋮⋮</span>
+            <div class="panel-title">
+              Class Tracker
+              <span class="panel-subtitle">Education • Promotion • Logistics • CE Compliance</span>
+            </div>
+            <div class="class-tracker-header-actions">
+              <button class="button-secondary" id="class-tracker-rules-btn" title="Manage Staff Inclusion and Exclusion Rules">⚙ Rules</button>
+              <button class="button-primary" id="class-tracker-sync-btn" title="Sync upcoming classes from GrowthZone">↻ Sync GrowthZone</button>
+            </div>
+          </div>
+
+          <!-- Today's Class Desk (Actionable KPI Bar) -->
+          <div id="class-tracker-desk" class="class-tracker-desk"></div>
+
+          <!-- Filters & Sorting Bar -->
+          <div class="class-tracker-controls">
+            <input type="search" id="class-tracker-search" class="class-tracker-search" placeholder="Search classes or instructors…">
+            <select id="class-tracker-filter-type">
+              <option value="all">All Class Types</option>
+              <option value="ccor_provider">CCOR Provider</option>
+              <option value="florida_realtors">Florida Realtors</option>
+              <option value="instructor_provider">Instructor / Outside School</option>
+              <option value="non_ce_ccor">Non-CE CCOR</option>
+              <option value="unclassified">Needs Classification</option>
+            </select>
+            <select id="class-tracker-filter-status">
+              <option value="active">Active Classes</option>
+              <option value="needs_attention">Needs Attention</option>
+              <option value="closeout">Needs Closeout</option>
+              <option value="archive">Archive / History</option>
+              <option value="ignored">Ignored</option>
+              <option value="canceled">Canceled</option>
+            </select>
+            <select id="class-tracker-filter-format">
+              <option value="all">All Formats</option>
+              <option value="in_person">In Person</option>
+              <option value="online">Online</option>
+              <option value="hybrid">Hybrid</option>
+            </select>
+            <select id="class-tracker-sort">
+              <option value="date">Sort: Upcoming Date</option>
+              <option value="priority">Sort: Promotion Priority</option>
+            </select>
+          </div>
+
+          <!-- Timeline Container -->
+          <div id="class-tracker-timeline" class="class-tracker-timeline">
+            <div class="class-tracker-loading" style="padding:20px;text-align:center;color:var(--ink-soft);">Loading classes…</div>
+          </div>
+        </section>
+
         <section class="panel draggable-section" id="section-projects" draggable="true">
           <div class="panel-header">
             <span class="section-drag-handle" title="Drag to reorder">⋮⋮</span>
@@ -17536,6 +18579,1798 @@ Raw Text:
       initCcorWaves();
     }
   })();
+</script>
+<script id="class-tracker-inlined-script">
+/**
+ * ==========================================================================
+ * CLASS TRACKER — FRONTEND MODULE
+ * Education • Promotion • Logistics • CE Compliance
+ * Namespaced strictly under window.ClassTracker
+ * ==========================================================================
+ */
+
+(function () {
+  "use strict";
+
+  const EASTERN_TIMEZONE = "America/New_York";
+
+  // Pure Eastern Time Helpers
+  function formatEasternDate(isoString) {
+    if (!isoString) return "";
+    const d = new Date(isoString);
+    if (Number.isNaN(d.getTime())) return "";
+    return new Intl.DateTimeFormat("en-US", {
+      timeZone: EASTERN_TIMEZONE,
+      weekday: "short",
+      month: "short",
+      day: "numeric",
+      year: "numeric",
+    }).format(d);
+  }
+
+  function formatEasternTime(isoString) {
+    if (!isoString) return "";
+    const d = new Date(isoString);
+    if (Number.isNaN(d.getTime())) return "";
+    return new Intl.DateTimeFormat("en-US", {
+      timeZone: EASTERN_TIMEZONE,
+      hour: "numeric",
+      minute: "2-digit",
+      hour12: true,
+    }).format(d);
+  }
+
+  function formatEasternTimeRange(startIso, endIso) {
+    const startTime = formatEasternTime(startIso);
+    const endTime = formatEasternTime(endIso);
+    if (!startTime) return "";
+    if (!endTime) return `${startTime} ET`;
+    return `${startTime} – ${endTime} ET`;
+  }
+
+  function getEasternDayMonth(isoString) {
+    if (!isoString) return { month: "---", day: "--" };
+    const d = new Date(isoString);
+    if (Number.isNaN(d.getTime())) return { month: "---", day: "--" };
+    const month = new Intl.DateTimeFormat("en-US", { timeZone: EASTERN_TIMEZONE, month: "short" })
+      .format(d)
+      .toUpperCase();
+    const day = new Intl.DateTimeFormat("en-US", { timeZone: EASTERN_TIMEZONE, day: "numeric" }).format(d);
+    return { month, day };
+  }
+
+  function isTodayInEastern(isoString, now = new Date()) {
+    if (!isoString) return false;
+    const d = new Date(isoString);
+    if (Number.isNaN(d.getTime())) return false;
+    const dateStr = new Intl.DateTimeFormat("en-CA", { timeZone: EASTERN_TIMEZONE }).format(d);
+    const todayStr = new Intl.DateTimeFormat("en-CA", { timeZone: EASTERN_TIMEZONE }).format(now);
+    return dateStr === todayStr;
+  }
+
+  function getDaysUntilClassInEastern(startIso, now = new Date()) {
+    if (!startIso) return 0;
+    const d = new Date(startIso);
+    if (Number.isNaN(d.getTime())) return 0;
+    const dateStr = new Intl.DateTimeFormat("en-CA", { timeZone: EASTERN_TIMEZONE }).format(d);
+    const todayStr = new Intl.DateTimeFormat("en-CA", { timeZone: EASTERN_TIMEZONE }).format(now);
+
+    const [y1, m1, d1] = dateStr.split("-").map(Number);
+    const [y2, m2, d2] = todayStr.split("-").map(Number);
+
+    const utc1 = Date.UTC(y1, m1 - 1, d1);
+    const utc2 = Date.UTC(y2, m2 - 1, d2);
+    return Math.round((utc1 - utc2) / (1000 * 60 * 60 * 24));
+  }
+
+  // Email Templates Dictionary
+  const EMAIL_TEMPLATES = Object.freeze({
+    instructor_confirmation: {
+      label: "Instructor Confirmation",
+      subject: "Confirming {{class_title}} — {{class_date}}",
+      body: `Hi {{instructor_name}},
+
+Just confirming your upcoming class, {{class_title}}, on {{class_date}} from {{start_time}}–{{end_time}} at CCOR.
+
+Please let us know if you need anything from us or have any updated materials we should have ready.
+
+Thanks!
+CCOR Education Team`,
+    },
+    instructor_reminder: {
+      label: "Instructor 1-2 Day Reminder",
+      subject: "Reminder: {{class_title}} at CCOR",
+      body: `Hi {{instructor_name}},
+
+Just a reminder that {{class_title}} is coming up {{relative_date}} from {{start_time}}–{{end_time}}.
+
+We currently have {{registration_count}} registered.
+
+Please let us know if there are any last-minute materials or setup needs.
+
+Thanks!
+CCOR Education Team`,
+    },
+    sponsor_confirmation: {
+      label: "Sponsor Confirmation",
+      subject: "Sponsor Confirmation: {{class_title}} on {{class_date}}",
+      body: `Hi {{sponsor_contact_name}},
+
+Thanks again for sponsoring {{class_title}} on {{class_date}}.
+
+The class runs from {{start_time}}–{{end_time}} at CCOR.
+
+We'll send you the final registration headcount as we get closer to the date.
+
+Thanks!
+CCOR Team`,
+    },
+    sponsor_reminder: {
+      label: "Sponsor Headcount / Reminder",
+      subject: "Headcount Update: {{class_title}} {{relative_date}}",
+      body: `Hi {{sponsor_contact_name}},
+
+Just a quick update for {{class_title}} {{relative_date}}.
+
+We currently have {{registration_count}} registered.
+
+We have you arriving around {{sponsor_arrival_time}}.
+
+Thanks again for sponsoring!
+CCOR Team`,
+    },
+    attendee_reminder: {
+      label: "Attendee Reminder",
+      subject: "Reminder: {{class_title}} {{relative_date}}",
+      body: `Hi,
+
+Just a reminder that you're registered for {{class_title}} {{relative_date}} from {{start_time}}–{{end_time}}.
+
+Location:
+{{location}}
+
+Please arrive a few minutes early for check-in.
+
+We look forward to seeing you!
+CCOR Education Team`,
+    },
+    attendee_reminder_online: {
+      label: "Attendee Reminder (Online)",
+      subject: "Zoom Link: {{class_title}} {{relative_date}}",
+      body: `Hi,
+
+Just a reminder that you're registered for {{class_title}} {{relative_date}} from {{start_time}}–{{end_time}}.
+
+Join online:
+{{zoom_link}}
+
+Please join a few minutes early so we can start promptly.
+
+See you there!
+CCOR Education Team`,
+    },
+    registration_push: {
+      label: "Member Promotion / Registration Push",
+      subject: "Coming Up at CCOR: {{class_title}}",
+      body: `Hi Members,
+
+Join us for {{class_title}} on {{class_date}} from {{start_time}}–{{end_time}}.
+
+Seats are available now — register today at:
+{{registration_link}}
+
+CCOR Education`,
+    },
+    survey: {
+      label: "Attendee Evaluation / Survey",
+      subject: "Quick Feedback: {{class_title}}",
+      body: `Hi,
+
+Thank you for joining us for {{class_title}}.
+
+We'd greatly appreciate your feedback to help improve future classes:
+{{survey_link}}
+
+Thank you!
+CCOR Education Team`,
+    },
+    sponsor_thank_you: {
+      label: "Sponsor Thank-You",
+      subject: "Thank You for Sponsoring {{class_title}}",
+      body: `Hi {{sponsor_contact_name}},
+
+Thank you so much for sponsoring today's session of {{class_title}}. Our members greatly appreciated the refreshments and your support of CCOR.
+
+We look forward to partnering with you on future events!
+
+Best regards,
+CCOR Team`,
+    },
+    instructor_thank_you: {
+      label: "Instructor Thank-You",
+      subject: "Thank You for Teaching {{class_title}}",
+      body: `Hi {{instructor_name}},
+
+Thank you for leading today's class, {{class_title}}. The presentation was insightful and valuable for our members.
+
+We look forward to hosting you again soon!
+
+Best regards,
+CCOR Education Team`,
+    },
+    missing_paperwork: {
+      label: "Missing Paperwork Reminder",
+      subject: "Follow-up: Course Paperwork for {{class_title}}",
+      body: `Hi {{instructor_name}},
+
+Could you please send over the completed attendance verification and evaluation sheets from {{class_title}} on {{class_date}}?
+
+We need these on file to complete Florida DBPR CE compliance.
+
+Thank you,
+CCOR Education Team`,
+    },
+  });
+
+  function renderEmailTemplate(templateKey, tokens = {}) {
+    const template = EMAIL_TEMPLATES[templateKey] || EMAIL_TEMPLATES.instructor_reminder;
+    const safeTokens = {
+      class_title: tokens.class_title || "Upcoming Class",
+      class_date: tokens.class_date || "Upcoming Date",
+      relative_date: tokens.relative_date || "coming up soon",
+      start_time: tokens.start_time || "",
+      end_time: tokens.end_time || "",
+      format: (tokens.format || "in_person").replace("_", " "),
+      location: tokens.location || "CCOR Classroom (25201 Paseo Del Prado, Bonita Springs, FL)",
+      zoom_link: tokens.zoom_link || "Link will be emailed prior to class",
+      instructor_name: tokens.instructor_name || "Instructor",
+      registration_count: String(tokens.registration_count ?? 0),
+      registration_goal: String(tokens.registration_goal ?? 36),
+      registration_link: tokens.registration_link || "https://coconutcoastrealtors.growthzoneapp.com",
+      sponsor_name: tokens.sponsor_name || "our affiliate sponsor",
+      sponsor_contact_name: tokens.sponsor_contact_name || "Sponsor",
+      sponsor_arrival_time: tokens.sponsor_arrival_time || "8:30 AM",
+      survey_link: tokens.survey_link || "https://coconutcoastrealtors.org/feedback",
+      ce_hours: tokens.ce_hours ? `${tokens.ce_hours} CE` : "",
+    };
+
+    const replaceTokens = (str) =>
+      str.replace(/\{\{([a-z0-9_]+)\}\}/gi, (match, key) => {
+        return safeTokens[key] !== undefined ? safeTokens[key] : "";
+      });
+
+    let subject = replaceTokens(template.subject);
+    let body = replaceTokens(template.body);
+
+    subject = subject.replace(/\s+/g, " ").trim();
+    body = body.replace(/[ \t]+$/gm, "");
+
+    return { label: template.label, subject, body };
+  }
+
+  // Pure Desk KPI computation
+  function calculateClassDeskKPIs(classes = []) {
+    const needsAttentionList = [];
+    let next7DaysCount = 0;
+    const waitingOnOthersList = [];
+    const needsCloseoutList = [];
+    const now = new Date();
+
+    for (const c of classes) {
+      if (c.is_ignored || c.is_canceled || c.class_type === "ignore" || c.closed_at) {
+        continue;
+      }
+
+      const daysUntil = getDaysUntilClassInEastern(c.start_date, now);
+      const isPast = daysUntil < 0 && !isTodayInEastern(c.start_date, now);
+
+      if (daysUntil >= 0 && daysUntil <= 7) {
+        next7DaysCount++;
+      }
+
+      if (isPast && !c.closed_at) {
+        needsCloseoutList.push({
+          id: c.id,
+          title: c.title,
+          daysAgo: Math.abs(daysUntil),
+          action: "Complete post-class CE reporting & attendance closeout",
+        });
+      }
+
+      if (daysUntil >= 0) {
+        if (c.class_type === "unclassified") {
+          needsAttentionList.push({
+            id: c.id,
+            title: c.title,
+            daysUntil,
+            badge: "NEEDS CLASSIFICATION",
+            action: "Assign class type: CCOR Provider, Florida Realtors, Outside School, or Non-CE",
+          });
+        } else if (c.priorityScore >= 70 && daysUntil <= 14) {
+          needsAttentionList.push({
+            id: c.id,
+            title: c.title,
+            daysUntil,
+            badge: `PRIORITY #${c.priorityRank || 1}`,
+            action: "Low registration: send additional email & social promotion",
+          });
+        } else if (!c.instructor_name && daysUntil <= 5) {
+          needsAttentionList.push({
+            id: c.id,
+            title: c.title,
+            daysUntil,
+            badge: "INSTRUCTOR NEEDED",
+            action: "Confirm instructor name and arrival details",
+          });
+        } else if (c.sponsor_status === "looking" && daysUntil <= 4 && c.format !== "online") {
+          needsAttentionList.push({
+            id: c.id,
+            title: c.title,
+            daysUntil,
+            badge: "SPONSOR PENDING",
+            action: "Confirm food/refreshment sponsor or mark not needed",
+          });
+        }
+      }
+
+      if (daysUntil >= 0 && daysUntil <= 14) {
+        if (c.sponsor_status === "looking" && c.format !== "online") {
+          waitingOnOthersList.push({
+            id: c.id,
+            title: c.title,
+            reason: "Waiting on sponsor confirmation",
+          });
+        }
+      }
+    }
+
+    return {
+      needsAttentionCount: needsAttentionList.length,
+      needsAttentionItems: needsAttentionList,
+      next7DaysCount,
+      waitingOnOthersCount: waitingOnOthersList.length,
+      waitingOnOthersItems: waitingOnOthersList,
+      needsCloseoutCount: needsCloseoutList.length,
+      needsCloseoutItems: needsCloseoutList,
+    };
+  }
+
+  // The ClassTracker Singleton
+  const ClassTracker = {
+    state: {
+      classes: [],
+      classDetailsCache: new Map(),
+      expandedClassId: null,
+      filterType: "all",
+      filterStatus: "active",
+      filterFormat: "all",
+      searchQuery: "",
+      sortBy: "date",
+      deskFilter: null,
+      isLoading: false,
+      isSyncing: false,
+      lastSyncedAt: null,
+    },
+
+    // Toast helper
+    showToast(message, isError = false) {
+      if (typeof window.showToast === "function") {
+        window.showToast(message, isError);
+        return;
+      }
+      const div = document.createElement("div");
+      div.className = "toast" + (isError ? " toast-error" : "");
+      div.textContent = message;
+      document.body.appendChild(div);
+      setTimeout(() => div.remove(), 3000);
+    },
+
+    // Authenticated API Fetcher
+    async api(endpoint, options = {}) {
+      let baseUrl = (typeof window !== "undefined" && window.API_BASE) ||
+                    (typeof API_BASE !== "undefined" ? API_BASE : "");
+
+      if (typeof window !== "undefined" && (window.location.hostname === "localhost" || window.location.hostname === "127.0.0.1")) {
+        baseUrl = "/api";
+      } else if (!baseUrl) {
+        baseUrl = "https://wrapsheet.bonitaspringsrealtors.workers.dev/api";
+      }
+
+      const userEmail = (window.state && window.state.currentUser && window.state.currentUser.email) || "";
+
+      const headers = {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+        ...(userEmail ? { "x-user-email": userEmail } : {}),
+        ...(options.headers || {}),
+      };
+
+      const res = await fetch(`${baseUrl}${endpoint}`, {
+        ...options,
+        headers,
+      });
+
+      if (!res.ok) {
+        const errJson = await res.json().catch(() => ({}));
+        const err = new Error(errJson.error || `HTTP ${res.status}`);
+        err.status = res.status;
+        err.data = errJson;
+        throw err;
+      }
+
+      return res.json();
+    },
+
+    // Render unauthenticated prompt if no staff user is selected
+    renderLoggedOutState() {
+      const desk = document.getElementById("class-tracker-desk");
+      if (desk) desk.innerHTML = "";
+      const timeline = document.getElementById("class-tracker-timeline");
+      if (timeline) {
+        timeline.innerHTML = `
+          <div class="class-tracker-empty" style="padding: 40px 20px; text-align: center; color: var(--ink-soft);">
+            <div style="font-size: 28px; margin-bottom: 8px;">👤</div>
+            <div style="font-size: 15px; font-weight: 500; margin-bottom: 6px;">Select your name to open the Class Tracker.</div>
+            <div style="font-size: 13px; color: var(--ink-faint);">Class Tracker data is protected and requires an active staff identity.</div>
+          </div>
+        `;
+      }
+    },
+
+    // Initialize Class Tracker
+    async init() {
+      console.log("Initializing Class Tracker module...");
+      this.attachControls();
+      const currentUser = window.state && window.state.currentUser;
+      if (!currentUser || !currentUser.email) {
+        this.renderLoggedOutState();
+        return;
+      }
+      await this.loadClasses();
+    },
+
+    // Attach filter & action bar controls
+    attachControls() {
+      const syncBtn = document.getElementById("class-tracker-sync-btn");
+      if (syncBtn) {
+        syncBtn.addEventListener("click", () => this.syncGrowthZone());
+      }
+
+      const rulesBtn = document.getElementById("class-tracker-rules-btn");
+      if (rulesBtn) {
+        rulesBtn.addEventListener("click", () => this.openRulesModal());
+      }
+
+      const searchInput = document.getElementById("class-tracker-search");
+      if (searchInput) {
+        searchInput.addEventListener("input", (e) => {
+          this.state.searchQuery = e.target.value.toLowerCase().trim();
+          this.renderTimeline();
+        });
+      }
+
+      const filterType = document.getElementById("class-tracker-filter-type");
+      if (filterType) {
+        filterType.addEventListener("change", (e) => {
+          this.state.filterType = e.target.value;
+          this.renderTimeline();
+        });
+      }
+
+      const filterStatus = document.getElementById("class-tracker-filter-status");
+      if (filterStatus) {
+        filterStatus.addEventListener("change", (e) => {
+          this.state.filterStatus = e.target.value;
+          this.state.deskFilter = null;
+          this.renderTimeline();
+        });
+      }
+
+      const filterFormat = document.getElementById("class-tracker-filter-format");
+      if (filterFormat) {
+        filterFormat.addEventListener("change", (e) => {
+          this.state.filterFormat = e.target.value;
+          this.renderTimeline();
+        });
+      }
+
+      const sortSelect = document.getElementById("class-tracker-sort");
+      if (sortSelect) {
+        sortSelect.addEventListener("change", (e) => {
+          this.state.sortBy = e.target.value;
+          this.renderTimeline();
+        });
+      }
+    },
+
+    // Load classes list from backend
+    async loadClasses() {
+      const currentUser = window.state && window.state.currentUser;
+      if (!currentUser || !currentUser.email) {
+        this.renderLoggedOutState();
+        return;
+      }
+      this.state.isLoading = true;
+      const timeline = document.getElementById("class-tracker-timeline");
+      if (timeline && this.state.classes.length === 0) {
+        timeline.innerHTML = '<div class="class-tracker-loading" style="padding:20px;text-align:center;color:var(--ink-soft);">Loading classes…</div>';
+      }
+
+      try {
+        const classes = await this.api("/classes");
+        this.state.classes = Array.isArray(classes) ? classes : [];
+        this.state.lastSyncedAt = new Date();
+        this.renderDesk();
+        this.renderTimeline();
+      } catch (err) {
+        console.error("Failed to load classes:", err);
+        if (timeline) {
+          timeline.innerHTML = `
+            <div style="padding:20px;text-align:center;color:var(--danger);">
+              Failed to load classes. ${err.message}.
+              <br><button class="button-secondary" onclick="ClassTracker.loadClasses()" style="margin-top:8px;">Retry</button>
+            </div>
+          `;
+        }
+      } finally {
+        this.state.isLoading = false;
+      }
+    },
+
+    // Trigger on-demand GrowthZone synchronization
+    async syncGrowthZone() {
+      if (this.state.isSyncing) return;
+      const syncBtn = document.getElementById("class-tracker-sync-btn");
+      this.state.isSyncing = true;
+      if (syncBtn) {
+        syncBtn.disabled = true;
+        syncBtn.textContent = "Syncing…";
+      }
+
+      try {
+        const stats = await this.api("/classes/sync", { method: "POST" });
+        const summary = `${stats.created || 0} new • ${stats.updated || 0} updated • ${stats.registrationChanges || 0} reg changes`;
+        this.showToast(`GrowthZone Sync Complete: ${summary}`);
+        await this.loadClasses();
+      } catch (err) {
+        console.error("GrowthZone sync failed:", err);
+        this.showToast(`Sync Error: ${err.message}`, true);
+      } finally {
+        this.state.isSyncing = false;
+        if (syncBtn) {
+          syncBtn.disabled = false;
+          syncBtn.textContent = "↻ Sync GrowthZone";
+        }
+      }
+    },
+
+    // Render Today's Class Desk (Actionable KPI Bar)
+    renderDesk() {
+      const deskEl = document.getElementById("class-tracker-desk");
+      if (!deskEl) return;
+
+      const kpis = calculateClassDeskKPIs(this.state.classes);
+
+      let actionRowsHtml = "";
+      if (kpis.needsAttentionItems.length > 0) {
+        actionRowsHtml = kpis.needsAttentionItems
+          .slice(0, 3)
+          .map(
+            (item) => `
+          <div class="class-desk-action-row" onclick="ClassTracker.expandAndScroll(${item.id})">
+            <div class="class-desk-action-left">
+              <span class="class-desk-action-badge">${item.badge}</span>
+              <span class="class-desk-action-title">${this.escapeHtml(item.title)}</span>
+            </div>
+            <span class="class-desk-action-rec">${item.action}</span>
+          </div>
+        `
+          )
+          .join("");
+      }
+
+      deskEl.innerHTML = `
+        <div class="class-desk-title">
+          <span>Today's Class Desk</span>
+          <span style="font-size:10px;font-weight:normal;color:var(--ink-soft);">Actionable Operations</span>
+        </div>
+        <div class="class-desk-kpi-grid">
+          <div class="class-desk-kpi-card kpi-card-attention ${this.state.deskFilter === "attention" ? "active-filter" : ""}"
+               onclick="ClassTracker.filterByDesk('attention')">
+            <span class="kpi-card-count">${kpis.needsAttentionCount}</span>
+            <span class="kpi-card-label">Need Attention</span>
+          </div>
+          <div class="class-desk-kpi-card kpi-card-upcoming ${this.state.deskFilter === "next7" ? "active-filter" : ""}"
+               onclick="ClassTracker.filterByDesk('next7')">
+            <span class="kpi-card-count">${kpis.next7DaysCount}</span>
+            <span class="kpi-card-label">Next 7 Days</span>
+          </div>
+          <div class="class-desk-kpi-card kpi-card-waiting ${this.state.deskFilter === "waiting" ? "active-filter" : ""}"
+               onclick="ClassTracker.filterByDesk('waiting')">
+            <span class="kpi-card-count">${kpis.waitingOnOthersCount}</span>
+            <span class="kpi-card-label">Waiting On Others</span>
+          </div>
+          <div class="class-desk-kpi-card kpi-card-closeout ${this.state.deskFilter === "closeout" ? "active-filter" : ""}"
+               onclick="ClassTracker.filterByDesk('closeout')">
+            <span class="kpi-card-count">${kpis.needsCloseoutCount}</span>
+            <span class="kpi-card-label">Needs Closeout</span>
+          </div>
+        </div>
+        ${actionRowsHtml ? `<div class="class-desk-action-items">${actionRowsHtml}</div>` : ""}
+      `;
+    },
+
+    filterByDesk(filterKey) {
+      if (this.state.deskFilter === filterKey) {
+        this.state.deskFilter = null;
+        this.state.filterStatus = "active";
+      } else {
+        this.state.deskFilter = filterKey;
+        if (filterKey === "closeout") this.state.filterStatus = "closeout";
+        else if (filterKey === "attention") this.state.filterStatus = "needs_attention";
+        else this.state.filterStatus = "active";
+      }
+
+      const statusSelect = document.getElementById("class-tracker-filter-status");
+      if (statusSelect) statusSelect.value = this.state.filterStatus;
+
+      this.renderDesk();
+      this.renderTimeline();
+    },
+
+    // Render Timeline Cards
+    renderTimeline() {
+      const container = document.getElementById("class-tracker-timeline");
+      if (!container) return;
+
+      const now = new Date();
+      let filtered = this.state.classes.filter((c) => {
+        const daysUntil = getDaysUntilClassInEastern(c.start_date, now);
+        const isPast = daysUntil < 0 && !isTodayInEastern(c.start_date, now);
+
+        // Status filter
+        if (this.state.filterStatus === "active") {
+          if (c.is_ignored || c.is_canceled || c.closed_at) return false;
+        } else if (this.state.filterStatus === "needs_attention") {
+          if (c.is_ignored || c.is_canceled || c.closed_at) return false;
+          if (c.class_type !== "unclassified" && (c.priorityScore || 0) < 60) return false;
+        } else if (this.state.filterStatus === "closeout") {
+          if (!isPast || c.closed_at || c.is_canceled || c.is_ignored) return false;
+        } else if (this.state.filterStatus === "ignored") {
+          if (!c.is_ignored && c.class_type !== "ignore") return false;
+        } else if (this.state.filterStatus === "canceled") {
+          if (!c.is_canceled) return false;
+        } else if (this.state.filterStatus === "archive") {
+          if (!c.closed_at && !isPast) return false;
+        }
+
+        // Type filter
+        if (this.state.filterType !== "all" && c.class_type !== this.state.filterType) {
+          return false;
+        }
+
+        // Format filter
+        if (this.state.filterFormat !== "all" && c.format !== this.state.filterFormat) {
+          return false;
+        }
+
+        // Search query
+        if (this.state.searchQuery) {
+          const q = this.state.searchQuery;
+          const matchTitle = (c.title || "").toLowerCase().includes(q);
+          const matchInstructor = (c.instructor_name || "").toLowerCase().includes(q);
+          const matchLocation = (c.location || "").toLowerCase().includes(q);
+          if (!matchTitle && !matchInstructor && !matchLocation) return false;
+        }
+
+        return true;
+      });
+
+      // Sort
+      if (this.state.sortBy === "priority") {
+        filtered.sort((a, b) => (b.priorityScore || 0) - (a.priorityScore || 0));
+      } else {
+        filtered.sort((a, b) => new Date(a.start_date || 0) - new Date(b.start_date || 0));
+      }
+
+      if (filtered.length === 0) {
+        container.innerHTML = `
+          <div style="padding: 30px; text-align: center; color: var(--ink-soft); font-size: 13px;">
+            No tracked classes match these filters.
+          </div>
+        `;
+        return;
+      }
+
+      container.innerHTML = filtered.map((c) => this.renderClassCard(c)).join("");
+    },
+
+    // Render single Class Card
+    renderClassCard(c) {
+      const isExpanded = this.state.expandedClassId === c.id;
+      const dayMonth = getEasternDayMonth(c.start_date);
+      const isToday = isTodayInEastern(c.start_date);
+      const timeRange = formatEasternTimeRange(c.start_date, c.end_date);
+      const daysUntil = getDaysUntilClassInEastern(c.start_date);
+
+      const regCount = c.registered_count || 0;
+      const regGoal = c.registration_goal || 36;
+      const regPct = Math.min(100, Math.round((regCount / regGoal) * 100));
+
+      const healthClass = (c.registrationHealth || "GOOD").toLowerCase().replace("_", "-");
+      const isTopPriority = c.priorityRank && c.priorityRank <= 2 && !c.is_canceled && !c.closed_at;
+
+      let cardModifiers = "";
+      if (isToday) cardModifiers += " is-today";
+      if (isTopPriority) cardModifiers += " is-priority-top";
+      if (c.class_type === "unclassified") cardModifiers += " is-unclassified";
+      if (c.is_canceled) cardModifiers += " is-canceled";
+      if (c.closed_at) cardModifiers += " is-closed";
+
+      const typeLabel = {
+        ccor_provider: "CCOR Provider",
+        florida_realtors: "Florida Realtors",
+        instructor_provider: "Instructor / Outside School",
+        non_ce_ccor: "Non-CE CCOR",
+        unclassified: "Needs Classification",
+        ignore: "Ignored",
+      }[c.class_type] || "Unclassified";
+
+      const formatLabel = {
+        in_person: "In Person",
+        online: "Online",
+        hybrid: "Hybrid",
+      }[c.format || "in_person"];
+
+      return `
+        <div class="class-card ${cardModifiers}" id="class-card-${c.id}">
+          <div class="class-card-summary" onclick="ClassTracker.toggleExpand(${c.id})">
+            <div class="class-date-box">
+              <span class="class-date-month">${dayMonth.month}</span>
+              <span class="class-date-day">${dayMonth.day}</span>
+            </div>
+
+            <div class="class-info-block">
+              <div class="class-title-row">
+                <span class="class-card-title">${this.escapeHtml(c.title)}</span>
+                ${isToday ? '<span class="class-today-pill">TODAY</span>' : ""}
+                ${c.is_canceled ? '<span class="class-badge" style="background:#fee2e2;color:#ef4444;">CANCELED</span>' : ""}
+                ${c.closed_at ? '<span class="class-badge" style="background:#f3f4f6;color:#6b7280;">CLOSED</span>' : ""}
+              </div>
+              <div class="class-meta-row">
+                <span class="class-badge badge-type-${(c.class_type || "unclassified").replace("_", "")}">${typeLabel}</span>
+                <span class="class-badge badge-format-${(c.format || "in_person").replace("_", "")}">${formatLabel}</span>
+                <span>${timeRange}</span>
+                ${c.ce_hours ? `<span class="class-badge" style="background:#e0f2fe;color:#0284c7;">${c.ce_hours} CE</span>` : ""}
+                <span>• ${daysUntil >= 0 ? `${daysUntil}d away` : `${Math.abs(daysUntil)}d ago`}</span>
+              </div>
+            </div>
+
+            <div class="class-metrics-block">
+              <div class="class-reg-stats health-${healthClass}">
+                <div class="class-reg-text">
+                  <span>${regCount} / ${regGoal}</span>
+                  <span>${(c.registrationHealth || "GOOD").replace("_", " ")}</span>
+                </div>
+                <div class="class-reg-bar">
+                  <div class="class-reg-fill" style="width: ${regPct}%;"></div>
+                </div>
+              </div>
+
+              ${
+                !c.is_canceled && !c.closed_at && c.priorityScore !== undefined && c.priorityScore > 0
+                  ? `
+                <div class="class-priority-badge ${c.priorityScore >= 70 ? "priority-high" : ""}" title="Promotion Priority Score">
+                  <span class="priority-score">${c.priorityScore}</span>
+                  <span class="priority-rank">${c.priorityRank ? `#${c.priorityRank} of ${this.state.classes.length}` : "PRIORITY"}</span>
+                </div>
+              `
+                  : ""
+              }
+
+              <button class="class-expand-btn" aria-label="Toggle details">
+                ${isExpanded ? "▲" : "▼"}
+              </button>
+            </div>
+          </div>
+
+          <div class="class-card-detail" id="class-detail-${c.id}" style="display: ${isExpanded ? "flex" : "none"};">
+            ${isExpanded ? this.renderDetailContent(c.id) : ""}
+          </div>
+        </div>
+      `;
+    },
+
+    // Toggle expand class
+    async toggleExpand(classId) {
+      if (this.state.expandedClassId === classId) {
+        this.state.expandedClassId = null;
+        const detailEl = document.getElementById(`class-detail-${classId}`);
+        if (detailEl) detailEl.style.display = "none";
+        const cardEl = document.getElementById(`class-card-${classId}`);
+        if (cardEl) {
+          const btn = cardEl.querySelector(".class-expand-btn");
+          if (btn) btn.textContent = "▼";
+        }
+        return;
+      }
+
+      // Close previous
+      if (this.state.expandedClassId) {
+        const prevEl = document.getElementById(`class-detail-${this.state.expandedClassId}`);
+        if (prevEl) prevEl.style.display = "none";
+        const prevCard = document.getElementById(`class-card-${this.state.expandedClassId}`);
+        if (prevCard) {
+          const btn = prevCard.querySelector(".class-expand-btn");
+          if (btn) btn.textContent = "▼";
+        }
+      }
+
+      this.state.expandedClassId = classId;
+      const detailEl = document.getElementById(`class-detail-${classId}`);
+      const cardEl = document.getElementById(`class-card-${classId}`);
+      if (cardEl) {
+        const btn = cardEl.querySelector(".class-expand-btn");
+        if (btn) btn.textContent = "▲";
+      }
+
+      if (detailEl) {
+        detailEl.style.display = "flex";
+        detailEl.innerHTML = '<div style="padding:20px;text-align:center;color:var(--ink-soft);">Loading class workflow…</div>';
+      }
+
+      // Fetch fresh detail
+      try {
+        const detail = await this.api(`/classes/${classId}`);
+        this.state.classDetailsCache.set(classId, detail);
+        if (detailEl) {
+          detailEl.innerHTML = this.renderDetailContent(classId);
+        }
+      } catch (err) {
+        if (detailEl) {
+          detailEl.innerHTML = `<div style="color:var(--danger);padding:14px;">Error loading class details: ${err.message}</div>`;
+        }
+      }
+    },
+
+    expandAndScroll(classId) {
+      this.state.filterStatus = "active";
+      const statusSelect = document.getElementById("class-tracker-filter-status");
+      if (statusSelect) statusSelect.value = "active";
+      this.renderTimeline();
+
+      setTimeout(() => {
+        const card = document.getElementById(`class-card-${classId}`);
+        if (card) {
+          card.scrollIntoView({ behavior: "smooth", block: "start" });
+          this.toggleExpand(classId);
+        }
+      }, 50);
+    },
+
+    // Render Expanded Class Details Drawer
+    renderDetailContent(classId) {
+      const d = this.state.classDetailsCache.get(classId);
+      if (!d) return '<div style="padding:14px;">Loading…</div>';
+
+      const isUnclassified = d.class_type === "unclassified";
+      const isFloridaRealtors = d.class_type === "florida_realtors";
+
+      // Group tasks by phase
+      const phases = [
+        { key: "intake", label: "Intake" },
+        { key: "marketing", label: "Marketing" },
+        { key: "sponsor", label: "Sponsor" },
+        { key: "pre_class", label: "Pre-Class" },
+        { key: "class_day", label: "Class Day" },
+        { key: "closeout", label: "Closeout" },
+      ];
+
+      const tasksByPhase = {};
+      for (const p of phases) tasksByPhase[p.key] = [];
+      for (const t of d.tasks || []) {
+        if (tasksByPhase[t.phase]) tasksByPhase[t.phase].push(t);
+        else tasksByPhase.pre_class.push(t);
+      }
+
+      const formattedStartDate = formatEasternDate(d.start_date);
+      const formattedTimeRange = formatEasternTimeRange(d.start_date, d.end_date);
+
+      return `
+        <!-- Unclassified Prompt if needed -->
+        ${
+          isUnclassified
+            ? `
+          <div class="unclassified-callout">
+            <div class="unclassified-callout-title">⚠️ Whose class is this? (Select Classification to Generate Tasks)</div>
+            <div class="unclassified-buttons">
+              <button class="button-primary" onclick="ClassTracker.updateClassType(${d.id}, 'ccor_provider')">CCOR Provider</button>
+              <button class="button-primary" onclick="ClassTracker.updateClassType(${d.id}, 'florida_realtors')">Florida Realtors</button>
+              <button class="button-secondary" onclick="ClassTracker.updateClassType(${d.id}, 'instructor_provider')">Instructor / Outside School</button>
+              <button class="button-secondary" onclick="ClassTracker.updateClassType(${d.id}, 'non_ce_ccor')">Non-CE CCOR</button>
+              <button class="button-secondary" style="color:var(--danger);" onclick="ClassTracker.updateClassType(${d.id}, 'ignore')">Ignore Event</button>
+            </div>
+          </div>
+        `
+            : ""
+        }
+
+        <!-- Pinned Important Notes Banner -->
+        <div class="class-important-notes-banner">
+          <div class="important-notes-header">
+            <span>📌 Pinned Important Notes</span>
+            <span style="font-size:10px;font-weight:normal;">Auto-saves on blur</span>
+          </div>
+          <textarea class="important-notes-textarea"
+                    placeholder="Add critical logistical notes (e.g. Instructor bringing updated handouts, Sponsor arrives at 8:30, Zoom link updated)..."
+                    onblur="ClassTracker.saveNotes(${d.id}, this.value)">${this.escapeHtml(d.important_notes || "")}</textarea>
+        </div>
+
+        <!-- Quick Class Info Form Grid -->
+        <div class="class-info-grid">
+          <div class="form-group">
+            <label>Class Classification</label>
+            <select onchange="ClassTracker.updateClassType(${d.id}, this.value)">
+              <option value="unclassified" ${d.class_type === "unclassified" ? "selected" : ""}>Needs Classification</option>
+              <option value="ccor_provider" ${d.class_type === "ccor_provider" ? "selected" : ""}>CCOR Provider</option>
+              <option value="florida_realtors" ${d.class_type === "florida_realtors" ? "selected" : ""}>Florida Realtors</option>
+              <option value="instructor_provider" ${d.class_type === "instructor_provider" ? "selected" : ""}>Instructor / Outside School</option>
+              <option value="non_ce_ccor" ${d.class_type === "non_ce_ccor" ? "selected" : ""}>Non-CE CCOR</option>
+              <option value="ignore" ${d.class_type === "ignore" ? "selected" : ""}>Ignored</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label>Class Format</label>
+            <select onchange="ClassTracker.updateMetadataField(${d.id}, 'format_override', this.value)">
+              <option value="in_person" ${d.format === "in_person" ? "selected" : ""}>In Person</option>
+              <option value="online" ${d.format === "online" ? "selected" : ""}>Online</option>
+              <option value="hybrid" ${d.format === "hybrid" ? "selected" : ""}>Hybrid</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label>Registration Goal</label>
+            <input type="number" value="${d.registration_goal || 36}" min="1" max="500"
+                   onchange="ClassTracker.updateMetadataField(${d.id}, 'registration_goal', Number(this.value))">
+          </div>
+
+          <div class="form-group">
+            <label>Instructor Name</label>
+            <input type="text" value="${this.escapeHtml(d.instructor_name || "")}" placeholder="Enter instructor name"
+                   onblur="ClassTracker.updateMetadataField(${d.id}, 'instructor_name', this.value)">
+          </div>
+
+          <div class="form-group">
+            <label>Instructor Email</label>
+            <input type="email" value="${this.escapeHtml(d.instructor_email || "")}" placeholder="email@example.com"
+                   onblur="ClassTracker.updateMetadataField(${d.id}, 'instructor_email', this.value)">
+          </div>
+
+          <div class="form-group">
+            <label>Instructor Phone</label>
+            <input type="tel" value="${this.escapeHtml(d.instructor_phone || "")}" placeholder="(239) 555-0100"
+                   onblur="ClassTracker.updateMetadataField(${d.id}, 'instructor_phone', this.value)">
+          </div>
+
+          <div class="form-group">
+            <label>Sponsor Status</label>
+            <select onchange="ClassTracker.updateSponsorStatus(${d.id}, this.value)">
+              <option value="looking" ${d.sponsor_status === "looking" ? "selected" : ""}>Looking for Sponsor</option>
+              <option value="confirmed" ${d.sponsor_status === "confirmed" ? "selected" : ""}>Sponsor Confirmed</option>
+              <option value="not_needed" ${d.sponsor_status === "not_needed" ? "selected" : ""}>No Sponsor Needed</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label>Attendee Survey URL</label>
+            <input type="url" value="${this.escapeHtml(d.survey_url || "")}" placeholder="https://coconutcoastrealtors.org/feedback"
+                   onblur="ClassTracker.updateMetadataField(${d.id}, 'survey_url', this.value)">
+          </div>
+
+          <!-- GrowthZone Authoritative Fields (Read-Only) -->
+          <div class="form-group">
+            <label>Date & Time (Eastern Time)</label>
+            <input type="text" value="${formattedStartDate} • ${formattedTimeRange}" readonly>
+          </div>
+
+          <div class="form-group">
+            <label>GrowthZone Registration Portal</label>
+            <div style="display:flex;gap:6px;align-items:center;">
+              <input type="text" value="${this.escapeHtml(d.public_url || "")}" readonly style="flex:1;">
+              ${
+                d.public_url
+                  ? `<a href="${d.public_url}" target="_blank" rel="noopener" class="button-secondary" style="font-size:11px;padding:5px 8px;text-decoration:none;">Open ↗</a>`
+                  : ""
+              }
+            </div>
+          </div>
+
+          <!-- Sponsor Detailed Fields (if confirmed) -->
+          ${
+            d.sponsor_status === "confirmed"
+              ? `
+            <div class="sponsor-details-box">
+              <div class="form-group">
+                <label>Sponsor Business Name</label>
+                <input type="text" value="${this.escapeHtml(d.sponsor_name || "")}" placeholder="e.g. Sunbelt Title"
+                       onblur="ClassTracker.updateMetadataField(${d.id}, 'sponsor_name', this.value)">
+              </div>
+              <div class="form-group">
+                <label>Sponsor Contact Person</label>
+                <input type="text" value="${this.escapeHtml(d.sponsor_contact_name || "")}" placeholder="e.g. Jane Smith"
+                       onblur="ClassTracker.updateMetadataField(${d.id}, 'sponsor_contact_name', this.value)">
+              </div>
+              <div class="form-group">
+                <label>Sponsor Email</label>
+                <input type="email" value="${this.escapeHtml(d.sponsor_contact_email || "")}" placeholder="jane@title.com"
+                       onblur="ClassTracker.updateMetadataField(${d.id}, 'sponsor_contact_email', this.value)">
+              </div>
+              <div class="form-group">
+                <label>Food / Refreshments</label>
+                <input type="text" value="${this.escapeHtml(d.sponsor_food_type || "")}" placeholder="e.g. Bagels & Coffee"
+                       onblur="ClassTracker.updateMetadataField(${d.id}, 'sponsor_food_type', this.value)">
+              </div>
+              <div class="form-group">
+                <label>Sponsor Arrival Time</label>
+                <input type="text" value="${this.escapeHtml(d.sponsor_arrival_time || "")}" placeholder="8:30 AM"
+                       onblur="ClassTracker.updateMetadataField(${d.id}, 'sponsor_arrival_time', this.value)">
+              </div>
+            </div>
+          `
+              : ""
+          }
+        </div>
+
+        <!-- Workflow Phases & Tasks -->
+        <div class="workflow-phases-container">
+          <div style="font-size:12px;font-weight:800;letter-spacing:0.06em;text-transform:uppercase;color:var(--ink-soft);display:flex;justify-content:space-between;align-items:center;">
+            <span>Workflow Checklist</span>
+            <button class="button-secondary" style="font-size:11px;padding:3px 8px;" onclick="ClassTracker.openCustomTaskModal(${d.id})">+ Add Custom Task</button>
+          </div>
+
+          ${phases
+            .map((p) => {
+              const phaseTasks = tasksByPhase[p.key] || [];
+              const completedCount = phaseTasks.filter((t) => t.status === "completed").length;
+              return `
+              <div class="phase-accordion-card">
+                <div class="phase-accordion-header is-open">
+                  <span class="phase-title-text">
+                    <span>${p.label}</span>
+                    <span class="phase-progress-count">(${completedCount} of ${phaseTasks.length} complete)</span>
+                  </span>
+                </div>
+                <div class="phase-task-list">
+                  ${phaseTasks.length === 0 ? '<div style="padding:10px 12px;font-size:11px;color:var(--ink-soft);">No tasks in this phase.</div>' : phaseTasks.map((t) => this.renderTaskRow(d, t)).join("")}
+                </div>
+              </div>
+            `;
+            })
+            .join("")}
+        </div>
+
+        <!-- Florida Realtors Materials Center (if FR class) -->
+        ${
+          isFloridaRealtors
+            ? `
+          <div class="class-materials-section">
+            <div style="display:flex;align-items:center;justify-content:space-between;">
+              <div style="font-size:13px;font-weight:800;color:var(--ink);">Florida Realtors Materials Center</div>
+              <button class="button-secondary" style="font-size:11px;padding:3px 8px;" onclick="ClassTracker.openAddResourceModal(${d.id})">+ Add Resource</button>
+            </div>
+            ${this.renderMaterialsTable(d, d.links || [])}
+          </div>
+        `
+            : `
+          <div class="class-materials-section">
+            <div style="display:flex;align-items:center;justify-content:space-between;">
+              <div style="font-size:13px;font-weight:800;color:var(--ink);">Class Materials & Resources</div>
+              <button class="button-secondary" style="font-size:11px;padding:3px 8px;" onclick="ClassTracker.openAddResourceModal(${d.id})">+ Add Resource</button>
+            </div>
+            ${this.renderMaterialsTable(d, d.links || [])}
+          </div>
+        `
+        }
+
+        <!-- Registration History & Activity Log -->
+        <div class="class-history-section">
+          <!-- Registration Snapshots -->
+          <div class="history-card">
+            <div class="history-title">
+              <span>Registration Trend</span>
+              <span style="color:var(--accent);font-weight:bold;">${d.sevenDayGrowth !== undefined && d.sevenDayGrowth > 0 ? `+${d.sevenDayGrowth} in last 7 days` : ""}</span>
+            </div>
+            ${this.renderSnapshotsList(d.snapshots || [])}
+          </div>
+
+          <!-- Activity Audit Log -->
+          <div class="history-card">
+            <div class="history-title">
+              <span>Recent Activity</span>
+              <button class="button-secondary" style="font-size:10px;padding:2px 6px;" onclick="ClassTracker.openFullActivityModal(${d.id})">Full Log</button>
+            </div>
+            <div class="activity-feed">
+              ${(d.activity || []).slice(0, 8).map((a) => this.renderActivityItem(a)).join("")}
+            </div>
+          </div>
+        </div>
+
+        <!-- Class Footer Controls -->
+        <div style="display:flex;justify-content:space-between;align-items:center;border-top:1px solid var(--panel-border);padding-top:12px;margin-top:4px;">
+          <div>
+            ${
+              d.closed_at
+                ? `<button class="button-secondary" onclick="ClassTracker.toggleArchiveClass(${d.id}, false)">Restore to Active</button>`
+                : `<button class="button-secondary" onclick="ClassTracker.toggleArchiveClass(${d.id}, true)">Archive / Close Class</button>`
+            }
+          </div>
+          <button class="button-secondary" onclick="ClassTracker.toggleExpand(${d.id})">Close Drawer ▲</button>
+        </div>
+      `;
+    },
+
+    // Render single task row
+    renderTaskRow(classObj, t) {
+      const isCompleted = t.status === "completed";
+      const isClaimed = Boolean(t.claimed_by_id);
+
+      let assigneeDisplay = "Unassigned";
+      if (t.assignees && t.assignees.length > 0) {
+        assigneeDisplay = t.assignees.map((a) => a.name.split(" ")[0]).join(" + ");
+      } else if (t.assigned_to_id) {
+        assigneeDisplay = "Assigned";
+      }
+
+      return `
+        <div class="class-task-row ${isCompleted ? "task-completed" : ""}" id="task-row-${t.id}">
+          <div class="class-task-left">
+            <input type="checkbox" ${isCompleted ? "checked" : ""}
+                   onchange="ClassTracker.toggleTaskComplete(${t.id}, this.checked)"
+                   title="Mark Complete / Reopen">
+            <span class="class-task-title">${this.escapeHtml(t.title)}</span>
+            ${t.due_date ? `<span class="class-task-due">${formatEasternDate(t.due_date)}</span>` : ""}
+            <span class="class-task-assignee-tag" onclick="ClassTracker.openAssignModal(${t.id})" title="Change Assignees">
+              👤 ${assigneeDisplay}
+            </span>
+          </div>
+
+          <div class="class-task-actions">
+            ${
+              !isClaimed && !isCompleted
+                ? `<button class="btn-task-claim" onclick="ClassTracker.claimTask(${t.id})">Claim</button>`
+                : ""
+            }
+            ${
+              t.email_template_key
+                ? `<button class="btn-task-email" onclick="ClassTracker.openEmailModal(${classObj.id}, ${t.id}, '${t.email_template_key}')">✉ Email</button>`
+                : ""
+            }
+            <button class="button-secondary" style="font-size:10px;padding:2px 6px;" onclick="ClassTracker.editTaskNotes(${t.id})" title="Task Notes">📝</button>
+          </div>
+        </div>
+      `;
+    },
+
+    // Render Materials Table
+    renderMaterialsTable(classObj, links = []) {
+      if (links.length === 0) {
+        return '<div style="padding:10px;font-size:11px;color:var(--ink-soft);">No resources attached.</div>';
+      }
+
+      return `
+        <table class="materials-table">
+          <thead>
+            <tr>
+              <th>Resource</th>
+              <th>Category</th>
+              <th>Status</th>
+              <th style="text-align:right;">Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            ${links
+              .map(
+                (l) => `
+              <tr>
+                <td style="font-weight:600;">
+                  ${this.escapeHtml(l.label)}
+                  ${
+                    l.url
+                      ? `<a href="${l.url}" target="_blank" rel="noopener" style="margin-left:6px;font-size:11px;color:var(--accent);text-decoration:none;">Open ↗</a>`
+                      : '<span style="font-size:10px;color:var(--ink-soft);margin-left:6px;">(No Link Set)</span>'
+                  }
+                </td>
+                <td style="text-transform:capitalize;color:var(--ink-soft);">${(l.category || "General").replace("_", " ")}</td>
+                <td>
+                  ${
+                    l.is_printable
+                      ? l.printed_at
+                        ? `<label style="cursor:pointer;color:#16a34a;font-weight:600;font-size:11px;">
+                             <input type="checkbox" checked onchange="ClassTracker.togglePrinted(${l.id}, false)">
+                             ✓ Printed
+                           </label>`
+                        : `<label style="cursor:pointer;color:var(--ink-soft);font-size:11px;">
+                             <input type="checkbox" onchange="ClassTracker.togglePrinted(${l.id}, true)">
+                             Print Pending
+                           </label>`
+                      : '<span style="font-size:10px;color:var(--ink-soft);">Digital Only</span>'
+                  }
+                </td>
+                <td style="text-align:right;">
+                  <button class="button-secondary" style="font-size:10px;padding:2px 6px;" onclick="ClassTracker.editLinkUrl(${l.id}, '${this.escapeHtml(l.url || "")}')">Edit Link</button>
+                  <button class="button-secondary" style="font-size:10px;padding:2px 6px;color:var(--danger);" onclick="ClassTracker.deleteLink(${l.id})">Delete</button>
+                </td>
+              </tr>
+            `
+              )
+              .join("")}
+          </tbody>
+        </table>
+      `;
+    },
+
+    // Render Snapshots List
+    renderSnapshotsList(snapshots = []) {
+      if (snapshots.length === 0) {
+        return '<div style="color:var(--ink-soft);font-size:11px;">No registration history recorded yet.</div>';
+      }
+
+      const recent = snapshots.slice(-5).reverse();
+      return `
+        <table class="snapshot-table">
+          <tbody>
+            ${recent
+              .map(
+                (s) => `
+              <tr>
+                <td>${formatEasternDate(s.recorded_at)}</td>
+                <td style="font-weight:bold;text-align:right;">${s.registered_count} registered</td>
+              </tr>
+            `
+              )
+              .join("")}
+          </tbody>
+        </table>
+      `;
+    },
+
+    // Render Activity Feed Item
+    renderActivityItem(a) {
+      const timeStr = a.created_at ? formatEasternDate(a.created_at) + " " + formatEasternTime(a.created_at) : "";
+      return `
+        <div class="activity-feed-item">
+          <div><strong>${this.escapeHtml(a.actor_name || "System")}</strong> ${this.escapeHtml(a.note || a.action)}</div>
+          <div class="activity-time">${timeStr}</div>
+        </div>
+      `;
+    },
+
+    // Task Actions
+    async toggleTaskComplete(taskId, isChecked) {
+      const status = isChecked ? "completed" : "pending";
+      try {
+        await this.api(`/classes/tasks/${taskId}`, {
+          method: "PATCH",
+          body: JSON.stringify({ status }),
+        });
+        this.showToast(isChecked ? "Task completed! 🎉" : "Task reopened");
+        if (this.state.expandedClassId) {
+          await this.refreshClassDetail(this.state.expandedClassId);
+        }
+      } catch (err) {
+        this.showToast(`Failed to update task: ${err.message}`, true);
+      }
+    },
+
+    async claimTask(taskId) {
+      try {
+        const res = await this.api(`/classes/tasks/${taskId}/claim`, { method: "POST" });
+        if (res.success) {
+          this.showToast("Task claimed! 👍");
+          if (this.state.expandedClassId) {
+            await this.refreshClassDetail(this.state.expandedClassId);
+          }
+        }
+      } catch (err) {
+        if (err.status === 409) {
+          this.showToast(err.message || "Task already claimed by another team member", true);
+        } else {
+          this.showToast(`Claim failed: ${err.message}`, true);
+        }
+        if (this.state.expandedClassId) {
+          await this.refreshClassDetail(this.state.expandedClassId);
+        }
+      }
+    },
+
+    // Email Communication Modal
+    openEmailModal(classId, taskId, templateKey) {
+      const classObj = this.state.classDetailsCache.get(classId);
+      if (!classObj) return;
+
+      const tokens = {
+        class_title: classObj.title,
+        class_date: formatEasternDate(classObj.start_date),
+        relative_date: `on ${formatEasternDate(classObj.start_date)}`,
+        start_time: formatEasternTime(classObj.start_date),
+        end_time: formatEasternTime(classObj.end_date),
+        format: classObj.format,
+        location: classObj.location,
+        zoom_link: classObj.zoom_link,
+        instructor_name: classObj.instructor_name,
+        registration_count: classObj.registered_count,
+        registration_goal: classObj.registration_goal,
+        registration_link: classObj.public_url,
+        sponsor_name: classObj.sponsor_name,
+        sponsor_contact_name: classObj.sponsor_contact_name,
+        sponsor_arrival_time: classObj.sponsor_arrival_time,
+        survey_link: classObj.survey_url,
+        ce_hours: classObj.ce_hours,
+      };
+
+      const rendered = renderEmailTemplate(templateKey, tokens);
+
+      const modalHtml = `
+        <div class="class-tracker-modal-backdrop" id="email-modal-backdrop">
+          <div class="class-tracker-modal">
+            <div class="class-tracker-modal-header">
+              <span class="class-tracker-modal-title">Draft Email: ${rendered.label}</span>
+              <button class="button-secondary" onclick="document.getElementById('email-modal-backdrop').remove()">✕</button>
+            </div>
+            <div class="class-tracker-modal-body">
+              <div class="form-group">
+                <label>Subject</label>
+                <input type="text" id="email-draft-subject" value="${this.escapeHtml(rendered.subject)}">
+              </div>
+              <div class="form-group">
+                <label>Message Body</label>
+                <textarea id="email-draft-body" style="height:180px;font-family:inherit;font-size:12px;padding:8px;border:1px solid var(--panel-border);border-radius:4px;background:var(--panel);color:var(--ink);">${this.escapeHtml(rendered.body)}</textarea>
+              </div>
+            </div>
+            <div class="class-tracker-modal-footer">
+              <button class="button-secondary" onclick="ClassTracker.copyEmailSubject()">Copy Subject</button>
+              <button class="button-secondary" onclick="ClassTracker.copyEmailBody()">Copy Message</button>
+              <button class="button-secondary" onclick="ClassTracker.copyEmailAll()">Copy All</button>
+              <button class="button-primary" style="background:#16a34a;" onclick="ClassTracker.markEmailSent(${taskId}, '${templateKey}')">✓ Mark Sent</button>
+            </div>
+          </div>
+        </div>
+      `;
+
+      const existing = document.getElementById("email-modal-backdrop");
+      if (existing) existing.remove();
+      document.body.insertAdjacentHTML("beforeend", modalHtml);
+    },
+
+    async copyEmailSubject() {
+      const subject = document.getElementById("email-draft-subject").value;
+      await navigator.clipboard.writeText(subject);
+      this.showToast("Subject copied to clipboard! 📋");
+    },
+
+    async copyEmailBody() {
+      const body = document.getElementById("email-draft-body").value;
+      await navigator.clipboard.writeText(body);
+      this.showToast("Message copied to clipboard! 📋");
+    },
+
+    async copyEmailAll() {
+      const subject = document.getElementById("email-draft-subject").value;
+      const body = document.getElementById("email-draft-body").value;
+      await navigator.clipboard.writeText(`Subject: ${subject}\n\n${body}`);
+      this.showToast("Email draft copied to clipboard! 📋");
+    },
+
+    async markEmailSent(taskId, templateKey) {
+      try {
+        await this.api(`/classes/tasks/${taskId}/mark-sent`, {
+          method: "POST",
+          body: JSON.stringify({ template_key: templateKey }),
+        });
+        this.showToast("Email marked sent and task completed! 🎉");
+        const modal = document.getElementById("email-modal-backdrop");
+        if (modal) modal.remove();
+        if (this.state.expandedClassId) {
+          await this.refreshClassDetail(this.state.expandedClassId);
+        }
+      } catch (err) {
+        this.showToast(`Mark sent failed: ${err.message}`, true);
+      }
+    },
+
+    // Materials Actions
+    async togglePrinted(linkId, isPrinted) {
+      try {
+        await this.api(`/classes/links/${linkId}`, {
+          method: "PATCH",
+          body: JSON.stringify({ is_printed: isPrinted }),
+        });
+        this.showToast(isPrinted ? "Marked printed! 🖨️" : "Unmarked printed");
+        if (this.state.expandedClassId) {
+          await this.refreshClassDetail(this.state.expandedClassId);
+        }
+      } catch (err) {
+        this.showToast(`Failed: ${err.message}`, true);
+      }
+    },
+
+    async editLinkUrl(linkId, currentUrl) {
+      const newUrl = prompt("Enter Resource URL:", currentUrl);
+      if (newUrl === null) return;
+      try {
+        await this.api(`/classes/links/${linkId}`, {
+          method: "PATCH",
+          body: JSON.stringify({ url: newUrl.trim() }),
+        });
+        this.showToast("Resource URL updated!");
+        if (this.state.expandedClassId) {
+          await this.refreshClassDetail(this.state.expandedClassId);
+        }
+      } catch (err) {
+        this.showToast(`Failed: ${err.message}`, true);
+      }
+    },
+
+    async deleteLink(linkId) {
+      if (!confirm("Are you sure you want to remove this resource link?")) return;
+      try {
+        await this.api(`/classes/links/${linkId}`, { method: "DELETE" });
+        this.showToast("Resource removed");
+        if (this.state.expandedClassId) {
+          await this.refreshClassDetail(this.state.expandedClassId);
+        }
+      } catch (err) {
+        this.showToast(`Failed: ${err.message}`, true);
+      }
+    },
+
+    openAddResourceModal(classId) {
+      const label = prompt("Resource Label (e.g. Course Handout):");
+      if (!label) return;
+      const url = prompt("Resource URL (Google Drive / GrowthZone / PDF):") || "";
+      const isPrintable = confirm("Is this item printable before class?");
+
+      this.api(`/classes/${classId}/links`, {
+        method: "POST",
+        body: JSON.stringify({
+          label: label.trim(),
+          category: "course",
+          url: url.trim(),
+          is_printable: isPrintable,
+        }),
+      })
+        .then(() => {
+          this.showToast("Resource added!");
+          return this.refreshClassDetail(classId);
+        })
+        .catch((err) => this.showToast(`Failed: ${err.message}`, true));
+    },
+
+    // Staff Assign Modal
+    openAssignModal(taskId) {
+      const users = (window.state && window.state.users) || [];
+      const classId = this.state.expandedClassId;
+      const classObj = this.state.classDetailsCache.get(classId);
+      const task = (classObj && classObj.tasks && classObj.tasks.find((t) => t.id === taskId)) || {};
+      const currentAssigneeIds = new Set((task.assignees || []).map((a) => a.id));
+
+      const modalHtml = `
+        <div class="class-tracker-modal-backdrop" id="assign-modal-backdrop">
+          <div class="class-tracker-modal" style="max-width:400px;">
+            <div class="class-tracker-modal-header">
+              <span class="class-tracker-modal-title">Assign Task: ${this.escapeHtml(task.title || "")}</span>
+              <button class="button-secondary" onclick="document.getElementById('assign-modal-backdrop').remove()">✕</button>
+            </div>
+            <div class="class-tracker-modal-body">
+              <div style="font-size:12px;color:var(--ink-soft);">Select one or more staff assignees:</div>
+              <div style="display:flex;flex-direction:column;gap:8px;max-height:220px;overflow-y:auto;">
+                ${users
+                  .map(
+                    (u) => `
+                  <label style="display:flex;align-items:center;gap:8px;font-size:12px;cursor:pointer;">
+                    <input type="checkbox" value="${u.id}" class="assignee-checkbox" ${currentAssigneeIds.has(u.id) ? "checked" : ""}>
+                    <span><strong>${this.escapeHtml(u.name)}</strong> (${this.escapeHtml(u.email)})</span>
+                  </label>
+                `
+                  )
+                  .join("")}
+              </div>
+            </div>
+            <div class="class-tracker-modal-footer">
+              <button class="button-secondary" onclick="document.getElementById('assign-modal-backdrop').remove()">Cancel</button>
+              <button class="button-primary" onclick="ClassTracker.saveAssignees(${taskId})">Save Assignees</button>
+            </div>
+          </div>
+        </div>
+      `;
+
+      const existing = document.getElementById("assign-modal-backdrop");
+      if (existing) existing.remove();
+      document.body.insertAdjacentHTML("beforeend", modalHtml);
+    },
+
+    async saveAssignees(taskId) {
+      const checkboxes = document.querySelectorAll(".assignee-checkbox:checked");
+      const assigneeIds = Array.from(checkboxes).map((cb) => Number(cb.value));
+
+      try {
+        await this.api(`/classes/tasks/${taskId}`, {
+          method: "PATCH",
+          body: JSON.stringify({ assignee_ids: assigneeIds }),
+        });
+        this.showToast("Assignees updated!");
+        const modal = document.getElementById("assign-modal-backdrop");
+        if (modal) modal.remove();
+        if (this.state.expandedClassId) {
+          await this.refreshClassDetail(this.state.expandedClassId);
+        }
+      } catch (err) {
+        this.showToast(`Failed: ${err.message}`, true);
+      }
+    },
+
+    // Custom Task Modal
+    openCustomTaskModal(classId) {
+      const title = prompt("Enter Custom Task Title:");
+      if (!title) return;
+      const phase = prompt("Phase (intake, marketing, sponsor, pre_class, class_day, closeout):", "pre_class") || "pre_class";
+
+      this.api(`/classes/${classId}/tasks`, {
+        method: "POST",
+        body: JSON.stringify({
+          title: title.trim(),
+          phase: phase.trim(),
+        }),
+      })
+        .then(() => {
+          this.showToast("Custom task created!");
+          return this.refreshClassDetail(classId);
+        })
+        .catch((err) => this.showToast(`Failed: ${err.message}`, true));
+    },
+
+    // Update Class Classification
+    async updateClassType(classId, newType) {
+      if (
+        !confirm(
+          `Changing this class to ${newType.replace("_", " ")} will update its workflow tasks matrix. Existing completed task history will be preserved. Proceed?`
+        )
+      ) {
+        return;
+      }
+
+      try {
+        await this.api(`/classes/${classId}`, {
+          method: "PATCH",
+          body: JSON.stringify({ class_type: newType }),
+        });
+        this.showToast(`Classification updated to ${newType.replace("_", " ")}`);
+        await this.loadClasses();
+        await this.refreshClassDetail(classId);
+      } catch (err) {
+        this.showToast(`Failed to update type: ${err.message}`, true);
+      }
+    },
+
+    async updateMetadataField(classId, field, value) {
+      try {
+        await this.api(`/classes/${classId}`, {
+          method: "PATCH",
+          body: JSON.stringify({ [field]: value }),
+        });
+        this.showToast("Class updated!");
+        await this.loadClasses();
+      } catch (err) {
+        this.showToast(`Update failed: ${err.message}`, true);
+      }
+    },
+
+    async updateSponsorStatus(classId, status) {
+      try {
+        await this.api(`/classes/${classId}`, {
+          method: "PATCH",
+          body: JSON.stringify({ sponsor_status: status }),
+        });
+        this.showToast(`Sponsor status: ${status.replace("_", " ")}`);
+        await this.refreshClassDetail(classId);
+      } catch (err) {
+        this.showToast(`Failed: ${err.message}`, true);
+      }
+    },
+
+    async saveNotes(classId, notes) {
+      try {
+        await this.api(`/classes/${classId}`, {
+          method: "PATCH",
+          body: JSON.stringify({ important_notes: notes }),
+        });
+        this.showToast("Important notes saved!");
+      } catch (err) {
+        this.showToast(`Failed to save notes: ${err.message}`, true);
+      }
+    },
+
+    async toggleArchiveClass(classId, shouldArchive) {
+      const closed_at = shouldArchive ? new Date().toISOString() : null;
+      try {
+        await this.api(`/classes/${classId}`, {
+          method: "PATCH",
+          body: JSON.stringify({ closed_at }),
+        });
+        this.showToast(shouldArchive ? "Class archived / closed" : "Class restored to active");
+        await this.loadClasses();
+        await this.refreshClassDetail(classId);
+      } catch (err) {
+        this.showToast(`Failed: ${err.message}`, true);
+      }
+    },
+
+    async refreshClassDetail(classId) {
+      try {
+        const detail = await this.api(`/classes/${classId}`);
+        this.state.classDetailsCache.set(classId, detail);
+        const detailEl = document.getElementById(`class-detail-${classId}`);
+        if (detailEl) {
+          detailEl.innerHTML = this.renderDetailContent(classId);
+        }
+      } catch (err) {
+        console.error("Failed to refresh detail:", err);
+      }
+    },
+
+    // Rules Management Modal
+    async openRulesModal() {
+      try {
+        const rules = await this.api("/classes/rules");
+        const modalHtml = `
+          <div class="class-tracker-modal-backdrop" id="rules-modal-backdrop">
+            <div class="class-tracker-modal">
+              <div class="class-tracker-modal-header">
+                <span class="class-tracker-modal-title">Class Inclusion & Exclusion Rules</span>
+                <button class="button-secondary" onclick="document.getElementById('rules-modal-backdrop').remove()">✕</button>
+              </div>
+              <div class="class-tracker-modal-body">
+                <div style="font-size:12px;color:var(--ink-soft);">Define recurring automated rules to force include or ignore GrowthZone events:</div>
+                <div style="max-height:200px;overflow-y:auto;">
+                  <table class="materials-table">
+                    <thead>
+                      <tr>
+                        <th>Rule Type</th>
+                        <th>Condition</th>
+                        <th>Status</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      ${
+                        rules.length === 0
+                          ? '<tr><td colspan="3" style="color:var(--ink-soft);padding:8px;">No custom rules set yet.</td></tr>'
+                          : rules
+                              .map(
+                                (r) => `
+                            <tr>
+                              <td><strong>${r.rule_type}</strong></td>
+                              <td>${r.field} ${r.operator} "${this.escapeHtml(r.value)}"</td>
+                              <td>${r.is_active ? "Active" : "Disabled"}</td>
+                            </tr>
+                          `
+                              )
+                              .join("")
+                      }
+                    </tbody>
+                  </table>
+                </div>
+
+                <div style="border-top:1px dashed var(--panel-border);padding-top:10px;display:flex;flex-direction:column;gap:6px;">
+                  <span style="font-size:11px;font-weight:700;">Add New Rule</span>
+                  <div style="display:flex;gap:6px;">
+                    <select id="new-rule-type" style="font-size:11px;padding:4px;">
+                      <option value="ignore">Ignore Event</option>
+                      <option value="force_include">Force Include</option>
+                    </select>
+                    <select id="new-rule-field" style="font-size:11px;padding:4px;">
+                      <option value="title">Title</option>
+                      <option value="organizer">Organizer</option>
+                    </select>
+                    <input type="text" id="new-rule-val" placeholder="e.g. RPR or Realtor.com" style="flex:1;font-size:11px;padding:4px;">
+                    <button class="button-primary" style="font-size:11px;" onclick="ClassTracker.saveNewRule()">+ Add</button>
+                  </div>
+                </div>
+              </div>
+              <div class="class-tracker-modal-footer">
+                <button class="button-secondary" onclick="document.getElementById('rules-modal-backdrop').remove()">Close</button>
+              </div>
+            </div>
+          </div>
+        `;
+        const existing = document.getElementById("rules-modal-backdrop");
+        if (existing) existing.remove();
+        document.body.insertAdjacentHTML("beforeend", modalHtml);
+      } catch (err) {
+        this.showToast(`Error opening rules: ${err.message}`, true);
+      }
+    },
+
+    async saveNewRule() {
+      const ruleType = document.getElementById("new-rule-type").value;
+      const field = document.getElementById("new-rule-field").value;
+      const val = document.getElementById("new-rule-val").value.trim();
+      if (!val) return;
+
+      try {
+        await this.api("/classes/rules", {
+          method: "POST",
+          body: JSON.stringify({
+            rule_type: ruleType,
+            field,
+            operator: "contains",
+            value: val,
+          }),
+        });
+        this.showToast("Rule created!");
+        const modal = document.getElementById("rules-modal-backdrop");
+        if (modal) modal.remove();
+        this.openRulesModal();
+      } catch (err) {
+        this.showToast(`Failed: ${err.message}`, true);
+      }
+    },
+
+    // Full Activity Modal
+    async openFullActivityModal(classId) {
+      try {
+        const activity = await this.api(`/classes/${classId}/activity`);
+        const modalHtml = `
+          <div class="class-tracker-modal-backdrop" id="activity-modal-backdrop">
+            <div class="class-tracker-modal">
+              <div class="class-tracker-modal-header">
+                <span class="class-tracker-modal-title">Full Audit Activity Log</span>
+                <button class="button-secondary" onclick="document.getElementById('activity-modal-backdrop').remove()">✕</button>
+              </div>
+              <div class="class-tracker-modal-body">
+                <div class="activity-feed" style="max-height:350px;">
+                  ${activity.map((a) => this.renderActivityItem(a)).join("")}
+                </div>
+              </div>
+              <div class="class-tracker-modal-footer">
+                <button class="button-secondary" onclick="document.getElementById('activity-modal-backdrop').remove()">Close</button>
+              </div>
+            </div>
+          </div>
+        `;
+        const existing = document.getElementById("activity-modal-backdrop");
+        if (existing) existing.remove();
+        document.body.insertAdjacentHTML("beforeend", modalHtml);
+      } catch (err) {
+        this.showToast(`Failed to load activity: ${err.message}`, true);
+      }
+    },
+
+    // Utility escape html
+    escapeHtml(str) {
+      if (!str) return "";
+      return String(str)
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+    },
+  };
+
+  // Expose globally
+  window.ClassTracker = ClassTracker;
+
+  // Auto-initialize when DOM is ready
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", () => {
+      ClassTracker.init();
+    });
+  } else {
+    ClassTracker.init();
+  }
+})();
+
 </script>
 </body>
 
