@@ -6249,7 +6249,7 @@ CCOR Education Team`,
               ${
                 (d.registered_count || 0) < 10
                   ? `<span class="marketing-pill-urgent">Triggered: Low Attendance (${d.registered_count || 0}/10)</span>`
-                  : `<span class="marketing-pill-safe">Safe (${d.registered_count || 0}/10 registered)</span>`
+                  : `<span class="marketing-pill-safe">Not needed: Above 10 (${d.registered_count || 0}/10 registered)</span>`
               }
             </div>
           </div>
@@ -6365,6 +6365,11 @@ CCOR Education Team`,
                    onchange="ClassTracker.toggleTaskComplete(${t.id}, this.checked)"
                    title="Mark Complete / Reopen">
             <span class="class-task-title">${this.escapeHtml(t.title)}</span>
+            ${
+              t.task_key === "marketing_urgent_eblast" && (classObj.registered_count || 0) >= 10
+                ? `<span style="font-size:10px;padding:1px 6px;border-radius:10px;background:rgba(16,185,129,0.12);color:#059669;font-weight:700;">Above 10 (${classObj.registered_count}/10) - Not Needed</span>`
+                : ""
+            }
             ${t.due_date ? `<span class="class-task-due">${formatEasternDate(t.due_date)}</span>` : ""}
             <span class="class-task-assignee-tag" onclick="ClassTracker.openAssignModal(${t.id})" title="Change Assignees">
               👤 ${assigneeDisplay}
