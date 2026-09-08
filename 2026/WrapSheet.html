@@ -2881,6 +2881,328 @@
   color: #a78bfa;
 }
 
+/* ===== NEW CONTENT TRACK BADGES ===== */
+.badge-track-contracts {
+  background: rgba(3, 170, 225, 0.12);
+  color: #0284c7;
+  border: 1px solid rgba(3, 170, 225, 0.25);
+}
+.badge-track-skills_based {
+  background: rgba(99, 102, 241, 0.12);
+  color: #4f46e5;
+  border: 1px solid rgba(99, 102, 241, 0.25);
+}
+.badge-track-business_building {
+  background: rgba(16, 185, 129, 0.12);
+  color: #059669;
+  border: 1px solid rgba(16, 185, 129, 0.25);
+}
+.badge-track-lunch_and_learn {
+  background: rgba(245, 158, 11, 0.12);
+  color: #d97706;
+  border: 1px solid rgba(245, 158, 11, 0.25);
+}
+.badge-track-appraisals {
+  background: rgba(14, 165, 233, 0.12);
+  color: #0284c7;
+  border: 1px solid rgba(14, 165, 233, 0.25);
+}
+.badge-track-home_inspections {
+  background: rgba(120, 113, 108, 0.12);
+  color: #57534e;
+  border: 1px solid rgba(120, 113, 108, 0.25);
+}
+.badge-track-nmo {
+  background: rgba(124, 58, 237, 0.12);
+  color: #7c3aed;
+  border: 1px solid rgba(124, 58, 237, 0.25);
+}
+.badge-track-general {
+  background: rgba(100, 116, 139, 0.1);
+  color: #475569;
+  border: 1px solid rgba(100, 116, 139, 0.2);
+}
+
+[data-theme="dark"] .badge-track-contracts { color: #38bdf8; }
+[data-theme="dark"] .badge-track-skills_based { color: #818cf8; }
+[data-theme="dark"] .badge-track-business_building { color: #34d399; }
+[data-theme="dark"] .badge-track-lunch_and_learn { color: #fbbf24; }
+[data-theme="dark"] .badge-track-appraisals { color: #38bdf8; }
+[data-theme="dark"] .badge-track-home_inspections { color: #a8a29e; }
+[data-theme="dark"] .badge-track-nmo { color: #a78bfa; }
+[data-theme="dark"] .badge-track-general { color: #94a3b8; }
+
+/* ===== CE BADGES ===== */
+.badge-ce-yes {
+  background: rgba(16, 185, 129, 0.12);
+  color: #059669;
+  font-weight: 700;
+  border: 1px solid rgba(16, 185, 129, 0.25);
+}
+.badge-ce-no {
+  background: rgba(148, 163, 184, 0.12);
+  color: #64748b;
+  font-weight: 600;
+}
+[data-theme="dark"] .badge-ce-yes { color: #34d399; }
+[data-theme="dark"] .badge-ce-no { color: #94a3b8; }
+
+/* ===== CLASSIFICATION BADGES ===== */
+.badge-type-ccor_provider, .badge-type-ccorprovider {
+  background: rgba(3, 170, 225, 0.12);
+  color: #0284c7;
+}
+.badge-type-star_partnership, .badge-type-starpartnership, .badge-type-floridarealtors {
+  background: rgba(236, 72, 153, 0.12);
+  color: #db2777;
+}
+.badge-type-third_party_webinar, .badge-type-thirdpartywebinar, .badge-type-instructorprovider {
+  background: rgba(139, 92, 246, 0.12);
+  color: #7c3aed;
+}
+.badge-type-ccor_affiliate_member, .badge-type-ccoraffiliatemember, .badge-type-nonceccor {
+  background: rgba(245, 158, 11, 0.12);
+  color: #d97706;
+}
+.badge-type-room_rental, .badge-type-roomrental {
+  background: rgba(71, 85, 105, 0.12);
+  color: #334155;
+}
+[data-theme="dark"] .badge-type-ccor_provider { color: #38bdf8; }
+[data-theme="dark"] .badge-type-star_partnership { color: #f472b6; }
+[data-theme="dark"] .badge-type-third_party_webinar { color: #a78bfa; }
+[data-theme="dark"] .badge-type-ccor_affiliate_member { color: #fbbf24; }
+[data-theme="dark"] .badge-type-room_rental { color: #cbd5e1; }
+
+/* ===== ATTENDANCE RECONCILIATION CARD (DRAWER) ===== */
+.class-reconciliation-card {
+  background: rgba(15, 23, 42, 0.03);
+  border: 1px solid var(--panel-border);
+  border-radius: var(--radius-sm);
+  padding: 12px 14px;
+  margin-top: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+[data-theme="dark"] .class-reconciliation-card {
+  background: rgba(30, 41, 59, 0.35);
+}
+.reconciliation-title {
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--ink-soft);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.reconciliation-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+  gap: 10px;
+  align-items: flex-end;
+}
+.reconciliation-turnout-pill {
+  padding: 4px 8px;
+  border-radius: 9999px;
+  font-size: 11px;
+  font-weight: 700;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+.turnout-high { background: rgba(16, 185, 129, 0.15); color: #059669; }
+.turnout-medium { background: rgba(245, 158, 11, 0.15); color: #d97706; }
+.turnout-low { background: rgba(239, 68, 68, 0.15); color: #dc2626; }
+[data-theme="dark"] .turnout-high { color: #34d399; }
+[data-theme="dark"] .turnout-medium { color: #fbbf24; }
+[data-theme="dark"] .turnout-low { color: #f87171; }
+
+/* ===== MARKETING AUTOMATION SCHEDULE CARD (DRAWER) ===== */
+.class-marketing-schedule-card {
+  background: rgba(99, 102, 241, 0.04);
+  border: 1px solid rgba(99, 102, 241, 0.2);
+  border-radius: var(--radius-sm);
+  padding: 12px 14px;
+  margin-top: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+[data-theme="dark"] .class-marketing-schedule-card {
+  background: rgba(99, 102, 241, 0.08);
+  border-color: rgba(99, 102, 241, 0.3);
+}
+.marketing-task-list {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.marketing-task-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 12px;
+  padding: 6px 8px;
+  background: var(--panel);
+  border: 1px solid var(--panel-border);
+  border-radius: 4px;
+}
+.marketing-task-item strong {
+  color: var(--ink);
+}
+.marketing-pill-active {
+  background: rgba(16, 185, 129, 0.15);
+  color: #059669;
+  font-size: 10px;
+  font-weight: 700;
+  padding: 2px 6px;
+  border-radius: 4px;
+}
+.marketing-pill-urgent {
+  background: rgba(239, 68, 68, 0.15);
+  color: #dc2626;
+  font-size: 10px;
+  font-weight: 700;
+  padding: 2px 6px;
+  border-radius: 4px;
+}
+.marketing-pill-safe {
+  background: rgba(148, 163, 184, 0.15);
+  color: #64748b;
+  font-size: 10px;
+  font-weight: 600;
+  padding: 2px 6px;
+  border-radius: 4px;
+}
+
+/* ===== ANALYTICS & RUNWAY MODALS ===== */
+.ct-modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(15, 23, 42, 0.6);
+  backdrop-filter: blur(4px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10000;
+  padding: 20px;
+}
+.ct-modal-card {
+  background: var(--panel);
+  border: 1px solid var(--panel-border);
+  border-radius: var(--radius-md);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.25);
+  width: 100%;
+  max-width: 900px;
+  max-height: 85vh;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+.ct-modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 20px;
+  border-bottom: 1px solid var(--panel-border);
+  background: rgba(15, 23, 42, 0.02);
+}
+[data-theme="dark"] .ct-modal-header {
+  background: rgba(30, 41, 59, 0.4);
+}
+.ct-modal-body {
+  padding: 20px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+.ct-kpi-summary-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 12px;
+}
+.ct-kpi-summary-box {
+  background: rgba(15, 23, 42, 0.03);
+  border: 1px solid var(--panel-border);
+  border-radius: var(--radius-sm);
+  padding: 12px;
+  display: flex;
+  flex-direction: column;
+}
+[data-theme="dark"] .ct-kpi-summary-box {
+  background: rgba(30, 41, 59, 0.3);
+}
+.ct-kpi-summary-val {
+  font-size: 24px;
+  font-weight: 800;
+  color: var(--ink);
+}
+.ct-kpi-summary-lbl {
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--ink-soft);
+  margin-top: 4px;
+}
+
+/* Runway Week Cards */
+.runway-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.runway-week-card {
+  border: 1px solid var(--panel-border);
+  border-radius: var(--radius-sm);
+  padding: 12px 14px;
+  background: var(--panel);
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.runway-week-card.week-status-gap {
+  border-color: rgba(239, 68, 68, 0.4);
+  background: rgba(239, 68, 68, 0.03);
+}
+.runway-week-card.week-status-light {
+  border-color: rgba(245, 158, 11, 0.4);
+  background: rgba(245, 158, 11, 0.03);
+}
+.runway-week-card.week-status-healthy {
+  border-color: rgba(16, 185, 129, 0.4);
+  background: rgba(16, 185, 129, 0.02);
+}
+.runway-week-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.runway-recs-box {
+  background: rgba(15, 23, 42, 0.03);
+  border-radius: 4px;
+  padding: 8px 10px;
+  font-size: 12px;
+}
+[data-theme="dark"] .runway-recs-box {
+  background: rgba(30, 41, 59, 0.4);
+}
+.runway-rec-tag {
+  display: inline-block;
+  font-size: 11px;
+  padding: 2px 6px;
+  border-radius: 4px;
+  background: rgba(3, 170, 225, 0.1);
+  color: var(--accent);
+  margin-right: 4px;
+  margin-bottom: 4px;
+}
+
+
 </style>
 </head>
 
@@ -3674,6 +3996,9 @@
               <span class="panel-subtitle">Education • Promotion • Logistics • CE Compliance</span>
             </div>
             <div class="class-tracker-header-actions">
+              <button class="button-secondary" id="class-tracker-attendance-btn" title="View Attended vs No-Show Turnout Metrics">📊 Attendance & Turnout</button>
+              <button class="button-secondary" id="class-tracker-runway-btn" title="View Weekly Runway & Core Course Recommendations">📅 Schedule Runway</button>
+              <a href="/api/classes/calendar/marketing.ics" target="_blank" class="button-secondary" style="font-size:12px;text-decoration:none;display:inline-flex;align-items:center;gap:4px;" title="Subscribe or download Kevin's Class Marketing Calendar">📅 Kevin's Calendar (.ics)</a>
               <button class="button-secondary" id="class-tracker-rules-btn" title="Manage Staff Inclusion and Exclusion Rules">⚙ Rules</button>
               <button class="button-primary" id="class-tracker-sync-btn" title="Sync upcoming classes from GrowthZone">↻ Sync GrowthZone</button>
             </div>
@@ -3686,12 +4011,29 @@
           <div class="class-tracker-controls">
             <input type="search" id="class-tracker-search" class="class-tracker-search" placeholder="Search classes or instructors…">
             <select id="class-tracker-filter-type">
-              <option value="all">All Class Types</option>
-              <option value="ccor_provider">CCOR Provider</option>
-              <option value="florida_realtors">Florida Realtors</option>
-              <option value="instructor_provider">Instructor / Outside School</option>
-              <option value="non_ce_ccor">Non-CE CCOR</option>
+              <option value="all">All Classifications</option>
+              <option value="ccor_provider">CCOR RE School Provider</option>
+              <option value="star_partnership">STAR Partnership Course</option>
+              <option value="third_party_webinar">3rd Party Webinar</option>
+              <option value="ccor_affiliate_member">CCOR Affiliate/Member</option>
+              <option value="room_rental">Room Rental Course</option>
               <option value="unclassified">Needs Classification</option>
+            </select>
+            <select id="class-tracker-filter-ce">
+              <option value="all">All CE Status</option>
+              <option value="ce_only">CE Approved (Yes)</option>
+              <option value="non_ce">Non-CE (No)</option>
+            </select>
+            <select id="class-tracker-filter-track">
+              <option value="all">All Topics / Tracks</option>
+              <option value="skills_based">Skills-based</option>
+              <option value="contracts">Contracts</option>
+              <option value="business_building">Business building</option>
+              <option value="lunch_and_learn">Lunch & Learn</option>
+              <option value="appraisals">Appraisals</option>
+              <option value="home_inspections">Home Inspections</option>
+              <option value="nmo">New Member Orientation</option>
+              <option value="general">General Education</option>
             </select>
             <select id="class-tracker-filter-status">
               <option value="active">Active Classes</option>
@@ -4579,6 +4921,30 @@ Enter date (YYYY-MM-DD):`,today);if(dateStr){if(!/^\d{4}-\d{2}-\d{2}$/.test(date
     return { month, day };
   }
 
+  const CLASS_TYPE_LABELS = {
+    ccor_provider: "CCOR RE School Provider",
+    star_partnership: "STAR Partnership Course",
+    third_party_webinar: "3rd Party Webinar",
+    ccor_affiliate_member: "CCOR Affiliate/Member",
+    room_rental: "Room Rental Course",
+    florida_realtors: "STAR Partnership Course",
+    instructor_provider: "3rd Party Webinar",
+    non_ce_ccor: "CCOR Affiliate/Member",
+    unclassified: "Needs Classification",
+    ignore: "Ignored",
+  };
+
+  const CONTENT_TRACK_LABELS = {
+    skills_based: "Skills-based",
+    contracts: "Contracts",
+    business_building: "Business building",
+    lunch_and_learn: "Lunch & Learn",
+    appraisals: "Appraisals",
+    home_inspections: "Home Inspections",
+    nmo: "New Member Orientation",
+    general: "General Education",
+  };
+
   function isTodayInEastern(isoString, now = new Date()) {
     if (!isoString) return false;
     const d = new Date(isoString);
@@ -4898,6 +5264,27 @@ CCOR Education Team`,
       }
     }
 
+    let totalCompletedAttended = 0;
+    let totalCompletedNoShow = 0;
+    let completedWithStats = 0;
+
+    for (const c of classes) {
+      if (c.attended_count !== null && c.attended_count !== undefined) {
+        completedWithStats++;
+        const att = Number(c.attended_count);
+        const noshow = c.no_show_count !== null && c.no_show_count !== undefined
+          ? Number(c.no_show_count)
+          : Math.max(0, Number(c.registered_count || 0) - att);
+        totalCompletedAttended += att;
+        totalCompletedNoShow += noshow;
+      }
+    }
+
+    const totalTurnoutDenom = totalCompletedAttended + totalCompletedNoShow;
+    const completedTurnoutPct = totalTurnoutDenom > 0
+      ? Math.round((totalCompletedAttended / totalTurnoutDenom) * 100)
+      : null;
+
     return {
       needsAttentionCount: needsAttentionList.length,
       needsAttentionItems: needsAttentionList,
@@ -4908,6 +5295,8 @@ CCOR Education Team`,
       needsCloseoutItems: needsCloseoutList,
       nmoWarningCount: nmoWarnings.length,
       nmoWarnings,
+      completedTurnoutPct,
+      completedWithStats,
     };
   }
 
@@ -4931,6 +5320,8 @@ CCOR Education Team`,
       classDetailsCache: new Map(),
       expandedClassId: null,
       filterType: "all",
+      filterCE: "all",
+      filterTrack: "all",
       filterStatus: "active",
       filterFormat: "all",
       searchQuery: "",
@@ -5097,6 +5488,32 @@ CCOR Education Team`,
           this.renderTimeline();
         });
       }
+
+      const filterCE = document.getElementById("class-tracker-filter-ce");
+      if (filterCE) {
+        filterCE.addEventListener("change", (e) => {
+          this.state.filterCE = e.target.value;
+          this.renderTimeline();
+        });
+      }
+
+      const filterTrack = document.getElementById("class-tracker-filter-track");
+      if (filterTrack) {
+        filterTrack.addEventListener("change", (e) => {
+          this.state.filterTrack = e.target.value;
+          this.renderTimeline();
+        });
+      }
+
+      const attBtn = document.getElementById("class-tracker-attendance-btn");
+      if (attBtn) {
+        attBtn.addEventListener("click", () => this.openAttendanceModal());
+      }
+
+      const runwayBtn = document.getElementById("class-tracker-runway-btn");
+      if (runwayBtn) {
+        runwayBtn.addEventListener("click", () => this.openRunwayModal());
+      }
     },
 
     // Load classes list from backend
@@ -5212,7 +5629,10 @@ CCOR Education Team`,
       deskEl.innerHTML = `
         <div class="class-desk-title">
           <span>Today's Class Desk</span>
-          <span style="font-size:10px;font-weight:normal;color:var(--ink-soft);">Actionable Operations</span>
+          <div style="display:flex;align-items:center;gap:8px;">
+            <a href="/api/classes/calendar/marketing.ics" target="_blank" class="button-secondary" style="font-size:11px;padding:3px 8px;text-decoration:none;display:inline-flex;align-items:center;gap:4px;" title="Subscribe or export Kevin's Class Marketing Calendar">📅 Kevin's Calendar (.ics)</a>
+            <span style="font-size:10px;font-weight:normal;color:var(--ink-soft);">Actionable Operations</span>
+          </div>
         </div>
         <div class="class-desk-kpi-grid">
           <div class="class-desk-kpi-card kpi-card-attention ${this.state.deskFilter === "attention" ? "active-filter" : ""}"
@@ -5234,6 +5654,14 @@ CCOR Education Team`,
                onclick="ClassTracker.filterByDesk('closeout')">
             <span class="kpi-card-count">${kpis.needsCloseoutCount}</span>
             <span class="kpi-card-label">Needs Closeout</span>
+          </div>
+          <div class="class-desk-kpi-card" onclick="ClassTracker.openAttendanceModal()" title="View Attended vs No-Show Turnout Metrics">
+            <span class="kpi-card-count" style="color:#059669;">${kpis.completedTurnoutPct !== null ? `${kpis.completedTurnoutPct}%` : (kpis.completedWithStats > 0 ? "100%" : "—")}</span>
+            <span class="kpi-card-label">📊 Attendance Turnout</span>
+          </div>
+          <div class="class-desk-kpi-card" onclick="ClassTracker.openRunwayModal()" title="View Weekly Runway & Core Course Recommendations">
+            <span class="kpi-card-count" style="color:#6366f1;">Runway</span>
+            <span class="kpi-card-label">📅 Schedule Gaps</span>
           </div>
         </div>
         ${actionRowsHtml ? `<div class="class-desk-action-items">${actionRowsHtml}</div>` : ""}
@@ -5301,9 +5729,24 @@ CCOR Education Team`,
           if (!isArchived && !isPast) return false;
         }
 
-        // Type filter
-        if (this.state.filterType !== "all" && c.class_type !== this.state.filterType) {
-          return false;
+        // Type filter (with canonical normalization)
+        if (this.state.filterType !== "all") {
+          const type = c.class_type || "unclassified";
+          const matchType = type === this.state.filterType ||
+            (this.state.filterType === "star_partnership" && type === "florida_realtors") ||
+            (this.state.filterType === "third_party_webinar" && type === "instructor_provider") ||
+            (this.state.filterType === "ccor_affiliate_member" && type === "non_ce_ccor");
+          if (!matchType) return false;
+        }
+
+        // CE filter
+        if (this.state.filterCE === "ce_only" && !c.is_ce) return false;
+        if (this.state.filterCE === "non_ce" && c.is_ce) return false;
+
+        // Content Track / Topic filter
+        if (this.state.filterTrack && this.state.filterTrack !== "all") {
+          const classTrack = c.track || (c.program_type === "nmo" ? "nmo" : "general");
+          if (classTrack !== this.state.filterTrack) return false;
         }
 
         // Format filter
@@ -5357,6 +5800,7 @@ CCOR Education Team`,
       const isIgnored = Boolean(c.is_ignored || c.class_type === "ignore" || c.status === "ignored" || c.status === "removed");
       const isCanceled = Boolean(c.is_canceled || c.status === "canceled");
       const isArchived = Boolean(c.closed_at || c.status === "archived" || c.is_archived);
+      const isPast = daysUntil < 0 && !isToday;
 
       const healthClass = (c.registrationHealth || "GOOD").toLowerCase().replace("_", "-");
       const isTopPriority = c.priorityRank && c.priorityRank <= 2 && !isCanceled && !isArchived && !isIgnored;
@@ -5368,20 +5812,31 @@ CCOR Education Team`,
       if (isCanceled) cardModifiers += " is-canceled";
       if (isArchived) cardModifiers += " is-closed";
 
-      const typeLabel = {
-        ccor_provider: "CCOR Provider",
-        florida_realtors: "Florida Realtors",
-        instructor_provider: "Instructor / Outside School",
-        non_ce_ccor: "Non-CE CCOR",
-        unclassified: "Needs Classification",
-        ignore: "Ignored",
-      }[c.class_type] || "Unclassified";
+      const typeLabel = CLASS_TYPE_LABELS[c.class_type] || "Unclassified";
+
+      const trackKey = c.track || (c.program_type === "nmo" ? "nmo" : "general");
+      const trackLabel = CONTENT_TRACK_LABELS[trackKey] || trackKey;
 
       const formatLabel = {
         in_person: "In Person",
         online: "Online",
         hybrid: "Hybrid",
       }[c.format || "in_person"];
+
+      // Turnout Info calculation
+      let turnoutBadgeHtml = "";
+      if (c.attended_count !== null && c.attended_count !== undefined) {
+        const attCount = Number(c.attended_count);
+        const noShowCount = c.no_show_count !== null && c.no_show_count !== undefined
+          ? Number(c.no_show_count)
+          : Math.max(0, regCount - attCount);
+        const turnoutTotal = attCount + noShowCount;
+        const turnoutPct = turnoutTotal > 0 ? Math.round((attCount / turnoutTotal) * 100) : 100;
+        const turnoutClass = turnoutPct >= 80 ? "turnout-high" : turnoutPct >= 60 ? "turnout-medium" : "turnout-low";
+        turnoutBadgeHtml = `<span class="reconciliation-turnout-pill ${turnoutClass}" title="Reconciled Attendance">👥 ${attCount} Attended • ${noShowCount} No-Show (${turnoutPct}%)</span>`;
+      } else if (isPast && !isCanceled && !isIgnored) {
+        turnoutBadgeHtml = `<span class="class-badge" style="background:#fef3c7;color:#b45309;">⚠️ Needs Attendance Count</span>`;
+      }
 
       const totalRanked = c.totalRankedUpcoming || this.getRankableCount();
       const showPriorityBadge = !isCanceled && !isArchived && !isIgnored && c.priorityScore !== undefined && c.priorityScore > 0 && c.priorityRank;
@@ -5405,14 +5860,16 @@ CCOR Education Team`,
               </div>
               <div class="class-meta-row">
                 <span class="class-badge badge-type-${(c.class_type || "unclassified").replace("_", "")}">${typeLabel}</span>
+                <span class="class-badge badge-track-${trackKey}">🏷️ ${trackLabel}</span>
+                ${c.is_ce ? `<span class="class-badge badge-ce-yes">🎓 ${c.ce_hours ? `${c.ce_hours} CE` : "CE Approved"}</span>` : `<span class="class-badge badge-ce-no">Non-CE</span>`}
                 <span class="class-badge badge-format-${(c.format || "in_person").replace("_", "")}">${formatLabel}</span>
                 <span>${timeRange}</span>
-                ${c.ce_hours ? `<span class="class-badge" style="background:#e0f2fe;color:#0284c7;">${c.ce_hours} CE</span>` : ""}
                 ${
                   (c.program_type === "nmo" || c.is_nmo) && c.nmoPrepProgress
                     ? `<span class="ct-nmo-prep-badge ${c.nmoPrepProgress.completed < c.nmoPrepProgress.total ? "prep-needed" : ""}">NMO Prep ${c.nmoPrepProgress.completed}/${c.nmoPrepProgress.total}</span>`
                     : ""
                 }
+                ${turnoutBadgeHtml}
                 <span>• ${daysUntil >= 0 ? `${daysUntil}d away` : `${Math.abs(daysUntil)}d ago`}</span>
               </div>
             </div>
@@ -5561,10 +6018,11 @@ CCOR Education Team`,
           <div class="unclassified-callout">
             <div class="unclassified-callout-title">⚠️ Whose class is this? (Select Classification to Generate Tasks)</div>
             <div class="unclassified-buttons">
-              <button class="button-primary" onclick="ClassTracker.updateClassType(${d.id}, 'ccor_provider')">CCOR Provider</button>
-              <button class="button-primary" onclick="ClassTracker.updateClassType(${d.id}, 'florida_realtors')">Florida Realtors</button>
-              <button class="button-secondary" onclick="ClassTracker.updateClassType(${d.id}, 'instructor_provider')">Instructor / Outside School</button>
-              <button class="button-secondary" onclick="ClassTracker.updateClassType(${d.id}, 'non_ce_ccor')">Non-CE CCOR</button>
+              <button class="button-primary" onclick="ClassTracker.updateClassType(${d.id}, 'ccor_provider')">CCOR RE School Provider</button>
+              <button class="button-primary" onclick="ClassTracker.updateClassType(${d.id}, 'star_partnership')">STAR Partnership Course</button>
+              <button class="button-secondary" onclick="ClassTracker.updateClassType(${d.id}, 'third_party_webinar')">3rd Party Webinar</button>
+              <button class="button-secondary" onclick="ClassTracker.updateClassType(${d.id}, 'ccor_affiliate_member')">CCOR Affiliate/Member</button>
+              <button class="button-secondary" onclick="ClassTracker.updateClassType(${d.id}, 'room_rental')">Room Rental Course</button>
               <button class="button-secondary" style="color:var(--danger);" onclick="ClassTracker.updateClassType(${d.id}, 'ignore')">Ignore Event</button>
             </div>
           </div>
@@ -5594,15 +6052,44 @@ CCOR Education Team`,
           </div>
 
           <div class="form-group">
+            <label>Content Track / Topic</label>
+            <select onchange="ClassTracker.updateMetadataField(${d.id}, 'track', this.value)">
+              <option value="skills_based" ${d.track === "skills_based" ? "selected" : ""}>Skills-based</option>
+              <option value="contracts" ${d.track === "contracts" ? "selected" : ""}>Contracts</option>
+              <option value="business_building" ${d.track === "business_building" ? "selected" : ""}>Business building</option>
+              <option value="lunch_and_learn" ${d.track === "lunch_and_learn" ? "selected" : ""}>Lunch & Learn</option>
+              <option value="appraisals" ${d.track === "appraisals" ? "selected" : ""}>Appraisals</option>
+              <option value="home_inspections" ${d.track === "home_inspections" ? "selected" : ""}>Home Inspections</option>
+              <option value="nmo" ${d.track === "nmo" || d.program_type === "nmo" ? "selected" : ""}>New Member Orientation</option>
+              <option value="general" ${!d.track || d.track === "general" ? "selected" : ""}>General Education</option>
+            </select>
+          </div>
+
+          <div class="form-group">
             <label>Class Classification</label>
             <select onchange="ClassTracker.updateClassType(${d.id}, this.value)">
               <option value="unclassified" ${d.class_type === "unclassified" ? "selected" : ""}>Needs Classification</option>
-              <option value="ccor_provider" ${d.class_type === "ccor_provider" ? "selected" : ""}>CCOR Provider</option>
-              <option value="florida_realtors" ${d.class_type === "florida_realtors" ? "selected" : ""}>Florida Realtors</option>
-              <option value="instructor_provider" ${d.class_type === "instructor_provider" ? "selected" : ""}>Instructor / Outside School</option>
-              <option value="non_ce_ccor" ${d.class_type === "non_ce_ccor" ? "selected" : ""}>Non-CE CCOR</option>
+              <option value="ccor_provider" ${d.class_type === "ccor_provider" ? "selected" : ""}>CCOR RE School Provider</option>
+              <option value="star_partnership" ${d.class_type === "star_partnership" || d.class_type === "florida_realtors" ? "selected" : ""}>STAR Partnership Course</option>
+              <option value="third_party_webinar" ${d.class_type === "third_party_webinar" || d.class_type === "instructor_provider" ? "selected" : ""}>3rd Party Webinar</option>
+              <option value="ccor_affiliate_member" ${d.class_type === "ccor_affiliate_member" || d.class_type === "non_ce_ccor" ? "selected" : ""}>CCOR Affiliate/Member</option>
+              <option value="room_rental" ${d.class_type === "room_rental" ? "selected" : ""}>Room Rental Course</option>
               <option value="ignore" ${d.class_type === "ignore" ? "selected" : ""}>Ignored</option>
             </select>
+          </div>
+
+          <div class="form-group">
+            <label>CE Approved?</label>
+            <select onchange="ClassTracker.updateCEStatus(${d.id}, this.value === '1')">
+              <option value="1" ${d.is_ce ? "selected" : ""}>Yes (CE Approved)</option>
+              <option value="0" ${!d.is_ce ? "selected" : ""}>No (Non-CE)</option>
+            </select>
+          </div>
+
+          <div class="form-group" id="ce-hours-field-${d.id}" style="${d.is_ce ? '' : 'display:none;'}">
+            <label>CE Credit Hours</label>
+            <input type="number" step="0.5" min="0" max="24" value="${d.ce_hours || 0}"
+                   onchange="ClassTracker.updateMetadataField(${d.id}, 'ce_hours', parseFloat(this.value) || 0)">
           </div>
 
           <div class="form-group">
@@ -5705,6 +6192,67 @@ CCOR Education Team`,
           `
               : ""
           }
+        </div>
+
+        <!-- Attendance & Turnout Reconciliation Card -->
+        <div class="class-reconciliation-card">
+          <div class="reconciliation-title">
+            <span>📊 Post-Class Attendance & No-Show Reconciliation</span>
+            ${
+              d.attended_count !== null && d.attended_count !== undefined
+                ? `<span class="reconciliation-turnout-pill ${(d.attended_count + (d.no_show_count || 0)) > 0 && Math.round((d.attended_count / (d.attended_count + (d.no_show_count || 0))) * 100) >= 80 ? 'turnout-high' : 'turnout-medium'}">
+                    Turnout: ${Math.round((d.attended_count / (d.attended_count + (d.no_show_count || 0))) * 100)}%
+                   </span>`
+                : '<span style="font-size:11px;color:var(--ink-soft);font-weight:normal;">Record final headcount for accurate reporting</span>'
+            }
+          </div>
+          <div class="reconciliation-grid">
+            <div class="form-group" style="margin-bottom:0;">
+              <label style="font-size:11px;">Registered (GZ)</label>
+              <input type="text" value="${d.registered_count || 0}" readonly style="background:var(--input-bg-disabled,#eee);font-weight:700;">
+            </div>
+            <div class="form-group" style="margin-bottom:0;">
+              <label style="font-size:11px;">Attended Count</label>
+              <input type="number" id="att-count-${d.id}" min="0" value="${d.attended_count !== null && d.attended_count !== undefined ? d.attended_count : ''}" placeholder="e.g. 18">
+            </div>
+            <div class="form-group" style="margin-bottom:0;">
+              <label style="font-size:11px;">Didn't Show (No-Show)</label>
+              <input type="number" id="noshow-count-${d.id}" min="0" value="${d.no_show_count !== null && d.no_show_count !== undefined ? d.no_show_count : ''}" placeholder="e.g. 2">
+            </div>
+            <div style="display:flex;gap:6px;">
+              <button class="button-secondary" type="button" style="font-size:11px;padding:6px 8px;" onclick="ClassTracker.autoCalcNoShows(${d.id}, ${d.registered_count || 0})" title="Auto-calculate No-Shows as (Registered - Attended)">Auto No-Shows</button>
+              <button class="button-primary" type="button" style="font-size:11px;padding:6px 12px;" onclick="ClassTracker.saveAttendance(${d.id})">Save Headcount</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Automated Marketing Schedule on Kevin's Calendar Card -->
+        <div class="class-marketing-schedule-card">
+          <div style="display:flex;align-items:center;justify-content:space-between;">
+            <span style="font-size:11px;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;color:#4f46e5;">📅 Kevin's Automated Marketing Schedule</span>
+            <a href="/api/classes/calendar/marketing.ics" target="_blank" class="button-secondary" style="font-size:10px;padding:3px 8px;text-decoration:none;">Sync iCal Feed ↗</a>
+          </div>
+          <div class="marketing-task-list">
+            <div class="marketing-task-item">
+              <div><strong>Promotional Event Flyer</strong> <span style="color:var(--ink-soft);font-size:11px;">(Scheduled 7–10 days beforehand)</span></div>
+              <span class="marketing-pill-active">Active on Kevin's Calendar</span>
+            </div>
+            <div class="marketing-task-item">
+              <div><strong>First Promotional Eblast</strong> <span style="color:var(--ink-soft);font-size:11px;">(Scheduled 7–10 days beforehand)</span></div>
+              <span class="marketing-pill-active">Active on Kevin's Calendar</span>
+            </div>
+            <div class="marketing-task-item">
+              <div>
+                <strong>Urgent Eblast Alert Rule</strong>
+                <span style="color:var(--ink-soft);font-size:11px;">(Scheduled 3 business days beforehand if &lt; 10 registrants)</span>
+              </div>
+              ${
+                (d.registered_count || 0) < 10
+                  ? `<span class="marketing-pill-urgent">Triggered: Low Attendance (${d.registered_count || 0}/10)</span>`
+                  : `<span class="marketing-pill-safe">Safe (${d.registered_count || 0}/10 registered)</span>`
+              }
+            </div>
+          </div>
         </div>
 
         <!-- NMO Presenters Panel (if NMO class) -->
@@ -6594,6 +7142,306 @@ CCOR Education Team`,
         await this.loadClasses();
       } catch (err) {
         this.showToast(`Failed to update program type: ${err.message}`, true);
+      }
+    },
+
+    async updateCEStatus(classId, isCE) {
+      try {
+        await this.api(`/classes/${classId}`, {
+          method: "PATCH",
+          body: JSON.stringify({ is_ce: isCE ? 1 : 0 }),
+        });
+        const hoursField = document.getElementById(`ce-hours-field-${classId}`);
+        if (hoursField) {
+          hoursField.style.display = isCE ? "block" : "none";
+        }
+        this.showToast(isCE ? "Marked as CE Approved" : "Marked as Non-CE Course");
+        await this.refreshClassDetail(classId);
+        await this.loadClasses();
+      } catch (err) {
+        this.showToast(`Failed to update CE status: ${err.message}`, true);
+      }
+    },
+
+    autoCalcNoShows(classId, regCount) {
+      const attInput = document.getElementById(`att-count-${classId}`);
+      const noShowInput = document.getElementById(`noshow-count-${classId}`);
+      if (!attInput || !noShowInput) return;
+      const att = parseInt(attInput.value, 10);
+      if (Number.isNaN(att)) {
+        this.showToast("Enter Attended Count first", true);
+        return;
+      }
+      const derivedNoShow = Math.max(0, regCount - att);
+      noShowInput.value = derivedNoShow;
+      this.showToast(`Auto-calculated ${derivedNoShow} no-shows`);
+    },
+
+    async saveAttendance(classId) {
+      const attInput = document.getElementById(`att-count-${classId}`);
+      const noShowInput = document.getElementById(`noshow-count-${classId}`);
+      const attVal = attInput && attInput.value.trim() !== "" ? parseInt(attInput.value, 10) : null;
+      const noShowVal = noShowInput && noShowInput.value.trim() !== "" ? parseInt(noShowInput.value, 10) : null;
+
+      try {
+        await this.api(`/classes/${classId}`, {
+          method: "PATCH",
+          body: JSON.stringify({
+            attended_count: attVal,
+            no_show_count: noShowVal,
+          }),
+        });
+        this.showToast("Attendance headcount saved!");
+        await this.refreshClassDetail(classId);
+        await this.loadClasses();
+      } catch (err) {
+        this.showToast(`Failed to save attendance: ${err.message}`, true);
+      }
+    },
+
+    async openAttendanceModal() {
+      try {
+        const data = await this.api("/classes/metrics/attendance");
+        const classes = data.completedClasses || [];
+        const overallRate = data.overallTurnoutRate !== null && data.overallTurnoutRate !== undefined
+          ? `${data.overallTurnoutRate}%`
+          : "—";
+
+        const modalHtml = `
+          <div class="ct-modal-overlay" id="attendance-modal-backdrop" onclick="if(event.target === this) this.remove()">
+            <div class="ct-modal-card">
+              <div class="ct-modal-header">
+                <div>
+                  <h3 style="margin:0;font-size:16px;font-weight:700;">📊 Class Attendance & Turnout Analytics</h3>
+                  <div style="font-size:11px;color:var(--ink-soft);margin-top:2px;">Post-class reconciliation, member show rates, and historical attendance trends</div>
+                </div>
+                <div style="display:flex;gap:8px;">
+                  <button class="button-secondary" onclick="ClassTracker.exportAttendanceCsv()" style="font-size:11px;">⬇ Export CSV</button>
+                  <button class="button-secondary" onclick="document.getElementById('attendance-modal-backdrop').remove()">✕</button>
+                </div>
+              </div>
+              <div class="ct-modal-body">
+                <div class="ct-kpi-summary-grid">
+                  <div class="ct-kpi-summary-box">
+                    <span class="ct-kpi-summary-val" style="color:#059669;">${overallRate}</span>
+                    <span class="ct-kpi-summary-lbl">Overall Turnout Rate</span>
+                  </div>
+                  <div class="ct-kpi-summary-box">
+                    <span class="ct-kpi-summary-val">${data.totalAttended || 0}</span>
+                    <span class="ct-kpi-summary-lbl">Total Attended</span>
+                  </div>
+                  <div class="ct-kpi-summary-box">
+                    <span class="ct-kpi-summary-val" style="color:#ef4444;">${data.totalNoShow || 0}</span>
+                    <span class="ct-kpi-summary-lbl">Total Didn't Show</span>
+                  </div>
+                  <div class="ct-kpi-summary-box">
+                    <span class="ct-kpi-summary-val">${data.classesWithAttendance || 0} / ${data.totalCompleted || 0}</span>
+                    <span class="ct-kpi-summary-lbl">Reconciled Classes</span>
+                  </div>
+                </div>
+
+                <div style="margin-top:8px;">
+                  <div style="font-size:12px;font-weight:700;margin-bottom:8px;text-transform:uppercase;letter-spacing:0.06em;color:var(--ink-soft);">Completed Classes Headcount</div>
+                  <div style="max-height:350px;overflow-y:auto;border:1px solid var(--panel-border);border-radius:var(--radius-sm);">
+                    <table class="materials-table" style="width:100%;font-size:12px;">
+                      <thead>
+                        <tr>
+                          <th>Class Title</th>
+                          <th>Date</th>
+                          <th>Topic / Track</th>
+                          <th style="text-align:right;">Registered</th>
+                          <th style="text-align:right;">Attended</th>
+                          <th style="text-align:right;">No-Shows</th>
+                          <th style="text-align:right;">Turnout %</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        ${
+                          classes.length === 0
+                            ? '<tr><td colspan="7" style="padding:16px;text-align:center;color:var(--ink-soft);">No completed classes recorded yet.</td></tr>'
+                            : classes
+                                .map((c) => {
+                                  const dateStr = formatEasternDate(c.startDate);
+                                  const trackLbl = CONTENT_TRACK_LABELS[c.track || "general"] || c.track || "General";
+                                  const hasAtt = c.attendedCount !== null && c.attendedCount !== undefined;
+                                  const pct = c.turnoutPercentage !== null && c.turnoutPercentage !== undefined ? `${c.turnoutPercentage}%` : "Pending";
+                                  const pctClass = c.turnoutPercentage >= 80 ? "turnout-high" : c.turnoutPercentage >= 60 ? "turnout-medium" : "turnout-low";
+                                  return `
+                                    <tr>
+                                      <td><strong>${this.escapeHtml(c.title)}</strong></td>
+                                      <td>${dateStr}</td>
+                                      <td><span class="class-badge badge-track-${c.track || "general"}">${trackLbl}</span></td>
+                                      <td style="text-align:right;">${c.registeredCount}</td>
+                                      <td style="text-align:right;font-weight:700;">${hasAtt ? c.attendedCount : "—"}</td>
+                                      <td style="text-align:right;color:#ef4444;">${c.noShowCount !== null && c.noShowCount !== undefined ? c.noShowCount : "—"}</td>
+                                      <td style="text-align:right;">
+                                        ${hasAtt ? `<span class="reconciliation-turnout-pill ${pctClass}">${pct}</span>` : '<span style="color:#b45309;font-size:11px;">Needs Entry</span>'}
+                                      </td>
+                                    </tr>
+                                  `;
+                                })
+                                .join("")
+                        }
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              </div>
+              <div class="class-tracker-modal-footer" style="padding:12px 20px;border-top:1px solid var(--panel-border);display:flex;justify-content:flex-end;">
+                <button class="button-secondary" onclick="document.getElementById('attendance-modal-backdrop').remove()">Close</button>
+              </div>
+            </div>
+          </div>
+        `;
+        const existing = document.getElementById("attendance-modal-backdrop");
+        if (existing) existing.remove();
+        document.body.insertAdjacentHTML("beforeend", modalHtml);
+      } catch (err) {
+        this.showToast(`Failed to open attendance metrics: ${err.message}`, true);
+      }
+    },
+
+    async exportAttendanceCsv() {
+      try {
+        const data = await this.api("/classes/metrics/attendance");
+        const classes = data.completedClasses || [];
+        const rows = [
+          ["Class ID", "Title", "Start Date", "Topic Track", "Class Type", "Registered", "Attended", "No Shows", "Turnout Percentage"],
+        ];
+        for (const c of classes) {
+          rows.push([
+            c.id,
+            `"${(c.title || "").replace(/"/g, '""')}"`,
+            c.startDate || "",
+            c.track || "general",
+            c.classType || "",
+            c.registeredCount || 0,
+            c.attendedCount !== null ? c.attendedCount : "",
+            c.noShowCount !== null ? c.noShowCount : "",
+            c.turnoutPercentage !== null ? `${c.turnoutPercentage}%` : "",
+          ]);
+        }
+        const csvContent = rows.map((r) => r.join(",")).join("\n");
+        const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
+        const link = document.createElement("a");
+        link.href = URL.createObjectURL(blob);
+        link.download = `ccor-class-attendance-report-${new Date().toISOString().slice(0, 10)}.csv`;
+        link.click();
+        this.showToast("Attendance CSV downloaded!");
+      } catch (err) {
+        this.showToast(`Failed to export CSV: ${err.message}`, true);
+      }
+    },
+
+    async openRunwayModal() {
+      try {
+        const data = await this.api("/classes/planner/runway?weeks=10");
+        const weeks = data.weeks || [];
+
+        const modalHtml = `
+          <div class="ct-modal-overlay" id="runway-modal-backdrop" onclick="if(event.target === this) this.remove()">
+            <div class="ct-modal-card">
+              <div class="ct-modal-header">
+                <div>
+                  <h3 style="margin:0;font-size:16px;font-weight:700;">📅 10-Week Schedule Runway & Core Course Recommendations</h3>
+                  <div style="font-size:11px;color:var(--ink-soft);margin-top:2px;">Identify scheduling gap weeks and see recommended core classes from instructors</div>
+                </div>
+                <button class="button-secondary" onclick="document.getElementById('runway-modal-backdrop').remove()">✕</button>
+              </div>
+              <div class="ct-modal-body">
+                <div class="ct-kpi-summary-grid">
+                  <div class="ct-kpi-summary-box">
+                    <span class="ct-kpi-summary-val" style="color:#ef4444;">${data.gapWeeksCount || 0}</span>
+                    <span class="ct-kpi-summary-lbl">Gap Weeks (0 Classes)</span>
+                  </div>
+                  <div class="ct-kpi-summary-box">
+                    <span class="ct-kpi-summary-val" style="color:#f59e0b;">${data.lightWeeksCount || 0}</span>
+                    <span class="ct-kpi-summary-lbl">Light Weeks (1 Class)</span>
+                  </div>
+                  <div class="ct-kpi-summary-box">
+                    <span class="ct-kpi-summary-val" style="color:#10b981;">${data.healthyWeeksCount || 0}</span>
+                    <span class="ct-kpi-summary-lbl">Healthy Weeks (2+ Classes)</span>
+                  </div>
+                  <div class="ct-kpi-summary-box">
+                    <span class="ct-kpi-summary-val">${data.totalWeeks || 10}</span>
+                    <span class="ct-kpi-summary-lbl">Total Planned Weeks</span>
+                  </div>
+                </div>
+
+                <div class="runway-grid" style="margin-top:10px;">
+                  ${weeks
+                    .map((w) => {
+                      const statusClass = `week-status-${w.status}`;
+                      const statusBadge = w.status === "gap"
+                        ? '<span class="class-badge" style="background:#fee2e2;color:#dc2626;font-weight:800;">🚨 GAP WEEK (0 Classes)</span>'
+                        : w.status === "light"
+                          ? '<span class="class-badge" style="background:#fef3c7;color:#b45309;font-weight:700;">⚠️ LIGHT (1 Class)</span>'
+                          : '<span class="class-badge" style="background:#dcfce7;color:#15803d;font-weight:700;">✓ HEALTHY</span>';
+
+                      return `
+                        <div class="runway-week-card ${statusClass}">
+                          <div class="runway-week-header">
+                            <div>
+                              <strong>${w.label}</strong>
+                              <span style="font-size:11px;color:var(--ink-soft);margin-left:8px;">(${w.weekStart} to ${w.weekEnd})</span>
+                            </div>
+                            <div style="display:flex;align-items:center;gap:6px;">
+                              <span style="font-size:12px;font-weight:600;">${w.classCount} scheduled</span>
+                              ${statusBadge}
+                            </div>
+                          </div>
+
+                          ${
+                            w.classes.length > 0
+                              ? `
+                            <div style="display:flex;flex-wrap:wrap;gap:6px;margin:4px 0;">
+                              ${w.classes
+                                .map((c) => `<span class="class-badge" style="background:var(--panel-border);color:var(--ink);">${this.escapeHtml(c.title)} (${c.registeredCount || 0} reg)</span>`)
+                                .join("")}
+                            </div>
+                          `
+                              : ""
+                          }
+
+                          ${
+                            w.recommendations && w.recommendations.length > 0
+                              ? `
+                            <div class="runway-recs-box">
+                              <div style="font-size:11px;font-weight:700;color:var(--ink-soft);margin-bottom:4px;">💡 Recommended CCOR Core Courses to Schedule:</div>
+                              <div style="display:flex;flex-wrap:wrap;gap:6px;">
+                                ${w.recommendations
+                                  .map(
+                                    (rec) => `
+                                  <div class="runway-rec-tag" title="${rec.reason}">
+                                    <strong>${this.escapeHtml(rec.title)}</strong>
+                                    <span style="opacity:0.8;">• ${rec.recommendedInstructor}</span>
+                                    ${rec.isCE ? '<span style="font-size:9px;background:#10b981;color:white;padding:1px 4px;border-radius:2px;margin-left:2px;">CE</span>' : ""}
+                                  </div>
+                                `
+                                  )
+                                  .join("")}
+                              </div>
+                            </div>
+                          `
+                              : ""
+                          }
+                        </div>
+                      `;
+                    })
+                    .join("")}
+                </div>
+              </div>
+              <div class="class-tracker-modal-footer" style="padding:12px 20px;border-top:1px solid var(--panel-border);display:flex;justify-content:flex-end;">
+                <button class="button-secondary" onclick="document.getElementById('runway-modal-backdrop').remove()">Close</button>
+              </div>
+            </div>
+          </div>
+        `;
+        const existing = document.getElementById("runway-modal-backdrop");
+        if (existing) existing.remove();
+        document.body.insertAdjacentHTML("beforeend", modalHtml);
+      } catch (err) {
+        this.showToast(`Failed to open runway planner: ${err.message}`, true);
       }
     },
 
