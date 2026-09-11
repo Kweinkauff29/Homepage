@@ -2347,8 +2347,7 @@
     // Type the exact name of the API events here in the order you want them to appear.
     // They will be forced to the front of the carousel, regardless of date or if they have a flyer.
     const pinnedApiEventNames = [
-      "7th Annual Casino Night",
-      "September Membership Breakfast"
+      "2027 CCOR Installation Breakfast"
     ];
 
     // 2. CUSTOM FLYERS / HERO IMAGES: 
@@ -2356,10 +2355,21 @@
     // Set the 'spot' number (1-indexed) to force it into a specific position overall.
     const customTiles = [
       {
+        title: "6th Annual CCOR Charity Poker Run",
+        description: "Sat, Nov 21",
+        image: "https://coconutcoastrealtors.org/wp-content/uploads/2026/09/f2e96532-5444-4c43-89c6-6c7f480aeb37.png",
+        link: "https://coconutcoastrealtors.org/all-upcoming-events/",
+        spot: 2,
+        tag: "Event",
+        format: "landscape",
+        fullBleed: true,
+        rawDesc: "Save the date! A fall favorite returns Saturday, November 21 hosted by CCOR Next Gen Leaders. Theme: Pajama Party."
+      },
+      {
         title: "Jeanne and Wade Promo",
         description: "Watch Jeanne and Wade",
         video: "https://coconutcoastrealtors.org/wp-content/uploads/2026/06/Jeanne-and-Wade-Promo.mp4",
-        spot: 6,
+        spot: 7,
         tag: "Video",
         aspectRatio: "9/16"
       },
@@ -2367,7 +2377,7 @@
         title: "Jeanne and Brooke Video",
         description: "Watch Jeanne and Brooke",
         video: "https://coconutcoastrealtors.org/wp-content/uploads/2026/05/Jeanne-and-Brooke-video1.mp4",
-        spot: 12,
+        spot: 14,
         tag: "Video"
       }
     ];
@@ -2472,9 +2482,17 @@
         const results = data.Results || [];
         const now = new Date();
 
-        let visualEvents = [];
-        let textEvents = [];
+        let ownVisualEvents = [];
+        let ownTextEvents = [];
+        let partnerVisualEvents = [];
+        let partnerTextEvents = [];
         let pinnedEvents = [];
+
+        // Helper: identify third-party webinars & partner classes to deprioritize behind CCOR's own classes and events
+        const isDeprioritizedClass = (name) => {
+          if (!name) return false;
+          return /rpr|realtor\.com|form simplicity|webinar/i.test(name);
+        };
 
         for (const e of results) {
           if (new Date(e.StartDate) >= now) {
@@ -2486,7 +2504,12 @@
             );
             if (isCanceled) continue;
 
-            let isExcluded = e.Name && (e.Name.toLowerCase().includes('forewarn') || e.Name.toLowerCase().includes('cubicas') || e.Name.toLowerCase().includes('cubicasa'));
+            let isExcluded = e.Name && (
+              e.Name.toLowerCase().includes('forewarn') ||
+              e.Name.toLowerCase().includes('cubicas') ||
+              e.Name.toLowerCase().includes('cubicasa') ||
+              /room rental|room block/i.test(e.Name)
+            );
             if (isExcluded) continue;
 
             let flyerURL = e.EnrichedFlyerUrl || e.EventLogoUrl || "";
@@ -2495,8 +2518,8 @@
               if (match) flyerURL = match[1];
             }
 
-            if (e.Name && e.Name.toLowerCase().includes("september") && e.Name.toLowerCase().includes("breakfast")) {
-              flyerURL = "https://coconutcoastrealtors.org/wp-content/uploads/2026/08/2026-District-5-Bowling-Tournament-scaled.png";
+            if (e.Name && e.Name.toLowerCase().includes("installation") && e.Name.toLowerCase().includes("breakfast")) {
+              flyerURL = "https://coconutcoastrealtors.org/wp-content/uploads/2026/09/70db7809-a867-4aaf-8feb-909638d3a614.png";
             }
 
             let hasFlyer = (flyerURL && !flyerURL.includes('default') && !flyerURL.includes('placeholder') && !flyerURL.includes('BER-Logo') && !flyerURL.toLowerCase().includes('ccor-horz'));
@@ -2513,7 +2536,7 @@
               rawDesc: e.Description ? e.Description.replace(/<br\s*[\/]?>/gi, ' ').replace(/<\/p>/gi, ' ').replace(/<[^>]*>?/gm, '').replace(/\s+/g, ' ').trim().substring(0, 120) + '...' : ''
             };
 
-            if (e.Name && e.Name.toLowerCase().includes("september") && e.Name.toLowerCase().includes("breakfast")) {
+            if (e.Name && e.Name.toLowerCase().includes("installation") && e.Name.toLowerCase().includes("breakfast")) {
               eventObj.format = "landscape";
               eventObj.fullBleed = true;
             }
@@ -2523,16 +2546,35 @@
             if (pinIndex !== -1) {
               pinnedEvents[pinIndex] = eventObj;
             } else if (hasFlyer) {
-              visualEvents.push(eventObj);
+              if (isDeprioritizedClass(e.Name)) {
+                partnerVisualEvents.push(eventObj);
+              } else {
+                ownVisualEvents.push(eventObj);
+              }
             } else {
-              textEvents.push(eventObj);
+              if (isDeprioritizedClass(e.Name)) {
+                partnerTextEvents.push(eventObj);
+              } else {
+                ownTextEvents.push(eventObj);
+              }
             }
           }
         }
 
         pinnedEvents = pinnedEvents.filter(e => e); // Remove empty slots
-        visualEvents = visualEvents.sort((a, b) => new Date(a.dateObj) - new Date(b.dateObj)).slice(0, 10);
-        textEvents = textEvents.sort((a, b) => new Date(a.dateObj) - new Date(b.dateObj)).slice(0, 5);
+
+        // Sort all groups chronologically
+        ownVisualEvents.sort((a, b) => new Date(a.dateObj) - new Date(b.dateObj));
+        partnerVisualEvents.sort((a, b) => new Date(a.dateObj) - new Date(b.dateObj));
+        ownTextEvents.sort((a, b) => new Date(a.dateObj) - new Date(b.dateObj));
+        partnerTextEvents.sort((a, b) => new Date(a.dateObj) - new Date(b.dateObj));
+
+        // CCOR's own visual classes & events lead first; partner webinars (RPR, Realtor.com, Form Simplicity) come after
+        let visualEvents = [...ownVisualEvents, ...partnerVisualEvents].slice(0, 15);
+
+        // CCOR's own text events lead first; partner text events come after
+        let textEvents = [...ownTextEvents, ...partnerTextEvents].slice(0, 8);
+
         return { pinnedEvents, visualEvents, textEvents };
       } catch (err) {
         console.error("Failed to fetch events", err);
@@ -6222,7 +6264,7 @@
 
   </div>
   <div class="col-sm-8">
-    <h3 class="resrow">Upcoming at CCOR - September 4th</h3>
+    <h3 class="resrow">Upcoming at CCOR - September 11th</h3>
 
     <style>
       .frame-class {
@@ -6244,7 +6286,7 @@
       }
     </style>
 
-    <iframe class="frame-class" src="https://bonitaspringsesterorealtorsfl.growthzoneapp.com/ap/EmailViewer/Po0YBxaL">
+    <iframe class="frame-class" src="https://bonitaspringsesterorealtorsfl.growthzoneapp.com/ap/EmailViewer/LmYn6DBL">
     </iframe>
   </div>
 </div>
