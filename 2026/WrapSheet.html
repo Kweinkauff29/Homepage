@@ -3644,6 +3644,458 @@ a[href*="marketing.ics"]:hover,
   color: #ffffff !important;
 }
 
+/* ==========================================================================
+   COMPACT CLASS BLOCKS GRID & POPUP WORKSPACE MODAL
+   Reduces vertical height drastically while providing focused, rich popup editing
+   ========================================================================== */
+
+.class-tracker-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 14px;
+}
+
+@media (max-width: 640px) {
+  .class-tracker-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.class-block {
+  background: var(--panel);
+  border: 1px solid var(--panel-border);
+  border-radius: var(--radius-md);
+  padding: 12px 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  cursor: pointer;
+  transition: transform 0.15s ease, border-color 0.15s ease, box-shadow 0.15s ease;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.03);
+}
+
+.class-block:hover {
+  transform: translateY(-2px);
+  border-color: var(--accent);
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
+}
+
+.class-block.is-today {
+  border-left: 5px solid #22c55e;
+}
+
+.class-block.is-priority-top {
+  border-left: 5px solid #ef4444;
+}
+
+.class-block.is-unclassified {
+  border-left: 5px solid #f59e0b;
+}
+
+.class-block.is-canceled {
+  opacity: 0.65;
+  border-left: 5px solid #9ca3af;
+}
+
+.class-block.is-closed {
+  opacity: 0.75;
+  border-left: 5px solid #6b7280;
+}
+
+.class-block-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.class-date-box-compact {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: rgba(15, 23, 42, 0.05);
+  border: 1px solid var(--panel-border);
+  border-radius: 6px;
+  width: 44px;
+  height: 42px;
+  flex-shrink: 0;
+  line-height: 1;
+}
+
+[data-theme="dark"] .class-date-box-compact {
+  background: rgba(30, 41, 59, 0.5);
+}
+
+.class-date-month-compact {
+  font-size: 9px;
+  font-weight: 800;
+  letter-spacing: 0.05em;
+  color: var(--accent);
+  text-transform: uppercase;
+}
+
+.class-date-day-compact {
+  font-size: 16px;
+  font-weight: 800;
+  color: var(--ink);
+  margin-top: 2px;
+}
+
+.class-block-tags {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  flex-wrap: wrap;
+  flex: 1;
+}
+
+.class-block-title {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--ink);
+  line-height: 1.3;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  min-height: 36px;
+}
+
+.class-block-meta {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 11px;
+  color: var(--ink-soft);
+}
+
+.class-block-progress-row {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  margin-top: 2px;
+}
+
+.class-block-reg-info {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 11px;
+  color: var(--ink);
+}
+
+.class-reg-pct-pill {
+  font-size: 10px;
+  font-weight: 800;
+  padding: 1px 6px;
+  border-radius: 999px;
+}
+
+.class-reg-bar-bg {
+  width: 100%;
+  height: 5px;
+  background: rgba(15, 23, 42, 0.08);
+  border-radius: 999px;
+  overflow: hidden;
+}
+
+[data-theme="dark"] .class-reg-bar-bg {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.class-reg-bar-fill {
+  height: 100%;
+  border-radius: 999px;
+  transition: width 0.3s ease;
+}
+
+.class-block-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-top: 6px;
+  border-top: 1px solid var(--panel-border);
+  margin-top: auto;
+}
+
+.btn-open-class-modal {
+  font-size: 11px !important;
+  font-weight: 700 !important;
+  color: var(--accent) !important;
+  background: rgba(3, 170, 225, 0.08) !important;
+  border: 1px solid rgba(3, 170, 225, 0.3) !important;
+  border-radius: 6px !important;
+  padding: 4px 10px !important;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.btn-open-class-modal:hover {
+  background: var(--accent) !important;
+  color: #ffffff !important;
+}
+
+[data-theme="dark"] .btn-open-class-modal {
+  background: rgba(56, 189, 248, 0.15) !important;
+  color: #38bdf8 !important;
+  border-color: rgba(56, 189, 248, 0.4) !important;
+}
+
+[data-theme="dark"] .btn-open-class-modal:hover {
+  background: #38bdf8 !important;
+  color: #0f172a !important;
+}
+
+/* ===== FULL-FEATURED CLASS POPUP MODAL ===== */
+.ct-class-popup-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(15, 23, 42, 0.65);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  animation: ctFadeIn 0.2s ease-out;
+}
+
+.ct-class-popup-card {
+  background: var(--panel);
+  border: 1px solid var(--panel-border);
+  border-radius: var(--radius-lg, 12px);
+  width: 100%;
+  max-width: 1050px;
+  max-height: 90vh;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.25);
+  overflow: hidden;
+  animation: ctScaleUp 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes ctFadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes ctScaleUp {
+  from { transform: scale(0.96); opacity: 0; }
+  to { transform: scale(1); opacity: 1; }
+}
+
+.ct-class-popup-header {
+  padding: 16px 20px;
+  background: var(--panel);
+  border-bottom: 1px solid var(--panel-border);
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+  flex-shrink: 0;
+}
+
+.ct-class-popup-title {
+  font-size: 18px;
+  font-weight: 800;
+  color: var(--ink);
+  line-height: 1.3;
+}
+
+.ct-class-popup-body {
+  padding: 20px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  flex: 1;
+}
+
+.ct-class-popup-footer {
+  padding: 12px 20px;
+  background: var(--panel);
+  border-top: 1px solid var(--panel-border);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-shrink: 0;
+}
+
+/* Phase Header Batch Actions */
+.phase-batch-actions {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-left: auto;
+}
+
+.btn-phase-claim {
+  background: #f0fdf4 !important;
+  color: #166534 !important;
+  border: 1px solid #86efac !important;
+  font-size: 11px !important;
+  font-weight: 700 !important;
+  padding: 3px 8px !important;
+  border-radius: 5px !important;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.btn-phase-claim:hover {
+  background: #22c55e !important;
+  color: #ffffff !important;
+}
+
+[data-theme="dark"] .btn-phase-claim {
+  background: rgba(34, 197, 94, 0.18) !important;
+  color: #86efac !important;
+  border-color: #22c55e !important;
+}
+
+.btn-phase-complete {
+  background: #eff6ff !important;
+  color: #1e40af !important;
+  border: 1px solid #93c5fd !important;
+  font-size: 11px !important;
+  font-weight: 700 !important;
+  padding: 3px 8px !important;
+  border-radius: 5px !important;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.btn-phase-complete:hover {
+  background: #3b82f6 !important;
+  color: #ffffff !important;
+}
+
+[data-theme="dark"] .btn-phase-complete {
+  background: rgba(59, 130, 246, 0.18) !important;
+  color: #93c5fd !important;
+  border-color: #3b82f6 !important;
+}
+
+.btn-phase-add {
+  background: rgba(15, 23, 42, 0.05) !important;
+  color: var(--ink) !important;
+  border: 1px solid var(--panel-border) !important;
+  font-size: 11px !important;
+  font-weight: 700 !important;
+  padding: 3px 8px !important;
+  border-radius: 5px !important;
+  cursor: pointer;
+}
+
+.btn-phase-add:hover {
+  background: var(--accent) !important;
+  color: #ffffff !important;
+}
+
+/* Task Inline Edit & Delete Buttons */
+.btn-task-edit-title, .btn-task-edit-due {
+  background: none;
+  border: none;
+  font-size: 11px;
+  cursor: pointer;
+  opacity: 0.6;
+  padding: 2px 4px;
+  border-radius: 3px;
+  transition: opacity 0.15s ease, background 0.15s ease;
+}
+
+.btn-task-edit-title:hover, .btn-task-edit-due:hover {
+  opacity: 1;
+  background: rgba(15, 23, 42, 0.08);
+}
+
+[data-theme="dark"] .btn-task-edit-title:hover,
+[data-theme="dark"] .btn-task-edit-due:hover {
+  background: rgba(255, 255, 255, 0.12);
+}
+
+.btn-reconcile-tasks {
+  background: #fdf4ff !important;
+  color: #86198f !important;
+  border: 1.5px solid #d946ef !important;
+  font-size: 12px !important;
+  font-weight: 700 !important;
+  padding: 6px 14px !important;
+  border-radius: 6px !important;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.btn-reconcile-tasks:hover {
+  background: #d946ef !important;
+  color: #ffffff !important;
+}
+
+[data-theme="dark"] .btn-reconcile-tasks {
+  background: rgba(217, 70, 239, 0.18) !important;
+  color: #f5d0fe !important;
+  border-color: #d946ef !important;
+}
+
+[data-theme="dark"] .btn-reconcile-tasks:hover {
+  background: #d946ef !important;
+  color: #ffffff !important;
+}
+
+/* Runway Modal Enhancements */
+.runway-filter-bar {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-bottom: 12px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid var(--panel-border);
+}
+
+.runway-tab-btn {
+  font-size: 11px;
+  font-weight: 700;
+  padding: 4px 10px;
+  border-radius: 6px;
+  border: 1px solid var(--panel-border);
+  background: var(--panel);
+  color: var(--ink);
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.runway-tab-btn.active {
+  background: var(--accent);
+  color: #ffffff;
+  border-color: var(--accent);
+}
+
+.btn-copy-course {
+  background: rgba(15, 23, 42, 0.06);
+  border: 1px solid var(--panel-border);
+  border-radius: 4px;
+  font-size: 10px;
+  font-weight: 700;
+  padding: 2px 6px;
+  color: var(--ink);
+  cursor: pointer;
+  transition: all 0.15s ease;
+  margin-left: 6px;
+}
+
+.btn-copy-course:hover {
+  background: var(--accent);
+  color: #ffffff;
+  border-color: var(--accent);
+}
+
 
 
 </style>
@@ -6260,12 +6712,11 @@ CCOR Education Team`,
         return;
       }
 
-      container.innerHTML = filtered.map((c) => this.renderClassCard(c)).join("");
+      container.innerHTML = `<div class="class-tracker-grid" id="class-tracker-grid">${filtered.map((c) => this.renderClassBlock(c)).join("")}</div>`;
     },
 
-    // Render single Class Card
-    renderClassCard(c) {
-      const isExpanded = this.state.expandedClassId === c.id;
+    // Render single Class Block (compact grid tile)
+    renderClassBlock(c) {
       const dayMonth = getEasternDayMonth(c.start_date);
       const isToday = isTodayInEastern(c.start_date);
       const timeRange = formatEasternTimeRange(c.start_date, c.end_date);
@@ -6291,7 +6742,6 @@ CCOR Education Team`,
       if (isArchived) cardModifiers += " is-closed";
 
       const typeLabel = CLASS_TYPE_LABELS[c.class_type] || "Unclassified";
-
       const trackKey = c.track || (c.program_type === "nmo" ? "nmo" : "general");
       const trackLabel = CONTENT_TRACK_LABELS[trackKey] || trackKey;
 
@@ -6301,7 +6751,6 @@ CCOR Education Team`,
         hybrid: "Hybrid",
       }[c.format || "in_person"];
 
-      // Turnout Info calculation
       let turnoutBadgeHtml = "";
       if (c.attended_count !== null && c.attended_count !== undefined) {
         const attCount = Number(c.attended_count);
@@ -6311,147 +6760,146 @@ CCOR Education Team`,
         const turnoutTotal = attCount + noShowCount;
         const turnoutPct = turnoutTotal > 0 ? Math.round((attCount / turnoutTotal) * 100) : 100;
         const turnoutClass = turnoutPct >= 80 ? "turnout-high" : turnoutPct >= 60 ? "turnout-medium" : "turnout-low";
-        turnoutBadgeHtml = `<span class="reconciliation-turnout-pill ${turnoutClass}" title="Reconciled Attendance">👥 ${attCount} Attended • ${noShowCount} No-Show (${turnoutPct}%)</span>`;
+        turnoutBadgeHtml = `<span class="reconciliation-turnout-pill ${turnoutClass}" title="Reconciled Attendance">👥 ${attCount} att (${turnoutPct}%)</span>`;
       } else if (isPast && !isCanceled && !isIgnored) {
-        turnoutBadgeHtml = `<span class="class-badge" style="background:#fef3c7;color:#b45309;">⚠️ Needs Attendance Count</span>`;
+        turnoutBadgeHtml = `<span class="class-badge" style="background:#fef3c7;color:#b45309;">⚠️ Headcount Needed</span>`;
       }
 
-      const totalRanked = c.totalRankedUpcoming || this.getRankableCount();
-      const showPriorityBadge = !isCanceled && !isArchived && !isIgnored && c.priorityScore !== undefined && c.priorityScore > 0 && c.priorityRank;
+      const totalTasks = c.taskProgress ? (c.taskProgress.completed + c.taskProgress.pending) : 0;
+      const completedTasks = c.taskProgress ? c.taskProgress.completed : 0;
 
       return `
-        <div class="class-card ${cardModifiers}" id="class-card-${c.id}">
-          <div class="class-card-summary" onclick="ClassTracker.toggleExpand(${c.id})">
-            <div class="class-date-box">
-              <span class="class-date-month">${dayMonth.month}</span>
-              <span class="class-date-day">${dayMonth.day}</span>
+        <div class="class-block ${cardModifiers}" id="class-block-${c.id}" onclick="ClassTracker.openClassModal(${c.id})">
+          <div class="class-block-header">
+            <div class="class-date-box-compact">
+              <span class="class-date-month-compact">${dayMonth.month}</span>
+              <span class="class-date-day-compact">${dayMonth.day}</span>
             </div>
-
-            <div class="class-info-block">
-              <div class="class-title-row">
-                <span class="class-card-title">${this.escapeHtml(c.title)}</span>
-                ${(c.program_type === "nmo" || c.is_nmo) ? '<span class="ct-nmo-badge">NEW MEMBER ORIENTATION</span>' : ""}
-                ${isToday ? '<span class="class-today-pill">TODAY</span>' : ""}
-                ${isCanceled ? '<span class="class-badge" style="background:#fee2e2;color:#ef4444;">CANCELED</span>' : ""}
-                ${isArchived ? '<span class="class-badge" style="background:#f3f4f6;color:#6b7280;">CLOSED</span>' : ""}
-                ${isIgnored ? '<span class="class-badge" style="background:#f3f4f6;color:#6b7280;">IGNORED</span>' : ""}
-              </div>
-              <div class="class-meta-row">
-                <span class="class-badge badge-type-${(c.class_type || "unclassified").replace("_", "")}">${typeLabel}</span>
-                <span class="class-badge badge-track-${trackKey}">🏷️ ${trackLabel}</span>
-                ${c.is_ce ? `<span class="class-badge badge-ce-yes">🎓 ${c.ce_hours ? `${c.ce_hours} CE` : "CE Approved"}</span>` : `<span class="class-badge badge-ce-no">Non-CE</span>`}
-                <span class="class-badge badge-format-${(c.format || "in_person").replace("_", "")}">${formatLabel}</span>
-                <span>${timeRange}</span>
-                ${
-                  (c.program_type === "nmo" || c.is_nmo) && c.nmoPrepProgress
-                    ? `<span class="ct-nmo-prep-badge ${c.nmoPrepProgress.completed < c.nmoPrepProgress.total ? "prep-needed" : ""}">NMO Prep ${c.nmoPrepProgress.completed}/${c.nmoPrepProgress.total}</span>`
-                    : ""
-                }
-                ${turnoutBadgeHtml}
-                <span>• ${daysUntil >= 0 ? `${daysUntil}d away` : `${Math.abs(daysUntil)}d ago`}</span>
-              </div>
-            </div>
-
-            <div class="class-metrics-block">
-              <div class="class-reg-stats health-${healthClass}">
-                <div class="class-reg-text">
-                  <span>${regCount} / ${regGoal}</span>
-                  <span>${(c.registrationHealth || "GOOD").replace("_", " ")}</span>
-                </div>
-                <div class="class-reg-bar">
-                  <div class="class-reg-fill" style="width: ${regPct}%;"></div>
-                </div>
-              </div>
-
-              ${
-                showPriorityBadge
-                  ? `
-                <div class="class-priority-badge ${c.priorityScore >= 70 ? "priority-high" : ""}" title="Promotion Priority Score">
-                  <span class="priority-score">${c.priorityScore}</span>
-                  <span class="priority-rank">#${c.priorityRank} OF ${totalRanked}</span>
-                </div>
-              `
-                  : ""
-              }
-
-              <button class="class-expand-btn" aria-label="Toggle details">
-                ${isExpanded ? "▲" : "▼"}
-              </button>
+            <div class="class-block-tags">
+              ${(c.program_type === "nmo" || c.is_nmo) ? '<span class="ct-nmo-badge">NMO</span>' : ""}
+              ${isToday ? '<span class="class-today-pill">TODAY</span>' : ""}
+              ${isCanceled ? '<span class="class-badge" style="background:#fee2e2;color:#ef4444;">CANCELED</span>' : ""}
+              ${isArchived ? '<span class="class-badge" style="background:#f3f4f6;color:#6b7280;">CLOSED</span>' : ""}
+              <span class="class-badge badge-track-${trackKey}">🏷️ ${trackLabel}</span>
+              ${c.is_ce ? `<span class="class-badge badge-ce-yes">🎓 ${c.ce_hours ? `${c.ce_hours} CE` : "CE"}</span>` : ""}
+              <span class="class-badge badge-format-${(c.format || "in_person").replace("_", "")}">${formatLabel}</span>
             </div>
           </div>
 
-          <div class="class-card-detail" id="class-detail-${c.id}" style="display: ${isExpanded ? "flex" : "none"};">
-            ${isExpanded ? this.renderDetailContent(c.id) : ""}
+          <div class="class-block-title" title="${this.escapeHtml(c.title)}">
+            ${this.escapeHtml(c.title)}
+          </div>
+
+          <div class="class-block-meta">
+            <span>🕒 ${timeRange}</span>
+            <span>• ${daysUntil >= 0 ? `${daysUntil}d away` : `${Math.abs(daysUntil)}d ago`}</span>
+            ${c.instructor_name ? `<span style="opacity:0.8;">• 👤 ${this.escapeHtml(c.instructor_name)}</span>` : ""}
+          </div>
+
+          <div class="class-block-progress-row">
+            <div class="class-block-reg-info">
+              <span>👥 <strong>${regCount}</strong> / ${regGoal} registered</span>
+              <span class="class-reg-pct-pill health-${healthClass}">${regPct}%</span>
+            </div>
+            <div class="class-reg-bar-bg">
+              <div class="class-reg-bar-fill health-${healthClass}" style="width: ${regPct}%;"></div>
+            </div>
+          </div>
+
+          <div class="class-block-footer">
+            <div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap;">
+              <span class="class-badge badge-type-${(c.class_type || "unclassified").replace("_", "")}">${typeLabel}</span>
+              ${turnoutBadgeHtml}
+              ${totalTasks > 0 ? `<span class="class-badge" style="background:rgba(15,23,42,0.06);color:var(--ink);">✓ ${completedTasks}/${totalTasks}</span>` : ""}
+            </div>
+            <button type="button" class="btn-open-class-modal" onclick="event.stopPropagation(); ClassTracker.openClassModal(${c.id})">
+              Details & Tasks ↗
+            </button>
           </div>
         </div>
       `;
     },
 
-    // Toggle expand class
-    async toggleExpand(classId) {
-      if (this.state.expandedClassId === classId) {
-        this.state.expandedClassId = null;
-        const detailEl = document.getElementById(`class-detail-${classId}`);
-        if (detailEl) detailEl.style.display = "none";
-        const cardEl = document.getElementById(`class-card-${classId}`);
-        if (cardEl) {
-          const btn = cardEl.querySelector(".class-expand-btn");
-          if (btn) btn.textContent = "▼";
-        }
-        return;
-      }
-
-      // Close previous
-      if (this.state.expandedClassId) {
-        const prevEl = document.getElementById(`class-detail-${this.state.expandedClassId}`);
-        if (prevEl) prevEl.style.display = "none";
-        const prevCard = document.getElementById(`class-card-${this.state.expandedClassId}`);
-        if (prevCard) {
-          const btn = prevCard.querySelector(".class-expand-btn");
-          if (btn) btn.textContent = "▼";
-        }
-      }
-
-      this.state.expandedClassId = classId;
-      const detailEl = document.getElementById(`class-detail-${classId}`);
-      const cardEl = document.getElementById(`class-card-${classId}`);
-      if (cardEl) {
-        const btn = cardEl.querySelector(".class-expand-btn");
-        if (btn) btn.textContent = "▲";
-      }
-
-      if (detailEl) {
-        detailEl.style.display = "flex";
-        detailEl.innerHTML = '<div style="padding:20px;text-align:center;color:var(--ink-soft);">Loading class workflow…</div>';
-      }
-
-      // Fetch fresh detail
+    // Full Class Popup Workspace Modal
+    async openClassModal(classId) {
       try {
-        const detail = await this.api(`/classes/${classId}`);
-        this.state.classDetailsCache.set(classId, detail);
-        if (detailEl) {
-          detailEl.innerHTML = this.renderDetailContent(classId);
+        let detail = this.state.classDetailsCache.get(classId);
+        if (!detail) {
+          detail = await this.api(`/classes/${classId}`);
+          this.state.classDetailsCache.set(classId, detail);
+        }
+        this.state.activeModalClassId = classId;
+
+        const modalHtml = `
+          <div class="ct-class-popup-overlay" id="class-popup-modal-backdrop" onclick="if(event.target === this) ClassTracker.closeClassModal()">
+            <div class="ct-class-popup-card" role="dialog" aria-modal="true" aria-labelledby="ct-popup-title">
+              <div class="ct-class-popup-header">
+                <div>
+                  <div class="ct-class-popup-title" id="ct-popup-title">${this.escapeHtml(detail.title)}</div>
+                  <div style="display:flex;align-items:center;gap:8px;margin-top:6px;flex-wrap:wrap;font-size:12px;color:var(--ink-soft);">
+                    <span>📅 ${formatEasternDate(detail.start_date)}</span>
+                    <span>🕒 ${formatEasternTimeRange(detail.start_date, detail.end_date, true)}</span>
+                    <span class="class-badge badge-type-${(detail.class_type || 'unclassified').replace('_', '')}">${CLASS_TYPE_LABELS[detail.class_type] || 'Unclassified'}</span>
+                    ${detail.is_ce ? `<span class="class-badge badge-ce-yes">🎓 ${detail.ce_hours ? `${detail.ce_hours} CE` : 'CE Approved'}</span>` : ''}
+                    ${detail.closed_at ? '<span class="class-badge" style="background:#f3f4f6;color:#6b7280;">CLOSED / ARCHIVED</span>' : ''}
+                  </div>
+                </div>
+                <div style="display:flex;align-items:center;gap:8px;">
+                  <button type="button" class="button-secondary" onclick="ClassTracker.closeClassModal()" style="font-size:14px;padding:4px 10px;" title="Close (Esc)">✕</button>
+                </div>
+              </div>
+
+              <div class="ct-class-popup-body" id="class-popup-body-${detail.id}">
+                ${this.renderDetailContent(detail.id)}
+              </div>
+
+              <div class="ct-class-popup-footer">
+                <div>
+                  ${detail.closed_at
+                    ? `<button type="button" class="button-secondary btn-restore-class" onclick="ClassTracker.toggleArchiveClass(${detail.id}, false)">Restore to Active</button>`
+                    : `<button type="button" class="button-secondary btn-archive-class" onclick="ClassTracker.toggleArchiveClass(${detail.id}, true)">Archive / Close Class</button>`
+                  }
+                </div>
+                <button type="button" class="button-secondary" onclick="ClassTracker.closeClassModal()">Close</button>
+              </div>
+            </div>
+          </div>
+        `;
+
+        const existing = document.getElementById("class-popup-modal-backdrop");
+        if (existing) existing.remove();
+        document.body.insertAdjacentHTML("beforeend", modalHtml);
+
+        // Bind Esc key
+        if (!this._popupEscBound) {
+          this._popupEscBound = true;
+          window.addEventListener("keydown", (e) => {
+            if (e.key === "Escape") {
+              const modal = document.getElementById("class-popup-modal-backdrop");
+              if (modal) ClassTracker.closeClassModal();
+            }
+          });
         }
       } catch (err) {
-        if (detailEl) {
-          detailEl.innerHTML = `<div style="color:var(--danger);padding:14px;">Error loading class details: ${err.message}</div>`;
-        }
+        this.showToast(`Failed to open class details: ${err.message}`, true);
       }
     },
 
-    expandAndScroll(classId) {
-      this.state.filterStatus = "active";
-      const statusSelect = document.getElementById("class-tracker-filter-status");
-      if (statusSelect) statusSelect.value = "active";
+    closeClassModal() {
+      const modal = document.getElementById("class-popup-modal-backdrop");
+      if (modal) modal.remove();
+      this.state.activeModalClassId = null;
       this.renderTimeline();
+      this.renderDesk();
+    },
 
-      setTimeout(() => {
-        const card = document.getElementById(`class-card-${classId}`);
-        if (card) {
-          card.scrollIntoView({ behavior: "smooth", block: "start" });
-          this.toggleExpand(classId);
-        }
-      }, 50);
+    // Backward compatibility aliases
+    toggleExpand(classId) {
+      this.openClassModal(classId);
+    },
+
+    expandAndScroll(classId) {
+      this.openClassModal(classId);
     },
 
     // Render Expanded Class Details Drawer
@@ -6674,9 +7122,12 @@ CCOR Education Team`,
 
         <!-- Class Configuration Save & Status Bar -->
         <div class="class-config-actions" style="display:flex;align-items:center;justify-content:space-between;gap:10px;margin-top:10px;margin-bottom:14px;padding:10px 14px;background:rgba(15,23,42,0.03);border:1px solid var(--panel-border);border-radius:var(--radius-sm);">
-          <div style="display:flex;align-items:center;gap:10px;">
+          <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;">
             <button type="button" class="btn-save-class-details" onclick="ClassTracker.saveClassDetails(${d.id})" title="Save all class configuration and sponsor details to database">
               💾 Save Class Details
+            </button>
+            <button type="button" class="btn-reconcile-tasks" onclick="ClassTracker.reconcileTasksMatrix(${d.id})" title="Synchronize task matrix with classifications">
+              ⚡ Reconcile Tasks Matrix
             </button>
             <span id="save-details-status-${d.id}" class="save-details-status">✓ Saved to Database</span>
           </div>
@@ -6765,6 +7216,17 @@ CCOR Education Team`,
                     <span>${p.label}</span>
                     <span class="phase-progress-count">(${completedCount} of ${phaseTasks.length} complete)</span>
                   </span>
+                  <div class="phase-batch-actions" onclick="event.stopPropagation();">
+                    <button type="button" class="btn-phase-claim" onclick="ClassTracker.batchClaimSection(${d.id}, '${p.key}')" title="Claim all unclaimed tasks in ${p.label}">
+                      👤 Claim Section
+                    </button>
+                    <button type="button" class="btn-phase-complete" onclick="ClassTracker.batchCompleteSection(${d.id}, '${p.key}')" title="Check off all tasks in ${p.label}">
+                      ✓ Check Off Section
+                    </button>
+                    <button type="button" class="btn-phase-add" onclick="ClassTracker.openCustomTaskModal(${d.id}, '${p.key}')" title="Add task to ${p.label}">
+                      + Task
+                    </button>
+                  </div>
                 </div>
                 <div class="phase-task-list">
                   ${phaseTasks.length === 0 ? '<div style="padding:10px 12px;font-size:11px;color:var(--ink-soft);">No tasks in this phase.</div>' : phaseTasks.map((t) => this.renderTaskRow(d, t)).join("")}
@@ -6853,13 +7315,15 @@ CCOR Education Team`,
             <input type="checkbox" ${isCompleted ? "checked" : ""}
                    onchange="ClassTracker.toggleTaskComplete(${t.id}, this.checked)"
                    title="Mark Complete / Reopen">
-            <span class="class-task-title">${this.escapeHtml(t.title)}</span>
+            <span class="class-task-title" title="${this.escapeHtml(t.title)}">${this.escapeHtml(t.title)}</span>
+            <button type="button" class="btn-task-edit-title" onclick="ClassTracker.editTaskTitle(${t.id}, '${this.escapeHtml(t.title).replace(/'/g, "\\'")}')" title="Edit task title">✎</button>
             ${
               t.task_key === "marketing_urgent_eblast" && (classObj.registered_count || 0) >= 10
                 ? `<span style="font-size:10px;padding:1px 6px;border-radius:10px;background:rgba(16,185,129,0.12);color:#059669;font-weight:700;">Above 10 (${classObj.registered_count}/10) - Not Needed</span>`
                 : ""
             }
             ${t.due_date ? `<span class="class-task-due">${formatEasternDate(t.due_date)}</span>` : ""}
+            <button type="button" class="btn-task-edit-due" onclick="ClassTracker.editTaskDueDate(${t.id}, '${t.due_date || ""}')" title="Set or change due date">📅</button>
             <span class="class-task-assignee-tag" onclick="ClassTracker.openAssignModal(${t.id})" title="Change Assignees">
               👤 ${assigneeDisplay}
             </span>
@@ -6877,6 +7341,7 @@ CCOR Education Team`,
                 : ""
             }
             <button class="button-secondary" style="font-size:10px;padding:2px 6px;" onclick="ClassTracker.editTaskNotes(${t.id})" title="Task Notes">📝</button>
+            <button type="button" class="button-secondary btn-task-delete" style="font-size:10px;padding:2px 6px;color:var(--danger);" onclick="ClassTracker.deleteTask(${t.id})" title="Delete Task">🗑</button>
           </div>
         </div>
       `;
@@ -7241,10 +7706,10 @@ CCOR Education Team`,
     },
 
     // Custom Task Modal
-    openCustomTaskModal(classId) {
+    openCustomTaskModal(classId, defaultPhase = "pre_class") {
       const title = prompt("Enter Custom Task Title:");
-      if (!title) return;
-      const phase = prompt("Phase (intake, marketing, sponsor, pre_class, class_day, closeout):", "pre_class") || "pre_class";
+      if (!title || !title.trim()) return;
+      const phase = prompt("Phase (intake, marketing, sponsor, pre_class, class_day, closeout):", defaultPhase) || defaultPhase;
 
       this.api(`/classes/${classId}/tasks`, {
         method: "POST",
@@ -7254,10 +7719,109 @@ CCOR Education Team`,
         }),
       })
         .then(() => {
-          this.showToast("Custom task created!");
+          this.showToast("Custom task created! 🎉");
           return this.refreshClassDetail(classId);
         })
         .catch((err) => this.showToast(`Failed: ${err.message}`, true));
+    },
+
+    async batchClaimSection(classId, phase) {
+      try {
+        const res = await this.api(`/classes/${classId}/phase-batch`, {
+          method: "POST",
+          body: JSON.stringify({ phase, action: "claim" }),
+        });
+        this.showToast(`Claimed ${res.updatedCount || 0} tasks in section! 👤`);
+        await this.refreshClassDetail(classId);
+      } catch (err) {
+        this.showToast(`Batch claim failed: ${err.message}`, true);
+      }
+    },
+
+    async batchCompleteSection(classId, phase) {
+      try {
+        const res = await this.api(`/classes/${classId}/phase-batch`, {
+          method: "POST",
+          body: JSON.stringify({ phase, action: "complete" }),
+        });
+        this.showToast(`Checked off ${res.updatedCount || 0} tasks in section! ✓`);
+        await this.refreshClassDetail(classId);
+      } catch (err) {
+        this.showToast(`Batch complete failed: ${err.message}`, true);
+      }
+    },
+
+    async editTaskTitle(taskId, currentTitle) {
+      const newTitle = prompt("Edit Task Title:", currentTitle);
+      if (newTitle === null) return;
+      const trimmed = newTitle.trim();
+      if (!trimmed) {
+        this.showToast("Task title cannot be empty.", true);
+        return;
+      }
+      try {
+        await this.api(`/classes/tasks/${taskId}`, {
+          method: "PATCH",
+          body: JSON.stringify({ title: trimmed }),
+        });
+        this.showToast("Task title updated! ✎");
+        if (this.state.activeModalClassId) {
+          await this.refreshClassDetail(this.state.activeModalClassId);
+        } else if (this.state.expandedClassId) {
+          await this.refreshClassDetail(this.state.expandedClassId);
+        }
+      } catch (err) {
+        this.showToast(`Failed to update title: ${err.message}`, true);
+      }
+    },
+
+    async editTaskDueDate(taskId, currentDate) {
+      const newDate = prompt("Set Due Date (YYYY-MM-DD or leave blank to clear):", currentDate ? currentDate.slice(0, 10) : "");
+      if (newDate === null) return;
+      const trimmed = newDate.trim() || null;
+      try {
+        await this.api(`/classes/tasks/${taskId}`, {
+          method: "PATCH",
+          body: JSON.stringify({ due_date: trimmed }),
+        });
+        this.showToast("Due date updated! 📅");
+        if (this.state.activeModalClassId) {
+          await this.refreshClassDetail(this.state.activeModalClassId);
+        } else if (this.state.expandedClassId) {
+          await this.refreshClassDetail(this.state.expandedClassId);
+        }
+      } catch (err) {
+        this.showToast(`Failed to update due date: ${err.message}`, true);
+      }
+    },
+
+    async deleteTask(taskId) {
+      if (!confirm("Are you sure you want to delete this task?")) return;
+      try {
+        await this.api(`/classes/tasks/${taskId}`, {
+          method: "DELETE",
+        });
+        this.showToast("Task deleted! 🗑");
+        if (this.state.activeModalClassId) {
+          await this.refreshClassDetail(this.state.activeModalClassId);
+        } else if (this.state.expandedClassId) {
+          await this.refreshClassDetail(this.state.expandedClassId);
+        }
+      } catch (err) {
+        this.showToast(`Failed to delete task: ${err.message}`, true);
+      }
+    },
+
+    async reconcileTasksMatrix(classId) {
+      try {
+        const res = await this.api(`/classes/${classId}/reconcile-tasks`, {
+          method: "POST",
+        });
+        this.showToast(`Tasks reconciled! (Added: ${res.inserted || 0}, Updated: ${res.updated || 0}) ⚡`);
+        await this.refreshClassDetail(classId);
+      } catch (err) {
+        this.showToast(`Reconciliation failed: ${err.message}`, true);
+      }
     },
 
     // Update Class Classification
@@ -7428,6 +7992,21 @@ CCOR Education Team`,
         if (detailEl) {
           detailEl.innerHTML = this.renderDetailContent(classId);
         }
+        const popupBody = document.getElementById(`class-popup-body-${classId}`);
+        if (popupBody) {
+          popupBody.innerHTML = this.renderDetailContent(classId);
+        }
+        const inList = (this.state.classes || []).find((c) => c.id === classId);
+        if (inList) {
+          Object.assign(inList, detail);
+          if (detail.tasks) {
+            inList.taskProgress = {
+              completed: detail.tasks.filter((t) => t.status === "completed").length,
+              pending: detail.tasks.filter((t) => t.status !== "completed" && t.is_active).length,
+            };
+          }
+        }
+        this.renderTimeline();
       } catch (err) {
         console.error("Failed to refresh detail:", err);
       }
@@ -7921,44 +8500,68 @@ CCOR Education Team`,
       }
     },
 
-    async openRunwayModal() {
+    async openRunwayModal(weeksCount = 10, activeTab = "all") {
       try {
-        const data = await this.api("/classes/planner/runway?weeks=10");
-        const weeks = data.weeks || [];
+        const data = await this.api(`/classes/planner/runway?weeks=${weeksCount}`);
+        const allWeeks = data.weeks || [];
+
+        const filteredWeeks = allWeeks.filter((w) => {
+          if (activeTab === "gap") return w.status === "gap";
+          if (activeTab === "light") return w.status === "light";
+          if (activeTab === "healthy") return w.status === "healthy";
+          return true;
+        });
 
         const modalHtml = `
           <div class="ct-modal-overlay" id="runway-modal-backdrop" onclick="if(event.target === this) this.remove()">
             <div class="ct-modal-card">
               <div class="ct-modal-header">
                 <div>
-                  <h3 style="margin:0;font-size:16px;font-weight:700;">📅 10-Week Schedule Runway & Core Course Recommendations</h3>
+                  <h3 style="margin:0;font-size:16px;font-weight:700;">📅 ${weeksCount}-Week Schedule Runway & Core Recommendations</h3>
                   <div style="font-size:11px;color:var(--ink-soft);margin-top:2px;">Identify scheduling gap weeks and see recommended core classes from instructors</div>
                 </div>
                 <button class="button-secondary" onclick="document.getElementById('runway-modal-backdrop').remove()">✕</button>
               </div>
               <div class="ct-modal-body">
                 <div class="ct-kpi-summary-grid">
-                  <div class="ct-kpi-summary-box">
+                  <div class="ct-kpi-summary-box" style="cursor:pointer;" onclick="ClassTracker.openRunwayModal(${weeksCount}, 'gap')" title="Filter to Gap Weeks">
                     <span class="ct-kpi-summary-val" style="color:#ef4444;">${data.gapWeeksCount || 0}</span>
                     <span class="ct-kpi-summary-lbl">Gap Weeks (0 Classes)</span>
                   </div>
-                  <div class="ct-kpi-summary-box">
+                  <div class="ct-kpi-summary-box" style="cursor:pointer;" onclick="ClassTracker.openRunwayModal(${weeksCount}, 'light')" title="Filter to Light Weeks">
                     <span class="ct-kpi-summary-val" style="color:#f59e0b;">${data.lightWeeksCount || 0}</span>
                     <span class="ct-kpi-summary-lbl">Light Weeks (1 Class)</span>
                   </div>
-                  <div class="ct-kpi-summary-box">
+                  <div class="ct-kpi-summary-box" style="cursor:pointer;" onclick="ClassTracker.openRunwayModal(${weeksCount}, 'healthy')" title="Filter to Healthy Weeks">
                     <span class="ct-kpi-summary-val" style="color:#10b981;">${data.healthyWeeksCount || 0}</span>
                     <span class="ct-kpi-summary-lbl">Healthy Weeks (2+ Classes)</span>
                   </div>
-                  <div class="ct-kpi-summary-box">
-                    <span class="ct-kpi-summary-val">${data.totalWeeks || 10}</span>
+                  <div class="ct-kpi-summary-box" style="cursor:pointer;" onclick="ClassTracker.openRunwayModal(${weeksCount}, 'all')" title="Show All Weeks">
+                    <span class="ct-kpi-summary-val">${data.totalWeeks || allWeeks.length}</span>
                     <span class="ct-kpi-summary-lbl">Total Planned Weeks</span>
                   </div>
                 </div>
 
+                <div class="runway-filter-bar" style="margin-top:14px;">
+                  <button class="runway-tab-btn ${activeTab === 'all' ? 'active' : ''}" onclick="ClassTracker.openRunwayModal(${weeksCount}, 'all')">All Weeks (${data.totalWeeks || allWeeks.length})</button>
+                  <button class="runway-tab-btn ${activeTab === 'gap' ? 'active' : ''}" onclick="ClassTracker.openRunwayModal(${weeksCount}, 'gap')">🚨 Gaps (${data.gapWeeksCount || 0})</button>
+                  <button class="runway-tab-btn ${activeTab === 'light' ? 'active' : ''}" onclick="ClassTracker.openRunwayModal(${weeksCount}, 'light')">⚠️ Light (${data.lightWeeksCount || 0})</button>
+                  <button class="runway-tab-btn ${activeTab === 'healthy' ? 'active' : ''}" onclick="ClassTracker.openRunwayModal(${weeksCount}, 'healthy')">✓ Healthy (${data.healthyWeeksCount || 0})</button>
+                  
+                  <div style="display:flex;align-items:center;gap:6px;margin-left:auto;">
+                    <span style="font-size:11px;color:var(--ink-soft);font-weight:600;">Runway Horizon:</span>
+                    <button class="runway-tab-btn ${weeksCount === 6 ? 'active' : ''}" onclick="ClassTracker.openRunwayModal(6, '${activeTab}')">6 Wks</button>
+                    <button class="runway-tab-btn ${weeksCount === 10 ? 'active' : ''}" onclick="ClassTracker.openRunwayModal(10, '${activeTab}')">10 Wks</button>
+                    <button class="runway-tab-btn ${weeksCount === 12 ? 'active' : ''}" onclick="ClassTracker.openRunwayModal(12, '${activeTab}')">12 Wks</button>
+                  </div>
+                </div>
+
                 <div class="runway-grid" style="margin-top:10px;">
-                  ${weeks
-                    .map((w) => {
+                  ${filteredWeeks.length === 0 ? `
+                    <div style="text-align:center;padding:24px;color:var(--ink-soft);font-size:13px;">
+                      No weeks match the "<strong>${activeTab}</strong>" filter.
+                    </div>
+                  ` : filteredWeeks.map((w) => {
                       const statusClass = `week-status-${w.status}`;
                       const statusBadge = w.status === "gap"
                         ? '<span class="class-badge" style="background:#fee2e2;color:#dc2626;font-weight:800;">🚨 GAP WEEK (0 Classes)</span>'
@@ -7966,12 +8569,17 @@ CCOR Education Team`,
                           ? '<span class="class-badge" style="background:#fef3c7;color:#b45309;font-weight:700;">⚠️ LIGHT (1 Class)</span>'
                           : '<span class="class-badge" style="background:#dcfce7;color:#15803d;font-weight:700;">✓ HEALTHY</span>';
 
+                      const weekLabel = w.weekLabel || w.label || `Week ${w.weekIndex || ''}`;
+                      const weekStart = w.startDate || w.weekStart || '';
+                      const weekEnd = w.endDate || w.weekEnd || '';
+                      const dateRangeStr = weekStart && weekEnd ? `(${weekStart} to ${weekEnd})` : (weekStart || '');
+
                       return `
                         <div class="runway-week-card ${statusClass}">
                           <div class="runway-week-header">
                             <div>
-                              <strong>${w.label}</strong>
-                              <span style="font-size:11px;color:var(--ink-soft);margin-left:8px;">(${w.weekStart} to ${w.weekEnd})</span>
+                              <strong>${weekLabel}</strong>
+                              ${dateRangeStr ? `<span style="font-size:11px;color:var(--ink-soft);margin-left:8px;">${dateRangeStr}</span>` : ''}
                             </div>
                             <div style="display:flex;align-items:center;gap:6px;">
                               <span style="font-size:12px;font-weight:600;">${w.classCount} scheduled</span>
@@ -7980,7 +8588,7 @@ CCOR Education Team`,
                           </div>
 
                           ${
-                            w.classes.length > 0
+                            w.classes && w.classes.length > 0
                               ? `
                             <div style="display:flex;flex-wrap:wrap;gap:6px;margin:4px 0;">
                               ${w.classes
@@ -7995,15 +8603,18 @@ CCOR Education Team`,
                             w.recommendations && w.recommendations.length > 0
                               ? `
                             <div class="runway-recs-box">
-                              <div style="font-size:11px;font-weight:700;color:var(--ink-soft);margin-bottom:4px;">💡 Recommended CCOR Core Courses to Schedule:</div>
-                              <div style="display:flex;flex-wrap:wrap;gap:6px;">
+                              <div style="font-size:11px;font-weight:700;color:var(--ink-soft);margin-bottom:6px;">💡 Recommended CCOR Core Courses to Schedule:</div>
+                              <div style="display:flex;flex-wrap:wrap;gap:8px;">
                                 ${w.recommendations
                                   .map(
                                     (rec) => `
-                                  <div class="runway-rec-tag" title="${rec.reason}">
-                                    <strong>${this.escapeHtml(rec.title)}</strong>
-                                    <span style="opacity:0.8;">• ${rec.recommendedInstructor}</span>
-                                    ${rec.isCE ? '<span style="font-size:9px;background:#10b981;color:white;padding:1px 4px;border-radius:2px;margin-left:2px;">CE</span>' : ""}
+                                  <div class="runway-rec-tag" title="${this.escapeHtml(rec.reason || '')}" style="display:inline-flex;align-items:center;gap:4px;background:var(--panel);border:1px solid var(--panel-border);padding:4px 8px;border-radius:4px;">
+                                    <span>
+                                      <strong>${this.escapeHtml(rec.title)}</strong>
+                                      <span style="opacity:0.8;">• ${this.escapeHtml(rec.recommendedInstructor || 'CCOR Faculty')}</span>
+                                      ${rec.isCE ? '<span style="font-size:9px;background:#10b981;color:white;padding:1px 4px;border-radius:2px;margin-left:2px;">CE</span>' : ''}
+                                    </span>
+                                    <button class="btn-copy-course" data-title="${this.escapeHtml(rec.title)}" data-instructor="${this.escapeHtml(rec.recommendedInstructor || '')}" data-ce="${rec.ceHours || 0}" onclick="event.stopPropagation(); ClassTracker.copyCourseRecommendation(this.dataset.title, this.dataset.instructor, this.dataset.ce)">📋 Copy Info</button>
                                   </div>
                                 `
                                   )
@@ -8030,6 +8641,19 @@ CCOR Education Team`,
         document.body.insertAdjacentHTML("beforeend", modalHtml);
       } catch (err) {
         this.showToast(`Failed to open runway planner: ${err.message}`, true);
+      }
+    },
+
+    copyCourseRecommendation(title, instructor, ceHours) {
+      const text = `Course: ${title}\nInstructor: ${instructor || "CCOR Faculty"}\nCE: ${ceHours ? `${ceHours} hrs` : "None"}\nSource: CCOR Schedule Runway Planner`;
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(text).then(() => {
+          this.showToast(`Copied recommendation for "${title}"!`);
+        }).catch(() => {
+          this.showToast(`Course: ${title} (${instructor || "CCOR Faculty"})`);
+        });
+      } else {
+        this.showToast(`Course: ${title} (${instructor || "CCOR Faculty"})`);
       }
     },
 
