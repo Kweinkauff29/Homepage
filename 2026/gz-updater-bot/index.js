@@ -31,12 +31,12 @@ const sleep = (ms) => new Promise(r => setTimeout(r, ms));
 async function isLoginPage(page) {
     try {
         const url = page.url();
-        if (url.includes('/auth') || url.includes('/login') || url.includes('/Account/Login') || url.includes('/connect/authorize')) {
+        if (url.includes('/auth') || url.includes('/login') || url.includes('/Account/Login') || url.includes('/oauth2/authorize') || url.includes('/connect/authorize')) {
             return true;
         }
         return await page.evaluate(() => {
-            const userField = document.querySelector('#check-user-name-field, input[name="Username"], input[name="UserName"], input[type="email"]');
-            const pwdField = document.querySelector('#password, input[name="Password"], input[type="password"]');
+            const userField = document.querySelector('#check-user-name-field, #loginId, input[name="Username"], input[name="loginId"], input[type="email"]');
+            const pwdField = document.querySelector('#password, #Password, input[name="password"], input[name="Password"], input[type="password"]');
             const isSpa = !!document.querySelector('#ContactExperienceTableWidget, .navbar-brand, [ng-app], .app-content');
             return (!isSpa && (!!userField || !!pwdField));
         });
@@ -60,7 +60,7 @@ async function ensureLoggedIn(page, targetUrlAfterLogin = null) {
 
     // Step 1: Handle username field if present
     try {
-        const userSelector = '#check-user-name-field, input[name="Username"], input[name="UserName"], input[type="email"]';
+        const userSelector = '#check-user-name-field, #loginId, input[name="Username"], input[name="loginId"]';
         const userEl = await page.$(userSelector);
         if (userEl) {
             const isVisible = await page.evaluate(el => el.offsetWidth > 0 && el.offsetHeight > 0, userEl);
@@ -70,29 +70,29 @@ async function ensureLoggedIn(page, targetUrlAfterLogin = null) {
                     const el = document.querySelector(sel);
                     if (el) { el.value = ''; el.focus(); }
                 }, userSelector);
-                await page.type(userSelector, username, { delay: 40 });
+                await page.type(userSelector, username, { delay: 30 });
                 await sleep(300);
 
-                const nextBtn = await page.$('#check-user-name-button, button[type="submit"], button.blue.button');
+                const nextBtn = await page.$('#check-user-name-button, button[type="submit"]');
                 if (nextBtn) {
                     await Promise.all([
-                        page.waitForNavigation({ waitUntil: 'networkidle2', timeout: 15000 }).catch(() => {}),
+                        page.waitForNavigation({ waitUntil: 'networkidle2', timeout: 20000 }).catch(() => {}),
                         nextBtn.click()
                     ]);
                 } else {
                     await page.keyboard.press('Enter');
                 }
-                await sleep(1500);
+                await sleep(2000);
             }
         }
     } catch (err) {
         console.log(`   [Login Notice] Username step: ${err.message}`);
     }
 
-    // Step 2: Handle password field
+    // Step 2: Handle password field (works on both FusionAuth and IdentityServer)
     try {
-        const pwdSelector = '#password, input[name="Password"], input[type="password"]';
-        await page.waitForSelector(pwdSelector, { visible: true, timeout: 10000 }).catch(() => {});
+        const pwdSelector = '#password, #Password, input[name="password"], input[name="Password"], input[type="password"]';
+        await page.waitForSelector(pwdSelector, { visible: true, timeout: 15000 }).catch(() => {});
         const pwdEl = await page.$(pwdSelector);
         if (pwdEl) {
             console.log(`   ⌨️  Entering password...`);
@@ -100,20 +100,20 @@ async function ensureLoggedIn(page, targetUrlAfterLogin = null) {
                 const el = document.querySelector(sel);
                 if (el) { el.value = ''; el.focus(); }
             }, pwdSelector);
-            await page.type(pwdSelector, password, { delay: 40 });
+            await page.type(pwdSelector, password, { delay: 30 });
             await sleep(300);
 
-            const submitBtn = await page.$('button.blue.button, button[type="submit"], input[type="submit"]');
+            const submitBtn = await page.$('button.blue.button, button[type="submit"], input[type="submit"], #sign-up-button');
             if (submitBtn) {
                 await Promise.all([
-                    page.waitForNavigation({ waitUntil: 'domcontentloaded', timeout: 30000 }).catch(() => {}),
+                    page.waitForNavigation({ waitUntil: 'domcontentloaded', timeout: 35000 }).catch(() => {}),
                     submitBtn.click()
                 ]);
             } else {
                 await page.keyboard.press('Enter');
             }
             console.log('   ✅ Submitted login credentials. Waiting for session initialization...');
-            await sleep(6000);
+            await sleep(8000);
         }
     } catch (err) {
         console.log(`   [Login Notice] Password step: ${err.message}`);
@@ -650,8 +650,8 @@ async function updateGrowthZoneLicense(page, contact) {
     });
 
     // ── Session Verification & Login ────────────────────────────────────────
-    console.log(`🔐 Connecting to GrowthZone (${GZ_BASE_URL})...`);
-    await page.goto(`${GZ_BASE_URL}/a`, { waitUntil: 'domcontentloaded', timeout: 45000 });
+    console.log(`🔐 Connecting to GrowthZone...`);
+    await page.goto('https://growthzoneapp.com/auth?ReturnUrl=%2fa', { waitUntil: 'domcontentloaded', timeout: 45000 }).catch(() => {});
     await sleep(3000);
 
     if (await isLoginPage(page)) {
