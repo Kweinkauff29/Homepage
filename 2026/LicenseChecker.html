@@ -726,7 +726,7 @@
 
     <script>
         (function () {
-            const GZ = 'https://coconutcoastrealtors.growthzoneapp.com';
+            const GZ = 'https://bonitaspringsesterorealtorsfl.growthzoneapp.com';
             const KEY = ''; // Removed compromised key - use proxy endpoint
             const WRAP = 'https://wrapsheet.bonitaspringsrealtors.workers.dev';
             const RTIDS = [10137, 10138, 10139, 10140, 10165, 34117];
@@ -735,6 +735,12 @@
 
             let licenses = [];  // Step 1 data
             let results = [];   // Step 2 data (with DBPR comparison)
+
+            function contactLink(name, contactId) {
+                if (!contactId) return `<strong>${name}</strong>`;
+                const url = `${GZ}/a#/ContactInfo/${contactId}/ContactOverview`;
+                return `<a href="${url}" target="_blank" rel="noopener noreferrer" style="color:var(--brand);text-decoration:none;font-weight:700;display:inline-flex;align-items:center;gap:5px" title="Open ${name} in GrowthZone">${name} <i class="fas fa-external-link-alt" style="font-size:10px;opacity:.65"></i></a>`;
+            }
 
             // ── HELPERS ──
             function log(id, msg, cls = '') { const el = document.getElementById(id); const s = document.createElement('span'); s.className = cls; s.textContent = `[${new Date().toLocaleTimeString()}] ${msg}\n`; el.appendChild(s); el.scrollTop = el.scrollHeight }
@@ -940,7 +946,7 @@
                 licenses.forEach((l, i) => {
                     const tr = document.createElement('tr');
                     tr.style.animationDelay = i * 10 + 'ms';
-                    tr.innerHTML = `<td><strong>${l.name}</strong></td><td style="font-family:var(--mono);font-size:12px">${l.licenseNumber}</td><td><strong>${l.licenseType}</strong></td><td>${l.gzExpStr}</td><td style="font-size:12px">${l.email || '—'}</td><td style="font-size:12px">${l.office || '—'}</td>`;
+                    tr.innerHTML = `<td>${contactLink(l.name, l.contactId)}</td><td style="font-family:var(--mono);font-size:12px">${l.licenseNumber}</td><td><strong>${l.licenseType}</strong></td><td>${l.gzExpStr}</td><td style="font-size:12px">${l.email || '—'}</td><td style="font-size:12px">${l.office || '—'}</td>`;
                     tb.appendChild(tr);
                 });
             }
@@ -1016,7 +1022,7 @@
                     tr.style.animationDelay = i * 20 + 'ms';
                     const bc = { 'match': 'b-match', 'outdated': 'b-outdated', 'newer': 'b-newer', 'notfound': 'b-notfound', 'error': 'b-error' }[r.status] || '';
                     const bt = { 'match': '✓ Match', 'outdated': '⚠ Outdated', 'newer': 'GZ Newer', 'notfound': 'Not Found', 'error': 'Error' }[r.status] || '—';
-                    tr.innerHTML = `<td><strong>${r.name}</strong></td><td style="font-family:var(--mono);font-size:12px">${r.licenseNumber}</td><td><strong>${r.licenseType}</strong></td>
+                    tr.innerHTML = `<td>${contactLink(r.name, r.contactId)}</td><td style="font-family:var(--mono);font-size:12px">${r.licenseNumber}</td><td><strong>${r.licenseType}</strong></td>
     <td>${r.gzExpStr}</td><td style="font-weight:${r.status === 'outdated' ? '700' : '400'};color:${r.status === 'outdated' ? 'var(--success)' : ''}">${r.dbprExpStr}</td>
     <td style="font-size:12px;max-width:180px;overflow:hidden;text-overflow:ellipsis">${r.dbprStatus || '—'}</td>
     <td><span class="badge ${bc}">${bt}</span></td>`;
@@ -1088,7 +1094,7 @@
                 items.forEach((r, i) => {
                     const tr = document.createElement('tr');
                     tr.style.animationDelay = i * 20 + 'ms';
-                    tr.innerHTML = `<td><strong>${r.name}</strong></td><td style="font-family:var(--mono);font-size:12px">${r.licenseNumber}</td><td><strong>${r.licenseType}</strong></td>
+                    tr.innerHTML = `<td>${contactLink(r.name, r.contactId)}</td><td style="font-family:var(--mono);font-size:12px">${r.licenseNumber}</td><td><strong>${r.licenseType}</strong></td>
     <td style="text-decoration:line-through;opacity:.6">${r.gzExpStr}</td>
     <td style="font-weight:700;color:var(--success)">${r.dbprExpStr}</td>`;
                     tb.appendChild(tr);
@@ -1124,6 +1130,7 @@
                 });
 
                 log('log3', `Matched ${matched} of ${outdated.length} contacts with GrowthZone IDs.`, 's');
+                renderUpdateTable(outdated);
                 bar('bar3', 100);
 
                 // Trigger Download

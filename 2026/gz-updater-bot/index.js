@@ -1,7 +1,10 @@
 const puppeteer = require('puppeteer');
 const fs = require('fs');
+const path = require('path');
 const csv = require('csv-parser');
 require('dotenv').config();
+
+const GZ_BASE_URL = 'https://bonitaspringsesterorealtorsfl.growthzoneapp.com';
 
 // ─── CSV Loading ────────────────────────────────────────────────────────────
 function loadContactsFromCSV(filePath) {
@@ -23,17 +26,137 @@ function loadContactsFromCSV(filePath) {
 const sleep = (ms) => new Promise(r => setTimeout(r, ms));
 
 /**
+ * Detect if the browser is currently on any login or authorization challenge page.
+ */
+async function isLoginPage(page) {
+    try {
+        const url = page.url();
+        if (url.includes('/auth') || url.includes('/login') || url.includes('/Account/Login') || url.includes('/connect/authorize')) {
+            return true;
+        }
+        return await page.evaluate(() => {
+            const userField = document.querySelector('#check-user-name-field, input[name="Username"], input[name="UserName"], input[type="email"]');
+            const pwdField = document.querySelector('#password, input[name="Password"], input[type="password"]');
+            const isSpa = !!document.querySelector('#ContactExperienceTableWidget, .navbar-brand, [ng-app], .app-content');
+            return (!isSpa && (!!userField || !!pwdField));
+        });
+    } catch (e) {
+        return false;
+    }
+}
+
+/**
+ * Automatically fill credentials and log into GrowthZone whenever a login challenge is encountered.
+ */
+async function ensureLoggedIn(page, targetUrlAfterLogin = null) {
+    const onLogin = await isLoginPage(page);
+    if (!onLogin) {
+        return true;
+    }
+
+    console.log('   🔐 GrowthZone login screen detected! Automatically entering credentials...');
+    const username = process.env.GZ_USERNAME || 'kevin@bonitaesterorealtors.com';
+    const password = process.env.GZ_PASSWORD || 'Goalie29';
+
+    // Step 1: Handle username field if present
+    try {
+        const userSelector = '#check-user-name-field, input[name="Username"], input[name="UserName"], input[type="email"]';
+        const userEl = await page.$(userSelector);
+        if (userEl) {
+            const isVisible = await page.evaluate(el => el.offsetWidth > 0 && el.offsetHeight > 0, userEl);
+            if (isVisible) {
+                console.log(`   ⌨️  Entering username (${username})...`);
+                await page.evaluate(sel => {
+                    const el = document.querySelector(sel);
+                    if (el) { el.value = ''; el.focus(); }
+                }, userSelector);
+                await page.type(userSelector, username, { delay: 40 });
+                await sleep(300);
+
+                const nextBtn = await page.$('#check-user-name-button, button[type="submit"], button.blue.button');
+                if (nextBtn) {
+                    await Promise.all([
+                        page.waitForNavigation({ waitUntil: 'networkidle2', timeout: 15000 }).catch(() => {}),
+                        nextBtn.click()
+                    ]);
+                } else {
+                    await page.keyboard.press('Enter');
+                }
+                await sleep(1500);
+            }
+        }
+    } catch (err) {
+        console.log(`   [Login Notice] Username step: ${err.message}`);
+    }
+
+    // Step 2: Handle password field
+    try {
+        const pwdSelector = '#password, input[name="Password"], input[type="password"]';
+        await page.waitForSelector(pwdSelector, { visible: true, timeout: 10000 }).catch(() => {});
+        const pwdEl = await page.$(pwdSelector);
+        if (pwdEl) {
+            console.log(`   ⌨️  Entering password...`);
+            await page.evaluate(sel => {
+                const el = document.querySelector(sel);
+                if (el) { el.value = ''; el.focus(); }
+            }, pwdSelector);
+            await page.type(pwdSelector, password, { delay: 40 });
+            await sleep(300);
+
+            const submitBtn = await page.$('button.blue.button, button[type="submit"], input[type="submit"]');
+            if (submitBtn) {
+                await Promise.all([
+                    page.waitForNavigation({ waitUntil: 'domcontentloaded', timeout: 30000 }).catch(() => {}),
+                    submitBtn.click()
+                ]);
+            } else {
+                await page.keyboard.press('Enter');
+            }
+            console.log('   ✅ Submitted login credentials. Waiting for session initialization...');
+            await sleep(6000);
+        }
+    } catch (err) {
+        console.log(`   [Login Notice] Password step: ${err.message}`);
+    }
+
+    // If a target contact URL was provided and we are not there yet, navigate to it
+    if (targetUrlAfterLogin) {
+        const cur = page.url();
+        if (!cur.includes(targetUrlAfterLogin) && !cur.includes(targetUrlAfterLogin.replace(GZ_BASE_URL, ''))) {
+            console.log(`   🌐 Navigating to destination: ${targetUrlAfterLogin}`);
+            await page.goto(targetUrlAfterLogin, { waitUntil: 'domcontentloaded', timeout: 30000 }).catch(() => {});
+            await sleep(3000);
+        }
+    }
+
+    return true;
+}
+
+/**
  * Wait for #ContactExperienceTableWidget to be present in the DOM.
  * This widget contains ALL professional/license records for the contact.
  */
-async function waitForWidget(page, timeout = 15000) {
-    await sleep(3000); // initial render buffer
-    try {
-        await page.waitForSelector('#ContactExperienceTableWidget', { timeout });
-    } catch {
-        // Widget might not exist for some contacts
+async function waitForWidget(page, timeout = 20000) {
+    await sleep(2500); // initial render buffer
+
+    if (await isLoginPage(page)) {
+        console.log('   ⚠️ Login screen detected while waiting for widget! Auto-authenticating...');
+        await ensureLoggedIn(page);
     }
-    await sleep(2000); // extra buffer for Angular rendering
+
+    const start = Date.now();
+    while (Date.now() - start < timeout) {
+        const found = await page.$('#ContactExperienceTableWidget');
+        if (found) {
+            await sleep(1500); // extra buffer for Angular rendering
+            return;
+        }
+        if (await isLoginPage(page)) {
+            console.log('   ⚠️ Login screen detected while waiting for widget! Auto-authenticating...');
+            await ensureLoggedIn(page);
+        }
+        await sleep(1000);
+    }
 }
 
 /**
@@ -115,15 +238,50 @@ async function focusAndType(page, inputIndex, value) {
  */
 async function updateGrowthZoneLicense(page, contact) {
     const contactHash = `/ContactInfo/${contact.ContactId}/ContactOverview`;
+    const contactUrl = `${GZ_BASE_URL}/a#${contactHash}`;
     console.log(`\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━`);
     console.log(`📋 ${contact.Name}  (ID: ${contact.ContactId})`);
     console.log(`   Target Exp Date: ${contact['License Expiration Date']}`);
     console.log(`━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━`);
 
-    // Navigate using hash change (SPA) to preserve session — avoid full page.goto
-    await page.evaluate((hash) => {
-        window.location.hash = '#' + hash;
-    }, contactHash);
+    // Guard: Ensure we are logged in before attempting navigation
+    if (await isLoginPage(page)) {
+        console.log(`   ⚠️ Login screen detected before navigating to contact. Auto-logging in...`);
+        await ensureLoggedIn(page, contactUrl);
+    }
+
+    const currentUrl = page.url();
+    const isInsideSpa = currentUrl.includes(GZ_BASE_URL) && currentUrl.includes('/a');
+
+    if (!isInsideSpa) {
+        console.log(`   🌐 Navigating directly to contact URL...`);
+        await page.goto(contactUrl, { waitUntil: 'domcontentloaded', timeout: 30000 });
+    } else {
+        // SPA Hash navigation to preserve session
+        await page.evaluate((hash) => {
+            if (window.angular) {
+                try {
+                    const el = document.querySelector('[ng-app]') || document.body;
+                    const inj = window.angular.element(el).injector();
+                    if (inj && inj.has('$location')) {
+                        inj.get('$location').path(hash);
+                        inj.get('$rootScope').$apply();
+                        return;
+                    }
+                } catch (e) { /* fallback */ }
+            }
+            window.location.hash = '#' + hash;
+            window.dispatchEvent(new HashChangeEvent('hashchange'));
+        }, contactHash);
+    }
+
+    // Verify we weren't challenged by a login page upon opening the contact
+    await sleep(2000);
+    if (await isLoginPage(page)) {
+        console.log(`   ⚠️ Session challenge triggered upon loading contact! Auto-entering credentials...`);
+        await ensureLoggedIn(page, contactUrl);
+    }
+
     await waitForWidget(page);
 
     // ── STEP 1: Count License rows INSIDE #ContactExperienceTableWidget ─────
@@ -470,11 +628,18 @@ async function updateGrowthZoneLicense(page, contact) {
         process.exit(0);
     }
 
-    console.log('🚀 Launching browser...');
+    console.log('🚀 Launching browser with persistent session profile...');
+    const sessionDir = path.join(__dirname, '.chrome-session');
     const browser = await puppeteer.launch({
         headless: false,
         defaultViewport: null,
-        args: ['--start-maximized']
+        userDataDir: sessionDir,
+        args: [
+            '--start-maximized',
+            '--no-sandbox',
+            '--disable-setuid-sandbox',
+            '--disable-blink-features=AutomationControlled'
+        ]
     });
     const page = await browser.newPage();
 
@@ -484,29 +649,20 @@ async function updateGrowthZoneLicense(page, contact) {
         await dialog.accept();
     });
 
-    // ── Login ───────────────────────────────────────────────────────────────
-    console.log('🔐 Logging in...');
-    // Login on the SAME subdomain used for contact URLs so cookies persist
-    await page.goto('https://coconutcoastrealtors.growthzoneapp.com/auth?ReturnUrl=%2fa', { waitUntil: 'domcontentloaded' });
+    // ── Session Verification & Login ────────────────────────────────────────
+    console.log(`🔐 Connecting to GrowthZone (${GZ_BASE_URL})...`);
+    await page.goto(`${GZ_BASE_URL}/a`, { waitUntil: 'domcontentloaded', timeout: 45000 });
+    await sleep(3000);
 
-    await page.waitForSelector('#check-user-name-field', { visible: true });
-    await page.type('#check-user-name-field', process.env.GZ_USERNAME || 'kevin@bonitaesterorealtors.com', { delay: 50 });
+    if (await isLoginPage(page)) {
+        console.log('🔐 GrowthZone login required. Automatically submitting credentials...');
+        await ensureLoggedIn(page, `${GZ_BASE_URL}/a`);
+    } else {
+        console.log('✨ Session already active via persistent profile!');
+    }
 
-    await Promise.all([
-        page.waitForNavigation({ waitUntil: 'networkidle2' }),
-        page.click('#check-user-name-button')
-    ]);
-
-    await page.waitForSelector('#password', { visible: true });
-    await page.type('#password', process.env.GZ_PASSWORD || 'Goalie29', { delay: 50 });
-
-    await Promise.all([
-        page.waitForNavigation({ waitUntil: 'domcontentloaded' }),
-        page.click('button.blue.button')
-    ]);
-
-    console.log('⏳ Waiting for dashboard...');
-    await sleep(15000);
+    console.log('⏳ Waiting for dashboard to ready...');
+    await sleep(8000);
 
     // ── Process All Contacts ────────────────────────────────────────────────
     console.log('\n╔══════════════════════════════════╗');
