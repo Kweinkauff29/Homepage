@@ -1714,7 +1714,8 @@
 
 .class-desk-kpi-card.active-filter {
   border-color: var(--accent);
-  background: rgba(3, 170, 225, 0.06);
+  background: rgba(3, 170, 225, 0.10);
+  box-shadow: 0 0 0 2px rgba(3, 170, 225, 0.25), 0 4px 12px rgba(0, 0, 0, 0.08);
 }
 
 .kpi-card-count {
@@ -3651,14 +3652,117 @@ a[href*="marketing.ics"]:hover,
 
 .class-tracker-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 14px;
+}
+
+@media (max-width: 1024px) {
+  .class-tracker-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
 }
 
 @media (max-width: 640px) {
   .class-tracker-grid {
     grid-template-columns: 1fr;
   }
+}
+
+/* Desk Active Filter Banner */
+.class-desk-active-banner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 10px 16px;
+  background: rgba(3, 170, 225, 0.08);
+  border: 1px solid rgba(3, 170, 225, 0.28);
+  border-radius: var(--radius-md);
+  margin-bottom: 12px;
+  animation: fadeIn 0.2s ease-in-out;
+}
+
+.desk-banner-text {
+  font-size: 13px;
+  color: var(--ink);
+}
+
+.desk-banner-text strong {
+  color: var(--accent);
+}
+
+.desk-banner-clear-btn {
+  font-size: 11px;
+  font-weight: 700;
+  padding: 4px 12px;
+  background: var(--panel);
+  border: 1px solid var(--panel-border);
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  color: var(--ink-soft);
+  transition: all 0.15s ease;
+}
+
+.desk-banner-clear-btn:hover {
+  color: var(--danger);
+  border-color: var(--danger);
+  background: rgba(239, 68, 68, 0.06);
+}
+
+/* Pagination Bar Controls */
+.ct-pagination-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 12px 18px;
+  background: var(--panel);
+  border: 1px solid var(--panel-border);
+  border-radius: var(--radius-md);
+  margin-top: 14px;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.03);
+}
+
+.ct-pagination-info {
+  font-size: 13px;
+  color: var(--ink-soft);
+}
+
+.ct-pagination-info strong {
+  color: var(--ink);
+  font-weight: 600;
+}
+
+.ct-pagination-controls {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.ct-page-btn {
+  font-size: 12px;
+  font-weight: 600;
+  padding: 6px 14px;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  transition: background 0.15s, border-color 0.15s;
+}
+
+.ct-page-btn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+.ct-page-indicator {
+  font-size: 12px;
+  color: var(--ink-soft);
+  padding: 0 4px;
+}
+
+.ct-page-indicator strong {
+  color: var(--ink);
+  font-weight: 700;
 }
 
 .class-block {
@@ -6246,6 +6350,8 @@ CCOR Education Team`,
       searchQuery: "",
       sortBy: "date",
       deskFilter: null,
+      currentPage: 1,
+      pageSize: 9, // Max 3 rows (3 cols x 3 rows)
       isLoading: false,
       isSyncing: false,
       lastSyncedAt: null,
@@ -6371,6 +6477,7 @@ CCOR Education Team`,
       if (searchInput) {
         searchInput.addEventListener("input", (e) => {
           this.state.searchQuery = e.target.value.toLowerCase().trim();
+          this.state.currentPage = 1;
           this.renderTimeline();
         });
       }
@@ -6379,6 +6486,7 @@ CCOR Education Team`,
       if (filterType) {
         filterType.addEventListener("change", (e) => {
           this.state.filterType = e.target.value;
+          this.state.currentPage = 1;
           this.renderTimeline();
         });
       }
@@ -6388,6 +6496,7 @@ CCOR Education Team`,
         filterStatus.addEventListener("change", (e) => {
           this.state.filterStatus = e.target.value;
           this.state.deskFilter = null;
+          this.state.currentPage = 1;
           this.renderTimeline();
         });
       }
@@ -6396,6 +6505,7 @@ CCOR Education Team`,
       if (filterFormat) {
         filterFormat.addEventListener("change", (e) => {
           this.state.filterFormat = e.target.value;
+          this.state.currentPage = 1;
           this.renderTimeline();
         });
       }
@@ -6404,6 +6514,7 @@ CCOR Education Team`,
       if (sortSelect) {
         sortSelect.addEventListener("change", (e) => {
           this.state.sortBy = e.target.value;
+          this.state.currentPage = 1;
           this.renderTimeline();
         });
       }
@@ -6412,6 +6523,7 @@ CCOR Education Team`,
       if (filterCE) {
         filterCE.addEventListener("change", (e) => {
           this.state.filterCE = e.target.value;
+          this.state.currentPage = 1;
           this.renderTimeline();
         });
       }
@@ -6420,6 +6532,7 @@ CCOR Education Team`,
       if (filterTrack) {
         filterTrack.addEventListener("change", (e) => {
           this.state.filterTrack = e.target.value;
+          this.state.currentPage = 1;
           this.renderTimeline();
         });
       }
@@ -6610,11 +6723,33 @@ CCOR Education Team`,
         else this.state.filterStatus = "active";
       }
 
+      this.state.currentPage = 1;
+
       const statusSelect = document.getElementById("class-tracker-filter-status");
       if (statusSelect) statusSelect.value = this.state.filterStatus;
 
       this.renderDesk();
       this.renderTimeline();
+    },
+
+    clearDeskFilter() {
+      this.state.deskFilter = null;
+      this.state.filterStatus = "active";
+      this.state.currentPage = 1;
+      const statusSelect = document.getElementById("class-tracker-filter-status");
+      if (statusSelect) statusSelect.value = "active";
+      this.renderDesk();
+      this.renderTimeline();
+    },
+
+    getDeskFilterLabel() {
+      const deskLabels = {
+        next7: "Next 7 Days (Starting within 7 days)",
+        attention: "Need Attention (High priority, unclassified or pending actions)",
+        waiting: "Waiting on Others (Sponsors pending)",
+        closeout: "Needs Closeout (Past classes requiring closeout)",
+      };
+      return deskLabels[this.state.deskFilter] || this.state.deskFilter || "";
     },
 
     getRankableCount() {
@@ -6628,13 +6763,9 @@ CCOR Education Team`,
       }).length;
     },
 
-    // Render Timeline Cards
-    renderTimeline() {
-      const container = document.getElementById("class-tracker-timeline");
-      if (!container) return;
-
+    getFilteredClasses() {
       const now = new Date();
-      let filtered = this.state.classes.filter((c) => {
+      let filtered = (this.state.classes || []).filter((c) => {
         const daysUntil = getDaysUntilClassInEastern(c.start_date, now);
         const isPast = daysUntil < 0 && !isTodayInEastern(c.start_date, now);
 
@@ -6642,21 +6773,41 @@ CCOR Education Team`,
         const isCanceled = Boolean(c.is_canceled || c.status === "canceled");
         const isArchived = Boolean(c.closed_at || c.status === "archived" || c.is_archived);
 
-        // Status filter
-        if (this.state.filterStatus === "active") {
+        // Desk filter takes precedence if set
+        if (this.state.deskFilter === "next7") {
           if (isIgnored || isCanceled || isArchived || isPast) return false;
-        } else if (this.state.filterStatus === "needs_attention") {
+          if (daysUntil < 0 || daysUntil > 7) return false;
+        } else if (this.state.deskFilter === "attention") {
           if (isIgnored || isCanceled || isArchived || isPast) return false;
-          const needsAttention = c.class_type === "unclassified" || (c.priorityScore || 0) >= 60 || (c.taskProgress && c.taskProgress.pending > 0 && daysUntil <= 7);
+          const needsAttention = c.class_type === "unclassified" ||
+            ((c.priorityScore || 0) >= 70 && daysUntil <= 14) ||
+            (!c.instructor_name && daysUntil <= 5) ||
+            (c.sponsor_status === "looking" && daysUntil <= 4 && c.format !== "online") ||
+            (c.taskProgress && c.taskProgress.pending > 0 && daysUntil <= 7);
           if (!needsAttention) return false;
-        } else if (this.state.filterStatus === "closeout") {
+        } else if (this.state.deskFilter === "waiting") {
+          if (isIgnored || isCanceled || isArchived || isPast) return false;
+          const isWaiting = (c.sponsor_status === "looking" && c.format !== "online" && daysUntil <= 14);
+          if (!isWaiting) return false;
+        } else if (this.state.deskFilter === "closeout") {
           if (!isPast || isArchived || isCanceled || isIgnored) return false;
-        } else if (this.state.filterStatus === "ignored") {
-          if (!isIgnored) return false;
-        } else if (this.state.filterStatus === "canceled") {
-          if (!isCanceled) return false;
-        } else if (this.state.filterStatus === "archive") {
-          if (!isArchived && !isPast) return false;
+        } else {
+          // Status filter
+          if (this.state.filterStatus === "active") {
+            if (isIgnored || isCanceled || isArchived || isPast) return false;
+          } else if (this.state.filterStatus === "needs_attention") {
+            if (isIgnored || isCanceled || isArchived || isPast) return false;
+            const needsAttention = c.class_type === "unclassified" || (c.priorityScore || 0) >= 60 || (c.taskProgress && c.taskProgress.pending > 0 && daysUntil <= 7);
+            if (!needsAttention) return false;
+          } else if (this.state.filterStatus === "closeout") {
+            if (!isPast || isArchived || isCanceled || isIgnored) return false;
+          } else if (this.state.filterStatus === "ignored") {
+            if (!isIgnored) return false;
+          } else if (this.state.filterStatus === "canceled") {
+            if (!isCanceled) return false;
+          } else if (this.state.filterStatus === "archive") {
+            if (!isArchived && !isPast) return false;
+          }
         }
 
         // Type filter (with canonical normalization)
@@ -6703,8 +6854,51 @@ CCOR Education Team`,
         filtered.sort((a, b) => new Date(a.start_date || 0) - new Date(b.start_date || 0));
       }
 
+      return filtered;
+    },
+
+    goToPage(p) {
+      this.state.currentPage = p;
+      this.renderTimeline();
+      const el = document.getElementById("section-class-tracker");
+      if (el) el.scrollIntoView({ behavior: "smooth", block: "start" });
+    },
+
+    prevPage() {
+      if (this.state.currentPage > 1) {
+        this.goToPage(this.state.currentPage - 1);
+      }
+    },
+
+    nextPage() {
+      const pageSize = this.state.pageSize || 9;
+      const filtered = this.getFilteredClasses();
+      const totalPages = Math.ceil(filtered.length / pageSize) || 1;
+      if (this.state.currentPage < totalPages) {
+        this.goToPage(this.state.currentPage + 1);
+      }
+    },
+
+    // Render Timeline Cards
+    renderTimeline() {
+      const container = document.getElementById("class-tracker-timeline");
+      if (!container) return;
+
+      const filtered = this.getFilteredClasses();
+
+      let deskBannerHtml = "";
+      if (this.state.deskFilter) {
+        deskBannerHtml = `
+          <div class="class-desk-active-banner">
+            <span class="desk-banner-text">📌 Active Desk Filter: <strong>${this.getDeskFilterLabel()}</strong> — ${filtered.length} matching</span>
+            <button class="button-secondary desk-banner-clear-btn" onclick="ClassTracker.clearDeskFilter()">Clear Filter ✕</button>
+          </div>
+        `;
+      }
+
       if (filtered.length === 0) {
         container.innerHTML = `
+          ${deskBannerHtml}
           <div style="padding: 30px; text-align: center; color: var(--ink-soft); font-size: 13px;">
             No tracked classes match these filters.
           </div>
@@ -6712,7 +6906,47 @@ CCOR Education Team`,
         return;
       }
 
-      container.innerHTML = `<div class="class-tracker-grid" id="class-tracker-grid">${filtered.map((c) => this.renderClassBlock(c)).join("")}</div>`;
+      // Pagination calculation: max 3 rows (9 classes)
+      const pageSize = this.state.pageSize || 9;
+      const totalPages = Math.ceil(filtered.length / pageSize) || 1;
+      if (this.state.currentPage > totalPages) {
+        this.state.currentPage = totalPages;
+      }
+      if (this.state.currentPage < 1) {
+        this.state.currentPage = 1;
+      }
+
+      const startIdx = (this.state.currentPage - 1) * pageSize;
+      const endIdx = Math.min(startIdx + pageSize, filtered.length);
+      const pageClasses = filtered.slice(startIdx, endIdx);
+
+      let paginationHtml = "";
+      if (filtered.length > pageSize) {
+        paginationHtml = `
+          <div class="ct-pagination-bar">
+            <div class="ct-pagination-info">
+              Showing <strong>${startIdx + 1}–${endIdx}</strong> of <strong>${filtered.length}</strong> classes
+            </div>
+            <div class="ct-pagination-controls">
+              <button class="button-secondary ct-page-btn" ${this.state.currentPage === 1 ? "disabled" : ""} onclick="ClassTracker.prevPage()">
+                ‹ Prev
+              </button>
+              <span class="ct-page-indicator">Page <strong>${this.state.currentPage}</strong> of <strong>${totalPages}</strong></span>
+              <button class="button-secondary ct-page-btn" ${this.state.currentPage === totalPages ? "disabled" : ""} onclick="ClassTracker.nextPage()">
+                Next ›
+              </button>
+            </div>
+          </div>
+        `;
+      }
+
+      container.innerHTML = `
+        ${deskBannerHtml}
+        <div class="class-tracker-grid" id="class-tracker-grid">
+          ${pageClasses.map((c) => this.renderClassBlock(c)).join("")}
+        </div>
+        ${paginationHtml}
+      `;
     },
 
     // Render single Class Block (compact grid tile)
