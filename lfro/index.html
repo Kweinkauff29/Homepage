@@ -1,0 +1,3494 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Limited Function Referral Offices (LFRO) | Broker Access Guide | CCOR</title>
+  <meta name="description"
+    content="Understand NAR's Limited Function Referral Office policy, LFRO MLS access restrictions, CCOR credential requirements, and administrative access options for eligible unlicensed assistants." />
+
+  <!-- Canonical & Social Meta -->
+  <link rel="canonical" href="https://coconutcoastrealtors.org/lfro/" />
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="LFRO + MLS Access | A Broker Guide from CCOR" />
+  <meta property="og:description"
+    content="Referral-only means referral-only. Understand LFRO restrictions, MLS access requirements, and CCOR's administrative assistant access option." />
+  <meta property="og:url" content="https://coconutcoastrealtors.org/lfro/" />
+  <meta property="og:image"
+    content="https://coconutcoastrealtors.org/wp-content/uploads/2026/04/CCOR-Vert-Logo-no-tag-clr-scaled-e1776958694707.png" />
+
+  <!-- Typography: Oswald (Headlines), Inter (Body/UI), Playfair Display (Editorial Accent), JetBrains Mono (Data) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700;800&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&family=Oswald:wght@500;600;700&family=Playfair+Display:ital,wght@0,600;0,700;1,400;1,600&display=swap"
+    rel="stylesheet" />
+
+  <style>
+    /* ==========================================================================
+       CCOR LFRO + OFFICE ACCESS GUIDE — DESIGN TOKENS & BASE STYLES
+       Directly Inherited from Winter Waive Design System
+       Container: #ccor-lfro
+       Prefix: .lfro-
+       Theme: Gulf Dawn / Warm Sand / Petrol Teal / Deep Navy
+       ========================================================================== */
+
+    :root {
+      --lfro-navy-deep: #071B35;
+      --lfro-navy: #102F59;
+      --lfro-navy-surface: #0C2342;
+      --lfro-petrol: #0C7489;
+      --lfro-teal: #0F7F80;
+      --lfro-teal-light: #2BA2A3;
+      --lfro-aqua: #47C4D2;
+      --lfro-seaglass: #64BAB0;
+      --lfro-seaglass-soft: rgba(100, 186, 176, 0.12);
+      --lfro-gold: #D4AC6C;
+      --lfro-gold-warm: #E2BC7E;
+      --lfro-gold-soft: #FBF4E8;
+      --lfro-ivory: #FCFAF5;
+      --lfro-sand: #F6F2E9;
+      --lfro-sand-card: #FFFFFF;
+      --lfro-text-main: #0E1D33;
+      --lfro-text-muted: #53647C;
+      --lfro-text-light: #FFFFFF;
+      --lfro-text-light-muted: rgba(255, 255, 255, 0.76);
+      --lfro-border-subtle: rgba(16, 47, 89, 0.12);
+      --lfro-border-light: rgba(255, 255, 255, 0.16);
+
+      --lfro-font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      --lfro-font-display: 'Oswald', 'Cinzel', -apple-system, sans-serif;
+      --lfro-font-serif: 'Playfair Display', Georgia, serif;
+      --lfro-font-mono: 'JetBrains Mono', 'SF Mono', monospace;
+
+      --lfro-radius-sm: 4px;
+      --lfro-radius-md: 8px;
+      --lfro-radius-lg: 12px;
+      --lfro-radius-pill: 999px;
+
+      --lfro-shadow-subtle: 0 4px 20px rgba(7, 27, 53, 0.05);
+      --lfro-shadow-card: 0 10px 30px rgba(7, 27, 53, 0.07);
+      --lfro-shadow-elevated: 0 18px 45px rgba(7, 27, 53, 0.12);
+    }
+
+    /* Reset & Page Wrapper */
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      scroll-behavior: smooth;
+      overflow-x: clip;
+      -webkit-text-size-adjust: 100%;
+      background-color: var(--lfro-ivory);
+    }
+
+    body {
+      font-family: var(--lfro-font-sans);
+      color: var(--lfro-text-main);
+      background-color: var(--lfro-ivory);
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      overflow-x: clip;
+    }
+
+    #ccor-lfro {
+      font-family: var(--lfro-font-sans);
+      color: var(--lfro-text-main);
+      background-color: var(--lfro-ivory);
+      line-height: 1.6;
+      width: 100%;
+      overflow-x: clip;
+    }
+
+    #ccor-lfro a {
+      color: inherit;
+      text-decoration: none;
+      transition: color 0.2s ease, border-color 0.2s ease, background-color 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    #ccor-lfro button {
+      font-family: inherit;
+      border: none;
+      background: none;
+      cursor: pointer;
+    }
+
+    #ccor-lfro img,
+    #ccor-lfro svg {
+      display: block;
+      max-width: 100%;
+    }
+
+    /* Container Utility (Matches WW Exactly) */
+    .lfro-container {
+      width: 100%;
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 clamp(16px, 4vw, 32px);
+    }
+
+    .lfro-container--narrow {
+      max-width: 960px;
+    }
+
+    /* Architectural Lines & Eyebrows (Matches WW Exactly) */
+    .lfro-eyebrow {
+      font-family: var(--lfro-font-sans);
+      font-size: 0.76rem;
+      font-weight: 700;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--lfro-petrol);
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .lfro-eyebrow--light {
+      color: var(--lfro-gold-warm);
+    }
+
+    .lfro-eyebrow::after {
+      content: '';
+      display: inline-block;
+      width: 24px;
+      height: 1px;
+      background-color: currentColor;
+    }
+
+    .lfro-section-heading {
+      font-family: var(--lfro-font-display);
+      font-size: clamp(1.9rem, 3.8vw, 2.75rem);
+      font-weight: 600;
+      letter-spacing: 0.02em;
+      text-transform: uppercase;
+      color: var(--lfro-navy-deep);
+      line-height: 1.15;
+      margin-top: 6px;
+      margin-bottom: 12px;
+    }
+
+    .lfro-section-heading--light {
+      color: var(--lfro-text-light);
+    }
+
+    .lfro-section-desc {
+      font-size: clamp(1rem, 1.3vw, 1.125rem);
+      color: var(--lfro-text-muted);
+      max-width: 680px;
+      line-height: 1.65;
+    }
+
+    .lfro-section-desc--light {
+      color: var(--lfro-text-light-muted);
+    }
+
+    /* Buttons (Matches WW Button System Exactly) */
+    .lfro-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      font-family: var(--lfro-font-sans);
+      font-size: 0.88rem;
+      font-weight: 600;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      padding: 14px 26px;
+      border-radius: var(--lfro-radius-sm);
+      border: 1px solid transparent;
+      cursor: pointer;
+      user-select: none;
+      transition: all 0.22s cubic-bezier(0.16, 1, 0.3, 1);
+      text-align: center;
+    }
+
+    .lfro-btn:focus-visible {
+      outline: 2px solid var(--lfro-gold);
+      outline-offset: 3px;
+    }
+
+    #ccor-lfro .lfro-btn--primary,
+    #ccor-lfro a.lfro-btn--primary,
+    #ccor-lfro a.lfro-btn--primary:visited {
+      background: linear-gradient(135deg, #0C7489 0%, #102F59 100%);
+      color: #FFFFFF !important;
+      box-shadow: 0 4px 14px rgba(12, 116, 137, 0.28);
+    }
+
+    #ccor-lfro .lfro-btn--primary:hover {
+      background: linear-gradient(135deg, #0F7F80 0%, #071B35 100%);
+      color: #FFFFFF !important;
+      transform: translateY(-2px);
+      box-shadow: 0 6px 18px rgba(12, 116, 137, 0.35);
+    }
+
+    #ccor-lfro .lfro-btn--gold,
+    #ccor-lfro a.lfro-btn--gold,
+    #ccor-lfro a.lfro-btn--gold:visited {
+      background: linear-gradient(135deg, #E2BC7E 0%, #D4AC6C 100%);
+      color: var(--lfro-navy-deep) !important;
+      font-weight: 700;
+      box-shadow: 0 4px 14px rgba(212, 172, 108, 0.35);
+    }
+
+    #ccor-lfro .lfro-btn--gold:hover {
+      background: linear-gradient(135deg, #eed09d 0%, #d8b275 100%);
+      color: var(--lfro-navy-deep) !important;
+      transform: translateY(-2px);
+      box-shadow: 0 8px 22px rgba(212, 172, 108, 0.45);
+    }
+
+    #ccor-lfro .lfro-btn--secondary,
+    #ccor-lfro a.lfro-btn--secondary,
+    #ccor-lfro a.lfro-btn--secondary:visited {
+      background-color: transparent;
+      border-color: var(--lfro-border-subtle);
+      color: var(--lfro-navy-deep) !important;
+    }
+
+    #ccor-lfro .lfro-btn--secondary:hover {
+      border-color: var(--lfro-petrol);
+      color: var(--lfro-petrol) !important;
+      background-color: var(--lfro-seaglass-soft);
+      transform: translateY(-2px);
+    }
+
+    #ccor-lfro .lfro-btn--ghost-light,
+    #ccor-lfro a.lfro-btn--ghost-light,
+    #ccor-lfro a.lfro-btn--ghost-light:visited {
+      background-color: rgba(255, 255, 255, 0.08);
+      border-color: rgba(255, 255, 255, 0.28);
+      color: #FFFFFF !important;
+    }
+
+    #ccor-lfro .lfro-btn--ghost-light:hover {
+      background-color: #FFFFFF;
+      color: var(--lfro-navy-deep) !important;
+      transform: translateY(-2px);
+    }
+
+    /* Top Brand Navigation Header - Sticky with Glassmorphism */
+    .lfro-header-bar {
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      background-color: rgba(7, 27, 53, 0.95);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.28);
+      padding: 12px 0;
+      transition: all 0.25s ease;
+    }
+
+    /* Ensure anchor links scroll cleanly below sticky header */
+    section[id],
+    div[id] {
+      scroll-margin-top: 75px;
+    }
+
+    @media (max-width: 480px) {
+      .lfro-header-bar {
+        padding: 9px 0;
+      }
+      .lfro-brand-badge__logo {
+        height: 28px;
+      }
+      .lfro-brand-badge__text {
+        font-size: 0.72rem;
+      }
+      .lfro-brand-badge__text span {
+        font-size: 0.62rem;
+      }
+    }
+
+    .lfro-header-bar__inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
+    }
+
+    .lfro-brand-badge {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .lfro-brand-badge__logo {
+      height: 38px;
+      width: auto;
+      object-fit: contain;
+    }
+
+    .lfro-brand-badge__text {
+      font-size: 0.84rem;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      color: #FFFFFF;
+      line-height: 1.25;
+    }
+
+    .lfro-brand-badge__text span {
+      display: block;
+      font-size: 0.72rem;
+      font-weight: 500;
+      color: var(--lfro-gold-warm);
+      letter-spacing: 0.12em;
+    }
+
+    .lfro-header-nav {
+      display: flex;
+      align-items: center;
+      gap: 22px;
+      font-size: 0.84rem;
+      font-weight: 600;
+      color: rgba(255, 255, 255, 0.85);
+    }
+
+    .lfro-header-nav a:hover {
+      color: var(--lfro-gold-warm);
+    }
+
+    @media (max-width: 860px) {
+      .lfro-header-nav {
+        display: none;
+      }
+    }
+
+    /* ==========================================================================
+       SECTION 1: HERO (Rebuilt directly using Winter Waive Hero Architecture)
+       ========================================================================== */
+    .lfro-hero {
+      position: relative;
+      background: linear-gradient(180deg, #071B35 0%, #0F2E52 58%, #143D6B 100%);
+      color: #FFFFFF;
+      padding: clamp(60px, 9vw, 110px) 0 clamp(60px, 8vw, 95px);
+      overflow: hidden;
+    }
+
+    /* Ambient Gulf morning light radial glow (Direct from WW) */
+    .lfro-hero__glow {
+      position: absolute;
+      top: -15%;
+      right: -5%;
+      width: clamp(300px, 50vw, 650px);
+      height: clamp(300px, 50vw, 650px);
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(212, 172, 108, 0.18) 0%, rgba(71, 196, 210, 0.12) 42%, rgba(7, 27, 53, 0) 72%);
+      filter: blur(50px);
+      pointer-events: none;
+      animation: heroSunPulse 14s ease-in-out infinite alternate;
+    }
+
+    @keyframes heroSunPulse {
+      0% { transform: scale(0.92) translate(0, 0); opacity: 0.7; }
+      100% { transform: scale(1.1) translate(-20px, 20px); opacity: 1; }
+    }
+
+    /* Moving Gulf Coast shoreline curve at bottom of hero */
+    .lfro-hero__shoreline {
+      position: absolute;
+      bottom: -1px;
+      left: 0;
+      width: 100%;
+      overflow: hidden;
+      line-height: 0;
+      pointer-events: none;
+      z-index: 2;
+    }
+
+    .lfro-hero__shoreline svg {
+      position: relative;
+      display: block;
+      width: calc(100% + 1.3px);
+      height: clamp(40px, 6vw, 70px);
+    }
+
+    .lfro-hero__grid {
+      display: grid;
+      grid-template-columns: 1.15fr 0.85fr;
+      gap: clamp(32px, 5vw, 60px);
+      align-items: center;
+      position: relative;
+      z-index: 3;
+    }
+
+    @media (max-width: 900px) {
+      .lfro-hero__grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .lfro-hero__kicker {
+      display: inline-flex;
+      align-items: center;
+      gap: 14px;
+      margin-bottom: 22px;
+      flex-wrap: wrap;
+    }
+
+    .lfro-hero__kicker-line {
+      display: inline-block;
+      width: 32px;
+      height: 2px;
+      background: linear-gradient(90deg, var(--lfro-gold-warm), var(--lfro-aqua));
+      border-radius: 1px;
+    }
+
+    .lfro-hero__kicker-text {
+      font-family: var(--lfro-font-sans);
+      font-size: 0.78rem;
+      font-weight: 700;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--lfro-gold-warm);
+    }
+
+    .lfro-hero__title {
+      font-family: var(--lfro-font-display);
+      font-size: clamp(2.3rem, 6vw, 4.6rem);
+      font-weight: 700;
+      letter-spacing: 0.04em;
+      line-height: 0.98;
+      text-transform: uppercase;
+      color: #FFFFFF;
+      margin-bottom: 14px;
+      text-shadow: 0 4px 24px rgba(0, 0, 0, 0.4);
+    }
+
+    .lfro-hero__title span {
+      display: block;
+      color: var(--lfro-gold-warm);
+      font-family: var(--lfro-font-serif);
+      font-style: italic;
+      font-weight: 400;
+      font-size: clamp(1.25rem, 2.5vw, 1.85rem);
+      letter-spacing: normal;
+      text-transform: none;
+      margin-top: 8px;
+      text-shadow: none;
+    }
+
+    .lfro-hero__body {
+      font-size: clamp(1.05rem, 1.4vw, 1.2rem);
+      color: rgba(255, 255, 255, 0.88);
+      max-width: 580px;
+      margin-bottom: 28px;
+      line-height: 1.6;
+    }
+
+    .lfro-hero__actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 14px;
+      margin-bottom: 34px;
+    }
+
+    .lfro-hero__qualifiers {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 16px;
+      padding-top: 20px;
+      border-top: 1px solid rgba(255, 255, 255, 0.14);
+      font-size: 0.82rem;
+      color: rgba(255, 255, 255, 0.72);
+    }
+
+    .lfro-hero__qualifier-item {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .lfro-hero__qualifier-item svg {
+      color: var(--lfro-seaglass);
+    }
+
+    /* Glass Card on Right (Directly Rebuilt from WW Savings Badge Card) */
+    .lfro-glass-card {
+      background: linear-gradient(160deg, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0.04) 100%);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      border-radius: var(--lfro-radius-lg);
+      padding: clamp(26px, 3.8vw, 36px);
+      box-shadow: 0 20px 45px rgba(0, 0, 0, 0.35);
+      position: relative;
+    }
+
+    .lfro-glass-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 30px;
+      right: 30px;
+      height: 2px;
+      background: linear-gradient(90deg, transparent, var(--lfro-gold-warm), transparent);
+    }
+
+    .lfro-glass-card__header {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      margin-bottom: 8px;
+    }
+
+    .lfro-glass-card__label {
+      font-family: var(--lfro-font-sans);
+      font-size: 0.75rem;
+      font-weight: 700;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--lfro-seaglass);
+    }
+
+    .lfro-glass-card__period {
+      font-family: var(--lfro-font-mono);
+      font-size: 0.74rem;
+      color: rgba(255, 255, 255, 0.6);
+      text-transform: uppercase;
+    }
+
+    .lfro-glass-card__title {
+      font-family: var(--lfro-font-display);
+      font-size: clamp(2rem, 3.4vw, 2.6rem);
+      font-weight: 700;
+      color: #FFFFFF;
+      line-height: 1.05;
+      margin-bottom: 4px;
+      letter-spacing: 0.02em;
+    }
+
+    .lfro-glass-card__sub {
+      font-family: var(--lfro-font-sans);
+      font-size: 0.78rem;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      color: var(--lfro-gold-warm);
+      text-transform: uppercase;
+      margin-bottom: 20px;
+    }
+
+    .lfro-glass-card__breakdown {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      border-top: 1px solid rgba(255, 255, 255, 0.12);
+      padding-top: 16px;
+      font-size: 0.88rem;
+    }
+
+    .lfro-glass-card__row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      color: rgba(255, 255, 255, 0.85);
+      padding: 4px 0;
+    }
+
+    .lfro-glass-card__row strong {
+      font-family: var(--lfro-font-mono);
+      font-size: 0.8rem;
+      letter-spacing: 0.05em;
+    }
+
+    .lfro-status-tag {
+      padding: 3px 10px;
+      border-radius: 4px;
+      font-size: 0.72rem;
+      font-weight: 700;
+      font-family: var(--lfro-font-mono);
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+    }
+
+    .lfro-status-tag--auth {
+      background: rgba(71, 196, 210, 0.18);
+      border: 1px solid var(--lfro-seaglass);
+      color: var(--lfro-seaglass);
+    }
+
+    .lfro-status-tag--denied {
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(255, 255, 255, 0.18);
+      color: rgba(255, 255, 255, 0.65);
+    }
+
+    /* ==========================================================================
+       SECTION 2: LFRO IN THREE POINTS (Editorial Stat Strip)
+       ========================================================================== */
+    .lfro-quick-section {
+      padding: clamp(65px, 8vw, 100px) 0;
+      background-color: var(--lfro-ivory);
+    }
+
+    .lfro-stat-strip {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: clamp(24px, 4vw, 48px);
+      margin-top: 40px;
+    }
+
+    @media (max-width: 860px) {
+      .lfro-stat-strip {
+        grid-template-columns: 1fr;
+        gap: 32px;
+      }
+    }
+
+    .lfro-stat-item {
+      display: flex;
+      flex-direction: column;
+      position: relative;
+    }
+
+    @media (min-width: 861px) {
+      .lfro-stat-item:not(:first-child) {
+        border-left: 1px solid var(--lfro-border-subtle);
+        padding-left: clamp(20px, 3vw, 40px);
+      }
+    }
+
+    .lfro-stat-num {
+      font-family: var(--lfro-font-mono);
+      font-size: clamp(2.4rem, 4.5vw, 3.2rem);
+      font-weight: 700;
+      color: var(--lfro-petrol);
+      line-height: 1;
+      margin-bottom: 12px;
+      letter-spacing: -0.02em;
+    }
+
+    .lfro-stat-title {
+      font-family: var(--lfro-font-display);
+      font-size: 1.35rem;
+      font-weight: 600;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      color: var(--lfro-navy-deep);
+      margin-bottom: 10px;
+    }
+
+    .lfro-stat-desc {
+      font-size: 0.95rem;
+      color: var(--lfro-text-muted);
+      line-height: 1.6;
+    }
+
+    .lfro-stat-link {
+      margin-top: 36px;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-weight: 600;
+      color: var(--lfro-petrol);
+      font-size: 0.92rem;
+    }
+
+    .lfro-stat-link:hover {
+      color: var(--lfro-navy-deep);
+      text-decoration: underline;
+    }
+
+    /* ==========================================================================
+       SECTION 3: "CAN THEY DO THAT?" — MIRRORED AFTER WINTER WAIVE CALCULATOR
+       ========================================================================== */
+    .lfro-scenarios-section {
+      padding: clamp(65px, 8vw, 105px) 0;
+      background-color: var(--lfro-sand);
+      border-top: 1px solid var(--lfro-border-subtle);
+      border-bottom: 1px solid var(--lfro-border-subtle);
+    }
+
+    .lfro-calc-layout {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: clamp(28px, 4vw, 50px);
+      margin-top: 36px;
+      align-items: start;
+    }
+
+    @media (max-width: 900px) {
+      .lfro-calc-layout {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    /* Left Panel: White Selector Card (Mirrors WW .ww-checklist-box) */
+    .lfro-calc-checklist-box {
+      background-color: var(--lfro-sand-card);
+      border: 1px solid var(--lfro-border-subtle);
+      border-radius: var(--lfro-radius-lg);
+      padding: clamp(24px, 3.5vw, 36px);
+      box-shadow: var(--lfro-shadow-card);
+    }
+
+    .lfro-calc-checklist-title {
+      font-family: var(--lfro-font-sans);
+      font-size: 0.82rem;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--lfro-petrol);
+      margin-bottom: 18px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .lfro-calc-group {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    /* Selectable Activity Row (Mirrors WW .ww-check-item) */
+    .lfro-activity-row {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      padding: 14px 18px;
+      border: 1px solid var(--lfro-border-subtle);
+      border-radius: var(--lfro-radius-md);
+      background-color: var(--lfro-ivory);
+      cursor: pointer;
+      user-select: none;
+      transition: all 0.2s ease;
+      text-align: left;
+      width: 100%;
+    }
+
+    .lfro-activity-row:hover {
+      border-color: var(--lfro-petrol);
+      background-color: #FFFFFF;
+      transform: translateX(3px);
+    }
+
+    .lfro-activity-row.is-selected {
+      border-color: var(--lfro-petrol);
+      background-color: rgba(12, 116, 137, 0.06);
+      box-shadow: 0 2px 10px rgba(12, 116, 137, 0.1);
+    }
+
+    .lfro-activity-radio {
+      width: 20px;
+      height: 20px;
+      min-width: 20px;
+      border: 2px solid #CBD5E1;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background-color: #FFFFFF;
+      transition: all 0.18s ease;
+    }
+
+    .lfro-activity-row.is-selected .lfro-activity-radio {
+      border-color: var(--lfro-petrol);
+      background-color: var(--lfro-petrol);
+    }
+
+    .lfro-activity-radio-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background-color: #FFFFFF;
+      opacity: 0;
+      transform: scale(0.5);
+      transition: all 0.18s ease;
+    }
+
+    .lfro-activity-row.is-selected .lfro-activity-radio-dot {
+      opacity: 1;
+      transform: scale(1);
+    }
+
+    .lfro-activity-label {
+      font-size: 0.94rem;
+      font-weight: 500;
+      color: var(--lfro-text-main);
+      line-height: 1.4;
+    }
+
+    .lfro-activity-row.is-selected .lfro-activity-label {
+      font-weight: 600;
+      color: var(--lfro-navy-deep);
+    }
+
+    /* Right Panel: Navy Dynamic Result Box (Mirrors WW .ww-result-box) */
+    .lfro-calc-result-box {
+      background: linear-gradient(145deg, #071B35 0%, #102F59 100%);
+      color: #FFFFFF;
+      border-radius: var(--lfro-radius-lg);
+      padding: clamp(24px, 3.5vw, 36px);
+      box-shadow: var(--lfro-shadow-elevated);
+      border: 1px solid rgba(255, 255, 255, 0.14);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .lfro-calc-status-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 12px;
+      border-radius: var(--lfro-radius-sm);
+      font-size: 0.74rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      margin-bottom: 16px;
+      background: rgba(71, 196, 210, 0.2);
+      border: 1px solid var(--lfro-seaglass);
+      color: var(--lfro-seaglass);
+    }
+
+    .lfro-scenario-active-title {
+      font-family: var(--lfro-font-display);
+      font-size: clamp(1.4rem, 2.2vw, 1.85rem);
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.02em;
+      color: #FFFFFF;
+      margin-bottom: 20px;
+      line-height: 1.15;
+    }
+
+    .lfro-result-roles {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      margin-bottom: 24px;
+    }
+
+    .lfro-result-role-card {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: var(--lfro-radius-md);
+      padding: 16px;
+      transition: all 0.25s ease;
+    }
+
+    .lfro-result-role-card__header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 6px;
+    }
+
+    .lfro-result-role-name {
+      font-family: var(--lfro-font-sans);
+      font-size: 0.76rem;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: rgba(255, 255, 255, 0.7);
+    }
+
+    .lfro-result-verdict {
+      font-family: var(--lfro-font-mono);
+      font-size: 0.76rem;
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      padding: 2px 8px;
+      border-radius: 3px;
+    }
+
+    .lfro-result-verdict--yes {
+      background: rgba(71, 196, 210, 0.22);
+      color: var(--lfro-seaglass);
+      border: 1px solid rgba(71, 196, 210, 0.4);
+    }
+
+    .lfro-result-verdict--no {
+      background: rgba(255, 255, 255, 0.1);
+      color: rgba(255, 255, 255, 0.75);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+    }
+
+    .lfro-result-verdict--warn {
+      background: rgba(212, 172, 108, 0.2);
+      color: var(--lfro-gold-warm);
+      border: 1px solid rgba(212, 172, 108, 0.4);
+    }
+
+    .lfro-result-role-desc {
+      font-size: 0.88rem;
+      color: rgba(255, 255, 255, 0.86);
+      line-height: 1.5;
+    }
+
+    .lfro-calc-callout {
+      background: rgba(212, 172, 108, 0.12);
+      border: 1px solid rgba(212, 172, 108, 0.3);
+      border-radius: var(--lfro-radius-md);
+      padding: 14px 18px;
+      margin-bottom: 22px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+    }
+
+    .lfro-calc-callout__label {
+      font-family: var(--lfro-font-display);
+      font-size: 0.88rem;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: var(--lfro-gold-warm);
+    }
+
+    .lfro-calc-callout__val {
+      font-family: var(--lfro-font-mono);
+      font-size: 0.88rem;
+      font-weight: 700;
+      color: var(--lfro-gold-warm);
+      text-align: right;
+    }
+
+    /* ==========================================================================
+       SECTION 4: KNOW THE LFRO LINE (Editorial Prohibited List)
+       ========================================================================== */
+    .lfro-prohibited-section {
+      padding: clamp(70px, 9vw, 110px) 0;
+      background: linear-gradient(180deg, #071B35 0%, #0C2342 100%);
+      color: #FFFFFF;
+      position: relative;
+    }
+
+    .lfro-editorial-list {
+      margin-top: 40px;
+      display: flex;
+      flex-direction: column;
+      border-top: 1px solid rgba(255, 255, 255, 0.12);
+    }
+
+    .lfro-editorial-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: clamp(16px, 2.5vw, 22px) 0;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+      transition: background-color 0.2s ease, padding-left 0.2s ease;
+    }
+
+    .lfro-editorial-row:hover {
+      background-color: rgba(255, 255, 255, 0.03);
+      padding-left: 8px;
+    }
+
+    .lfro-editorial-name {
+      font-family: var(--lfro-font-display);
+      font-size: clamp(1.2rem, 2.2vw, 1.6rem);
+      font-weight: 600;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      color: #FFFFFF;
+    }
+
+    .lfro-editorial-status {
+      font-family: var(--lfro-font-mono);
+      font-size: 0.84rem;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--lfro-gold-warm);
+      background: rgba(212, 172, 108, 0.12);
+      border: 1px solid rgba(212, 172, 108, 0.28);
+      padding: 4px 14px;
+      border-radius: var(--lfro-radius-sm);
+    }
+
+    /* Premium Family Inset Callout (Mirrors WW Glass Card) */
+    .lfro-family-callout {
+      margin-top: 48px;
+      background: linear-gradient(160deg, rgba(255, 255, 255, 0.08) 0%, rgba(255, 255, 255, 0.03) 100%);
+      border: 1px solid rgba(255, 255, 255, 0.18);
+      border-radius: var(--lfro-radius-lg);
+      padding: clamp(26px, 4vw, 38px);
+      position: relative;
+      box-shadow: 0 16px 40px rgba(0, 0, 0, 0.25);
+    }
+
+    .lfro-family-callout::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 30px;
+      right: 30px;
+      height: 2px;
+      background: linear-gradient(90deg, transparent, var(--lfro-gold-warm), transparent);
+    }
+
+    .lfro-family-callout__badge {
+      font-family: var(--lfro-font-mono);
+      font-size: 0.74rem;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--lfro-gold-warm);
+      margin-bottom: 8px;
+    }
+
+    .lfro-family-callout__title {
+      font-family: var(--lfro-font-display);
+      font-size: clamp(1.4rem, 2.4vw, 1.85rem);
+      font-weight: 600;
+      letter-spacing: 0.03em;
+      text-transform: uppercase;
+      color: #FFFFFF;
+      margin-bottom: 12px;
+    }
+
+    .lfro-family-callout__text {
+      font-size: 0.98rem;
+      color: rgba(255, 255, 255, 0.88);
+      line-height: 1.65;
+      max-width: 820px;
+      margin-bottom: 20px;
+    }
+
+    /* ==========================================================================
+       SECTION 5: MLS CREDENTIAL SECURITY & PENALTIES
+       ========================================================================== */
+    .lfro-security-section {
+      padding: clamp(65px, 8vw, 100px) 0;
+      background: linear-gradient(180deg, #0C2342 0%, #102F59 100%);
+      color: #FFFFFF;
+    }
+
+    /* Architectural Credentials Routing Flow */
+    .lfro-route-flow {
+      margin-top: 40px;
+      margin-bottom: 48px;
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      border-radius: var(--lfro-radius-lg);
+      padding: clamp(24px, 4vw, 40px);
+    }
+
+    .lfro-flow-grid {
+      display: grid;
+      grid-template-columns: 1fr auto 1fr auto 1fr;
+      gap: 16px;
+      align-items: center;
+    }
+
+    @media (max-width: 860px) {
+      .lfro-flow-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .lfro-flow-node {
+      background: rgba(255, 255, 255, 0.07);
+      border: 1px solid rgba(255, 255, 255, 0.16);
+      border-radius: var(--lfro-radius-md);
+      padding: 20px;
+      text-align: center;
+    }
+
+    .lfro-flow-node--valid {
+      border-color: var(--lfro-seaglass);
+      background: rgba(100, 186, 176, 0.08);
+    }
+
+    .lfro-flow-node__tag {
+      font-family: var(--lfro-font-mono);
+      font-size: 0.7rem;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--lfro-gold-warm);
+      margin-bottom: 6px;
+    }
+
+    .lfro-flow-node__title {
+      font-family: var(--lfro-font-display);
+      font-size: 1.15rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      color: #FFFFFF;
+    }
+
+    .lfro-flow-arrow {
+      color: var(--lfro-seaglass);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    @media (max-width: 860px) {
+      .lfro-flow-arrow svg {
+        transform: rotate(90deg);
+      }
+    }
+
+    /* Three-Column Financial / Penalty Stat Strip (Mirrors WW Timeline Strip) */
+    .lfro-penalties-strip {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 24px;
+      margin-top: 32px;
+    }
+
+    @media (max-width: 860px) {
+      .lfro-penalties-strip {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .lfro-penalty-card {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      border-radius: var(--lfro-radius-lg);
+      padding: 28px;
+      position: relative;
+    }
+
+    .lfro-penalty-card--first {
+      border-top: 4px solid var(--lfro-gold-warm);
+    }
+
+    .lfro-penalty-card--suspension {
+      border-top: 4px solid var(--lfro-petrol);
+    }
+
+    .lfro-penalty-card--second {
+      border-top: 4px solid var(--lfro-aqua);
+    }
+
+    .lfro-penalty-amount {
+      font-family: var(--lfro-font-mono);
+      font-size: clamp(2.2rem, 3.8vw, 2.8rem);
+      font-weight: 700;
+      color: #FFFFFF;
+      line-height: 1;
+      margin-bottom: 8px;
+      letter-spacing: -0.02em;
+    }
+
+    .lfro-penalty-amount--gold {
+      color: var(--lfro-gold-warm);
+    }
+
+    .lfro-penalty-amount--teal {
+      color: var(--lfro-seaglass);
+    }
+
+    .lfro-penalty-label {
+      font-family: var(--lfro-font-display);
+      font-size: 1.1rem;
+      font-weight: 600;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      color: #FFFFFF;
+      margin-bottom: 6px;
+    }
+
+    .lfro-penalty-desc {
+      font-size: 0.86rem;
+      color: rgba(255, 255, 255, 0.72);
+      line-height: 1.5;
+    }
+
+    /* ==========================================================================
+       SECTION 6: "NEED ADMINISTRATIVE HELP?" ($120 Solution Moment)
+       ========================================================================== */
+    .lfro-assistant-section {
+      padding: clamp(70px, 9vw, 110px) 0;
+      background-color: var(--lfro-ivory);
+      position: relative;
+    }
+
+    .lfro-assistant-grid {
+      display: grid;
+      grid-template-columns: 1.1fr 0.9fr;
+      gap: clamp(32px, 5vw, 60px);
+      align-items: center;
+      margin-top: 36px;
+    }
+
+    @media (max-width: 900px) {
+      .lfro-assistant-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .lfro-req-checklist {
+      margin-top: 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .lfro-req-line {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-size: 0.95rem;
+      font-weight: 600;
+      color: var(--lfro-navy-deep);
+    }
+
+    .lfro-req-line svg {
+      color: var(--lfro-teal);
+      flex-shrink: 0;
+    }
+
+    /* Solution Price Card (Mirrors WW Savings Badge Card with $120) */
+    .lfro-price-card {
+      background: linear-gradient(145deg, #071B35 0%, #102F59 100%);
+      color: #FFFFFF;
+      border-radius: var(--lfro-radius-lg);
+      padding: clamp(28px, 4vw, 42px);
+      box-shadow: var(--lfro-shadow-elevated);
+      border: 1px solid rgba(255, 255, 255, 0.16);
+      position: relative;
+    }
+
+    .lfro-price-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 30px;
+      right: 30px;
+      height: 2px;
+      background: linear-gradient(90deg, transparent, var(--lfro-gold-warm), transparent);
+    }
+
+    .lfro-price-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      margin-bottom: 6px;
+    }
+
+    .lfro-price-badge-label {
+      font-family: var(--lfro-font-sans);
+      font-size: 0.74rem;
+      font-weight: 700;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--lfro-seaglass);
+    }
+
+    .lfro-price-period-tag {
+      font-family: var(--lfro-font-mono);
+      font-size: 0.72rem;
+      color: rgba(255, 255, 255, 0.6);
+      text-transform: uppercase;
+    }
+
+    .lfro-price-number {
+      font-family: var(--lfro-font-mono);
+      font-size: clamp(3.4rem, 5.5vw, 4.8rem);
+      font-weight: 700;
+      color: var(--lfro-gold-warm);
+      line-height: 1;
+      margin-bottom: 4px;
+      letter-spacing: -0.02em;
+    }
+
+    .lfro-price-sub {
+      font-family: var(--lfro-font-display);
+      font-size: 1.15rem;
+      font-weight: 600;
+      letter-spacing: 0.06em;
+      color: #FFFFFF;
+      text-transform: uppercase;
+      margin-bottom: 22px;
+    }
+
+    .lfro-price-breakdown {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      border-top: 1px solid rgba(255, 255, 255, 0.12);
+      padding-top: 18px;
+      margin-bottom: 26px;
+      font-size: 0.88rem;
+    }
+
+    .lfro-price-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      color: rgba(255, 255, 255, 0.88);
+    }
+
+    .lfro-price-row strong {
+      font-family: var(--lfro-font-mono);
+      color: var(--lfro-seaglass);
+    }
+
+    /* ==========================================================================
+       SECTION 7: WHAT CAN AN UNLICENSED ASSISTANT DO? (FREC Accordion)
+       Directly Reuses Winter Waive .ww-accordion-panel CSS
+       ========================================================================== */
+    .lfro-frec-section {
+      padding: clamp(65px, 8vw, 100px) 0;
+      background-color: var(--lfro-sand);
+      border-top: 1px solid var(--lfro-border-subtle);
+      border-bottom: 1px solid var(--lfro-border-subtle);
+    }
+
+    .lfro-accordion-group {
+      margin-top: 36px;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    .lfro-accordion-panel {
+      background-color: #FFFFFF;
+      border: 1px solid var(--lfro-border-subtle);
+      border-radius: var(--lfro-radius-lg);
+      box-shadow: var(--lfro-shadow-subtle);
+      overflow: hidden;
+      transition: border-color 0.2s ease;
+    }
+
+    .lfro-accordion-panel:hover {
+      border-color: rgba(12, 116, 137, 0.35);
+    }
+
+    .lfro-accordion-trigger {
+      width: 100%;
+      background: transparent;
+      border: none;
+      padding: 22px 28px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      text-align: left;
+      cursor: pointer;
+      font-family: var(--lfro-font-sans);
+      font-size: 1.08rem;
+      font-weight: 700;
+      color: var(--lfro-navy-deep);
+      transition: background-color 0.2s ease;
+    }
+
+    .lfro-accordion-trigger:hover {
+      background-color: var(--lfro-ivory);
+    }
+
+    .lfro-accordion-trigger:focus-visible {
+      outline: 2px solid var(--lfro-petrol);
+      outline-offset: -2px;
+    }
+
+    .lfro-accordion-icon {
+      width: 28px;
+      height: 28px;
+      min-width: 28px;
+      border-radius: 50%;
+      background: var(--lfro-seaglass-soft);
+      color: var(--lfro-petrol);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: transform 0.28s ease;
+    }
+
+    .lfro-accordion-trigger[aria-expanded="true"] .lfro-accordion-icon {
+      transform: rotate(180deg);
+    }
+
+    .lfro-accordion-body {
+      display: none;
+      padding: 0 28px 26px;
+      border-top: 1px solid var(--lfro-border-subtle);
+    }
+
+    .lfro-accordion-body.is-open {
+      display: block;
+      padding-top: 18px;
+    }
+
+    .lfro-frec-task-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .lfro-frec-task-list li {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      font-size: 0.92rem;
+      color: var(--lfro-text-muted);
+      line-height: 1.5;
+    }
+
+    .lfro-frec-task-list li svg {
+      color: var(--lfro-teal);
+      flex-shrink: 0;
+      margin-top: 2px;
+    }
+
+    /* ==========================================================================
+       SECTION 8: ROLE COMPARISON MATRIX (Editorial Table)
+       ========================================================================== */
+    .lfro-matrix-section {
+      padding: clamp(65px, 8vw, 100px) 0;
+      background-color: var(--lfro-ivory);
+    }
+
+    .lfro-table-wrapper {
+      margin-top: 36px;
+      background-color: #FFFFFF;
+      border: 1px solid var(--lfro-border-subtle);
+      border-radius: var(--lfro-radius-lg);
+      box-shadow: var(--lfro-shadow-card);
+      overflow-x: auto;
+    }
+
+    .lfro-matrix-table {
+      width: 100%;
+      border-collapse: collapse;
+      text-align: left;
+      font-size: 0.92rem;
+      min-width: 680px;
+    }
+
+    .lfro-matrix-table th {
+      padding: 18px 24px;
+      font-family: var(--lfro-font-display);
+      font-size: 1.05rem;
+      font-weight: 600;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      background-color: var(--lfro-ivory);
+      border-bottom: 2px solid var(--lfro-border-subtle);
+      color: var(--lfro-navy-deep);
+    }
+
+    .lfro-matrix-table th:first-child {
+      width: 32%;
+    }
+
+    .lfro-matrix-table td {
+      padding: 16px 24px;
+      border-bottom: 1px solid var(--lfro-border-subtle);
+      color: var(--lfro-text-main);
+      vertical-align: middle;
+    }
+
+    .lfro-matrix-table tr:last-child td {
+      border-bottom: none;
+    }
+
+    .lfro-matrix-table tr:hover td {
+      background-color: rgba(12, 116, 137, 0.02);
+    }
+
+    .lfro-td-lfro {
+      color: var(--lfro-text-muted);
+    }
+
+    .lfro-td-assistant {
+      color: var(--lfro-petrol);
+      font-weight: 500;
+    }
+
+    .lfro-td-active {
+      color: var(--lfro-navy-deep);
+      font-weight: 600;
+    }
+
+    /* Mobile Fallback Stack */
+    .lfro-mobile-matrix {
+      display: none;
+    }
+
+    @media (max-width: 700px) {
+      .lfro-table-wrapper {
+        display: none;
+      }
+      .lfro-mobile-matrix {
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
+        margin-top: 28px;
+      }
+      .lfro-role-summary-card {
+        background-color: #FFFFFF;
+        border: 1px solid var(--lfro-border-subtle);
+        border-radius: var(--lfro-radius-md);
+        padding: 20px;
+        box-shadow: var(--lfro-shadow-subtle);
+      }
+      .lfro-role-summary-card h3 {
+        font-family: var(--lfro-font-display);
+        font-size: 1.25rem;
+        text-transform: uppercase;
+        color: var(--lfro-navy-deep);
+        margin-bottom: 8px;
+      }
+      .lfro-role-summary-card ul {
+        list-style: none;
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+        font-size: 0.88rem;
+      }
+    }
+
+    /* ==========================================================================
+       SECTION 9: INTERACTIVE ROLE FINDER
+       ========================================================================== */
+    .lfro-finder-section {
+      padding: clamp(70px, 9vw, 110px) 0;
+      background: linear-gradient(180deg, #071B35 0%, #0C2342 100%);
+      color: #FFFFFF;
+    }
+
+    .lfro-finder-layout {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: clamp(28px, 4vw, 50px);
+      margin-top: 36px;
+      align-items: start;
+    }
+
+    @media (max-width: 860px) {
+      .lfro-finder-layout {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .lfro-finder-options {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    .lfro-finder-option {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      border-radius: var(--lfro-radius-md);
+      padding: 20px 24px;
+      cursor: pointer;
+      user-select: none;
+      transition: all 0.2s ease;
+      text-align: left;
+    }
+
+    .lfro-finder-option:hover {
+      background: rgba(255, 255, 255, 0.08);
+      border-color: var(--lfro-seaglass);
+      transform: translateX(4px);
+    }
+
+    .lfro-finder-option.is-active {
+      background: rgba(100, 186, 176, 0.12);
+      border-color: var(--lfro-seaglass);
+      box-shadow: 0 4px 20px rgba(100, 186, 176, 0.18);
+    }
+
+    .lfro-finder-option__tag {
+      font-family: var(--lfro-font-mono);
+      font-size: 0.72rem;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--lfro-gold-warm);
+      margin-bottom: 6px;
+    }
+
+    .lfro-finder-option__quote {
+      font-family: var(--lfro-font-serif);
+      font-style: italic;
+      font-size: 1.15rem;
+      color: #FFFFFF;
+      line-height: 1.4;
+    }
+
+    /* Finder Result Panel */
+    .lfro-finder-result {
+      background: linear-gradient(160deg, rgba(255, 255, 255, 0.09) 0%, rgba(255, 255, 255, 0.03) 100%);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      border-radius: var(--lfro-radius-lg);
+      padding: clamp(26px, 4vw, 38px);
+      box-shadow: 0 20px 45px rgba(0, 0, 0, 0.35);
+      position: relative;
+    }
+
+    .lfro-finder-result::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 30px;
+      right: 30px;
+      height: 2px;
+      background: linear-gradient(90deg, transparent, var(--lfro-gold-warm), transparent);
+    }
+
+    .lfro-finder-result__badge {
+      font-family: var(--lfro-font-mono);
+      font-size: 0.74rem;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--lfro-seaglass);
+      margin-bottom: 8px;
+    }
+
+    .lfro-finder-result__title {
+      font-family: var(--lfro-font-display);
+      font-size: clamp(1.6rem, 2.6vw, 2.2rem);
+      font-weight: 700;
+      letter-spacing: 0.03em;
+      text-transform: uppercase;
+      color: #FFFFFF;
+      margin-bottom: 12px;
+      line-height: 1.1;
+    }
+
+    .lfro-finder-result__desc {
+      font-size: 0.98rem;
+      color: rgba(255, 255, 255, 0.86);
+      line-height: 1.6;
+      margin-bottom: 24px;
+    }
+
+    /* ==========================================================================
+       SECTION 10: FAQ (Directly Reuses Winter Waive FAQ Accordion CSS)
+       ========================================================================== */
+    .lfro-faq-section {
+      padding: clamp(65px, 8vw, 100px) 0;
+      background-color: #FFFFFF;
+      border-top: none;
+    }
+
+    .lfro-faq-list {
+      margin-top: 36px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .lfro-faq-item {
+      border: 1px solid var(--lfro-border-subtle);
+      border-radius: var(--lfro-radius-md);
+      background-color: var(--lfro-ivory);
+      overflow: hidden;
+      transition: border-color 0.2s ease;
+    }
+
+    .lfro-faq-item:hover {
+      border-color: rgba(12, 116, 137, 0.3);
+    }
+
+    .lfro-faq-question {
+      width: 100%;
+      background: transparent;
+      border: none;
+      padding: 18px 22px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 14px;
+      text-align: left;
+      font-family: var(--lfro-font-sans);
+      font-size: 1.02rem;
+      font-weight: 600;
+      color: var(--lfro-navy-deep);
+      cursor: pointer;
+    }
+
+    .lfro-faq-question:focus-visible {
+      outline: 2px solid var(--lfro-petrol);
+      outline-offset: -2px;
+    }
+
+    .lfro-faq-chevron {
+      width: 24px;
+      height: 24px;
+      min-width: 24px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--lfro-petrol);
+      transition: transform 0.25s ease;
+    }
+
+    .lfro-faq-question[aria-expanded="true"] .lfro-faq-chevron {
+      transform: rotate(180deg);
+    }
+
+    .lfro-faq-answer {
+      display: none;
+      padding: 0 22px 20px;
+      font-size: 0.92rem;
+      color: var(--lfro-text-muted);
+      line-height: 1.6;
+      border-top: 1px solid rgba(16, 47, 89, 0.06);
+    }
+
+    .lfro-faq-answer.is-open {
+      display: block;
+      padding-top: 14px;
+    }
+
+    /* ==========================================================================
+       SECTION 11: FINAL CTA (Directly Rebuilt from Winter Waive Final CTA)
+       ========================================================================== */
+    .lfro-final-cta-section {
+      padding: clamp(70px, 9vw, 110px) 0;
+      background: linear-gradient(135deg, #071B35 0%, #102F59 100%);
+      color: #FFFFFF;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .lfro-final-cta-section::after {
+      content: '';
+      position: absolute;
+      bottom: -150px;
+      right: -100px;
+      width: 500px;
+      height: 500px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(71, 196, 210, 0.15) 0%, transparent 70%);
+      pointer-events: none;
+    }
+
+    .lfro-final-grid {
+      display: grid;
+      grid-template-columns: 1.25fr 0.75fr;
+      gap: clamp(32px, 5vw, 60px);
+      align-items: center;
+      position: relative;
+      z-index: 2;
+    }
+
+    @media (max-width: 860px) {
+      .lfro-final-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .lfro-final-heading {
+      font-family: var(--lfro-font-display);
+      font-size: clamp(2.4rem, 4.8vw, 3.8rem);
+      font-weight: 700;
+      line-height: 1.05;
+      text-transform: uppercase;
+      letter-spacing: 0.03em;
+      color: #FFFFFF;
+      margin-bottom: 20px;
+    }
+
+    .lfro-final-heading span {
+      color: var(--lfro-gold-warm);
+    }
+
+    .lfro-final-subtext {
+      font-size: clamp(1rem, 1.25vw, 1.15rem);
+      color: rgba(255, 255, 255, 0.85);
+      max-width: 580px;
+      margin-bottom: 32px;
+      line-height: 1.6;
+    }
+
+    .lfro-final-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 16px;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+
+    /* Contact Card (Mirrors WW QR Frame Card) */
+    .lfro-contact-card {
+      background: #FFFFFF;
+      border-radius: var(--lfro-radius-lg);
+      padding: clamp(24px, 3.5vw, 32px);
+      box-shadow: 0 20px 45px rgba(0, 0, 0, 0.35);
+      color: var(--lfro-navy-deep);
+      position: relative;
+    }
+
+    .lfro-contact-card__title {
+      font-family: var(--lfro-font-display);
+      font-size: 1.15rem;
+      font-weight: 600;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      color: var(--lfro-navy-deep);
+      margin-bottom: 14px;
+      border-bottom: 1px solid var(--lfro-border-subtle);
+      padding-bottom: 8px;
+    }
+
+    .lfro-contact-list {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      font-size: 0.9rem;
+      color: var(--lfro-text-muted);
+    }
+
+    .lfro-contact-list a {
+      color: var(--lfro-petrol);
+      font-weight: 600;
+    }
+
+    .lfro-contact-list a:hover {
+      text-decoration: underline;
+    }
+
+    /* ==========================================================================
+       SECTION 12: SOURCES / POLICY REFERENCES
+       ========================================================================== */
+    .lfro-references-section {
+      padding: clamp(50px, 6vw, 75px) 0;
+      background-color: var(--lfro-sand);
+      border-top: 1px solid var(--lfro-border-subtle);
+    }
+
+    .lfro-ref-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 16px;
+      margin-top: 24px;
+    }
+
+    .lfro-ref-card {
+      background-color: #FFFFFF;
+      border: 1px solid var(--lfro-border-subtle);
+      border-radius: var(--lfro-radius-md);
+      padding: 16px 20px;
+      box-shadow: var(--lfro-shadow-subtle);
+    }
+
+    .lfro-ref-card__org {
+      font-family: var(--lfro-font-mono);
+      font-size: 0.72rem;
+      font-weight: 700;
+      color: var(--lfro-petrol);
+      text-transform: uppercase;
+      margin-bottom: 4px;
+    }
+
+    .lfro-ref-card a {
+      font-size: 0.88rem;
+      font-weight: 600;
+      color: var(--lfro-navy-deep);
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .lfro-ref-card a:hover {
+      color: var(--lfro-petrol);
+      text-decoration: underline;
+    }
+
+    .lfro-disclaimer-text {
+      margin-top: 32px;
+      font-size: 0.78rem;
+      color: var(--lfro-text-muted);
+      line-height: 1.6;
+      border-top: 1px solid var(--lfro-border-subtle);
+      padding-top: 20px;
+    }
+
+    /* ==========================================================================
+       SWFL COASTAL BEACH SLITS WITH "WAVY" CUTOUTS (PARALLAX VIEWPORTS)
+       ========================================================================== */
+    .lfro-beach-slit {
+      position: relative;
+      width: 100%;
+      height: clamp(230px, 30vw, 340px);
+      background-attachment: fixed;
+      background-position: center center;
+      background-repeat: no-repeat;
+      background-size: cover;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      box-shadow: inset 0 18px 30px rgba(7, 27, 53, 0.4), inset 0 -18px 30px rgba(7, 27, 53, 0.4);
+    }
+
+    @media (max-width: 768px) {
+      .lfro-beach-slit {
+        background-attachment: scroll;
+        height: 200px;
+      }
+    }
+
+    .lfro-beach-slit::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(
+        180deg,
+        rgba(7, 27, 53, 0.5) 0%,
+        rgba(7, 27, 53, 0.16) 50%,
+        rgba(7, 27, 53, 0.5) 100%
+      );
+      pointer-events: none;
+      z-index: 2;
+    }
+
+    /* Wavy Cutout Masks */
+    .lfro-wave-cutout {
+      position: absolute;
+      left: 0;
+      width: 100%;
+      overflow: hidden;
+      line-height: 0;
+      pointer-events: none;
+      z-index: 3;
+    }
+
+    .lfro-wave-cutout svg {
+      display: block;
+      width: calc(100% + 2px);
+      height: clamp(36px, 5vw, 64px);
+    }
+
+    .lfro-wave-cutout--top {
+      top: -1px;
+    }
+
+    .lfro-wave-cutout--top svg {
+      filter: drop-shadow(0 4px 10px rgba(7, 27, 53, 0.22));
+    }
+
+    .lfro-wave-cutout--bottom {
+      bottom: -1px;
+    }
+
+    .lfro-wave-cutout--bottom svg {
+      filter: drop-shadow(0 -4px 10px rgba(7, 27, 53, 0.22));
+    }
+
+    /* Image Assignments matching Coconut Coast SWFL Theme */
+    .lfro-beach-slit--hero {
+      background-image: url('https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=1920&q=80');
+    }
+
+    .lfro-beach-slit--shore {
+      background-image: url('https://images.unsplash.com/photo-1655917914007-cda647b5e8cb?auto=format&fit=crop&w=1920&q=80');
+    }
+
+    .lfro-beach-slit--sunset {
+      background-image: url('https://images.unsplash.com/photo-1662697666481-7155ae7669fd?auto=format&fit=crop&w=1920&q=80');
+    }
+
+    .lfro-beach-slit--water {
+      background-image: url('https://images.unsplash.com/photo-1510414842594-a61c69b5ae57?auto=format&fit=crop&w=1920&q=80');
+    }
+
+    .lfro-beach-slit__content {
+      position: relative;
+      z-index: 4;
+      text-align: center;
+      padding: 0 24px;
+    }
+
+    .lfro-beach-slit__tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+      font-family: var(--lfro-font-sans);
+      font-size: clamp(0.74rem, 1.2vw, 0.86rem);
+      font-weight: 700;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: #FFFFFF;
+      text-shadow: 0 2px 14px rgba(0, 0, 0, 0.85);
+    }
+
+    .lfro-beach-slit__tag::before,
+    .lfro-beach-slit__tag::after {
+      content: '';
+      display: inline-block;
+      width: 28px;
+      height: 1px;
+      background-color: var(--lfro-gold-warm);
+      box-shadow: 0 1px 4px rgba(0, 0, 0, 0.6);
+    }
+
+    /* Accessibility / Reduced Motion */
+    @media (prefers-reduced-motion: reduce) {
+      #ccor-lfro * {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+      }
+      .lfro-beach-slit {
+        background-attachment: scroll;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div id="ccor-lfro">
+
+    <!-- Top Brand Navigation Header -->
+    <header class="lfro-header-bar" role="banner">
+      <div class="lfro-container">
+        <div class="lfro-header-bar__inner">
+          <div class="lfro-brand-badge">
+            <img src="https://coconutcoastrealtors.org/wp-content/uploads/2026/04/CCOR-Vert-Logo-no-tag-clr-scaled-e1776958694707.png"
+              alt="Coconut Coast Organization of REALTORS® Logo" class="lfro-brand-badge__logo" width="120" height="38" />
+            <div class="lfro-brand-badge__text">
+              Coconut Coast Organization of REALTORS®
+              <span>Broker Operations &amp; Compliance Center</span>
+            </div>
+          </div>
+          <nav class="lfro-header-nav" aria-label="Page navigation">
+            <a href="#scenarios">Allowed Activities</a>
+            <a href="#security">MLS Credentials</a>
+            <a href="#assistant">Assistant Access</a>
+            <a href="#comparison">Role Matrix</a>
+            <a href="#faq">FAQ</a>
+            <a href="tel:+12399926771" style="color: var(--lfro-gold-warm);">239-992-6771</a>
+          </nav>
+        </div>
+      </div>
+    </header>
+
+    <main id="main-content">
+
+      <!-- ====================================================================
+           SECTION 1: HERO (Winter Waive Coastal Shoreline & Ambient Glow Style)
+           ==================================================================== -->
+      <section class="lfro-hero" id="lfro-hero" aria-labelledby="lfro-hero-title">
+        <div class="lfro-hero__glow" aria-hidden="true"></div>
+
+        <div class="lfro-container">
+          <div class="lfro-hero__grid">
+            <div class="lfro-hero__content">
+              <div class="lfro-hero__kicker">
+                <span class="lfro-hero__kicker-line" aria-hidden="true"></span>
+                <span class="lfro-hero__kicker-text">BROKER RESOURCE • LFRO + MLS ACCESS</span>
+              </div>
+
+              <h1 class="lfro-hero__title" id="lfro-hero-title">
+                REFERRAL-ONLY<br />MEANS REFERRAL-ONLY.
+                <span>Know where referral status ends — and where another access path begins.</span>
+              </h1>
+
+              <p class="lfro-hero__body">
+                The Limited Function Referral Office waiver is designed for licensees whose real estate activity is strictly limited to referrals. It does not provide limited brokerage privileges or MLS access. If your office needs administrative MLS support instead, CCOR offers a compliant, dedicated access path for eligible unlicensed assistants.
+              </p>
+
+              <div class="lfro-hero__actions">
+                <a class="lfro-btn lfro-btn--gold" href="#scenarios" id="heroCtaSavings">CHECK WHAT'S ALLOWED</a>
+                <a class="lfro-btn lfro-btn--ghost-light" href="#assistant">EXPLORE ASSISTANT ACCESS</a>
+              </div>
+
+              <div class="lfro-hero__qualifiers">
+                <div class="lfro-hero__qualifier-item">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/>
+                  </svg>
+                  <span>NAR LFRO Policy Compliant</span>
+                </div>
+                <div class="lfro-hero__qualifier-item">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/>
+                  </svg>
+                  <span>CCOR MLS Rule 3.4 Protected</span>
+                </div>
+                <div class="lfro-hero__qualifier-item">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/>
+                  </svg>
+                  <span>FREC Support Staff Guidance</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Glass Key Card: LFRO Access Profile (Mirrors WW Savings Card) -->
+            <div class="lfro-hero__visual">
+              <div class="lfro-glass-card">
+                <div class="lfro-glass-card__header">
+                  <span class="lfro-glass-card__label">Role Profile</span>
+                  <span class="lfro-glass-card__period">REFERRAL WAIVER</span>
+                </div>
+                <div class="lfro-glass-card__title">LFRO ACCESS PROFILE</div>
+                <div class="lfro-glass-card__sub">OFFICIAL PERMISSIONS MATRIX</div>
+
+                <div class="lfro-glass-card__breakdown">
+                  <div class="lfro-glass-card__row">
+                    <span>Client Referrals</span>
+                    <span class="lfro-status-tag lfro-status-tag--auth">AUTHORIZED</span>
+                  </div>
+                  <div class="lfro-glass-card__row">
+                    <span>MLS / Matrix System</span>
+                    <span class="lfro-status-tag lfro-status-tag--denied">NO ACCESS</span>
+                  </div>
+                  <div class="lfro-glass-card__row">
+                    <span>Listing Activity</span>
+                    <span class="lfro-status-tag lfro-status-tag--denied">NOT AUTHORIZED</span>
+                  </div>
+                  <div class="lfro-glass-card__row">
+                    <span>Showing Property</span>
+                    <span class="lfro-status-tag lfro-status-tag--denied">NOT AUTHORIZED</span>
+                  </div>
+                  <div class="lfro-glass-card__row">
+                    <span>Contract Negotiation</span>
+                    <span class="lfro-status-tag lfro-status-tag--denied">NOT AUTHORIZED</span>
+                  </div>
+                  <div class="lfro-glass-card__row">
+                    <span>Property Management</span>
+                    <span class="lfro-status-tag lfro-status-tag--denied">NOT AUTHORIZED</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </section>
+
+      <!-- ====================================================================
+           SWFL COASTAL BREAK 1: BELOW HERO (PARALLAX SLIT WITH WAVY CUTOUTS)
+           ==================================================================== -->
+      <div class="lfro-beach-slit lfro-beach-slit--hero" role="img" aria-label="Southwest Florida Beach Coastline">
+        <div class="lfro-wave-cutout lfro-wave-cutout--top" style="color: #143D6B;" aria-hidden="true">
+          <svg viewBox="0 0 1440 64" preserveAspectRatio="none" fill="currentColor">
+            <path d="M0,0 L1440,0 L1440,24 C1260,52 1060,8 880,38 C700,66 500,16 300,46 C160,60 0,26 0,26 Z"></path>
+          </svg>
+        </div>
+
+        <div class="lfro-beach-slit__content">
+          <span class="lfro-beach-slit__tag">GULF COAST OPERATIONS &bull; COCONUT COAST REALTORS&reg;</span>
+        </div>
+
+        <div class="lfro-wave-cutout lfro-wave-cutout--bottom" style="color: #FCFAF5;" aria-hidden="true">
+          <svg viewBox="0 0 1440 64" preserveAspectRatio="none" fill="currentColor">
+            <path d="M0,64 L1440,64 L1440,40 C1280,10 1080,56 880,26 C680,-4 480,48 280,18 C150,2 0,38 0,38 Z"></path>
+          </svg>
+        </div>
+      </div>
+
+      <!-- ====================================================================
+           SECTION 2: THE RULE IN 20 SECONDS (Editorial Stat Strip)
+           ==================================================================== -->
+      <section class="lfro-quick-section" id="quick-summary" aria-labelledby="lfro-quick-heading">
+        <div class="lfro-container">
+          <div class="lfro-eyebrow">The Quick Version</div>
+          <h2 class="lfro-section-heading" id="lfro-quick-heading">LFRO IN THREE POINTS</h2>
+          <p class="lfro-section-desc">
+            Core operational guardrails every broker and office manager should know when structuring referral licensees and administrative staff.
+          </p>
+
+          <div class="lfro-stat-strip">
+            <div class="lfro-stat-item">
+              <div class="lfro-stat-num">01</div>
+              <h3 class="lfro-stat-title">REFERRALS</h3>
+              <p class="lfro-stat-desc">
+                The only real estate activity authorized under the waiver. Licensees may send client referrals and receive referral fees through their supervising broker.
+              </p>
+            </div>
+
+            <div class="lfro-stat-item">
+              <div class="lfro-stat-num">02</div>
+              <h3 class="lfro-stat-title">NO MLS ACCESS</h3>
+              <p class="lfro-stat-desc">
+                NAR's LFRO policy specifically establishes that LFRO licensees are ineligible for MLS subscriptions, credentials, or system access.
+              </p>
+            </div>
+
+            <div class="lfro-stat-item">
+              <div class="lfro-stat-num">03</div>
+              <h3 class="lfro-stat-title">SEPARATE ENTITY</h3>
+              <p class="lfro-stat-desc">
+                The waiver structure requires licensees to be held through a separate legal referral entity, isolated from the REALTOR® firm's brokerage practice.
+              </p>
+            </div>
+          </div>
+
+          <a href="https://www.nar.realtor/about-nar/policies/limited-function-referral-office-lfro-policy"
+            target="_blank" rel="noopener" class="lfro-stat-link" id="linkNarPolicySummary">
+            <span>READ THE OFFICIAL NAR LFRO POLICY</span>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M14 3v2h3.59l-9.83 9.83 1.41 1.41L19 6.41V10h2V3h-7zM5 5c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2v-6h-2v6H5V7h6V5H5z"/>
+            </svg>
+          </a>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           SECTION 3: "CAN THEY DO THAT?" — MIRRORED AFTER WW CALCULATOR
+           ==================================================================== -->
+      <section class="lfro-scenarios-section" id="scenarios" aria-labelledby="lfro-scenarios-heading">
+        <div class="lfro-container">
+          <div class="lfro-eyebrow">Interactive Verification</div>
+          <h2 class="lfro-section-heading" id="lfro-scenarios-heading">CAN THEY DO THAT?</h2>
+          <p class="lfro-section-desc">
+            Choose a common office activity below to see how authorization differs across LFRO, Unlicensed Assistant, and Active Licensee roles.
+          </p>
+
+          <div class="lfro-calc-layout">
+            <!-- Left: Selectable Activity Rows (Mirrors WW Checklist) -->
+            <div class="lfro-calc-checklist-box">
+              <div class="lfro-calc-checklist-title">
+                <span>Choose An Office Activity</span>
+                <span style="font-size: 0.72rem; color: var(--lfro-text-muted); font-family: var(--lfro-font-mono);">8 SCENARIOS</span>
+              </div>
+
+              <div class="lfro-calc-group" role="tablist" aria-label="Office activities">
+                <button type="button" class="lfro-activity-row is-selected" role="tab" id="tab-refer-client"
+                  aria-selected="true" aria-controls="scenarioResultPanel" data-scenario="refer-client">
+                  <span class="lfro-activity-radio" aria-hidden="true">
+                    <span class="lfro-activity-radio-dot"></span>
+                  </span>
+                  <span class="lfro-activity-label">Refer a client to another licensee</span>
+                </button>
+
+                <button type="button" class="lfro-activity-row" role="tab" id="tab-search-matrix"
+                  aria-selected="false" aria-controls="scenarioResultPanel" data-scenario="search-matrix">
+                  <span class="lfro-activity-radio" aria-hidden="true">
+                    <span class="lfro-activity-radio-dot"></span>
+                  </span>
+                  <span class="lfro-activity-label">Search Matrix / MLS for listings</span>
+                </button>
+
+                <button type="button" class="lfro-activity-row" role="tab" id="tab-enter-listing"
+                  aria-selected="false" aria-controls="scenarioResultPanel" data-scenario="enter-listing">
+                  <span class="lfro-activity-radio" aria-hidden="true">
+                    <span class="lfro-activity-radio-dot"></span>
+                  </span>
+                  <span class="lfro-activity-label">Enter or update a listing in MLS</span>
+                </button>
+
+                <button type="button" class="lfro-activity-row" role="tab" id="tab-show-property"
+                  aria-selected="false" aria-controls="scenarioResultPanel" data-scenario="show-property">
+                  <span class="lfro-activity-radio" aria-hidden="true">
+                    <span class="lfro-activity-radio-dot"></span>
+                  </span>
+                  <span class="lfro-activity-label">Show property to prospective buyers</span>
+                </button>
+
+                <button type="button" class="lfro-activity-row" role="tab" id="tab-negotiate-terms"
+                  aria-selected="false" aria-controls="scenarioResultPanel" data-scenario="negotiate-terms">
+                  <span class="lfro-activity-radio" aria-hidden="true">
+                    <span class="lfro-activity-radio-dot"></span>
+                  </span>
+                  <span class="lfro-activity-label">Negotiate price, commissions, or terms</span>
+                </button>
+
+                <button type="button" class="lfro-activity-row" role="tab" id="tab-gather-info"
+                  aria-selected="false" aria-controls="scenarioResultPanel" data-scenario="gather-info">
+                  <span class="lfro-activity-radio" aria-hidden="true">
+                    <span class="lfro-activity-radio-dot"></span>
+                  </span>
+                  <span class="lfro-activity-label">Gather property or CMA information</span>
+                </button>
+
+                <button type="button" class="lfro-activity-row" role="tab" id="tab-schedule-appts"
+                  aria-selected="false" aria-controls="scenarioResultPanel" data-scenario="schedule-appts">
+                  <span class="lfro-activity-radio" aria-hidden="true">
+                    <span class="lfro-activity-radio-dot"></span>
+                  </span>
+                  <span class="lfro-activity-label">Schedule showings, inspections, or closings</span>
+                </button>
+
+                <button type="button" class="lfro-activity-row" role="tab" id="tab-share-login"
+                  aria-selected="false" aria-controls="scenarioResultPanel" data-scenario="share-login">
+                  <span class="lfro-activity-radio" aria-hidden="true">
+                    <span class="lfro-activity-radio-dot"></span>
+                  </span>
+                  <span class="lfro-activity-label">Use another person's Matrix login</span>
+                </button>
+              </div>
+
+              <div style="margin-top: 18px; font-size: 0.8rem; color: var(--lfro-text-muted); line-height: 1.5;">
+                <strong>Compliance Rule:</strong> Each account type must align strictly with the individual's actual daily operational function.
+              </div>
+            </div>
+
+            <!-- Right: Dynamic Navy Result Box (Mirrors WW Result Box) -->
+            <div class="lfro-calc-result-box" id="scenarioResultPanel" role="tabpanel" aria-live="polite">
+              <div class="lfro-calc-status-badge">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/>
+                </svg>
+                <span>SCENARIO RESULT</span>
+              </div>
+
+              <h3 class="lfro-scenario-active-title" id="scenarioActiveTitle">
+                Refer a client to another licensee
+              </h3>
+
+              <div class="lfro-result-roles">
+                <!-- LFRO Licensee -->
+                <div class="lfro-result-role-card" id="cardLfro">
+                  <div class="lfro-result-role-card__header">
+                    <span class="lfro-result-role-name">LFRO Licensee</span>
+                    <span class="lfro-result-verdict lfro-result-verdict--yes" id="verdictLfro">YES</span>
+                  </div>
+                  <p class="lfro-result-role-desc" id="descLfro">
+                    Authorized. The core activity permitted under the LFRO waiver is placing referrals with licensed brokerages.
+                  </p>
+                </div>
+
+                <!-- Unlicensed Assistant -->
+                <div class="lfro-result-role-card" id="cardAssistant">
+                  <div class="lfro-result-role-card__header">
+                    <span class="lfro-result-role-name">Unlicensed Assistant</span>
+                    <span class="lfro-result-verdict lfro-result-verdict--no" id="verdictAssistant">NO</span>
+                  </div>
+                  <p class="lfro-result-role-desc" id="descAssistant">
+                    Unlicensed assistants cannot solicit clients or earn referral fees requiring a real estate license.
+                  </p>
+                </div>
+
+                <!-- Active Licensee -->
+                <div class="lfro-result-role-card" id="cardActive">
+                  <div class="lfro-result-role-card__header">
+                    <span class="lfro-result-role-name">Active Licensee / MLS</span>
+                    <span class="lfro-result-verdict lfro-result-verdict--yes" id="verdictActive">YES</span>
+                  </div>
+                  <p class="lfro-result-role-desc" id="descActive">
+                    Active licensees can refer clients and receive referral compensation through their supervising broker.
+                  </p>
+                </div>
+              </div>
+
+              <!-- Recommendation Callout Strip -->
+              <div class="lfro-calc-callout">
+                <span class="lfro-calc-callout__label" id="scenarioCalloutLabel">Role Match</span>
+                <span class="lfro-calc-callout__val" id="scenarioCalloutVal">Referral Structure Compliant</span>
+              </div>
+
+              <a class="lfro-btn lfro-btn--gold" id="btnScenarioDynamicCta" href="#assistant" style="width: 100%;">
+                EXPLORE ASSISTANT ACCESS
+              </a>
+
+              <p style="font-size: 0.74rem; color: rgba(255, 255, 255, 0.55); line-height: 1.45; margin-top: 14px; border-top: 1px solid rgba(255, 255, 255, 0.08); padding-top: 10px;">
+                Summary based on published NAR LFRO guidelines, CCOR MLS rules, and Florida DBPR regulatory guidance.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           SECTION 4: KNOW THE LFRO LINE (Editorial Prohibited List)
+           ==================================================================== -->
+      <section class="lfro-prohibited-section" id="prohibited" aria-labelledby="lfro-prohibited-heading">
+        <div class="lfro-container">
+          <div class="lfro-eyebrow lfro-eyebrow--light">Referral-Only Status</div>
+          <h2 class="lfro-section-heading lfro-section-heading--light" id="lfro-prohibited-heading">
+            WHAT AN LFRO LICENSEE DOES NOT DO
+          </h2>
+          <p class="lfro-section-desc lfro-section-desc--light">
+            Under NAR's Limited Function Referral Office policy, the exemption requires that licensees not engage "to any degree" in real estate brokerage activities other than making referrals.
+          </p>
+
+          <div class="lfro-editorial-list">
+            <div class="lfro-editorial-row">
+              <span class="lfro-editorial-name">LIST REAL PROPERTY</span>
+              <span class="lfro-editorial-status">NO &bull; PROHIBITED</span>
+            </div>
+            <div class="lfro-editorial-row">
+              <span class="lfro-editorial-name">SELL REAL PROPERTY</span>
+              <span class="lfro-editorial-status">NO &bull; PROHIBITED</span>
+            </div>
+            <div class="lfro-editorial-row">
+              <span class="lfro-editorial-name">LEASE OR RENT REAL PROPERTY</span>
+              <span class="lfro-editorial-status">NO &bull; PROHIBITED</span>
+            </div>
+            <div class="lfro-editorial-row">
+              <span class="lfro-editorial-name">MANAGE REAL PROPERTY</span>
+              <span class="lfro-editorial-status">NO &bull; PROHIBITED</span>
+            </div>
+            <div class="lfro-editorial-row">
+              <span class="lfro-editorial-name">COUNSEL AS PART OF BROKERAGE ACTIVITY</span>
+              <span class="lfro-editorial-status">NO &bull; PROHIBITED</span>
+            </div>
+            <div class="lfro-editorial-row">
+              <span class="lfro-editorial-name">APPRAISE REAL PROPERTY</span>
+              <span class="lfro-editorial-status">NO &bull; PROHIBITED</span>
+            </div>
+            <div class="lfro-editorial-row">
+              <span class="lfro-editorial-name">MLS / MATRIX SYSTEM ACCESS</span>
+              <span class="lfro-editorial-status">NO &bull; INELIGIBLE</span>
+            </div>
+          </div>
+
+          <!-- Family Property Inset Callout (Mirrors WW Glass Card) -->
+          <div class="lfro-family-callout">
+            <div class="lfro-family-callout__badge">NAR POLICY GUIDANCE &bull; FAQ #1</div>
+            <h3 class="lfro-family-callout__title">"WHAT ABOUT JUST ONE FAMILY TRANSACTION?"</h3>
+            <p class="lfro-family-callout__text">
+              NAR specifically addresses this common broker question: The LFRO waiver does <strong>not</strong> permit a licensee to list a property for a family member or friend as an exception. To list or sell any property, the licensee must be placed with an active REALTOR® brokerage firm and hold proper MLS subscriber access.
+            </p>
+            <a href="https://www.nar.realtor/about-nar/policies/limited-function-referral-office-lfro-policy"
+              target="_blank" rel="noopener" class="lfro-btn lfro-btn--ghost-light" id="btnNarFullPolicy">
+              <span>READ THE FULL NAR POLICY</span>
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M14 3v2h3.59l-9.83 9.83 1.41 1.41L19 6.41V10h2V3h-7zM5 5c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2v-6h-2v6H5V7h6V5H5z"/>
+              </svg>
+            </a>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           SECTION 5: MLS CREDENTIAL SECURITY & PENALTIES
+           ==================================================================== -->
+      <section class="lfro-security-section" id="security" aria-labelledby="lfro-security-heading">
+        <div class="lfro-container">
+          <div class="lfro-eyebrow lfro-eyebrow--light">MLS Security &amp; Accountability</div>
+          <h2 class="lfro-section-heading lfro-section-heading--light" id="lfro-security-heading">
+            NO MLS ACCESS DOESN'T MEAN BORROW SOMEONE ELSE'S LOGIN.
+          </h2>
+          <p class="lfro-section-desc lfro-section-desc--light">
+            Every person accessing CCOR's MLS must use the unique credentials assigned to their own authorized account. Sharing credentials violates Article 3 of the CCOR MLS Rules.
+          </p>
+
+          <!-- Flat Route Architecture Flow -->
+          <div class="lfro-route-flow">
+            <div class="lfro-flow-grid">
+              <div class="lfro-flow-node lfro-flow-node--valid">
+                <div class="lfro-flow-node__tag">AUTHORIZED USER</div>
+                <div class="lfro-flow-node__title">Broker or Staff</div>
+              </div>
+
+              <div class="lfro-flow-arrow">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M12 4l-1.41 1.41L16.17 11H4v2h12.17l-5.58 5.59L12 20l8-8z"/>
+                </svg>
+              </div>
+
+              <div class="lfro-flow-node lfro-flow-node--valid">
+                <div class="lfro-flow-node__tag">SECURITY STANDARD</div>
+                <div class="lfro-flow-node__title">Unique Login</div>
+              </div>
+
+              <div class="lfro-flow-arrow">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M12 4l-1.41 1.41L16.17 11H4v2h12.17l-5.58 5.59L12 20l8-8z"/>
+                </svg>
+              </div>
+
+              <div class="lfro-flow-node lfro-flow-node--valid">
+                <div class="lfro-flow-node__tag">MATRIX AUDIT TRAIL</div>
+                <div class="lfro-flow-node__title">Authorized Access</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Three-Column Penalty Stat Strip (Mirrors WW Timeline Amounts) -->
+          <div class="lfro-penalties-strip">
+            <div class="lfro-penalty-card lfro-penalty-card--first">
+              <div class="lfro-penalty-amount lfro-penalty-amount--gold">$500</div>
+              <div class="lfro-penalty-label">FIRST OFFENSE FINE</div>
+              <p class="lfro-penalty-desc">
+                Assessed automatically against the credential holder upon verified credential sharing.
+              </p>
+            </div>
+
+            <div class="lfro-penalty-card lfro-penalty-card--suspension">
+              <div class="lfro-penalty-amount">30 DAYS</div>
+              <div class="lfro-penalty-label">MLS SUSPENSION</div>
+              <p class="lfro-penalty-desc">
+                Mandatory account suspension applied on the first confirmed credential sharing offense.
+              </p>
+            </div>
+
+            <div class="lfro-penalty-card lfro-penalty-card--second">
+              <div class="lfro-penalty-amount lfro-penalty-amount--teal">$1,000 + 60D</div>
+              <div class="lfro-penalty-label">SECOND OFFENSE</div>
+              <p class="lfro-penalty-desc">
+                Doubled financial fine paired with an extended 60-day MLS service suspension.
+              </p>
+            </div>
+          </div>
+
+          <div style="margin-top: 28px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 16px;">
+            <span style="font-size: 0.8rem; color: rgba(255, 255, 255, 0.65);">
+              *Penalties reflect Article 3, Section 3.4 of the verified 2026 CCOR MLS Rules &amp; Regulations.
+            </span>
+            <a href="https://coconutcoastrealtors.org/wp-content/uploads/2026/03/2026-MLS-Rules.pdf"
+              target="_blank" rel="noopener" class="lfro-btn lfro-btn--ghost-light" id="btnMlsRulesSecurity">
+              <span>VIEW CCOR MLS RULES (PDF)</span>
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M14 3v2h3.59l-9.83 9.83 1.41 1.41L19 6.41V10h2V3h-7zM5 5c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2v-6h-2v6H5V7h6V5H5z"/>
+              </svg>
+            </a>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           SWFL COASTAL BREAK 2: PRE-ASSISTANT (PARALLAX SLIT WITH WAVY CUTOUTS)
+           ==================================================================== -->
+      <div class="lfro-beach-slit lfro-beach-slit--shore" role="img" aria-label="Southwest Florida Gulf Coast Shoreline">
+        <div class="lfro-wave-cutout lfro-wave-cutout--top" style="color: #102F59;" aria-hidden="true">
+          <svg viewBox="0 0 1440 64" preserveAspectRatio="none" fill="currentColor">
+            <path d="M0,0 L1440,0 L1440,24 C1260,52 1060,8 880,38 C700,66 500,16 300,46 C160,60 0,26 0,26 Z"></path>
+          </svg>
+        </div>
+
+        <div class="lfro-beach-slit__content">
+          <span class="lfro-beach-slit__tag">COMPLIANT ACCESS PATHWAYS</span>
+        </div>
+
+        <div class="lfro-wave-cutout lfro-wave-cutout--bottom" style="color: #FCFAF5;" aria-hidden="true">
+          <svg viewBox="0 0 1440 64" preserveAspectRatio="none" fill="currentColor">
+            <path d="M0,64 L1440,64 L1440,40 C1280,10 1080,56 880,26 C680,-4 480,48 280,18 C150,2 0,38 0,38 Z"></path>
+          </svg>
+        </div>
+      </div>
+
+      <!-- ====================================================================
+           SECTION 6: "NEED ADMINISTRATIVE HELP?" ($120 Solution Moment)
+           ==================================================================== -->
+      <section class="lfro-assistant-section" id="assistant" aria-labelledby="lfro-assistant-heading">
+        <div class="lfro-container">
+          <div class="lfro-assistant-grid">
+            <div>
+              <div class="lfro-eyebrow">A Better Fit for Administrative Support</div>
+              <h2 class="lfro-section-heading" id="lfro-assistant-heading">
+                NEED HELP RUNNING THE OFFICE?
+              </h2>
+              <p class="lfro-section-desc">
+                If the person's real role is administrative support rather than referral activity, CCOR provides an authorized, compliant access path for eligible unlicensed assistants.
+              </p>
+
+              <div class="lfro-req-checklist">
+                <div class="lfro-req-line">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/>
+                  </svg>
+                  <span>Must NOT hold an active real estate license</span>
+                </div>
+                <div class="lfro-req-line">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/>
+                  </svg>
+                  <span>Supports one assigned broker or agent</span>
+                </div>
+                <div class="lfro-req-line">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/>
+                  </svg>
+                  <span>Required MLS training completed within 30 days</span>
+                </div>
+              </div>
+
+              <div style="margin-top: 24px; font-size: 0.86rem; color: var(--lfro-text-muted); line-height: 1.55;">
+                <strong>Supporting multiple agents?</strong> Staff servicing multiple agents across an office typically fall under the Transaction Coordinator access structure. Contact CCOR Member Services for multi-agent setup.
+              </div>
+            </div>
+
+            <!-- Price Card (Mirrors WW Savings Badge Card) -->
+            <div>
+              <div class="lfro-price-card">
+                <div class="lfro-price-header">
+                  <span class="lfro-price-badge-label">Compliant Solution</span>
+                  <span class="lfro-price-period-tag">ANNUAL MEMBERSHIP</span>
+                </div>
+                <div class="lfro-price-number">$120</div>
+                <div class="lfro-price-sub">PER YEAR &bull; UNLICENSED ASSISTANT</div>
+
+                <div class="lfro-price-breakdown">
+                  <div class="lfro-price-row">
+                    <span>Own Unique Matrix Login</span>
+                    <strong>INCLUDED</strong>
+                  </div>
+                  <div class="lfro-price-row">
+                    <span>Administrative MLS Access</span>
+                    <strong>INCLUDED</strong>
+                  </div>
+                  <div class="lfro-price-row">
+                    <span>Broker Supervised Support</span>
+                    <strong>INCLUDED</strong>
+                  </div>
+                  <div class="lfro-price-row" style="padding-top: 8px; border-top: 1px dashed rgba(255,255,255,0.18);">
+                    <span style="color: var(--lfro-gold-warm);">MLS Education Class</span>
+                    <strong style="color: var(--lfro-gold-warm);">Within 30 Days</strong>
+                  </div>
+                </div>
+
+                <a href="https://bonitaspringsesterorealtorsfl.growthzoneapp.com/ap/Membership/Application/4pVeMvr8"
+                  target="_blank" rel="noopener" class="lfro-btn lfro-btn--gold" id="btnApplyAssistant" style="width: 100%;">
+                  APPLY FOR UNLICENSED ASSISTANT ACCESS ↗
+                </a>
+
+                <div style="margin-top: 12px; text-align: center;">
+                  <a href="tel:+12399926771" class="lfro-btn lfro-btn--ghost-light" id="btnContactTc" style="width: 100%;">
+                    MULTIPLE AGENTS? CONTACT CCOR
+                  </a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           SECTION 7: WHAT CAN AN UNLICENSED ASSISTANT DO? (FREC Accordion)
+           Directly Reuses Winter Waive .ww-accordion-panel
+           ==================================================================== -->
+      <section class="lfro-frec-section" aria-labelledby="lfro-frec-heading">
+        <div class="lfro-container">
+          <div class="lfro-eyebrow">Regulatory Guidance</div>
+          <h2 class="lfro-section-heading" id="lfro-frec-heading">
+            ADMINISTRATIVE SUPPORT WITHOUT CROSSING THE LICENSING LINE
+          </h2>
+          <p class="lfro-section-desc">
+            The Florida Real Estate Commission (FREC) and DBPR provide official guidance defining permissible administrative duties for support staff under broker supervision.
+          </p>
+
+          <div class="lfro-accordion-group">
+            <!-- Item 1: MLS Administration -->
+            <div class="lfro-accordion-panel">
+              <button type="button" class="lfro-accordion-trigger" id="frecTrigger1" aria-expanded="true" aria-controls="frecBody1">
+                <span>MLS &amp; Listing Administration</span>
+                <span class="lfro-accordion-icon" aria-hidden="true">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M7.41 8.59L12 13.17l4.59-4.58L18 10l-6 6-6-6 1.41-1.41z"/>
+                  </svg>
+                </span>
+              </button>
+              <div class="lfro-accordion-body is-open" id="frecBody1" role="region" aria-labelledby="frecTrigger1">
+                <ul class="lfro-frec-task-list">
+                  <li>
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
+                    <span>Fill out and submit listing agreements and status changes to the MLS under direct broker supervision.</span>
+                  </li>
+                  <li>
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
+                    <span>Provide objective, written property information strictly from materials prepared and approved by the broker.</span>
+                  </li>
+                  <li>
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
+                    <span>Place approved listing signs, lockboxes, and marketing flyers at listed properties.</span>
+                  </li>
+                </ul>
+              </div>
+            </div>
+
+            <!-- Item 2: Transaction Support -->
+            <div class="lfro-accordion-panel">
+              <button type="button" class="lfro-accordion-trigger" id="frecTrigger2" aria-expanded="false" aria-controls="frecBody2">
+                <span>Transaction &amp; Contract Coordination</span>
+                <span class="lfro-accordion-icon" aria-hidden="true">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M7.41 8.59L12 13.17l4.59-4.58L18 10l-6 6-6-6 1.41-1.41z"/>
+                  </svg>
+                </span>
+              </button>
+              <div class="lfro-accordion-body" id="frecBody2" role="region" aria-labelledby="frecTrigger2">
+                <ul class="lfro-frec-task-list">
+                  <li>
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
+                    <span>Assemble closing files, track required disclosures, and coordinate document delivery to title and lending entities.</span>
+                  </li>
+                  <li>
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
+                    <span>Follow up on loan commitments, appraisal schedules, and title status under broker oversight.</span>
+                  </li>
+                </ul>
+              </div>
+            </div>
+
+            <!-- Item 3: Scheduling & Logistics -->
+            <div class="lfro-accordion-panel">
+              <button type="button" class="lfro-accordion-trigger" id="frecTrigger3" aria-expanded="false" aria-controls="frecBody3">
+                <span>Scheduling, Inspections &amp; Logistics</span>
+                <span class="lfro-accordion-icon" aria-hidden="true">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M7.41 8.59L12 13.17l4.59-4.58L18 10l-6 6-6-6 1.41-1.41z"/>
+                  </svg>
+                </span>
+              </button>
+              <div class="lfro-accordion-body" id="frecBody3" role="region" aria-labelledby="frecTrigger3">
+                <ul class="lfro-frec-task-list">
+                  <li>
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
+                    <span>Schedule appointments for appraisers, home inspectors, pest inspectors, and closing agents.</span>
+                  </li>
+                  <li>
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
+                    <span>Coordinate open house dates, prepare printed packets, and staff registration tables (without discussing terms or showing property independently).</span>
+                  </li>
+                </ul>
+              </div>
+            </div>
+
+            <!-- Item 4: Marketing & Office Support -->
+            <div class="lfro-accordion-panel">
+              <button type="button" class="lfro-accordion-trigger" id="frecTrigger4" aria-expanded="false" aria-controls="frecBody4">
+                <span>Marketing &amp; Office Administration</span>
+                <span class="lfro-accordion-icon" aria-hidden="true">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M7.41 8.59L12 13.17l4.59-4.58L18 10l-6 6-6-6 1.41-1.41z"/>
+                  </svg>
+                </span>
+              </button>
+              <div class="lfro-accordion-body" id="frecBody4" role="region" aria-labelledby="frecTrigger4">
+                <ul class="lfro-frec-task-list">
+                  <li>
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
+                    <span>Draft promotional materials, advertisements, and social media announcements for mandatory broker review and approval.</span>
+                  </li>
+                  <li>
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
+                    <span>Answer phones, take clerical messages, and route client inquiries to the appropriate licensed professional.</span>
+                  </li>
+                </ul>
+              </div>
+            </div>
+
+            <!-- Item 5: Public Information -->
+            <div class="lfro-accordion-panel">
+              <button type="button" class="lfro-accordion-trigger" id="frecTrigger5" aria-expanded="false" aria-controls="frecBody5">
+                <span>Public Information &amp; Data Gathering</span>
+                <span class="lfro-accordion-icon" aria-hidden="true">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M7.41 8.59L12 13.17l4.59-4.58L18 10l-6 6-6-6 1.41-1.41z"/>
+                  </svg>
+                </span>
+              </button>
+              <div class="lfro-accordion-body" id="frecBody5" role="region" aria-labelledby="frecTrigger5">
+                <ul class="lfro-frec-task-list">
+                  <li>
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
+                    <span>Retrieve public property records, tax cards, zoning maps, and municipal documents.</span>
+                  </li>
+                  <li>
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
+                    <span>Order title searches, survey reports, and lien searches requested by the supervising broker.</span>
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </div>
+
+          <div style="margin-top: 24px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 16px;">
+            <span style="font-size: 0.82rem; color: var(--lfro-text-muted);">
+              All activities subject to broker supervision, Florida Statutes Chapter 475, and FREC guidelines.
+            </span>
+            <a href="https://www2.myfloridalicense.com/re/documents/1118FREC_PermissibleActivitiesUnlicensedAssistant.pdf"
+              target="_blank" rel="noopener" class="lfro-btn lfro-btn--secondary" id="btnFrecGuidancePdf">
+              <span>VIEW FREC GUIDANCE (PDF)</span>
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M14 3v2h3.59l-9.83 9.83 1.41 1.41L19 6.41V10h2V3h-7zM5 5c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2v-6h-2v6H5V7h6V5H5z"/>
+              </svg>
+            </a>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           SECTION 8: ROLE COMPARISON MATRIX
+           ==================================================================== -->
+      <section class="lfro-matrix-section" id="comparison" aria-labelledby="lfro-matrix-heading">
+        <div class="lfro-container">
+          <div class="lfro-eyebrow">Clear Role Architecture</div>
+          <h2 class="lfro-section-heading" id="lfro-matrix-heading">
+            THREE ROLES. THREE DIFFERENT PURPOSES.
+          </h2>
+          <p class="lfro-section-desc">
+            Compare license status, MLS permissions, and authorized activities across all three categories to ensure your office operates with the right access.
+          </p>
+
+          <!-- Desktop Matrix Table -->
+          <div class="lfro-table-wrapper">
+            <table class="lfro-matrix-table" aria-label="Role Comparison Matrix">
+              <thead>
+                <tr>
+                  <th scope="col">Operational Role Feature</th>
+                  <th scope="col">LFRO Licensee</th>
+                  <th scope="col">Unlicensed Assistant</th>
+                  <th scope="col">Active Licensee / MLS</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <th scope="row">Primary Purpose</th>
+                  <td class="lfro-td-lfro">Client referrals only</td>
+                  <td class="lfro-td-assistant">Clerical &amp; administrative support</td>
+                  <td class="lfro-td-active">Full real estate brokerage practice</td>
+                </tr>
+                <tr>
+                  <th scope="row">Active Real Estate License</th>
+                  <td class="lfro-td-lfro">Yes (in separate referral entity)</td>
+                  <td class="lfro-td-assistant"><strong>NO</strong> (Must be unlicensed)</td>
+                  <td class="lfro-td-active">Yes (Active with REALTOR® firm)</td>
+                </tr>
+                <tr>
+                  <th scope="row">MLS / Matrix Access</th>
+                  <td class="lfro-td-lfro"><strong>NO ACCESS</strong> (NAR policy)</td>
+                  <td class="lfro-td-assistant">Authorized Administrative Login</td>
+                  <td class="lfro-td-active">Full MLS Subscriber Access</td>
+                </tr>
+                <tr>
+                  <th scope="row">Listing Input &amp; Status Edits</th>
+                  <td class="lfro-td-lfro">Not authorized</td>
+                  <td class="lfro-td-assistant">Authorized (under broker direction)</td>
+                  <td class="lfro-td-active">Authorized (full authority)</td>
+                </tr>
+                <tr>
+                  <th scope="row">Showings &amp; Open Houses</th>
+                  <td class="lfro-td-lfro">Not authorized</td>
+                  <td class="lfro-td-assistant">Staff registration desk only</td>
+                  <td class="lfro-td-active">Authorized</td>
+                </tr>
+                <tr>
+                  <th scope="row">Contract Negotiation</th>
+                  <td class="lfro-td-lfro">Not authorized</td>
+                  <td class="lfro-td-assistant">Not authorized</td>
+                  <td class="lfro-td-active">Authorized</td>
+                </tr>
+                <tr>
+                  <th scope="row">Provide Real Estate Advice</th>
+                  <td class="lfro-td-lfro">Not authorized</td>
+                  <td class="lfro-td-assistant">Not authorized</td>
+                  <td class="lfro-td-active">Authorized</td>
+                </tr>
+                <tr>
+                  <th scope="row">Property Management</th>
+                  <td class="lfro-td-lfro">Not authorized</td>
+                  <td class="lfro-td-assistant">Clerical tracking only</td>
+                  <td class="lfro-td-active">Authorized</td>
+                </tr>
+                <tr>
+                  <th scope="row">Own Credentials Required</th>
+                  <td class="lfro-td-lfro">N/A (No MLS access)</td>
+                  <td class="lfro-td-assistant"><strong>YES</strong> (Unique administrative account)</td>
+                  <td class="lfro-td-active"><strong>YES</strong> (Unique subscriber account)</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <!-- Mobile Stacked Alternative -->
+          <div class="lfro-mobile-matrix">
+            <div class="lfro-role-summary-card">
+              <h3>LFRO Licensee</h3>
+              <ul>
+                <li><strong>Purpose:</strong> Referral-only activity</li>
+                <li><strong>License:</strong> Held in separate entity</li>
+                <li><strong>MLS Access:</strong> None (Ineligible)</li>
+                <li><strong>Brokerage Privileges:</strong> None</li>
+              </ul>
+            </div>
+            <div class="lfro-role-summary-card">
+              <h3>Unlicensed Assistant</h3>
+              <ul>
+                <li><strong>Purpose:</strong> Administrative office support</li>
+                <li><strong>License:</strong> Must NOT hold active license</li>
+                <li><strong>MLS Access:</strong> Own administrative account ($120/yr)</li>
+                <li><strong>Brokerage Privileges:</strong> Clerical only</li>
+              </ul>
+            </div>
+            <div class="lfro-role-summary-card">
+              <h3>Active Licensee / MLS</h3>
+              <ul>
+                <li><strong>Purpose:</strong> Licensed real estate practice</li>
+                <li><strong>License:</strong> Active with REALTOR® firm</li>
+                <li><strong>MLS Access:</strong> Full Matrix subscriber</li>
+                <li><strong>Brokerage Privileges:</strong> Full licensed authority</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           SECTION 9: INTERACTIVE ROLE FINDER
+           ==================================================================== -->
+      <section class="lfro-finder-section" aria-labelledby="lfro-finder-heading">
+        <div class="lfro-container">
+          <div class="lfro-eyebrow lfro-eyebrow--light">Find the Right Path</div>
+          <h2 class="lfro-section-heading lfro-section-heading--light" id="lfro-finder-heading">
+            WHAT DOES THIS PERSON ACTUALLY NEED TO DO?
+          </h2>
+          <p class="lfro-section-desc lfro-section-desc--light">
+            Select the operational statement that reflects the person's true day-to-day responsibilities in your office:
+          </p>
+
+          <div class="lfro-finder-layout">
+            <div class="lfro-finder-options">
+              <div class="lfro-finder-option is-active" id="optFinderA" data-path="lfro" tabindex="0" role="button">
+                <div class="lfro-finder-option__tag">OPERATIONAL NEED A</div>
+                <div class="lfro-finder-option__quote">"I only need them to send referrals."</div>
+              </div>
+
+              <div class="lfro-finder-option" id="optFinderB" data-path="assistant" tabindex="0" role="button">
+                <div class="lfro-finder-option__tag">OPERATIONAL NEED B</div>
+                <div class="lfro-finder-option__quote">"I need them to help with listing administration or office MLS work."</div>
+              </div>
+
+              <div class="lfro-finder-option" id="optFinderC" data-path="active" tabindex="0" role="button">
+                <div class="lfro-finder-option__tag">OPERATIONAL NEED C</div>
+                <div class="lfro-finder-option__quote">"I need them to show property, negotiate, list, sell or provide licensed real estate services."</div>
+              </div>
+            </div>
+
+            <div class="lfro-finder-result" id="finderResultPanel">
+              <div class="lfro-finder-result__badge" id="finderResultBadge">RECOMMENDED STRUCTURE</div>
+              <h3 class="lfro-finder-result__title" id="finderResultTitle">
+                LFRO May Be the Appropriate Structure
+              </h3>
+              <p class="lfro-finder-result__desc" id="finderResultDesc">
+                Review NAR's LFRO requirements and confirm that the licensee will hold their license through a separate referral entity and perform strictly referral activities without MLS access.
+              </p>
+              <a href="https://www.nar.realtor/about-nar/policies/limited-function-referral-office-lfro-policy"
+                target="_blank" rel="noopener" class="lfro-btn lfro-btn--gold" id="btnFinderAction">
+                VIEW LFRO POLICY ↗
+              </a>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           SWFL COASTAL BREAK 3: PRE-FAQ (PARALLAX SLIT WITH WAVY CUTOUTS)
+           ==================================================================== -->
+      <div class="lfro-beach-slit lfro-beach-slit--sunset" role="img" aria-label="Gulf of Mexico Sunset in Southwest Florida">
+        <div class="lfro-wave-cutout lfro-wave-cutout--top" style="color: #0C2342;" aria-hidden="true">
+          <svg viewBox="0 0 1440 64" preserveAspectRatio="none" fill="currentColor">
+            <path d="M0,0 L1440,0 L1440,24 C1260,52 1060,8 880,38 C700,66 500,16 300,46 C160,60 0,26 0,26 Z"></path>
+          </svg>
+        </div>
+
+        <div class="lfro-beach-slit__content">
+          <span class="lfro-beach-slit__tag">CLEAR GUIDANCE &amp; COMPLIANCE</span>
+        </div>
+
+        <div class="lfro-wave-cutout lfro-wave-cutout--bottom" style="color: #FFFFFF;" aria-hidden="true">
+          <svg viewBox="0 0 1440 64" preserveAspectRatio="none" fill="currentColor">
+            <path d="M0,64 L1440,64 L1440,40 C1280,10 1080,56 880,26 C680,-4 480,48 280,18 C150,2 0,38 0,38 Z"></path>
+          </svg>
+        </div>
+      </div>
+
+      <!-- ====================================================================
+           SECTION 10: FAQ (Directly Reuses Winter Waive FAQ Accordion CSS)
+           ==================================================================== -->
+      <section class="lfro-faq-section" id="faq" aria-labelledby="lfro-faq-heading">
+        <div class="lfro-container">
+          <div class="lfro-eyebrow">Common Questions</div>
+          <h2 class="lfro-section-heading" id="lfro-faq-heading">FREQUENTLY ASKED QUESTIONS</h2>
+          <p class="lfro-section-desc">
+            Direct, practical answers to common broker and office manager questions regarding LFRO policies, credentials, and assistant accounts.
+          </p>
+
+          <div class="lfro-faq-list">
+            <div class="lfro-faq-item">
+              <button type="button" class="lfro-faq-question" id="faqTrigger1" aria-expanded="true" aria-controls="faqAnswer1">
+                <span>Can an LFRO licensee access Matrix just to research a property?</span>
+                <span class="lfro-faq-chevron" aria-hidden="true">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M7.41 8.59L12 13.17l4.59-4.58L18 10l-6 6-6-6 1.41-1.41z"/>
+                  </svg>
+                </span>
+              </button>
+              <div class="lfro-faq-answer is-open" id="faqAnswer1" role="region" aria-labelledby="faqTrigger1">
+                No. NAR's LFRO policy specifically states that LFRO licensees do not receive MLS access or credentials. There is no exception for research or casual property searches.
+              </div>
+            </div>
+
+            <div class="lfro-faq-item">
+              <button type="button" class="lfro-faq-question" id="faqTrigger2" aria-expanded="false" aria-controls="faqAnswer2">
+                <span>Can an LFRO licensee list a friend or family member's property?</span>
+                <span class="lfro-faq-chevron" aria-hidden="true">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M7.41 8.59L12 13.17l4.59-4.58L18 10l-6 6-6-6 1.41-1.41z"/>
+                  </svg>
+                </span>
+              </button>
+              <div class="lfro-faq-answer" id="faqAnswer2" role="region" aria-labelledby="faqTrigger2">
+                No exception is created for family transactions under the LFRO waiver. NAR specifically addresses family-member listings: to list or sell property, the licensee must be placed with an active brokerage firm.
+              </div>
+            </div>
+
+            <div class="lfro-faq-item">
+              <button type="button" class="lfro-faq-question" id="faqTrigger3" aria-expanded="false" aria-controls="faqAnswer3">
+                <span>Can an LFRO licensee use the broker's or another agent's MLS login?</span>
+                <span class="lfro-faq-chevron" aria-hidden="true">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M7.41 8.59L12 13.17l4.59-4.58L18 10l-6 6-6-6 1.41-1.41z"/>
+                  </svg>
+                </span>
+              </button>
+              <div class="lfro-faq-answer" id="faqAnswer3" role="region" aria-labelledby="faqTrigger3">
+                No. CCOR requires all authorized MLS users to access the system strictly using their own credentials. Sharing credentials violates Article 3 of the CCOR MLS Rules and carries immediate fines and suspensions.
+              </div>
+            </div>
+
+            <div class="lfro-faq-item">
+              <button type="button" class="lfro-faq-question" id="faqTrigger4" aria-expanded="false" aria-controls="faqAnswer4">
+                <span>Can an LFRO licensee be registered as a CCOR Unlicensed Assistant?</span>
+                <span class="lfro-faq-chevron" aria-hidden="true">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M7.41 8.59L12 13.17l4.59-4.58L18 10l-6 6-6-6 1.41-1.41z"/>
+                  </svg>
+                </span>
+              </button>
+              <div class="lfro-faq-answer" id="faqAnswer4" role="region" aria-labelledby="faqTrigger4">
+                The current CCOR Unlicensed Assistant application specifically requires that the applicant not hold an active real estate license. An individual holding an active referral license does not meet that qualification.
+              </div>
+            </div>
+
+            <div class="lfro-faq-item">
+              <button type="button" class="lfro-faq-question" id="faqTrigger5" aria-expanded="false" aria-controls="faqAnswer5">
+                <span>What if an assistant or licensee's job duties change?</span>
+                <span class="lfro-faq-chevron" aria-hidden="true">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M7.41 8.59L12 13.17l4.59-4.58L18 10l-6 6-6-6 1.41-1.41z"/>
+                  </svg>
+                </span>
+              </button>
+              <div class="lfro-faq-answer" id="faqAnswer5" role="region" aria-labelledby="faqTrigger5">
+                Contact CCOR Member Services before permitting activity outside the person's current access type. Staff can guide your office through the proper membership transition or MLS account change.
+              </div>
+            </div>
+
+            <div class="lfro-faq-item">
+              <button type="button" class="lfro-faq-question" id="faqTrigger6" aria-expanded="false" aria-controls="faqAnswer6">
+                <span>What if one administrative assistant supports multiple agents or offices?</span>
+                <span class="lfro-faq-chevron" aria-hidden="true">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M7.41 8.59L12 13.17l4.59-4.58L18 10l-6 6-6-6 1.41-1.41z"/>
+                  </svg>
+                </span>
+              </button>
+              <div class="lfro-faq-answer" id="faqAnswer6" role="region" aria-labelledby="faqTrigger6">
+                CCOR provides dedicated access structures such as Transaction Coordinator accounts for staff servicing multiple agents across an office. Contact CCOR Member Services for exact setup instructions.
+              </div>
+            </div>
+
+            <div class="lfro-faq-item">
+              <button type="button" class="lfro-faq-question" id="faqTrigger7" aria-expanded="false" aria-controls="faqAnswer7">
+                <span>Does an Unlicensed Assistant account allow the person to show homes?</span>
+                <span class="lfro-faq-chevron" aria-hidden="true">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M7.41 8.59L12 13.17l4.59-4.58L18 10l-6 6-6-6 1.41-1.41z"/>
+                  </svg>
+                </span>
+              </button>
+              <div class="lfro-faq-answer" id="faqAnswer7" role="region" aria-labelledby="faqTrigger7">
+                No. MLS system access does not confer real estate licensing privileges. Under Florida law, showing properties and negotiating transactions remain activities reserved strictly for licensed real estate professionals.
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           SWFL COASTAL BREAK 4: PRE-CTA (PARALLAX SLIT WITH WAVY CUTOUTS)
+           ==================================================================== -->
+      <div class="lfro-beach-slit lfro-beach-slit--water" role="img" aria-label="Pristine Gulf Coast Waters in Southwest Florida">
+        <div class="lfro-wave-cutout lfro-wave-cutout--top" style="color: #FFFFFF;" aria-hidden="true">
+          <svg viewBox="0 0 1440 64" preserveAspectRatio="none" fill="currentColor">
+            <path d="M0,0 L1440,0 L1440,24 C1260,52 1060,8 880,38 C700,66 500,16 300,46 C160,60 0,26 0,26 Z"></path>
+          </svg>
+        </div>
+
+        <div class="lfro-beach-slit__content">
+          <span class="lfro-beach-slit__tag">BROKER EXCELLENCE &bull; COCONUT COAST REALTORS&reg;</span>
+        </div>
+
+        <div class="lfro-wave-cutout lfro-wave-cutout--bottom" style="color: #071B35;" aria-hidden="true">
+          <svg viewBox="0 0 1440 64" preserveAspectRatio="none" fill="currentColor">
+            <path d="M0,64 L1440,64 L1440,40 C1280,10 1080,56 880,26 C680,-4 480,48 280,18 C150,2 0,38 0,38 Z"></path>
+          </svg>
+        </div>
+      </div>
+
+      <!-- ====================================================================
+           SECTION 11: FINAL CTA (Directly Rebuilt from Winter Waive Final CTA)
+           ==================================================================== -->
+      <section class="lfro-final-cta-section" aria-labelledby="lfro-final-heading">
+        <div class="lfro-container">
+          <div class="lfro-final-grid">
+            <div>
+              <div class="lfro-eyebrow lfro-eyebrow--light">Compliance &bull; Clarity &bull; Access</div>
+              <h2 class="lfro-final-heading" id="lfro-final-heading">
+                RIGHT ROLE.<br />
+                <span>RIGHT ACCESS.</span>
+              </h2>
+              <p class="lfro-final-subtext">
+                Set each account up around what the person actually does — referrals, administrative support, or licensed brokerage activity. CCOR is here to help your office configure compliant access seamlessly.
+              </p>
+
+              <div class="lfro-final-actions">
+                <a href="https://bonitaspringsesterorealtorsfl.growthzoneapp.com/ap/Membership/Application/4pVeMvr8"
+                  target="_blank" rel="noopener" class="lfro-btn lfro-btn--gold" id="btnFinalAssistant">
+                  UNLICENSED ASSISTANT APPLICATION ↗
+                </a>
+                <a href="tel:+12399926771" class="lfro-btn lfro-btn--ghost-light" id="btnFinalContact">
+                  CONTACT CCOR
+                </a>
+              </div>
+
+              <div style="font-size: 0.88rem; color: rgba(255, 255, 255, 0.75);">
+                Need policy verification? <a href="https://www.nar.realtor/about-nar/policies/limited-function-referral-office-lfro-policy"
+                  target="_blank" rel="noopener" style="color: var(--lfro-gold-warm); text-decoration: underline;">View NAR LFRO Policy ↗</a>
+              </div>
+            </div>
+
+            <!-- Contact Card (Mirrors WW QR Card Frame) -->
+            <div>
+              <div class="lfro-contact-card">
+                <div class="lfro-contact-card__title">CCOR Member Services</div>
+                <div class="lfro-contact-list">
+                  <div><strong>Direct Line:</strong> <a href="tel:+12399926771">239-992-6771</a></div>
+                  <div><strong>Email:</strong> <a href="mailto:membership@coconutcoastrealtors.org">membership@coconutcoastrealtors.org</a></div>
+                  <div><strong>Headquarters:</strong> 25300 Bernwood Dr, Suite 1, Bonita Springs, FL 34135</div>
+                  <div><strong>Hours:</strong> Mon – Fri, 8:30 AM – 5:00 PM</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           SECTION 12: SOURCES / POLICY REFERENCES
+           ==================================================================== -->
+      <section class="lfro-references-section" aria-labelledby="lfro-ref-heading">
+        <div class="lfro-container">
+          <div class="lfro-eyebrow">Official Source Materials</div>
+          <h2 class="lfro-section-heading" id="lfro-ref-heading" style="font-size: 1.8rem;">
+            POLICY &amp; REGULATORY GUIDANCE REFERENCES
+          </h2>
+
+          <div class="lfro-ref-grid">
+            <div class="lfro-ref-card">
+              <div class="lfro-ref-card__org">National Association of REALTORS®</div>
+              <a href="https://www.nar.realtor/about-nar/policies/limited-function-referral-office-lfro-policy" target="_blank" rel="noopener">
+                <span>NAR LFRO Policy &bull; Model Bylaws</span>
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M14 3v2h3.59l-9.83 9.83 1.41 1.41L19 6.41V10h2V3h-7zM5 5c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2v-6h-2v6H5V7h6V5H5z"/></svg>
+              </a>
+            </div>
+
+            <div class="lfro-ref-card">
+              <div class="lfro-ref-card__org">Coconut Coast REALTORS®</div>
+              <a href="https://coconutcoastrealtors.org/wp-content/uploads/2026/03/2026-MLS-Rules.pdf" target="_blank" rel="noopener">
+                <span>CCOR 2026 MLS Rules &bull; Article 3</span>
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M14 3v2h3.59l-9.83 9.83 1.41 1.41L19 6.41V10h2V3h-7zM5 5c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2v-6h-2v6H5V7h6V5H5z"/></svg>
+              </a>
+            </div>
+
+            <div class="lfro-ref-card">
+              <div class="lfro-ref-card__org">Florida DBPR / FREC</div>
+              <a href="https://www2.myfloridalicense.com/re/documents/1118FREC_PermissibleActivitiesUnlicensedAssistant.pdf" target="_blank" rel="noopener">
+                <span>Permissible Activities Guidance</span>
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M14 3v2h3.59l-9.83 9.83 1.41 1.41L19 6.41V10h2V3h-7zM5 5c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2v-6h-2v6H5V7h6V5H5z"/></svg>
+              </a>
+            </div>
+
+            <div class="lfro-ref-card">
+              <div class="lfro-ref-card__org">CCOR Membership Portal</div>
+              <a href="https://bonitaspringsesterorealtorsfl.growthzoneapp.com/ap/Membership/Application/4pVeMvr8" target="_blank" rel="noopener">
+                <span>Unlicensed Assistant Application</span>
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M14 3v2h3.59l-9.83 9.83 1.41 1.41L19 6.41V10h2V3h-7zM5 5c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2v-6h-2v6H5V7h6V5H5z"/></svg>
+              </a>
+            </div>
+          </div>
+
+          <p class="lfro-disclaimer-text">
+            <strong>Disclaimer:</strong> This page is intended as a general educational resource summarizing association/MLS policy and published Florida regulatory guidance. It is not legal advice. Brokers should consult the applicable source documents and appropriate legal counsel when legal interpretation is required.
+          </p>
+        </div>
+      </section>
+
+    </main>
+  </div>
+
+  <!-- Interactive Logic & Analytics Hooks -->
+  <script>
+    (function () {
+      'use strict';
+
+      // ========================================================================
+      // 1. DATASET: 8 SCENARIOS FOR "CAN THEY DO THAT?"
+      // ========================================================================
+      const SCENARIOS = {
+        'refer-client': {
+          title: 'Refer a client to another licensee',
+          lfro: { verdict: 'YES', type: 'yes', desc: 'Authorized. The core activity permitted under the LFRO waiver is placing referrals with licensed brokerages.' },
+          assistant: { verdict: 'NO', type: 'no', desc: 'Unlicensed assistants cannot solicit clients or earn referral fees requiring a real estate license.' },
+          active: { verdict: 'YES', type: 'yes', desc: 'Active licensees can refer clients and receive referral compensation through their supervising broker.' },
+          calloutLabel: 'Role Match',
+          calloutVal: 'Referral Structure Compliant',
+          ctaText: 'EXPLORE ASSISTANT ACCESS',
+          ctaHref: '#assistant'
+        },
+        'search-matrix': {
+          title: 'Search Matrix / MLS for listings',
+          lfro: { verdict: 'NO ACCESS', type: 'no', desc: 'NAR\'s LFRO policy specifically states that LFRO licensees are ineligible for MLS access or credentials.' },
+          assistant: { verdict: 'YES (WITH ACCOUNT)', type: 'yes', desc: 'Eligible assistants may receive their own unique administrative Matrix credentials under broker sponsorship ($120/yr).' },
+          active: { verdict: 'YES', type: 'yes', desc: 'Active licensees receive direct MLS access subject to subscriber dues and rules.' },
+          calloutLabel: 'Access Solution',
+          calloutVal: 'Assistant Account Required',
+          ctaText: 'APPLY FOR ASSISTANT ACCESS',
+          ctaHref: '#assistant'
+        },
+        'enter-listing': {
+          title: 'Enter or update a listing in MLS',
+          lfro: { verdict: 'NOT AUTHORIZED', type: 'no', desc: 'LFRO licensees do not have MLS access and cannot perform listing activities to any degree under NAR policy.' },
+          assistant: { verdict: 'AUTHORIZED', type: 'yes', desc: 'Authorized assistants can input listing data and changes under the direct supervision of the broker.' },
+          active: { verdict: 'AUTHORIZED', type: 'yes', desc: 'Full authority to enter and maintain listings under broker supervision.' },
+          calloutLabel: 'Operational Fit',
+          calloutVal: 'Administrative Task',
+          ctaText: 'APPLY FOR ASSISTANT ACCESS',
+          ctaHref: '#assistant'
+        },
+        'show-property': {
+          title: 'Show property to prospective buyers',
+          lfro: { verdict: 'NOT AUTHORIZED', type: 'no', desc: 'Engaging in showing real property violates the LFRO referral-only waiver requirement.' },
+          assistant: { verdict: 'NOT AUTHORIZED', type: 'no', desc: 'Under Florida law, showing properties is an activity requiring a real estate license. Assistants cannot conduct showings.' },
+          active: { verdict: 'AUTHORIZED', type: 'yes', desc: 'Fully authorized as part of licensed real estate brokerage activity.' },
+          calloutLabel: 'Licensing Line',
+          calloutVal: 'Requires Active REALTOR®',
+          ctaText: 'CONTACT CCOR ABOUT LICENSING',
+          ctaHref: 'tel:+12399926771'
+        },
+        'negotiate-terms': {
+          title: 'Negotiate price, commissions, or terms',
+          lfro: { verdict: 'NOT AUTHORIZED', type: 'no', desc: 'Counseling or negotiating terms violates the referral-only limitation under NAR policy.' },
+          assistant: { verdict: 'NOT AUTHORIZED', type: 'no', desc: 'Florida statutes prohibit unlicensed assistants from negotiating contract terms or commissions.' },
+          active: { verdict: 'AUTHORIZED', type: 'yes', desc: 'Authorized under supervising broker.' },
+          calloutLabel: 'Licensing Line',
+          calloutVal: 'Requires Active REALTOR®',
+          ctaText: 'CONTACT CCOR ABOUT LICENSING',
+          ctaHref: 'tel:+12399926771'
+        },
+        'gather-info': {
+          title: 'Gather property or CMA information',
+          lfro: { verdict: 'NO MLS ACCESS', type: 'no', desc: 'LFRO licensees cannot use Matrix to pull CMA comps or public tax records.' },
+          assistant: { verdict: 'AUTHORIZED', type: 'yes', desc: 'Assistants can pull comparable data, gather tax cards, and assemble CMA packets for agent review.' },
+          active: { verdict: 'AUTHORIZED', type: 'yes', desc: 'Authorized to pull and interpret CMA market data.' },
+          calloutLabel: 'Support Fit',
+          calloutVal: 'Permissible Clerical Duty',
+          ctaText: 'APPLY FOR ASSISTANT ACCESS',
+          ctaHref: '#assistant'
+        },
+        'schedule-appts': {
+          title: 'Schedule showings, inspections, or closings',
+          lfro: { verdict: 'NOT AUTHORIZED', type: 'no', desc: 'LFRO licensees do not participate in active transaction coordination.' },
+          assistant: { verdict: 'AUTHORIZED', type: 'yes', desc: 'Permissible clerical duty under FREC guidance to coordinate appointments.' },
+          active: { verdict: 'AUTHORIZED', type: 'yes', desc: 'Authorized under supervising broker.' },
+          calloutLabel: 'Support Fit',
+          calloutVal: 'Permissible Clerical Duty',
+          ctaText: 'APPLY FOR ASSISTANT ACCESS',
+          ctaHref: '#assistant'
+        },
+        'share-login': {
+          title: 'Use another person\'s Matrix login',
+          lfro: { verdict: 'STRICTLY PROHIBITED', type: 'warn', desc: 'Violates CCOR MLS Rule 3.4. Carries $500 fine and 30-day suspension on 1st offense.' },
+          assistant: { verdict: 'STRICTLY PROHIBITED', type: 'warn', desc: 'Assistants must receive their own unique credentials ($120/yr). Credential sharing is prohibited.' },
+          active: { verdict: 'STRICTLY PROHIBITED', type: 'warn', desc: 'All subscribers must use their own credentials. Sharing credentials risks account suspension.' },
+          calloutLabel: 'Rule 3.4 Strict Policy',
+          calloutVal: 'Unique Credentials Required',
+          ctaText: 'VIEW CCOR MLS RULES (PDF)',
+          ctaHref: 'https://coconutcoastrealtors.org/wp-content/uploads/2026/03/2026-MLS-Rules.pdf'
+        }
+      };
+
+      // ========================================================================
+      // 2. INTERACTION: SCENARIO SELECTOR (Calculator Style)
+      // ========================================================================
+      const activityRows = document.querySelectorAll('.lfro-activity-row');
+      const scenarioTitleEl = document.getElementById('scenarioActiveTitle');
+      const verdictLfroEl = document.getElementById('verdictLfro');
+      const descLfroEl = document.getElementById('descLfro');
+      const verdictAssistantEl = document.getElementById('verdictAssistant');
+      const descAssistantEl = document.getElementById('descAssistant');
+      const verdictActiveEl = document.getElementById('verdictActive');
+      const descActiveEl = document.getElementById('descActive');
+      const calloutLabelEl = document.getElementById('scenarioCalloutLabel');
+      const calloutValEl = document.getElementById('scenarioCalloutVal');
+      const dynamicCtaEl = document.getElementById('btnScenarioDynamicCta');
+
+      function updateScenario(scenarioId) {
+        const data = SCENARIOS[scenarioId];
+        if (!data) return;
+
+        // Update rows active state
+        activityRows.forEach(row => {
+          const isMatch = row.getAttribute('data-scenario') === scenarioId;
+          row.classList.toggle('is-selected', isMatch);
+          row.setAttribute('aria-selected', isMatch ? 'true' : 'false');
+        });
+
+        // Update right panel
+        scenarioTitleEl.textContent = data.title;
+
+        // Update LFRO
+        verdictLfroEl.textContent = data.lfro.verdict;
+        verdictLfroEl.className = 'lfro-result-verdict lfro-result-verdict--' + data.lfro.type;
+        descLfroEl.textContent = data.lfro.desc;
+
+        // Update Assistant
+        verdictAssistantEl.textContent = data.assistant.verdict;
+        verdictAssistantEl.className = 'lfro-result-verdict lfro-result-verdict--' + data.assistant.type;
+        descAssistantEl.textContent = data.assistant.desc;
+
+        // Update Active
+        verdictActiveEl.textContent = data.active.verdict;
+        verdictActiveEl.className = 'lfro-result-verdict lfro-result-verdict--' + data.active.type;
+        descActiveEl.textContent = data.active.desc;
+
+        // Update Callout & CTA
+        calloutLabelEl.textContent = data.calloutLabel;
+        calloutValEl.textContent = data.calloutVal;
+        dynamicCtaEl.textContent = data.ctaText;
+        dynamicCtaEl.setAttribute('href', data.ctaHref);
+
+        // Analytics hook
+        if (window.dataLayer) {
+          window.dataLayer.push({
+            event: 'lfro_scenario_select',
+            scenario_id: scenarioId
+          });
+        }
+      }
+
+      activityRows.forEach(row => {
+        row.addEventListener('click', function () {
+          const scenarioId = this.getAttribute('data-scenario');
+          updateScenario(scenarioId);
+        });
+        row.addEventListener('keydown', function (e) {
+          if (e.key === 'Enter' || e.key === ' ') {
+            e.preventDefault();
+            this.click();
+          }
+        });
+      });
+
+      // ========================================================================
+      // 3. INTERACTION: ACCORDIONS (FREC & FAQ)
+      // ========================================================================
+      function setupAccordion(triggerSelector, bodySelector) {
+        const triggers = document.querySelectorAll(triggerSelector);
+        triggers.forEach(trigger => {
+          trigger.addEventListener('click', function () {
+            const isExpanded = this.getAttribute('aria-expanded') === 'true';
+            const targetId = this.getAttribute('aria-controls');
+            const targetBody = document.getElementById(targetId);
+
+            this.setAttribute('aria-expanded', isExpanded ? 'false' : 'true');
+            if (targetBody) {
+              targetBody.classList.toggle('is-open', !isExpanded);
+            }
+          });
+        });
+      }
+
+      setupAccordion('.lfro-accordion-trigger', '.lfro-accordion-body');
+      setupAccordion('.lfro-faq-question', '.lfro-faq-answer');
+
+      // ========================================================================
+      // 4. INTERACTION: ROLE FINDER
+      // ========================================================================
+      const finderOptions = document.querySelectorAll('.lfro-finder-option');
+      const finderResultTitle = document.getElementById('finderResultTitle');
+      const finderResultDesc = document.getElementById('finderResultDesc');
+      const finderActionBtn = document.getElementById('btnFinderAction');
+
+      const FINDER_DATA = {
+        lfro: {
+          title: 'LFRO May Be the Appropriate Structure',
+          desc: 'Review NAR\'s LFRO requirements and confirm that the licensee will hold their license through a separate referral entity and perform strictly referral activities without MLS access.',
+          btnText: 'VIEW LFRO POLICY ↗',
+          btnHref: 'https://www.nar.realtor/about-nar/policies/limited-function-referral-office-lfro-policy',
+          event: 'lfro_role_finder_lfro'
+        },
+        assistant: {
+          title: 'Unlicensed Assistant Account Is the Better Fit',
+          desc: 'Eligible administrative staff who do not hold an active real estate license can receive an authorized CCOR administrative Matrix account ($120/year) under broker sponsorship.',
+          btnText: 'VIEW ASSISTANT APPLICATION ↗',
+          btnHref: 'https://bonitaspringsesterorealtorsfl.growthzoneapp.com/ap/Membership/Application/4pVeMvr8',
+          event: 'lfro_role_finder_assistant'
+        },
+        active: {
+          title: 'Requires Active REALTOR® Subscriber Status',
+          desc: 'Showing property, negotiating terms, and listing property are licensed brokerage services. This role requires full active licensee membership and individual MLS participation.',
+          btnText: 'CONTACT CCOR MEMBER SERVICES',
+          btnHref: 'tel:+12399926771',
+          event: 'lfro_role_finder_active'
+        }
+      };
+
+      finderOptions.forEach(opt => {
+        opt.addEventListener('click', function () {
+          finderOptions.forEach(o => o.classList.remove('is-active'));
+          this.classList.add('is-active');
+
+          const path = this.getAttribute('data-path');
+          const item = FINDER_DATA[path];
+          if (!item) return;
+
+          finderResultTitle.textContent = item.title;
+          finderResultDesc.textContent = item.desc;
+          finderActionBtn.textContent = item.btnText;
+          finderActionBtn.setAttribute('href', item.btnHref);
+
+          if (window.dataLayer) {
+            window.dataLayer.push({ event: item.event });
+          }
+        });
+
+        opt.addEventListener('keydown', function (e) {
+          if (e.key === 'Enter' || e.key === ' ') {
+            e.preventDefault();
+            this.click();
+          }
+        });
+      });
+
+      // ========================================================================
+      // 5. ANALYTICS DISPATCH HOOKS
+      // ========================================================================
+      function trackClick(elementId, eventName) {
+        const el = document.getElementById(elementId);
+        if (el) {
+          el.addEventListener('click', function () {
+            if (window.dataLayer) {
+              window.dataLayer.push({ event: eventName });
+            }
+          });
+        }
+      }
+
+      trackClick('heroCtaSavings', 'lfro_hero_check_rules');
+      trackClick('linkNarPolicySummary', 'lfro_nar_policy_click');
+      trackClick('btnNarFullPolicy', 'lfro_nar_policy_click');
+      trackClick('btnMlsRulesSecurity', 'lfro_mls_rules_click');
+      trackClick('btnApplyAssistant', 'lfro_assistant_application_click');
+      trackClick('btnFinalAssistant', 'lfro_assistant_application_click');
+      trackClick('btnFrecGuidancePdf', 'lfro_frec_guidance_click');
+      trackClick('btnContactTc', 'lfro_contact_click');
+      trackClick('btnFinalContact', 'lfro_contact_click');
+
+    })();
+  </script>
+</body>
+
+</html>

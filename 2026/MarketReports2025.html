@@ -900,6 +900,18 @@
     const REPORTS = [
       /* ===== 2026 ===== */
       {
+        year: 2026, month: "August",
+        fastStats: "https://coconutcoastrealtors.org/wp-content/uploads/2026/09/BER_Fast_Stats-2.pdf",
+        frStats: "https://coconutcoastrealtors.org/wp-content/uploads/2026/09/August-2026-FR-Stats.pdf",
+        indicators: "https://coconutcoastrealtors.org/wp-content/uploads/2026/09/BER_Monthly_Indicators-3.pdf",
+        thumb: "https://coconutcoastrealtors.org/wp-content/uploads/2026/09/Bonita-August-2026.png",
+        thumbs: [
+          "https://coconutcoastrealtors.org/wp-content/uploads/2026/09/Bonita-August-2026.png",
+          "https://coconutcoastrealtors.org/wp-content/uploads/2026/09/Fort-August-2026.png",
+          "https://coconutcoastrealtors.org/wp-content/uploads/2026/09/Naples-August-2026.png"
+        ]
+      },
+      {
         year: 2026, month: "July",
         fastStats: "https://coconutcoastrealtors.org/wp-content/uploads/2026/08/BER_Fast_Stats-10.pdf",
         frStats: "https://coconutcoastrealtors.org/wp-content/uploads/2026/08/July-2026-fr-stats.pdf",
@@ -1156,6 +1168,12 @@
 
     // ---- Curated video list made GLOBAL so the rail can see it ----
     window.VIDEOS = [
+      { title: "August 2026 Bonita + Estero Stats", url: "https://youtu.be/DxznykIfbWY" },
+      { title: "August 2026 Naples + Fort Myers Stats", url: "https://youtu.be/kb2kwUB-sZE" },
+      { title: "July 2026 Bonita + Estero Stats", url: "https://youtu.be/gyhiXI0h5eE" },
+      { title: "July 2026 Naples + Fort Myers Stats", url: "https://youtu.be/i_mXs6ewn_g" },
+      { title: "June 2026 Bonita + Estero Stats", url: "https://youtu.be/Dk_0ECG3H4Q" },
+      { title: "June 2026 Naples + Fort Myers Stats", url: "https://youtu.be/eSTixk0gL5E" },
       { title: "May 2026 Bonita + Estero Stats", url: "https://youtu.be/2-M6-Jahqe8" },
       { title: "May 2026 Naples + Fort Myers Stats", url: "https://youtu.be/3mSC9o3kvZI" },
       { title: "April 2026 Bonita + Estero Stats", url: "https://www.youtube.com/watch?v=DJpMFu0i05M" },
@@ -1566,6 +1584,54 @@
     // ---- Mock AI Chatbot Logic ----
     // Data mapping for specific month interactions
     const AI_DATA = {
+      "2026-august-q1": `Based on the August 2026 market data across Southwest Florida (Lee, Collier, and Hendry Counties / Bonita Springs-Estero, Naples, Fort Myers), buyer momentum continued steadily with **Pending Sales rising 12.0%** and **Closed Sales up 2.3%** Year-over-Year. Persistent buyer absorption drove total **Active Inventory down 12.2%** to 21,577 units.
+
+KEY METRICS OVERVIEW (ALL PROPERTIES):
+* Median Sale Price: $347,325 (Up 3.1% YoY).
+* Closed Sales: 2,746 units (Up 2.3% YoY).
+* Pending Sales: 3,032 units (Up 12.0% YoY).
+* New Listings: 4,485 units (Down 1.0% YoY).
+* Active Inventory: 21,577 units (Down 12.2% YoY).
+* Months Supply: 10 Months (Down from 11 Months).
+* Median Days on Market: 66 days (Down 8.8%).
+
+CLOSED SALES (YoY):
+[BAR: August 2025|2,685|98%, August 2026|2,746|100%]
+
+PENDING SALES GROWTH:
+[BAR: August 2025|2,706|89%, August 2026|3,032|100%]`,
+
+      "2026-august-q2": `PRICING & INVENTORY DYNAMICS:
+The overall median sales price climbed **3.1% to $347,325** ($430,000 for Single-Family Homes, up 3.6%, and $522,500 in Bonita Springs-Estero, up 6%). Inventory continues to contract across the region, with **New Listings dipping 1.0%** and total **Active Inventory falling 12.2%** Year-over-Year to 21,577 units.
+
+INVENTORY & SALES FLOW (AUGUST 2026):
+[BAR: New Listings|4,485|100%, Pending Sales|3,032|68%]
+
+MONTHS SUPPLY TRAJECTORY:
+[BAR: August 2025|11 Mos|100%, August 2026|10 Mos|91%]
+
+With 3,032 pending contracts signed and closed sales running ahead of last year, available supply has decreased to 10 months regionally (and as low as 4.2 to 5 months in high-demand Single-Family segments). Properties that sold moved faster, with median days on market declining to 66 days.`,
+
+      "2026-august-q3": `Comparing August 2026 to August 2025 demonstrates steady late-summer demand and tightening inventory across Southwest Florida. The 12.0% increase in pending sales (3,032 vs 2,706) and 2.3% increase in closed sales (2,746 vs 2,685) outpaced the slight 1.0% decline in new listings.
+
+PENDING SALES COMPARISON (YoY):
+[BAR: August 2025 Pending|2,706|89%, August 2026 Pending|3,032|100%]
+
+ACTIVE INVENTORY LEVEL (YoY):
+[BAR: August 2025 Active|24,573|100%, August 2026 Active|21,577|88%]
+
+Total regional inventory dropped by nearly 3,000 listings compared to last August. Concurrently, submarket data shows strong local pending demand—notably in Fort Myers (+30% pending) and Naples (+14% pending)—while homes spent 8.8% fewer days on market (66 vs 72 days).`,
+
+      "2026-august-fr": `The August 2026 Florida Realtors and Monthly Indicators reports highlight clear distinctions between Single-Family Homes and Condos/Townhomes. Single-Family Homes posted a regional median price of **$430,000 (+3.6% YoY)** with pending sales up 10.8% and supply tightening to 5.0 months (-17.9%). The Condo/Townhome sector experienced a sharp **20.6% surge in pending sales** (739 contracts) with a stable median price of **$334,000 (-0.1% YoY)**.
+
+SFH vs. CONDO MEDIAN PRICES (AUGUST 2026):
+[BAR: SFH Price|$430K|100%, Condo Price|$334K|78%]
+
+MONTHS SUPPLY OF INVENTORY (AUGUST 2026):
+[BAR: SFH Supply|5.0 Mos|63%, Condo Supply|8.0 Mos|100%]
+
+Active inventory contracted across both categories: Single-Family inventory fell 15.8% to 8,745 listings, while Condo inventory dropped 17.0% to 5,056 listings. Condos also saw median days on market plunge 21.6% down to 87 days, reflecting accelerating demand for maintenance-free living.`,
+
       "2026-july-q1": `Based on the July 2026 market data across Southwest Florida (Bonita Springs-Estero / Lee, Collier, Hendry), buyer demand accelerated significantly with **Pending Sales surging 39.3%** and **Closed Sales rising 7.2%** Year-over-Year. Strong buyer absorption drove total **Active Inventory down 17.3%** to 22,406 units.
 
 KEY METRICS OVERVIEW (ALL PROPERTIES):
