@@ -2492,72 +2492,102 @@
         // Helper: identify third-party webinars & partner classes to deprioritize behind CCOR's own classes and events
         const isDeprioritizedClass = (name) => {
           if (!name) return false;
-          return /rpr|realtor\.com|form simplicity|webinar/i.test(name);
+          return /rpr|realtor\.com|form simplicity|webinar|affordable housing/i.test(name);
         };
 
-        for (const e of results) {
-          if (new Date(e.StartDate) >= now) {
-            let isCanceled = e.Name && (
-              e.Name.toLowerCase().trim().startsWith('** canceled **') ||
-              e.Name.toLowerCase().trim().startsWith('** cancelled **') ||
-              e.Name.toLowerCase().trim().startsWith('**canceled**') ||
-              e.Name.toLowerCase().trim().startsWith('**cancelled**')
-            );
-            if (isCanceled) continue;
+        // Normalize event title for deduplicating recurring class series
+        const normalizeEventTitle = (name) => {
+          if (!name) return "";
+          return name
+            .toLowerCase()
+            .replace(/\s*–\s*online/gi, '')
+            .replace(/\s*-\s*online/gi, '')
+            .replace(/\s+/g, ' ')
+            .trim();
+        };
 
-            let isExcluded = e.Name && (
-              e.Name.toLowerCase().includes('forewarn') ||
-              e.Name.toLowerCase().includes('cubicas') ||
-              e.Name.toLowerCase().includes('cubicasa') ||
-              /room rental|room block/i.test(e.Name)
-            );
-            if (isExcluded) continue;
+        const seenEventTitles = new Set();
 
-            let flyerURL = e.EnrichedFlyerUrl || e.EventLogoUrl || "";
-            if (!flyerURL && e.Description) {
-              const match = e.Description.match(/<img[^>]+src=["']([^"']+)["']/i);
-              if (match) flyerURL = match[1];
-            }
+        // Sort upcoming events chronologically ascending so the earliest session is evaluated first
+        const validUpcoming = results
+          .filter(e => e.StartDate && new Date(e.StartDate) >= now)
+          .sort((a, b) => new Date(a.StartDate) - new Date(b.StartDate));
 
-            if (e.Name && e.Name.toLowerCase().includes("installation") && e.Name.toLowerCase().includes("breakfast")) {
-              flyerURL = "https://coconutcoastrealtors.org/wp-content/uploads/2026/09/70db7809-a867-4aaf-8feb-909638d3a614.png";
-            }
+        for (const e of validUpcoming) {
+          let isCanceled = e.Name && (
+            e.Name.toLowerCase().trim().startsWith('** canceled **') ||
+            e.Name.toLowerCase().trim().startsWith('** cancelled **') ||
+            e.Name.toLowerCase().trim().startsWith('**canceled**') ||
+            e.Name.toLowerCase().trim().startsWith('**cancelled**')
+          );
+          if (isCanceled) continue;
 
-            let hasFlyer = (flyerURL && !flyerURL.includes('default') && !flyerURL.includes('placeholder') && !flyerURL.includes('BER-Logo') && !flyerURL.toLowerCase().includes('ccor-horz'));
+          let isExcluded = e.Name && (
+            e.Name.toLowerCase().includes('forewarn') ||
+            e.Name.toLowerCase().includes('cubicas') ||
+            e.Name.toLowerCase().includes('cubicasa') ||
+            /room rental|room block/i.test(e.Name)
+          );
+          if (isExcluded) continue;
 
-            let eventObj = {
-              title: e.Name || "Event",
-              description: new Date(e.StartDate).toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric', hour: 'numeric', minute: '2-digit' }),
-              image: flyerURL,
-              link: e.PublicUrl || `https://coconutcoastrealtors.growthzoneapp.com/ap/Events/Register/${e.EventId}`,
-              tag: "Event",
-              hasFlyer: hasFlyer,
-              isTextOnly: !hasFlyer,
-              dateObj: e.StartDate,
-              rawDesc: e.Description ? e.Description.replace(/<br\s*[\/]?>/gi, ' ').replace(/<\/p>/gi, ' ').replace(/<[^>]*>?/gm, '').replace(/\s+/g, ' ').trim().substring(0, 120) + '...' : ''
-            };
+          // Deduplicate recurring classes with identical titles (keep earliest upcoming session)
+          const normTitle = normalizeEventTitle(e.Name);
+          if (seenEventTitles.has(normTitle)) {
+            continue;
+          }
+          seenEventTitles.add(normTitle);
 
-            if (e.Name && e.Name.toLowerCase().includes("installation") && e.Name.toLowerCase().includes("breakfast")) {
-              eventObj.format = "landscape";
-              eventObj.fullBleed = true;
-            }
+          let flyerURL = e.EnrichedFlyerUrl || e.EventLogoUrl || "";
+          if (!flyerURL && e.Description) {
+            const match = e.Description.match(/<img[^>]+src=["']([^"']+)["']/i);
+            if (match) flyerURL = match[1];
+          }
 
-            let pinIndex = e.Name ? pinnedApiEventNames.findIndex(name => name.toLowerCase() === e.Name.toLowerCase()) : -1;
+          if (e.Name && e.Name.toLowerCase().includes("installation") && e.Name.toLowerCase().includes("breakfast")) {
+            flyerURL = "https://coconutcoastrealtors.org/wp-content/uploads/2026/09/70db7809-a867-4aaf-8feb-909638d3a614.png";
+          }
 
-            if (pinIndex !== -1) {
-              pinnedEvents[pinIndex] = eventObj;
-            } else if (hasFlyer) {
-              if (isDeprioritizedClass(e.Name)) {
-                partnerVisualEvents.push(eventObj);
-              } else {
-                ownVisualEvents.push(eventObj);
-              }
+          let hasFlyer = Boolean(
+            flyerURL &&
+            !flyerURL.includes('default') &&
+            !flyerURL.includes('placeholder') &&
+            !flyerURL.includes('BER-Logo') &&
+            !flyerURL.toLowerCase().includes('ccor-horz') &&
+            !flyerURL.toLowerCase().includes('constantcontact')
+          );
+
+          let eventObj = {
+            title: e.Name || "Event",
+            description: new Date(e.StartDate).toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric', hour: 'numeric', minute: '2-digit' }),
+            image: flyerURL,
+            link: e.PublicUrl || `https://coconutcoastrealtors.growthzoneapp.com/ap/Events/Register/${e.EventId}`,
+            tag: "Event",
+            hasFlyer: hasFlyer,
+            isTextOnly: !hasFlyer,
+            dateObj: e.StartDate,
+            rawDesc: e.Description ? e.Description.replace(/<br\s*[\/]?>/gi, ' ').replace(/<\/p>/gi, ' ').replace(/<[^>]*>?/gm, '').replace(/\s+/g, ' ').trim().substring(0, 120) + '...' : ''
+          };
+
+          if (e.Name && e.Name.toLowerCase().includes("installation") && e.Name.toLowerCase().includes("breakfast")) {
+            eventObj.format = "landscape";
+            eventObj.fullBleed = true;
+          }
+
+          let pinIndex = e.Name ? pinnedApiEventNames.findIndex(name => name.toLowerCase() === e.Name.toLowerCase()) : -1;
+
+          if (pinIndex !== -1) {
+            pinnedEvents[pinIndex] = eventObj;
+          } else if (hasFlyer) {
+            if (isDeprioritizedClass(e.Name)) {
+              partnerVisualEvents.push(eventObj);
             } else {
-              if (isDeprioritizedClass(e.Name)) {
-                partnerTextEvents.push(eventObj);
-              } else {
-                ownTextEvents.push(eventObj);
-              }
+              ownVisualEvents.push(eventObj);
+            }
+          } else {
+            if (isDeprioritizedClass(e.Name)) {
+              partnerTextEvents.push(eventObj);
+            } else {
+              ownTextEvents.push(eventObj);
             }
           }
         }
