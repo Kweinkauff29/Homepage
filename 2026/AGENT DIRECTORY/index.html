@@ -1308,6 +1308,36 @@
                 return [];
             }
 
+            async function fetchRealtorContactIds() {
+                try {
+                    const RTIDS = [10137, 10138, 10139, 10140, 10165, 34117];
+                    const ids = new Set();
+                    if (!apiKey) return ids;
+                    const promises = RTIDS.map(typeId =>
+                        fetch(`${MEMBERSHIPS_BASE_URL}?$skip=0&$top=2000`, {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                                'Authorization': 'ApiKey ' + apiKey
+                            },
+                            body: JSON.stringify({ MembershipTypeId: typeId })
+                        })
+                        .then(r => r.ok ? r.json() : {})
+                        .then(d => (d.Results || d.items || []).forEach(item => {
+                            const status = String(item.Status || item.MembershipStatusName || '').toLowerCase();
+                            const cid = item.ContactId || item.MemberContactId;
+                            if (cid && (!status || status === 'active')) ids.add(cid);
+                        }))
+                        .catch(() => {})
+                    );
+                    await Promise.all(promises);
+                    return ids;
+                } catch (e) {
+                    console.warn('fetchRealtorContactIds error', e);
+                    return new Set();
+                }
+            }
+
             /**
              * Fetch ALL active REALTOR® contacts instantly from Cloudflare D1 database cache
              * (synced every 30 minutes in the background), with automatic GrowthZone fallback.
@@ -1924,7 +1954,7 @@
                 <div class="card-header">
                     ${avatarHtml}
                     <div class="info">
-                        <h3 class="agent-name">${contact.FirstName || ''} ${contact.LastName || contact.Name}</h3>
+                        <h3 class="agent-name">${contact.Name || `${contact.FirstName || ''} ${contact.LastName || ''}`.trim()}</h3>
                         <div class="agent-office" title="${companyName}">${companyName}</div>
                     </div>
                 </div>
