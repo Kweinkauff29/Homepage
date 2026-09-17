@@ -73,10 +73,11 @@
     }
 
     /* Reset & Page Wrapper */
-    *, *::before, *::after {
+    #ccor-lfro,
+    #ccor-lfro *,
+    #ccor-lfro *::before,
+    #ccor-lfro *::after {
       box-sizing: border-box;
-      margin: 0;
-      padding: 0;
     }
 
     html {
@@ -274,92 +275,196 @@
     }
 
     /* Top Brand Navigation Header - Sticky with Glassmorphism */
-    .lfro-header-bar {
+    #ccor-lfro .lfro-header-bar {
       position: sticky;
       top: 0;
       z-index: 1000;
-      background-color: rgba(7, 27, 53, 0.95);
+      background-color: rgba(7, 27, 53, 0.96) !important;
       backdrop-filter: blur(12px);
       -webkit-backdrop-filter: blur(12px);
       border-bottom: 1px solid rgba(255, 255, 255, 0.12);
       box-shadow: 0 4px 20px rgba(0, 0, 0, 0.28);
-      padding: 12px 0;
+      padding: 10px 0 !important;
+      width: 100% !important;
+      box-sizing: border-box !important;
       transition: all 0.25s ease;
+    }
+
+    /* WP Admin bar offset if logged in */
+    body.admin-bar #ccor-lfro .lfro-header-bar {
+      top: 32px;
+    }
+    @media (max-width: 782px) {
+      body.admin-bar #ccor-lfro .lfro-header-bar {
+        top: 46px;
+      }
     }
 
     /* Ensure anchor links scroll cleanly below sticky header */
     section[id],
     div[id] {
-      scroll-margin-top: 75px;
+      scroll-margin-top: 85px;
     }
 
-    @media (max-width: 480px) {
-      .lfro-header-bar {
-        padding: 9px 0;
+    #ccor-lfro .lfro-header-bar__inner {
+      display: flex !important;
+      align-items: center !important;
+      justify-content: space-between !important;
+      gap: 16px !important;
+      width: 100% !important;
+      flex-wrap: nowrap !important;
+      box-sizing: border-box !important;
+    }
+
+    #ccor-lfro .lfro-brand-badge {
+      display: flex !important;
+      align-items: center !important;
+      gap: 12px !important;
+      flex-shrink: 0 !important;
+      min-width: 0 !important;
+      text-decoration: none !important;
+    }
+
+    #ccor-lfro .lfro-brand-badge__logo,
+    .lfro-header-bar img.lfro-brand-badge__logo,
+    header.lfro-header-bar img.lfro-brand-badge__logo {
+      height: 38px !important;
+      max-height: 38px !important;
+      min-height: 38px !important;
+      width: 38px !important;
+      max-width: 38px !important;
+      min-width: 38px !important;
+      object-fit: contain !important;
+      flex-shrink: 0 !important;
+      display: block !important;
+      margin: 0 !important;
+      padding: 0 !important;
+      border: 0 !important;
+      box-shadow: none !important;
+      border-radius: 0 !important;
+    }
+
+    #ccor-lfro .lfro-brand-badge__text {
+      font-family: var(--lfro-font-sans) !important;
+      font-size: 0.82rem !important;
+      font-weight: 700 !important;
+      letter-spacing: 0.04em !important;
+      text-transform: uppercase !important;
+      color: #FFFFFF !important;
+      line-height: 1.2 !important;
+      white-space: nowrap !important;
+      flex-shrink: 0 !important;
+    }
+
+    #ccor-lfro .lfro-brand-badge__text span {
+      display: block !important;
+      font-size: 0.68rem !important;
+      font-weight: 500 !important;
+      color: var(--lfro-gold-warm) !important;
+      letter-spacing: 0.10em !important;
+      text-transform: uppercase !important;
+    }
+
+    #ccor-lfro .lfro-header-nav {
+      display: flex !important;
+      align-items: center !important;
+      gap: 18px !important;
+      font-size: 0.82rem !important;
+      font-weight: 600 !important;
+      color: rgba(255, 255, 255, 0.88) !important;
+      flex-shrink: 0 !important;
+      white-space: nowrap !important;
+      margin-left: auto !important;
+    }
+
+    #ccor-lfro .lfro-header-nav a {
+      color: rgba(255, 255, 255, 0.88) !important;
+      text-decoration: none !important;
+      white-space: nowrap !important;
+      flex-shrink: 0 !important;
+      transition: color 0.2s ease, opacity 0.2s ease !important;
+      line-height: 1 !important;
+      padding: 4px 0 !important;
+    }
+
+    #ccor-lfro .lfro-header-nav a:hover {
+      color: var(--lfro-gold-warm) !important;
+    }
+
+    #ccor-lfro .lfro-header-nav a.lfro-nav-tel {
+      color: var(--lfro-gold-warm) !important;
+      font-weight: 700 !important;
+      padding: 6px 14px !important;
+      border: 1px solid rgba(226, 188, 126, 0.4) !important;
+      border-radius: var(--lfro-radius-pill) !important;
+      background: rgba(226, 188, 126, 0.08) !important;
+    }
+
+    #ccor-lfro .lfro-header-nav a.lfro-nav-tel:hover {
+      background: var(--lfro-gold-warm) !important;
+      color: var(--lfro-navy-deep) !important;
+      border-color: var(--lfro-gold-warm) !important;
+    }
+
+    /* Responsive header layouts */
+    #ccor-lfro .lfro-brand-compact {
+      display: none !important;
+    }
+
+    @media (max-width: 1140px) {
+      #ccor-lfro .lfro-header-nav {
+        gap: 12px !important;
+        font-size: 0.78rem !important;
       }
-      .lfro-brand-badge__logo {
-        height: 28px;
-      }
-      .lfro-brand-badge__text {
-        font-size: 0.72rem;
-      }
-      .lfro-brand-badge__text span {
-        font-size: 0.62rem;
+      #ccor-lfro .lfro-brand-badge__text {
+        font-size: 0.76rem !important;
       }
     }
 
-    .lfro-header-bar__inner {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 20px;
+    @media (max-width: 992px) {
+      #ccor-lfro .lfro-brand-sub {
+        display: none !important;
+      }
+      #ccor-lfro .lfro-header-nav a:not(.lfro-nav-tel):not([href="#scenarios"]):not([href="#assistant"]) {
+        display: none !important;
+      }
     }
 
-    .lfro-brand-badge {
-      display: flex;
-      align-items: center;
-      gap: 14px;
+    @media (max-width: 680px) {
+      #ccor-lfro .lfro-header-bar {
+        padding: 8px 0 !important;
+      }
+      #ccor-lfro .lfro-brand-badge__logo,
+      .lfro-header-bar img.lfro-brand-badge__logo,
+      header.lfro-header-bar img.lfro-brand-badge__logo {
+        height: 28px !important;
+        max-height: 28px !important;
+        min-height: 28px !important;
+        width: 28px !important;
+        max-width: 28px !important;
+        min-width: 28px !important;
+      }
+      #ccor-lfro .lfro-brand-full {
+        display: none !important;
+      }
+      #ccor-lfro .lfro-brand-compact {
+        display: inline !important;
+      }
+      #ccor-lfro .lfro-brand-badge__text {
+        font-size: 0.74rem !important;
+      }
+      #ccor-lfro .lfro-header-nav a:not(.lfro-nav-tel) {
+        display: none !important;
+      }
+      #ccor-lfro .lfro-header-nav a.lfro-nav-tel {
+        padding: 4px 10px !important;
+        font-size: 0.72rem !important;
+      }
     }
 
-    .lfro-brand-badge__logo {
-      height: 38px;
-      width: auto;
-      object-fit: contain;
-    }
-
-    .lfro-brand-badge__text {
-      font-size: 0.84rem;
-      font-weight: 700;
-      letter-spacing: 0.04em;
-      text-transform: uppercase;
-      color: #FFFFFF;
-      line-height: 1.25;
-    }
-
-    .lfro-brand-badge__text span {
-      display: block;
-      font-size: 0.72rem;
-      font-weight: 500;
-      color: var(--lfro-gold-warm);
-      letter-spacing: 0.12em;
-    }
-
-    .lfro-header-nav {
-      display: flex;
-      align-items: center;
-      gap: 22px;
-      font-size: 0.84rem;
-      font-weight: 600;
-      color: rgba(255, 255, 255, 0.85);
-    }
-
-    .lfro-header-nav a:hover {
-      color: var(--lfro-gold-warm);
-    }
-
-    @media (max-width: 860px) {
-      .lfro-header-nav {
-        display: none;
+    @media (max-width: 380px) {
+      #ccor-lfro .lfro-brand-badge__text {
+        display: none !important;
       }
     }
 
@@ -2051,10 +2156,15 @@
         <div class="lfro-header-bar__inner">
           <div class="lfro-brand-badge">
             <img src="https://coconutcoastrealtors.org/wp-content/uploads/2026/04/CCOR-Vert-Logo-no-tag-clr-scaled-e1776958694707.png"
-              alt="Coconut Coast Organization of REALTORS® Logo" class="lfro-brand-badge__logo" width="120" height="38" />
+              alt="Coconut Coast Organization of REALTORS® Logo"
+              class="lfro-brand-badge__logo"
+              width="38"
+              height="38"
+              style="height: 38px !important; max-height: 38px !important; min-height: 38px !important; width: 38px !important; max-width: 38px !important; min-width: 38px !important; object-fit: contain !important; flex-shrink: 0 !important; display: block !important; margin: 0 !important; padding: 0 !important; border: 0 !important;" />
             <div class="lfro-brand-badge__text">
-              Coconut Coast Organization of REALTORS®
-              <span>Broker Operations &amp; Compliance Center</span>
+              <span class="lfro-brand-full">Coconut Coast Organization of REALTORS®</span>
+              <span class="lfro-brand-compact">Coconut Coast REALTORS®</span>
+              <span class="lfro-brand-sub">Broker Operations &amp; Compliance Center</span>
             </div>
           </div>
           <nav class="lfro-header-nav" aria-label="Page navigation">
@@ -2063,7 +2173,7 @@
             <a href="#assistant">Assistant Access</a>
             <a href="#comparison">Role Matrix</a>
             <a href="#faq">FAQ</a>
-            <a href="tel:+12399926771" style="color: var(--lfro-gold-warm);">239-992-6771</a>
+            <a href="tel:+12399926771" class="lfro-nav-tel">239-992-6771</a>
           </nav>
         </div>
       </div>
