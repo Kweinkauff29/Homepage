@@ -1,0 +1,1296 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BER Video Library | Bonita Springs-Estero REALTORS®</title>
+    <meta name="description"
+        content="Watch Tech Tip Tuesday and What to Know Wednesday shorts from Bonita Springs-Estero REALTORS®">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --brand-primary: #03AAE1;
+            --brand-secondary: #0CA7A4;
+            --brand-accent: #7EF0F0;
+            --brand-dark: #006b86;
+            --ink: #0f172a;
+            --muted: #64748b;
+            --surface: #f7fbff;
+            --line: #e5e7eb;
+            --radius: 16px;
+            --shadow-sm: 0 2px 8px rgba(2, 8, 20, 0.06);
+            --shadow-md: 0 8px 24px rgba(2, 8, 20, 0.08);
+            --shadow-lg: 0 18px 48px rgba(2, 8, 20, 0.12);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', system-ui, -apple-system, sans-serif;
+            background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 50%, #f0fdfa 100%);
+            min-height: 100vh;
+            color: var(--ink);
+        }
+
+        /* Header */
+        .header {
+            background: linear-gradient(120deg, #7EF0F0 0%, #03AAE1 18%, #0CA7A4 48%, #006b86 78%, #7EF0F0 100%);
+            background-size: 400% 100%;
+            animation: ribbonFlow 10s ease-in-out infinite alternate;
+            padding: 48px 24px 56px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        @keyframes ribbonFlow {
+            0% {
+                background-position: 0% 50%;
+            }
+
+            100% {
+                background-position: 100% 50%;
+            }
+        }
+
+        .header::before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(circle at 30% 20%, rgba(255, 255, 255, 0.2) 0%, transparent 50%),
+                radial-gradient(circle at 70% 80%, rgba(255, 255, 255, 0.1) 0%, transparent 40%);
+            pointer-events: none;
+        }
+
+        .header h1 {
+            font-size: clamp(2rem, 5vw, 3rem);
+            font-weight: 800;
+            color: #fff;
+            text-shadow: 0 2px 12px rgba(0, 0, 0, 0.15);
+            margin-bottom: 8px;
+            position: relative;
+        }
+
+        .header p {
+            font-size: 1.1rem;
+            color: rgba(255, 255, 255, 0.9);
+            max-width: 600px;
+            margin: 0 auto;
+            position: relative;
+        }
+
+        .header .video-count {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            margin-top: 20px;
+            padding: 10px 20px;
+            background: rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(10px);
+            border-radius: 999px;
+            font-weight: 600;
+            color: #fff;
+            font-size: 0.95rem;
+        }
+
+        /* Search Bar */
+        .search-container {
+            max-width: 600px;
+            margin: -28px auto 0;
+            padding: 0 24px;
+            position: relative;
+            z-index: 200;
+        }
+
+        .search-wrapper {
+            position: relative;
+        }
+
+        .search-input {
+            width: 100%;
+            padding: 16px 20px 16px 52px;
+            border: 2px solid transparent;
+            border-radius: 16px;
+            font-size: 1rem;
+            font-weight: 500;
+            background: #fff;
+            box-shadow: var(--shadow-lg);
+            transition: all 0.2s ease;
+        }
+
+        .search-input:focus {
+            outline: none;
+            border-color: var(--brand-primary);
+            box-shadow: var(--shadow-lg), 0 0 0 4px rgba(3, 170, 225, 0.15);
+        }
+
+        .search-icon {
+            position: absolute;
+            left: 18px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 22px;
+            height: 22px;
+            color: var(--muted);
+            pointer-events: none;
+        }
+
+        .search-dropdown {
+            position: absolute;
+            top: calc(100% + 8px);
+            left: 0;
+            right: 0;
+            background: #fff;
+            border-radius: 16px;
+            box-shadow: var(--shadow-lg);
+            max-height: 400px;
+            overflow-y: auto;
+            display: none;
+            z-index: 300;
+        }
+
+        .search-dropdown.active {
+            display: block;
+        }
+
+        .search-category {
+            padding: 12px 16px 6px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            color: var(--brand-secondary);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            border-bottom: 1px solid var(--line);
+        }
+
+        .search-result {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            padding: 12px 16px;
+            cursor: pointer;
+            transition: background 0.15s ease;
+        }
+
+        .search-result:hover {
+            background: var(--surface);
+        }
+
+        .search-result-thumb {
+            width: 48px;
+            height: 48px;
+            border-radius: 8px;
+            object-fit: cover;
+            flex-shrink: 0;
+        }
+
+        .search-result-info {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .search-result-title {
+            font-size: 0.95rem;
+            font-weight: 600;
+            color: var(--ink);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .search-result-category {
+            font-size: 0.8rem;
+            color: var(--muted);
+        }
+
+        .search-suggestions {
+            padding: 12px 16px;
+            border-top: 1px solid var(--line);
+        }
+
+        .search-suggestions-label {
+            font-size: 0.75rem;
+            font-weight: 700;
+            color: var(--muted);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: 10px;
+        }
+
+        .suggestion-chips {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        .suggestion-chip {
+            padding: 8px 14px;
+            background: var(--surface);
+            border: 1px solid var(--line);
+            border-radius: 999px;
+            font-size: 0.85rem;
+            font-weight: 500;
+            color: var(--ink);
+            cursor: pointer;
+            transition: all 0.15s ease;
+        }
+
+        .suggestion-chip:hover {
+            background: var(--brand-primary);
+            border-color: var(--brand-primary);
+            color: #fff;
+        }
+
+        .no-results-msg {
+            padding: 24px 16px;
+            text-align: center;
+            color: var(--muted);
+        }
+
+        /* Filter Tabs */
+        .filter-bar {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 10px;
+            padding: 24px 16px;
+            background: #fff;
+            border-bottom: 1px solid var(--line);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: var(--shadow-sm);
+            margin-top: 16px;
+        }
+
+        .filter-btn {
+            padding: 12px 24px;
+            border: 1.5px solid var(--line);
+            background: #fff;
+            border-radius: 999px;
+            font-size: 0.95rem;
+            font-weight: 600;
+            color: var(--muted);
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .filter-btn:hover {
+            border-color: var(--brand-primary);
+            color: var(--brand-primary);
+        }
+
+        .filter-btn.active {
+            background: linear-gradient(135deg, var(--brand-primary), var(--brand-secondary));
+            border-color: transparent;
+            color: #fff;
+            box-shadow: 0 4px 12px rgba(3, 170, 225, 0.3);
+        }
+
+        /* Main Content */
+        .main {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 32px 24px 64px;
+        }
+
+        /* Video Grid */
+        .video-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 28px;
+        }
+
+        .video-card {
+            background: #fff;
+            border-radius: var(--radius);
+            overflow: hidden;
+            box-shadow: var(--shadow-md);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            cursor: pointer;
+        }
+
+        .video-card:hover {
+            transform: translateY(-6px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .video-wrapper {
+            position: relative;
+            aspect-ratio: 9/16;
+            background: #1a1a1a;
+            overflow: hidden;
+        }
+
+        .thumbnail {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 100%;
+            height: 100%;
+            min-width: 100%;
+            min-height: 100%;
+            object-fit: cover;
+            object-position: center center;
+            transform: translate(-50%, -50%) scale(1.01);
+            transition: opacity 0.3s ease;
+        }
+
+        .video-embed {
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+        }
+
+        .video-card:hover .thumbnail {
+            opacity: 0;
+        }
+
+        .video-card:hover .video-embed {
+            opacity: 1;
+        }
+
+        .play-overlay {
+            position: absolute;
+            inset: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(0, 0, 0, 0.25);
+            opacity: 1;
+            transition: opacity 0.3s ease;
+            pointer-events: none;
+        }
+
+        .video-card:hover .play-overlay {
+            opacity: 0;
+        }
+
+        .play-btn {
+            width: 64px;
+            height: 64px;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+        }
+
+        .play-btn svg {
+            width: 28px;
+            height: 28px;
+            fill: var(--brand-primary);
+            margin-left: 4px;
+        }
+
+        .video-info {
+            padding: 20px;
+        }
+
+        .video-title {
+            font-size: 1rem;
+            font-weight: 700;
+            color: var(--ink);
+            line-height: 1.4;
+            margin-bottom: 8px;
+        }
+
+        .video-description {
+            font-size: 0.9rem;
+            color: var(--muted);
+            line-height: 1.5;
+            margin-bottom: 12px;
+        }
+
+        .video-category {
+            display: inline-block;
+            padding: 6px 12px;
+            border-radius: 8px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.03em;
+        }
+
+        .video-category.tech {
+            background: linear-gradient(135deg, #dbeafe, #e0f2fe);
+            color: #0369a1;
+        }
+
+        .video-category.wtkw {
+            background: linear-gradient(135deg, #d1fae5, #ccfbf1);
+            color: #047857;
+        }
+
+        /* Modal */
+        .modal-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.85);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            padding: 24px;
+            backdrop-filter: blur(8px);
+        }
+
+        .modal-overlay.active {
+            display: flex;
+        }
+
+        .modal-content {
+            position: relative;
+            width: 90vw;
+            max-width: 500px;
+            height: 85vh;
+            max-height: 900px;
+            background: #000;
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 24px 80px rgba(0, 0, 0, 0.4);
+        }
+
+        .modal-close {
+            position: absolute;
+            top: -48px;
+            right: 0;
+            width: 40px;
+            height: 40px;
+            background: rgba(255, 255, 255, 0.15);
+            border: none;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background 0.2s ease;
+        }
+
+        .modal-close:hover {
+            background: rgba(255, 255, 255, 0.25);
+        }
+
+        .modal-close svg {
+            width: 20px;
+            height: 20px;
+            stroke: #fff;
+        }
+
+        .modal-video {
+            width: 100%;
+            height: 100%;
+        }
+
+        .modal-video iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .header {
+                padding: 32px 16px 40px;
+            }
+
+            .search-container {
+                margin-top: -24px;
+                padding: 0 16px;
+            }
+
+            .video-grid {
+                grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+                gap: 20px;
+            }
+
+            .video-info {
+                padding: 16px;
+            }
+
+            .video-title {
+                font-size: 0.95rem;
+            }
+
+            .filter-bar {
+                padding: 16px 12px;
+                gap: 8px;
+            }
+
+            .filter-btn {
+                padding: 10px 18px;
+                font-size: 0.85rem;
+            }
+        }
+
+        /* No results */
+        .no-results {
+            text-align: center;
+            padding: 64px 24px;
+            color: var(--muted);
+        }
+
+        .no-results svg {
+            width: 64px;
+            height: 64px;
+            margin-bottom: 16px;
+            opacity: 0.5;
+        }
+    </style>
+</head>
+
+<body>
+    <header class="header">
+        <h1>📺 BER Video Library</h1>
+        <p>Tech Tip Tuesdays & What to Know Wednesdays from your REALTOR® association</p>
+        <div class="video-count">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <polygon points="5 3 19 12 5 21 5 3"></polygon>
+            </svg>
+            <span id="videoCount">Loading...</span>
+        </div>
+    </header>
+
+    <!-- Smart Search -->
+    <div class="search-container">
+        <div class="search-wrapper">
+            <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="11" cy="11" r="8"></circle>
+                <path d="m21 21-4.35-4.35"></path>
+            </svg>
+            <input type="text" class="search-input" id="searchInput"
+                placeholder="Search videos... (MLS, contracts, Agent 3000, etc.)">
+            <div class="search-dropdown" id="searchDropdown">
+                <div id="searchResults"></div>
+                <div class="search-suggestions" id="searchSuggestions">
+                    <div class="search-suggestions-label">Popular Searches</div>
+                    <div class="suggestion-chips" id="suggestionChips"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <nav class="filter-bar">
+        <button class="filter-btn active" data-filter="all">All Videos</button>
+        <button class="filter-btn" data-filter="tech">🔧 Tech Tip Tuesday</button>
+        <button class="filter-btn" data-filter="wtkw">📰 What to Know Wednesday</button>
+    </nav>
+
+    <main class="main">
+        <div class="video-grid" id="videoGrid"></div>
+        <div class="no-results" id="noResults" style="display: none;">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                <circle cx="11" cy="11" r="8"></circle>
+                <path d="m21 21-4.35-4.35"></path>
+            </svg>
+            <p>No videos found in this category</p>
+        </div>
+    </main>
+
+    <!-- Modal -->
+    <div class="modal-overlay" id="modal">
+        <div class="modal-content">
+            <button class="modal-close" id="modalClose">
+                <svg viewBox="0 0 24 24" fill="none" stroke-width="2">
+                    <path d="M18 6 6 18M6 6l12 12"></path>
+                </svg>
+            </button>
+            <div class="modal-video" id="modalVideo"></div>
+        </div>
+    </div>
+
+    <script>
+        // Tech Tip Tuesday videos (shown first)
+        const techVideos = [
+            {
+                id: "Rdx6c6ujgko",
+                title: "Searching by Flood Zone? Try This SWFLAMLS Map Trick",
+                description: "Quickly and visually search properties by FEMA flood zone layers directly within SWFLAMLS.",
+                category: "tech",
+                keywords: ["flood zone","swflamls","mls map","fema","map search","mls layers","flood search"]
+            },
+            {
+                id: "WqUNLnY7fck",
+                title: "Matrix Help Is Going 24/7! AnswerLink vs. CCOR MLS Explained",
+                description: "Get after-hours MLS assistance 24/7 with AnswerLink virtual support and know when to contact local staff.",
+                category: "tech",
+                keywords: ["matrix","answerlink","mls support","help desk","24/7 support","matrix help"]
+            },
+            {
+                id: "vrHpPVlZTxw",
+                title: "Den Not Showing Correctly in Matrix? Check These 3 MLS Settings",
+                description: "Fix den and bedroom display errors on your Matrix listings with these three essential input settings.",
+                category: "tech",
+                keywords: ["matrix","den","listing input","bedroom count","mls settings","matrix listing"]
+            },
+            {
+                id: "E_3U3A1HK3A",
+                title: "No Cell Signal? Update Your Supra eKEY Before the Showing!",
+                description: "Ensure your Supra lockbox opens smoothly in dead zones by updating your eKEY authorization before you go.",
+                category: "tech",
+                keywords: ["supra","ekey","lockbox","offline showing","cell signal","showing tip"]
+            },
+            {
+                id: "BCvPDb_09pM",
+                title: "How to Invite Clients to OneHomeowner",
+                description: "Easily invite past and current clients to OneHomeowner—your free member portal benefit for client retention.",
+                category: "tech",
+                keywords: ["onehomeowner","client portal","client invite","member benefit","client retention"]
+            },
+            {
+                id: "aBxmpV2tHUw",
+                title: "Switch Between New & Classic MLS Dashboard + Adjust Font Size",
+                description: "Customize your Matrix workspace by toggling between classic and new layouts and adjusting font sizes.",
+                category: "tech",
+                keywords: ["matrix","mls dashboard","classic dashboard","font size","user preferences","customization"]
+            },
+            {
+                id: "W0Kc3CY082I",
+                title: "How to Claim Your CCOR Member Portal Account",
+                description: "Step-by-step instructions to activate and access your CCOR Member Portal account for billing and events.",
+                category: "tech",
+                keywords: ["member portal","account setup","billing","ccor portal","member account","login"]
+            },
+            {
+                id: "FR8PJni2p2w",
+                title: "How to Add a Supra Lockbox to Your MLS Listing",
+                description: "Two quick methods to assign and link a Supra lockbox serial number directly to your Matrix MLS listing.",
+                category: "tech",
+                keywords: ["supra","lockbox","listing","mls","matrix","lockbox serial","showing setup"]
+            },
+            {
+                id: "4jA_mYQEw2U",
+                title: "Check MLS Listing Compliance Before It Gets Reported",
+                description: "Catch potential listing errors and avoid fines using built-in MLS compliance checkers before reporting occurs.",
+                category: "tech",
+                keywords: ["compliance","mls rules","listing violations","fines","audit","matrix"]
+            },
+            {
+                id: "shvNIS7KS1w",
+                title: "Master Your MLS Production Reports",
+                description: "Track your year-to-date sales volume, transaction stats, and ranking with Matrix MLS production reports.",
+                category: "tech",
+                keywords: ["production report","agent stats","matrix","sales volume","ranking","agent metrics"]
+            },
+            {
+                id: "NcFya-AdFtM",
+                title: "Use MLS Layers Like a Pro (Flood Zones, Neighborhoods, Schools)",
+                description: "Overlay flood zones, school boundaries, parcel lines, and neighborhood data on your MLS map searches.",
+                category: "tech",
+                keywords: ["mls layers","map search","flood zones","school districts","parcels","matrix map"]
+            },
+            {
+                id: "L6Uuep6D6vQ",
+                title: "Pull Lot Dimensions Fast with Realist Integration",
+                description: "Auto-fill frontage and lot dimensions directly from Realist Tax data without leaving your listing input screen.",
+                category: "tech",
+                keywords: ["realist","lot dimensions","tax records","listing input","frontage","parcel size"]
+            },
+            {
+                id: "EoOkdiv3XpQ",
+                title: "MLS Account Setup (New Agent Registration + Login Steps)",
+                description: "Smooth onboarding guide for new agents to complete registration, password creation, and first-time MLS login.",
+                category: "tech",
+                keywords: ["new agent","account setup","mls registration","login","onboarding","passwords"]
+            },
+            {
+                id: "r0dmOUujwcg",
+                title: "FEMA-Based Flood Zone Snapshots Using Realist",
+                description: "Pull official FEMA flood maps, BFE data, and flood zone reports in Realist to share with clients.",
+                category: "tech",
+                keywords: ["realist","flood zone","fema","flood maps","bfe","insurance","flood report"]
+            },
+            {
+                id: "VCKPLMuLoi0",
+                title: "Generating the Agent Production Report in the MLS",
+                description: "Step-by-step guide to pulling your production stats from Matrix MLS.",
+                category: "tech",
+                keywords: ["mls", "matrix", "production report", "stats", "agent report", "metrics"]
+            },
+            {
+                id: "C16t5XzEZeo",
+                title: "FREE Safety Tool: How to Activate FOREWARN",
+                description: "Protect yourself with FOREWARN—your free member safety benefit activated in 60 seconds.",
+                category: "tech",
+                keywords: ["forewarn", "safety", "security", "background check", "protection", "free tool"]
+            },
+            {
+                id: "7b_WFqD0H5s",
+                title: "Claim Your Realtor.com® Profile in 3 Steps",
+                description: "Get free leads and control your listings by claiming your Realtor.com profile.",
+                category: "tech",
+                keywords: ["realtor.com", "profile", "leads", "listings", "claim profile", "online presence"]
+            },
+            {
+                id: "_HGCWaDkUzE",
+                title: "OneHome App — New BER Member Benefit",
+                description: "Explore the OneHome client portal as an alternative to MLS-Client.",
+                category: "tech",
+                keywords: ["onehome", "app", "client portal", "mls-client", "member benefit", "client communication"]
+            },
+            {
+                id: "G7WAL9mV7Ow",
+                title: "Your REALTOR® Toolkit: The Apps That Make You a Pro",
+                description: "Essential apps every BER member should have on their phone.",
+                category: "tech",
+                keywords: ["apps", "toolkit", "mobile", "productivity", "essential apps", "technology"]
+            },
+            {
+                id: "SRpJU5KIhgU",
+                title: "How to Make a Listing Collage with Agent 3000",
+                description: "Create stunning visual collages for your listings in minutes.",
+                category: "tech",
+                keywords: ["agent 3000", "collage", "listing photos", "marketing", "visuals", "images"]
+            },
+            {
+                id: "9b3eEgamADk",
+                title: "RPR Neighborhood Reports",
+                description: "Generate client-ready neighborhood snapshots using RPR's powerful tools.",
+                category: "tech",
+                keywords: ["rpr", "neighborhood", "reports", "market data", "cma", "analytics"]
+            },
+            {
+                id: "0YrF2vkstBI",
+                title: "BrokerBay is Coming SOON!",
+                description: "Preview the upcoming showing service upgrade for BER REALTORS®.",
+                category: "tech",
+                keywords: ["brokerbay", "showings", "appointments", "scheduling", "showing service"]
+            },
+            {
+                id: "gShSHIVyp1M",
+                title: "Introducing RentSpree for Rentals!",
+                description: "Streamline your rental transactions with the new RentSpree integration.",
+                category: "tech",
+                keywords: ["rentspree", "rentals", "tenant screening", "lease", "rental applications"]
+            },
+            {
+                id: "qZTAaUY0gnk",
+                title: "NEW OneHomeowner Platform for Agents",
+                description: "Stay connected with past clients using the OneHomeowner platform.",
+                category: "tech",
+                keywords: ["onehomeowner", "past clients", "follow up", "client retention", "sphere"]
+            },
+            {
+                id: "16aSGlZIa7o",
+                title: "Turn One Listing into a Lead Magnet with Agent 3000",
+                description: "Maximize exposure and generate leads from a single listing.",
+                category: "tech",
+                keywords: ["agent 3000", "leads", "listing", "marketing", "lead generation", "exposure"]
+            },
+            {
+                id: "7SJ3y74KZ_A",
+                title: "Creating Email Templates in Under 60 Seconds",
+                description: "Build professional email templates quickly using Agent 3000.",
+                category: "tech",
+                keywords: ["email", "templates", "agent 3000", "marketing", "communication", "automation"]
+            },
+            {
+                id: "EUZnMKuLQa4",
+                title: "Creating Flyers in Less Than 60 Seconds",
+                description: "Design eye-catching listing flyers with Agent 3000's templates.",
+                category: "tech",
+                keywords: ["flyers", "agent 3000", "marketing", "print", "listing flyer", "design"]
+            },
+            {
+                id: "jrkfTsFuCpg",
+                title: "Create a Single Property Website in 60 Seconds",
+                description: "Launch professional property websites instantly with Agent 3000.",
+                category: "tech",
+                keywords: ["property website", "agent 3000", "single property site", "marketing", "listing website"]
+            },
+            {
+                id: "pCdVplszeEE",
+                title: "How Much It REALLY Costs to Become a Florida REALTOR®",
+                description: "Full breakdown of DBPR, MLS, dues, and Supra costs for new agents.",
+                category: "tech",
+                keywords: ["cost", "new agent", "dbpr", "mls fees", "supra", "dues", "licensing", "become realtor"]
+            },
+            {
+                id: "yr_IvgYUBhk",
+                title: "Florida Real Estate License — Part 3: Passed Your Exam?",
+                description: "Next steps after passing your Florida real estate exam.",
+                category: "tech",
+                keywords: ["license", "exam", "passed", "next steps", "new agent", "post-exam", "activation"]
+            },
+            {
+                id: "48wyHGxLGC4",
+                title: "Florida Real Estate License — Part 2: DBPR & Pearson VUE",
+                description: "Apply with DBPR, get fingerprinted, and pass your licensing exam.",
+                category: "tech",
+                keywords: ["license", "dbpr", "pearson vue", "fingerprints", "exam", "application", "testing"]
+            },
+            {
+                id: "vcrc4cHNc1g",
+                title: "How to Become a REALTOR® in SWFL — Part 1",
+                description: "Pre-licensing requirements and getting started in real estate.",
+                category: "tech",
+                keywords: ["become realtor", "pre-license", "new agent", "getting started", "swfl", "requirements"]
+            }
+        ];
+
+        // What to Know Wednesday videos (shown second)
+        const wtknVideos = [
+            {
+                id: "wA94QWDAshE",
+                title: "What’s Changing in Bonita Springs? 4 Updates REALTORS® Should Know",
+                description: "Key downtown developments, infrastructure projects, and zoning changes impacting Bonita Springs real estate.",
+                category: "wtkw",
+                keywords: ["bonita springs","development","local market","zoning","infrastructure","city updates"]
+            },
+            {
+                id: "mC5vtrj0zFE",
+                title: "The Residential Contract You May Be Overlooking: Do You Know CRSP?",
+                description: "Explore Florida Realtors' CRSP contract as an alternative to FAR/BAR for specific transaction needs.",
+                category: "wtkw",
+                keywords: ["crsp","contracts","far bar","purchase contract","florida realtors forms","legal"]
+            },
+            {
+                id: "aHnECfSifzE",
+                title: "NEW at CCOR: Your Committee Now Has an Online Home!",
+                description: "Collaborate with fellow committee members using private community discussion and document hubs in MemberPortal.",
+                category: "wtkw",
+                keywords: ["committees","communities","member portal","association","volunteering","collaboration"]
+            },
+            {
+                id: "g04_Zcx1LLE",
+                title: "FHA Update: Could This Help More Rehab Deals?",
+                description: "Highlights of FHA policy updates making rehabilitation and renovation financing easier for buyers.",
+                category: "wtkw",
+                keywords: ["fha","rehab loans","financing","mortgage update","203k","renovation"]
+            },
+            {
+                id: "rDe3EkAC4K0",
+                title: "Did You Know? CCOR Offers Free Notary Service",
+                description: "Take advantage of complimentary in-person notary services available to all CCOR members at the association office.",
+                category: "wtkw",
+                keywords: ["notary","free benefit","member perk","closing documents","association services"]
+            },
+            {
+                id: "zhX622ugRb0",
+                title: "Sabal Sign Becomes Standard in Form Simplicity Ultimate Edition",
+                description: "Overview of Sabal Sign e-signatures becoming the integrated default solution in Form Simplicity Ultimate.",
+                category: "wtkw",
+                keywords: ["sabal sign","form simplicity","digital signatures","e-sign","contracts","forms"]
+            },
+            {
+                id: "f-DXI4pnTls",
+                title: "Pick Up CCOR Store Items on Your Schedule",
+                description: "Access signs, riders, and store merchandise anytime with the new after-hours CCOR pickup lockbox.",
+                category: "wtkw",
+                keywords: ["realtor store","store pickup","signs","riders","after hours","member store"]
+            },
+            {
+                id: "1CTBxEZ9iUA",
+                title: "Committee Meetings Are Evolving at CCOR",
+                description: "New hybrid, virtual, and streamlined scheduling options making committee participation faster and easier.",
+                category: "wtkw",
+                keywords: ["committees","governance","meeting updates","volunteer","association leadership"]
+            },
+            {
+                id: "_LD8D7G8OGY",
+                title: "Not Sure Who to Call at CCOR? Start Here",
+                description: "Quick directory breakdown of staff contacts for MLS tech support, membership, education, and billing.",
+                category: "wtkw",
+                keywords: ["staff directory","ccor contacts","customer service","who to call","support"]
+            },
+            {
+                id: "5mkJvHRGd14",
+                title: "How to Sign Up for a Committee at CCOR",
+                description: "Guide for members to get involved, apply for open committee seats, and shape association policy.",
+                category: "wtkw",
+                keywords: ["committee sign up","volunteer","get involved","leadership","committees"]
+            },
+            {
+                id: "lhadkYb3lLY",
+                title: "It’s Official! NAR Approves Our New Name: CCOR",
+                description: "NAR officially approves our name change from BER to Coconut Coast Organization of REALTORS® (CCOR).",
+                category: "wtkw",
+                keywords: ["ccor","rebrand","nar approval","association name","coconut coast"]
+            },
+            {
+                id: "TeIcd4i-GxE",
+                title: "Brokers: If Your Agents Use AI, You Need a Policy Now",
+                description: "Guidance for brokerage leaders on mitigating legal, copyright, and fair housing risks with agent AI use.",
+                category: "wtkw",
+                keywords: ["ai policy","broker risk","artificial intelligence","brokerage management","legal compliance"]
+            },
+            {
+                id: "wLQ9hvNiHXA",
+                title: "MLS Billing: Everything Members Need to Know",
+                description: "Essential billing dates, dues amounts, and payment methods for individual agents and brokerages.",
+                category: "wtkw",
+                keywords: ["mls billing","dues","annual dues","deadlines","payment portal","fees"]
+            },
+            {
+                id: "gET4GdC9rMI",
+                title: "Property Fraud Alert: The Free Tool Every Lee County Property Owner Should Know",
+                description: "Help your homeowners protect against deed and title fraud with Lee County Clerk’s free recording alert.",
+                category: "wtkw",
+                keywords: ["property fraud","title theft","lee county clerk","fraud alert","deed fraud","homeowner safety"]
+            },
+            {
+                id: "LTUiXyE7EXs",
+                title: "Florida College Scholarships Are Open (Not Just for Realtor Families!)",
+                description: "Details on Florida Realtors® Education Foundation scholarship applications open to students across Florida.",
+                category: "wtkw",
+                keywords: ["scholarships","florida realtors foundation","education","college funding","students"]
+            },
+            {
+                id: "MQUzkX1Dqa4",
+                title: "Leadership Academy 2026: Your Seat at the Table Starts Here",
+                description: "Develop leadership skills, connect with industry mentors, and grow your career in CCOR's Leadership Academy.",
+                category: "wtkw",
+                keywords: ["leadership academy","professional development","career growth","mentorship","leadership"]
+            },
+            {
+                id: "oluU3u-CE_8",
+                title: "Realtor.com+ Launches SOON! — Bonita Springs-Estero MLS Among First Markets",
+                description: "Exclusive preview of Realtor.com+ launch in our local market, expanding listing reach and agent visibility.",
+                category: "wtkw",
+                keywords: ["realtor.com+","portal upgrade","listing syndication","leads","first market","realtor.com"]
+            },
+            {
+                id: "JOtl9Zkvepc",
+                title: "New Florida Realtors Forms — What You Need to Know",
+                description: "Crucial summary of changes and new mandatory disclosure forms released by Florida Realtors.",
+                category: "wtkw",
+                keywords: ["forms update","florida realtors forms","contracts","disclosures","far bar","transaction forms"]
+            },
+            {
+                id: "_vF_c51H13I",
+                title: '"As Is" Contract Just Changed',
+                description: "Important update on the Florida As Is contract changes that affect your transactions.",
+                category: "wtkw",
+                keywords: ["as is", "contract", "changes", "far bar", "forms", "transaction", "legal"]
+            },
+            {
+                id: "L92xIOw1t6Y",
+                title: "Withdrawn Doesn't Reset Days on Market",
+                description: "Learn what actually resets days on market and avoid costly MLS mistakes.",
+                category: "wtkw",
+                keywords: ["dom", "days on market", "withdrawn", "mls", "listing status", "cdom"]
+            },
+            {
+                id: "C3q1qy9AF5Y",
+                title: "Turn Client Questions Into Referrals with TrustedOnly",
+                description: "Discover how to leverage TrustedOnly to generate quality referrals from client inquiries.",
+                category: "wtkw",
+                keywords: ["trustedonly", "referrals", "clients", "leads", "networking", "vendors"]
+            },
+            {
+                id: "aHN626_BpGI",
+                title: "Sips & Tips - Realtor Round Table Discussions",
+                description: "Join our casual networking sessions with fellow REALTORS® to share insights.",
+                category: "wtkw",
+                keywords: ["sips tips", "networking", "roundtable", "discussion", "community", "events"]
+            },
+            {
+                id: "1xCO4T5uO_k",
+                title: "Delayed MLS & Syndication Are Here",
+                description: "Understand the new delayed listing options and how syndication timing works.",
+                category: "wtkw",
+                keywords: ["delayed listing", "syndication", "mls", "coming soon", "listing options", "nar"]
+            },
+            {
+                id: "6z84xdppvWw",
+                title: "Florida Real Estate Roundup from the FR Convention",
+                description: "Key takeaways and updates from the Florida REALTORS® Convention.",
+                category: "wtkw",
+                keywords: ["florida realtors", "convention", "updates", "industry news", "fr convention"]
+            },
+            {
+                id: "SiDWciKIpIA",
+                title: "Lee County Flood Map Updates",
+                description: "Critical flood zone changes affecting Lee County properties and insurance.",
+                category: "wtkw",
+                keywords: ["flood", "flood maps", "lee county", "fema", "insurance", "flood zone", "elevation"]
+            },
+            {
+                id: "CD1b6o4oAus",
+                title: "Jamaica Inbound Trade Mission at BER 🌎🇯🇲",
+                description: "Connecting with international buyers through our Jamaica trade mission event.",
+                category: "wtkw",
+                keywords: ["jamaica", "international", "trade mission", "global", "foreign buyers", "global network"]
+            },
+            {
+                id: "EIlcnwr1G_w",
+                title: "2026 Housing Outlook: Rates, Sales, Inventory",
+                description: "60-second market forecast covering interest rates, sales trends, and inventory levels.",
+                category: "wtkw",
+                keywords: ["market", "forecast", "2026", "rates", "inventory", "housing outlook", "predictions"]
+            },
+            {
+                id: "Vdg8QJsSjUY",
+                title: "Our REALTOR® Store!",
+                description: "Tour the BER REALTOR® store and see what's available for members.",
+                category: "wtkw",
+                keywords: ["store", "realtor store", "merchandise", "swag", "member benefits", "supplies"]
+            },
+            {
+                id: "EUjF7enBilU",
+                title: "Foreign Buyers Flood Back to the U.S—Florida Wins BIG! 🌍🏡",
+                description: "International buyer trends and why Florida is the top destination.",
+                category: "wtkw",
+                keywords: ["foreign buyers", "international", "florida", "market trends", "global", "investment"]
+            }
+        ];
+
+        // Combined videos: Tech Tips first, then What to Know Wednesday
+        const videos = [...techVideos, ...wtknVideos];
+
+        // Popular search suggestions
+        const popularSearches = [
+            "Agent 3000", "MLS", "FOREWARN", "Contract", "Flood Maps",
+            "Sabal Sign", "CRSP", "Supra", "Realist", "New Agent", "RPR"
+        ];
+
+        const grid = document.getElementById('videoGrid');
+        const modal = document.getElementById('modal');
+        const modalVideo = document.getElementById('modalVideo');
+        const modalClose = document.getElementById('modalClose');
+        const filterBtns = document.querySelectorAll('.filter-btn');
+        const noResults = document.getElementById('noResults');
+        const videoCount = document.getElementById('videoCount');
+        const searchInput = document.getElementById('searchInput');
+        const searchDropdown = document.getElementById('searchDropdown');
+        const searchResults = document.getElementById('searchResults');
+        const suggestionChips = document.getElementById('suggestionChips');
+
+        function getThumbnail(id) {
+            return `https://i.ytimg.com/vi/${id}/hq720.jpg`;
+        }
+
+        function createCard(video) {
+            const card = document.createElement('div');
+            card.className = 'video-card';
+            card.dataset.category = video.category;
+            card.dataset.videoId = video.id;
+
+            card.innerHTML = `
+                <div class="video-wrapper">
+                    <img class="thumbnail" src="${getThumbnail(video.id)}" alt="${video.title}" loading="lazy">
+                    <iframe class="video-embed" 
+                        data-src="https://www.youtube.com/embed/${video.id}?autoplay=1&mute=1&loop=1&playlist=${video.id}&controls=0&modestbranding=1"
+                        allow="autoplay; encrypted-media" 
+                        allowfullscreen></iframe>
+                    <div class="play-overlay">
+                        <div class="play-btn">
+                            <svg viewBox="0 0 24 24"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
+                        </div>
+                    </div>
+                </div>
+                <div class="video-info">
+                    <h3 class="video-title">${video.title}</h3>
+                    <p class="video-description">${video.description}</p>
+                    <span class="video-category ${video.category}">${getCategoryLabel(video.category)}</span>
+                </div>
+            `;
+
+            // Autoplay on hover
+            let hoverTimeout;
+            card.addEventListener('mouseenter', () => {
+                hoverTimeout = setTimeout(() => {
+                    const iframe = card.querySelector('.video-embed');
+                    if (iframe && !iframe.src) {
+                        iframe.src = iframe.dataset.src;
+                    }
+                }, 300);
+            });
+
+            card.addEventListener('mouseleave', () => {
+                clearTimeout(hoverTimeout);
+                const iframe = card.querySelector('.video-embed');
+                if (iframe) {
+                    iframe.src = '';
+                }
+            });
+
+            // Click to open modal
+            card.addEventListener('click', (e) => {
+                if (e.target.tagName !== 'IFRAME') {
+                    openModal(video.id);
+                }
+            });
+
+            return card;
+        }
+
+        function getCategoryLabel(cat) {
+            const labels = {
+                tech: '🔧 Tech Tip Tuesday',
+                wtkw: '📰 What to Know Wednesday'
+            };
+            return labels[cat] || cat;
+        }
+
+        function renderVideos(filter = 'all') {
+            grid.innerHTML = '';
+            const filtered = filter === 'all' ? videos : videos.filter(v => v.category === filter);
+
+            if (filtered.length === 0) {
+                noResults.style.display = 'block';
+            } else {
+                noResults.style.display = 'none';
+                filtered.forEach(video => grid.appendChild(createCard(video)));
+            }
+
+            videoCount.textContent = `${filtered.length} Video${filtered.length !== 1 ? 's' : ''}`;
+        }
+
+        // Modal functions
+        function openModal(videoId) {
+            modalVideo.innerHTML = `<iframe src="https://www.youtube.com/embed/${videoId}?autoplay=1" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>`;
+            modal.classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeModal() {
+            modal.classList.remove('active');
+            modalVideo.innerHTML = '';
+            document.body.style.overflow = '';
+        }
+
+        // Search functions
+        function searchVideos(query) {
+            const q = query.toLowerCase().trim();
+            if (!q) return [];
+
+            return videos.filter(video => {
+                const titleMatch = video.title.toLowerCase().includes(q);
+                const descMatch = video.description.toLowerCase().includes(q);
+                const keywordMatch = video.keywords.some(kw => kw.toLowerCase().includes(q));
+                return titleMatch || descMatch || keywordMatch;
+            }).slice(0, 8);
+        }
+
+        function renderSearchResults(results, query) {
+            if (results.length === 0) {
+                searchResults.innerHTML = `<div class="no-results-msg">No videos found for "${query}"</div>`;
+                return;
+            }
+
+            // Group by category
+            const techResults = results.filter(v => v.category === 'tech');
+            const wtknResults = results.filter(v => v.category === 'wtkw');
+
+            let html = '';
+
+            if (techResults.length > 0) {
+                html += `<div class="search-category">🔧 Tech Tip Tuesday</div>`;
+                techResults.forEach(video => {
+                    html += `
+                        <div class="search-result" data-video-id="${video.id}">
+                            <img class="search-result-thumb" src="${getThumbnail(video.id)}" alt="">
+                            <div class="search-result-info">
+                                <div class="search-result-title">${video.title}</div>
+                                <div class="search-result-category">${video.description.slice(0, 60)}...</div>
+                            </div>
+                        </div>
+                    `;
+                });
+            }
+
+            if (wtknResults.length > 0) {
+                html += `<div class="search-category">📰 What to Know Wednesday</div>`;
+                wtknResults.forEach(video => {
+                    html += `
+                        <div class="search-result" data-video-id="${video.id}">
+                            <img class="search-result-thumb" src="${getThumbnail(video.id)}" alt="">
+                            <div class="search-result-info">
+                                <div class="search-result-title">${video.title}</div>
+                                <div class="search-result-category">${video.description.slice(0, 60)}...</div>
+                            </div>
+                        </div>
+                    `;
+                });
+            }
+
+            searchResults.innerHTML = html;
+
+            // Add click handlers
+            searchResults.querySelectorAll('.search-result').forEach(el => {
+                el.addEventListener('click', () => {
+                    openModal(el.dataset.videoId);
+                    searchDropdown.classList.remove('active');
+                    searchInput.value = '';
+                });
+            });
+        }
+
+        function renderSuggestions() {
+            suggestionChips.innerHTML = popularSearches.map(term =>
+                `<button class="suggestion-chip">${term}</button>`
+            ).join('');
+
+            suggestionChips.querySelectorAll('.suggestion-chip').forEach(chip => {
+                chip.addEventListener('click', () => {
+                    searchInput.value = chip.textContent;
+                    const results = searchVideos(chip.textContent);
+                    renderSearchResults(results, chip.textContent);
+                    document.getElementById('searchSuggestions').style.display = 'none';
+                });
+            });
+        }
+
+        // Event listeners
+        filterBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                filterBtns.forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                renderVideos(btn.dataset.filter);
+            });
+        });
+
+        modalClose.addEventListener('click', closeModal);
+        modal.addEventListener('click', (e) => {
+            if (e.target === modal) closeModal();
+        });
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') closeModal();
+        });
+
+        // Search event listeners
+        searchInput.addEventListener('focus', () => {
+            searchDropdown.classList.add('active');
+            if (!searchInput.value.trim()) {
+                document.getElementById('searchSuggestions').style.display = 'block';
+                searchResults.innerHTML = '';
+            }
+        });
+
+        searchInput.addEventListener('input', () => {
+            const query = searchInput.value.trim();
+            if (query) {
+                const results = searchVideos(query);
+                renderSearchResults(results, query);
+                document.getElementById('searchSuggestions').style.display = 'none';
+            } else {
+                searchResults.innerHTML = '';
+                document.getElementById('searchSuggestions').style.display = 'block';
+            }
+        });
+
+        document.addEventListener('click', (e) => {
+            if (!e.target.closest('.search-container')) {
+                searchDropdown.classList.remove('active');
+            }
+        });
+
+        // Initialize
+        renderVideos();
+        renderSuggestions();
+    </script>
+</body>
+
+</html>
