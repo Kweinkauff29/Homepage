@@ -469,52 +469,52 @@
 
         .modal-content {
             position: relative;
-            width: 90vw;
-            max-width: 500px;
-            height: 85vh;
-            max-height: 900px;
+            width: 92vw;
+            max-width: 860px;
             background: #000;
             border-radius: 16px;
             overflow: hidden;
-            box-shadow: 0 24px 80px rgba(0, 0, 0, 0.4);
+            box-shadow: 0 24px 80px rgba(0, 0, 0, 0.6);
             display: flex;
             flex-direction: column;
+            margin: auto;
         }
 
         .modal-video {
+            position: relative;
             width: 100%;
-            flex: 1;
-            display: flex;
-            flex-direction: column;
+            aspect-ratio: 16 / 9;
             background: #000;
         }
 
         .modal-video iframe {
+            position: absolute;
+            inset: 0;
             width: 100%;
-            flex: 1;
-            min-height: 0;
+            height: 100%;
             border: none;
         }
 
         .modal-actions {
-            height: 48px;
+            height: 50px;
             display: flex;
             align-items: center;
             justify-content: space-between;
-            padding: 0 16px;
+            padding: 0 20px;
             background: #0f172a;
             color: #fff;
-            font-size: 0.85rem;
+            font-size: 0.9rem;
             flex-shrink: 0;
-            gap: 12px;
+            gap: 16px;
+            border-top: 1px solid rgba(255, 255, 255, 0.08);
         }
 
         .modal-actions-title {
             white-space: nowrap;
             overflow: hidden;
             text-overflow: ellipsis;
-            color: rgba(255, 255, 255, 0.85);
-            font-weight: 500;
+            color: rgba(255, 255, 255, 0.9);
+            font-weight: 600;
             flex: 1;
         }
 
@@ -525,9 +525,9 @@
             color: #ff5252;
             text-decoration: none;
             font-weight: 600;
-            font-size: 0.8rem;
-            padding: 4px 10px;
-            border-radius: 6px;
+            font-size: 0.85rem;
+            padding: 6px 12px;
+            border-radius: 8px;
             background: rgba(255, 255, 255, 0.08);
             transition: all 0.2s ease;
             flex-shrink: 0;
