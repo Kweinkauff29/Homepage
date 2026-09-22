@@ -450,6 +450,23 @@
             display: flex;
         }
 
+                .play-btn {
+            width: 64px;
+            height: 64px;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.25);
+            transition: transform 0.2s ease, background 0.2s ease;
+        }
+
+        .video-card:hover .play-btn {
+            transform: scale(1.12);
+            background: #ffffff;
+        }
+
         .modal-content {
             position: relative;
             width: 90vw;
@@ -460,47 +477,75 @@
             border-radius: 16px;
             overflow: hidden;
             box-shadow: 0 24px 80px rgba(0, 0, 0, 0.4);
-        }
-
-        .modal-close {
-            position: absolute;
-            top: -48px;
-            right: 0;
-            width: 40px;
-            height: 40px;
-            background: rgba(255, 255, 255, 0.15);
-            border: none;
-            border-radius: 50%;
-            cursor: pointer;
             display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: background 0.2s ease;
-        }
-
-        .modal-close:hover {
-            background: rgba(255, 255, 255, 0.25);
-        }
-
-        .modal-close svg {
-            width: 20px;
-            height: 20px;
-            stroke: #fff;
+            flex-direction: column;
         }
 
         .modal-video {
             width: 100%;
-            height: 100%;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            background: #000;
         }
 
         .modal-video iframe {
             width: 100%;
-            height: 100%;
+            flex: 1;
+            min-height: 0;
             border: none;
+        }
+
+        .modal-actions {
+            height: 48px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 16px;
+            background: #0f172a;
+            color: #fff;
+            font-size: 0.85rem;
+            flex-shrink: 0;
+            gap: 12px;
+        }
+
+        .modal-actions-title {
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            color: rgba(255, 255, 255, 0.85);
+            font-weight: 500;
+            flex: 1;
+        }
+
+        .modal-yt-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            color: #ff5252;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.8rem;
+            padding: 4px 10px;
+            border-radius: 6px;
+            background: rgba(255, 255, 255, 0.08);
+            transition: all 0.2s ease;
+            flex-shrink: 0;
+        }
+
+        .modal-yt-btn:hover {
+            color: #fff;
+            background: #ff5252;
         }
 
         /* Responsive */
         @media (max-width: 768px) {
+            .modal-close {
+                top: 10px;
+                right: 10px;
+                z-index: 10;
+                background: rgba(0, 0, 0, 0.65);
+            }
             .header {
                 padding: 32px 16px 40px;
             }
@@ -610,7 +655,7 @@
         </div>
     </div>
 
-    <script>
+    <script class="cmplz-native" data-category="functional" data-cfasync="false">
         // Tech Tip Tuesday videos (shown first)
         const techVideos = [
             {
@@ -1071,56 +1116,44 @@
             return `https://i.ytimg.com/vi/${id}/hq720.jpg`;
         }
 
+        function escapeHtml(str) {
+            return (str || '').replace(/[&<>"']/g, m => ({
+                '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
+            })[m]);
+        }
+
         function createCard(video) {
             const card = document.createElement('div');
             card.className = 'video-card';
             card.dataset.category = video.category;
             card.dataset.videoId = video.id;
 
+            const safeTitle = escapeHtml(video.title);
+            const safeDesc = escapeHtml(video.description);
+
             card.innerHTML = `
                 <div class="video-wrapper">
-                    <img class="thumbnail" src="${getThumbnail(video.id)}" alt="${video.title}" loading="lazy">
-                    <iframe class="video-embed" 
-                        data-src="https://www.youtube.com/embed/${video.id}?autoplay=1&mute=1&loop=1&playlist=${video.id}&controls=0&modestbranding=1"
-                        allow="autoplay; encrypted-media" 
-                        allowfullscreen></iframe>
+                    <img class="thumbnail" 
+                         src="${getThumbnail(video.id)}" 
+                         alt="${safeTitle}" 
+                         loading="lazy" 
+                         onerror="this.onerror=null;this.src='https://i.ytimg.com/vi/${video.id}/hqdefault.jpg'">
                     <div class="play-overlay">
-                        <div class="play-btn">
+                        <div class="play-btn" aria-label="Play video">
                             <svg viewBox="0 0 24 24"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
                         </div>
                     </div>
                 </div>
                 <div class="video-info">
-                    <h3 class="video-title">${video.title}</h3>
-                    <p class="video-description">${video.description}</p>
+                    <h3 class="video-title">${safeTitle}</h3>
+                    <p class="video-description">${safeDesc}</p>
                     <span class="video-category ${video.category}">${getCategoryLabel(video.category)}</span>
                 </div>
             `;
 
-            // Autoplay on hover
-            let hoverTimeout;
-            card.addEventListener('mouseenter', () => {
-                hoverTimeout = setTimeout(() => {
-                    const iframe = card.querySelector('.video-embed');
-                    if (iframe && !iframe.src) {
-                        iframe.src = iframe.dataset.src;
-                    }
-                }, 300);
-            });
-
-            card.addEventListener('mouseleave', () => {
-                clearTimeout(hoverTimeout);
-                const iframe = card.querySelector('.video-embed');
-                if (iframe) {
-                    iframe.src = '';
-                }
-            });
-
-            // Click to open modal
-            card.addEventListener('click', (e) => {
-                if (e.target.tagName !== 'IFRAME') {
-                    openModal(video.id);
-                }
+            // Instant, reliable click anywhere on card
+            card.addEventListener('click', () => {
+                openModal(video.id, video.title);
             });
 
             return card;
@@ -1149,8 +1182,25 @@
         }
 
         // Modal functions
-        function openModal(videoId) {
-            modalVideo.innerHTML = `<iframe src="https://www.youtube.com/embed/${videoId}?autoplay=1" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>`;
+        function openModal(videoId, title = '') {
+            const safeTitle = escapeHtml(title);
+            // Use privacy-enhanced YouTube domain and Complianz native attributes
+            const embedUrl = 'https://www.youtube-nocookie.com/embed/' + videoId + '?autoplay=1&rel=0&modestbranding=1&playsinline=1';
+            
+            modalVideo.innerHTML = `
+                <iframe class="cmplz-native" data-category="functional" 
+                    src="${embedUrl}" 
+                    title="${safeTitle}" 
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
+                    allowfullscreen></iframe>
+                <div class="modal-actions">
+                    <span class="modal-actions-title">${safeTitle}</span>
+                    <a href="https://www.youtube.com/shorts/${videoId}" target="_blank" rel="noopener noreferrer" class="modal-yt-btn">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>
+                        Watch on YouTube ↗
+                    </a>
+                </div>
+            `;
             modal.classList.add('active');
             document.body.style.overflow = 'hidden';
         }
