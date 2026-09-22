@@ -1233,17 +1233,66 @@
             // ------------------------------------------------------------------------
             const D1_API = 'https://ccor-member-hub-prototype.bonitaspringsrealtors.workers.dev/api/public/directory';
 
+            const KNOWN_AGENT_OFFICES = {
+                4998384: "Jason Mitchell Real Estate",      // Christy Lominack LLC
+                17499480: "Jason Mitchell Real Estate",     // Anna Carpanzano
+                4159764: "Sellstate Max Performance",       // Denise Simmons
+                4159936: "Ad Infinitum Realty & Consult",   // Edward Lorenzini
+                4160446: "Realty One Group MVP",            // Lauri Page
+                4160564: "EXP Realty LLC",                  // David Irwin PA
+                4161229: "Realty One Group MVP",            // Yudimar DeJesus
+                4161646: "DomainRealty.com LLC",            // Lori Howard
+                4163352: "Realty One Group MVP",            // Carol Matarazzo
+                4163890: "John R Wood Properties",          // Susan Dondero
+                4164176: "Local Real Estate LLC",           // DeAnn Suchy
+                4165623: "Pollard & Hedrich Realty, Inc.",  // Danny Andrade Sr
+                4393739: "Potter Trinity",                  // Crystal Lynch
+                5981831: "Dalton Wade Inc",                 // Marita Meiers
+                6906787: "LPT Realty, LLC",                 // Bret Borshell
+                7057398: "Orchid Realty International",     // Jennifer Samuels
+                7957359: "Coldwell Banker Realty",          // William Pilger Jr.
+                8308249: "Keller Williams Elevate Luxury",  // Maisie Locke
+                10034702: "Premiere Plus Realty Company",   // Nicholas Cwikla
+                13768390: "DomainRealty.com LLC",           // Carrie Martus
+                13905449: "Keller Williams Elevate Luxury",  // Kadi Schmucker
+                13958152: "Keller Williams Elevate Luxury",  // John Taylor
+                14151113: "LPT Realty, LLC",                // Arthur Schultheis Jr
+                23843030: "Downing Frye Realty Inc.",       // Monika Ghangus
+                26696874: "Game Changer Realty",            // Jennifer Henry
+                31841700: "Sellstate Max Performance",      // William Simmons
+                33782941: "Keller Williams Elite Realty",   // Makinna Fisher
+                34227964: "AXEN Realty"                     // Greg Prengaman
+            };
+
+            function resolveOfficeByEmail(email) {
+                if (!email) return "";
+                const em = String(email).toLowerCase();
+                if (em.includes("@cbrealty.com")) return "Coldwell Banker Realty";
+                if (em.includes("@gamechangerrealty.com")) return "Game Changer Realty";
+                if (em.includes("@kwelevate.com")) return "Keller Williams Elevate Luxury";
+                if (em.includes("@johnrwood.com")) return "John R Wood Properties";
+                if (em.includes("@orchidrealtygroup.com")) return "Orchid Realty International";
+                if (em.includes("@pottertrinity.com")) return "Potter Trinity";
+                if (em.includes("@axenrealty.com")) return "AXEN Realty";
+                return "";
+            }
+
             function transformD1ItemToContact(item) {
                 const nameParts = (item.displayName || "").split(' ');
                 const firstName = nameParts[0] || item.displayName;
                 const lastName = nameParts.slice(1).join(' ') || "";
+                const cid = Number(item.contactId || item.ContactId);
+                const knownOffice = KNOWN_AGENT_OFFICES[cid] || resolveOfficeByEmail(item.email || item.EmailAddress);
+                const rawOrg = (item.organization && item.organization.trim()) ? item.organization : (knownOffice || "");
+                const org = standardizeOfficeName({ PrimaryContact: rawOrg, CompanyName: rawOrg, ContactId: cid });
+
                 return {
                     ContactId: item.contactId,
                     Name: item.displayName,
                     FirstName: firstName,
                     LastName: lastName,
-                    PrimaryContact: item.organization,
-                    CompanyName: item.organization,
+                    PrimaryContact: org,
+                    CompanyName: org,
                     City: item.city,
                     State: item.state,
                     Phone: item.phone,
@@ -1426,22 +1475,53 @@
             // DATA NORMALIZATION HELPERS
             // ------------------------------------------------------------------------
             function standardizeOfficeName(contact) {
-                let name = contact.PrimaryContact || contact.CompanyName || "Local Real Estate Office";
-                name = name.trim().toLowerCase().replace(/\b\w/g, c => c.toUpperCase());
+                let name = contact.PrimaryContact || contact.CompanyName;
+                if (!name || !name.trim()) {
+                    const cid = Number(contact.ContactId || contact.contactId);
+                    if (cid && KNOWN_AGENT_OFFICES[cid]) {
+                        name = KNOWN_AGENT_OFFICES[cid];
+                    } else if (contact.EmailAddress || contact.email) {
+                        name = resolveOfficeByEmail(contact.EmailAddress || contact.email);
+                    }
+                }
+                if (!name || !name.trim()) return "Local Real Estate Office";
+
+                name = name.trim();
+
+                // Specific brokerages normalization
+                const lower = name.toLowerCase();
+                if (lower.includes("jason mitchell")) {
+                    return "Jason Mitchell Real Estate";
+                }
+                if (lower.includes("domainrealty") || lower.includes("domain realty")) {
+                    return "DomainRealty.com LLC";
+                }
+                if (lower.includes("pavich")) {
+                    return "Realty World J. PAVICH R.E.";
+                }
+                if (lower === "premiere plus" || lower === "premiere plus realty") {
+                    return "Premiere Plus Realty Company";
+                }
+                if (lower.includes("keyes co") || lower.includes("keyes company")) {
+                    return "The Keyes Company";
+                }
+                if (lower.includes("royal shell bonita springs")) {
+                    return "Royal Shell Real Estate, Inc.";
+                }
+                if (lower === "local real estate") {
+                    return "Local Real Estate LLC";
+                }
+                if (lower.includes("coldwell banker")) {
+                    return "Coldwell Banker Realty";
+                }
+
+                name = name.toLowerCase().replace(/\b\w/g, c => c.toUpperCase());
 
                 // Fix common capitalization artifacts
                 name = name.replace(/\bLlc\b/g, 'LLC')
                     .replace(/\bInc\b/g, 'Inc.')
                     .replace(/\bInc\.\.\b/g, 'Inc.') // in case it was already Inc.
                     .replace(/\.Com\b/g, '.com');
-
-                // Specific hardcoded fixes for known messy agent data
-                if (name.includes("Domainrealty.com Llc") || name.includes("Domain Realty.com Llc")) {
-                    name = "DomainRealty.com LLC";
-                }
-                if (name.trim() === "Domain Realty") {
-                    name = "DomainRealty.com LLC";
-                }
 
                 return name;
             }
@@ -1647,7 +1727,8 @@
                         if (term) {
                             const nameMatch = c.Name && c.Name.toLowerCase().includes(term);
                             const cityMatch = c.City && c.City.toLowerCase().includes(term);
-                            const companyMatch = (c.PrimaryContact || '').toLowerCase().includes(term);
+                            const stdOffice = standardizeOfficeName(c).toLowerCase();
+                            const companyMatch = (c.PrimaryContact || '').toLowerCase().includes(term) || stdOffice.includes(term);
                             if (!nameMatch && !cityMatch && !companyMatch) return false;
                         }
                         // Office filter
@@ -2216,7 +2297,7 @@
                 const name = basic.FirstName
                     ? `${basic.FirstName} ${basic.LastName || ''}`
                     : (basic.Name || detail?.ContactDisplayName || 'Agent');
-                const officeName = basic.PrimaryContact || basic.CompanyName || 'Local Real Estate Office';
+                const officeName = standardizeOfficeName(basic);
                 const photoUrl = basic.ImageUrl || '';
                 const realtorLink = constructRealtorLink(basic);
 
@@ -2499,7 +2580,7 @@
                         const photo = (l.Media && l.Media.length > 0) ? l.Media[0].MediaURL : '';
 
                         html += `
-                                <div class="modal-listing-card" onclick="window.open('https://bonitaspringsesterolifestyles.com/home-search/?mls=${l.ListingId}', '_blank')">
+                                <div class="modal-listing-card" onclick="window.open('https://coconutcoastopenhouses.com/home-search/?mls=${l.ListingId}', '_blank')">
                                     <img src="${photo}" class="modal-listing-img" onerror="this.src='https://placehold.co/400x300?text=No+Photo'">
                                     <div class="modal-listing-info">
                                         <div class="modal-listing-price">$${Number(price).toLocaleString()}</div>
