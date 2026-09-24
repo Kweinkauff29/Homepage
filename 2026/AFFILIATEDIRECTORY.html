@@ -1374,10 +1374,16 @@
 
                 function youtubeEmbed(value) {
                     try {
-                        const url = new URL(safeUrl(value));
+                        const raw = typeof value === 'object' && value !== null ? (value.url || value.embedUrl || '') : String(value || '');
+                        const url = new URL(safeUrl(raw));
                         let id = '';
                         if (url.hostname.includes('youtu.be')) id = url.pathname.split('/').filter(Boolean)[0] || '';
-                        else if (url.hostname.includes('youtube.com')) id = url.searchParams.get('v') || url.pathname.split('/').filter(Boolean).pop() || '';
+                        else if (url.hostname.includes('youtube.com')) {
+                            id = url.searchParams.get('v') || '';
+                            const parts = url.pathname.split('/').filter(Boolean);
+                            if (!id && ['embed', 'shorts', 'live'].includes(parts[0])) id = parts[1] || '';
+                            if (!id) id = parts.pop() || '';
+                        }
                         return /^[A-Za-z0-9_-]{6,20}$/.test(id) ? `https://www.youtube-nocookie.com/embed/${id}` : '';
                     } catch {
                         return '';
