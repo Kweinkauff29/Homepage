@@ -9321,6 +9321,9 @@ CCOR Education Team`,
     refreshTimer: null,
     identityTimer: null,
     requestInFlight: false,
+    refreshQueued: false,
+    refreshQueuedAnnounce: false,
+    pageSyncHookInstalled: false,
     initialized: false,
 
     getCurrentUser() {
@@ -9542,8 +9545,48 @@ CCOR Education Team`,
       return response.json();
     },
 
+    queueRefresh(announce = true) {
+      this.refreshQueued = true;
+      this.refreshQueuedAnnounce = this.refreshQueuedAnnounce || announce;
+    },
+
+    finishRequest() {
+      this.requestInFlight = false;
+      if (!this.refreshQueued) return;
+
+      const announce = this.refreshQueuedAnnounce;
+      this.refreshQueued = false;
+      this.refreshQueuedAnnounce = false;
+      window.setTimeout(() => this.refresh({ announce }), 0);
+    },
+
+    installPageSyncHook() {
+      const pageSync = window.refreshAllData;
+      if (typeof pageSync !== "function") return;
+      if (pageSync.__waterTrackerHooked) {
+        this.pageSyncHookInstalled = true;
+        return;
+      }
+
+      const trackerInstance = this;
+      const refreshAllDataWithWater = async function (...args) {
+        try {
+          return await pageSync.apply(this, args);
+        } finally {
+          await trackerInstance.refresh({ announce: true });
+        }
+      };
+      Object.defineProperty(refreshAllDataWithWater, "__waterTrackerHooked", { value: true });
+      Object.defineProperty(refreshAllDataWithWater, "__waterTrackerOriginal", { value: pageSync });
+      window.refreshAllData = refreshAllDataWithWater;
+      this.pageSyncHookInstalled = true;
+    },
+
     async refresh({ announce = true } = {}) {
-      if (this.requestInFlight) return;
+      if (this.requestInFlight) {
+        this.queueRefresh(announce);
+        return;
+      }
       this.requestInFlight = true;
       try {
         const activeUser = this.getCurrentUser();
@@ -9567,7 +9610,7 @@ CCOR Education Team`,
           board.innerHTML = '<div class="water-tracker__empty">The water scoreboard is taking a quick refill. We’ll try again shortly.</div>';
         }
       } finally {
-        this.requestInFlight = false;
+        this.finishRequest();
       }
     },
 
@@ -9602,7 +9645,7 @@ CCOR Education Team`,
         button.disabled = false;
         button.textContent = "💧 + Add a cup";
       } finally {
-        this.requestInFlight = false;
+        this.finishRequest();
       }
     },
 
@@ -9619,6 +9662,7 @@ CCOR Education Team`,
     init() {
       if (this.initialized) return;
       this.initialized = true;
+      this.installPageSyncHook();
       this.ensureMarkup();
       const board = document.getElementById("water-scoreboard");
       if (board) {
