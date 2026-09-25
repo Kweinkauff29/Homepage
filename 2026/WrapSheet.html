@@ -4203,6 +4203,391 @@ a[href*="marketing.ics"]:hover,
 
 
 </style>
+<style id="water-tracker-inlined-styles">
+/* Daily Water Tracker */
+.water-tracker {
+  position: relative;
+  overflow: hidden;
+  border: 1px solid var(--panel-border);
+  border-radius: var(--radius-lg);
+  background:
+    radial-gradient(circle at 8% -25%, rgba(56, 189, 248, 0.3), transparent 34%),
+    linear-gradient(135deg, rgba(224, 242, 254, 0.96), rgba(255, 255, 255, 0.98) 50%, rgba(207, 250, 254, 0.92));
+  color: #0f172a;
+  padding: 13px 14px 14px;
+  box-shadow: var(--shadow-md);
+  isolation: isolate;
+}
+
+body[data-theme="dark"] .water-tracker {
+  background:
+    radial-gradient(circle at 8% -25%, rgba(14, 165, 233, 0.35), transparent 34%),
+    linear-gradient(135deg, #082f49, #0f172a 52%, #164e63);
+  color: #f8fafc;
+}
+
+.water-tracker__topline {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 10px;
+}
+
+.water-tracker__heading {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  min-width: 0;
+}
+
+.water-tracker__drop {
+  display: grid;
+  place-items: center;
+  width: 34px;
+  height: 34px;
+  border-radius: 50% 50% 52% 48% / 65% 65% 35% 35%;
+  background: linear-gradient(145deg, #7dd3fc, #0284c7);
+  box-shadow: inset 4px 4px 8px rgba(255, 255, 255, 0.35), 0 6px 16px rgba(2, 132, 199, 0.22);
+  color: #fff;
+  font-size: 17px;
+  transform: rotate(45deg);
+  animation: water-bob 2.8s ease-in-out infinite;
+  flex: 0 0 auto;
+}
+
+.water-tracker__drop span {
+  transform: rotate(-45deg);
+}
+
+.water-tracker__title {
+  margin: 0;
+  font-size: 15px;
+  line-height: 1.1;
+  font-weight: 850;
+  letter-spacing: -0.02em;
+}
+
+.water-tracker__subtitle {
+  margin: 2px 0 0;
+  color: #475569;
+  font-size: 11px;
+}
+
+body[data-theme="dark"] .water-tracker__subtitle {
+  color: #bae6fd;
+}
+
+.water-tracker__goal {
+  flex: 0 0 auto;
+  border: 1px solid rgba(3, 105, 161, 0.3);
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.62);
+  color: #075985;
+  padding: 5px 10px;
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+body[data-theme="dark"] .water-tracker__goal {
+  background: rgba(15, 23, 42, 0.62);
+  color: #e0f2fe;
+  border-color: rgba(186, 230, 253, 0.35);
+}
+
+.water-scoreboard {
+  display: flex;
+  align-items: stretch;
+  gap: 8px;
+  overflow-x: auto;
+  padding: 1px 1px 5px;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(14, 165, 233, 0.55) transparent;
+}
+
+.water-score {
+  --water-fill: 0%;
+  position: relative;
+  flex: 1 0 154px;
+  min-width: 154px;
+  overflow: hidden;
+  border: 1px solid rgba(14, 116, 144, 0.25);
+  border-radius: 13px;
+  background: rgba(255, 255, 255, 0.72);
+  padding: 9px 10px 10px;
+  transition: transform 420ms cubic-bezier(0.2, 0.9, 0.2, 1), box-shadow 220ms ease, border-color 220ms ease;
+}
+
+.water-score::before {
+  content: "";
+  position: absolute;
+  inset: auto 0 0;
+  height: var(--water-fill);
+  max-height: 100%;
+  background: linear-gradient(180deg, rgba(125, 211, 252, 0.16), rgba(14, 165, 233, 0.3));
+  transition: height 600ms cubic-bezier(0.2, 0.85, 0.25, 1);
+  z-index: -1;
+}
+
+body[data-theme="dark"] .water-score {
+  background: rgba(15, 23, 42, 0.7);
+  border-color: rgba(125, 211, 252, 0.28);
+}
+
+.water-score.is-you {
+  border-color: #0284c7;
+  box-shadow: 0 0 0 2px rgba(56, 189, 248, 0.18), 0 8px 18px rgba(2, 132, 199, 0.12);
+}
+
+.water-score.is-leader {
+  background: linear-gradient(145deg, rgba(254, 249, 195, 0.92), rgba(255, 255, 255, 0.75));
+  border-color: rgba(202, 138, 4, 0.42);
+}
+
+body[data-theme="dark"] .water-score.is-leader {
+  background: linear-gradient(145deg, rgba(113, 63, 18, 0.78), rgba(15, 23, 42, 0.76));
+  border-color: rgba(253, 224, 71, 0.48);
+}
+
+.water-score__row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.water-score__rank {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  color: #334155;
+  font-size: 10px;
+  font-weight: 850;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+body[data-theme="dark"] .water-score__rank {
+  color: #cbd5e1;
+}
+
+.water-score__you {
+  border-radius: 999px;
+  background: #0ea5e9;
+  color: #fff;
+  padding: 2px 6px;
+  font-size: 9px;
+  font-weight: 850;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.water-score__name {
+  display: block;
+  margin-top: 5px;
+  overflow: hidden;
+  font-size: 13px;
+  font-weight: 850;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.water-score__count {
+  display: flex;
+  align-items: baseline;
+  gap: 4px;
+  margin-top: 4px;
+}
+
+.water-score__number {
+  color: #0369a1;
+  font-size: 24px;
+  font-weight: 900;
+  line-height: 1;
+  font-variant-numeric: tabular-nums;
+}
+
+body[data-theme="dark"] .water-score__number {
+  color: #7dd3fc;
+}
+
+.water-score__unit {
+  color: #64748b;
+  font-size: 10px;
+  font-weight: 700;
+}
+
+body[data-theme="dark"] .water-score__unit {
+  color: #cbd5e1;
+}
+
+.water-score__progress {
+  height: 4px;
+  margin-top: 7px;
+  overflow: hidden;
+  border-radius: 999px;
+  background: rgba(14, 116, 144, 0.15);
+}
+
+.water-score__progress span {
+  display: block;
+  width: var(--water-fill);
+  height: 100%;
+  border-radius: inherit;
+  background: linear-gradient(90deg, #38bdf8, #0284c7);
+  transition: width 600ms cubic-bezier(0.2, 0.85, 0.25, 1);
+}
+
+.water-score__add {
+  width: 100%;
+  margin-top: 8px;
+  border: 0;
+  border-radius: 999px;
+  background: linear-gradient(135deg, #0ea5e9, #0369a1);
+  color: #fff;
+  padding: 7px 10px;
+  font: inherit;
+  font-size: 11px;
+  font-weight: 850;
+  cursor: pointer;
+  box-shadow: 0 5px 12px rgba(2, 132, 199, 0.22);
+  transition: transform 150ms ease, filter 150ms ease;
+}
+
+.water-score__add:hover:not(:disabled) {
+  filter: brightness(1.08);
+  transform: translateY(-1px);
+}
+
+.water-score__add:active:not(:disabled) {
+  transform: translateY(1px) scale(0.98);
+}
+
+.water-score__add:disabled {
+  cursor: wait;
+  opacity: 0.62;
+}
+
+.water-score__goal-hit {
+  display: block;
+  margin-top: 7px;
+  color: #047857;
+  font-size: 10px;
+  font-weight: 850;
+}
+
+body[data-theme="dark"] .water-score__goal-hit {
+  color: #6ee7b7;
+}
+
+.water-tracker__empty {
+  width: 100%;
+  padding: 17px;
+  border: 1px dashed rgba(14, 116, 144, 0.3);
+  border-radius: 12px;
+  color: #475569;
+  text-align: center;
+  font-size: 12px;
+}
+
+.water-tracker__status {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+.water-tracker__burst {
+  position: absolute;
+  inset: 0;
+  z-index: 5;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.water-emoji {
+  position: absolute;
+  left: var(--burst-left, 50%);
+  bottom: -34px;
+  font-size: var(--burst-size, 25px);
+  filter: drop-shadow(0 4px 5px rgba(15, 23, 42, 0.2));
+  animation: water-happy-burst 1.45s cubic-bezier(0.15, 0.78, 0.28, 1) forwards;
+}
+
+.water-emoji.is-mad {
+  left: -40px;
+  bottom: var(--burst-bottom, 20%);
+  animation-name: water-mad-fire;
+  animation-duration: 1.15s;
+}
+
+.water-emoji.is-drop {
+  animation-name: water-drop-pop;
+  animation-duration: 900ms;
+}
+
+.water-score.is-swapping {
+  will-change: transform;
+}
+
+@keyframes water-bob {
+  0%, 100% { transform: rotate(45deg) translateY(0); }
+  50% { transform: rotate(45deg) translate(-2px, -2px); }
+}
+
+@keyframes water-happy-burst {
+  0% { opacity: 0; transform: translate(-50%, 0) rotate(-10deg) scale(0.55); }
+  16% { opacity: 1; }
+  100% { opacity: 0; transform: translate(calc(-50% + var(--burst-drift, 0px)), -210px) rotate(var(--burst-rotate, 14deg)) scale(1.25); }
+}
+
+@keyframes water-mad-fire {
+  0% { opacity: 0; transform: translateX(0) rotate(-18deg) scale(0.6); }
+  15% { opacity: 1; }
+  100% { opacity: 0; transform: translateX(calc(100vw + 80px)) rotate(520deg) scale(1.2); }
+}
+
+@keyframes water-drop-pop {
+  0% { opacity: 0; transform: translate(-50%, 0) scale(0.45); }
+  18% { opacity: 1; }
+  70% { opacity: 1; }
+  100% { opacity: 0; transform: translate(calc(-50% + var(--burst-drift, 0px)), -105px) scale(1.05); }
+}
+
+@media (max-width: 620px) {
+  .water-tracker {
+    padding: 11px;
+  }
+
+  .water-tracker__topline {
+    align-items: flex-start;
+  }
+
+  .water-tracker__subtitle {
+    max-width: 210px;
+  }
+
+  .water-score {
+    flex-basis: 146px;
+    min-width: 146px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .water-tracker__drop,
+  .water-emoji,
+  .water-score {
+    animation: none !important;
+    transition: none !important;
+  }
+}
+
+</style>
 </head>
 
 <body>
@@ -8913,6 +9298,352 @@ CCOR Education Team`,
     });
   } else {
     ClassTracker.init();
+  }
+})();
+
+</script>
+<script id="water-tracker-inlined-script">
+(function () {
+  "use strict";
+
+  const POLL_INTERVAL_MS = 12000;
+  const IDENTITY_INTERVAL_MS = 700;
+  const MEDALS = ["🥇", "🥈", "🥉"];
+  const HAPPY_EMOJIS = ["🙂", "😄", "🥳", "😁", "🙌"];
+  const MAD_EMOJIS = ["😠", "😤", "😡", "🤨"];
+
+  const tracker = {
+    scores: [],
+    date: "",
+    goalCups: 8,
+    currentUserId: null,
+    previousRank: null,
+    refreshTimer: null,
+    identityTimer: null,
+    requestInFlight: false,
+    initialized: false,
+
+    getCurrentUser() {
+      const stateUser = window.state && window.state.currentUser;
+      if (stateUser && stateUser.id) return stateUser;
+
+      try {
+        const stored = JSON.parse(localStorage.getItem("wrapsheet-user") || "null");
+        if (!stored || !stored.id) return null;
+        const users = (window.state && window.state.users) || [];
+        return users.find((user) => Number(user.id) === Number(stored.id)) || null;
+      } catch (_) {
+        return null;
+      }
+    },
+
+    getApiBase() {
+      return window.API_BASE || "https://wrapsheet.bonitaspringsrealtors.workers.dev/api";
+    },
+
+    ordinal(rank) {
+      const mod100 = rank % 100;
+      if (mod100 >= 11 && mod100 <= 13) return `${rank}th`;
+      if (rank % 10 === 1) return `${rank}st`;
+      if (rank % 10 === 2) return `${rank}nd`;
+      if (rank % 10 === 3) return `${rank}rd`;
+      return `${rank}th`;
+    },
+
+    formatDate(dateKey) {
+      if (!dateKey) return "Today";
+      const parsed = new Date(`${dateKey}T12:00:00`);
+      if (Number.isNaN(parsed.getTime())) return "Today";
+      return parsed.toLocaleDateString(undefined, { weekday: "long", month: "short", day: "numeric" });
+    },
+
+    escapeMarkup(value) {
+      return String(value ?? "")
+        .replaceAll("&", "&amp;")
+        .replaceAll("<", "&lt;")
+        .replaceAll(">", "&gt;")
+        .replaceAll('"', "&quot;")
+        .replaceAll("'", "&#039;");
+    },
+
+    ensureMarkup() {
+      if (document.getElementById("water-tracker")) return;
+      const appHeader = document.querySelector(".app-shell > header.app-header");
+      if (!appHeader) return;
+
+      const section = document.createElement("section");
+      section.id = "water-tracker";
+      section.className = "water-tracker";
+      section.setAttribute("aria-labelledby", "water-tracker-title");
+      section.innerHTML = `
+        <div class="water-tracker__topline">
+          <div class="water-tracker__heading">
+            <div class="water-tracker__drop" aria-hidden="true"><span>💧</span></div>
+            <div>
+              <h2 class="water-tracker__title" id="water-tracker-title">Hydration Hustle</h2>
+              <p class="water-tracker__subtitle" id="water-tracker-subtitle">Today’s team water scoreboard</p>
+            </div>
+          </div>
+          <span class="water-tracker__goal" id="water-tracker-goal">Daily goal: 8 cups</span>
+        </div>
+        <div class="water-scoreboard" id="water-scoreboard" aria-label="Today’s water leaderboard">
+          <div class="water-tracker__empty">Filling the water bottles…</div>
+        </div>
+        <div class="water-tracker__burst" id="water-tracker-burst" aria-hidden="true"></div>
+        <p class="water-tracker__status" id="water-tracker-status" aria-live="polite"></p>
+      `;
+      appHeader.insertAdjacentElement("afterend", section);
+    },
+
+    capturePositions() {
+      const positions = new Map();
+      document.querySelectorAll(".water-score[data-user-id]").forEach((card) => {
+        positions.set(card.dataset.userId, card.getBoundingClientRect());
+      });
+      return positions;
+    },
+
+    animateReorder(previousPositions) {
+      if (window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+      document.querySelectorAll(".water-score[data-user-id]").forEach((card) => {
+        const before = previousPositions.get(card.dataset.userId);
+        if (!before) return;
+        const after = card.getBoundingClientRect();
+        const deltaX = before.left - after.left;
+        const deltaY = before.top - after.top;
+        if (Math.abs(deltaX) < 1 && Math.abs(deltaY) < 1) return;
+        card.style.transition = "none";
+        card.style.transform = `translate(${deltaX}px, ${deltaY}px)`;
+        card.classList.add("is-swapping");
+        requestAnimationFrame(() => {
+          requestAnimationFrame(() => {
+            card.style.transition = "";
+            card.style.transform = "";
+            window.setTimeout(() => card.classList.remove("is-swapping"), 480);
+          });
+        });
+      });
+    },
+
+    render() {
+      this.ensureMarkup();
+      const board = document.getElementById("water-scoreboard");
+      if (!board) return;
+
+      const previousPositions = this.capturePositions();
+      const user = this.getCurrentUser();
+      const userId = user ? Number(user.id) : null;
+      const goal = Math.max(1, Number(this.goalCups || 8));
+
+      document.getElementById("water-tracker-subtitle").textContent =
+        `${this.formatDate(this.date)} · every cup counts`;
+      document.getElementById("water-tracker-goal").textContent = `Daily goal: ${goal} cups`;
+
+      if (!this.scores.length) {
+        board.innerHTML = '<div class="water-tracker__empty">No active teammates found yet.</div>';
+        return;
+      }
+
+      board.innerHTML = this.scores.map((score, index) => {
+        const cupCount = Number(score.cup_count || 0);
+        const isYou = userId !== null && Number(score.user_id) === userId;
+        const progress = Math.min(100, Math.round((cupCount / goal) * 100));
+        const medal = MEDALS[index] || "💧";
+        const goalMessage = cupCount >= goal
+          ? '<span class="water-score__goal-hit">✨ Goal reached!</span>'
+          : "";
+        const action = isYou
+          ? '<button type="button" class="water-score__add" data-action="add-water">💧 + Add a cup</button>'
+          : goalMessage;
+
+        return `
+          <article class="water-score${isYou ? " is-you" : ""}${index === 0 ? " is-leader" : ""}"
+            data-user-id="${Number(score.user_id)}" style="--water-fill:${progress}%">
+            <div class="water-score__row">
+              <span class="water-score__rank">${medal} ${this.ordinal(index + 1)} place</span>
+              ${isYou ? '<span class="water-score__you">You</span>' : ""}
+            </div>
+            <span class="water-score__name">${this.escapeMarkup(score.name)}</span>
+            <div class="water-score__count">
+              <span class="water-score__number">${cupCount}</span>
+              <span class="water-score__unit">${cupCount === 1 ? "cup" : "cups"}</span>
+            </div>
+            <div class="water-score__progress" aria-label="${progress}% of daily goal"><span></span></div>
+            ${action}
+          </article>
+        `;
+      }).join("");
+
+      this.animateReorder(previousPositions);
+    },
+
+    announceRankChange(oldRank, newRank) {
+      const status = document.getElementById("water-tracker-status");
+      if (!status || !oldRank || !newRank || oldRank === newRank) return;
+
+      if (newRank < oldRank) {
+        status.textContent = `Nice! You moved into ${this.ordinal(newRank)} place.`;
+        if (typeof window.showToast === "function") {
+          window.showToast(`💧 Nice! You passed someone — now ${this.ordinal(newRank)} place!`);
+        }
+        this.burst("happy");
+      } else {
+        status.textContent = `Someone just passed you. You are now in ${this.ordinal(newRank)} place.`;
+        if (typeof window.showToast === "function") {
+          window.showToast(`😤 Somebody splashed past you — now ${this.ordinal(newRank)} place.`);
+        }
+        this.burst("mad");
+      }
+    },
+
+    burst(type, anchor) {
+      const layer = document.getElementById("water-tracker-burst");
+      if (!layer) return;
+      const isMad = type === "mad";
+      const isDrop = type === "drop";
+      const emojis = isMad ? MAD_EMOJIS : (isDrop ? ["💧", "💦", "💧"] : HAPPY_EMOJIS);
+      const count = isMad ? 9 : (isDrop ? 7 : 12);
+      const layerRect = layer.getBoundingClientRect();
+      const anchorRect = anchor && anchor.getBoundingClientRect ? anchor.getBoundingClientRect() : null;
+      const anchorLeft = anchorRect
+        ? Math.max(6, Math.min(94, ((anchorRect.left + anchorRect.width / 2 - layerRect.left) / layerRect.width) * 100))
+        : 50;
+
+      for (let index = 0; index < count; index += 1) {
+        const emoji = document.createElement("span");
+        emoji.className = `water-emoji${isMad ? " is-mad" : ""}${isDrop ? " is-drop" : ""}`;
+        emoji.textContent = emojis[index % emojis.length];
+        emoji.style.setProperty("--burst-left", `${anchorLeft + (Math.random() * 16 - 8)}%`);
+        emoji.style.setProperty("--burst-bottom", `${8 + Math.random() * 64}%`);
+        emoji.style.setProperty("--burst-drift", `${Math.round(Math.random() * 150 - 75)}px`);
+        emoji.style.setProperty("--burst-rotate", `${Math.round(Math.random() * 90 - 45)}deg`);
+        emoji.style.setProperty("--burst-size", `${20 + Math.round(Math.random() * 17)}px`);
+        emoji.style.animationDelay = `${index * 45}ms`;
+        layer.appendChild(emoji);
+        window.setTimeout(() => emoji.remove(), 2100);
+      }
+    },
+
+    async request(method = "GET") {
+      const user = this.getCurrentUser();
+      const headers = { Accept: "application/json" };
+      if (method !== "GET") headers["Content-Type"] = "application/json";
+      if (user && user.email) headers["x-user-email"] = user.email;
+
+      const response = await fetch(`${this.getApiBase()}/water-tracker`, {
+        method,
+        headers,
+        ...(method === "GET" ? {} : { body: "{}" }),
+      });
+      if (!response.ok) {
+        const detail = await response.json().catch(() => ({}));
+        throw new Error(detail.error || `Water tracker request failed (${response.status})`);
+      }
+      return response.json();
+    },
+
+    async refresh({ announce = true } = {}) {
+      if (this.requestInFlight) return;
+      this.requestInFlight = true;
+      try {
+        const activeUser = this.getCurrentUser();
+        const activeUserId = activeUser ? Number(activeUser.id) : null;
+        const oldRank = activeUserId === this.currentUserId ? this.previousRank : null;
+        const data = await this.request("GET");
+
+        this.scores = Array.isArray(data.scores) ? data.scores : [];
+        this.date = data.date || "";
+        this.goalCups = Number(data.goal_cups || 8);
+        this.currentUserId = activeUserId;
+        const ownScore = this.scores.find((score) => Number(score.user_id) === activeUserId);
+        const newRank = ownScore ? Number(ownScore.rank) : null;
+        this.render();
+        if (announce) this.announceRankChange(oldRank, newRank);
+        this.previousRank = newRank;
+      } catch (error) {
+        console.error("Water tracker refresh failed:", error);
+        const board = document.getElementById("water-scoreboard");
+        if (board && !this.scores.length) {
+          board.innerHTML = '<div class="water-tracker__empty">The water scoreboard is taking a quick refill. We’ll try again shortly.</div>';
+        }
+      } finally {
+        this.requestInFlight = false;
+      }
+    },
+
+    async addCup(button) {
+      const user = this.getCurrentUser();
+      if (!user || !user.email) {
+        if (typeof window.showToast === "function") window.showToast("Select your name before adding water", true);
+        return;
+      }
+      if (this.requestInFlight) return;
+
+      this.requestInFlight = true;
+      button.disabled = true;
+      button.textContent = "Adding…";
+      const oldRank = this.previousRank;
+      try {
+        const data = await this.request("POST");
+        this.scores = Array.isArray(data.scores) ? data.scores : [];
+        this.date = data.date || this.date;
+        this.goalCups = Number(data.goal_cups || this.goalCups || 8);
+        this.currentUserId = Number(user.id);
+        const ownScore = this.scores.find((score) => Number(score.user_id) === Number(user.id));
+        const newRank = ownScore ? Number(ownScore.rank) : null;
+        this.render();
+        const freshButton = document.querySelector('.water-score.is-you [data-action="add-water"]');
+        this.burst("drop", freshButton || button);
+        this.announceRankChange(oldRank, newRank);
+        this.previousRank = newRank;
+      } catch (error) {
+        console.error("Could not add water cup:", error);
+        if (typeof window.showToast === "function") window.showToast(error.message || "Could not add that cup", true);
+        button.disabled = false;
+        button.textContent = "💧 + Add a cup";
+      } finally {
+        this.requestInFlight = false;
+      }
+    },
+
+    syncIdentity() {
+      const user = this.getCurrentUser();
+      const nextId = user ? Number(user.id) : null;
+      if (nextId === this.currentUserId) return;
+      this.currentUserId = nextId;
+      const ownScore = this.scores.find((score) => Number(score.user_id) === nextId);
+      this.previousRank = ownScore ? Number(ownScore.rank) : null;
+      this.render();
+    },
+
+    init() {
+      if (this.initialized) return;
+      this.initialized = true;
+      this.ensureMarkup();
+      const board = document.getElementById("water-scoreboard");
+      if (board) {
+        board.addEventListener("click", (event) => {
+          const button = event.target.closest('[data-action="add-water"]');
+          if (button) this.addCup(button);
+        });
+      }
+
+      this.refresh({ announce: false });
+      this.refreshTimer = window.setInterval(() => {
+        if (!document.hidden) this.refresh({ announce: true });
+      }, POLL_INTERVAL_MS);
+      this.identityTimer = window.setInterval(() => this.syncIdentity(), IDENTITY_INTERVAL_MS);
+      document.addEventListener("visibilitychange", () => {
+        if (!document.hidden) this.refresh({ announce: true });
+      });
+    },
+  };
+
+  window.WaterTracker = tracker;
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", () => tracker.init(), { once: true });
+  } else {
+    tracker.init();
   }
 })();
 
