@@ -4595,6 +4595,118 @@ body[data-theme="dark"] .water-score__goal-hit {
   }
 }
 
+/* Playful ounce scoreboard, with a distinct badge for every place. */
+.water-tracker { padding: 18px; border-color: #a5dbea; }
+.water-tracker__title { font-size: 20px; }
+.water-tracker__subtitle { margin-top: 5px; font-size: 12px; }
+.water-tracker__drop { width: 42px; height: 42px; font-size: 22px; }
+.water-tracker__topline { margin-bottom: 16px; flex-wrap: wrap; }
+.water-scoreboard { gap: 12px; padding: 3px 3px 8px; }
+.water-score { display: flex; flex-direction: column; flex-basis: 168px; padding: 13px; isolation: isolate; }
+.water-score__mascot { align-self: center; display: grid; place-items: center; width: 56px; height: 56px; margin: 12px 0 6px; font-size: 36px; border-radius: 18px; background: rgba(125,211,252,.22); box-shadow: inset 0 0 0 1px rgba(14,165,233,.15); }
+.water-score.is-leader .water-score__mascot { background: rgba(250,204,21,.24); transform: rotate(-6deg); }
+.water-score__title { text-align: center; font-size: 10px; font-weight: 800; color: #075985; }
+.water-score__name { margin-top: 9px; font-size: 14px; }
+.water-score__count { margin-top: 8px; }
+.water-score__number { font-size: 30px; }
+.water-score__unit { font-size: 12px; }
+.water-score__progress { height: 7px; margin-top: 10px; }
+.water-score__target { margin-top: 6px; font-size: 10px; color: #475569; }
+.water-score__milestone { display: block; margin: 10px 0 4px; font-size: 11px; font-weight: 750; color: #075985; }
+.water-score__milestone.is-complete { color: #047857; }
+.water-score.is-complete .water-score__progress span { background: linear-gradient(90deg, #34d399, #059669); }
+.water-score__add { min-height: 40px; margin-top: 9px; font-size: 12px; }
+.water-score__add:focus-visible { outline: 3px solid #075985; outline-offset: 3px; }
+body[data-theme="dark"] .water-score__title,
+body[data-theme="dark"] .water-score__milestone { color: #bae6fd; }
+body[data-theme="dark"] .water-score__target { color: #cbd5e1; }
+body[data-theme="dark"] .water-score__milestone.is-complete { color: #6ee7b7; }
+body[data-theme="dark"] .water-score__add:focus-visible { outline-color: #bae6fd; }
+@media (max-width: 620px) {
+  .water-tracker { padding: 12px; }
+  .water-tracker__title { font-size: 18px; }
+  .water-scoreboard { scroll-snap-type: x proximity; }
+  .water-score { flex-basis: 164px; scroll-snap-align: start; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .water-score::before, .water-score__progress span, .water-score__add { transition: none !important; }
+}
+.water-score__amount { display: grid; gap: 6px; margin-top: 8px; }
+.water-score__amount label { font-size: 11px; font-weight: 700; }
+.water-score__amount select, .water-score__amount input { box-sizing: border-box; width: 100%; min-width: 0; min-height: 40px; border: 1px solid #7cb9d2; border-radius: 9px; padding: 8px; font: inherit; font-size: 13px; background: #fff; color: #0f172a; }
+.water-score__amount input[hidden] { display: none; }
+.water-score__amount :focus-visible { outline: 2px solid #0284c7; outline-offset: 2px; }
+body[data-theme="dark"] .water-score__amount select,
+body[data-theme="dark"] .water-score__amount input { background: #0f172a; color: #e0f2fe; }
+.water-score.is-overflow { border-color: #a855f7; box-shadow: 0 0 0 2px rgba(168,85,247,.18), 0 6px 18px rgba(168,85,247,.16); }
+.water-score.is-overflow::before { background: linear-gradient(160deg, rgba(192,132,252,.12), rgba(167,139,250,.32)); }
+.water-score.is-overflow .water-score__number { color: #7e22ce; }
+.water-score.is-overflow .water-score__progress { position: relative; overflow: visible; }
+.water-score.is-overflow .water-score__progress > span:first-child { background: linear-gradient(90deg, #06b6d4, #a855f7, #ec4899); box-shadow: 0 0 10px rgba(168,85,247,.45); }
+.water-score__progress .water-score__spark { position: absolute; right: -5px; top: -9px; width: auto; height: auto; font-size: 19px; background: none; transform: rotate(12deg); }
+.water-score.is-overflow .water-score__milestone { color: #7e22ce; }
+body[data-theme="dark"] .water-score.is-overflow .water-score__number,
+body[data-theme="dark"] .water-score.is-overflow .water-score__milestone { color: #e9b5ff; }
+
+/* Compact scoreboard: keep badges, totals and logging within a shallow strip. */
+.water-tracker { padding: 10px 12px; }
+.water-tracker__topline { margin-bottom: 7px; gap: 8px; }
+.water-tracker__drop { width: 28px; height: 28px; font-size: 16px; }
+.water-tracker__title { font-size: 15px; }
+.water-tracker__subtitle { margin-top: 2px; font-size: 10px; }
+.water-scoreboard { gap: 8px; padding: 2px 2px 4px; }
+.water-score { display: grid; grid-template-columns: 26px minmax(0, 1fr) auto; grid-template-rows: auto 30px 5px auto auto auto; gap: 5px 6px; align-content: start; align-items: center; flex-basis: 195px; min-width: 195px; padding: 8px 9px; border-radius: 11px; }
+.water-score__row { grid-column: 1 / -1; grid-row: 1; }
+.water-score__rank { font-size: 9px; }
+.water-score__mascot { grid-column: 1; grid-row: 2; width: 26px; height: 28px; margin: 0; border-radius: 8px; font-size: 22px; }
+.water-score__title { display: none; }
+.water-score__name { grid-column: 2; grid-row: 2; margin: 0; font-size: 12px; }
+.water-score__count { grid-column: 3; grid-row: 2; margin: 0; gap: 2px; }
+.water-score__number { font-size: 23px; }
+.water-score__unit { font-size: 10px; }
+.water-score__progress { grid-column: 1 / -1; grid-row: 3; height: 5px; margin: 0; }
+.water-score__target { grid-column: 1 / -1; grid-row: 4; margin: 0; font-size: 9px; }
+.water-score__milestone { grid-column: 1 / -1; grid-row: 5; margin: 0; font-size: 10px; }
+.water-score__amount { grid-column: 1 / 3; grid-row: 6; margin: 0; gap: 4px; }
+.water-score__amount label { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+.water-score__amount select, .water-score__amount input { min-height: 32px; padding: 5px; border-radius: 7px; font-size: 11px; }
+.water-score__add { grid-column: 3; grid-row: 6; align-self: start; min-height: 32px; width: auto; margin: 0; padding: 5px 8px; font-size: 11px; white-space: nowrap; }
+.water-score.is-overflow .water-score__progress > .water-score__spark { background: none; box-shadow: none; font-size: 15px; top: -7px; }
+@media (max-width: 620px) {
+  .water-tracker { padding: 9px; }
+  .water-tracker__topline { align-items: center; }
+  .water-tracker__subtitle { display: none; }
+  .water-tracker__goal { font-size: 9px; padding: 4px 6px; }
+  .water-score { flex-basis: 220px; min-width: 220px; }
+  .water-score__amount select, .water-score__amount input, .water-score__add { min-height: 36px; }
+}
+
+/* History shares the same horizontal strip; neither panel wraps underneath. */
+.water-tracker__content { display: flex; align-items: stretch; gap: 10px; overflow-x: auto; padding: 2px; }
+.water-tracker__content > .water-scoreboard { flex: 1 1 0; min-width: 245px; }
+.water-history { flex: 0 0 360px; box-sizing: border-box; padding: 8px 10px; border: 1px solid #a5cfe0; border-radius: 11px; background: rgba(255,255,255,.65); }
+.water-history__heading { display: flex; align-items: center; justify-content: space-between; gap: 8px; font-size: 12px; }
+.water-history select, .water-history input, .water-history button { font: inherit; font-size: 10px; min-height: 26px; border: 1px solid #8ebdd2; border-radius: 6px; background: #fff; color: #0f172a; padding: 3px 5px; }
+.water-history__dates { display: flex; align-items: center; gap: 4px; margin-top: 5px; }
+.water-history__dates[hidden] { display: none; }
+.water-history__dates input { min-width: 0; flex: 1; }
+.water-history button { cursor: pointer; font-weight: 700; }
+.water-history__caption { font-size: 9px; margin: 4px 0; color: #475569; }
+.water-history__chart { display: grid; gap: 3px; }
+.water-history__bar { position: relative; isolation: isolate; display: flex; align-items: center; gap: 5px; padding: 3px 6px; min-height: 17px; font-size: 11px; border-radius: 4px; background: rgba(14,165,233,.06); overflow: hidden; }
+.water-history__bar::before { content: ""; position: absolute; inset: 0 auto 0 0; width: var(--history-fill); background: linear-gradient(90deg, rgba(56,189,248,.38),rgba(167,139,250,.28)); z-index: -1; }
+.water-history__place { width: 20px; text-align: center; }
+.water-history__person { flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.water-history__bar strong { font-variant-numeric: tabular-nums; }
+.water-history__bar small { font-size: 9px; font-weight: 500; }
+.water-history__status { margin: 3px 0 0; font-size: 10px; }
+.water-history__status:empty { display: none; }
+.water-history :focus-visible { outline: 2px solid #0284c7; outline-offset: 2px; }
+body[data-theme="dark"] .water-history { background: rgba(15,23,42,.7); border-color: #47758a; }
+body[data-theme="dark"] .water-history__caption { color: #cbd5e1; }
+body[data-theme="dark"] .water-history select, body[data-theme="dark"] .water-history input, body[data-theme="dark"] .water-history button { background: #0f172a; color: #e0f2fe; color-scheme: dark; }
+@media(max-width:620px) { .water-history { flex-basis: 330px; } }
+
 </style>
 </head>
 
@@ -9323,7 +9435,13 @@ CCOR Education Team`,
 
   const POLL_INTERVAL_MS = 12000;
   const IDENTITY_INTERVAL_MS = 700;
-  const MEDALS = ["🥇", "🥈", "🥉"];
+  // The existing API stores 8 fl oz servings; preserve all historical entries.
+  const OUNCES_PER_CUP = 8;
+  const PLACES = [
+    ["👑", "Splash champion"], ["🥈", "Wave maker"], ["🥉", "Sip superstar"],
+    ["🐬", "Dolphin energy"], ["🌊", "Making waves"], ["🦦", "Smooth sipper"],
+    ["🐳", "Whale hello!"], ["💎", "Liquid legend"],
+  ];
   const HAPPY_EMOJIS = ["🙂", "😄", "🥳", "😁", "🙌"];
   const MAD_EMOJIS = ["😠", "😤", "😡", "🤨"];
 
@@ -9331,6 +9449,10 @@ CCOR Education Team`,
     scores: [],
     date: "",
     goalCups: 8,
+    historyRequestId: 0,
+    historyRange: null,
+    selectedAmount: "8",
+    customAmount: "",
     currentUserId: null,
     previousRank: null,
     refreshTimer: null,
@@ -9402,15 +9524,71 @@ CCOR Education Team`,
               <p class="water-tracker__subtitle" id="water-tracker-subtitle">Today’s team water scoreboard</p>
             </div>
           </div>
-          <span class="water-tracker__goal" id="water-tracker-goal">Daily goal: 8 cups</span>
+          <span class="water-tracker__goal" id="water-tracker-goal">Daily goal: 64 oz</span>
         </div>
+        <div class="water-tracker__content">
         <div class="water-scoreboard" id="water-scoreboard" aria-label="Today’s water leaderboard">
           <div class="water-tracker__empty">Filling the water bottles…</div>
+        </div>
+        <aside class="water-history" aria-labelledby="water-history-title">
+          <div class="water-history__heading"><strong id="water-history-title">🏆 Hydration standings</strong>
+            <select id="water-history-period" aria-label="History period"><option value="30">Last 30 days</option><option value="custom">Date range</option></select>
+          </div>
+          <form id="water-history-form" class="water-history__dates" hidden>
+            <input id="water-history-start" type="date" aria-label="Start date" required>
+            <span>–</span><input id="water-history-end" type="date" aria-label="End date" required>
+            <button type="submit">Go</button>
+          </form>
+          <p id="water-history-caption" class="water-history__caption">Total ounces · last 30 days</p>
+          <div id="water-history-chart" class="water-history__chart" aria-label="Total ounces by teammate"><span>Loading history…</span></div>
+          <p id="water-history-status" class="water-history__status" role="status"></p>
+        </aside>
         </div>
         <div class="water-tracker__burst" id="water-tracker-burst" aria-hidden="true"></div>
         <p class="water-tracker__status" id="water-tracker-status" aria-live="polite"></p>
       `;
       appHeader.insertAdjacentElement("afterend", section);
+    },
+
+    personEmoji(name) {
+      return ({ emma: "🌸", "emma cox": "🌸", erica: "🦋", jenna: "🐬", kevin: "🦊", meighan: "🦄", monica: "🌻" })[String(name).trim().toLowerCase()] || "💧";
+    },
+
+    async refreshHistory() {
+      const chart = document.getElementById("water-history-chart");
+      if (!chart) return;
+      const requestId = ++this.historyRequestId;
+      const status = document.getElementById("water-history-status");
+      status.textContent = "Updating…";
+      try {
+        const query = this.historyRange ? `?${new URLSearchParams(this.historyRange)}` : "";
+        const response = await fetch(`${this.getApiBase()}/water-tracker/history${query}`, { headers: { Accept: "application/json" } });
+        const data = await response.json();
+        if (requestId !== this.historyRequestId) return;
+        if (!response.ok) throw new Error(data.error || "History is unavailable. Try again.");
+        const scores = Array.isArray(data.scores) ? data.scores : [];
+        const max = Math.max(1, ...scores.map(score => Number(score.ounces) || 0));
+        chart.innerHTML = scores.map(score => {
+          const ounces = Math.max(0, Number(score.ounces) || 0);
+          const rank = Number(score.rank) || 0;
+          const badge = rank ? (["🥇", "🥈", "🥉"][rank - 1] || `#${rank}`) : "—";
+          return `<div class="water-history__bar" style="--history-fill:${ounces / max * 100}%" aria-label="${this.escapeMarkup(score.name)}, ${rank ? this.ordinal(rank) + " place" : "no entries"}, ${ounces} ounces">
+            <span class="water-history__place" aria-hidden="true">${badge}</span>
+            <span class="water-history__person">${this.personEmoji(score.name)} ${this.escapeMarkup(score.name)}</span>
+            <strong>${ounces.toLocaleString()} <small>oz</small></strong>
+          </div>`;
+        }).join("") || '<span>No teammates found.</span>';
+        document.getElementById("water-history-caption").textContent = `${data.start} – ${data.end} · total oz`;
+        if (!this.historyRange && document.getElementById("water-history-period").value !== "custom") {
+          document.getElementById("water-history-start").value = data.start;
+          document.getElementById("water-history-end").value = data.end;
+        }
+        status.textContent = scores.some(score => Number(score.ounces) > 0) ? "" : "No water logged in this range yet.";
+      } catch (error) {
+        if (requestId !== this.historyRequestId) return;
+        chart.innerHTML = "";
+        status.textContent = error.message || "History is unavailable. Try again.";
+      }
     },
 
     capturePositions() {
@@ -9448,14 +9626,16 @@ CCOR Education Team`,
       const board = document.getElementById("water-scoreboard");
       if (!board) return;
 
+      // Polling must not interrupt a person choosing or typing an amount.
+      if (document.activeElement?.closest?.(".water-score__amount")) return;
       const previousPositions = this.capturePositions();
       const user = this.getCurrentUser();
       const userId = user ? Number(user.id) : null;
       const goal = Math.max(1, Number(this.goalCups || 8));
 
       document.getElementById("water-tracker-subtitle").textContent =
-        `${this.formatDate(this.date)} · every cup counts`;
-      document.getElementById("water-tracker-goal").textContent = `Daily goal: ${goal} cups`;
+        `${this.formatDate(this.date)} · little sips, big wins`;
+      document.getElementById("water-tracker-goal").textContent = `🎯 Daily goal: ${goal * OUNCES_PER_CUP} oz`;
 
       if (!this.scores.length) {
         board.innerHTML = '<div class="water-tracker__empty">No active teammates found yet.</div>';
@@ -9465,28 +9645,45 @@ CCOR Education Team`,
       board.innerHTML = this.scores.map((score, index) => {
         const cupCount = Number(score.cup_count || 0);
         const isYou = userId !== null && Number(score.user_id) === userId;
-        const progress = Math.min(100, Math.round((cupCount / goal) * 100));
-        const medal = MEDALS[index] || "💧";
-        const goalMessage = cupCount >= goal
-          ? '<span class="water-score__goal-hit">✨ Goal reached!</span>'
-          : "";
+        const progress = Math.round((cupCount / goal) * 100);
+        const beyondGoal = cupCount > goal;
+        const ounces = cupCount * OUNCES_PER_CUP;
+        const [emoji, title] = PLACES[index % PLACES.length];
+        const milestone = beyondGoal ? "🚀 Scale broken!" : cupCount >= goal ? "🎉 Goal unlocked!"
+          : progress >= 75 ? "✨ Almost there!"
+          : progress >= 50 ? "🙌 Halfway hero!"
+          : progress >= 25 ? "🌱 Finding your flow"
+          : cupCount > 0 ? "💧 A splash of progress" : "🌤️ A fresh start";
+        const goalMessage = `<span class="water-score__milestone${cupCount >= goal ? " is-complete" : ""}">${milestone}</span>`;
         const action = isYou
-          ? '<button type="button" class="water-score__add" data-action="add-water">💧 + Add a cup</button>'
-          : goalMessage;
+          ? `<div class="water-score__amount">
+              <label for="water-amount">Amount to log</label>
+              <select id="water-amount" aria-label="Water amount in ounces">
+                ${[4, 8, 12, 16, 20, 24, 32, 40, 64].map(amount => `<option value="${amount}"${this.selectedAmount === String(amount) ? " selected" : ""}>${amount} oz</option>`).join("")}
+                <option value="custom"${this.selectedAmount === "custom" ? " selected" : ""}>Custom amount…</option>
+              </select>
+              <input id="water-custom-amount" type="number" min="1" max="128" step="1" inputmode="numeric" aria-label="Custom water amount in ounces" placeholder="Enter oz (1–128)" value="${this.escapeMarkup(this.customAmount)}"${this.selectedAmount === "custom" ? "" : " hidden"}>
+            </div>
+            <button type="button" class="water-score__add" data-action="add-water" aria-label="💧 + Log water">+ Log</button>`
+          : "";
 
         return `
-          <article class="water-score${isYou ? " is-you" : ""}${index === 0 ? " is-leader" : ""}"
-            data-user-id="${Number(score.user_id)}" style="--water-fill:${progress}%">
+          <article class="water-score${isYou ? " is-you" : ""}${index === 0 ? " is-leader" : ""}${cupCount >= goal ? " is-complete" : ""}${beyondGoal ? " is-overflow" : ""}"
+            data-user-id="${Number(score.user_id)}" style="--water-fill:${Math.min(100, progress)}%">
             <div class="water-score__row">
-              <span class="water-score__rank">${medal} ${this.ordinal(index + 1)} place</span>
+              <span class="water-score__rank">${this.ordinal(index + 1)} place</span>
               ${isYou ? '<span class="water-score__you">You</span>' : ""}
             </div>
+            <div class="water-score__mascot" aria-hidden="true">${this.personEmoji(score.name)}</div>
+            <span class="water-score__title">${title}</span>
             <span class="water-score__name">${this.escapeMarkup(score.name)}</span>
             <div class="water-score__count">
-              <span class="water-score__number">${cupCount}</span>
-              <span class="water-score__unit">${cupCount === 1 ? "cup" : "cups"}</span>
+              <span class="water-score__number">${ounces}</span>
+              <span class="water-score__unit">oz</span>
             </div>
-            <div class="water-score__progress" aria-label="${progress}% of daily goal"><span></span></div>
+            <div class="water-score__progress" role="meter" aria-label="Daily hydration goal progress" aria-valuemin="0" aria-valuemax="100" aria-valuenow="${Math.min(100, progress)}" aria-valuetext="${progress}% of daily goal"><span></span>${beyondGoal ? '<span class="water-score__spark" aria-hidden="true">⚡</span>' : ""}</div>
+            <div class="water-score__target">${progress}% of goal · ${beyondGoal ? `${(cupCount - goal) * OUNCES_PER_CUP} oz beyond!` : `${Math.max(0, (goal - cupCount) * OUNCES_PER_CUP)} oz to go`}</div>
+            ${goalMessage}
             ${action}
           </article>
         `;
@@ -9515,6 +9712,7 @@ CCOR Education Team`,
     },
 
     burst(type, anchor) {
+      if (window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
       const layer = document.getElementById("water-tracker-burst");
       if (!layer) return;
       const isMad = type === "mad";
@@ -9542,7 +9740,7 @@ CCOR Education Team`,
       }
     },
 
-    async request(method = "GET") {
+    async request(method = "GET", ounces) {
       const user = this.getCurrentUser();
       const headers = { Accept: "application/json" };
       if (method !== "GET") headers["Content-Type"] = "application/json";
@@ -9551,7 +9749,7 @@ CCOR Education Team`,
       const response = await fetch(`${this.getApiBase()}/water-tracker`, {
         method,
         headers,
-        ...(method === "GET" ? {} : { body: "{}" }),
+        ...(method === "GET" ? {} : { body: JSON.stringify({ ounces }) }),
       });
       if (!response.ok) {
         const detail = await response.json().catch(() => ({}));
@@ -9618,6 +9816,7 @@ CCOR Education Team`,
         this.render();
         if (announce) this.announceRankChange(oldRank, newRank);
         this.previousRank = newRank;
+        this.refreshHistory();
       } catch (error) {
         console.error("Water tracker refresh failed:", error);
         const board = document.getElementById("water-scoreboard");
@@ -9629,20 +9828,31 @@ CCOR Education Team`,
       }
     },
 
-    async addCup(button) {
+    async addWater(button) {
       const user = this.getCurrentUser();
       if (!user || !user.email) {
         if (typeof window.showToast === "function") window.showToast("Select your name before adding water", true);
         return;
       }
       if (this.requestInFlight) return;
+      const ounces = Number(this.selectedAmount === "custom" ? this.customAmount : this.selectedAmount);
+      if (!Number.isInteger(ounces) || ounces < 1 || ounces > 128) {
+        const message = "Choose a whole ounce amount from 1 to 128.";
+        document.getElementById("water-tracker-status").textContent = message;
+        if (typeof window.showToast === "function") window.showToast(message, true);
+        document.getElementById("water-custom-amount")?.focus();
+        return;
+      }
 
       this.requestInFlight = true;
       button.disabled = true;
       button.textContent = "Adding…";
       const oldRank = this.previousRank;
+      const previousScore = this.scores.find((score) => Number(score.user_id) === Number(user.id));
+      const previousCups = Number(previousScore?.cup_count || 0);
+      const previousDate = this.date;
       try {
-        const data = await this.request("POST");
+        const data = await this.request("POST", ounces);
         this.scores = Array.isArray(data.scores) ? data.scores : [];
         this.date = data.date || this.date;
         this.goalCups = Number(data.goal_cups || this.goalCups || 8);
@@ -9654,11 +9864,21 @@ CCOR Education Team`,
         this.burst("drop", freshButton || button);
         this.announceRankChange(oldRank, newRank);
         this.previousRank = newRank;
+        const total = Number(ownScore?.cup_count || 0);
+        const reachedGoal = (previousDate !== this.date || previousCups < this.goalCups) && total >= this.goalCups;
+        const brokeScale = (previousDate !== this.date || previousCups <= this.goalCups) && total > this.goalCups;
+        const message = brokeScale ? `🚀 Scale broken! ${total * OUNCES_PER_CUP} oz logged today — ${Math.round(total / this.goalCups * 100)}% of goal!` : reachedGoal ? "🎉 Goal unlocked! You hit your daily hydration goal."
+          : `💧 ${ounces} oz logged! ${total * OUNCES_PER_CUP} oz today. Nice work!`;
+        document.getElementById("water-tracker-status").textContent = message;
+        if (typeof window.showToast === "function") window.showToast(message);
+        if (reachedGoal || brokeScale) this.burst("happy", freshButton);
+        freshButton?.focus({ preventScroll: true });
+        this.refreshHistory();
       } catch (error) {
-        console.error("Could not add water cup:", error);
-        if (typeof window.showToast === "function") window.showToast(error.message || "Could not add that cup", true);
+        console.error("Could not add water:", error);
+        if (typeof window.showToast === "function") window.showToast(error.message || "Could not add that water", true);
         button.disabled = false;
-        button.textContent = "💧 + Add a cup";
+        button.textContent = "+ Log";
       } finally {
         this.finishRequest();
       }
@@ -9679,11 +9899,38 @@ CCOR Education Team`,
       this.initialized = true;
       this.installPageSyncHook();
       this.ensureMarkup();
+      document.getElementById("water-history-period").addEventListener("change", (event) => {
+        const custom = event.target.value === "custom";
+        document.getElementById("water-history-form").hidden = !custom;
+        if (!custom) { this.historyRange = null; this.refreshHistory(); }
+      });
+      document.getElementById("water-history-form").addEventListener("submit", (event) => {
+        event.preventDefault();
+        const start = document.getElementById("water-history-start").value;
+        const end = document.getElementById("water-history-end").value;
+        if (!start || !end || start > end) {
+          document.getElementById("water-history-status").textContent = "Choose a start date on or before the end date.";
+          return;
+        }
+        this.historyRange = { start, end };
+        this.refreshHistory();
+      });
+      this.refreshHistory();
       const board = document.getElementById("water-scoreboard");
       if (board) {
+        board.addEventListener("change", (event) => {
+          if (event.target.id !== "water-amount") return;
+          this.selectedAmount = event.target.value;
+          const input = document.getElementById("water-custom-amount");
+          input.hidden = this.selectedAmount !== "custom";
+          if (!input.hidden) input.focus();
+        });
+        board.addEventListener("input", (event) => {
+          if (event.target.id === "water-custom-amount") this.customAmount = event.target.value;
+        });
         board.addEventListener("click", (event) => {
           const button = event.target.closest('[data-action="add-water"]');
-          if (button) this.addCup(button);
+          if (button) this.addWater(button);
         });
       }
 
