@@ -2,14 +2,14 @@
 <html lang="en">
 <head>
   <meta charset="utf-8" />
-  <title>Realtor Review Magazine — Spring 2026 | CCOR (formerly BER)</title>
+  <title>Realtor Review Magazine — Fall 2026 | CCOR (formerly BER)</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <meta name="description" content="Flip through the Spring 2026 issue of Realtor Review magazine online, download the PDF, and see the Year Sponsors who support each issue.">
+  <meta name="description" content="Flip through the Fall 2026 issue of Realtor Review magazine online, explore Florida's 2026 ballot amendments, Q2 2026 market statistics, Chapter 3 of Striving for 60, hurricane transaction readiness, condo compliance underwriting, and see our 2026 Year Sponsors.">
 
   <!-- Swiss-Tech fonts & Icons -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&family=Montserrat:wght@600;800&family=Roboto+Mono:wght@400;600;700&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Montserrat:wght@600;700;800&family=Roboto+Mono:wght@400;600;700&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" />
 
   <style>
@@ -88,9 +88,10 @@
 
     .page-head .sub {
       margin: 0;
-      max-width: 620px;
-      font-size: 16px;
+      max-width: 680px;
+      font-size: 15.5px;
       color: var(--ink-soft);
+      line-height: 1.6;
     }
 
     /* Flipbook Viewer */
@@ -116,7 +117,7 @@
     }
 
     .btn-row {
-      display: flex;flex-wrap: wrap; gap: 10px;
+      display: flex; flex-wrap: wrap; gap: 10px;
     }
 
     .btn {
@@ -134,7 +135,7 @@
     .btn.secondary:hover { background: rgba(0,0,0,0.05); }
 
     .flip-shell {
-      margin-top: 20px;
+      margin-top: 10px;
       border-radius: var(--radius);
       overflow: hidden;
       background: #000;
@@ -146,6 +147,61 @@
       width: 100%;
       height: 720px;
       display: block;
+    }
+
+    /* Dates to Remember Strip */
+    .dates-strip {
+      margin-top: 24px;
+      padding: 20px 24px;
+      background: #ffffff;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      box-shadow: 0 4px 16px rgba(0,0,0,0.03);
+    }
+    .dates-title {
+      font-family: var(--font-heading);
+      font-weight: 800;
+      font-size: 13px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--brand-primary);
+      margin-bottom: 14px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .dates-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+      gap: 12px;
+    }
+    .date-chip {
+      background: var(--muted);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 10px 14px;
+      display: flex;
+      flex-direction: column;
+      gap: 3px;
+      transition: transform 0.15s ease;
+    }
+    .date-chip:hover {
+      transform: translateY(-2px);
+    }
+    .date-chip.highlight-chip {
+      background: #eef9f8;
+      border-color: var(--accent);
+    }
+    .chip-date {
+      font-family: var(--font-mono);
+      font-weight: 700;
+      font-size: 12px;
+      color: var(--ink);
+    }
+    .chip-desc {
+      font-size: 12px;
+      color: var(--ink-soft);
+      line-height: 1.35;
     }
 
     /* Grid Layout for Main Content */
@@ -199,9 +255,12 @@
       display: flex;
       flex-direction: column;
       gap: 8px;
-      transition: transform 0.2s;
+      transition: transform 0.2s, box-shadow 0.2s;
     }
-    .highlight-card:hover { transform: translateY(-2px); }
+    .highlight-card:hover { 
+      transform: translateY(-3px); 
+      box-shadow: 0 6px 16px rgba(0,0,0,0.06);
+    }
 
     .highlight-tag {
       font-family: var(--font-mono);
@@ -220,10 +279,11 @@
     }
 
     .highlight-body {
-      font-size: 14px;
+      font-size: 13.5px;
       color: var(--ink-soft);
       flex: 1;
       margin: 0;
+      line-height: 1.5;
     }
 
     .highlight-meta {
@@ -237,7 +297,7 @@
       padding-top: 8px;
     }
 
-    /* AI Chatbot Section (Ported from Market Reports) */
+    /* AI Chatbot Section */
     .ai-module {
       padding: 24px;
       border-radius: var(--radius);
@@ -274,11 +334,12 @@
     .ai-desc {
       font-size: 13px; color: var(--ink-soft);
       margin-bottom: 16px;
+      line-height: 1.45;
     }
 
     .ai-questions {
       display: flex; flex-direction: column; gap: 8px;
-      max-height: 360px; overflow-y: auto;
+      max-height: 380px; overflow-y: auto;
       padding-right: 8px;
     }
     /* Scrollbar styling for questions list */
@@ -290,19 +351,19 @@
       background: #fff; border: 1px solid var(--border);
       padding: 12px; border-radius: 8px;
       font: 600 13px/1.4 var(--font-body); color: var(--ink);
-      text-align: left; cursor: pointer; transition: all 0.1s ease;
+      text-align: left; cursor: pointer; transition: all 0.15s ease;
       box-shadow: 2px 2px 0 rgba(0,0,0,0.03); position: relative;
     }
     .ai-q-btn:hover, .ai-q-btn.active-q {
       box-shadow: 3px 3px 0 rgba(0,0,0,0.08);
-      border-color: var(--ink);
+      border-color: var(--brand-primary);
       transform: translate(-1px, -1px);
     }
 
     .ai-response-area {
       margin-top: 20px; background: #1a1b1e; border: 1px solid #2d3036;
       border-radius: 8px; padding: 20px;
-      font: 400 14px/1.6 var(--font-mono); color: #e2e4e8;
+      font: 400 13.5px/1.6 var(--font-mono); color: #e2e4e8;
       display: none; box-shadow: inset 0 2px 8px rgba(0,0,0,0.3);
       min-height: 120px; white-space: pre-wrap;
     }
@@ -412,10 +473,10 @@
     
     <header class="page-head">
       <div>
-        <div class="page-tag">Realtor Review Magazine</div>
-        <h1>Spring 2026 Issue</h1>
+        <div class="page-tag">Realtor Review Magazine • Fall 2026</div>
+        <h1>Fall 2026 Issue</h1>
         <p class="sub">
-          Flip through the landmark Spring 2026 issue. Celebrate the member-approved transition to the Coconut Coast Organization of REALTORS® (CCOR), review Spring 2026 market statistics, read about the history of Southwest Florida's growth, and explore transaction security guidelines.
+          Flip through our 60th anniversary Fall 2026 edition. Explore Jeanne's Journal on moving from promise to progress, a voter's guide to Florida's 2026 constitutional ballot amendments (including Amendment 3 property tax changes), Q2 2026 market statistics, Chapter 3 of "Striving for 60: A Region Transformed (1996–2010)", tools of the trade archives, hurricane transaction planning, and Florida condo compliance underwriting updates.
         </p>
       </div>
     </header>
@@ -426,16 +487,29 @@
         <div class="mag-header-line">
           <div class="mag-label">Interactive Flipbook</div>
           <div class="btn-row">
-            <a class="btn primary" href="https://heyzine.com/flip-book/421c2ba9c7.html" target="_blank" rel="noopener">
+            <a class="btn primary" href="https://heyzine.com/flip-book/d7580af5da.html" target="_blank" rel="noopener">
               Open Full Screen
             </a>
           </div>
         </div>
 
         <div class="flip-shell">
-          <iframe allowfullscreen="allowfullscreen" allow="clipboard-write" scrolling="no" class="fp-iframe" src="https://heyzine.com/flip-book/421c2ba9c7.html" title="Spring 2026 Issue"></iframe>
+          <iframe allowfullscreen="allowfullscreen" allow="clipboard-write" scrolling="no" class="fp-iframe" src="https://heyzine.com/flip-book/d7580af5da.html" title="Fall 2026 Issue"></iframe>
         </div>
       </section>
+
+      <!-- Dates to Remember Strip -->
+      <div class="dates-strip" aria-label="Important Dates and Association Events">
+        <div class="dates-title"><i class="far fa-calendar-alt"></i> Dates to Remember</div>
+        <div class="dates-grid">
+          <div class="date-chip"><span class="chip-date">SEP 25–27</span><span class="chip-desc">Fall Open House Weekend</span></div>
+          <div class="date-chip"><span class="chip-date">OCT 13</span><span class="chip-desc">Blood Drive: Make an Impact</span></div>
+          <div class="date-chip"><span class="chip-date">OCT 30–NOV 1</span><span class="chip-desc">Open House Weekend</span></div>
+          <div class="date-chip highlight-chip"><span class="chip-date">NOV 3</span><span class="chip-desc">Florida Election: Amendments 1–3</span></div>
+          <div class="date-chip"><span class="chip-date">NOV 6–8</span><span class="chip-desc">Fall Open House Weekend</span></div>
+          <div class="date-chip"><span class="chip-date">DEC 11</span><span class="chip-desc">Annual Membership Breakfast</span></div>
+        </div>
+      </div>
 
       <!-- Grid Layout for Highlights and Chatbot -->
       <div class="content-grid">
@@ -443,96 +517,110 @@
         <!-- Highlights -->
         <section class="mag-highlights" aria-label="Issue Highlights">
           <h2>Highlights from this issue</h2>
-          <p class="subtext">A quick look at the features, market stats, and announcements shaping our Spring 2026 edition.</p>
+          <p class="subtext">A quick look at the features, market stats, ballot guides, and history shaping our Fall 2026 edition.</p>
           
           <div class="mag-highlights-grid">
             <article class="highlight-card">
               <div class="highlight-tag">Leadership & Vision</div>
-              <h3 class="highlight-title">Jeanne’s Journal: A New Name, Same Commitment</h3>
-              <p class="highlight-body">CCOR President Jeanne Drath shares a message about celebrating 60 years of BSER/BER and embarking on a new chapter as Coconut Coast Organization of REALTORS® (CCOR) after a historic member vote.</p>
-              <div class="highlight-meta">See page 3</div>
+              <h3 class="highlight-title">Jeanne’s Journal: From Promise to Progress</h3>
+              <p class="highlight-body">CCOR President Jeanne Drath reflects on turning strategic conversations into concrete action, elevating professionalism, our Protect Our Homes partnership with the Lee County Clerk of Courts, and championing the Bonita Estero Rail Trail (BERT).</p>
+              <div class="highlight-meta">See pages 3–4</div>
             </article>
 
             <article class="highlight-card">
-              <div class="highlight-tag">CCOR Transition</div>
-              <h3 class="highlight-title">A New Name for a Growing Region</h3>
-              <p class="highlight-body">A closer look at our transition to Coconut Coast Organization of REALTORS® (CCOR), including the voting breakdown, why the "Coconut Coast" identity was chosen, and the rollout timeline.</p>
-              <div class="highlight-meta">See page 5</div>
-            </article>
-
-            <article class="highlight-card">
-              <div class="highlight-tag">Events Recap</div>
-              <h3 class="highlight-title">Spring 2026 Events & Sales Excellence</h3>
-              <p class="highlight-body">A visual celebration of our community connection and spring events, including highlights from the 33rd Annual BER Golf Challenge, networking, and educational programs.</p>
-              <div class="highlight-meta">See page 6</div>
-            </article>
-
-            <article class="highlight-card">
-              <div class="highlight-tag">Market Snapshot</div>
-              <h3 class="highlight-title">Spring 2026 Market Stats</h3>
-              <p class="highlight-body">A deep dive into Bonita Springs & Estero market indicators, detailing median sales prices, pending sales, closed transactions, and homes for sale by ZIP code.</p>
-              <div class="highlight-meta">See page 7</div>
-            </article>
-
-            <article class="highlight-card">
-              <div class="highlight-tag">Anniversary Series</div>
-              <h3 class="highlight-title">Striving for 60 — Growth, Grit & Regional Momentum</h3>
-              <p class="highlight-body">Chapter 2 explores 1982–1996: Southwest Florida's transition from Old Florida to a connected regional market, RSW airport's certification, FGCU's founding, and community leadership.</p>
-              <div class="highlight-meta">See pages 9–10</div>
-            </article>
-
-            <article class="highlight-card">
-              <div class="highlight-tag">From the Archives</div>
-              <h3 class="highlight-title">Tools of the Trade: 1982–1996</h3>
-              <p class="highlight-body">Step back to the analog era of printed MLS books, pagers, car phones, fax machines, and carbon-copy paper contracts that defined early real estate practice.</p>
-              <div class="highlight-meta">See page 11</div>
-            </article>
-
-            <article class="highlight-card">
-              <div class="highlight-tag">Transaction Security</div>
-              <h3 class="highlight-title">Protecting the Closing Process</h3>
-              <p class="highlight-body">Legal insights from closing attorney Samuel F. Colburn, Esq. outlining essential safeguards to protect clients from wire fraud and vacant land seller impersonation schemes.</p>
-              <div class="highlight-meta">See pages 12–13</div>
+              <div class="highlight-tag">Events & Community</div>
+              <h3 class="highlight-title">Coconut Coast Kickoff & New Board Leadership</h3>
+              <p class="highlight-body">A vibrant recap of the August 13 CCOR Kickoff with 84 attendees celebrating our new identity, ribbon cutting, and live music, plus welcoming Andy Brinkoetter and Jolyn Covelli to Board leadership.</p>
+              <div class="highlight-meta">See pages 4–6</div>
             </article>
 
             <article class="highlight-card">
               <div class="highlight-tag">Advocacy in Action</div>
-              <h3 class="highlight-title">2026 Advocacy & Legislative Update</h3>
-              <p class="highlight-body">Key policy outcomes from the 2026 Legislative Session, including property rights protection, regulatory structure preservation, and property tax estimator liability shields.</p>
+              <h3 class="highlight-title">Florida Votes 2026: Three Ballot Amendments</h3>
+              <p class="highlight-body">A plain-language guide to the November 3 general election constitutional amendments requiring 60% approval: Amendment 1 (Budget Stabilization Fund), Amendment 2 (Agricultural Tangible Property), and Amendment 3 (Property Taxes).</p>
+              <div class="highlight-meta">See page 8</div>
+            </article>
+
+            <article class="highlight-card">
+              <div class="highlight-tag">Market Snapshot</div>
+              <h3 class="highlight-title">Q2 2026 Market Stats: Bonita Springs & Estero</h3>
+              <p class="highlight-body">Second quarter indicators reveal 1,086 closed sales outperforming both 2025 and 2024, median prices holding steady in the mid-$500Ks, 63 median days on market, and 337 pending sales leading in ZIP 34135.</p>
+              <div class="highlight-meta">See page 9</div>
+            </article>
+
+            <article class="highlight-card">
+              <div class="highlight-tag">Property Tax Deep Dive</div>
+              <h3 class="highlight-title">Property Tax Reset? Understanding Amendment 3</h3>
+              <p class="highlight-body">A detailed look at proposed Amendment 3: phased non-school homestead exemptions, special rules for new residents arriving after 2026, lowering the non-homestead assessment cap from 10% to 5%, and municipal revenue effects.</p>
+              <div class="highlight-meta">See page 10</div>
+            </article>
+
+            <article class="highlight-card">
+              <div class="highlight-tag">Transaction Guidance</div>
+              <h3 class="highlight-title">What Amendment 3 Means in a Transaction</h3>
+              <p class="highlight-body">Essential compliance practices for REALTORS®: why a seller’s tax bill is never the buyer’s future bill, avoiding tax predictions, safe phrasing, and utilizing the official referral directory for property appraisers and CPAs.</p>
+              <div class="highlight-meta">See page 11</div>
+            </article>
+
+            <article class="highlight-card">
+              <div class="highlight-tag">Anniversary Series</div>
+              <h3 class="highlight-title">Striving for 60: Chapter 3 — A Region Transformed</h3>
+              <p class="highlight-body">Covering 1996–2002: FGCU’s opening in 1997, Bonita Springs incorporating on Dec 31, 1999, the creation of SunshineMLS with Naples in 2002, 1999 Board President John Mitchell, and the emergence of an interconnected regional market.</p>
+              <div class="highlight-meta">See page 12</div>
+            </article>
+
+            <article class="highlight-card">
+              <div class="highlight-tag">Development & Resilience</div>
+              <h3 class="highlight-title">Growth Accelerates, Then the Market Turns (2003–2010)</h3>
+              <p class="highlight-body">The opening of RSW’s 28-gate terminal (2005) and Coconut Point (2006), followed by Hurricanes Charley and Wilma, the 2007–2010 housing correction, and how agents adapted through SFR certification and digital tools.</p>
+              <div class="highlight-meta">See page 13</div>
+            </article>
+
+            <article class="highlight-card">
+              <div class="highlight-tag">From the Archives</div>
+              <h3 class="highlight-title">Tools of the Trade: 1996–2010</h3>
+              <p class="highlight-body">A retrospective on the technology transformation: desktop PCs with dial-up modems, CD-ROM databases, early online MLS, 128MB digital camera cards, early virtual tours, PalmPilots, Thomas Guides, and electronic lockboxes.</p>
               <div class="highlight-meta">See page 14</div>
             </article>
 
             <article class="highlight-card">
-              <div class="highlight-tag">Condo & Property Watch</div>
-              <h3 class="highlight-title">Property Insurance & Resilience</h3>
-              <p class="highlight-body">An update on Florida's stabilizing insurance market, condo milestone compliance (SIRS), and financial relief through the My Safe Florida programs.</p>
+              <div class="highlight-tag">Disaster Preparedness</div>
+              <h3 class="highlight-title">Storm-Ready Transactions: Before the Cone</h3>
+              <p class="highlight-body">Pre-storm readiness protocols: assembling roof permits, opening protection photos, and elevation certs before listing; binding insurance early, verifying wires, and understanding the 30-day NFIP waiting period.</p>
               <div class="highlight-meta">See page 15</div>
             </article>
 
             <article class="highlight-card">
-              <div class="highlight-tag">Regional Insights</div>
-              <h3 class="highlight-title">Regional Momentum & RSW Airport Growth</h3>
-              <p class="highlight-body">Southwest Florida growth indicators, analyzing Lee County population increases, Florida visitor records, and RSW's busiest month in history.</p>
-              <div class="highlight-meta">See page 16</div>
-            </article>
-
-            <article class="highlight-card">
-              <div class="highlight-tag">Advocacy Basics</div>
-              <h3 class="highlight-title">RPAC 101 & Candidate Screenings</h3>
-              <p class="highlight-body">A guide to the non-partisan Realtor Political Action Committee, evaluating local candidates on housing affordability, infrastructure, and property rights.</p>
+              <div class="highlight-tag">State Policy & Funding</div>
+              <h3 class="highlight-title">What Changed This Summer? Florida Housing Update</h3>
+              <p class="highlight-body">Key appropriations from Florida’s 2026–27 budget: $378M for My Safe Florida Home, $27M for My Safe Florida Condo, $236.5M for SHIP & SAIL, $50M for Hometown Heroes, and HB 1389 Live Local amendments.</p>
               <div class="highlight-meta">See page 17</div>
             </article>
 
             <article class="highlight-card">
+              <div class="highlight-tag">Condo Compliance</div>
+              <h3 class="highlight-title">The Hidden Closing Hurdle: Condo Underwriting</h3>
+              <p class="highlight-body">WWMR attorney Brian A. Cordero, Esq. details how updated 2026 Fannie Mae and Freddie Mac guidelines scrutinize reserve studies, structural milestone inspections, and deferred maintenance across Florida’s 900,000+ older units.</p>
+              <div class="highlight-meta">See pages 18–19</div>
+            </article>
+
+            <article class="highlight-card">
+              <div class="highlight-tag">Global Connections</div>
+              <h3 class="highlight-title">From the Coconut Coast to Rio: CILA 2026</h3>
+              <p class="highlight-body">President Jeanne Drath represented CCOR at CILA 2026 and CIMI360 in Rio de Janeiro, Brazil, building international relationships and referral pipelines with one of Florida's premier foreign buyer markets.</p>
+              <div class="highlight-meta">See page 19</div>
+            </article>
+
+            <article class="highlight-card">
               <div class="highlight-tag">Sponsors Spotlight</div>
-              <h3 class="highlight-title">Thank You to Our 2026 Year Sponsors</h3>
-              <p class="highlight-body">A tribute to the dedicated year sponsors and advertisers whose support makes education, events, and communications possible all year long.</p>
+              <h3 class="highlight-title">Thank You to Our 2026 Year & Magazine Sponsors</h3>
+              <p class="highlight-body">A tribute to the committed sponsors, photography partners, and magazine advertisers whose year-round support fuels professional education, advocacy, and member services.</p>
               <div class="highlight-meta">See Back Cover</div>
             </article>
           </div>
         </section>
 
-        <!-- AI Chatbot Mock -->
+        <!-- AI Chatbot Module -->
         <aside class="ai-module">
           <div class="ai-head">
             <div class="ai-icon"><i class="fa fa-terminal"></i></div>
@@ -540,7 +628,7 @@
               <h2 class="ai-title">Magazine Insights AI</h2>
             </div>
           </div>
-          <p class="ai-desc">Ask the chatbot about the Spring 2026 content and key takeaways directly from the articles.</p>
+          <p class="ai-desc">Ask the chatbot about the Fall 2026 content, ballot amendments, market stats, history, and key takeaways directly from the articles.</p>
           
           <div class="ai-questions" id="aiQList">
             <!-- Populated via JS -->
@@ -573,7 +661,7 @@
           <div class="y-tier-label">Platinum</div>
           <div class="y-logos">
             <div class="y-logo"><img src="https://cottrelltitle.com/wp-content/uploads/cottrell-title-logo.png" alt="Cottrell Title & Escrow"></div>
-            <div class="y-logo"><img src="https://coconutcoastrealtors.org/wp-content/uploads/2025/12/Housemaster.png" alt="HouseMaster"></div>
+            <div class="y-logo"><img src="https://coconutcoastrealtors.org/wp-content/uploads/2025/12/Housemaster.png" alt="HouseMaster Home Inspections"></div>
           </div>
         </div>
 
@@ -595,10 +683,17 @@
         </div>
 
         <!-- Additional Magazine Partners listing -->
-        <h3 style="text-align:center; font:700 16px var(--font-heading); margin-top:40px; margin-bottom:12px;">Magazine Publication Partners</h3>
+        <h3 style="text-align:center; font:700 16px var(--font-heading); margin-top:40px; margin-bottom:12px;">Magazine Publication Advertisers & Partners</h3>
         <div class="mag-sponsors-tags">
-          <span class="mag-tag">Downing Frye</span>
-          <span class="mag-tag">Top Choice</span>
+          <span class="mag-tag">Downing-Frye Realty, Inc.</span>
+          <span class="mag-tag">Woods · Weidenmiller · Michetti · Rudnick</span>
+          <span class="mag-tag">Law Office of Sam J. Saad III</span>
+          <span class="mag-tag">Paradise Coast Title</span>
+          <span class="mag-tag">The Colony Golf & Country Club</span>
+          <span class="mag-tag">Top Choice Solutions</span>
+          <span class="mag-tag">Frame Studio (Photography Sponsor)</span>
+          <span class="mag-tag">HouseMaster Home Inspections</span>
+          <span class="mag-tag">Revolution Mortgage</span>
           <span class="mag-tag">RPAC</span>
         </div>
       </section>
@@ -607,8 +702,8 @@
       <section class="sponsor-section" aria-label="Magazine Advertisements">
         <h2>Advertise in Realtor Review</h2>
         <div class="contact-banner">
-          <p style="margin-top:0;font-size:16px;">Secure your spot in our upcoming issues and reach a hyper-local audience of real estate professionals.</p>
-          <a href="mailto:tech@berealtors.org" class="btn primary">Contact tech@berealtors.org to Reserve</a>
+          <p style="margin-top:0;font-size:16px;">Secure your spot in our upcoming issues and reach a hyper-local audience of real estate professionals across Southwest Florida.</p>
+          <a href="mailto:tech@coconutcoastrealtors.org" class="btn primary">Contact tech@coconutcoastrealtors.org to Reserve</a>
         </div>
 
         <div class="ad-specs-grid">
@@ -636,26 +731,90 @@
   <script>
     // AI Chatbot Logic
     const AI_QA = [
-      { q: "1) What is the overall theme of this Spring 2026 issue?", a: "The Spring 2026 issue centers on transition and progress, specifically celebrating the member-approved name change from Bonita Springs-Estero REALTORS® (BER) to the Coconut Coast Organization of REALTORS® (CCOR), while honoring 60 years of history and navigating a re-stabilizing market. (Cover; pages 3–5.)" },
-      { q: "2) Who wrote the President's letter and what is its main message?", a: "CCOR President Jeanne Drath wrote the letter, titled 'A New Name, Same Commitment,' which outlines our strategic transition to a broader regional identity (CCOR) while preserving our core dedication to member services, education, advocacy, and MLS. (Page 3.)" },
-      { q: "3) What was the result of the member vote on the name change?", a: "On January 15, 2026, the membership voted to approve the transition to Coconut Coast Organization of REALTORS® (CCOR). The vote passed with a strong 74.8% approval rate, representing 110 yes votes and 37 no votes out of 147 ballots cast. (Page 3, page 5.)" },
-      { q: "4) Why was the name 'Coconut Coast' chosen?", a: "The name is deeply local. Bonita Springs' history is rooted in tropical agriculture dating back to the late 1800s, including coconuts. This legacy lives on in familiar regional landmarks like Coconut Road, Coconut Point, and Via Coconut, connecting our history to the coastal communities we serve today. (Page 5.)" },
-      { q: "5) What changes and what stays the same with the transition to CCOR?", a: "Changes include our new public name (CCOR), updated branding, and a broader regional identity that reduces geographic confusion. What stays the same is our core mission, local staff support, dedication to education, advocacy, and MLS, and our local roots in Bonita Springs and Estero. (Page 5.)" },
-      { q: "6) What is the new member benefit highlighted in Jeanne's message?", a: "Realtor.com+ has launched as a major new member benefit, providing agents with a connected, branded space to support client searches, real-time insights, in-app chat, and tour requests. (Page 3.)" },
-      { q: "7) How did the local real estate market perform in March 2026?", a: "In the Bonita Springs-Estero area, March closed sales increased 38% year-over-year, and pending sales rose 34%, while new listings declined 22%. This indicates active buyer demand but a market moving toward balanced, data-driven pricing. (Page 3.)" },
-      { q: "8) What did Florida Realtors report regarding sales trends in March 2026?", a: "Florida Realtors reported that March 2026 marked the seventh consecutive month of year-over-year closed sales gains in both single-family and condo-townhouse categories statewide, showing signs of a steady and stabilizing market. (Page 3.)" },
-      { q: "9) What was the median days on market in 2026 compared to prior years?", a: "According to Spring 2026 stats, the median days on market rose to 64 days, compared to 48 days in 2025 and 42 days in 2024, showing a more deliberate pace for buyers. (Page 7.)" },
-      { q: "10) What was the average number of homes for sale in the first quarter of 2026?", a: "The average number of homes for sale in Jan-Feb-Mar 2026 was 2,030, compared to 2,395 in 2025 and 1,618 in 2024. (Page 7.)" },
-      { q: "11) Which ZIP code had the highest pending sales in Q1 2026?", a: "ZIP code 34135 had the highest total pending sales in Jan-Feb-Mar 2026 with 447 pendings, followed by 33928 with 375, and 34134 with 285. (Page 7.)" },
-      { q: "12) What historical period does Chapter 2 of 'Striving for 60' cover?", a: "Chapter 2 covers 'Growth, Grit & Regional Momentum' from 1982 to 1996, chronicling how the association grew alongside Southwest Florida's transition from Old Florida to a connected regional hub. (Pages 9–10.)" },
-      { q: "13) When was Southwest Florida Regional Airport (RSW) certified for operation?", a: "RSW was certified for operation in May 1983, opening the region to a wider stream of seasonal residents and buyers. (Page 9, page 10.)" },
-      { q: "14) Who was Hank Hochstetler and what was his contribution to the community?", a: "Hank Hochstetler moved to Bonita Springs in 1979, owned Hochstetler Realty, and served as president of the Bonita Springs Board of REALTORS® (1993), Chamber of Commerce, Bonita Springs Utilities, and Bonita Springs Main Street. He was named Citizen of the Year and REALTOR® of the Year in 1996. (Page 10.)" },
-      { q: "15) What analog tools defined real estate work in the 1980s and 1990s?", a: "REALTORS® relied on printed MLS books, pagers, car phones, fax machines, lockbox keys, classified ads, Tuesday caravans, and paper carbon-copy contracts before the digital transition. (Page 11.)" },
-      { q: "16) What are the 5 safeguards to reinforce against closing fraud?", a: "1) Educate buyers about scams; 2) Include a wire fraud notice in email signatures; 3) Never send wire instructions via unsecured email; 4) Verify wire instructions independently by phone; and 5) Use smart email practices. (Page 12.)" },
-      { q: "17) What is Seller Impersonation Fraud and what property type is most targeted?", a: "In these schemes, fraudsters pose as legitimate owners of vacant or unoccupied land parcels using forged IDs and fake email accounts, trying to sell the property before the true owner notices. (Page 13.)" },
-      { q: "18) What were the major wins of the 2026 Florida legislative session?", a: "Major wins include maintaining Florida's real estate regulatory structure (under DBPR/DRE), protecting property rights against fraudulent occupancy (squatting), avoiding a confusing septic system disclosure mandate, and protecting REALTORS® from liability in property tax estimator disclosures. (Page 14.)" },
-      { q: "19) What are the latest statistics for Florida's property insurance market?", a: "Homeowners policies in the voluntary market rose to 91.19%, while Citizens policies in force decreased to 8.81% (392,689 policies as of Jan 31, 2026), indicating a stabilizing insurance market with an average rate change of -8.8% for Citizens. (Page 15.)" },
-      { q: "20) What passenger traffic milestone did RSW achieve in March 2026?", a: "RSW served 1,521,149 passengers in March 2026, marking the busiest single month in the airport's 43-year history. (Page 16.)" }
+      { 
+        q: "1) What is the overarching theme and focus of this Fall 2026 issue?", 
+        a: "The Fall 2026 issue celebrates 60 years of excellence with a focus on moving 'From Promise to Progress.' Key topics include CCOR's community kickoff and board leadership, a voter's guide to three proposed Florida constitutional amendments (specifically Amendment 3's property tax reform), Q2 2026 market statistics, Chapter 3 of the 'Striving for 60' series (1996–2010), tools of the trade archives, hurricane transaction planning, and condominium underwriting compliance. (Cover; pages 3–5.)" 
+      },
+      { 
+        q: "2) What are the main takeaways from President Jeanne Drath's journal message?", 
+        a: "In 'From Promise to Progress,' President Jeanne Drath explains that CCOR's transition is about elevating professionalism and strengthening member experience. Highlights include advancing the strategic plan, the Protect Our Homes fraud prevention partnership with the Lee County Clerk of Courts, advocacy for the Bonita Estero Rail Trail (BERT), celebrating the August 13 CCOR Kickoff, and welcoming Andy Brinkoetter and Jolyn Covelli to Board leadership. (Pages 3–4.)" 
+      },
+      { 
+        q: "3) What is the 'Protect Our Homes' program and how does it protect property owners?", 
+        a: "Through the Protect Our Homes Program, CCOR has partnered with the Lee County Clerk of Courts to educate property owners about the Clerk's free Property Fraud Alert service. Homeowners can register their name, business, or parcel to receive immediate email notifications whenever a document affecting their property is recorded, demonstrating that REALTOR® value extends far beyond the closing table. (Page 4.)" 
+      },
+      { 
+        q: "4) What is the Bonita Estero Rail Trail (BERT) and what recent milestone was reached?", 
+        a: "BERT is a planned multi-use trail converting the former Seminole Gulf Railway corridor into a connected regional trail network through Bonita Springs and Estero. In 2026, the Village of Estero advanced the project by approving a purchase and sale agreement for its approximately 4.1-mile portion of the corridor to promote safer mobility, connectivity, and quality of life. (Page 4.)" 
+      },
+      { 
+        q: "5) Who are the new Board of Directors leaders announced in this issue?", 
+        a: "President Jeanne Drath announced the appointment of Andy Brinkoetter (who has served as MLS Committee Chair evaluating MLS and Matrix tools) and Jolyn Covelli (an active Affiliate member with BioSweep Suncoast bringing industry-partner perspective) to Board leadership. (Page 4.)" 
+      },
+      { 
+        q: "6) What took place at the Coconut Coast Organization of REALTORS® Kickoff?", 
+        a: "Held on August 13, 2026, the kickoff brought together 84 members, partners, and community leaders for an official ribbon-cutting ceremony celebrating the CCOR identity. The afternoon featured technology demonstrations, live music, food, networking, and a silent auction. (Pages 4, 6.)" 
+      },
+      { 
+        q: "7) What are the three Florida constitutional amendments on the November 3, 2026 ballot?", 
+        a: "Voters will decide on: Amendment 1 (Budget Stabilization Fund), Amendment 2 (Exemption of Tangible Personal Property on Agricultural Land from Taxation), and Amendment 3 (Save Our Homes from Excessive Property Taxes). Each proposed amendment requires at least 60% voter approval to pass. (Page 8.)" 
+      },
+      { 
+        q: "8) What does Amendment 1 propose and what is its potential connection to real estate?", 
+        a: "Amendment 1 would raise the maximum amount Florida may hold in its budget stabilization ('rainy day') fund from 10% to 25% of general revenue collections, with higher mandatory annual transfers. While it does not alter property taxes or real estate transaction law, it strengthens state emergency reserves and fiscal resilience during crises and natural disasters. (Page 8.)" 
+      },
+      { 
+        q: "9) What does Amendment 2 propose regarding agricultural tangible property?", 
+        a: "Amendment 2 exempts qualifying tangible personal property from ad valorem taxation when located on land classified as agricultural, used for agricultural production or agritourism, and owned by the landowner or leaseholder. If approved, it takes effect beginning January 1, 2027, reducing equipment tax burdens for groves, nurseries, and farm operations. (Page 8.)" 
+      },
+      { 
+        q: "10) What are the primary components of proposed Amendment 3 (Property Taxes)?", 
+        a: "Amendment 3 proposes: 1) expanding homestead relief for non-school levies via phased exemption increases; 2) establishing new residency rules for individuals becoming permanent Florida residents after Dec. 31, 2026; 3) reducing the annual assessment-growth cap for many non-homestead properties from 10% to 5%; and 4) restricting how local governments allocate remaining ad valorem revenues. (Pages 8, 10.)" 
+      },
+      { 
+        q: "11) How should REALTORS® guide clients regarding property taxes under Amendment 3?", 
+        a: "REALTORS® must never quote the seller's current tax bill as the buyer's future tax bill. Agents should explain the assessment and millage process without predicting dollar outcomes, clarify that the amendment is not yet law, use safe phrasing ('The seller's current tax bill may not reflect what a buyer will pay...'), and refer clients directly to the local Property Appraiser or a tax CPA. (Page 11.)" 
+      },
+      { 
+        q: "12) How did the Bonita Springs-Estero housing market perform in Q2 2026?", 
+        a: "In Q2 2026 (April–June), closed sales reached 1,086 transactions—outperforming both 2025 and 2024 across all three months. Median sales prices remained steady in the mid-$500Ks ($560K April, $525K May, $560K June). New listings totaled 955 (trending downward), and median days on market was 63 days (compared to 58 in 2025 and 44 in 2024). (Page 9.)" 
+      },
+      { 
+        q: "13) Which ZIP codes had the highest pending sales activity in Q2 2026?", 
+        a: "ZIP code 34135 led the region with 337 pending sales, closely followed by 33928 with 327 pendings. ZIP 34134 recorded 195 pendings, 33967 had 100, and 33931 had 88. (Page 9.)" 
+      },
+      { 
+        q: "14) What historical period is examined in Chapter 3 of 'Striving for 60'?", 
+        a: "Chapter 3 covers 1996 to 2010, titled 'A Region Transformed.' It explores how Southwest Florida evolved from separate towns into an integrated regional powerhouse, anchored by higher education, municipal incorporation, regional MLS cooperation, and adapting through hurricanes and the Great Recession. (Pages 12–13.)" 
+      },
+      { 
+        q: "15) What landmark events occurred in Southwest Florida between 1996 and 2002?", 
+        a: "In March 1996, FGCU received approval for degree programs and opened on August 25, 1997 with 2,584 students. Bonita Springs incorporated on December 31, 1999 (reaching 32,797 residents in Census 2000). On July 12, 2002, Bonita Springs-Estero REALTORS® and MLS of Naples partnered to establish SunshineMLS, creating a shared online regional database. (Page 12.)" 
+      },
+      { 
+        q: "16) What major infrastructure and market shifts happened between 2003 and 2010?", 
+        a: "The new 28-gate RSW terminal opened on Sept 9, 2005, and Coconut Point opened on Nov 10, 2006. In 2004–2005, Hurricanes Charley and Wilma struck the area. After peaking in 2006, the housing market experienced a sharp correction: Lee County's FHFA home price index dropped from 250.59 (2006) to 112.95 (2010), leading NAR to introduce the Short Sales and Foreclosure Resource (SFR) certification in 2009. (Page 13.)" 
+      },
+      { 
+        q: "17) What bygone tools are featured in the 'Tools of the Trade: 1996–2010' archive?", 
+        a: "Featured tools include desktop PCs with dial-up modems, CD-ROM property databases, early online MLS interfaces, email announcements (Microsoft Outlook), 128MB digital camera memory cards, early virtual tour webpages, PalmPilots/pagers/BlackBerrys, printed Thomas Guide street maps and MapQuest printouts, early electronic lockboxes, and SoftPro electronic forms. (Page 14.)" 
+      },
+      { 
+        q: "18) What does the magazine recommend for 'Storm-Ready Transactions'?", 
+        a: "Preparation should happen before a storm cone forms: 1) Build a property file before listing (roof permits, wind-mitigation reports, opening protection photos, elevation certificates, flood policies, condo milestone docs, and pre-storm photos); 2) Under contract, bind insurance early, confirm remote closing/wire security with title, review force-majeure contract terms, and note the 30-day NFIP waiting period. (Page 15.)" 
+      },
+      { 
+        q: "19) What Florida housing and property hardening funding was passed for 2026–2027?", 
+        a: "Florida's state budget allocated $378M for My Safe Florida Home, $27M for My Safe Florida Condominium, $236.5M for SHIP and SAIL programs ($165.7M SHIP, $70.8M SAIL), and an additional $50M for the Hometown Heroes program. It also enacted HB 1389 updates to the Live Local Act and added SHIP flexibility for mobile home lot-rental assistance. (Page 17.)" 
+      },
+      { 
+        q: "20) Why is Florida condo compliance considered a 'hidden closing hurdle' in 2026?", 
+        a: "Closing attorney Brian A. Cordero, Esq. explains that Florida holds ~20% of the nation's condos and 900,000+ units over 30 years old. In 2026, Fannie Mae and Freddie Mac updated condo project standards, requiring rigorous scrutiny of structural integrity reserve studies (SIRS), milestone inspection reports, insurance adequacy, special assessments, and deferred maintenance. Communities lacking compliance risk lender blacklists and loan denials. (Pages 18–19.)" 
+      },
+      { 
+        q: "21) What was the purpose and outcome of CCOR's participation in CILA 2026 in Brazil?", 
+        a: "President Jeanne Drath represented CCOR at the CILA 2026 Congress and CIMI360 in Rio de Janeiro, Brazil, connecting with over 8,000 real estate professionals from 40+ countries. The mission strengthened international referral networks with Brazil, which remains one of Florida's premier foreign buyer markets. (Page 19.)" 
+      }
     ];
 
     document.addEventListener("DOMContentLoaded", () => {
@@ -664,7 +823,7 @@
       const aiModule = document.querySelector(".ai-module");
 
       // Populate buttons
-      AI_QA.forEach((item, idx) => {
+      AI_QA.forEach((item) => {
         const btn = document.createElement("button");
         btn.className = "ai-q-btn";
         btn.textContent = item.q;
@@ -691,7 +850,7 @@
           respArea.innerHTML = '';
           const tokens = text.match(/\s+|\S+/g) || [];
           typeWords(tokens, 0);
-        }, 600);
+        }, 500);
       }
 
       function typeWords(tokens, i) {
@@ -699,7 +858,7 @@
         if (i < tokens.length) {
           const currentText = tokens.slice(0, i + 1).join('');
           respArea.innerHTML = currentText + '<span class="cursor"></span>';
-          aiModule.dataset.typeTimeout = setTimeout(() => typeWords(tokens, i + 1), 20);
+          aiModule.dataset.typeTimeout = setTimeout(() => typeWords(tokens, i + 1), 18);
         } else {
           respArea.innerHTML = tokens.join('') + '<span class="cursor"></span>';
           aiModule.dataset.isTyping = 'false';
