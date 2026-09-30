@@ -2221,12 +2221,12 @@
                 try {
                     // Step 1: Try fetching instant pre-cached agent profile from D1 Worker API (/api/public/directory/agent/:slug or /api/public/directory/:slug)
                     const d1UrlsToTry = [
-                        `${D1_API}/${encodeURIComponent(contactIdOrSlug)}`,
-                        `${D1_API}/agent/${encodeURIComponent(contactIdOrSlug)}`
+                        `${D1_API}/${encodeURIComponent(contactIdOrSlug)}?t=${Date.now()}`,
+                        `${D1_API}/agent/${encodeURIComponent(contactIdOrSlug)}?t=${Date.now()}`
                     ];
                     for (const u of d1UrlsToTry) {
                         try {
-                            const d1ProfileRes = await fetch(u, { headers: { Accept: 'application/json' } });
+                            const d1ProfileRes = await fetch(u, { headers: { Accept: 'application/json' }, cache: 'no-cache' });
                             if (d1ProfileRes.ok) {
                                 const d1ProfileData = await d1ProfileRes.json();
                                 const profile = d1ProfileData.profile || d1ProfileData;
@@ -2251,7 +2251,7 @@
                                             ...(profile.specialties ? [{ DisplayName: 'Area of Expertise', Value: Array.isArray(profile.specialties) ? profile.specialties.join(', ') : profile.specialties }] : [])
                                         ]
                                     };
-                                    renderBerAgentModal(basic, detail, moreinfo, profile.contactId || contactIdOrSlug);
+                                    renderBerAgentModal(basic, detail, moreinfo, profile.contactId || contactIdOrSlug, profile);
                                     return;
                                 }
                             }
@@ -2293,7 +2293,7 @@
                 }
             }
 
-            function renderBerAgentModal(basic, detail, moreinfo, contactId) {
+            function renderBerAgentModal(basic, detail, moreinfo, contactId, profile = null) {
                 const name = basic.FirstName
                     ? `${basic.FirstName} ${basic.LastName || ''}`
                     : (basic.Name || detail?.ContactDisplayName || 'Agent');
@@ -2451,6 +2451,39 @@
                     });
                 }
 
+                // Build YouTube videos section if present
+                const rawVideos = (profile && Array.isArray(profile.youtube)) ? profile.youtube : [];
+                let videosHtml = '';
+                rawVideos.forEach(v => {
+                    const videoId = typeof v === 'object' && v !== null ? (v.id || '') : '';
+                    const videoUrl = typeof v === 'object' && v !== null ? (v.url || '') : String(v || '');
+                    let id = videoId;
+                    if (!id && videoUrl) {
+                        try {
+                            const u = new URL(videoUrl);
+                            if (u.hostname === 'youtu.be' || u.hostname.endsWith('.youtu.be')) id = u.pathname.split('/').filter(Boolean)[0] || '';
+                            else if (u.hostname === 'youtube.com' || u.hostname.endsWith('.youtube.com')) {
+                                id = u.searchParams.get('v') || '';
+                                const parts = u.pathname.split('/').filter(Boolean);
+                                if (!id && ['embed', 'shorts', 'live'].includes(parts[0])) id = parts[1] || '';
+                            }
+                        } catch (_) {}
+                    }
+                    if (id && /^[A-Za-z0-9_-]{6,20}$/.test(id)) {
+                        const title = (typeof v === 'object' && v !== null && v.title) ? v.title : 'Featured Video';
+                        videosHtml += `
+                            <div class="modal-video-card" style="border:1px solid #e2e8f0;border-radius:12px;overflow:hidden;background:#fff;box-shadow:0 2px 6px rgba(0,0,0,0.05);">
+                                <div style="position:relative;width:100%;aspect-ratio:16/9;background:#000;">
+                                    <iframe src="https://www.youtube-nocookie.com/embed/${id}" title="${title}" loading="lazy" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen style="width:100%;height:100%;border:0;"></iframe>
+                                </div>
+                                <div style="padding:10px 14px;font-size:0.875rem;font-weight:600;color:#1e293b;display:flex;align-items:center;">
+                                    <i class="fab fa-youtube" style="color:#ef4444;margin-right:8px;font-size:1.1rem;"></i>
+                                    <span>${title}</span>
+                                </div>
+                            </div>`;
+                    }
+                });
+
                 modalBody.innerHTML = `
                 <div class="modal-hero">
                     ${photoUrl ? `<img class="modal-avatar" src="${photoUrl}" alt="${name}">` : `<div class="modal-avatar"></div>`}
@@ -2495,6 +2528,14 @@
                 <div class="modal-section">
                     <div class="modal-section-title"><i class="fas fa-users"></i> Committees & Groups</div>
                     <div class="modal-tags">${groupsHtml}</div>
+                </div>` : ''}
+
+                ${videosHtml ? `
+                <div class="modal-section">
+                    <div class="modal-section-title"><i class="fas fa-play-circle"></i> Featured Videos</div>
+                    <div class="modal-video-grid" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:1rem;margin-top:0.75rem;">
+                        ${videosHtml}
+                    </div>
                 </div>` : ''}
 
                 <div class="modal-section">
