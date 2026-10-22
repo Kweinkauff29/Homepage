@@ -14068,7 +14068,7 @@
 
       const cols = ["Topic", "FB Post", "FB Story", "LinkedIn", "Instagram", "TikTok"];
       const rows = [
-        "Microvolunteerism Monday", "Tech Tip Tuesday", "WTK Wednesday",
+        "More at CCOR", "Tech Tip Tuesday", "WTK Wednesday",
         "Thoughtful Thursday", "Friday Blast Shorts", "Classes",
         "Office Closures", "Daily FB Story", "Magazine Needs", "Gift Card Promotion"
       ];
@@ -14092,7 +14092,7 @@
           const cell = document.createElement("div");
           cell.className = "weekly-cell";
           const textarea = document.createElement("textarea");
-          const entry = data.find(d => d.category === "marketing" && d.row_key === r && d.col_key === c);
+          const entry = data.find(d => d.category === "marketing" && (d.row_key === r || (r === "More at CCOR" && d.row_key === "Microvolunteerism Monday")) && d.col_key === c);
           textarea.value = entry ? entry.value : "";
 
           let debounce = null;
