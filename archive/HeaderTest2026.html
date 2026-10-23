@@ -1,3 +1,143 @@
+<!-- === CCOR SEO, BRANDING & FAVICON INJECTION === -->
+<title>Coconut Coast Organization of REALTORS® | CCOR | Southwest Florida Real Estate</title>
+<link rel="icon" type="image/png" href="https://coconutcoastrealtors.org/wp-content/uploads/2026/10/Untitled-design17.png" sizes="32x32">
+<link rel="icon" type="image/png" href="https://coconutcoastrealtors.org/wp-content/uploads/2026/10/Untitled-design17.png" sizes="192x192">
+<link rel="apple-touch-icon" href="https://coconutcoastrealtors.org/wp-content/uploads/2026/10/Untitled-design17.png">
+<meta name="msapplication-TileImage" content="https://coconutcoastrealtors.org/wp-content/uploads/2026/10/Untitled-design17.png">
+<meta name="description" content="Coconut Coast Organization of REALTORS® (CCOR) is the leading real estate association in Southwest Florida serving Bonita Springs, Estero, Naples, Fort Myers, Cape Coral, and Marco Island. Education, MLS access, advocacy, and member resources.">
+<meta name="keywords" content="Coconut Coast Organization of REALTORS, CCOR, Bonita Springs REALTORS, Estero Real Estate, Southwest Florida MLS, SWFLAMLS, Matrix MLS, Florida REALTORS, Naples REALTORS, Fort Myers Real Estate">
+<meta property="og:site_name" content="Coconut Coast Organization of REALTORS® (CCOR)">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Coconut Coast Organization of REALTORS® | CCOR">
+<meta property="og:description" content="Your hub for Southwest Florida REALTOR® education, MLS access, advocacy, and real estate market connections.">
+<meta property="og:image" content="https://coconutcoastrealtors.org/wp-content/uploads/2026/10/Untitled-design17.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Coconut Coast Organization of REALTORS® | CCOR">
+<meta name="twitter:description" content="Your hub for Southwest Florida REALTOR® education, MLS access, advocacy, and real estate market connections.">
+<meta name="twitter:image" content="https://coconutcoastrealtors.org/wp-content/uploads/2026/10/Untitled-design17.png">
+
+<script>
+  (function () {
+    const FAVICON_URL = 'https://coconutcoastrealtors.org/wp-content/uploads/2026/10/Untitled-design17.png';
+    const OLD_TITLE_PATTERNS = [/Bonita\s+Estero\s+Realtors/i, /Bonita\s+Springs-Estero\s+Realtors/i, /Bonita\s+Springs\s+Estero\s+Realtors/i];
+
+    function applyCcorSiteIdentity() {
+      // 1. Dynamic Title Fix (removes legacy association names and appends modern brand)
+      try {
+        let t = document.title || '';
+        if (OLD_TITLE_PATTERNS.some(rx => rx.test(t)) || !t || t.toLowerCase() === 'home' || t.includes('Creating value-driven success')) {
+          let cleaned = t
+            .replace(/Bonita\s+Estero\s+Realtors(\s*&#8211;|\s*–|\s*-)?/gi, '')
+            .replace(/Bonita\s+Springs-?Estero\s+Realtors(\s*&#8211;|\s*–|\s*-)?/gi, '')
+            .replace(/Creating value-driven success for our members and the communities we serve\.?/gi, '')
+            .replace(/^[\s–—\-|]+|[\s–—\-|]+$/g, '')
+            .trim();
+
+          if (cleaned && cleaned.length > 1) {
+            document.title = cleaned + ' | Coconut Coast Organization of REALTORS® (CCOR)';
+          } else {
+            document.title = 'Coconut Coast Organization of REALTORS® | CCOR | Southwest Florida Real Estate';
+          }
+        }
+      } catch (e) {}
+
+      // 2. Favicon Override (swaps all existing link icons + creates if missing)
+      try {
+        const iconRels = ["icon", "shortcut icon", "apple-touch-icon"];
+        let links = Array.from(document.querySelectorAll("link[rel*='icon'], link[rel='apple-touch-icon']"));
+        if (links.length === 0) {
+          iconRels.forEach(rel => {
+            const l = document.createElement('link');
+            l.rel = rel;
+            l.href = FAVICON_URL;
+            document.head.appendChild(l);
+          });
+        } else {
+          links.forEach(l => {
+            l.href = FAVICON_URL;
+          });
+        }
+        let tile = document.querySelector('meta[name="msapplication-TileImage"]');
+        if (tile) tile.setAttribute('content', FAVICON_URL);
+      } catch (e) {}
+
+      // 3. SEO Meta Tags (ensure description & OpenGraph are always populated)
+      try {
+        function ensureMeta(attr, key, val) {
+          let m = document.querySelector(`meta[${attr}="${key}"]`);
+          if (!m) {
+            m = document.createElement('meta');
+            m.setAttribute(attr, key);
+            document.head.appendChild(m);
+          }
+          if (!m.getAttribute('content') || m.getAttribute('content').toLowerCase().includes('bonita')) {
+            m.setAttribute('content', val);
+          }
+        }
+        ensureMeta('name', 'description', 'Coconut Coast Organization of REALTORS® (CCOR) is the leading real estate association in Southwest Florida serving Bonita Springs, Estero, Naples, Fort Myers, Cape Coral, and Marco Island. Education, MLS access, advocacy, and member resources.');
+        ensureMeta('property', 'og:site_name', 'Coconut Coast Organization of REALTORS® (CCOR)');
+        ensureMeta('property', 'og:image', FAVICON_URL);
+
+      // 4. Schema.org JSON-LD Structured Data
+      try {
+        if (!document.getElementById('ccor-schema-org')) {
+          const schemaScript = document.createElement('script');
+          schemaScript.id = 'ccor-schema-org';
+          schemaScript.type = 'application/ld+json';
+          schemaScript.textContent = JSON.stringify({
+            "@context": "https://schema.org",
+            "@graph": [
+              {
+                "@type": "Organization",
+                "@id": "https://coconutcoastrealtors.org/#organization",
+                "name": "Coconut Coast Organization of REALTORS®",
+                "alternateName": ["CCOR", "BER", "Bonita Springs-Estero REALTORS®"],
+                "url": "https://coconutcoastrealtors.org/",
+                "logo": {
+                  "@type": "ImageObject",
+                  "url": "https://coconutcoastrealtors.org/wp-content/uploads/2026/10/Untitled-design17.png"
+                },
+                "description": "Official REALTOR® association serving real estate professionals across Southwest Florida including Bonita Springs, Estero, Fort Myers, and Naples.",
+                "telephone": "+1-239-992-6771",
+                "email": "Support@coconutcoastrealtors.org",
+                "address": {
+                  "@type": "PostalAddress",
+                  "streetAddress": "25300 Bernwood Dr Ste 1",
+                  "addressLocality": "Bonita Springs",
+                  "addressRegion": "FL",
+                  "postalCode": "34135",
+                  "addressCountry": "US"
+                },
+                "sameAs": [
+                  "https://www.facebook.com/BonitaSpringsEsteroRealtors",
+                  "https://www.instagram.com/ber_realtors"
+                ]
+              },
+              {
+                "@type": "WebSite",
+                "@id": "https://coconutcoastrealtors.org/#website",
+                "url": "https://coconutcoastrealtors.org/",
+                "name": "Coconut Coast Organization of REALTORS®",
+                "publisher": {
+                  "@id": "https://coconutcoastrealtors.org/#organization"
+                }
+              }
+            ]
+          });
+          document.head.appendChild(schemaScript);
+        }
+      } catch (e) {}
+
+      } catch (e) {}
+    }
+
+    applyCcorSiteIdentity();
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', applyCcorSiteIdentity);
+    }
+  })();
+</script>
+
 <div id="ccor-rebrand-banner"
   style="display: none; background: #FFF9C4; color: #856404; text-align: center; padding: 10px 20px; font-size: 14px; font-family: 'Inter', sans-serif; font-weight: 500; line-height: 1.4; border-bottom: 1px solid #ffeeba; position: relative; z-index: 1000000;">
   <!-- Coconut Coast Organization of REALTORS (formerly Bonita Springs-Estero REALTORS), pending official state approval. -->
@@ -1365,7 +1505,7 @@
           <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" style="vertical-align:-2px">
             <path d="M20 4H4a2 2 0 00-2 2v12a2 2 0 002 2h16a2 2 0 002-2V6a2 2 0 00-2-2zm0 4l-8 5L4 8V6l8 5 8-5v2z" />
           </svg>
-          &nbsp;Email: <a href="mailto:Support@BERealtors.org">Support@BERealtors.org</a>
+          &nbsp;Email: <a href="mailto:Support@coconutcoastrealtors.org">Support@coconutcoastrealtors.org</a>
           <span id="ber-topbar-surf" style="opacity:0.85; display:inline-block;" title="Southwest Florida Marine Sync: Automatically scaling the digital background waves based on actual real-time wave observations, displaying sea surface temperature.">
             &nbsp;&nbsp;|&nbsp;&nbsp;
             Bonita Beach Water Temp: <span id="ber-surf-bonita" style="color:var(--ccor-gold); font-weight:700;">Loading...</span>
@@ -1432,7 +1572,7 @@
             </a>
           </li>
           <li>
-            <a class="ber-link ber-cta ber-cta--portal" href="https://members.bonitaesterorealtors.com/MIC/Login"
+            <a class="ber-link ber-cta ber-cta--portal" href="https://members.coconutcoastrealtors.org/MIC/Login"
               target="_blank" rel="noopener">
               Member Portal
             </a>
@@ -1460,7 +1600,7 @@
               <li><a href="https://coconutcoastrealtors.org/2025-sales-excellence-award-winners/">CCOR Sales
                   Excellence Awards</a></li>
               <li><a href="https://coconutcoastrealtors.org/board-of-directors/">Board of Directors</a></li>
-              <li><a href="https://coconutcoastrealtors.org/home-foundation/">BER Home Foundation</a></li>
+              <li><a href="https://coconutcoastrealtors.org/home-foundation/">CCOR Home Foundation</a></li>
               <li><a href="https://coconutcoastrealtors.org/leadership-academy">Leadership Academy</a></li>
               <li><a href="https://coconutcoastrealtors.org/realtor-directory/">Realtor Directory</a></li>
               <li><a href="https://coconutcoastrealtors.org/realtor-directory/">Broker
@@ -1721,7 +1861,7 @@
         ]
       },
       {
-        title: "Join BER",
+        title: "Join CCOR",
         category: "Membership",
         url: "https://coconutcoastrealtors.org/join-bser/",
         keywords: [
@@ -1739,7 +1879,7 @@
           "how much does membership cost",
           "which membership do I need",
           "compare membership types",
-          "how to join BER",
+          "how to join CCOR", "how to join BER",
           "becoming a member process",
           "apply to be a realtor",
           "what does membership include",
@@ -1986,7 +2126,7 @@
         ]
       },
       {
-        title: "BER Global Network",
+        title: "CCOR Global Network",
         category: "Global",
         url: "https://coconutcoastrealtors.org/b-e-a-r-global-network/",
         keywords: [
@@ -2026,15 +2166,15 @@
           "inclusion policy",
           "equal opportunity statement",
           "diversity programs",
-          "BER diversity commitment",
-          "how does BER support diversity",
+          "CCOR diversity commitment",
+          "how does CCOR support diversity",
           "diversity resources",
           "diversity page",
           "commitment to diversity and inclusion",
           "diversity mission",
           "equal opportunity pledge",
           "diversity statement",
-          "DEI at BER"
+          "DEI at CCOR"
         ]
       },
       {
@@ -2051,7 +2191,7 @@
           "board staff directory",
           "find contact info",
           "important links",
-          "contact BER",
+          "contact CCOR",
           "important phone numbers",
           "support contact",
           "helpdesk email",
@@ -2104,11 +2244,11 @@
           "committee application",
           "volunteer for a committee",
           "committee sign up",
-          "how to get involved with BER",
+          "how to get involved with CCOR",
           "join committees",
           "serve on a committee",
           "committee membership",
-          "volunteer opportunities at BER",
+          "volunteer opportunities at CCOR",
           "committee involvement",
           "committee volunteer sign up",
           "committee service",
@@ -2155,7 +2295,7 @@
           "office membership",
           "broker office application form",
           "apply for office membership",
-          "start a new brokerage with BER",
+          "start a new brokerage with CCOR",
           "office membership cost",
           "broker application requirements",
           "open an office membership",
@@ -2220,7 +2360,7 @@
         ]
       },
       {
-        title: "BER News & Articles",
+        title: "CCOR News & Articles",
         category: "News",
         url: "https://coconutcoastrealtors.org/",
         keywords: [
@@ -2233,13 +2373,13 @@
           "recent articles",
           "news and articles",
           "association news updates",
-          "latest BER articles",
+          "latest CCOR articles",
           "recent news posts",
           "news blog",
           "association announcements",
-          "BER updates",
+          "CCOR updates",
           "real estate news",
-          "what’s new at BER",
+          "what’s new at CCOR",
           "read latest articles",
           "news homepage",
           "association blog"
@@ -2272,7 +2412,7 @@
         ]
       },
       {
-        title: "BER BOX TRUCK Rentals",
+        title: "CCOR BOX TRUCK Rentals",
         category: "Logistics",
         url: "https://www.ccreschool.com/truck-reservation/pages/",
         keywords: [
@@ -2283,12 +2423,12 @@
           "rent the ber box truck",
           "how to book the box truck",
           "moving truck rental",
-          "book the BER box truck",
+          "book the CCOR box truck",
           "box truck rental cost",
           "truck rental schedule",
           "reserve moving truck",
           "moving truck booking",
-          "BER box truck availability",
+          "CCOR box truck availability",
           "truck rental reservation",
           "box truck rental process",
           "how to rent the box truck",
@@ -2336,9 +2476,9 @@
         ],
         questions: [
           "how do I book the media room",
-          "rent the BER media room",
+          "rent the CCOR media room",
           "reserve a studio for recording",
-          "does BER offer podcast recording space",
+          "does CCOR offer podcast recording space",
           "media room booking form",
           "how much is the media room rental",
           "what equipment is included in the media room",
@@ -2410,7 +2550,7 @@
         ]
       },
       {
-        title: "BER Guided Walkthroughs",
+        title: "CCOR Guided Walkthroughs",
         category: "Resources",
         url: "https://coconutcoastrealtors.org/ber-guided-walkthroughs/",
         keywords: [
@@ -2420,11 +2560,11 @@
         questions: [
           "where are the guided walkthroughs",
           "how to use member portal step by step",
-          "BER tutorials",
+          "CCOR tutorials",
           "walkthrough guides for members",
           "getting started guides",
           "step by step instructions",
-          "help me navigate BER tools"
+          "help me navigate CCOR tools"
         ]
       },
       {
@@ -2438,10 +2578,10 @@
         questions: [
           "who is on the board of directors",
           "view the board of directors",
-          "BER leadership team",
+          "CCOR leadership team",
           "who are the officers",
           "current board members",
-          "who is the president of BER",
+          "who is the president of CCOR",
           "board governance information"
         ]
       },
@@ -2457,7 +2597,7 @@
         questions: [
           "find a local affiliate",
           "search the vendor directory",
-          "who are BER’s affiliate members",
+          "who are CCOR’s affiliate members", "who are BER’s affiliate members",
           "look up an affiliate by name",
           "where is the affiliate directory",
           "find photographers and inspectors",
@@ -2493,7 +2633,7 @@
           "search members by office",
           "how to find a buyer’s agent",
           "real estate agent contact list",
-          "directory of BER members",
+          "directory of CCOR members", "directory of BER members",
           "agent profile lookup",
           "realtor search by specialty"
         ]
@@ -2611,7 +2751,7 @@
           "posting rules", "communications policy"
         ],
         questions: [
-          "what is the BER social media policy",
+          "what is the CCOR social media policy",
           "guidelines for posting online",
           "rules for social media use",
           "social media do’s and don’ts",
@@ -2753,7 +2893,7 @@
       if (matched.length === 0) {
         const p = document.createElement('p');
         p.style.cssText = "padding:12px;text-align:center;color:var(--muted,#6b7280)";
-        p.textContent = 'No matches found. Try “MLS”, “Join BER”, or “Event Calendar”.';
+        p.textContent = 'No matches found. Try 'MLS', 'Join CCOR', or 'Event Calendar'';
         results.appendChild(p);
         appendClearButton();
         results.hidden = false;
@@ -3157,7 +3297,7 @@
 <script>
   window.CocoConfig = {
     apiUrl: 'https://www.ccreschool.com',
-    supportEmail: 'support@berealtors.org'
+    supportEmail: 'support@coconutcoastrealtors.org'
   };
 </script>
 <script src="https://www.ccreschool.com/coco/coco-widget.js?v=5" defer></script>
