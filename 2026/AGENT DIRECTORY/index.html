@@ -9,21 +9,65 @@
     <link rel="canonical" href="https://coconutcoastrealtors.org/realtor-directory/">
     <link rel="sitemap" type="application/xml" title="Sitemap" href="https://coconutcoastrealtors.org/sitemap-agents.xml">
 
-    <!-- Schema.org Organization Microdata for Search Engines & AI indexing -->
+    <!-- CCOR Agent Directory Structured Data: CollectionPage, TradeAssociation & FAQPage Schema Graph -->
     <script type="application/ld+json">
     {
       "@context": "https://schema.org",
-      "@type": "Organization",
-      "name": "Coconut Coast Organization of REALTORS®",
-      "url": "https://coconutcoastrealtors.org/realtor-directory/",
-      "description": "Official REALTOR® member directory for Southwest Florida real estate professionals.",
-      "address": {
-        "@type": "PostalAddress",
-        "addressLocality": "Bonita Springs",
-        "addressRegion": "FL",
-        "postalCode": "34135",
-        "addressCountry": "US"
-      }
+      "@graph": [
+        {
+          "@type": "CollectionPage",
+          "@id": "https://coconutcoastrealtors.org/realtor-directory/#webpage",
+          "url": "https://coconutcoastrealtors.org/realtor-directory/",
+          "name": "Southwest Florida REALTOR® & Broker Directory",
+          "description": "Find licensed REALTORS® and real estate brokers across Southwest Florida including Bonita Springs, Estero, Naples, Fort Myers, Cape Coral, and Marco Island.",
+          "isPartOf": {
+            "@id": "https://coconutcoastrealtors.org/#website"
+          },
+          "about": {
+            "@id": "https://coconutcoastrealtors.org/#organization"
+          },
+          "inLanguage": "en-US"
+        },
+        {
+          "@type": "TradeAssociation",
+          "@id": "https://coconutcoastrealtors.org/#organization",
+          "name": "Coconut Coast Organization of REALTORS®",
+          "alternateName": ["CCOR", "BER", "Bonita Springs-Estero REALTORS®"],
+          "url": "https://coconutcoastrealtors.org/",
+          "telephone": "+1-239-992-6771",
+          "email": "Support@coconutcoastrealtors.org",
+          "address": {
+            "@type": "PostalAddress",
+            "streetAddress": "25300 Bernwood Dr Ste 1",
+            "addressLocality": "Bonita Springs",
+            "addressRegion": "FL",
+            "postalCode": "34135",
+            "addressCountry": "US"
+          }
+        },
+        {
+          "@type": "FAQPage",
+          "@id": "https://coconutcoastrealtors.org/realtor-directory/#faq",
+          "mainEntity": [
+            {
+              "@type": "Question",
+              "name": "How can I verify a REALTOR®'s license in Southwest Florida?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Every REALTOR® in the CCOR Directory is an active licensed real estate professional governed by the Florida Department of Business and Professional Regulation (DBPR) and held to the strict National Association of REALTORS® Code of Ethics."
+              }
+            },
+            {
+              "@type": "Question",
+              "name": "What areas do CCOR REALTORS® specialize in?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "CCOR REALTORS® specialize in residential sales, waterfront and beach properties, golf communities, luxury estates, condominiums, and commercial real estate across Bonita Springs, Estero, Naples, Fort Myers, Cape Coral, Sanibel, Captiva, and Marco Island."
+              }
+            }
+          ]
+        }
+      ]
     }
     </script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
@@ -1074,17 +1118,20 @@
                 <h3>Don't see your profile?</h3>
                 <p>Your profile might not be fully complete in our system. Please log in to the Member Portal to ensure
                     your contact details, photo, and preferences are up to date.</p>
-                <a href="https://members.coconutcoastrealtors.org/MIC/Login" target="_blank" class="btn-missing">Go to
+                <a href="https://coconutcoastrealtors.growthzoneapp.com/MIC/Login" target="_blank" class="btn-missing">Go to
                     Member Portal</a>
             </div>
         </div>
 
     </div>
 
-    <footer class="directory-footer">
-        <div class="container">
-            <p>All profiles shown are in randomized order per page load. All data is provided via our GrowthZone AMS
-                system.</p>
+        <footer class="directory-footer" style="padding: 32px 0; background: #ffffff; border-top: 1px solid #e5e5ea; margin-top: 40px;">
+        <div class="container" style="max-width: 1200px; margin: 0 auto; padding: 0 20px;">
+            <div style="margin-bottom: 24px; font-size: 0.95rem; color: #475569; line-height: 1.6;">
+                <h2 style="font-size: 1.3rem; font-weight: 700; color: #0f172a; margin-bottom: 8px;">Connecting Southwest Florida Buyers &amp; Sellers with Certified REALTORS®</h2>
+                <p>Welcome to the official Coconut Coast Organization of REALTORS® (CCOR) directory. Our membership represents over 1,400 top-producing real estate professionals serving Bonita Springs, Estero, Naples, Fort Myers, Cape Coral, Marco Island, and surrounding barrier islands. Whether you are buying your first home, purchasing a coastal vacation retreat, or listing an investment property, partnering with a CCOR REALTOR® ensures expert local market guidance and adherence to the highest standards of professional ethics.</p>
+            </div>
+            <p style="font-size: 0.85rem; color: #94a3b8; margin: 0;">All profiles shown are in randomized order per page load. Member data is verified and provided in real-time via CCOR GrowthZone AMS integration.</p>
         </div>
     </footer>
 
@@ -1098,7 +1145,7 @@
         </div>
     </div>
 
-    <script>
+    <script type="text/javascript" data-cmplz-skip="1">
         (function () {
             // ------------------------------------------------------------------------
             // CONFIGURATION
@@ -2371,7 +2418,7 @@
 
                 const emailForContact = emails.length ? emails[0].Value : (basic.EmailAddress || '');
                 const contactSubject = encodeURIComponent(`Inquiry from CCOR Agent Directory – ${name}`);
-                const contactBody = encodeURIComponent(`Hi ${basic.FirstName || name},\n\nI found your profile on the Bonita Springs–Estero REALTORS® Agent Directory and would like to connect.\n\nThank you!`);
+                const contactBody = encodeURIComponent(`Hi ${basic.FirstName || name},\n\nI found your profile on the Coconut Coast Organization of REALTORS® (CCOR) Directory and would like to connect.\n\nThank you!`);
 
                 let contactHtml = '';
                 phones.forEach(p => {

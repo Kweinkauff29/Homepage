@@ -1,0 +1,24 @@
+{
+  "name": "ccor-sea-2026-staging",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "check": "tsc --noEmit && wrangler deploy --dry-run --env staging",
+    "dev": "wrangler dev --env staging --local --port 8787 --var ALLOW_LOCALHOST_AUTH:true",
+    "deploy:staging": "wrangler deploy --env staging",
+    "test": "vitest run",
+    "types": "wrangler types --env staging worker-configuration.d.ts"
+  },
+  "dependencies": {
+    "jose": "latest"
+  },
+  "devDependencies": {
+    "@cloudflare/vitest-plugin": "latest",
+    "@cloudflare/workers-types": "latest",
+    "@types/node": "latest",
+    "typescript": "latest",
+    "vitest": "latest",
+    "wrangler": "latest"
+  }
+}

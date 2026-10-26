@@ -1,0 +1,2380 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>2025 Sales Excellence Award Winners — Official Historical Archive</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Playfair+Display:ital,wght@0,600;0,700;1,600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --bg-color: #0c121e;
+            --surface: #151f32;
+            --surface-hover: #1e2c45;
+            --border-color: rgba(255, 255, 255, 0.08);
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+            --gold: #f59e0b;
+            --gold-light: #fef3c7;
+            --platinum: #cbd5e1;
+            --diamond: #67e8f9;
+            --diamond-border: rgba(103, 232, 249, 0.4);
+            --platinum-border: rgba(203, 213, 225, 0.3);
+            --gold-border: rgba(245, 158, 11, 0.4);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            min-height: 100vh;
+            line-height: 1.5;
+        }
+
+        /* Universal Awards Navigation Header */
+        .awards-archive-nav {
+            background: rgba(15, 23, 42, 0.95);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid var(--border-color);
+            padding: 0.85rem 1.5rem;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .nav-inner {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .nav-brand {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            font-weight: 700;
+            font-size: 1.1rem;
+            color: #fff;
+            text-decoration: none;
+        }
+
+        .nav-brand i {
+            color: var(--gold);
+        }
+
+        .nav-links {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+        }
+
+        .nav-pill {
+            padding: 0.45rem 0.9rem;
+            border-radius: 9999px;
+            text-decoration: none;
+            font-size: 0.85rem;
+            font-weight: 600;
+            transition: all 0.2s ease;
+            color: var(--text-muted);
+            border: 1px solid transparent;
+        }
+
+        .nav-pill:hover {
+            color: #fff;
+            background: var(--surface);
+            border-color: var(--border-color);
+        }
+
+        .nav-pill.active {
+            background: rgba(245, 158, 11, 0.15);
+            color: var(--gold);
+            border-color: rgba(245, 158, 11, 0.4);
+        }
+
+        .nav-pill.current-year {
+            background: rgba(37, 99, 235, 0.15);
+            color: #60a5fa;
+            border-color: rgba(37, 99, 235, 0.4);
+        }
+
+        /* Hero Banner */
+        .hero {
+            text-align: center;
+            padding: 4rem 1.5rem 2.5rem;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .archive-tag {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: rgba(245, 158, 11, 0.12);
+            color: var(--gold);
+            padding: 0.4rem 1rem;
+            border-radius: 9999px;
+            font-size: 0.85rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: 1.25rem;
+            border: 1px solid rgba(245, 158, 11, 0.3);
+        }
+
+        h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: 3rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            background: linear-gradient(135deg, #fff 0%, #cbd5e1 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .hero p {
+            color: var(--text-muted);
+            font-size: 1.15rem;
+            line-height: 1.6;
+        }
+
+        .criteria-box {
+            margin-top: 1.5rem;
+            padding: 1rem 1.5rem;
+            background: var(--surface);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            font-size: 0.9rem;
+            color: var(--text-muted);
+            display: inline-block;
+        }
+
+        .criteria-box strong {
+            color: #fff;
+        }
+
+        /* Filter Controls */
+        .controls-section {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 1rem 1.5rem 2rem;
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .controls-bar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 1rem;
+            background: var(--surface);
+            padding: 1rem 1.5rem;
+            border-radius: 16px;
+            border: 1px solid var(--border-color);
+        }
+
+        .tier-tabs {
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+        }
+
+        .tier-btn {
+            background: transparent;
+            border: 1px solid var(--border-color);
+            color: var(--text-muted);
+            padding: 0.5rem 1.1rem;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: all 0.2s;
+        }
+
+        .tier-btn:hover {
+            background: var(--surface-hover);
+            color: #fff;
+        }
+
+        .tier-btn.active {
+            background: #fff;
+            color: #0f172a;
+            border-color: #fff;
+        }
+
+        .tier-btn.diamond.active {
+            background: #22d3ee;
+            color: #0f172a;
+            border-color: #22d3ee;
+        }
+
+        .tier-btn.platinum.active {
+            background: #cbd5e1;
+            color: #0f172a;
+            border-color: #cbd5e1;
+        }
+
+        .tier-btn.gold.active {
+            background: #f59e0b;
+            color: #0f172a;
+            border-color: #f59e0b;
+        }
+
+        .badge-count {
+            padding: 0.15rem 0.5rem;
+            border-radius: 999px;
+            font-size: 0.75rem;
+            background: rgba(0,0,0,0.15);
+        }
+
+        .search-box {
+            position: relative;
+            flex-grow: 1;
+            max-width: 350px;
+        }
+
+        .search-box i {
+            position: absolute;
+            left: 1rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-muted);
+        }
+
+        .search-box input {
+            width: 100%;
+            background: var(--bg-color);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 0.6rem 1rem 0.6rem 2.5rem;
+            color: #fff;
+            font-size: 0.9rem;
+            outline: none;
+            transition: border-color 0.2s;
+        }
+
+        .search-box input:focus {
+            border-color: var(--gold);
+        }
+
+        /* Winners Grid */
+        .winners-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 1.5rem 5rem;
+        }
+
+        .winners-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .winner-card {
+            background: var(--surface);
+            border-radius: 16px;
+            overflow: hidden;
+            border: 1px solid var(--border-color);
+            display: flex;
+            flex-direction: column;
+            transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
+            position: relative;
+        }
+
+        .winner-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 16px 30px rgba(0, 0, 0, 0.4);
+        }
+
+        .winner-card.diamond {
+            border-top: 4px solid #22d3ee;
+        }
+        .winner-card.platinum {
+            border-top: 4px solid #cbd5e1;
+        }
+        .winner-card.gold {
+            border-top: 4px solid #f59e0b;
+        }
+
+        .photo-wrap {
+            height: 280px;
+            background: #0f172a;
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .photo-wrap img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            object-position: top center;
+            transition: transform 0.3s ease;
+        }
+
+        .winner-card:hover .photo-wrap img {
+            transform: scale(1.03);
+        }
+
+        .photo-placeholder {
+            font-size: 4rem;
+            color: rgba(255, 255, 255, 0.15);
+        }
+
+        .tier-tag {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            padding: 0.35rem 0.75rem;
+            border-radius: 6px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            backdrop-filter: blur(8px);
+            box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+        }
+
+        .tier-tag.diamond {
+            background: rgba(14, 165, 233, 0.85);
+            color: #fff;
+        }
+        .tier-tag.platinum {
+            background: rgba(148, 163, 184, 0.85);
+            color: #0f172a;
+        }
+        .tier-tag.gold {
+            background: rgba(245, 158, 11, 0.85);
+            color: #0f172a;
+        }
+
+        .card-body {
+            padding: 1.25rem;
+            display: flex;
+            flex-direction: column;
+            flex-grow: 1;
+            justify-content: space-between;
+        }
+
+        .agent-name {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: #fff;
+            margin-bottom: 0.35rem;
+        }
+
+        .brokerage-name {
+            font-size: 0.9rem;
+            color: var(--text-muted);
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+        }
+
+        .brokerage-name i {
+            font-size: 0.8rem;
+            opacity: 0.7;
+        }
+
+        /* Empty state */
+        .empty-state {
+            grid-column: 1 / -1;
+            text-align: center;
+            padding: 4rem 1rem;
+            color: var(--text-muted);
+            display: none;
+        }
+
+        .empty-state i {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            opacity: 0.4;
+        }
+
+        footer {
+            border-top: 1px solid var(--border-color);
+            padding: 2rem 1.5rem;
+            text-align: center;
+            color: var(--text-muted);
+            font-size: 0.85rem;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Unified Awards Navigation -->
+    <nav class="awards-archive-nav">
+        <div class="nav-inner">
+            <a href="#" class="nav-brand">
+                <i class="fa-solid fa-trophy"></i>
+                <span>Sales Excellence Awards</span>
+            </a>
+            <div class="nav-links">
+                <a href="/sea-2026/frontend/index.html" class="nav-pill current-year">
+                    <i class="fa-solid fa-gear"></i> 2026 Awards Management
+                </a>
+                <a href="#" class="nav-pill active">
+                    <i class="fa-solid fa-clock-rotate-left"></i> 2025 Archive (Active)
+                </a>
+                <a href="https://coconutcoastrealtors.org/2024-sales-excellence-award-winners/" target="_blank" class="nav-pill">
+                    <i class="fa-solid fa-box-archive"></i> 2024 Archive
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Header -->
+    <header class="hero">
+        <div class="archive-tag">
+            <i class="fa-solid fa-landmark"></i> Historical Archive — 2025 Year
+        </div>
+        <h1>2025 Sales Excellence Award Winners</h1>
+        <p>Celebrating the exceptional achievement and dedication of our top-producing members during the 2024–2025 production year.</p>
+        <div class="criteria-box">
+            <strong>2025 Award Rules:</strong> Diamond ($20M+ or 75+ sides) &bull; Platinum ($10M+ or 45+ sides) &bull; Gold ($5M+ or 25+ sides)
+        </div>
+    </header>
+
+    <!-- Filter & Search Controls -->
+    <section class="controls-section">
+        <div class="controls-bar">
+            <div class="tier-tabs">
+                <button class="tier-btn active" data-filter="all">
+                    All Recipients <span class="badge-count">131</span>
+                </button>
+                <button class="tier-btn diamond" data-filter="diamond">
+                    <i class="fa-solid fa-gem"></i> Diamond <span class="badge-count">32</span>
+                </button>
+                <button class="tier-btn platinum" data-filter="platinum">
+                    <i class="fa-solid fa-medal"></i> Platinum <span class="badge-count">43</span>
+                </button>
+                <button class="tier-btn gold" data-filter="gold">
+                    <i class="fa-solid fa-award"></i> Gold <span class="badge-count">56</span>
+                </button>
+            </div>
+
+            <div class="search-box">
+                <i class="fa-solid fa-magnifying-glass"></i>
+                <input type="text" id="searchInput" placeholder="Search agent or brokerage...">
+            </div>
+        </div>
+    </section>
+
+    <!-- Winners Roster Grid -->
+    <main class="winners-container">
+        <div class="winners-grid" id="winnersGrid">
+
+            <div class="winner-card diamond" data-tier="diamond" data-name="adam dearmond" data-brokerage="domainrealty.com llc">
+                <div class="photo-wrap">
+                    <img src="https://coconutcoastrealtors.org/wp-content/uploads/2026/02/Adam-DeArmond.jpg?w=400" alt="Adam DeArmond" loading="lazy">
+                    <div class="tier-tag diamond">diamond</div>
+                </div>
+                <div class="card-body">
+                    <div class="agent-name">Adam DeArmond</div>
+                    <div class="brokerage-name">
+                        <i class="fa-solid fa-building"></i>
+                        <span>DomainRealty.com LLC</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="winner-card gold" data-tier="gold" data-name="alison pollitt" data-brokerage="keller williams elite realty">
+                <div class="photo-wrap">
+                    <img src="https://coconutcoastrealtors.org/wp-content/uploads/2026/02/Alison-Pollitt.jpg?w=400" alt="Alison Pollitt" loading="lazy">
+                    <div class="tier-tag gold">gold</div>
+                </div>
+                <div class="card-body">
+                    <div class="agent-name">Alison Pollitt</div>
+                    <div class="brokerage-name">
+                        <i class="fa-solid fa-building"></i>
+                        <span>Keller Williams Elite Realty</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="winner-card platinum" data-tier="platinum" data-name="alley zuardi" data-brokerage="keller williams elite realty">
+                <div class="photo-wrap">
+                    <img src="https://coconutcoastrealtors.org/wp-content/uploads/2026/02/Alley-Zuardi.jpg?w=400" alt="Alley Zuardi" loading="lazy">
+                    <div class="tier-tag platinum">platinum</div>
+                </div>
+                <div class="card-body">
+                    <div class="agent-name">Alley Zuardi</div>
+                    <div class="brokerage-name">
+                        <i class="fa-solid fa-building"></i>
+                        <span>Keller Williams Elite Realty</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="winner-card platinum" data-tier="platinum" data-name="allyson evans" data-brokerage="keller williams elite realty">
+                <div class="photo-wrap">
+                    <img src="https://coconutcoastrealtors.org/wp-content/uploads/2026/02/Allyson-Evans.jpg?w=400" alt="Allyson Evans" loading="lazy">
+                    <div class="tier-tag platinum">platinum</div>
+                </div>
+                <div class="card-body">
+                    <div class="agent-name">Allyson Evans</div>
+                    <div class="brokerage-name">
+                        <i class="fa-solid fa-building"></i>
+                        <span>Keller Williams Elite Realty</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="winner-card platinum" data-tier="platinum" data-name="amber reyes" data-brokerage="local real estate llc">
+                <div class="photo-wrap">
+                    <img src="https://coconutcoastrealtors.org/wp-content/uploads/2026/02/Amber-Reyes.jpg?w=400" alt="Amber Reyes" loading="lazy">
+                    <div class="tier-tag platinum">platinum</div>
+                </div>
+                <div class="card-body">
+                    <div class="agent-name">Amber Reyes</div>
+                    <div class="brokerage-name">
+                        <i class="fa-solid fa-building"></i>
+                        <span>Local Real Estate LLC</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="winner-card gold" data-tier="gold" data-name="amy alvarez-betz" data-brokerage="premiere plus realty company">
+                <div class="photo-wrap">
+                    <img src="https://coconutcoastrealtors.org/wp-content/uploads/2026/02/Amy-Alvarez-Betz.jpg?w=400" alt="Amy Alvarez-Betz" loading="lazy">
+                    <div class="tier-tag gold">gold</div>
+                </div>
+                <div class="card-body">
+                    <div class="agent-name">Amy Alvarez-Betz</div>
+                    <div class="brokerage-name">
+                        <i class="fa-solid fa-building"></i>
+                        <span>Premiere Plus Realty Company</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="winner-card platinum" data-tier="platinum" data-name="amy velyvis" data-brokerage="john r. wood properties">
+                <div class="photo-wrap">
+                    <img src="https://mmp4production.blob.core.windows.net/publicfiles/6c24b0da-8a6e-4f2b-8547-26a8c1dc4581/18cb0f8b-6c8a-4c1e-b565-aa6889b1feec" alt="Amy Velyvis" loading="lazy">
+                    <div class="tier-tag platinum">platinum</div>
+                </div>
+                <div class="card-body">
+                    <div class="agent-name">Amy Velyvis</div>
+                    <div class="brokerage-name">
+                        <i class="fa-solid fa-building"></i>
+                        <span>John R. Wood Properties</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="winner-card gold" data-tier="gold" data-name="andrea mollica" data-brokerage="realty world j. pavich r.e.">
+                <div class="photo-wrap">
+                    <img src="https://coconutcoastrealtors.org/wp-content/uploads/2026/02/Andrea-Mollica.jpg?w=400" alt="Andrea Mollica" loading="lazy">
+                    <div class="tier-tag gold">gold</div>
+                </div>
+                <div class="card-body">
+                    <div class="agent-name">Andrea Mollica</div>
+                    <div class="brokerage-name">
+                        <i class="fa-solid fa-building"></i>
+                        <span>Realty World J. PAVICH R.E.</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="winner-card platinum" data-tier="platinum" data-name="andrew brinkoetter" data-brokerage="keller williams elite realty">
+                <div class="photo-wrap">
+                    <img src="https://coconutcoastrealtors.org/wp-content/uploads/2026/02/Andrew-Brinkoetter.jpg?w=400" alt="Andrew Brinkoetter" loading="lazy">
+                    <div class="tier-tag platinum">platinum</div>
+                </div>
+                <div class="card-body">
+                    <div class="agent-name">Andrew Brinkoetter</div>
+                    <div class="brokerage-name">
+                        <i class="fa-solid fa-building"></i>
+                        <span>Keller Williams Elite Realty</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="winner-card gold" data-tier="gold" data-name="andrew coppens" data-brokerage="premiere plus realty company">
+                <div class="photo-wrap">
+                    <img src="https://mmp4production.blob.core.windows.net/publicfiles/6c24b0da-8a6e-4f2b-8547-26a8c1dc4581/624d1547-afc2-4cb7-aea3-edc9edd576ae" alt="Andrew Coppens" loading="lazy">
+                    <div class="tier-tag gold">gold</div>
+                </div>
+                <div class="card-body">
+                    <div class="agent-name">Andrew Coppens</div>
+                    <div class="brokerage-name">
+                        <i class="fa-solid fa-building"></i>
+                        <span>Premiere Plus Realty Company</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="winner-card platinum" data-tier="platinum" data-name="andrew lynch" data-brokerage="potter trinity">
+                <div class="photo-wrap">
+                    <img src="https://coconutcoastrealtors.org/wp-content/uploads/2026/02/Andrew-Lynch.png?w=400" alt="Andrew Lynch" loading="lazy">
+                    <div class="tier-tag platinum">platinum</div>
+                </div>
+                <div class="card-body">
+                    <div class="agent-name">Andrew Lynch</div>
+                    <div class="brokerage-name">
+                        <i class="fa-solid fa-building"></i>
+                        <span>Potter Trinity</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="winner-card diamond" data-tier="diamond" data-name="angela guillette" data-brokerage="exp realty llc">
+                <div class="photo-wrap">
+                    <img src="https://coconutcoastrealtors.org/wp-content/uploads/2026/02/Angela-Guillette.jpg?w=400" alt="Angela Guillette" loading="lazy">
+                    <div class="tier-tag diamond">diamond</div>
+                </div>
+                <div class="card-body">
+                    <div class="agent-name">Angela Guillette</div>
+                    <div class="brokerage-name">
+                        <i class="fa-solid fa-building"></i>
+                        <span>EXP Realty LLC</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="winner-card platinum" data-tier="platinum" data-name="arianna jorrin" data-brokerage="realty one group mvp">
+                <div class="photo-wrap">
+                    <img src="https://mmp4production.blob.core.windows.net/publicfiles/6c24b0da-8a6e-4f2b-8547-26a8c1dc4581/8fb548b5-926e-4c7c-8994-12976ed95e78" alt="Arianna Jorrin" loading="lazy">
+                    <div class="tier-tag platinum">platinum</div>
+                </div>
+                <div class="card-body">
+                    <div class="agent-name">Arianna Jorrin</div>
+                    <div class="brokerage-name">
+                        <i class="fa-solid fa-building"></i>
+                        <span>Realty One Group MVP</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="winner-card platinum" data-tier="platinum" data-name="arlene santangelo" data-brokerage="keller williams elite realty">
+                <div class="photo-wrap">
+                    <img src="https://coconutcoastrealtors.org/wp-content/uploads/2026/02/Arlene-Santangelo.jpg?w=400" alt="Arlene Santangelo" loading="lazy">
+                    <div class="tier-tag platinum">platinum</div>
+                </div>
+                <div class="card-body">
+                    <div class="agent-name">Arlene Santangelo</div>
+                    <div class="brokerage-name">
+                        <i class="fa-solid fa-building"></i>
+                        <span>Keller Williams Elite Realty</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="winner-card gold" data-tier="gold" data-name="ashley prescott" data-brokerage="domainrealty.com llc">
+                <div class="photo-wrap">
+                    <img src="https://coconutcoastrealtors.org/wp-content/uploads/2026/02/Ashley-Prescott.jpg?w=400" alt="Ashley Prescott" loading="lazy">
+                    <div class="tier-tag gold">gold</div>
+                </div>
+                <div class="card-body">
+                    <div class="agent-name">Ashley Prescott</div>
+                    <div class="brokerage-name">
+                        <i class="fa-solid fa-building"></i>
+                        <span>DomainRealty.com LLC</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="winner-card gold" data-tier="gold" data-name="ashley wells" data-brokerage="royal shell real estate, inc.">
+                <div class="photo-wrap">
+                    <img src="https://mmp4production.blob.core.windows.net/publicfiles/6c24b0da-8a6e-4f2b-8547-26a8c1dc4581/e3f8aa39-a233-4b82-860e-3f95c9c30308" alt="Ashley Wells" loading="lazy">
+                    <div class="tier-tag gold">gold</div>
+                </div>
+                <div class="card-body">
+                    <div class="agent-name">Ashley Wells</div>
+                    <div class="brokerage-name">
+                        <i class="fa-solid fa-building"></i>
+                        <span>Royal Shell Real Estate, Inc.</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="winner-card platinum" data-tier="platinum" data-name="astrid hayes" data-brokerage="realty world j. pavich r.e.">
+                <div class="photo-wrap">
+                    <img src="https://coconutcoastrealtors.org/wp-content/uploads/2026/02/Astrid-Hayes.jpg?w=400" alt="Astrid Hayes" loading="lazy">
+                    <div class="tier-tag platinum">platinum</div>
+                </div>
+                <div class="card-body">
+                    <div class="agent-name">Astrid Hayes</div>
+                    <div class="brokerage-name">
+                        <i class="fa-solid fa-building"></i>
+                        <span>Realty World J. PAVICH R.E.</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="winner-card gold" data-tier="gold" data-name="barbara rich" data-brokerage="sun village realty llc">
+                <div class="photo-wrap">
+                    <img src="https://coconutcoastrealtors.org/wp-content/uploads/2026/02/Barbara-Rich.jpg?w=400" alt="Barbara Rich" loading="lazy">
+                    <div class="tier-tag gold">gold</div>
+                </div>
+                <div class="card-body">
+                    <div class="agent-name">Barbara Rich</div>
+                    <div class="brokerage-name">
+                        <i class="fa-solid fa-building"></i>
+                        <span>Sun Village Realty LLC</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="winner-card platinum" data-tier="platinum" data-name="becky jaarda" data-brokerage="john r. wood properties">
+                <div class="photo-wrap">
+                    <img src="https://coconutcoastrealtors.org/wp-content/uploads/2026/02/Becky-Jaarda.jpg?w=400" alt="Becky Jaarda" loading="lazy">
+                    <div class="tier-tag platinum">platinum</div>
+                </div>
+                <div class="card-body">
+                    <div class="agent-name">Becky Jaarda</div>
+                    <div class="brokerage-name">
+                        <i class="fa-solid fa-building"></i>
+                        <span>John R. Wood Properties</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="winner-card platinum" data-tier="platinum" data-name="beth wardlaw" data-brokerage="local real estate llc">
+                <div class="photo-wrap">
+                    <img src="https://coconutcoastrealtors.org/wp-content/uploads/2026/02/Beth-Wardlaw.jpg?w=400" alt="Beth Wardlaw" loading="lazy">
+                    <div class="tier-tag platinum">platinum</div>
+                </div>
+                <div class="card-body">
+                    <div class="agent-name">Beth Wardlaw</div>
+                    <div class="brokerage-name">
+                        <i class="fa-solid fa-building"></i>
+                        <span>Local Real Estate LLC</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="winner-card platinum" data-tier="platinum" data-name="bettina koss" data-brokerage="premiere plus realty company">
+                <div class="photo-wrap">
+                    <img src="https://coconutcoastrealtors.org/wp-content/uploads/2026/02/Bettina-Koss.jpg?w=400" alt="Bettina Koss" loading="lazy">
+                    <div class="tier-tag platinum">platinum</div>
+                </div>
+                <div class="card-body">
+                    <div class="agent-name">Bettina Koss</div>
+                    <div class="brokerage-name">
+                        <i class="fa-solid fa-building"></i>
+                        <span>Premiere Plus Realty Company</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="winner-card platinum" data-tier="platinum" data-name="billie jans" data-brokerage="john r. wood properties">
+                <div class="photo-wrap">
+                    <img src="https://coconutcoastrealtors.org/wp-content/uploads/2026/02/Billie-Jans.jpg?w=400" alt="Billie Jans" loading="lazy">
+                    <div class="tier-tag platinum">platinum</div>
+                </div>
+                <div class="card-body">
+                    <div class="agent-name">Billie Jans</div>
+                    <div class="brokerage-name">
+                        <i class="fa-solid fa-building"></i>
+                        <span>John R. Wood Properties</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="winner-card gold" data-tier="gold" data-name="brad graves pa" data-brokerage="premiere plus realty company">
+                <div class="photo-wrap">
+                    <img src="https://coconutcoastrealtors.org/wp-content/uploads/2025/02/Brad-Graves-scaled.jpg" alt="Brad Graves PA" loading="lazy">
+                    <div class="tier-tag gold">gold</div>
+                </div>
+                <div class="card-body">
+                    <div class="agent-name">Brad Graves PA</div>
+                    <div class="brokerage-name">
+                        <i class="fa-solid fa-building"></i>
+                        <span>Premiere Plus Realty Company</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="winner-card gold" data-tier="gold" data-name="callie zintz" data-brokerage="local real estate llc">
+                <div class="photo-wrap">
+                    <img src="https://coconutcoastrealtors.org/wp-content/uploads/2026/02/Callie-Zintz.jpg?w=400" alt="Callie Zintz" loading="lazy">
+                    <div class="tier-tag gold">gold</div>
+                </div>
+                <div class="card-body">
+                    <div class="agent-name">Callie Zintz</div>
+                    <div class="brokerage-name">
+                        <i class="fa-solid fa-building"></i>
+                        <span>Local Real Estate LLC</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="winner-card platinum" data-tier="platinum" data-name="candace farmer" data-brokerage="local real estate llc">
+                <div class="photo-wrap">
+                    <img src="https://coconutcoastrealtors.org/wp-content/uploads/2026/02/Candace-Farmer.jpg?w=400" alt="Candace Farmer" loading="lazy">
+                    <div class="tier-tag platinum">platinum</div>
+                </div>
+                <div class="card-body">
+                    <div class="agent-name">Candace Farmer</div>
+                    <div class="brokerage-name">
+                        <i class="fa-solid fa-building"></i>
+                        <span>Local Real Estate LLC</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="winner-card gold" data-tier="gold" data-name="carla huyler" data-brokerage="grandeur realty co.">
+                <div class="photo-wrap">
+                    <img src="https://coconutcoastrealtors.org/wp-content/uploads/2026/02/Carla-Huyler.jpg?w=400" alt="Carla Huyler" loading="lazy">
+                    <div class="tier-tag gold">gold</div>
+                </div>
+                <div class="card-body">
+                    <div class="agent-name">Carla Huyler</div>
+                    <div class="brokerage-name">
+                        <i class="fa-solid fa-building"></i>
+                        <span>Grandeur Realty Co.</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="winner-card platinum" data-tier="platinum" data-name="carrie martus" data-brokerage="domainrealty.com llc">
+                <div class="photo-wrap">
+                    <img src="https://coconutcoastrealtors.org/wp-content/uploads/2026/02/Carrie-Martus.jpg?w=400" alt="Carrie Martus" loading="lazy">
+                    <div class="tier-tag platinum">platinum</div>
+                </div>
+                <div class="card-body">
+                    <div class="agent-name">Carrie Martus</div>
+                    <div class="brokerage-name">
+                        <i class="fa-solid fa-building"></i>
+                        <span>DomainRealty.com LLC</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="winner-card gold" data-tier="gold" data-name="christy lominack" data-brokerage="jason mitchell real estate flo">
+                <div class="photo-wrap">
+                    <img src="https://coconutcoastrealtors.org/wp-content/uploads/2026/02/Christy-Lominack.jpg?w=400" alt="Christy Lominack" loading="lazy">
+                    <div class="tier-tag gold">gold</div>
+                </div>
+                <div class="card-body">
+                    <div class="agent-name">Christy Lominack</div>
+                    <div class="brokerage-name">
+                        <i class="fa-solid fa-building"></i>
+                        <span>Jason Mitchell Real Estate Flo</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="winner-card diamond" data-tier="diamond" data-name="constance lummis" data-brokerage="royal shell real estate, inc.">
+                <div class="photo-wrap">
+                    <img src="https://coconutcoastrealtors.org/wp-content/uploads/2026/02/Constance-Lummis.jpg?w=400" alt="Constance Lummis" loading="lazy">
+                    <div class="tier-tag diamond">diamond</div>
+                </div>
+                <div class="card-body">
+                    <div class="agent-name">Constance Lummis</div>
+                    <div class="brokerage-name">
+                        <i class="fa-solid fa-building"></i>
+                        <span>Royal Shell Real Estate, Inc.</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="winner-card diamond" data-tier="diamond" data-name="corye reiter" data-brokerage="royal shell real estate, inc.">
+                <div class="photo-wrap">
+                    <img src="https://coconutcoastrealtors.org/wp-content/uploads/2026/02/Corye-Reiter.jpg?w=400" alt="Corye Reiter" loading="lazy">
+                    <div class="tier-tag diamond">diamond</div>
+                </div>
+                <div class="card-body">
+                    <div class="agent-name">Corye Reiter</div>
+                    <div class="brokerage-name">
+                        <i class="fa-solid fa-building"></i>
+                        <span>Royal Shell Real Estate, Inc.</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="winner-card gold" data-tier="gold" data-name="cynthia zairis" data-brokerage="realty world j. pavich r.e.">
+                <div class="photo-wrap">
+                    <img src="https://coconutcoastrealtors.org/wp-content/uploads/2026/02/Cynthia-Zairis.jpg?w=400" alt="Cynthia Zairis" loading="lazy">
+                    <div class="tier-tag gold">gold</div>
+                </div>
+                <div class="card-body">
+                    <div class="agent-name">Cynthia Zairis</div>
+                    <div class="brokerage-name">
+                        <i class="fa-solid fa-building"></i>
+                        <span>Realty World J. PAVICH R.E.</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="winner-card platinum" data-tier="platinum" data-name="danielle stefanacci" data-brokerage="corkscrew real estate">
+                <div class="photo-wrap">
+                    <img src="https://coconutcoastrealtors.org/wp-content/uploads/2026/02/Danielle-Stefanacci.jpg?w=400" alt="Danielle Stefanacci" loading="lazy">
+                    <div class="tier-tag platinum">platinum</div>
+                </div>
+                <div class="card-body">
+                    <div class="agent-name">Danielle Stefanacci</div>
+                    <div class="brokerage-name">
+                        <i class="fa-solid fa-building"></i>
+                        <span>Corkscrew Real Estate</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="winner-card diamond" data-tier="diamond" data-name="david urban" data-brokerage="john r. wood properties">
+                <div class="photo-wrap">
+                    <img src="https://coconutcoastrealtors.org/wp-content/uploads/2026/02/David-Urban.jpg?w=400" alt="David Urban" loading="lazy">
+                    <div class="tier-tag diamond">diamond</div>
+                </div>
+                <div class="card-body">
+                    <div class="agent-name">David Urban</div>
+                    <div class="brokerage-name">
+                        <i class="fa-solid fa-building"></i>
+                        <span>John R. Wood Properties</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="winner-card gold" data-tier="gold" data-name="dennis graham" data-brokerage="william raveis real estate">
+                <div class="photo-wrap">
+                    <img src="https://coconutcoastrealtors.org/wp-content/uploads/2026/02/Dennis-Graham.jpg?w=400" alt="Dennis Graham" loading="lazy">
+                    <div class="tier-tag gold">gold</div>
+                </div>
+                <div class="card-body">
+                    <div class="agent-name">Dennis Graham</div>
+                    <div class="brokerage-name">
+                        <i class="fa-solid fa-building"></i>
+                        <span>William Raveis Real Estate</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="winner-card gold" data-tier="gold" data-name="dianne anderson" data-brokerage="premier sotheby's int'l realty">
+                <div class="photo-wrap">
+                    <img src="https://coconutcoastrealtors.org/wp-content/uploads/2026/02/Dianne-Anderson.jpg?w=400" alt="Dianne Anderson" loading="lazy">
+                    <div class="tier-tag gold">gold</div>
+                </div>
+                <div class="card-body">
+                    <div class="agent-name">Dianne Anderson</div>
+                    <div class="brokerage-name">
+                        <i class="fa-solid fa-building"></i>
+                        <span>Premier Sotheby's Int'l Realty</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="winner-card gold" data-tier="gold" data-name="diego barreto" data-brokerage="corkscrew real estate">
+                <div class="photo-wrap">
+                    <img src="https://coconutcoastrealtors.org/wp-content/uploads/2026/02/Diego-Barreto.jpg?w=400" alt="Diego Barreto" loading="lazy">
+                    <div class="tier-tag gold">gold</div>
+                </div>
+                <div class="card-body">
+                    <div class="agent-name">Diego Barreto</div>
+                    <div class="brokerage-name">
+                        <i class="fa-solid fa-building"></i>
+                        <span>Corkscrew Real Estate</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="winner-card diamond" data-tier="diamond" data-name="dina marie skaff" data-brokerage="dina marie realty llc">
+                <div class="photo-wrap">
+                    <img src="https://coconutcoastrealtors.org/wp-content/uploads/2026/02/Dina-Marie-Skaff.jpg?w=400" alt="Dina Marie Skaff" loading="lazy">
+                    <div class="tier-tag diamond">diamond</div>
+                </div>
+                <div class="card-body">
+                    <div class="agent-name">Dina Marie Skaff</div>
+                    <div class="brokerage-name">
+                        <i class="fa-solid fa-building"></i>
+                        <span>Dina Marie Realty LLC</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="winner-card gold" data-tier="gold" data-name="don droke" data-brokerage="berkshire hathaway fl realty">
+                <div class="photo-wrap">
+                    <img src="https://mmp4production.blob.core.windows.net/publicfiles/6c24b0da-8a6e-4f2b-8547-26a8c1dc4581/621363e0-7eb9-4737-bef3-a0e3153d8aad" alt="Don Droke" loading="lazy">
+                    <div class="tier-tag gold">gold</div>
+                </div>
+                <div class="card-body">
+                    <div class="agent-name">Don Droke</div>
+                    <div class="brokerage-name">
+                        <i class="fa-solid fa-building"></i>
+                        <span>Berkshire Hathaway FL Realty</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="winner-card gold" data-tier="gold" data-name="donald faber" data-brokerage="royal shell real estate, inc.">
+                <div class="photo-wrap">
+                    <img src="https://coconutcoastrealtors.org/wp-content/uploads/2026/02/Donald-Faber.jpg?w=400" alt="Donald Faber" loading="lazy">
+                    <div class="tier-tag gold">gold</div>
+                </div>
+                <div class="card-body">
+                    <div class="agent-name">Donald Faber</div>
+                    <div class="brokerage-name">
+                        <i class="fa-solid fa-building"></i>
+                        <span>Royal Shell Real Estate, Inc.</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="winner-card diamond" data-tier="diamond" data-name="donna marcotte" data-brokerage="premier sotheby's int'l realty">
+                <div class="photo-wrap">
+                    <img src="https://coconutcoastrealtors.org/wp-content/uploads/2026/02/Donna-Marcotte-pic.jpg" alt="Donna Marcotte" loading="lazy">
+                    <div class="tier-tag diamond">diamond</div>
+                </div>
+                <div class="card-body">
+                    <div class="agent-name">Donna Marcotte</div>
+                    <div class="brokerage-name">
+                        <i class="fa-solid fa-building"></i>
+                        <span>Premier Sotheby's Int'l Realty</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="winner-card gold" data-tier="gold" data-name="dotty rydell" data-brokerage="local real estate llc">
+                <div class="photo-wrap">
+                    <img src="https://coconutcoastrealtors.org/wp-content/uploads/2026/02/Dotty-Rydell.jpg?w=400" alt="Dotty Rydell" loading="lazy">
+                    <div class="tier-tag gold">gold</div>
+                </div>
+                <div class="card-body">
+                    <div class="agent-name">Dotty Rydell</div>
+                    <div class="brokerage-name">
+                        <i class="fa-solid fa-building"></i>
+                        <span>Local Real Estate LLC</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="winner-card gold" data-tier="gold" data-name="drew fagan" data-brokerage="royal shell real estate, inc.">
+                <div class="photo-wrap">
+                    <img src="https://coconutcoastrealtors.org/wp-content/uploads/2026/02/Drew-Fagan.jpg?w=400" alt="Drew Fagan" loading="lazy">
+                    <div class="tier-tag gold">gold</div>
+                </div>
+                <div class="card-body">
+                    <div class="agent-name">Drew Fagan</div>
+                    <div class="brokerage-name">
+                        <i class="fa-solid fa-building"></i>
+                        <span>Royal Shell Real Estate, Inc.</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="winner-card platinum" data-tier="platinum" data-name="elizabeth baker" data-brokerage="keller williams elite realty">
+                <div class="photo-wrap">
+                    <img src="https://coconutcoastrealtors.org/wp-content/uploads/2026/02/Elizabeth-Baker.jpg?w=400" alt="Elizabeth Baker" loading="lazy">
+                    <div class="tier-tag platinum">platinum</div>
+                </div>
+                <div class="card-body">
+                    <div class="agent-name">Elizabeth Baker</div>
+                    <div class="brokerage-name">
+                        <i class="fa-solid fa-building"></i>
+                        <span>Keller Williams Elite Realty</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="winner-card platinum" data-tier="platinum" data-name="ellen boyce" data-brokerage="keller williams elite realty">
+                <div class="photo-wrap">
+                    <img src="https://coconutcoastrealtors.org/wp-content/uploads/2026/02/Ellen-Boyce.jpg?w=400" alt="Ellen Boyce" loading="lazy">
+                    <div class="tier-tag platinum">platinum</div>
+                </div>
+                <div class="card-body">
+                    <div class="agent-name">Ellen Boyce</div>
+                    <div class="brokerage-name">
+                        <i class="fa-solid fa-building"></i>
+                        <span>Keller Williams Elite Realty</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="winner-card platinum" data-tier="platinum" data-name="emily prescott" data-brokerage="domainrealty.com llc">
+                <div class="photo-wrap">
+                    <img src="https://coconutcoastrealtors.org/wp-content/uploads/2026/02/Emily-Prescott.jpg?w=400" alt="Emily Prescott" loading="lazy">
+                    <div class="tier-tag platinum">platinum</div>
+                </div>
+                <div class="card-body">
+                    <div class="agent-name">Emily Prescott</div>
+                    <div class="brokerage-name">
+                        <i class="fa-solid fa-building"></i>
+                        <span>DomainRealty.com LLC</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="winner-card platinum" data-tier="platinum" data-name="glenroy huggins" data-brokerage="premiere plus realty company">
+                <div class="photo-wrap">
+                    <img src="https://coconutcoastrealtors.org/wp-content/uploads/2026/02/Glenroy-Huggins.jpg?w=400" alt="Glenroy Huggins" loading="lazy">
+                    <div class="tier-tag platinum">platinum</div>
+                </div>
+                <div class="card-body">
+                    <div class="agent-name">Glenroy Huggins</div>
+                    <div class="brokerage-name">
+                        <i class="fa-solid fa-building"></i>
+                        <span>Premiere Plus Realty Company</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="winner-card gold" data-tier="gold" data-name="goran denadija" data-brokerage="premiere plus realty company">
+                <div class="photo-wrap">
+                    <img src="https://coconutcoastrealtors.org/wp-content/uploads/2026/02/Goran-Denadija.jpg?w=400" alt="Goran Denadija" loading="lazy">
+                    <div class="tier-tag gold">gold</div>
+                </div>
+                <div class="card-body">
+                    <div class="agent-name">Goran Denadija</div>
+                    <div class="brokerage-name">
+                        <i class="fa-solid fa-building"></i>
+                        <span>Premiere Plus Realty Company</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="winner-card diamond" data-tier="diamond" data-name="h. max lummis" data-brokerage="royal shell real estate, inc.">
+                <div class="photo-wrap">
+                    <img src="https://cdn-east.idcrealestate.com/RYS_PUBLIC/image_cache/AGENT/PICTURE/6FC/6FC243E1-45CE-4C74-A384-55DE6ADCE23B_2.jpg?mw=500&mh=648" alt="H. Max Lummis" loading="lazy">
+                    <div class="tier-tag diamond">diamond</div>
+                </div>
+                <div class="card-body">
+                    <div class="agent-name">H. Max Lummis</div>
+                    <div class="brokerage-name">
+                        <i class="fa-solid fa-building"></i>
+                        <span>Royal Shell Real Estate, Inc.</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="winner-card gold" data-tier="gold" data-name="hunter kent" data-brokerage="premiere plus realty company">
+                <div class="photo-wrap">
+                    <img src="https://coconutcoastrealtors.org/wp-content/uploads/2026/02/Hunter-Kent.jpg?w=400" alt="Hunter Kent" loading="lazy">
+                    <div class="tier-tag gold">gold</div>
+                </div>
+                <div class="card-body">
+                    <div class="agent-name">Hunter Kent</div>
+                    <div class="brokerage-name">
+                        <i class="fa-solid fa-building"></i>
+                        <span>Premiere Plus Realty Company</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="winner-card diamond" data-tier="diamond" data-name="j alex king" data-brokerage="premiere plus realty company">
+                <div class="photo-wrap">
+                    <img src="https://coconutcoastrealtors.org/wp-content/uploads/2026/02/J-Alex-King.jpg?w=400" alt="J Alex King" loading="lazy">
+                    <div class="tier-tag diamond">diamond</div>
+                </div>
+                <div class="card-body">
+                    <div class="agent-name">J Alex King</div>
+                    <div class="brokerage-name">
+                        <i class="fa-solid fa-building"></i>
+                        <span>Premiere Plus Realty Company</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="winner-card diamond" data-tier="diamond" data-name="jack mancini" data-brokerage="keller williams elite realty">
+                <div class="photo-wrap">
+                    <img src="https://coconutcoastrealtors.org/wp-content/uploads/2026/02/Jack-Mancini.jpg?w=400" alt="Jack Mancini" loading="lazy">
+                    <div class="tier-tag diamond">diamond</div>
+                </div>
+                <div class="card-body">
+                    <div class="agent-name">Jack Mancini</div>
+                    <div class="brokerage-name">
+                        <i class="fa-solid fa-building"></i>
+                        <span>Keller Williams Elite Realty</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="winner-card platinum" data-tier="platinum" data-name="james hunter" data-brokerage="realty one group mvp">
+                <div class="photo-wrap">
+                    <img src="https://coconutcoastrealtors.org/wp-content/uploads/2026/02/James-Hunter.jpg?w=400" alt="James Hunter" loading="lazy">
+                    <div class="tier-tag platinum">platinum</div>
+                </div>
+                <div class="card-body">
+                    <div class="agent-name">James Hunter</div>
+                    <div class="brokerage-name">
+                        <i class="fa-solid fa-building"></i>
+                        <span>Realty One Group MVP</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="winner-card diamond" data-tier="diamond" data-name="jason pavich" data-brokerage="realty world j. pavich r.e.">
+                <div class="photo-wrap">
+                    <img src="https://coconutcoastrealtors.org/wp-content/uploads/2026/02/Jason-Pavich.jpg?w=400" alt="Jason Pavich" loading="lazy">
+                    <div class="tier-tag diamond">diamond</div>
+                </div>
+                <div class="card-body">
+                    <div class="agent-name">Jason Pavich</div>
+                    <div class="brokerage-name">
+                        <i class="fa-solid fa-building"></i>
+                        <span>Realty World J. PAVICH R.E.</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="winner-card diamond" data-tier="diamond" data-name="jay westerlund" data-brokerage="premier sotheby's int'l realty">
+                <div class="photo-wrap">
+                    <img src="https://coconutcoastrealtors.org/wp-content/uploads/2026/02/Jay-Westerlund-pic.jpg" alt="Jay Westerlund" loading="lazy">
+                    <div class="tier-tag diamond">diamond</div>
+                </div>
+                <div class="card-body">
+                    <div class="agent-name">Jay Westerlund</div>
+                    <div class="brokerage-name">
+                        <i class="fa-solid fa-building"></i>
+                        <span>Premier Sotheby's Int'l Realty</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="winner-card platinum" data-tier="platinum" data-name="jayson matthews" data-brokerage="downing-frye realty inc.">
+                <div class="photo-wrap">
+                    <img src="https://coconutcoastrealtors.org/wp-content/uploads/2026/02/Jayson-Matthews.jpg?w=400" alt="Jayson Matthews" loading="lazy">
+                    <div class="tier-tag platinum">platinum</div>
+                </div>
+                <div class="card-body">
+                    <div class="agent-name">Jayson Matthews</div>
+                    <div class="brokerage-name">
+                        <i class="fa-solid fa-building"></i>
+                        <span>Downing-Frye Realty Inc.</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="winner-card gold" data-tier="gold" data-name="jeanne siciliano" data-brokerage="realty world j. pavich r.e.">
+                <div class="photo-wrap">
+                    <img src="https://coconutcoastrealtors.org/wp-content/uploads/2026/02/Jeanne-Siciliano.jpg?w=400" alt="Jeanne Siciliano" loading="lazy">
+                    <div class="tier-tag gold">gold</div>
+                </div>
+                <div class="card-body">
+                    <div class="agent-name">Jeanne Siciliano</div>
+                    <div class="brokerage-name">
+                        <i class="fa-solid fa-building"></i>
+                        <span>Realty World J. PAVICH R.E.</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="winner-card platinum" data-tier="platinum" data-name="jennifer smyth" data-brokerage="john r. wood properties">
+                <div class="photo-wrap">
+                    <img src="https://coconutcoastrealtors.org/wp-content/uploads/2026/02/Jennifer-Smyth.jpg?w=400" alt="Jennifer Smyth" loading="lazy">
+                    <div class="tier-tag platinum">platinum</div>
+                </div>
+                <div class="card-body">
+                    <div class="agent-name">Jennifer Smyth</div>
+                    <div class="brokerage-name">
+                        <i class="fa-solid fa-building"></i>
+                        <span>John R. Wood Properties</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="winner-card diamond" data-tier="diamond" data-name="jennifer springer-rinden" data-brokerage="orchid properties">
+                <div class="photo-wrap">
+                    <img src="https://coconutcoastrealtors.org/wp-content/uploads/2026/02/Jennifer-Springer-Rinden.jpg?w=400" alt="Jennifer Springer-Rinden" loading="lazy">
+                    <div class="tier-tag diamond">diamond</div>
+                </div>
+                <div class="card-body">
+                    <div class="agent-name">Jennifer Springer-Rinden</div>
+                    <div class="brokerage-name">
+                        <i class="fa-solid fa-building"></i>
+                        <span>Orchid Properties</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="winner-card platinum" data-tier="platinum" data-name="jesse mcgreevy" data-brokerage="domainrealty.com llc">
+                <div class="photo-wrap">
+                    <img src="https://coconutcoastrealtors.org/wp-content/uploads/2026/02/Jesse-McGreevy.jpg?w=400" alt="Jesse McGreevy" loading="lazy">
+                    <div class="tier-tag platinum">platinum</div>
+                </div>
+                <div class="card-body">
+                    <div class="agent-name">Jesse McGreevy</div>
+                    <div class="brokerage-name">
+                        <i class="fa-solid fa-building"></i>
+                        <span>DomainRealty.com LLC</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="winner-card platinum" data-tier="platinum" data-name="joanne fultz" data-brokerage="realty one group mvp">
+                <div class="photo-wrap">
+                    <img src="https://coconutcoastrealtors.org/wp-content/uploads/2026/02/Joanne-Fultz.jpg?w=400" alt="Joanne Fultz" loading="lazy">
+                    <div class="tier-tag platinum">platinum</div>
+                </div>
+                <div class="card-body">
+                    <div class="agent-name">Joanne Fultz</div>
+                    <div class="brokerage-name">
+                        <i class="fa-solid fa-building"></i>
+                        <span>Realty One Group MVP</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="winner-card gold" data-tier="gold" data-name="jodi lynn wachman" data-brokerage="premier sotheby's int'l realty">
+                <div class="photo-wrap">
+                    <img src="https://coconutcoastrealtors.org/wp-content/uploads/2026/02/Jodi-Wachman-pic-scaled.jpg" alt="Jodi Lynn Wachman" loading="lazy">
+                    <div class="tier-tag gold">gold</div>
+                </div>
+                <div class="card-body">
+                    <div class="agent-name">Jodi Lynn Wachman</div>
+                    <div class="brokerage-name">
+                        <i class="fa-solid fa-building"></i>
+                        <span>Premier Sotheby's Int'l Realty</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="winner-card gold" data-tier="gold" data-name="joni pavich" data-brokerage="realty world j. pavich r.e.">
+                <div class="photo-wrap">
+                    <img src="https://coconutcoastrealtors.org/wp-content/uploads/2026/02/Joni-Pavich.jpg?w=400" alt="Joni Pavich" loading="lazy">
+                    <div class="tier-tag gold">gold</div>
+                </div>
+                <div class="card-body">
+                    <div class="agent-name">Joni Pavich</div>
+                    <div class="brokerage-name">
+                        <i class="fa-solid fa-building"></i>
+                        <span>Realty World J. PAVICH R.E.</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="winner-card diamond" data-tier="diamond" data-name="joseph pavich" data-brokerage="realty world j. pavich r.e.">
+                <div class="photo-wrap">
+                    <img src="https://coconutcoastrealtors.org/wp-content/uploads/2026/02/Joseph-Pavich.jpg?w=400" alt="Joseph Pavich" loading="lazy">
+                    <div class="tier-tag diamond">diamond</div>
+                </div>
+                <div class="card-body">
+                    <div class="agent-name">Joseph Pavich</div>
+                    <div class="brokerage-name">
+                        <i class="fa-solid fa-building"></i>
+                        <span>Realty World J. PAVICH R.E.</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="winner-card platinum" data-tier="platinum" data-name="joseph pavich sr" data-brokerage="realty world j. pavich r.e.">
+                <div class="photo-wrap">
+                    <img src="https://coconutcoastrealtors.org/wp-content/uploads/2026/02/Joseph-Pavich-Sr.jpg?w=400" alt="Joseph Pavich Sr" loading="lazy">
+                    <div class="tier-tag platinum">platinum</div>
+                </div>
+                <div class="card-body">
+                    <div class="agent-name">Joseph Pavich Sr</div>
+                    <div class="brokerage-name">
+                        <i class="fa-solid fa-building"></i>
+                        <span>Realty World J. PAVICH R.E.</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="winner-card gold" data-tier="gold" data-name="josh bohling" data-brokerage="lpt realty, llc">
+                <div class="photo-wrap">
+                    <img src="https://coconutcoastrealtors.org/wp-content/uploads/2026/02/Josh-Bohling.jpg?w=400" alt="Josh Bohling" loading="lazy">
+                    <div class="tier-tag gold">gold</div>
+                </div>
+                <div class="card-body">
+                    <div class="agent-name">Josh Bohling</div>
+                    <div class="brokerage-name">
+                        <i class="fa-solid fa-building"></i>
+                        <span>LPT Realty, LLC</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="winner-card gold" data-tier="gold" data-name="judith gietzen" data-brokerage="elite realty of swfl">
+                <div class="photo-wrap">
+                    <img src="https://coconutcoastrealtors.org/wp-content/uploads/2026/02/Judith-Gietzen.jpg?w=400" alt="Judith Gietzen" loading="lazy">
+                    <div class="tier-tag gold">gold</div>
+                </div>
+                <div class="card-body">
+                    <div class="agent-name">Judith Gietzen</div>
+                    <div class="brokerage-name">
+                        <i class="fa-solid fa-building"></i>
+                        <span>Elite Realty of SWFL</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="winner-card diamond" data-tier="diamond" data-name="justin jordan" data-brokerage="local real estate llc">
+                <div class="photo-wrap">
+                    <img src="https://coconutcoastrealtors.org/wp-content/uploads/2026/02/Justin-Jordan.jpg?w=400" alt="Justin Jordan" loading="lazy">
+                    <div class="tier-tag diamond">diamond</div>
+                </div>
+                <div class="card-body">
+                    <div class="agent-name">Justin Jordan</div>
+                    <div class="brokerage-name">
+                        <i class="fa-solid fa-building"></i>
+                        <span>Local Real Estate LLC</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="winner-card platinum" data-tier="platinum" data-name="justin o'hara" data-brokerage="premiere plus realty company">
+                <div class="photo-wrap">
+                    <img src="https://coconutcoastrealtors.org/wp-content/uploads/2026/02/Justin-O-Hara.jpg?w=400" alt="Justin O'Hara" loading="lazy">
+                    <div class="tier-tag platinum">platinum</div>
+                </div>
+                <div class="card-body">
+                    <div class="agent-name">Justin O'Hara</div>
+                    <div class="brokerage-name">
+                        <i class="fa-solid fa-building"></i>
+                        <span>Premiere Plus Realty Company</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="winner-card gold" data-tier="gold" data-name="kimberly springer" data-brokerage="orchid realty international">
+                <div class="photo-wrap">
+                    <img src="https://coconutcoastrealtors.org/wp-content/uploads/2026/02/KImberly-Springer.jpg?w=400" alt="KImberly Springer" loading="lazy">
+                    <div class="tier-tag gold">gold</div>
+                </div>
+                <div class="card-body">
+                    <div class="agent-name">KImberly Springer</div>
+                    <div class="brokerage-name">
+                        <i class="fa-solid fa-building"></i>
+                        <span>Orchid Realty International</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="winner-card gold" data-tier="gold" data-name="kathleen felszer" data-brokerage="downing-frye realty inc">
+                <div class="photo-wrap">
+                    <img src="https://coconutcoastrealtors.org/wp-content/uploads/2026/02/Kathleen-Felszer.jpg?w=400" alt="Kathleen Felszer" loading="lazy">
+                    <div class="tier-tag gold">gold</div>
+                </div>
+                <div class="card-body">
+                    <div class="agent-name">Kathleen Felszer</div>
+                    <div class="brokerage-name">
+                        <i class="fa-solid fa-building"></i>
+                        <span>Downing-Frye Realty Inc</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="winner-card gold" data-tier="gold" data-name="kathleen wegwert" data-brokerage="keller williams elite realty">
+                <div class="photo-wrap">
+                    <img src="https://coconutcoastrealtors.org/wp-content/uploads/2026/02/Kathleen-Wegwert.jpg?w=400" alt="Kathleen Wegwert" loading="lazy">
+                    <div class="tier-tag gold">gold</div>
+                </div>
+                <div class="card-body">
+                    <div class="agent-name">Kathleen Wegwert</div>
+                    <div class="brokerage-name">
+                        <i class="fa-solid fa-building"></i>
+                        <span>Keller Williams Elite Realty</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="winner-card platinum" data-tier="platinum" data-name="kathryn zangrilli" data-brokerage="broker brothers llc">
+                <div class="photo-wrap">
+                    <img src="https://coconutcoastrealtors.org/wp-content/uploads/2026/02/Zangrilli.png?w=400" alt="Kathryn Zangrilli" loading="lazy">
+                    <div class="tier-tag platinum">platinum</div>
+                </div>
+                <div class="card-body">
+                    <div class="agent-name">Kathryn Zangrilli</div>
+                    <div class="brokerage-name">
+                        <i class="fa-solid fa-building"></i>
+                        <span>Broker Brothers LLC</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="winner-card diamond" data-tier="diamond" data-name="kathy brooks" data-brokerage="miromar realty llc">
+                <div class="photo-wrap">
+                    <img src="https://coconutcoastrealtors.org/wp-content/uploads/2026/02/Kathy-Brooks.jpg?w=400" alt="Kathy Brooks" loading="lazy">
+                    <div class="tier-tag diamond">diamond</div>
+                </div>
+                <div class="card-body">
+                    <div class="agent-name">Kathy Brooks</div>
+                    <div class="brokerage-name">
+                        <i class="fa-solid fa-building"></i>
+                        <span>Miromar Realty LLC</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="winner-card platinum" data-tier="platinum" data-name="katrena meyers" data-brokerage="keller williams elevate luxury">
+                <div class="photo-wrap">
+                    <img src="https://coconutcoastrealtors.org/wp-content/uploads/2025/02/Katrena-Meyers.avif" alt="Katrena Meyers" loading="lazy">
+                    <div class="tier-tag platinum">platinum</div>
+                </div>
+                <div class="card-body">
+                    <div class="agent-name">Katrena Meyers</div>
+                    <div class="brokerage-name">
+                        <i class="fa-solid fa-building"></i>
+                        <span>Keller Williams Elevate Luxury</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="winner-card gold" data-tier="gold" data-name="kerry wilson" data-brokerage="veris realty, llc">
+                <div class="photo-wrap">
+                    <img src="https://mmp4production.blob.core.windows.net/publicfiles/6c24b0da-8a6e-4f2b-8547-26a8c1dc4581/0d3e9511-1d71-4ee5-97d4-dbabe490e794" alt="Kerry Wilson" loading="lazy">
+                    <div class="tier-tag gold">gold</div>
+                </div>
+                <div class="card-body">
+                    <div class="agent-name">Kerry Wilson</div>
+                    <div class="brokerage-name">
+                        <i class="fa-solid fa-building"></i>
+                        <span>Veris Realty, LLC</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="winner-card diamond" data-tier="diamond" data-name="kevin bartlett" data-brokerage="knowledge base real estate">
+                <div class="photo-wrap">
+                    <img src="https://coconutcoastrealtors.org/wp-content/uploads/2026/02/Kevin-Bartlett.jpg?w=400" alt="Kevin Bartlett" loading="lazy">
+                    <div class="tier-tag diamond">diamond</div>
+                </div>
+                <div class="card-body">
+                    <div class="agent-name">Kevin Bartlett</div>
+                    <div class="brokerage-name">
+                        <i class="fa-solid fa-building"></i>
+                        <span>Knowledge Base Real Estate</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="winner-card diamond" data-tier="diamond" data-name="kevin shelly" data-brokerage="kevin shelly realty inc.">
+                <div class="photo-wrap">
+                    <img src="https://coconutcoastrealtors.org/wp-content/uploads/2026/02/Kevin-Shelly.jpg?w=400" alt="Kevin Shelly" loading="lazy">
+                    <div class="tier-tag diamond">diamond</div>
+                </div>
+                <div class="card-body">
+                    <div class="agent-name">Kevin Shelly</div>
+                    <div class="brokerage-name">
+                        <i class="fa-solid fa-building"></i>
+                        <span>Kevin Shelly Realty Inc.</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="winner-card platinum" data-tier="platinum" data-name="kim swope schott" data-brokerage="premiere plus realty company">
+                <div class="photo-wrap">
+                    <img src="https://coconutcoastrealtors.org/wp-content/uploads/2026/02/Kim-Swope-Schott.jpg?w=400" alt="Kim Swope Schott" loading="lazy">
+                    <div class="tier-tag platinum">platinum</div>
+                </div>
+                <div class="card-body">
+                    <div class="agent-name">Kim Swope Schott</div>
+                    <div class="brokerage-name">
+                        <i class="fa-solid fa-building"></i>
+                        <span>Premiere Plus Realty Company</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="winner-card gold" data-tier="gold" data-name="kris asquith" data-brokerage="premiere plus realty company">
+                <div class="photo-wrap">
+                    <img src="https://coconutcoastrealtors.org/wp-content/uploads/2023/03/Krista-Asquith-1-scaled.jpg" alt="Kris Asquith" loading="lazy">
+                    <div class="tier-tag gold">gold</div>
+                </div>
+                <div class="card-body">
+                    <div class="agent-name">Kris Asquith</div>
+                    <div class="brokerage-name">
+                        <i class="fa-solid fa-building"></i>
+                        <span>Premiere Plus Realty Company</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="winner-card platinum" data-tier="platinum" data-name="kyle suhr" data-brokerage="john r. wood properties">
+                <div class="photo-wrap">
+                    <img src="https://coconutcoastrealtors.org/wp-content/uploads/2026/02/Kyle-Suhr.jpg?w=400" alt="Kyle Suhr" loading="lazy">
+                    <div class="tier-tag platinum">platinum</div>
+                </div>
+                <div class="card-body">
+                    <div class="agent-name">Kyle Suhr</div>
+                    <div class="brokerage-name">
+                        <i class="fa-solid fa-building"></i>
+                        <span>John R. Wood Properties</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="winner-card platinum" data-tier="platinum" data-name="kylie fowler" data-brokerage="compass florida, llc">
+                <div class="photo-wrap">
+                    <img src="https://coconutcoastrealtors.org/wp-content/uploads/2026/02/Kylie-Fowler.png?w=400" alt="Kylie Fowler" loading="lazy">
+                    <div class="tier-tag platinum">platinum</div>
+                </div>
+                <div class="card-body">
+                    <div class="agent-name">Kylie Fowler</div>
+                    <div class="brokerage-name">
+                        <i class="fa-solid fa-building"></i>
+                        <span>Compass Florida, LLC</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="winner-card diamond" data-tier="diamond" data-name="laura vance pa" data-brokerage="lpt realty, llc">
+                <div class="photo-wrap">
+                    <img src="https://coconutcoastrealtors.org/wp-content/uploads/2026/02/Laura-Vance-PA.jpg?w=400" alt="Laura Vance PA" loading="lazy">
+                    <div class="tier-tag diamond">diamond</div>
+                </div>
+                <div class="card-body">
+                    <div class="agent-name">Laura Vance PA</div>
+                    <div class="brokerage-name">
+                        <i class="fa-solid fa-building"></i>
+                        <span>LPT Realty, LLC</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="winner-card platinum" data-tier="platinum" data-name="leslie prinz" data-brokerage="orchid realty international">
+                <div class="photo-wrap">
+                    <img src="https://coconutcoastrealtors.org/wp-content/uploads/2026/02/Leslie-Prinz.jpg?w=400" alt="Leslie Prinz" loading="lazy">
+                    <div class="tier-tag platinum">platinum</div>
+                </div>
+                <div class="card-body">
+                    <div class="agent-name">Leslie Prinz</div>
+                    <div class="brokerage-name">
+                        <i class="fa-solid fa-building"></i>
+                        <span>Orchid Realty International</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="winner-card gold" data-tier="gold" data-name="linda marie anderson" data-brokerage="domainrealty.com llc">
+                <div class="photo-wrap">
+                    <img src="https://coconutcoastrealtors.org/wp-content/uploads/2026/02/Linda-Marie-Anderson.jpg?w=400" alt="Linda Marie Anderson" loading="lazy">
+                    <div class="tier-tag gold">gold</div>
+                </div>
+                <div class="card-body">
+                    <div class="agent-name">Linda Marie Anderson</div>
+                    <div class="brokerage-name">
+                        <i class="fa-solid fa-building"></i>
+                        <span>DomainRealty.com LLC</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="winner-card platinum" data-tier="platinum" data-name="lindsey moffat" data-brokerage="domainrealty.com llc">
+                <div class="photo-wrap">
+                    <img src="https://coconutcoastrealtors.org/wp-content/uploads/2026/02/Lindsey-Moffat.jpg?w=400" alt="Lindsey Moffat" loading="lazy">
+                    <div class="tier-tag platinum">platinum</div>
+                </div>
+                <div class="card-body">
+                    <div class="agent-name">Lindsey Moffat</div>
+                    <div class="brokerage-name">
+                        <i class="fa-solid fa-building"></i>
+                        <span>DomainRealty.com LLC</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="winner-card diamond" data-tier="diamond" data-name="lisa mishler" data-brokerage="john r. wood properties">
+                <div class="photo-wrap">
+                    <img src="https://coconutcoastrealtors.org/wp-content/uploads/2026/02/Lisa-Mishler.jpg?w=400" alt="Lisa Mishler" loading="lazy">
+                    <div class="tier-tag diamond">diamond</div>
+                </div>
+                <div class="card-body">
+                    <div class="agent-name">Lisa Mishler</div>
+                    <div class="brokerage-name">
+                        <i class="fa-solid fa-building"></i>
+                        <span>John R. Wood Properties</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="winner-card platinum" data-tier="platinum" data-name="lisa ninchritz" data-brokerage="royal shell real estate, inc.">
+                <div class="photo-wrap">
+                    <img src="https://coconutcoastrealtors.org/wp-content/uploads/2026/02/Lisa-Ninchritz.jpg?w=400" alt="Lisa Ninchritz" loading="lazy">
+                    <div class="tier-tag platinum">platinum</div>
+                </div>
+                <div class="card-body">
+                    <div class="agent-name">Lisa Ninchritz</div>
+                    <div class="brokerage-name">
+                        <i class="fa-solid fa-building"></i>
+                        <span>Royal Shell Real Estate, Inc.</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="winner-card platinum" data-tier="platinum" data-name="lisa perry" data-brokerage="berkshire hathaway fl realty">
+                <div class="photo-wrap">
+                    <img src="https://coconutcoastrealtors.org/wp-content/uploads/2026/02/Lisa-Perry.jpg?w=400" alt="Lisa Perry" loading="lazy">
+                    <div class="tier-tag platinum">platinum</div>
+                </div>
+                <div class="card-body">
+                    <div class="agent-name">Lisa Perry</div>
+                    <div class="brokerage-name">
+                        <i class="fa-solid fa-building"></i>
+                        <span>Berkshire Hathaway FL Realty</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="winner-card diamond" data-tier="diamond" data-name="lisa schroeder" data-brokerage="coldwell banker realty">
+                <div class="photo-wrap">
+                    <img src="https://coconutcoastrealtors.org/wp-content/uploads/2026/02/Lisa-Schroeder.jpg?w=400" alt="Lisa Schroeder" loading="lazy">
+                    <div class="tier-tag diamond">diamond</div>
+                </div>
+                <div class="card-body">
+                    <div class="agent-name">Lisa Schroeder</div>
+                    <div class="brokerage-name">
+                        <i class="fa-solid fa-building"></i>
+                        <span>Coldwell Banker Realty</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="winner-card diamond" data-tier="diamond" data-name="marc comisar" data-brokerage="domainrealty.com llc">
+                <div class="photo-wrap">
+                    <img src="https://coconutcoastrealtors.org/wp-content/uploads/2026/02/Marc-Comisar.jpg?w=400" alt="Marc Comisar" loading="lazy">
+                    <div class="tier-tag diamond">diamond</div>
+                </div>
+                <div class="card-body">
+                    <div class="agent-name">Marc Comisar</div>
+                    <div class="brokerage-name">
+                        <i class="fa-solid fa-building"></i>
+                        <span>DomainRealty.com LLC</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="winner-card gold" data-tier="gold" data-name="marc lobdell" data-brokerage="coldwell banker realty">
+                <div class="photo-wrap">
+                    <img src="https://mmp4production.blob.core.windows.net/publicfiles/6c24b0da-8a6e-4f2b-8547-26a8c1dc4581/92d5f2ab-426c-4a0a-9dcd-1c25bd962842" alt="Marc Lobdell" loading="lazy">
+                    <div class="tier-tag gold">gold</div>
+                </div>
+                <div class="card-body">
+                    <div class="agent-name">Marc Lobdell</div>
+                    <div class="brokerage-name">
+                        <i class="fa-solid fa-building"></i>
+                        <span>Coldwell Banker Realty</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="winner-card diamond" data-tier="diamond" data-name="marianne fechter" data-brokerage="john r. wood properties">
+                <div class="photo-wrap">
+                    <img src="https://coconutcoastrealtors.org/wp-content/uploads/2026/02/Marianne-Fechter.jpg?w=400" alt="Marianne Fechter" loading="lazy">
+                    <div class="tier-tag diamond">diamond</div>
+                </div>
+                <div class="card-body">
+                    <div class="agent-name">Marianne Fechter</div>
+                    <div class="brokerage-name">
+                        <i class="fa-solid fa-building"></i>
+                        <span>John R. Wood Properties</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="winner-card gold" data-tier="gold" data-name="marsha lynn" data-brokerage="hunters ridge realty co.">
+                <div class="photo-wrap">
+                    <img src="https://coconutcoastrealtors.org/wp-content/uploads/2026/02/Marsha-Lynn.jpg?w=400" alt="Marsha Lynn" loading="lazy">
+                    <div class="tier-tag gold">gold</div>
+                </div>
+                <div class="card-body">
+                    <div class="agent-name">Marsha Lynn</div>
+                    <div class="brokerage-name">
+                        <i class="fa-solid fa-building"></i>
+                        <span>Hunters Ridge Realty Co.</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="winner-card gold" data-tier="gold" data-name="mary jo selden" data-brokerage="domainrealty.com llc">
+                <div class="photo-wrap">
+                    <img src="https://coconutcoastrealtors.org/wp-content/uploads/2026/02/Mary-Jo-Selden.webp?w=400" alt="Mary Jo Selden" loading="lazy">
+                    <div class="tier-tag gold">gold</div>
+                </div>
+                <div class="card-body">
+                    <div class="agent-name">Mary Jo Selden</div>
+                    <div class="brokerage-name">
+                        <i class="fa-solid fa-building"></i>
+                        <span>DomainRealty.com LLC</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="winner-card diamond" data-tier="diamond" data-name="matthew larmore" data-brokerage="domainrealty.com llc">
+                <div class="photo-wrap">
+                    <img src="https://coconutcoastrealtors.org/wp-content/uploads/2026/02/Matthew-Larmore.jpg?w=400" alt="Matthew Larmore" loading="lazy">
+                    <div class="tier-tag diamond">diamond</div>
+                </div>
+                <div class="card-body">
+                    <div class="agent-name">Matthew Larmore</div>
+                    <div class="brokerage-name">
+                        <i class="fa-solid fa-building"></i>
+                        <span>DomainRealty.com LLC</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="winner-card gold" data-tier="gold" data-name="michael fagan" data-brokerage="royal shell real estate, inc.">
+                <div class="photo-wrap">
+                    <img src="https://coconutcoastrealtors.org/wp-content/uploads/2026/02/Michael-Fagan.jpg?w=400" alt="Michael Fagan" loading="lazy">
+                    <div class="tier-tag gold">gold</div>
+                </div>
+                <div class="card-body">
+                    <div class="agent-name">Michael Fagan</div>
+                    <div class="brokerage-name">
+                        <i class="fa-solid fa-building"></i>
+                        <span>Royal Shell Real Estate, Inc.</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="winner-card gold" data-tier="gold" data-name="michael jackson" data-brokerage="local real estate llc">
+                <div class="photo-wrap">
+                    <img src="https://www.coconutcoastrealtors.org/wp-content/uploads/2024/03/Michael-Jackson.jpg" alt="Michael Jackson" loading="lazy">
+                    <div class="tier-tag gold">gold</div>
+                </div>
+                <div class="card-body">
+                    <div class="agent-name">Michael Jackson</div>
+                    <div class="brokerage-name">
+                        <i class="fa-solid fa-building"></i>
+                        <span>Local Real Estate LLC</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="winner-card diamond" data-tier="diamond" data-name="michael monge" data-brokerage="keller williams elevate luxury">
+                <div class="photo-wrap">
+                    <img src="https://coconutcoastrealtors.org/wp-content/uploads/2026/02/Michael-Monge.jpg?w=400" alt="Michael Monge" loading="lazy">
+                    <div class="tier-tag diamond">diamond</div>
+                </div>
+                <div class="card-body">
+                    <div class="agent-name">Michael Monge</div>
+                    <div class="brokerage-name">
+                        <i class="fa-solid fa-building"></i>
+                        <span>Keller Williams Elevate Luxury</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="winner-card gold" data-tier="gold" data-name="michelle decatur" data-brokerage="decatur real estate group">
+                <div class="photo-wrap">
+                    <img src="https://coconutcoastrealtors.org/wp-content/uploads/2025/02/michelle-decatur.jpg" alt="Michelle Decatur" loading="lazy">
+                    <div class="tier-tag gold">gold</div>
+                </div>
+                <div class="card-body">
+                    <div class="agent-name">Michelle Decatur</div>
+                    <div class="brokerage-name">
+                        <i class="fa-solid fa-building"></i>
+                        <span>Decatur Real Estate Group</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="winner-card gold" data-tier="gold" data-name="michelle lyons" data-brokerage="john r. wood properties">
+                <div class="photo-wrap">
+                    <img src="https://coconutcoastrealtors.org/wp-content/uploads/2026/02/Michelle-Lyons.jpg?w=400" alt="Michelle Lyons" loading="lazy">
+                    <div class="tier-tag gold">gold</div>
+                </div>
+                <div class="card-body">
+                    <div class="agent-name">Michelle Lyons</div>
+                    <div class="brokerage-name">
+                        <i class="fa-solid fa-building"></i>
+                        <span>John R. Wood Properties</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="winner-card gold" data-tier="gold" data-name="mikaila murray" data-brokerage="premiere plus realty company">
+                <div class="photo-wrap">
+                    <img src="https://coconutcoastrealtors.org/wp-content/uploads/2026/02/Mikaila-Murray.jpg?w=400" alt="Mikaila Murray" loading="lazy">
+                    <div class="tier-tag gold">gold</div>
+                </div>
+                <div class="card-body">
+                    <div class="agent-name">Mikaila Murray</div>
+                    <div class="brokerage-name">
+                        <i class="fa-solid fa-building"></i>
+                        <span>Premiere Plus Realty Company</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="winner-card gold" data-tier="gold" data-name="missey weatherly" data-brokerage="premiere plus realty company">
+                <div class="photo-wrap">
+                    <img src="https://coconutcoastrealtors.org/wp-content/uploads/2026/02/Missey-Weatherly.jpg?w=400" alt="Missey Weatherly" loading="lazy">
+                    <div class="tier-tag gold">gold</div>
+                </div>
+                <div class="card-body">
+                    <div class="agent-name">Missey Weatherly</div>
+                    <div class="brokerage-name">
+                        <i class="fa-solid fa-building"></i>
+                        <span>Premiere Plus Realty Company</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="winner-card platinum" data-tier="platinum" data-name="nanette padgett llc" data-brokerage="keller williams elevate luxury">
+                <div class="photo-wrap">
+                    <img src="https://coconutcoastrealtors.org/wp-content/uploads/2026/02/Nanette-Padgett-LLC.jpg?w=400" alt="Nanette Padgett LLC" loading="lazy">
+                    <div class="tier-tag platinum">platinum</div>
+                </div>
+                <div class="card-body">
+                    <div class="agent-name">Nanette Padgett LLC</div>
+                    <div class="brokerage-name">
+                        <i class="fa-solid fa-building"></i>
+                        <span>Keller Williams Elevate Luxury</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="winner-card platinum" data-tier="platinum" data-name="nikki hagmann" data-brokerage="keller williams elevate luxury">
+                <div class="photo-wrap">
+                    <img src="https://coconutcoastrealtors.org/wp-content/uploads/2026/02/Nikki-Hagmann.jpg?w=400" alt="Nikki Hagmann" loading="lazy">
+                    <div class="tier-tag platinum">platinum</div>
+                </div>
+                <div class="card-body">
+                    <div class="agent-name">Nikki Hagmann</div>
+                    <div class="brokerage-name">
+                        <i class="fa-solid fa-building"></i>
+                        <span>Keller Williams Elevate Luxury</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="winner-card diamond" data-tier="diamond" data-name="pam umscheid" data-brokerage="premier sotheby's int'l realty">
+                <div class="photo-wrap">
+                    <img src="https://coconutcoastrealtors.org/wp-content/uploads/2026/02/Pam-Umscheid-pic-scaled.jpg" alt="Pam Umscheid" loading="lazy">
+                    <div class="tier-tag diamond">diamond</div>
+                </div>
+                <div class="card-body">
+                    <div class="agent-name">Pam Umscheid</div>
+                    <div class="brokerage-name">
+                        <i class="fa-solid fa-building"></i>
+                        <span>Premier Sotheby's Int'l Realty</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="winner-card platinum" data-tier="platinum" data-name="peggy lotz" data-brokerage="realty one group mvp">
+                <div class="photo-wrap">
+                    <img src="https://coconutcoastrealtors.org/wp-content/uploads/2026/02/Peggy-Lotz.jpg?w=400" alt="Peggy Lotz" loading="lazy">
+                    <div class="tier-tag platinum">platinum</div>
+                </div>
+                <div class="card-body">
+                    <div class="agent-name">Peggy Lotz</div>
+                    <div class="brokerage-name">
+                        <i class="fa-solid fa-building"></i>
+                        <span>Realty One Group MVP</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="winner-card diamond" data-tier="diamond" data-name="rita murray" data-brokerage="premiere plus realty company">
+                <div class="photo-wrap">
+                    <img src="https://coconutcoastrealtors.org/wp-content/uploads/2026/02/Rita-Murray.jpg?w=400" alt="Rita Murray" loading="lazy">
+                    <div class="tier-tag diamond">diamond</div>
+                </div>
+                <div class="card-body">
+                    <div class="agent-name">Rita Murray</div>
+                    <div class="brokerage-name">
+                        <i class="fa-solid fa-building"></i>
+                        <span>Premiere Plus Realty Company</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="winner-card gold" data-tier="gold" data-name="rochelle brindley" data-brokerage="local real estate llc">
+                <div class="photo-wrap">
+                    <img src="https://coconutcoastrealtors.org/wp-content/uploads/2026/02/Rochelle-Brindley.jpg?w=400" alt="Rochelle Brindley" loading="lazy">
+                    <div class="tier-tag gold">gold</div>
+                </div>
+                <div class="card-body">
+                    <div class="agent-name">Rochelle Brindley</div>
+                    <div class="brokerage-name">
+                        <i class="fa-solid fa-building"></i>
+                        <span>Local Real Estate LLC</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="winner-card gold" data-tier="gold" data-name="roxanne jeske" data-brokerage="john r. wood properties">
+                <div class="photo-wrap">
+                    <img src="https://coconutcoastrealtors.org/wp-content/uploads/2026/02/Roxanne-Jeske.jpg?w=400" alt="Roxanne Jeske" loading="lazy">
+                    <div class="tier-tag gold">gold</div>
+                </div>
+                <div class="card-body">
+                    <div class="agent-name">Roxanne Jeske</div>
+                    <div class="brokerage-name">
+                        <i class="fa-solid fa-building"></i>
+                        <span>John R. Wood Properties</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="winner-card platinum" data-tier="platinum" data-name="scott fogel" data-brokerage="berkshire hathaway fl realty">
+                <div class="photo-wrap">
+                    <img src="https://coconutcoastrealtors.org/wp-content/uploads/2026/02/Scott-Fogel.jpg?w=400" alt="Scott Fogel" loading="lazy">
+                    <div class="tier-tag platinum">platinum</div>
+                </div>
+                <div class="card-body">
+                    <div class="agent-name">Scott Fogel</div>
+                    <div class="brokerage-name">
+                        <i class="fa-solid fa-building"></i>
+                        <span>Berkshire Hathaway FL Realty</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="winner-card platinum" data-tier="platinum" data-name="scott hansen" data-brokerage="premiere plus realty company">
+                <div class="photo-wrap">
+                    <img src="https://coconutcoastrealtors.org/wp-content/uploads/2026/02/Scott-Hansen.jpg?w=400" alt="Scott Hansen" loading="lazy">
+                    <div class="tier-tag platinum">platinum</div>
+                </div>
+                <div class="card-body">
+                    <div class="agent-name">Scott Hansen</div>
+                    <div class="brokerage-name">
+                        <i class="fa-solid fa-building"></i>
+                        <span>Premiere Plus Realty Company</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="winner-card gold" data-tier="gold" data-name="shane mazurek" data-brokerage="downing-frye realty inc">
+                <div class="photo-wrap">
+                    <img src="https://coconutcoastrealtors.org/wp-content/uploads/2026/02/Shane-Mazurek.jpg?w=400" alt="Shane Mazurek" loading="lazy">
+                    <div class="tier-tag gold">gold</div>
+                </div>
+                <div class="card-body">
+                    <div class="agent-name">Shane Mazurek</div>
+                    <div class="brokerage-name">
+                        <i class="fa-solid fa-building"></i>
+                        <span>Downing-Frye Realty Inc</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="winner-card platinum" data-tier="platinum" data-name="shasta degraw" data-brokerage="realty one group mvp">
+                <div class="photo-wrap">
+                    <img src="https://coconutcoastrealtors.org/wp-content/uploads/2026/02/Shasta-DeGraw.jpg?w=400" alt="Shasta DeGraw" loading="lazy">
+                    <div class="tier-tag platinum">platinum</div>
+                </div>
+                <div class="card-body">
+                    <div class="agent-name">Shasta DeGraw</div>
+                    <div class="brokerage-name">
+                        <i class="fa-solid fa-building"></i>
+                        <span>Realty One Group MVP</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="winner-card gold" data-tier="gold" data-name="shelley millard" data-brokerage="realty world j. pavich r.e.">
+                <div class="photo-wrap">
+                    <img src="https://coconutcoastrealtors.org/wp-content/uploads/2026/02/Shelley-Millard.jpg?w=400" alt="Shelley Millard" loading="lazy">
+                    <div class="tier-tag gold">gold</div>
+                </div>
+                <div class="card-body">
+                    <div class="agent-name">Shelley Millard</div>
+                    <div class="brokerage-name">
+                        <i class="fa-solid fa-building"></i>
+                        <span>Realty World J. PAVICH R.E.</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="winner-card diamond" data-tier="diamond" data-name="shelly olsen" data-brokerage="local real estate llc">
+                <div class="photo-wrap">
+                    <img src="https://coconutcoastrealtors.org/wp-content/uploads/2026/02/Shelly-Olsen.jpg?w=400" alt="Shelly Olsen" loading="lazy">
+                    <div class="tier-tag diamond">diamond</div>
+                </div>
+                <div class="card-body">
+                    <div class="agent-name">Shelly Olsen</div>
+                    <div class="brokerage-name">
+                        <i class="fa-solid fa-building"></i>
+                        <span>Local Real Estate LLC</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="winner-card gold" data-tier="gold" data-name="stacey reed" data-brokerage="domainrealty.com llc">
+                <div class="photo-wrap">
+                    <img src="https://coconutcoastrealtors.org/wp-content/uploads/2026/02/Stacey-Reed.jpg?w=400" alt="Stacey Reed" loading="lazy">
+                    <div class="tier-tag gold">gold</div>
+                </div>
+                <div class="card-body">
+                    <div class="agent-name">Stacey Reed</div>
+                    <div class="brokerage-name">
+                        <i class="fa-solid fa-building"></i>
+                        <span>DomainRealty.com LLC</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="winner-card gold" data-tier="gold" data-name="steve perusse p.a." data-brokerage="realty one group mvp">
+                <div class="photo-wrap">
+                    <img src="https://coconutcoastrealtors.org/wp-content/uploads/2026/02/Steve-Perusse-P-A.jpg?w=400" alt="Steve Perusse P.A." loading="lazy">
+                    <div class="tier-tag gold">gold</div>
+                </div>
+                <div class="card-body">
+                    <div class="agent-name">Steve Perusse P.A.</div>
+                    <div class="brokerage-name">
+                        <i class="fa-solid fa-building"></i>
+                        <span>Realty One Group MVP</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="winner-card diamond" data-tier="diamond" data-name="susan heller" data-brokerage="exp realty llc">
+                <div class="photo-wrap">
+                    <img src="https://coconutcoastrealtors.org/wp-content/uploads/2026/02/Susan-Heller.jpg?w=400" alt="Susan Heller" loading="lazy">
+                    <div class="tier-tag diamond">diamond</div>
+                </div>
+                <div class="card-body">
+                    <div class="agent-name">Susan Heller</div>
+                    <div class="brokerage-name">
+                        <i class="fa-solid fa-building"></i>
+                        <span>EXP Realty LLC</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="winner-card gold" data-tier="gold" data-name="sylvia maietta" data-brokerage="re/max realty group">
+                <div class="photo-wrap">
+                    <img src="https://coconutcoastrealtors.org/wp-content/uploads/2026/02/Sylvia-Maietta.jpg?w=400" alt="Sylvia Maietta" loading="lazy">
+                    <div class="tier-tag gold">gold</div>
+                </div>
+                <div class="card-body">
+                    <div class="agent-name">Sylvia Maietta</div>
+                    <div class="brokerage-name">
+                        <i class="fa-solid fa-building"></i>
+                        <span>RE/MAX Realty Group</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="winner-card gold" data-tier="gold" data-name="teresa garella" data-brokerage="decatur real estate group">
+                <div class="photo-wrap">
+                    <img src="https://coconutcoastrealtors.org/wp-content/uploads/2025/02/Teresa-Garella-Realtor.jpg" alt="Teresa Garella" loading="lazy">
+                    <div class="tier-tag gold">gold</div>
+                </div>
+                <div class="card-body">
+                    <div class="agent-name">Teresa Garella</div>
+                    <div class="brokerage-name">
+                        <i class="fa-solid fa-building"></i>
+                        <span>Decatur Real Estate Group</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="winner-card gold" data-tier="gold" data-name="tessa perry" data-brokerage="local real estate llc">
+                <div class="photo-wrap">
+                    <img src="https://coconutcoastrealtors.org/wp-content/uploads/2026/02/Tessa-Perry.jpg?w=400" alt="Tessa Perry" loading="lazy">
+                    <div class="tier-tag gold">gold</div>
+                </div>
+                <div class="card-body">
+                    <div class="agent-name">Tessa Perry</div>
+                    <div class="brokerage-name">
+                        <i class="fa-solid fa-building"></i>
+                        <span>Local Real Estate LLC</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="winner-card gold" data-tier="gold" data-name="thereza zager" data-brokerage="downing-frye realty inc">
+                <div class="photo-wrap">
+                    <img src="https://coconutcoastrealtors.org/wp-content/uploads/2026/02/Thereza-Zager.jpg?w=400" alt="Thereza Zager" loading="lazy">
+                    <div class="tier-tag gold">gold</div>
+                </div>
+                <div class="card-body">
+                    <div class="agent-name">Thereza Zager</div>
+                    <div class="brokerage-name">
+                        <i class="fa-solid fa-building"></i>
+                        <span>Downing-Frye Realty Inc</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="winner-card gold" data-tier="gold" data-name="todd golnick" data-brokerage="premiere plus realty company">
+                <div class="photo-wrap">
+                    <img src="https://coconutcoastrealtors.org/wp-content/uploads/2026/02/Todd-Golnick.jpg?w=400" alt="Todd Golnick" loading="lazy">
+                    <div class="tier-tag gold">gold</div>
+                </div>
+                <div class="card-body">
+                    <div class="agent-name">Todd Golnick</div>
+                    <div class="brokerage-name">
+                        <i class="fa-solid fa-building"></i>
+                        <span>Premiere Plus Realty Company</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="winner-card diamond" data-tier="diamond" data-name="tyler butcher" data-brokerage="corkscrew real estate">
+                <div class="photo-wrap">
+                    <img src="https://coconutcoastrealtors.org/wp-content/uploads/2026/02/TylerButcher.png?w=400" alt="Tyler Butcher" loading="lazy">
+                    <div class="tier-tag diamond">diamond</div>
+                </div>
+                <div class="card-body">
+                    <div class="agent-name">Tyler Butcher</div>
+                    <div class="brokerage-name">
+                        <i class="fa-solid fa-building"></i>
+                        <span>Corkscrew Real Estate</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="winner-card platinum" data-tier="platinum" data-name="tyler mattingly" data-brokerage="keller williams elite realty">
+                <div class="photo-wrap">
+                    <img src="https://coconutcoastrealtors.org/wp-content/uploads/2026/02/Tyler-Mattingly.jpg?w=400" alt="Tyler Mattingly" loading="lazy">
+                    <div class="tier-tag platinum">platinum</div>
+                </div>
+                <div class="card-body">
+                    <div class="agent-name">Tyler Mattingly</div>
+                    <div class="brokerage-name">
+                        <i class="fa-solid fa-building"></i>
+                        <span>Keller Williams Elite Realty</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="winner-card gold" data-tier="gold" data-name="ursula weinkauff pa" data-brokerage="local real estate llc">
+                <div class="photo-wrap">
+                    <img src="https://coconutcoastrealtors.org/wp-content/uploads/2026/02/Ursula-Weinkauff-PA.jpg?w=400" alt="Ursula Weinkauff PA" loading="lazy">
+                    <div class="tier-tag gold">gold</div>
+                </div>
+                <div class="card-body">
+                    <div class="agent-name">Ursula Weinkauff PA</div>
+                    <div class="brokerage-name">
+                        <i class="fa-solid fa-building"></i>
+                        <span>Local Real Estate LLC</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="winner-card gold" data-tier="gold" data-name="victoria ventresca" data-brokerage="berkshire hathaway fl realty">
+                <div class="photo-wrap">
+                    <img src="https://coconutcoastrealtors.org/wp-content/uploads/2026/02/Victoria-Ventresca.jpg?w=400" alt="Victoria Ventresca" loading="lazy">
+                    <div class="tier-tag gold">gold</div>
+                </div>
+                <div class="card-body">
+                    <div class="agent-name">Victoria Ventresca</div>
+                    <div class="brokerage-name">
+                        <i class="fa-solid fa-building"></i>
+                        <span>Berkshire Hathaway FL Realty</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="winner-card gold" data-tier="gold" data-name="wade abed" data-brokerage="royal shell real estate, inc.">
+                <div class="photo-wrap">
+                    <img src="https://coconutcoastrealtors.org/wp-content/uploads/2026/02/Wade-Abed.jpg?w=400" alt="Wade Abed" loading="lazy">
+                    <div class="tier-tag gold">gold</div>
+                </div>
+                <div class="card-body">
+                    <div class="agent-name">Wade Abed</div>
+                    <div class="brokerage-name">
+                        <i class="fa-solid fa-building"></i>
+                        <span>Royal Shell Real Estate, Inc.</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="winner-card diamond" data-tier="diamond" data-name="wayne taylor" data-brokerage="john r. wood properties">
+                <div class="photo-wrap">
+                    <img src="https://coconutcoastrealtors.org/wp-content/uploads/2026/02/Wayne-Taylor.jpg?w=400" alt="Wayne Taylor" loading="lazy">
+                    <div class="tier-tag diamond">diamond</div>
+                </div>
+                <div class="card-body">
+                    <div class="agent-name">Wayne Taylor</div>
+                    <div class="brokerage-name">
+                        <i class="fa-solid fa-building"></i>
+                        <span>John R. Wood Properties</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="winner-card gold" data-tier="gold" data-name="william gubelman" data-brokerage="knowledge base real estate">
+                <div class="photo-wrap">
+                    <img src="https://coconutcoastrealtors.org/wp-content/uploads/2026/02/William-Gubelman.jpg?w=400" alt="William Gubelman" loading="lazy">
+                    <div class="tier-tag gold">gold</div>
+                </div>
+                <div class="card-body">
+                    <div class="agent-name">William Gubelman</div>
+                    <div class="brokerage-name">
+                        <i class="fa-solid fa-building"></i>
+                        <span>Knowledge Base Real Estate</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="winner-card diamond" data-tier="diamond" data-name="zachary rosen" data-brokerage="compass florida, llc">
+                <div class="photo-wrap">
+                    <img src="https://coconutcoastrealtors.org/wp-content/uploads/2026/02/Zachary-Rosen.jpg?w=400" alt="Zachary Rosen" loading="lazy">
+                    <div class="tier-tag diamond">diamond</div>
+                </div>
+                <div class="card-body">
+                    <div class="agent-name">Zachary Rosen</div>
+                    <div class="brokerage-name">
+                        <i class="fa-solid fa-building"></i>
+                        <span>Compass Florida, LLC</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="empty-state" id="emptyState">
+                <i class="fa-solid fa-magnifying-glass"></i>
+                <h3>No Recipients Match Your Filter</h3>
+                <p>Try clearing your search term or selecting "All Recipients".</p>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <p>Coconut Coast Organization of REALTORS&reg; (CCOR) &bull; Official Historical Archive for 2025 Sales Excellence Awards</p>
+        <p style="margin-top: 0.5rem; opacity: 0.6;">All recipient data, brokerages, and award levels are permanently preserved as published.</p>
+    </footer>
+
+    <script>
+        const searchInput = document.getElementById('searchInput');
+        const filterBtns = document.querySelectorAll('.tier-btn');
+        const cards = document.querySelectorAll('.winner-card');
+        const emptyState = document.getElementById('emptyState');
+
+        let activeTier = 'all';
+
+        function filterWinners() {
+            const query = searchInput.value.toLowerCase().trim();
+            let visibleCount = 0;
+
+            cards.forEach(card => {
+                const tier = card.dataset.tier;
+                const name = card.dataset.name;
+                const brokerage = card.dataset.brokerage;
+
+                const matchesTier = (activeTier === 'all' || tier === activeTier);
+                const matchesQuery = (!query || name.includes(query) || brokerage.includes(query));
+
+                if (matchesTier && matchesQuery) {
+                    card.style.display = 'flex';
+                    visibleCount++;
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+
+            if (visibleCount === 0) {
+                emptyState.style.display = 'block';
+            } else {
+                emptyState.style.display = 'none';
+            }
+        }
+
+        filterBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                filterBtns.forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                activeTier = btn.dataset.filter;
+                filterWinners();
+            });
+        });
+
+        searchInput.addEventListener('input', filterWinners);
+    </script>
+</body>
+</html>

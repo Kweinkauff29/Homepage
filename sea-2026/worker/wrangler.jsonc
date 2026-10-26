@@ -1,0 +1,68 @@
+{
+  "$schema": "./node_modules/wrangler/config-schema.json",
+  "name": "ccor-sea-2026",
+  "main": "./src/index.ts",
+  "compatibility_date": "2026-10-23",
+  "compatibility_flags": ["nodejs_compat"],
+  "upload_source_maps": true,
+  "workers_dev": false,
+  "preview_urls": false,
+  "assets": {
+    "directory": "./public",
+    "binding": "ASSETS",
+    "html_handling": "none",
+    "not_found_handling": "none",
+    "run_worker_first": true
+  },
+  "observability": {
+    "enabled": true,
+    "redact_query_string": true,
+    "logs": {
+      "enabled": true,
+      "head_sampling_rate": 1,
+      "invocation_logs": true
+    },
+    "traces": {
+      "enabled": true,
+      "head_sampling_rate": 0.1
+    }
+  },
+  "env": {
+    "staging": {
+      "name": "ccor-sea-2026-staging",
+      "assets": {
+        "directory": "./public",
+        "binding": "ASSETS",
+        "html_handling": "none",
+        "not_found_handling": "none",
+        "run_worker_first": true
+      },
+      "routes": [
+        {
+          "pattern": "sea-staging.coconutcoastrealtors.org",
+          "custom_domain": true
+        }
+      ],
+      "vars": {
+        "ENVIRONMENT": "staging",
+        "ALLOW_LOCALHOST_AUTH": "false",
+        "REQUIRE_ACCESS_JWT": "false",
+        "TEAM_DOMAIN": "",
+        "POLICY_AUD": "",
+        "ALLOWED_STAFF_DOMAINS": "coconutcoastrealtors.org,bonitaspringsrealtors.com",
+        "ALLOWED_STAFF_USERS": "Kevin,Erica,Jenna,Meighan,Emma,Monica",
+        "PUBLIC_CONFIRMATION_ENABLED": "false",
+        "EMAIL_MODE": "disabled",
+        "MANDATORY_BCC_EMAIL": "tech@coconutcoastrealtors.org"
+      },
+      "d1_databases": [
+        {
+          "binding": "DB",
+          "database_name": "sea_2026_staging",
+          "database_id": "003496ce-b3ee-4112-8047-a3b1c1e903f0",
+          "migrations_dir": "./migrations"
+        }
+      ]
+    }
+  }
+}

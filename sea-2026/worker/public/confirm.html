@@ -1,0 +1,1132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Agent Confirmation | 2026 Sales Excellence Awards</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-base: #090e1a;
+      --bg-surface: #0f172a;
+      --bg-card: #141f36;
+      --bg-card-hover: #192745;
+      --border-subtle: #23324d;
+      --border-focus: #38bdf8;
+      
+      --text-main: #f8fafc;
+      --text-muted: #94a3b8;
+      --text-dim: #64748b;
+      
+      --brand-blue: #2563eb;
+      --brand-blue-hover: #1d4ed8;
+      --accent-gold: #f59e0b;
+      --accent-gold-bg: rgba(245, 158, 11, 0.12);
+      --accent-green: #10b981;
+      --accent-green-bg: rgba(16, 185, 129, 0.12);
+      --accent-red: #ef4444;
+      --accent-red-bg: rgba(239, 68, 68, 0.12);
+      --accent-sky: #38bdf8;
+      --accent-sky-bg: rgba(56, 189, 248, 0.12);
+
+      --radius-sm: 8px;
+      --radius-md: 12px;
+      --radius-lg: 18px;
+      --shadow-lg: 0 20px 25px -5px rgba(0, 0, 0, 0.5), 0 8px 10px -6px rgba(0, 0, 0, 0.5);
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+      background-color: var(--bg-base);
+      color: var(--text-main);
+      line-height: 1.6;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 24px 16px 60px;
+    }
+
+    /* Container */
+    .form-container {
+      width: 100%;
+      max-width: 760px;
+      margin: 0 auto;
+    }
+
+    /* Header & Branding */
+    .brand-header {
+      text-align: center;
+      margin-bottom: 28px;
+    }
+    .brand-emblem {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 56px;
+      height: 56px;
+      background: linear-gradient(135deg, #1e3a8a 0%, #2563eb 100%);
+      border: 2px solid #38bdf8;
+      border-radius: 14px;
+      font-size: 20px;
+      font-weight: 800;
+      color: #ffffff;
+      box-shadow: 0 10px 20px rgba(37, 99, 235, 0.35);
+      margin-bottom: 14px;
+    }
+    .brand-header h1 {
+      font-size: 26px;
+      font-weight: 800;
+      letter-spacing: -0.5px;
+      color: #ffffff;
+      margin-bottom: 6px;
+    }
+    .brand-header p {
+      font-size: 14px;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      font-weight: 600;
+    }
+
+    /* Progress Checklist Bar */
+    .progress-bar-card {
+      background: var(--bg-surface);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-md);
+      padding: 16px 20px;
+      margin-bottom: 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+    }
+    .progress-info {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text-muted);
+    }
+    .progress-info strong { color: var(--accent-sky); }
+    .progress-pill {
+      background: #141f36;
+      border: 1px solid #23324d;
+      padding: 4px 10px;
+      border-radius: 9999px;
+      font-size: 12px;
+      font-weight: 600;
+      color: #cbd5e1;
+    }
+
+    /* Section Cards */
+    .section-card {
+      background: var(--bg-surface);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-lg);
+      padding: 28px 24px;
+      margin-bottom: 24px;
+      box-shadow: var(--shadow-lg);
+      transition: border-color 0.2s ease;
+    }
+    .section-card:focus-within {
+      border-color: #2e4368;
+    }
+    .section-header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 20px;
+      padding-bottom: 14px;
+      border-bottom: 1px solid var(--border-subtle);
+    }
+    .section-number {
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      background: #1e2e4f;
+      border: 1px solid #38bdf8;
+      color: #38bdf8;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 13px;
+      font-weight: 700;
+      flex-shrink: 0;
+    }
+    .section-header h2 {
+      font-size: 18px;
+      font-weight: 700;
+      color: #ffffff;
+    }
+    .section-subtitle {
+      font-size: 13px;
+      color: var(--text-muted);
+      margin-top: 2px;
+    }
+
+    /* Profile Display Grid */
+    .profile-meta-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 12px;
+      background: #090e1a;
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-md);
+      padding: 16px;
+      margin-bottom: 20px;
+    }
+    .meta-item label {
+      display: block;
+      font-size: 11px;
+      text-transform: uppercase;
+      color: var(--text-dim);
+      font-weight: 600;
+      letter-spacing: 0.5px;
+      margin-bottom: 2px;
+    }
+    .meta-item span {
+      font-size: 14px;
+      font-weight: 600;
+      color: #f8fafc;
+    }
+
+    /* Form Inputs */
+    .form-group {
+      margin-bottom: 18px;
+    }
+    .form-label {
+      display: block;
+      font-size: 13px;
+      font-weight: 600;
+      color: #f1f5f9;
+      margin-bottom: 6px;
+    }
+    .form-label .req {
+      color: var(--accent-red);
+      margin-left: 4px;
+    }
+    .form-desc {
+      font-size: 12px;
+      color: var(--text-muted);
+      margin-bottom: 8px;
+    }
+    .form-control {
+      width: 100%;
+      background: #090e1a;
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-sm);
+      padding: 12px 14px;
+      color: #ffffff;
+      font-size: 14px;
+      transition: all 0.2s;
+    }
+    .form-control:focus {
+      outline: none;
+      border-color: var(--border-focus);
+      box-shadow: 0 0 0 3px rgba(56, 189, 248, 0.15);
+    }
+
+    /* Collapsible correction details */
+    .corrections-toggle {
+      background: transparent;
+      border: none;
+      color: var(--accent-sky);
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 4px 0;
+      margin-top: 4px;
+    }
+    .corrections-toggle:hover {
+      text-decoration: underline;
+    }
+    .corrections-panel {
+      display: none;
+      background: #090e1a;
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-md);
+      padding: 16px;
+      margin-top: 12px;
+    }
+    .corrections-panel.open {
+      display: block;
+    }
+
+    /* Option Cards (Award Selection & Attendance) */
+    .option-cards-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 14px;
+    }
+    @media (max-width: 580px) {
+      .option-cards-grid { grid-template-columns: 1fr; }
+    }
+    .selection-card {
+      background: #090e1a;
+      border: 2px solid var(--border-subtle);
+      border-radius: var(--radius-md);
+      padding: 20px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      position: relative;
+    }
+    .selection-card:hover {
+      background: #141f36;
+      border-color: #3b5278;
+    }
+    .selection-card.selected {
+      border-color: var(--accent-gold);
+      background: rgba(245, 158, 11, 0.08);
+      box-shadow: 0 0 0 1px var(--accent-gold);
+    }
+    .selection-card.selected-blue {
+      border-color: var(--brand-blue);
+      background: rgba(37, 99, 235, 0.1);
+      box-shadow: 0 0 0 1px var(--brand-blue);
+    }
+    .card-icon {
+      font-size: 32px;
+      margin-bottom: 10px;
+    }
+    .card-title {
+      font-size: 16px;
+      font-weight: 700;
+      color: #ffffff;
+      margin-bottom: 4px;
+    }
+    .card-desc {
+      font-size: 12px;
+      color: var(--text-muted);
+    }
+    .radio-circle {
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      border: 2px solid #3b5278;
+      position: absolute;
+      top: 14px;
+      right: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .selection-card.selected .radio-circle {
+      border-color: var(--accent-gold);
+    }
+    .selection-card.selected .radio-circle::after {
+      content: "";
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--accent-gold);
+    }
+    .selection-card.selected-blue .radio-circle {
+      border-color: var(--brand-blue);
+    }
+    .selection-card.selected-blue .radio-circle::after {
+      content: "";
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--brand-blue);
+    }
+
+    /* Attendance Options */
+    .attendance-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+    }
+    @media (max-width: 600px) {
+      .attendance-grid { grid-template-columns: 1fr; }
+    }
+
+    /* Conditional Affirmation Checkbox */
+    .affirmation-container {
+      margin-top: 18px;
+      padding: 16px 18px;
+      background: rgba(16, 185, 129, 0.08);
+      border: 1px solid rgba(16, 185, 129, 0.3);
+      border-radius: var(--radius-md);
+      display: none;
+      animation: fadeIn 0.25s ease;
+    }
+    .affirmation-container.visible {
+      display: block;
+    }
+    .checkbox-label {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      cursor: pointer;
+      font-size: 13px;
+      font-weight: 600;
+      color: #e2e8f0;
+      line-height: 1.5;
+    }
+    .checkbox-label input[type="checkbox"] {
+      width: 18px;
+      height: 18px;
+      accent-color: var(--accent-green);
+      margin-top: 2px;
+      cursor: pointer;
+      flex-shrink: 0;
+    }
+
+    /* Official Event Registration Section */
+    .registration-banner-card {
+      background: linear-gradient(135deg, #091328 0%, #112040 100%);
+      border: 2px solid #2563eb;
+      border-radius: var(--radius-lg);
+      padding: 24px;
+      margin-bottom: 24px;
+      box-shadow: 0 10px 25px -5px rgba(37, 99, 235, 0.3);
+    }
+    .reg-header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 12px;
+    }
+    .reg-header h3 {
+      font-size: 17px;
+      font-weight: 800;
+      color: #ffffff;
+    }
+    .reg-details-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 16px;
+      font-size: 13px;
+      color: #cbd5e1;
+      margin-bottom: 18px;
+      padding-bottom: 14px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    }
+    .reg-details-row div strong {
+      color: #ffffff;
+    }
+    .btn-register-link {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      background: #2563eb;
+      color: #ffffff;
+      text-decoration: none;
+      font-weight: 700;
+      font-size: 15px;
+      padding: 14px 24px;
+      border-radius: var(--radius-sm);
+      border: 1px solid #3b82f6;
+      box-shadow: 0 4px 14px rgba(37, 99, 235, 0.4);
+      cursor: pointer;
+      transition: all 0.2s;
+      width: 100%;
+    }
+    .btn-register-link:hover {
+      background: #1d4ed8;
+      transform: translateY(-1px);
+    }
+    .reg-status-pill {
+      margin-top: 12px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text-muted);
+    }
+    .reg-status-pill.verified {
+      color: #34d399;
+    }
+
+    /* Submit Section */
+    .submit-card {
+      background: var(--bg-surface);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-lg);
+      padding: 24px;
+      text-align: center;
+    }
+    .btn-submit-main {
+      width: 100%;
+      background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+      border: 1px solid #34d399;
+      color: #ffffff;
+      font-weight: 800;
+      font-size: 16px;
+      padding: 16px 28px;
+      border-radius: var(--radius-sm);
+      cursor: pointer;
+      transition: all 0.2s;
+      box-shadow: 0 4px 14px rgba(16, 185, 129, 0.35);
+    }
+    .btn-submit-main:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(16, 185, 129, 0.45);
+    }
+    .btn-submit-main:disabled {
+      background: #1e293b;
+      border-color: #334155;
+      color: #64748b;
+      cursor: not-allowed;
+      transform: none;
+      box-shadow: none;
+    }
+
+    /* Validation Messages Box */
+    .validation-summary {
+      background: rgba(239, 68, 68, 0.1);
+      border: 1px solid #ef4444;
+      border-radius: var(--radius-sm);
+      padding: 14px 16px;
+      margin-top: 16px;
+      text-align: left;
+      font-size: 13px;
+      color: #fca5a5;
+      display: none;
+    }
+    .validation-summary ul {
+      margin-left: 20px;
+      margin-top: 6px;
+    }
+
+    /* Confirmation Success Modal / View */
+    .success-view {
+      display: none;
+      background: var(--bg-surface);
+      border: 2px solid #10b981;
+      border-radius: var(--radius-lg);
+      padding: 40px 32px;
+      text-align: center;
+      box-shadow: 0 25px 50px -12px rgba(16, 185, 129, 0.25);
+    }
+    .success-icon {
+      width: 64px;
+      height: 64px;
+      border-radius: 50%;
+      background: rgba(16, 185, 129, 0.15);
+      border: 2px solid #10b981;
+      color: #10b981;
+      font-size: 30px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 20px;
+    }
+    .success-view h2 {
+      font-size: 24px;
+      font-weight: 800;
+      color: #ffffff;
+      margin-bottom: 12px;
+    }
+    .success-view p {
+      font-size: 15px;
+      color: #cbd5e1;
+      max-width: 580px;
+      margin: 0 auto 24px;
+      line-height: 1.6;
+    }
+    .submission-summary-box {
+      background: #090e1a;
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-md);
+      padding: 20px;
+      text-align: left;
+      max-width: 500px;
+      margin: 0 auto 24px;
+      font-size: 13px;
+    }
+    .summary-row {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 8px;
+    }
+    .summary-row span:first-child {
+      color: var(--text-dim);
+    }
+    .summary-row span:last-child {
+      font-weight: 600;
+      color: #f8fafc;
+    }
+
+    /* Auto-save notification */
+    .autosave-badge {
+      font-size: 11px;
+      color: var(--text-dim);
+      font-family: 'JetBrains Mono', monospace;
+      margin-top: 8px;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(-4px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="form-container">
+    <!-- Brand Header -->
+    <div class="brand-header">
+      <div class="brand-emblem">SEA</div>
+      <h1>2026 Sales Excellence Awards</h1>
+      <p>Candidate Confirmation &amp; Event RSVP Portal</p>
+    </div>
+
+    <!-- Active Form View -->
+    <div id="form-view">
+      <!-- Section 1: Agent Identification -->
+      <div class="section-card">
+        <div class="section-header">
+          <div class="section-number">1</div>
+          <div>
+            <h2>Candidate Information</h2>
+            <div class="section-subtitle">Please verify your agent details and specify your official award display name.</div>
+          </div>
+        </div>
+
+        <div class="profile-meta-grid">
+          <div class="meta-item">
+            <label>Agent Name</label>
+            <span id="disp-agent-name">Loading...</span>
+          </div>
+          <div class="meta-item">
+            <label>Current Office / Brokerage</label>
+            <span id="disp-brokerage">Loading...</span>
+          </div>
+          <div class="meta-item">
+            <label>Award Production Year</label>
+            <span>2026</span>
+          </div>
+          <div class="meta-item">
+            <label>Contact Email</label>
+            <span id="disp-email">Loading...</span>
+          </div>
+        </div>
+
+        <!-- Mandatory Award Name -->
+        <div class="form-group">
+          <label class="form-label" for="inp-engraved-name">
+            Name to Appear on Award <span class="req">*</span>
+          </label>
+          <div class="form-desc">
+            This exact text will be engraved on your trophy or printed on your official certificate. You may adjust professional suffixes (e.g. PA, LLC) or capitalization.
+          </div>
+          <input type="text" id="inp-engraved-name" class="form-control" placeholder="e.g. Jordan Rivera, PA" oninput="handleInputDraft()">
+        </div>
+
+        <!-- Optional Profile Correction Details -->
+        <div>
+          <button type="button" class="corrections-toggle" onclick="toggleCorrections()">
+            <span>✏️</span> Request contact info or brokerage correction
+          </button>
+          <div class="corrections-panel" id="corrections-panel">
+            <div class="form-desc" style="color: #cbd5e1; margin-bottom: 12px;">
+              Authoritative MLS records are preserved. Any corrections submitted below are queued for CCOR staff verification.
+            </div>
+            <div class="form-group">
+              <label class="form-label">Corrected Email Address</label>
+              <input type="email" id="inp-corr-email" class="form-control" placeholder="your-preferred-email@domain.com">
+            </div>
+            <div class="form-group">
+              <label class="form-label">Corrected Phone Number</label>
+              <input type="tel" id="inp-corr-phone" class="form-control" placeholder="(239) 555-0199">
+            </div>
+            <div class="form-group">
+              <label class="form-label">Corrected Brokerage Name</label>
+              <input type="text" id="inp-corr-office" class="form-control" placeholder="Updated Brokerage / Office">
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Section 2: Award Selection -->
+      <div class="section-card">
+        <div class="section-header">
+          <div class="section-number">2</div>
+          <div>
+            <h2>Award Preference <span style="color: var(--accent-red); font-size:14px;">*</span></h2>
+            <div class="section-subtitle">Please select your preferred award format. Exactly one selection is required.</div>
+          </div>
+        </div>
+
+        <div class="option-cards-grid">
+          <!-- Option A: Certificate -->
+          <div class="selection-card" id="card-award-certificate" onclick="selectAward('certificate')">
+            <div class="radio-circle"></div>
+            <div class="card-icon">📜</div>
+            <div class="card-title">Official Certificate</div>
+            <div class="card-desc">Gold-embossed commemorative certificate honoring your 2026 sales production achievement.</div>
+          </div>
+
+          <!-- Option B: Trophy -->
+          <div class="selection-card" id="card-award-trophy" onclick="selectAward('trophy')">
+            <div class="radio-circle"></div>
+            <div class="card-icon">🏆</div>
+            <div class="card-title">Crystal Trophy</div>
+            <div class="card-desc">Custom laser-engraved crystal award with your verified name and honor distinction.</div>
+          </div>
+        </div>
+        <input type="hidden" id="inp-award-preference" value="">
+      </div>
+
+      <!-- Section 3: Attendance Decision -->
+      <div class="section-card">
+        <div class="section-header">
+          <div class="section-number">3</div>
+          <div>
+            <h2>Ceremony Attendance <span style="color: var(--accent-red); font-size:14px;">*</span></h2>
+            <div class="section-subtitle">Will you be attending the 2027 Sales Excellence Awards ceremony?</div>
+          </div>
+        </div>
+
+        <div class="attendance-grid">
+          <div class="selection-card selected-blue" id="card-att-yes" onclick="selectAttendance('yes')">
+            <div class="radio-circle"></div>
+            <div style="font-size: 24px; margin-bottom: 6px;">🎉</div>
+            <div class="card-title">Yes, Attending</div>
+            <div class="card-desc">I plan to celebrate at the ceremony.</div>
+          </div>
+
+          <div class="selection-card" id="card-att-no" onclick="selectAttendance('no')">
+            <div class="radio-circle"></div>
+            <div style="font-size: 24px; margin-bottom: 6px;">✉️</div>
+            <div class="card-title">No, Cannot Attend</div>
+            <div class="card-desc">I will receive my award separately.</div>
+          </div>
+
+          <div class="selection-card" id="card-att-undecided" onclick="selectAttendance('undecided')">
+            <div class="radio-circle"></div>
+            <div style="font-size: 24px; margin-bottom: 6px;">⏳</div>
+            <div class="card-title">Undecided</div>
+            <div class="card-desc">Staff will follow up closer to event.</div>
+          </div>
+        </div>
+        <input type="hidden" id="inp-attendance" value="">
+
+        <!-- Conditional Affirmation Checkbox (Attending YES Only) -->
+        <div class="affirmation-container" id="affirmation-container">
+          <label class="checkbox-label">
+            <input type="checkbox" id="chk-self-reported" onchange="handleInputDraft()">
+            <span>
+              <strong>Registration Affirmation:</strong> I confirm that I have completed my official event registration for the 2027 Sales Excellence Awards via the GrowthZone event portal.
+            </span>
+          </label>
+        </div>
+      </div>
+
+      <!-- Section 4: Official Event Registration -->
+      <div class="registration-banner-card">
+        <div class="reg-header">
+          <div style="font-size: 26px;">🎟️</div>
+          <div>
+            <h3>Official Event Registration (Mandatory Step)</h3>
+            <div style="font-size: 12px; color: #94a3b8;">
+              All qualifying agents must open the official event registration link at least once before completing this confirmation.
+            </div>
+          </div>
+        </div>
+
+        <div class="reg-details-row">
+          <div><strong>Event:</strong> 2027 Sales Excellence Awards</div>
+          <div><strong>Date:</strong> February 11, 2027</div>
+          <div><strong>Time:</strong> 9:00 AM – 11:30 AM EST</div>
+        </div>
+
+        <button type="button" class="btn-register-link" onclick="handleRegistrationLinkClick()">
+          <span>Register for the Sales Excellence Awards</span>
+          <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg>
+        </button>
+
+        <div class="reg-status-pill" id="reg-status-pill">
+          <span id="reg-status-dot" style="width: 8px; height: 8px; border-radius: 50%; background: #64748b;"></span>
+          <span id="reg-status-text">Registration link has not yet been opened. Click the button above to open GrowthZone in a new tab.</span>
+        </div>
+      </div>
+
+      <!-- Section 5: Submit Confirmation -->
+      <div class="submit-card">
+        <button type="button" id="btn-submit" class="btn-submit-main" onclick="submitForm()">
+          Submit Award Confirmation
+        </button>
+        <div class="autosave-badge" id="autosave-status">Draft auto-saved locally and server-side</div>
+
+        <div class="validation-summary" id="validation-box">
+          <strong>Please complete all required fields before submitting:</strong>
+          <ul id="validation-list"></ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- Confirmation Success View -->
+    <div class="success-view" id="success-view">
+      <div class="success-icon">✓</div>
+      <h2>Thank You! Your Confirmation Has Been Received</h2>
+      <p id="success-message">
+        Your award preference and event response have been recorded into the CCOR Sales Excellence Awards system.
+      </p>
+
+      <div class="submission-summary-box">
+        <div class="summary-row">
+          <span>Award Recipient:</span>
+          <span id="sum-name">--</span>
+        </div>
+        <div class="summary-row">
+          <span>Award Format:</span>
+          <span id="sum-award" style="color: var(--accent-gold); text-transform: capitalize;">--</span>
+        </div>
+        <div class="summary-row">
+          <span>Attendance:</span>
+          <span id="sum-attendance" style="text-transform: capitalize;">--</span>
+        </div>
+        <div class="summary-row">
+          <span>GrowthZone Registration:</span>
+          <span id="sum-registration">--</span>
+        </div>
+        <div class="summary-row">
+          <span>Submitted At:</span>
+          <span id="sum-timestamp">--</span>
+        </div>
+      </div>
+
+      <button type="button" class="corrections-toggle" style="margin: 0 auto;" onclick="reopenFormForRevision()">
+        Need to update your answers? Click here to revise your submission
+      </button>
+    </div>
+  </div>
+
+  <script>
+    // State
+    let agentToken = "";
+    let agentContext = null;
+    let registrationLinkClicked = false;
+    let saveTimeout = null;
+
+    // Parse Token from URL
+    function getTokenFromURL() {
+      const params = new URLSearchParams(window.location.search);
+      return params.get('token') || "";
+    }
+
+    // Initialize Form
+    async function initConfirmation() {
+      agentToken = getTokenFromURL();
+      if (!agentToken) {
+        showFatalError("No confirmation token provided. Please use the personalized link sent to you by CCOR.");
+        return;
+      }
+
+      try {
+        const previewParam = new URLSearchParams(window.location.search).get('preview') === 'true' ? '&preview=true' : '';
+        const res = await fetch(`/api/confirm/verify?token=${encodeURIComponent(agentToken)}${previewParam}`);
+        const data = await res.json();
+
+        if (!res.ok) {
+          showFatalError(data.error || "Invalid or expired confirmation link.");
+          return;
+        }
+
+        agentContext = data;
+        populateAgentInfo(data);
+
+        // Check for Staff Safe Preview Mode
+        const isPreview = new URLSearchParams(window.location.search).get('preview') === 'true';
+        if (isPreview) {
+          const banner = document.createElement('div');
+          banner.id = 'preview-mode-banner';
+          banner.style.cssText = 'background: #b45309; color: #fef3c7; padding: 14px 20px; font-weight: 700; text-align: center; border-radius: 10px; margin-bottom: 24px; border: 2px solid #f59e0b; display: flex; align-items: center; justify-content: center; gap: 12px; font-size: 14px;';
+          banner.innerHTML = `
+            <span style="font-size: 20px;">🛡️</span>
+            <div>
+              <strong>STAFF SAFE PREVIEW MODE</strong> &bull; Read-only preview for authorized CCOR staff.
+              <div style="font-size: 12px; font-weight: 400; opacity: 0.95; margin-top: 3px;">
+                Form responses, registration click logging, and email triggers are disabled. No real agent data will be altered.
+              </div>
+            </div>
+          `;
+          document.querySelector('.form-container').insertBefore(banner, document.getElementById('form-view'));
+
+          const submitBtn = document.getElementById('btn-submit');
+          if (submitBtn) {
+            submitBtn.innerText = "Submission Disabled in Staff Preview Mode";
+            submitBtn.disabled = true;
+            submitBtn.style.opacity = "0.5";
+            submitBtn.style.cursor = "not-allowed";
+          }
+        }
+
+        // Preload existing response or draft
+        if (data.existing_response && data.existing_response.is_active) {
+          showSubmittedView(data.existing_response);
+        } else if (data.draft) {
+          applyDraft(data.draft);
+        }
+      } catch (err) {
+        showFatalError("Could not connect to confirmation service: " + err.message);
+      }
+    }
+
+    function showFatalError(msg) {
+      document.getElementById('form-view').innerHTML = `
+        <div class="section-card" style="border-left: 4px solid #ef4444; text-align: center; padding: 40px 20px;">
+          <div style="font-size: 32px; margin-bottom: 12px;">⚠️</div>
+          <h2 style="color: #f87171; font-size: 20px; margin-bottom: 8px;">Unable to Access Confirmation Form</h2>
+          <p style="color: #cbd5e1; max-width: 500px; margin: 0 auto 20px;">${msg}</p>
+          <div style="font-size: 13px; color: #94a3b8;">
+            If you believe this is an error, please contact CCOR Member Services at <strong>tech@coconutcoastrealtors.org</strong>.
+          </div>
+        </div>
+      `;
+    }
+
+    function populateAgentInfo(data) {
+      document.getElementById('disp-agent-name').innerText = data.full_name || "Agent";
+      document.getElementById('disp-brokerage').innerText = data.office || "CCOR Member Office";
+      document.getElementById('disp-email').innerText = data.primary_email || "Not on file";
+      
+      const inpEngraved = document.getElementById('inp-engraved-name');
+      if (!inpEngraved.value) {
+        inpEngraved.value = data.engraved_name || data.full_name || "";
+      }
+
+      if (data.registration_link_clicked) {
+        markRegistrationLinkClicked(data.registration_link_clicked_at);
+      }
+    }
+
+    function applyDraft(draft) {
+      if (draft.draft_engraved_name) {
+        document.getElementById('inp-engraved-name').value = draft.draft_engraved_name;
+      }
+      if (draft.draft_award_preference) {
+        selectAward(draft.draft_award_preference, false);
+      }
+      if (draft.draft_attendance_response) {
+        selectAttendance(draft.draft_attendance_response, false);
+      }
+      if (draft.draft_self_reported) {
+        document.getElementById('chk-self-reported').checked = true;
+      }
+    }
+
+    function selectAward(type, triggerSave = true) {
+      document.getElementById('inp-award-preference').value = type;
+      document.getElementById('card-award-certificate').classList.toggle('selected', type === 'certificate');
+      document.getElementById('card-award-trophy').classList.toggle('selected', type === 'trophy');
+      if (triggerSave) handleInputDraft();
+    }
+
+    function selectAttendance(choice, triggerSave = true) {
+      const prevChoice = document.getElementById('inp-attendance').value;
+      document.getElementById('inp-attendance').value = choice;
+
+      document.getElementById('card-att-yes').classList.toggle('selected-blue', choice === 'yes');
+      document.getElementById('card-att-no').classList.toggle('selected-blue', choice === 'no');
+      document.getElementById('card-att-undecided').classList.toggle('selected-blue', choice === 'undecided');
+
+      const aff = document.getElementById('affirmation-container');
+      if (choice === 'yes') {
+        aff.classList.add('visible');
+      } else {
+        aff.classList.remove('visible');
+        // Clear checkbox state when switching away from Yes
+        document.getElementById('chk-self-reported').checked = false;
+      }
+
+      if (triggerSave) handleInputDraft();
+    }
+
+    function toggleCorrections() {
+      const panel = document.getElementById('corrections-panel');
+      panel.classList.toggle('open');
+    }
+
+    async function handleRegistrationLinkClick() {
+      const isPreview = new URLSearchParams(window.location.search).get('preview') === 'true';
+      if (isPreview) {
+        markRegistrationLinkClicked(new Date().toLocaleTimeString());
+        window.open(agentContext.registration_url, '_blank', 'noopener,noreferrer');
+        return;
+      }
+      try {
+        // Record server-side click
+        const res = await fetch('/api/confirm/track-click', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ token: agentToken })
+        });
+        const data = await res.json();
+        if (res.ok) {
+          markRegistrationLinkClicked(data.clicked_at);
+          // Open official GrowthZone URL in new tab without exposing token
+          window.open(data.target_url, '_blank', 'noopener,noreferrer');
+        } else {
+          alert("Could not register click: " + (data.error || "Unknown error"));
+        }
+      } catch (err) {
+        alert("Registration link tracking error: " + err.message);
+      }
+    }
+
+    function markRegistrationLinkClicked(timestamp) {
+      registrationLinkClicked = true;
+      const dot = document.getElementById('reg-status-dot');
+      const text = document.getElementById('reg-status-text');
+      dot.style.background = '#10b981';
+      dot.style.boxShadow = '0 0 8px rgba(16, 185, 129, 0.8)';
+      text.innerHTML = `<strong>Registration link opened:</strong> GrowthZone opened in a separate tab. Attending agents, please complete registration and check the affirmation above.`;
+      document.getElementById('reg-status-pill').classList.add('verified');
+    }
+
+    function handleInputDraft() {
+      clearTimeout(saveTimeout);
+      saveTimeout = setTimeout(saveDraftToServer, 800);
+    }
+
+    async function saveDraftToServer() {
+      if (!agentToken) return;
+      const isPreview = new URLSearchParams(window.location.search).get('preview') === 'true';
+      if (isPreview) {
+        document.getElementById('autosave-status').innerText = 'Draft saving bypassed in Staff Preview Mode';
+        return;
+      }
+      const payload = {
+        award_preference: document.getElementById('inp-award-preference').value,
+        engraved_name: document.getElementById('inp-engraved-name').value,
+        attendance_response: document.getElementById('inp-attendance').value,
+        registration_self_reported: document.getElementById('chk-self-reported').checked ? 1 : 0
+      };
+
+      try {
+        await fetch('/api/confirm/save-draft', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ token: agentToken, ...payload })
+        });
+        const badge = document.getElementById('autosave-status');
+        badge.innerText = `Draft auto-saved at ${new Date().toLocaleTimeString()}`;
+      } catch (e) {
+        console.warn("Draft auto-save failed", e);
+      }
+    }
+
+    async function submitForm() {
+      const isPreview = new URLSearchParams(window.location.search).get('preview') === 'true';
+      if (isPreview) {
+        alert("Form submission is disabled in Staff Preview Mode to prevent recording false responses.");
+        return;
+      }
+      const engravedName = document.getElementById('inp-engraved-name').value.trim();
+      const awardPref = document.getElementById('inp-award-preference').value;
+      const attendance = document.getElementById('inp-attendance').value;
+      const selfReported = document.getElementById('chk-self-reported').checked;
+
+      const errors = [];
+      if (!engravedName) errors.push("Please provide the name to appear on your award.");
+      if (!awardPref) errors.push("Please select your award format (Certificate or Trophy).");
+      if (!attendance) errors.push("Please indicate your ceremony attendance decision (Yes, No, or Undecided).");
+      if (!registrationLinkClicked) errors.push("You must open the official event registration link at least once.");
+      if (attendance === 'yes' && !selfReported) {
+        errors.push("Attending agents must confirm that they completed registration via the checkbox in Section 3.");
+      }
+
+      const valBox = document.getElementById('validation-box');
+      const valList = document.getElementById('validation-list');
+
+      if (errors.length > 0) {
+        valList.innerHTML = errors.map(e => `<li>${e}</li>`).join('');
+        valBox.style.display = 'block';
+        valBox.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        return;
+      }
+      valBox.style.display = 'none';
+
+      const payload = {
+        token: agentToken,
+        engraved_name: engravedName,
+        award_preference: awardPref,
+        attendance_response: attendance,
+        registration_self_reported: selfReported,
+        corrections: {
+          preferred_name: engravedName,
+          corrected_email: document.getElementById('inp-corr-email').value.trim(),
+          corrected_phone: document.getElementById('inp-corr-phone').value.trim(),
+          corrected_brokerage: document.getElementById('inp-corr-office').value.trim()
+        }
+      };
+
+      try {
+        const btn = document.getElementById('btn-submit');
+        btn.disabled = true;
+        btn.innerText = "Submitting Confirmation...";
+
+        const res = await fetch('/api/confirm/submit', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
+        });
+        const result = await res.json();
+
+        if (res.ok) {
+          showSubmittedView(result);
+        } else {
+          btn.disabled = false;
+          btn.innerText = "Submit Award Confirmation";
+          valList.innerHTML = `<li>${result.error || result.message || 'Submission error'}</li>`;
+          valBox.style.display = 'block';
+          valBox.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }
+      } catch (err) {
+        alert("Submission failed: " + err.message);
+        document.getElementById('btn-submit').disabled = false;
+        document.getElementById('btn-submit').innerText = "Submit Award Confirmation";
+      }
+    }
+
+    function showSubmittedView(resp) {
+      document.getElementById('form-view').style.display = 'none';
+      const sView = document.getElementById('success-view');
+      sView.style.display = 'block';
+
+      if (resp.attendance_note) {
+        document.getElementById('success-message').innerText = resp.attendance_note;
+      }
+
+      document.getElementById('sum-name').innerText = resp.engraved_name || "--";
+      document.getElementById('sum-award').innerText = resp.award_preference || "--";
+      document.getElementById('sum-attendance').innerText = resp.attendance_response || "--";
+      
+      let regStatus = "Not Attending";
+      if (resp.attendance_response === 'yes') {
+        regStatus = resp.registration_self_reported ? "Self-Reported Confirmed" : "Pending Verification";
+      } else if (resp.attendance_response === 'undecided') {
+        regStatus = "Attendance Undecided";
+      }
+      document.getElementById('sum-registration').innerText = regStatus;
+      document.getElementById('sum-timestamp').innerText = resp.submitted_at || new Date().toLocaleString();
+
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function reopenFormForRevision() {
+      document.getElementById('success-view').style.display = 'none';
+      document.getElementById('form-view').style.display = 'block';
+      document.getElementById('btn-submit').innerText = "Update & Resubmit Confirmation";
+      document.getElementById('btn-submit').disabled = false;
+    }
+
+    document.addEventListener('DOMContentLoaded', initConfirmation);
+  </script>
+</body>
+</html>

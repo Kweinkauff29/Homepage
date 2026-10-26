@@ -1,0 +1,496 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>2026 Sales Excellence Awards | Coconut Coast Organization of REALTORS®</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Playfair+Display:ital,wght@0,600;0,700;1,600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --bg-color: #0b1120;
+            --surface: #131c31;
+            --surface-card: #18243e;
+            --border-color: rgba(255, 255, 255, 0.08);
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+            --gold: #f59e0b;
+            --gold-glow: rgba(245, 158, 11, 0.25);
+            --blue: #3b82f6;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            min-height: 100vh;
+            line-height: 1.6;
+        }
+
+        /* Awards Header Navigation */
+        .awards-nav {
+            background: rgba(15, 23, 42, 0.95);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid var(--border-color);
+            padding: 0.85rem 2rem;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        .nav-inner {
+            max-width: 1300px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+        .nav-brand {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            font-weight: 700;
+            font-size: 1.1rem;
+            color: #fff;
+            text-decoration: none;
+        }
+        .nav-brand i { color: var(--gold); }
+        .nav-links {
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+            flex-wrap: wrap;
+        }
+        .nav-pill {
+            padding: 0.45rem 1rem;
+            border-radius: 9999px;
+            text-decoration: none;
+            font-size: 0.85rem;
+            font-weight: 600;
+            transition: all 0.2s ease;
+            color: var(--text-muted);
+            border: 1px solid transparent;
+        }
+        .nav-pill:hover {
+            color: #fff;
+            background: var(--surface);
+            border-color: var(--border-color);
+        }
+        .nav-pill.active {
+            background: rgba(59, 130, 246, 0.15);
+            color: #60a5fa;
+            border-color: rgba(59, 130, 246, 0.4);
+        }
+        .nav-pill.archive {
+            color: #cbd5e1;
+        }
+
+        /* Hero Section */
+        .hero {
+            padding: 5rem 1.5rem 3.5rem;
+            text-align: center;
+            max-width: 960px;
+            margin: 0 auto;
+        }
+        .hero-tag {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: var(--gold-glow);
+            color: var(--gold);
+            padding: 0.4rem 1.1rem;
+            border-radius: 9999px;
+            font-size: 0.85rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: 1.5rem;
+            border: 1px solid rgba(245, 158, 11, 0.4);
+        }
+        h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: 3.5rem;
+            font-weight: 700;
+            line-height: 1.15;
+            margin-bottom: 1.25rem;
+            background: linear-gradient(135deg, #ffffff 0%, #cbd5e1 60%, #f59e0b 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .hero-lead {
+            font-size: 1.25rem;
+            color: var(--text-muted);
+            max-width: 780px;
+            margin: 0 auto 2.5rem;
+        }
+
+        /* Event Details Card */
+        .event-card {
+            background: var(--surface);
+            border: 1px solid var(--border-color);
+            border-radius: 20px;
+            padding: 2.5rem;
+            max-width: 900px;
+            margin: 0 auto 4rem;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+            position: relative;
+            overflow: hidden;
+        }
+        .event-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, #3b82f6, #f59e0b, #3b82f6);
+        }
+        .event-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 1.5rem;
+            text-align: left;
+            margin-bottom: 2rem;
+        }
+        .event-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 1rem;
+        }
+        .event-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 12px;
+            background: rgba(59, 130, 246, 0.15);
+            color: #60a5fa;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.25rem;
+            flex-shrink: 0;
+        }
+        .event-icon.gold {
+            background: var(--gold-glow);
+            color: var(--gold);
+        }
+        .event-info h4 {
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: var(--text-muted);
+            margin-bottom: 0.25rem;
+        }
+        .event-info p {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: #fff;
+        }
+        .event-info span {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+        }
+
+        .cta-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.75rem;
+            background: linear-gradient(135deg, #2563eb, #1d4ed8);
+            color: #fff;
+            padding: 0.9rem 2rem;
+            border-radius: 10px;
+            font-weight: 700;
+            font-size: 1rem;
+            text-decoration: none;
+            transition: all 0.2s ease;
+            box-shadow: 0 4px 14px rgba(37, 99, 235, 0.4);
+        }
+        .cta-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(37, 99, 235, 0.6);
+        }
+
+        /* Criteria & Review Notice Section */
+        .info-section {
+            max-width: 1000px;
+            margin: 0 auto 5rem;
+            padding: 0 1.5rem;
+        }
+        .info-card {
+            background: var(--surface-card);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 2rem 2.5rem;
+            margin-bottom: 2rem;
+        }
+        .info-card h3 {
+            font-size: 1.35rem;
+            margin-bottom: 1rem;
+            color: #fff;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+        .info-card h3 i { color: var(--gold); }
+        .info-card p {
+            color: var(--text-muted);
+            margin-bottom: 1rem;
+        }
+        .rules-badge-group {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+            margin-top: 1.25rem;
+        }
+        .rule-badge {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--border-color);
+            padding: 0.6rem 1.2rem;
+            border-radius: 8px;
+            font-size: 0.9rem;
+            color: #fff;
+        }
+        .rule-badge strong { color: var(--gold); }
+
+        .status-alert {
+            background: rgba(37, 99, 235, 0.08);
+            border: 1px solid rgba(59, 130, 246, 0.3);
+            border-radius: 12px;
+            padding: 1.25rem 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            color: #bfdbfe;
+            font-size: 0.95rem;
+        }
+        .status-alert i {
+            font-size: 1.5rem;
+            color: #60a5fa;
+            flex-shrink: 0;
+        }
+
+        /* Archives Preview Section */
+        .archives-section {
+            background: rgba(15, 23, 42, 0.6);
+            border-top: 1px solid var(--border-color);
+            padding: 4rem 1.5rem;
+        }
+        .archives-inner {
+            max-width: 1000px;
+            margin: 0 auto;
+            text-align: center;
+        }
+        .archives-inner h2 {
+            font-size: 1.75rem;
+            margin-bottom: 0.75rem;
+            color: #fff;
+        }
+        .archives-inner p {
+            color: var(--text-muted);
+            margin-bottom: 2.5rem;
+        }
+        .archives-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+        }
+        .archive-card {
+            background: var(--surface);
+            border: 1px solid var(--border-color);
+            border-radius: 14px;
+            padding: 2rem;
+            text-decoration: none;
+            color: inherit;
+            transition: all 0.2s ease;
+            text-align: left;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+        .archive-card:hover {
+            transform: translateY(-4px);
+            border-color: var(--gold);
+            box-shadow: 0 12px 24px rgba(0, 0, 0, 0.3);
+        }
+        .archive-badge {
+            display: inline-block;
+            background: rgba(245, 158, 11, 0.15);
+            color: var(--gold);
+            padding: 0.25rem 0.6rem;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            margin-bottom: 1rem;
+            align-self: flex-start;
+        }
+        .archive-card h3 {
+            font-size: 1.25rem;
+            color: #fff;
+            margin-bottom: 0.5rem;
+        }
+        .archive-card p {
+            font-size: 0.9rem;
+            color: var(--text-muted);
+            margin-bottom: 1.25rem;
+        }
+        .archive-link-text {
+            color: #60a5fa;
+            font-weight: 600;
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        footer {
+            border-top: 1px solid var(--border-color);
+            padding: 2.5rem 1.5rem;
+            text-align: center;
+            color: var(--text-muted);
+            font-size: 0.85rem;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Unified Awards Navigation -->
+    <nav class="awards-nav">
+        <div class="nav-inner">
+            <a href="#" class="nav-brand">
+                <i class="fa-solid fa-trophy"></i>
+                <span>Sales Excellence Awards</span>
+            </a>
+            <div class="nav-links">
+                <a href="#" class="nav-pill active">
+                    <i class="fa-solid fa-star"></i> 2026 Awards Information
+                </a>
+                <a href="/archive/2025" class="nav-pill archive">
+                    <i class="fa-solid fa-clock-rotate-left"></i> 2025 Winners Archive
+                </a>
+                <a href="https://coconutcoastrealtors.org/2024-sales-excellence-award-winners/" target="_blank" class="nav-pill archive">
+                    <i class="fa-solid fa-box-archive"></i> 2024 Winners Archive
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero -->
+    <header class="hero">
+        <div class="hero-tag">
+            <i class="fa-solid fa-calendar-check"></i> Upcoming Gala Event &bull; Awards Year 2026
+        </div>
+        <h1>2027 Sales Excellence Awards Gala</h1>
+        <p class="hero-lead">Honoring extraordinary production, professionalism, and community leadership across the Coconut Coast Organization of REALTORS&reg;.</p>
+    </header>
+
+    <!-- Event Ceremony Card -->
+    <section class="event-card">
+        <div class="event-grid">
+            <div class="event-item">
+                <div class="event-icon gold">
+                    <i class="fa-solid fa-calendar-day"></i>
+                </div>
+                <div class="event-info">
+                    <h4>Event Date</h4>
+                    <p>February 11, 2027</p>
+                    <span>Annual Gala Ceremony</span>
+                </div>
+            </div>
+
+            <div class="event-item">
+                <div class="event-icon">
+                    <i class="fa-solid fa-clock"></i>
+                </div>
+                <div class="event-info">
+                    <h4>Ceremony Time</h4>
+                    <p>9:00 AM – 11:30 AM</p>
+                    <span>Eastern Time</span>
+                </div>
+            </div>
+
+            <div class="event-item">
+                <div class="event-icon gold">
+                    <i class="fa-solid fa-location-dot"></i>
+                </div>
+                <div class="event-info">
+                    <h4>Location & Host</h4>
+                    <p>Bonita Springs, FL</p>
+                    <span>Coconut Coast REALTORS&reg;</span>
+                </div>
+            </div>
+        </div>
+
+        <div style="text-align: center;">
+            <a href="https://bonitaspringsesterorealtorsfl.growthzoneapp.com/ap/Events/Register/J5F2A7xHJCzC3" target="_blank" class="cta-btn">
+                <span>Official GrowthZone Registration</span>
+                <i class="fa-solid fa-arrow-up-right-from-square"></i>
+            </a>
+        </div>
+    </section>
+
+    <!-- Information & Qualification Criteria -->
+    <section class="info-section">
+        <div class="info-card">
+            <h3><i class="fa-solid fa-award"></i> 2026 Qualification Criteria & Working Thresholds</h3>
+            <p>Preliminary sales excellence eligibility is measured across MLS production for the award year. Current preliminary benchmark requirements:</p>
+            
+            <div class="rules-badge-group">
+                <div class="rule-badge">Total Sales Volume: <strong>More than $5,000,000</strong></div>
+                <div class="rule-badge">Total Transaction Sides: <strong>More than 25 sides</strong></div>
+                <div class="rule-badge">Standard: <strong>Both thresholds required (AND logic)</strong></div>
+            </div>
+        </div>
+
+        <div class="status-alert">
+            <i class="fa-solid fa-circle-info"></i>
+            <div>
+                <strong>Auditing & Verification in Progress:</strong> Preliminary qualification records are currently undergoing verification by CCOR staff. Official award recipients and tier designations will be published upon conclusion of the qualification and audit period.
+            </div>
+        </div>
+    </section>
+
+    <!-- Past Archives Section -->
+    <section class="archives-section">
+        <div class="archives-inner">
+            <h2>Historical Awards Archives</h2>
+            <p>Explore recognized award recipients, brokerages, and achievements from previous award ceremonies.</p>
+
+            <div class="archives-grid">
+                <a href="/archive/2025" class="archive-card">
+                    <div>
+                        <span class="archive-badge">2025 Archive</span>
+                        <h3>2025 Sales Excellence Winners</h3>
+                        <p>Complete historical roster of 131 recognized Diamond, Platinum, and Gold recipients across 60 brokerages.</p>
+                    </div>
+                    <div class="archive-link-text">
+                        <span>View 2025 Historical Archive</span>
+                        <i class="fa-solid fa-arrow-right"></i>
+                    </div>
+                </a>
+
+                <a href="https://coconutcoastrealtors.org/2024-sales-excellence-award-winners/" target="_blank" class="archive-card">
+                    <div>
+                        <span class="archive-badge">2024 Archive</span>
+                        <h3>2024 Sales Excellence Winners</h3>
+                        <p>Official published award recipients and recognition from the 2024 ceremony.</p>
+                    </div>
+                    <div class="archive-link-text">
+                        <span>View 2024 Historical Archive</span>
+                        <i class="fa-solid fa-arrow-right"></i>
+                    </div>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <p>Coconut Coast Organization of REALTORS&reg; (CCOR) &bull; Official Sales Excellence Awards Portal</p>
+        <p style="margin-top: 0.5rem; opacity: 0.6;">All award criteria and recognitions governed by official CCOR board policies.</p>
+    </footer>
+
+</body>
+</html>
