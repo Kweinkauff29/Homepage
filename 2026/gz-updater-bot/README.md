@@ -16,6 +16,8 @@ The Cloudflare checker uses this local helper for all GrowthZone writes: **DBPR 
 
 The first update opens a separate browser profile. Sign in to GrowthZone there once; the profile is then reused locally. Credentials are not sent to the Cloudflare page or stored in GitHub.
 
+The checker verifies that the helper can open child browser processes before enabling an update. If it reports that the browser runtime is blocked, close the existing helper and start the Windows or macOS launcher directly from File Explorer or Finder.
+
 ## Safety checks
 
 - The helper listens only on `127.0.0.1:3001` and accepts requests only from the CCOR checker or local development.

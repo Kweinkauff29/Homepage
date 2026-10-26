@@ -114,7 +114,7 @@
                     <label><input type="radio" name="updateMode" value="coe"> Confirmed COE</label>
                     <label><input type="radio" name="updateMode" value="both" checked> Both</label>
                 </fieldset>
-                <small class="source-status">All three options use the signed-in PC/Mac GrowthZone helper. Start <code>start-windows.cmd</code> or <code>start-mac.command</code> from <code>2026/gz-updater-bot</code> and keep it open. Cloudflare verifies DBPR data but does not write directly to GrowthZone.</small>
+                <small class="source-status">All three options use the signed-in PC/Mac GrowthZone helper. Start <code>start-windows.cmd</code> or <code>start-mac.command</code> from <code>2026/gz-updater-bot</code> and keep it open. If the browser asks to access devices on your local network, choose Allow. Cloudflare verifies DBPR data but does not write directly to GrowthZone.</small>
                 <small class="source-status helper-status" id="helperStatus">Checking the local GrowthZone helper…</small>
                 <div class="actions">
                     <button class="btn primary" id="checkButton" disabled>Check DBPR + COE</button>
@@ -169,7 +169,7 @@
             const API = "https://ccor-license-checker-api.bonitaspringsrealtors.workers.dev";
             const GZ_BASE = "https://bonitaspringsesterorealtorsfl.growthzoneapp.com";
             const LOCAL_UPDATER = "http://127.0.0.1:3001";
-            const HELPER_STARTUP_MESSAGE = "GrowthZone helper is offline. Start start-windows.cmd on Windows or start-mac.command on macOS from 2026/gz-updater-bot, leave it open, then retry.";
+            const HELPER_STARTUP_MESSAGE = "GrowthZone helper is offline. Start start-windows.cmd on Windows or start-mac.command on macOS from 2026/gz-updater-bot, allow local-network access if the browser asks, leave the helper open, then retry.";
             const state = { rows: [], checked: false, busy: false, mode: "both", helperOnline: false };
             const elements = Object.fromEntries([
                 "fileInput", "fileLabel", "dropZone", "checkButton", "syncButton", "downloadButton",
@@ -213,13 +213,13 @@
                 }
             }
 
-            function showHelperStatus(online) {
+            function showHelperStatus(online, message = null) {
                 state.helperOnline = online;
                 elements.helperStatus.classList.toggle("online", online);
                 elements.helperStatus.classList.toggle("offline", !online);
-                elements.helperStatus.textContent = online
+                elements.helperStatus.textContent = message || (online
                     ? "GrowthZone helper: online and ready on this computer."
-                    : HELPER_STARTUP_MESSAGE;
+                    : HELPER_STARTUP_MESSAGE);
             }
 
             async function loadHelperStatus() {
@@ -227,6 +227,10 @@
                     const response = await fetch(`${LOCAL_UPDATER}/health`, { cache: "no-store" });
                     const payload = await response.json();
                     if (!response.ok || !payload.ok) throw new Error("Helper unavailable");
+                    if (payload.browserReady === false) {
+                        showHelperStatus(false, payload.issue || HELPER_STARTUP_MESSAGE);
+                        return false;
+                    }
                     showHelperStatus(true);
                     return true;
                 } catch {

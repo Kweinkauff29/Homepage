@@ -8,6 +8,7 @@ const fs = require('fs');
 const os = require('os');
 const path = require('path');
 const { normalizeJobRecord, usDate } = require('./core');
+const { checkBrowserRuntime } = require('./browser-runtime');
 require('dotenv').config();
 
 const app = express();
@@ -17,6 +18,7 @@ const allowedOrigins = new Set([
     'http://127.0.0.1:8788',
 ]);
 const jobs = new Map();
+const browserRuntimePromise = checkBrowserRuntime();
 
 app.use((_request, response, next) => {
     // Chrome's Private Network Access preflight requires this for an HTTPS page calling localhost.
@@ -40,13 +42,19 @@ function csvValue(value) {
     return `"${String(value ?? '').replaceAll('"', '""')}"`;
 }
 
-app.get('/health', (_request, response) => response.json({
-    ok: true,
-    service: 'ccor-growthzone-updater',
-    capabilities: ['license', 'coe', 'both'],
-}));
+app.get('/health', async (_request, response) => {
+    const browserRuntime = await browserRuntimePromise;
+    response.json({
+        ok: true,
+        service: 'ccor-growthzone-updater',
+        capabilities: ['license', 'coe', 'both'],
+        browserReady: browserRuntime.ready,
+        browser: browserRuntime.browser,
+        issue: browserRuntime.issue,
+    });
+});
 
-app.post('/run-updater', (request, response) => {
+app.post('/run-updater', async (request, response) => {
     const input = request.body?.records;
     const records = Array.isArray(input) ? input.map(normalizeJobRecord) : [];
     if (!Array.isArray(input) || input.length < 1 || input.length > 100 || records.some((record) => !record)) {
@@ -55,6 +63,14 @@ app.post('/run-updater', (request, response) => {
     }
     if ([...jobs.values()].some((job) => job.status === 'running')) {
         response.status(409).json({ error: 'A GrowthZone update job is already running on this computer.' });
+        return;
+    }
+    const browserRuntime = await browserRuntimePromise;
+    if (!browserRuntime.ready) {
+        response.status(503).json({
+            error: browserRuntime.issue,
+            code: 'browser_runtime_blocked',
+        });
         return;
     }
 
@@ -97,8 +113,12 @@ app.post('/run-updater', (request, response) => {
         job.status = 'failed';
         job.completedAt = new Date().toISOString();
         job.logs.push({ level: 'error', line: error.message });
+        console.error(`Could not start local updater process: ${error.message}`);
         fs.rm(jobDir, { recursive: true, force: true }, () => {});
-        response.status(500).json({ error: 'The local browser process could not be started.' });
+        response.status(500).json({
+            error: 'The local updater process could not start. Close this helper and launch start-windows.cmd or start-mac.command directly, then retry.',
+            code: 'updater_process_start_failed',
+        });
         return;
     }
 

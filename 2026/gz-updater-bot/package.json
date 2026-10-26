@@ -5,7 +5,8 @@
   "scripts": {
     "start": "node server.js",
     "run": "node index.js",
-    "test": "node --check server.js && node --check index.js && node test/core.test.js && node test/page-syntax.test.js"
+    "test": "node --check server.js && node --check index.js && node --check test/private-browser-smoke.js && node test/core.test.js && node test/browser-runtime.test.js && node test/page-syntax.test.js",
+    "test:private": "node test/private-browser-smoke.js"
   },
   "keywords": [],
   "author": "",

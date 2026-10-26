@@ -5,6 +5,7 @@ const fs = require('fs');
 const path = require('path');
 const csv = require('csv-parser');
 const { enabled, normalizeLicenseNumber, toIsoDate, usDate } = require('./core');
+const { findBrowserExecutable } = require('./browser-runtime');
 require('dotenv').config();
 
 const GZ_BASE_URL = 'https://bonitaspringsesterorealtorsfl.growthzoneapp.com';
@@ -37,22 +38,6 @@ function loadContactsFromCSV(filePath) {
             .on('end', () => resolve(contacts))
             .on('error', reject);
     });
-}
-
-function findBrowserExecutable() {
-    const candidates = process.platform === 'win32'
-        ? [
-            path.join(process.env.PROGRAMFILES || '', 'Google', 'Chrome', 'Application', 'chrome.exe'),
-            path.join(process.env['PROGRAMFILES(X86)'] || '', 'Google', 'Chrome', 'Application', 'chrome.exe'),
-            path.join(process.env.LOCALAPPDATA || '', 'Google', 'Chrome', 'Application', 'chrome.exe'),
-            path.join(process.env.PROGRAMFILES || '', 'Microsoft', 'Edge', 'Application', 'msedge.exe'),
-        ]
-        : [
-            '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome',
-            '/Applications/Microsoft Edge.app/Contents/MacOS/Microsoft Edge',
-            '/Applications/Chromium.app/Contents/MacOS/Chromium',
-        ];
-    return candidates.find((candidate) => candidate && fs.existsSync(candidate)) || null;
 }
 
 async function isLoginPage(page) {
