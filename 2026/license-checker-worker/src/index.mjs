@@ -246,7 +246,12 @@ async function runStatementBatches(env, statements) {
     }
 }
 
-async function refreshDbprChunk(env) {
+async function enqueueDbprChunk(env, sourceLastModified, sourceLength, cursor) {
+    await env.DBPR_REFRESH_QUEUE.send({ sourceLastModified, sourceLength, cursor });
+    await env.DB.prepare("UPDATE ingest_state SET queued_at=CURRENT_TIMESTAMP WHERE id=1").run();
+}
+
+async function pollDbprSource(env) {
     const head = await fetch(env.DBPR_CSV_URL, {
         method: "HEAD",
         headers: { "Accept-Encoding": "identity", "User-Agent": "CCOR-License-Checker/3.0" },
@@ -257,19 +262,50 @@ async function refreshDbprChunk(env) {
     if (!sourceLength) throw new Error("DBPR did not provide a content length.");
 
     let state = await env.DB.prepare("SELECT * FROM ingest_state WHERE id=1").first();
-    if (state?.source_last_modified === sourceLastModified && state?.status === "complete") {
+    if (state?.source_last_modified === sourceLastModified
+        && Number(state?.source_length || 0) === sourceLength
+        && state?.status === "complete") {
+        await env.DB.prepare("UPDATE ingest_state SET checked_at=CURRENT_TIMESTAMP, last_error=NULL WHERE id=1").run();
         return { status: "current", sourceLastModified };
     }
 
-    if (state?.source_last_modified !== sourceLastModified) {
+    if (state?.source_last_modified !== sourceLastModified || Number(state?.source_length || 0) !== sourceLength) {
         await env.DB.batch([
             env.DB.prepare("DELETE FROM dbpr_coe_staging"),
-            env.DB.prepare("UPDATE ingest_state SET source_last_modified=?, source_length=?, cursor=0, carry='', status='processing', started_at=CURRENT_TIMESTAMP, completed_at=NULL, rows_processed=0, verified_count=0, review_count=0, last_error=NULL WHERE id=1").bind(sourceLastModified, sourceLength),
+            env.DB.prepare("UPDATE ingest_state SET source_last_modified=?, source_length=?, cursor=0, carry='', status='processing', checked_at=CURRENT_TIMESTAMP, queued_at=NULL, started_at=CURRENT_TIMESTAMP, completed_at=NULL, rows_processed=0, verified_count=0, review_count=0, last_error=NULL WHERE id=1").bind(sourceLastModified, sourceLength),
         ]);
-        state = await env.DB.prepare("SELECT * FROM ingest_state WHERE id=1").first();
+        await enqueueDbprChunk(env, sourceLastModified, sourceLength, 0);
+        return { status: "queued", sourceLastModified, sourceLength, cursor: 0 };
     }
 
-    const start = Number(state?.cursor || 0);
+    if (state?.status === "error") {
+        await env.DB.prepare("UPDATE ingest_state SET status='processing', checked_at=CURRENT_TIMESTAMP, queued_at=NULL, last_error=NULL WHERE id=1").run();
+        await enqueueDbprChunk(env, sourceLastModified, sourceLength, Number(state.cursor || 0));
+        return { status: "resumed", sourceLastModified, sourceLength, cursor: Number(state.cursor || 0) };
+    }
+
+    await env.DB.prepare("UPDATE ingest_state SET checked_at=CURRENT_TIMESTAMP WHERE id=1").run();
+    const queuedAt = state?.queued_at ? Date.parse(`${state.queued_at}Z`) : 0;
+    if (state?.status === "processing" && (!queuedAt || Date.now() - queuedAt > 5 * 60 * 1000)) {
+        await enqueueDbprChunk(env, sourceLastModified, sourceLength, Number(state.cursor || 0));
+        return { status: "resumed", sourceLastModified, sourceLength, cursor: Number(state.cursor || 0) };
+    }
+    return { status: state?.status || "idle", sourceLastModified, sourceLength, cursor: Number(state?.cursor || 0) };
+}
+
+async function processDbprChunk(env, message) {
+    const sourceLastModified = String(message?.sourceLastModified || "");
+    const sourceLength = Number(message?.sourceLength || 0);
+    const expectedCursor = Number(message?.cursor || 0);
+    const state = await env.DB.prepare("SELECT * FROM ingest_state WHERE id=1").first();
+    if (state?.status !== "processing"
+        || state?.source_last_modified !== sourceLastModified
+        || Number(state?.source_length || 0) !== sourceLength
+        || Number(state?.cursor || 0) !== expectedCursor) {
+        return { status: "stale", cursor: expectedCursor };
+    }
+
+    const start = expectedCursor;
     const end = Math.min(start + DBPR_CHUNK_BYTES - 1, sourceLength - 1);
     const response = await fetch(env.DBPR_CSV_URL, {
         headers: {
@@ -320,12 +356,13 @@ async function refreshDbprChunk(env) {
             env.DB.prepare("DELETE FROM dbpr_coe"),
             env.DB.prepare("INSERT INTO dbpr_coe SELECT * FROM dbpr_coe_staging"),
             env.DB.prepare("DELETE FROM dbpr_coe_staging"),
-            env.DB.prepare("UPDATE ingest_state SET cursor=?, carry='', status='complete', completed_at=CURRENT_TIMESTAMP, rows_processed=rows_processed+?, verified_count=(SELECT COUNT(*) FROM dbpr_coe WHERE verified_date IS NOT NULL), review_count=(SELECT COUNT(*) FROM dbpr_coe WHERE review_date IS NOT NULL), last_error=NULL WHERE id=1").bind(sourceLength, lines.length),
+            env.DB.prepare("UPDATE ingest_state SET cursor=?, carry='', status='complete', queued_at=NULL, completed_at=CURRENT_TIMESTAMP, rows_processed=rows_processed+?, verified_count=(SELECT COUNT(*) FROM dbpr_coe WHERE verified_date IS NOT NULL), review_count=(SELECT COUNT(*) FROM dbpr_coe WHERE review_date IS NOT NULL), last_error=NULL WHERE id=1").bind(sourceLength, lines.length),
         ]);
     } else {
-        await env.DB.prepare("UPDATE ingest_state SET cursor=?, carry=?, status='processing', rows_processed=rows_processed+?, last_error=NULL WHERE id=1")
+        await env.DB.prepare("UPDATE ingest_state SET cursor=?, carry=?, status='processing', queued_at=NULL, rows_processed=rows_processed+?, last_error=NULL WHERE id=1")
             .bind(end + 1, carry, lines.length)
             .run();
+        await enqueueDbprChunk(env, sourceLastModified, sourceLength, end + 1);
     }
 
     return { status: finalChunk ? "complete" : "processing", cursor: end + 1, sourceLength };
@@ -345,7 +382,7 @@ async function handleRequest(request, env) {
     }
 
     if (request.method === "GET" && url.pathname === "/api/status") {
-        const state = await env.DB.prepare("SELECT source_last_modified, source_length, cursor, status, started_at, completed_at, rows_processed, verified_count, review_count, last_error FROM ingest_state WHERE id=1").first();
+        const state = await env.DB.prepare("SELECT source_last_modified, source_length, cursor, status, checked_at, queued_at, started_at, completed_at, rows_processed, verified_count, review_count, last_error FROM ingest_state WHERE id=1").first();
         return json({ ok: true, dbpr: state }, 200, headers);
     }
 
@@ -403,7 +440,7 @@ export default {
     async scheduled(_controller, env, ctx) {
         ctx.waitUntil((async () => {
             try {
-                const result = await refreshDbprChunk(env);
+                const result = await pollDbprSource(env);
                 console.log(JSON.stringify({ message: "DBPR COE refresh", ...result }));
             } catch (error) {
                 const message = error instanceof Error ? error.message : String(error);
@@ -411,5 +448,19 @@ export default {
                 await env.DB.prepare("UPDATE ingest_state SET status='error', last_error=? WHERE id=1").bind(message).run();
             }
         })());
+    },
+    async queue(batch, env) {
+        for (const message of batch.messages) {
+            try {
+                const result = await processDbprChunk(env, message.body);
+                console.log(JSON.stringify({ message: "DBPR COE chunk", ...result }));
+                message.ack();
+            } catch (error) {
+                const text = error instanceof Error ? error.message : String(error);
+                console.error(JSON.stringify({ message: "DBPR COE chunk failed", error: text }));
+                await env.DB.prepare("UPDATE ingest_state SET queued_at=NULL, last_error=? WHERE id=1").bind(text).run();
+                message.retry({ delaySeconds: 30 });
+            }
+        }
     },
 };

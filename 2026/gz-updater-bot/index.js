@@ -25,6 +25,30 @@ function loadContactsFromCSV(filePath) {
 // ─── Helpers ────────────────────────────────────────────────────────────────
 const sleep = (ms) => new Promise(r => setTimeout(r, ms));
 
+function toIsoDate(value) {
+    const text = String(value || '').trim();
+    let match = /^(\d{1,2})\/(\d{1,2})\/(\d{4})$/.exec(text);
+    if (match) return `${match[3]}-${match[1].padStart(2, '0')}-${match[2].padStart(2, '0')}`;
+    match = /^(\d{4})-(\d{2})-(\d{2})/.exec(text);
+    return match ? `${match[1]}-${match[2]}-${match[3]}` : null;
+}
+
+function findBrowserExecutable() {
+    const candidates = process.platform === 'win32'
+        ? [
+            path.join(process.env.PROGRAMFILES || '', 'Google', 'Chrome', 'Application', 'chrome.exe'),
+            path.join(process.env['PROGRAMFILES(X86)'] || '', 'Google', 'Chrome', 'Application', 'chrome.exe'),
+            path.join(process.env.LOCALAPPDATA || '', 'Google', 'Chrome', 'Application', 'chrome.exe'),
+            path.join(process.env.PROGRAMFILES || '', 'Microsoft', 'Edge', 'Application', 'msedge.exe'),
+        ]
+        : [
+            '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome',
+            '/Applications/Microsoft Edge.app/Contents/MacOS/Microsoft Edge',
+            '/Applications/Chromium.app/Contents/MacOS/Chromium',
+        ];
+    return candidates.find((candidate) => candidate && fs.existsSync(candidate)) || null;
+}
+
 /**
  * Detect if the browser is currently on any login or authorization challenge page.
  */
@@ -54,9 +78,23 @@ async function ensureLoggedIn(page, targetUrlAfterLogin = null) {
         return true;
     }
 
-    console.log('   🔐 GrowthZone login screen detected! Automatically entering credentials...');
-    const username = process.env.GZ_USERNAME || 'kevin@bonitaesterorealtors.com';
-    const password = process.env.GZ_PASSWORD || 'Goalie29';
+    console.log('   🔐 GrowthZone login screen detected.');
+    const username = process.env.GZ_USERNAME;
+    const password = process.env.GZ_PASSWORD;
+    if (!username || !password) {
+        console.log('   GrowthZone login is required. Sign in in the opened browser window; waiting up to 5 minutes...');
+        const deadline = Date.now() + 5 * 60 * 1000;
+        while (Date.now() < deadline) {
+            await sleep(1000);
+            if (!(await isLoginPage(page))) break;
+        }
+        if (await isLoginPage(page)) throw new Error('GrowthZone login timed out.');
+        if (targetUrlAfterLogin) {
+            await page.goto(targetUrlAfterLogin, { waitUntil: 'domcontentloaded', timeout: 30000 }).catch(() => {});
+            await sleep(3000);
+        }
+        return true;
+    }
 
     // Step 1: Handle username field if present
     try {
@@ -322,6 +360,20 @@ async function updateGrowthZoneLicense(page, contact) {
     console.log(`   Found ${licenseCount} License row(s) in #ContactExperienceTableWidget`);
     licenseInfo.rows.forEach((r, i) => console.log(`     [${i}] "${r.text}"`));
 
+    // Safety guard: never add or delete license rows. Only update one exact match.
+    const expectedLicense = String(contact['License Number'] || '').replace(/\D/g, '').replace(/^0+/, '');
+    const matchingRows = licenseInfo.rows.filter((row) => row.text.replace(/\D/g, '').includes(expectedLicense));
+    if (licenseCount !== 1) {
+        const result = { contactId: contact.ContactId, licenseNumber: expectedLicense, action: 'blocked', reason: licenseCount ? 'multiple_growthzone_license_rows' : 'growthzone_license_missing' };
+        console.log(`CCOR_RESULT ${JSON.stringify(result)}`);
+        return result;
+    }
+    if (!expectedLicense || matchingRows.length !== 1) {
+        const result = { contactId: contact.ContactId, licenseNumber: expectedLicense, action: 'blocked', reason: 'growthzone_license_mismatch' };
+        console.log(`CCOR_RESULT ${JSON.stringify(result)}`);
+        return result;
+    }
+
     // ── STEP 2: Delete EXTRAS only (if more than 1 license row) ─────────────
     if (licenseCount > 1) {
         console.log(`   ⚠️  Removing ${licenseCount - 1} extra license row(s)...`);
@@ -493,6 +545,33 @@ async function updateGrowthZoneLicense(page, contact) {
 
     // ── STEP 4: Set the Expiration Date ─────────────────────────────────────
     const expDate = contact['License Expiration Date'];
+    const currentExpiration = await page.evaluate(() => {
+        const modal = document.querySelector('.modal.in, .modal.show, .modal[style*="display: block"]');
+        if (!modal) return null;
+        for (const label of modal.querySelectorAll('label')) {
+            if (label.innerText.trim().toLowerCase().includes('expir')) {
+                return label.closest('.form-group')?.querySelector('input')?.value || null;
+            }
+        }
+        return null;
+    });
+    const currentIso = toIsoDate(currentExpiration);
+    const targetIso = toIsoDate(expDate);
+    if (!targetIso) {
+        const result = { contactId: contact.ContactId, licenseNumber: expectedLicense, action: 'blocked', reason: 'invalid_dbpr_expiration' };
+        console.log(`CCOR_RESULT ${JSON.stringify(result)}`);
+        return result;
+    }
+    if (currentIso && currentIso >= targetIso) {
+        await page.evaluate(() => {
+            const modal = document.querySelector('.modal.in, .modal.show, .modal[style*="display: block"]');
+            const cancel = [...(modal?.querySelectorAll('button') || [])].find((button) => button.innerText.trim() === 'Cancel');
+            cancel?.click();
+        });
+        const result = { contactId: contact.ContactId, licenseNumber: expectedLicense, action: 'skipped', reason: 'growthzone_license_already_current', savedDate: currentIso };
+        console.log(`CCOR_RESULT ${JSON.stringify(result)}`);
+        return result;
+    }
     console.log(`   📅 Setting Expiration Date: ${expDate}`);
 
     // Focus the Expiration Date field (the second date input with a calendar icon)
@@ -507,7 +586,7 @@ async function updateGrowthZoneLicense(page, contact) {
         const labels = modal.querySelectorAll('label');
         for (const label of labels) {
             if (label.innerText.trim().toLowerCase().includes('expir') && label.offsetWidth > 0) {
-                const group = label.closest('.form-group, div');
+                const group = label.closest('.form-group');
                 const input = group?.querySelector('input');
                 if (input && input.offsetWidth > 0) {
                     input.focus();
@@ -604,6 +683,39 @@ async function updateGrowthZoneLicense(page, contact) {
     }
 
     console.log(`   Result: ${success}`);
+    await waitForWidget(page);
+    const verifyOpened = await page.evaluate(() => {
+        const widget = document.querySelector('#ContactExperienceTableWidget');
+        if (!widget) return false;
+        for (const row of widget.querySelectorAll('tr.widget-row:not(.widget-row-condensed)')) {
+            if ([...row.querySelectorAll('span')].some((span) => span.innerText.trim() === 'License')) {
+                const edit = row.querySelector('li.item-action i.fa-pen, li.item-action [class*="fa-pen"], li.item-action i.edit-dialog');
+                if (edit) { edit.closest('li.item-action').click(); return true; }
+            }
+        }
+        return false;
+    });
+    if (verifyOpened) await sleep(2000);
+    const savedExpiration = verifyOpened ? await page.evaluate(() => {
+        const modal = document.querySelector('.modal.in, .modal.show, .modal[style*="display: block"]');
+        if (!modal) return null;
+        let value = null;
+        for (const label of modal.querySelectorAll('label')) {
+            if (label.innerText.trim().toLowerCase().includes('expir')) {
+                value = label.closest('.form-group')?.querySelector('input')?.value || null;
+                break;
+            }
+        }
+        const cancel = [...modal.querySelectorAll('button')].find((button) => button.innerText.trim() === 'Cancel');
+        cancel?.click();
+        return value;
+    }) : null;
+    const savedIso = toIsoDate(savedExpiration);
+    const result = savedIso === targetIso
+        ? { contactId: contact.ContactId, licenseNumber: expectedLicense, action: 'updated', reason: 'dbpr_expiration_verified', previousDate: currentIso, savedDate: savedIso }
+        : { contactId: contact.ContactId, licenseNumber: expectedLicense, action: 'blocked', reason: 'growthzone_save_not_verified', previousDate: currentIso, savedDate: savedIso };
+    console.log(`CCOR_RESULT ${JSON.stringify(result)}`);
+    return result;
     console.log(`   ✅ Done processing ${contact.Name}`);
 }
 
@@ -630,7 +742,10 @@ async function updateGrowthZoneLicense(page, contact) {
 
     console.log('🚀 Launching browser with persistent session profile...');
     const sessionDir = path.join(__dirname, '.chrome-session');
+    const executablePath = findBrowserExecutable();
+    if (!executablePath) throw new Error('Google Chrome or Microsoft Edge was not found on this computer.');
     const browser = await puppeteer.launch({
+        executablePath,
         headless: false,
         defaultViewport: null,
         userDataDir: sessionDir,
@@ -655,7 +770,7 @@ async function updateGrowthZoneLicense(page, contact) {
     await sleep(3000);
 
     if (await isLoginPage(page)) {
-        console.log('🔐 GrowthZone login required. Automatically submitting credentials...');
+        console.log('🔐 GrowthZone login required.');
         await ensureLoggedIn(page, `${GZ_BASE_URL}/a`);
     } else {
         console.log('✨ Session already active via persistent profile!');
@@ -675,8 +790,9 @@ async function updateGrowthZoneLicense(page, contact) {
         const contact = contactsToUpdate[idx];
         console.log(`\n[${idx + 1}/${contactsToUpdate.length}]`);
         try {
-            await updateGrowthZoneLicense(page, contact);
-            ok++;
+            const result = await updateGrowthZoneLicense(page, contact);
+            if (result?.action === 'updated' || result?.action === 'skipped') ok++;
+            else fail++;
         } catch (err) {
             console.error(`   ❌ FAILED: ${err.message}`);
             fail++;

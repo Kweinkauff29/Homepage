@@ -132,6 +132,30 @@ export class GrowthZoneRealEstate extends WorkerEntrypoint {
         return { ok: res.ok, status: res.status, data: parseJson(text) };
     }
 
+    async getContactSummary(contactId) {
+        const id = validatedContactId(contactId);
+        const url = `${this.env.GZ_BASE_URL}/api/contacts/orggeneral/${id}`;
+        const { res, text } = await proxyGetUpstream(url, this.env.GZ_API_KEY);
+        return { ok: res.ok, status: res.status, data: parseJson(text) };
+    }
+
+    async getContactExperiences(contactId) {
+        const id = validatedContactId(contactId);
+        const url = `${this.env.GZ_BASE_URL}/api/contacts/experience/all/${id}`;
+        const { res, text } = await proxyGetUpstream(url, this.env.GZ_API_KEY);
+        return { ok: res.ok, status: res.status, data: parseJson(text) };
+    }
+
+    async getContactExperience(contactId, contactExperienceItemId, experienceItemTypeId = 4) {
+        const id = validatedContactId(contactId);
+        const itemId = validatedContactId(contactExperienceItemId);
+        const typeId = Math.trunc(Number(experienceItemTypeId));
+        if (typeId < 1 || typeId > 4) throw new Error("A valid GrowthZone experience type is required.");
+        const url = `${this.env.GZ_BASE_URL}/api/contacts/contacts/${itemId}/${id}/${typeId}`;
+        const { res, text } = await proxyGetUpstream(url, this.env.GZ_API_KEY);
+        return { ok: res.ok, status: res.status, data: parseJson(text) };
+    }
+
     async searchContacts(name) {
         const query = String(name ?? "").trim();
         if (!query || query.length > 80) throw new Error("A contact name of 1-80 characters is required.");
@@ -170,7 +194,7 @@ export class GrowthZoneRealEstate extends WorkerEntrypoint {
             CodeOfEthicsList: model.CodeOfEthicsList,
         };
         const url = `${this.env.GZ_BASE_URL}/api/contacts/editionFields/AddEditCodeOfEthics/${id}/`;
-        const { res, text } = await proxyJsonUpstream(url, this.env.GZ_API_KEY, "POST", payload);
+        const { res, text } = await proxyJsonUpstream(url, this.env.GZ_API_KEY, "PUT", payload);
         return {
             ok: res.ok,
             status: res.status,
@@ -178,6 +202,7 @@ export class GrowthZoneRealEstate extends WorkerEntrypoint {
             responseText: text.slice(0, 500),
         };
     }
+
 }
 
 export default {

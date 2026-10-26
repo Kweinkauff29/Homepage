@@ -29,6 +29,24 @@
             "remote": true
         }
     ],
+    "queues": {
+        "producers": [
+            {
+                "binding": "DBPR_REFRESH_QUEUE",
+                "queue": "ccor-license-checker-dbpr-refresh"
+            }
+        ],
+        "consumers": [
+            {
+                "queue": "ccor-license-checker-dbpr-refresh",
+                "max_batch_size": 1,
+                "max_batch_timeout": 1,
+                "max_retries": 5,
+                "retry_delay": 30,
+                "max_concurrency": 1
+            }
+        ]
+    },
     "triggers": {
         "crons": ["*/15 * * * *"]
     },
