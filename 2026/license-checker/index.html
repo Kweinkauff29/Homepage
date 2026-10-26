@@ -1,0 +1,427 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>CCOR License &amp; Code of Ethics Checker</title>
+    <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+    <style>
+        :root {
+            color-scheme: light;
+            --navy: #252c78;
+            --teal: #55b8ae;
+            --ink: #172033;
+            --muted: #667085;
+            --line: #dfe4ea;
+            --surface: #ffffff;
+            --bg: #f3f5f8;
+            --good: #067647;
+            --good-bg: #ecfdf3;
+            --warn: #b54708;
+            --warn-bg: #fffaeb;
+            --bad: #b42318;
+            --bad-bg: #fef3f2;
+            --info: #175cd3;
+            --info-bg: #eff8ff;
+        }
+
+        * { box-sizing: border-box; }
+        body { margin: 0; min-height: 100vh; background: var(--bg); color: var(--ink); font: 15px/1.5 Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; }
+        button, input { font: inherit; }
+        header { background: linear-gradient(130deg, var(--navy), #38449c 58%, var(--teal)); color: white; padding: 34px max(22px, calc((100vw - 1440px) / 2)); }
+        header h1 { margin: 0; font-size: clamp(25px, 3vw, 36px); letter-spacing: -.03em; }
+        header p { margin: 7px 0 0; max-width: 800px; opacity: .88; }
+        main { max-width: 1440px; margin: 0 auto; padding: 24px; }
+        .toolbar, .card, .notice { background: var(--surface); border: 1px solid var(--line); border-radius: 13px; box-shadow: 0 3px 18px rgba(16, 24, 40, .05); }
+        .toolbar { display: grid; grid-template-columns: minmax(280px, 1fr) auto; gap: 18px; align-items: center; padding: 18px; }
+        .drop { border: 2px dashed #aeb7c6; border-radius: 10px; padding: 22px; text-align: center; cursor: pointer; transition: .15s ease; }
+        .drop:hover, .drop.drag { border-color: var(--teal); background: #f0fbf9; }
+        .drop strong { display: block; font-size: 17px; }
+        .drop span { color: var(--muted); font-size: 13px; }
+        .actions { display: flex; flex-wrap: wrap; gap: 9px; justify-content: flex-end; }
+        .btn { border: 0; border-radius: 8px; padding: 10px 15px; font-weight: 700; cursor: pointer; transition: .15s ease; }
+        .btn:hover:not(:disabled) { transform: translateY(-1px); filter: brightness(.98); }
+        .btn:disabled { opacity: .48; cursor: not-allowed; }
+        .primary { background: var(--navy); color: white; }
+        .success { background: var(--good); color: white; }
+        .secondary { background: white; color: var(--navy); border: 1px solid #aab1d9; }
+        .notice { margin: 16px 0; padding: 14px 16px; color: #344054; }
+        .notice strong { color: var(--navy); }
+        .notice.error { border-color: #fecdca; background: var(--bad-bg); color: var(--bad); }
+        .stats { display: grid; grid-template-columns: repeat(5, minmax(130px, 1fr)); gap: 12px; margin: 16px 0; }
+        .stat { background: white; border: 1px solid var(--line); border-radius: 11px; padding: 15px; }
+        .stat b { display: block; font-size: 25px; line-height: 1.1; }
+        .stat span { color: var(--muted); font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: .04em; }
+        .card { overflow: hidden; }
+        .card-head { display: flex; gap: 12px; justify-content: space-between; align-items: center; padding: 16px 18px; border-bottom: 1px solid var(--line); }
+        .card-head h2 { margin: 0; font-size: 18px; }
+        .card-head small { color: var(--muted); }
+        .table-wrap { overflow: auto; max-height: 65vh; }
+        table { width: 100%; border-collapse: separate; border-spacing: 0; min-width: 1180px; }
+        th { position: sticky; top: 0; z-index: 1; background: #f8fafc; color: #475467; text-align: left; font-size: 11px; letter-spacing: .045em; text-transform: uppercase; }
+        th, td { padding: 11px 12px; border-bottom: 1px solid #edf0f3; vertical-align: top; }
+        tbody tr:hover { background: #fafcfd; }
+        td small { display: block; color: var(--muted); }
+        .mono { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; }
+        .badge { display: inline-block; border-radius: 999px; padding: 4px 8px; font-size: 12px; font-weight: 800; white-space: nowrap; }
+        .good { color: var(--good); background: var(--good-bg); }
+        .warn { color: var(--warn); background: var(--warn-bg); }
+        .bad { color: var(--bad); background: var(--bad-bg); }
+        .info { color: var(--info); background: var(--info-bg); }
+        .muted { color: var(--muted); background: #f2f4f7; }
+        .progress { height: 7px; background: #e9edf2; overflow: hidden; border-radius: 999px; margin-top: 12px; }
+        .progress div { height: 100%; width: 0; background: linear-gradient(90deg, var(--navy), var(--teal)); transition: width .2s ease; }
+        .empty { padding: 56px 20px; text-align: center; color: var(--muted); }
+        a { color: var(--navy); font-weight: 700; }
+        footer { padding: 22px 4px 8px; color: var(--muted); font-size: 12px; text-align: center; }
+        [hidden] { display: none !important; }
+
+        @media (max-width: 900px) {
+            main { padding: 14px; }
+            .toolbar { grid-template-columns: 1fr; }
+            .actions { justify-content: flex-start; }
+            .stats { grid-template-columns: repeat(2, 1fr); }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>License &amp; Code of Ethics Checker</h1>
+        <p>Compare active GrowthZone agents with live DBPR license data and DBPR course completions, then add only verified current-cycle COE records to the GrowthZone Real Estate tab.</p>
+    </header>
+
+    <main>
+        <section class="toolbar" aria-label="License checker controls">
+            <label class="drop" id="dropZone" for="fileInput">
+                <strong id="fileLabel">Choose or drop a GrowthZone export</strong>
+                <span>Excel or CSV · works in Chrome, Edge, Safari, and Firefox on Windows or macOS</span>
+                <input id="fileInput" type="file" accept=".xlsx,.xls,.csv" hidden>
+            </label>
+            <div class="actions">
+                <button class="btn primary" id="checkButton" disabled>Check DBPR + COE</button>
+                <button class="btn success" id="syncButton" disabled>Sync verified COE</button>
+                <button class="btn secondary" id="downloadButton" disabled>Download results</button>
+            </div>
+        </section>
+
+        <div class="progress" id="progress" hidden><div id="progressBar"></div></div>
+        <div class="notice" id="message"><strong>Required columns:</strong> license number. Include Contact ID to enable GrowthZone updates; name, license expiration, and Code of Ethics date are optional.</div>
+
+        <section class="stats" id="stats" hidden>
+            <div class="stat"><b id="totalStat">0</b><span>Loaded</span></div>
+            <div class="stat"><b id="licenseStat">0</b><span>License updates</span></div>
+            <div class="stat"><b id="coeReadyStat">0</b><span>COE ready</span></div>
+            <div class="stat"><b id="reviewStat">0</b><span>Manual review</span></div>
+            <div class="stat"><b id="syncedStat">0</b><span>COE updated</span></div>
+        </section>
+
+        <section class="card">
+            <div class="card-head">
+                <h2>Results</h2>
+                <small id="resultSummary">No file loaded</small>
+            </div>
+            <div class="table-wrap">
+                <table id="resultsTable" hidden>
+                    <thead>
+                        <tr>
+                            <th>Agent</th>
+                            <th>License</th>
+                            <th>GZ license exp.</th>
+                            <th>DBPR license exp.</th>
+                            <th>GZ COE</th>
+                            <th>Latest verified DBPR COE</th>
+                            <th>Result</th>
+                        </tr>
+                    </thead>
+                    <tbody id="resultsBody"></tbody>
+                </table>
+                <div class="empty" id="emptyState">Load a GrowthZone export to begin.</div>
+            </div>
+        </section>
+
+        <footer>CCOR License Checker v3 · License status is checked live; COE data refreshes from the DBPR extract and only explicit current-cycle courses are eligible for automatic sync.</footer>
+    </main>
+
+    <script>
+        (() => {
+            "use strict";
+
+            const API = "https://ccor-license-checker-api.bonitaspringsrealtors.workers.dev";
+            const GZ_BASE = "https://bonitaspringsesterorealtorsfl.growthzoneapp.com";
+            const state = { rows: [], checked: false, busy: false };
+            const elements = Object.fromEntries([
+                "fileInput", "fileLabel", "dropZone", "checkButton", "syncButton", "downloadButton",
+                "message", "progress", "progressBar", "stats", "totalStat", "licenseStat", "coeReadyStat",
+                "reviewStat", "syncedStat", "resultsTable", "resultsBody", "emptyState", "resultSummary",
+            ].map((id) => [id, document.getElementById(id)]));
+
+            const headerKey = (value) => String(value || "").toLowerCase().replace(/[^a-z0-9]/g, "");
+            const normalizeLicense = (value) => {
+                const compact = String(value || "").toUpperCase().replace(/[^A-Z0-9]/g, "");
+                return compact.replace(/^[A-Z]+/, "").replace(/^0+/, "") || compact;
+            };
+            const iso = (value) => {
+                if (value === null || value === undefined || value === "") return null;
+                if (value instanceof Date && !Number.isNaN(value.valueOf())) return value.toISOString().slice(0, 10);
+                if (typeof value === "number" && window.XLSX?.SSF) {
+                    const parsed = XLSX.SSF.parse_date_code(value);
+                    if (parsed) return `${parsed.y}-${String(parsed.m).padStart(2, "0")}-${String(parsed.d).padStart(2, "0")}`;
+                }
+                const text = String(value).trim();
+                const us = /^(\d{1,2})\/(\d{1,2})\/(\d{4})$/.exec(text);
+                if (us) return `${us[3]}-${us[1].padStart(2, "0")}-${us[2].padStart(2, "0")}`;
+                const ymd = /^(\d{4})-(\d{2})-(\d{2})/.exec(text);
+                return ymd ? `${ymd[1]}-${ymd[2]}-${ymd[3]}` : null;
+            };
+            const displayDate = (value) => value ? new Date(`${value}T00:00:00Z`).toLocaleDateString("en-US", { timeZone: "UTC" }) : "—";
+
+            function findColumn(keys, tests) {
+                return keys.find((key) => tests.some((test) => test(headerKey(key)))) || null;
+            }
+
+            function mapColumns(rows) {
+                const keys = Object.keys(rows[0] || {});
+                return {
+                    license: findColumn(keys, [(key) => ["licensenumber", "realestatelicensenumber", "m1licensenumber", "nrdslicensenumber"].includes(key), (key) => key.includes("license") && key.includes("number")]),
+                    contactId: findColumn(keys, [(key) => ["contactid", "growthzonecontactid"].includes(key)]),
+                    name: findColumn(keys, [(key) => ["name", "contactname", "displayname", "membername"].includes(key)]),
+                    licenseExpiration: findColumn(keys, [(key) => key.includes("license") && (key.includes("expiration") || key.includes("expiry"))]),
+                    coeDate: findColumn(keys, [(key) => key.includes("ethic") && (key.includes("date") || key.includes("training") || key.includes("completion"))]),
+                };
+            }
+
+            function setMessage(text, error = false) {
+                elements.message.textContent = text;
+                elements.message.classList.toggle("error", error);
+            }
+
+            function setBusy(busy, progress = 0) {
+                state.busy = busy;
+                elements.progress.hidden = !busy;
+                elements.progressBar.style.width = `${Math.max(0, Math.min(100, progress))}%`;
+                elements.checkButton.disabled = busy || !state.rows.length;
+                elements.syncButton.disabled = busy || !state.checked || !state.rows.some((row) =>
+                    row.coe?.autoEligible && row.contactId && (!row.gzCoeDate || row.coe.verifiedDate > row.gzCoeDate) && row.syncAction !== "updated",
+                );
+                elements.downloadButton.disabled = busy || !state.checked;
+            }
+
+            function statusFor(row) {
+                if (row.error) return { text: row.error, css: "bad" };
+                if (!state.checked && !row.coe) return { text: "Not checked", css: "muted" };
+                if (row.syncAction === "updated") return { text: `COE updated · ${displayDate(row.savedDate)}`, css: "good" };
+                if (row.syncReason === "growthzone_already_current") return { text: "GrowthZone COE already current", css: "good" };
+                if (row.syncReason && row.syncReason !== "no_verified_coe") return { text: row.syncReason.replaceAll("_", " "), css: "warn" };
+                if (!row.coe?.verifiedDate) return { text: "No explicit DBPR COE", css: "muted" };
+                if (!row.coe.autoEligible) return { text: row.coe.eligibilityReason.replaceAll("_", " "), css: "warn" };
+                if (row.gzCoeDate && row.gzCoeDate >= row.coe.verifiedDate) return { text: "COE current", css: "good" };
+                if (!row.contactId) return { text: "COE ready · Contact ID needed", css: "warn" };
+                return { text: "COE ready to sync", css: "info" };
+            }
+
+            function licenseNeedsUpdate(row) {
+                return Boolean(row.dbprExpiration && (!row.gzExpiration || row.dbprExpiration > row.gzExpiration));
+            }
+
+            function cell(text, className = "") {
+                const td = document.createElement("td");
+                td.textContent = text;
+                if (className) td.className = className;
+                return td;
+            }
+
+            function render() {
+                elements.resultsBody.replaceChildren();
+                for (const row of state.rows) {
+                    const tr = document.createElement("tr");
+                    const agent = document.createElement("td");
+                    if (row.contactId) {
+                        const link = document.createElement("a");
+                        link.href = `${GZ_BASE}/a#/ContactInfo/${encodeURIComponent(row.contactId)}/NAREditionFieldsV2`;
+                        link.target = "_blank";
+                        link.rel = "noopener";
+                        link.textContent = row.name || "Open GrowthZone";
+                        agent.append(link);
+                    } else {
+                        agent.textContent = row.name || "—";
+                    }
+                    if (row.contactId) {
+                        const small = document.createElement("small");
+                        small.textContent = `Contact ${row.contactId}`;
+                        agent.append(small);
+                    }
+                    tr.append(agent, cell(row.licenseNumber, "mono"), cell(displayDate(row.gzExpiration)));
+                    const dbprCell = cell(displayDate(row.dbprExpiration));
+                    if (licenseNeedsUpdate(row)) dbprCell.classList.add("good");
+                    tr.append(dbprCell, cell(displayDate(row.gzCoeDate)));
+                    const coeCell = cell(displayDate(row.coe?.verifiedDate));
+                    if (row.coe?.verifiedCourseName) {
+                        const small = document.createElement("small");
+                        small.textContent = row.coe.verifiedCourseName;
+                        coeCell.append(small);
+                    }
+                    tr.append(coeCell);
+                    const resultCell = document.createElement("td");
+                    const status = statusFor(row);
+                    const badge = document.createElement("span");
+                    badge.className = `badge ${status.css}`;
+                    badge.textContent = status.text;
+                    resultCell.append(badge);
+                    tr.append(resultCell);
+                    elements.resultsBody.append(tr);
+                }
+
+                elements.resultsTable.hidden = !state.rows.length;
+                elements.emptyState.hidden = Boolean(state.rows.length);
+                elements.stats.hidden = !state.rows.length;
+                elements.totalStat.textContent = state.rows.length;
+                elements.licenseStat.textContent = state.rows.filter(licenseNeedsUpdate).length;
+                elements.coeReadyStat.textContent = state.rows.filter((row) => row.coe?.autoEligible && (!row.gzCoeDate || row.coe.verifiedDate > row.gzCoeDate)).length;
+                elements.reviewStat.textContent = state.rows.filter((row) => row.coe && !row.coe.autoEligible && (row.coe.verifiedDate || row.coe.reviewDate)).length;
+                elements.syncedStat.textContent = state.rows.filter((row) => row.syncAction === "updated").length;
+                elements.resultSummary.textContent = `${state.rows.length} license record${state.rows.length === 1 ? "" : "s"}`;
+                setBusy(state.busy, Number(elements.progressBar.style.width.replace("%", "")) || 0);
+            }
+
+            async function loadFile(file) {
+                setBusy(true, 8);
+                try {
+                    const workbook = XLSX.read(await file.arrayBuffer(), { type: "array", cellDates: true });
+                    const sheet = workbook.Sheets[workbook.SheetNames[0]];
+                    const rawRows = XLSX.utils.sheet_to_json(sheet, { defval: "", raw: true });
+                    if (!rawRows.length) throw new Error("The first worksheet is empty.");
+                    const columns = mapColumns(rawRows);
+                    if (!columns.license) throw new Error("No license number column was found.");
+                    state.rows = rawRows.map((raw) => ({
+                        name: columns.name ? String(raw[columns.name] || "").trim() : "",
+                        licenseNumber: normalizeLicense(raw[columns.license]),
+                        contactId: columns.contactId && /^\d+$/.test(String(raw[columns.contactId]).trim()) ? String(raw[columns.contactId]).trim() : "",
+                        gzExpiration: columns.licenseExpiration ? iso(raw[columns.licenseExpiration]) : null,
+                        gzCoeDate: columns.coeDate ? iso(raw[columns.coeDate]) : null,
+                        dbprExpiration: null,
+                        coe: null,
+                        error: null,
+                    })).filter((row) => row.licenseNumber);
+                    if (!state.rows.length) throw new Error("No populated license numbers were found.");
+                    state.checked = false;
+                    elements.fileLabel.textContent = `${file.name} · ${state.rows.length} records`;
+                    setMessage(`Loaded ${state.rows.length} records. Click “Check DBPR + COE” to verify them.`);
+                    render();
+                } catch (error) {
+                    state.rows = [];
+                    setMessage(error instanceof Error ? error.message : "The file could not be read.", true);
+                    render();
+                } finally {
+                    setBusy(false);
+                }
+            }
+
+            async function checkAll() {
+                if (!state.rows.length) return;
+                setBusy(true, 0);
+                state.checked = false;
+                let next = 0;
+                let complete = 0;
+                const worker = async () => {
+                    while (next < state.rows.length) {
+                        const index = next++;
+                        const row = state.rows[index];
+                        try {
+                            const response = await fetch(`${API}/api/verify-license?number=${encodeURIComponent(row.licenseNumber)}`);
+                            const payload = await response.json();
+                            if (!response.ok || !payload.valid) throw new Error(payload.error || "License not found in DBPR");
+                            row.dbprExpiration = iso(payload.details?.expiration_date) || iso((payload.details?.status_expires || "").match(/\d{1,2}\/\d{1,2}\/\d{4}/)?.[0]);
+                            row.coe = payload.coe || { autoEligible: false, eligibilityReason: "no_coe_candidate" };
+                        } catch (error) {
+                            row.error = error instanceof Error ? error.message : "Lookup failed";
+                        }
+                        complete += 1;
+                        setBusy(true, complete / state.rows.length * 100);
+                        if (complete % 5 === 0 || complete === state.rows.length) render();
+                    }
+                };
+                await Promise.all(Array.from({ length: Math.min(5, state.rows.length) }, worker));
+                state.checked = true;
+                setBusy(false, 100);
+                setMessage(`Checked ${state.rows.length} licenses. Review the results, then sync only the verified COE candidates.`);
+                render();
+            }
+
+            async function syncCoe() {
+                const candidates = state.rows.filter((row) =>
+                    row.coe?.autoEligible && row.contactId && (!row.gzCoeDate || row.coe.verifiedDate > row.gzCoeDate) && row.syncAction !== "updated",
+                );
+                if (!candidates.length) return;
+                if (!window.confirm(`Sync ${candidates.length} guarded COE candidate${candidates.length === 1 ? "" : "s"} to GrowthZone? Existing current records and failed validations will be skipped.`)) return;
+                setBusy(true, 5);
+                try {
+                    let completed = 0;
+                    for (let offset = 0; offset < candidates.length; offset += 25) {
+                        const batch = candidates.slice(offset, offset + 25);
+                        const response = await fetch(`${API}/api/coe/sync`, {
+                            method: "POST",
+                            headers: { "Content-Type": "application/json" },
+                            body: JSON.stringify({ records: batch.map((row) => ({ contactId: row.contactId, licenseNumber: row.licenseNumber })) }),
+                        });
+                        const payload = await response.json();
+                        if (!response.ok) throw new Error(payload.error || "GrowthZone sync failed.");
+                        for (const result of payload.results || []) {
+                            const row = state.rows.find((item) => item.contactId === String(result.contactId) && item.licenseNumber === result.licenseNumber);
+                            if (!row) continue;
+                            row.syncAction = result.action;
+                            row.syncReason = result.reason;
+                            row.savedDate = result.savedDate || result.existingDate || null;
+                            if (row.savedDate) row.gzCoeDate = row.savedDate;
+                        }
+                        completed += batch.length;
+                        setBusy(true, completed / candidates.length * 100);
+                        render();
+                    }
+                    setMessage("GrowthZone sync finished. Updated records were verified from the save response; all ineligible records were skipped.");
+                } catch (error) {
+                    setMessage(error instanceof Error ? error.message : "GrowthZone sync failed.", true);
+                } finally {
+                    setBusy(false, 100);
+                    render();
+                }
+            }
+
+            function csvValue(value) {
+                return `"${String(value ?? "").replaceAll('"', '""')}"`;
+            }
+
+            function downloadResults() {
+                const headers = ["Name", "Contact ID", "License Number", "GZ License Expiration", "DBPR License Expiration", "GZ COE Date", "DBPR Verified COE Date", "DBPR COE Course", "COE Eligible", "Result"];
+                const lines = [headers.map(csvValue).join(",")];
+                for (const row of state.rows) {
+                    lines.push([
+                        row.name, row.contactId, row.licenseNumber, row.gzExpiration, row.dbprExpiration,
+                        row.gzCoeDate, row.coe?.verifiedDate, row.coe?.verifiedCourseName,
+                        row.coe?.autoEligible ? "Yes" : "No", statusFor(row).text,
+                    ].map(csvValue).join(","));
+                }
+                const url = URL.createObjectURL(new Blob([lines.join("\r\n")], { type: "text/csv;charset=utf-8" }));
+                const link = document.createElement("a");
+                link.href = url;
+                link.download = `CCOR_License_COE_Results_${new Date().toISOString().slice(0, 10)}.csv`;
+                document.body.append(link);
+                link.click();
+                link.remove();
+                URL.revokeObjectURL(url);
+            }
+
+            elements.fileInput.addEventListener("change", () => elements.fileInput.files[0] && loadFile(elements.fileInput.files[0]));
+            elements.dropZone.addEventListener("dragover", (event) => { event.preventDefault(); elements.dropZone.classList.add("drag"); });
+            elements.dropZone.addEventListener("dragleave", () => elements.dropZone.classList.remove("drag"));
+            elements.dropZone.addEventListener("drop", (event) => {
+                event.preventDefault();
+                elements.dropZone.classList.remove("drag");
+                if (event.dataTransfer.files[0]) loadFile(event.dataTransfer.files[0]);
+            });
+            elements.checkButton.addEventListener("click", checkAll);
+            elements.syncButton.addEventListener("click", syncCoe);
+            elements.downloadButton.addEventListener("click", downloadResults);
+        })();
+    </script>
+</body>
+</html>

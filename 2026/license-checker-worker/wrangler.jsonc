@@ -1,0 +1,40 @@
+{
+    "$schema": "node_modules/wrangler/config-schema.json",
+    "name": "ccor-license-checker-api",
+    "main": "src/index.mjs",
+    "compatibility_date": "2026-10-26",
+    "compatibility_flags": ["nodejs_compat"],
+    "vars": {
+        "ALLOWED_ORIGIN": "https://ccor-license-checker.pages.dev",
+        "DBPR_CSV_URL": "https://www2.myfloridalicense.com/sto/file_download/extracts/re_salesperson.csv"
+    },
+    "d1_databases": [
+        {
+            "binding": "DB",
+            "database_name": "ccor-license-checker",
+            "database_id": "c4b2fdd0-8536-4d2a-8802-f90dab0d2467",
+            "remote": true
+        }
+    ],
+    "services": [
+        {
+            "binding": "GZ_REAL_ESTATE",
+            "service": "gz-realestate-proxy",
+            "entrypoint": "GrowthZoneRealEstate",
+            "remote": true
+        },
+        {
+            "binding": "WRAP_SHEET",
+            "service": "wrapsheet",
+            "remote": true
+        }
+    ],
+    "triggers": {
+        "crons": ["*/15 * * * *"]
+    },
+    "observability": {
+        "enabled": true,
+        "logs": { "head_sampling_rate": 1 },
+        "traces": { "enabled": true, "head_sampling_rate": 0.01 }
+    }
+}

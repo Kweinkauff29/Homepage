@@ -1,5 +1,7 @@
 // gz-realestate-proxy.js
 
+import { WorkerEntrypoint } from "cloudflare:workers";
+
 function corsHeaders() {
     return {
         "Access-Control-Allow-Origin": "*",
@@ -62,6 +64,120 @@ async function proxyGetUpstream(url, apiKey) {
     const contentType = res.headers.get("Content-Type");
     const text = await res.text();
     return { res, text, contentType };
+}
+
+async function proxyJsonUpstream(url, apiKey, method, body) {
+    const headers = {
+        "Authorization": `ApiKey ${apiKey}`,
+        "Content-Type": "application/json",
+        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
+    };
+    const res = await fetch(url, { method, headers, body: JSON.stringify(body) });
+    const text = await res.text();
+    return { res, text };
+}
+
+function parseJson(text) {
+    try {
+        return text ? JSON.parse(text) : null;
+    } catch {
+        return null;
+    }
+}
+
+function validatedContactId(contactId) {
+    const value = String(contactId ?? "").trim();
+    if (!/^\d+$/.test(value)) throw new Error("A numeric GrowthZone contact ID is required.");
+    return value;
+}
+
+/**
+ * Private GrowthZone methods for same-account Workers. These methods are only
+ * reachable through a named service binding; they are not HTTP routes.
+ */
+export class GrowthZoneRealEstate extends WorkerEntrypoint {
+    async getEditionFields(contactId) {
+        const id = validatedContactId(contactId);
+        const url = `${this.env.GZ_BASE_URL}/api/contacts/editionFields/${id}/V2/`;
+        const { res, text } = await proxyGetUpstream(url, this.env.GZ_API_KEY);
+        return {
+            ok: res.ok,
+            status: res.status,
+            data: parseJson(text),
+        };
+    }
+
+    async getCodeOfEthics(contactId) {
+        const id = validatedContactId(contactId);
+        const url = `${this.env.GZ_BASE_URL}/api/contacts/editionFields/AddEditCodeOfEthics/${id}/`;
+        const { res, text } = await proxyGetUpstream(url, this.env.GZ_API_KEY);
+        return {
+            ok: res.ok,
+            status: res.status,
+            data: parseJson(text),
+        };
+    }
+
+    async getContact(contactId) {
+        const id = validatedContactId(contactId);
+        const url = `${this.env.GZ_BASE_URL}/api/contacts/${id}`;
+        const { res, text } = await proxyGetUpstream(url, this.env.GZ_API_KEY);
+        return { ok: res.ok, status: res.status, data: parseJson(text) };
+    }
+
+    async getContactMoreInfo(contactId) {
+        const id = validatedContactId(contactId);
+        const url = `${this.env.GZ_BASE_URL}/api/contacts/${id}/moreinfo`;
+        const { res, text } = await proxyGetUpstream(url, this.env.GZ_API_KEY);
+        return { ok: res.ok, status: res.status, data: parseJson(text) };
+    }
+
+    async searchContacts(name) {
+        const query = String(name ?? "").trim();
+        if (!query || query.length > 80) throw new Error("A contact name of 1-80 characters is required.");
+        const escaped = query.replaceAll("'", "''");
+        const filter = encodeURIComponent(`substringof('${escaped}',Name)`);
+        const url = `${this.env.GZ_BASE_URL}/api/contacts?$top=50&$filter=${filter}`;
+        const { res, text } = await proxyGetUpstream(url, this.env.GZ_API_KEY);
+        return { ok: res.ok, status: res.status, data: parseJson(text) };
+    }
+
+    async listContacts(skip = 0, top = 5000) {
+        const safeSkip = Math.max(0, Math.trunc(Number(skip) || 0));
+        const safeTop = Math.min(5000, Math.max(1, Math.trunc(Number(top) || 5000)));
+        const url = `${this.env.GZ_BASE_URL}/api/contacts?$skip=${safeSkip}&$top=${safeTop}`;
+        const { res, text } = await proxyGetUpstream(url, this.env.GZ_API_KEY);
+        return { ok: res.ok, status: res.status, data: parseJson(text) };
+    }
+
+    async saveCodeOfEthics(contactId, model) {
+        const id = validatedContactId(contactId);
+        if (!model || typeof model !== "object" || Array.isArray(model)) {
+            throw new Error("A GrowthZone Code of Ethics model is required.");
+        }
+        if (String(model.ContactId ?? "") !== id) {
+            throw new Error("The model ContactId does not match the requested contact.");
+        }
+        if (!Array.isArray(model.CodeOfEthicsList) || model.CodeOfEthicsList.length > 50) {
+            throw new Error("CodeOfEthicsList must be an array with no more than 50 records.");
+        }
+
+        const payload = {
+            AssociationId: model.AssociationId ?? null,
+            ContactId: Number(id),
+            ForceSave: Boolean(model.ForceSave),
+            UseM1Api: Boolean(model.UseM1Api),
+            CodeOfEthicsList: model.CodeOfEthicsList,
+        };
+        const url = `${this.env.GZ_BASE_URL}/api/contacts/editionFields/AddEditCodeOfEthics/${id}/`;
+        const { res, text } = await proxyJsonUpstream(url, this.env.GZ_API_KEY, "POST", payload);
+        return {
+            ok: res.ok,
+            status: res.status,
+            data: parseJson(text),
+            responseText: text.slice(0, 500),
+        };
+    }
 }
 
 export default {

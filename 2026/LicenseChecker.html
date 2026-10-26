@@ -1,1363 +1,427 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CCOR License Expiration Checker</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
-    <link
-        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Space+Mono:wght@400;700&display=swap"
-        rel="stylesheet">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>CCOR License &amp; Code of Ethics Checker</title>
     <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
     <style>
         :root {
-            --bg: #f0f2f5;
-            --surface: #fff;
-            --ink: #0b1220;
-            --muted: #5b6577;
-            --line: #e2e5ea;
-            --brand: #64BAB0;
-            --brand-dark: #2a3086;
-            --success: #10b981;
-            --warning: #f59e0b;
-            --danger: #ef4444;
-            --radius: 10px;
-            --shadow: 0 2px 12px rgba(0, 0, 0, .06);
-            --mono: 'Space Mono', monospace;
-            --sans: 'Inter', -apple-system, sans-serif
-        }
-
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box
-        }
-
-        body {
-            font-family: var(--sans);
-            background: var(--bg);
-            color: var(--ink);
-            min-height: 100vh
-        }
-
-        .header {
-            background: linear-gradient(135deg, var(--brand-dark), var(--brand));
-            color: #fff;
-            padding: 32px 24px 28px;
-            position: relative
-        }
-
-        .header::before {
-            content: 'LICENSE//CHK';
-            position: absolute;
-            top: 12px;
-            right: 24px;
-            font-family: var(--mono);
-            font-size: 11px;
-            letter-spacing: 2px;
-            opacity: .3
-        }
-
-        .header h1 {
-            font-size: 28px;
-            font-weight: 900;
-            letter-spacing: -.5px
-        }
-
-        .header p {
-            font-size: 14px;
-            opacity: .8;
-            margin-top: 4px
-        }
-
-        .container {
-            max-width: 1400px;
-            margin: 0 auto;
-            padding: 24px
-        }
-
-        .card {
-            background: var(--surface);
-            border: 1px solid var(--line);
-            border-radius: var(--radius);
-            box-shadow: var(--shadow);
-            margin-bottom: 20px;
-            overflow: hidden
-        }
-
-        .card-head {
-            padding: 16px 24px;
-            border-bottom: 1px solid var(--line);
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            position: relative
-        }
-
-        .card-head::before {
-            content: attr(data-label);
-            position: absolute;
-            top: 6px;
-            left: 16px;
-            font-family: var(--mono);
-            font-size: 10px;
-            letter-spacing: 1.5px;
-            color: var(--muted);
-            opacity: .5
-        }
-
-        .card-head h2 {
-            font-size: 18px;
-            font-weight: 800;
-            margin-top: 10px
-        }
-
-        .card-body {
-            padding: 24px
-        }
-
-        .step-indicator {
-            display: flex;
-            gap: 8px;
-            margin-bottom: 20px
-        }
-
-        .step {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            padding: 10px 18px;
-            border-radius: 6px;
-            font-size: 13px;
-            font-weight: 600;
-            background: #f0f2f5;
-            color: var(--muted);
-            transition: .2s
-        }
-
-        .step.active {
-            background: var(--brand);
-            color: #fff
-        }
-
-        .step.done {
-            background: var(--success);
-            color: #fff
-        }
-
-        .step .num {
-            width: 24px;
-            height: 24px;
-            border-radius: 50%;
-            background: rgba(0, 0, 0, .1);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 12px;
-            font-weight: 700
-        }
-
-        label.field-label {
-            display: block;
-            font-size: 12px;
-            font-weight: 700;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            color: var(--muted);
-            margin-bottom: 6px
-        }
-
-        input[type=date],
-        input[type=file] {
-            padding: 10px 14px;
-            border: 1px solid var(--line);
-            border-radius: 6px;
-            font-family: var(--sans);
-            font-size: 14px;
-            background: #fafbfc
-        }
-
-        input:focus {
-            outline: none;
-            border-color: var(--brand);
-            box-shadow: 0 0 0 3px rgba(5, 170, 225, .1)
-        }
-
-        .toggle-group {
-            display: flex;
-            border: 1px solid var(--line);
-            border-radius: 6px;
-            overflow: hidden
-        }
-
-        .toggle-group input[type=radio] {
-            display: none
-        }
-
-        .toggle-group label {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 10px 18px;
-            font-size: 13px;
-            font-weight: 600;
-            cursor: pointer;
-            border-right: 1px solid var(--line);
-            text-transform: uppercase;
-            background: #fafbfc;
-            margin: 0
-        }
-
-        .toggle-group label:last-of-type {
-            border-right: none
-        }
-
-        .toggle-group input:checked+label {
-            background: var(--brand);
-            color: #fff
-        }
-
-        .btn {
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            padding: 10px 20px;
-            border: none;
-            border-radius: 6px;
-            font-family: var(--sans);
-            font-size: 14px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: .2s;
-            white-space: nowrap
-        }
-
-        .btn-primary {
-            background: var(--brand);
-            color: #fff
-        }
-
-        .btn-primary:hover {
-            background: #0498c9
-        }
-
-        .btn-primary:disabled {
-            background: #a0d4e8;
-            cursor: not-allowed
-        }
-
-        .btn-success {
-            background: var(--success);
-            color: #fff
-        }
-
-        .btn-success:hover {
-            background: #0da572
-        }
-
-        .btn-outline {
-            background: transparent;
-            color: var(--muted);
-            border: 1px solid var(--line)
-        }
-
-        .btn-outline:hover {
-            color: var(--ink);
-            border-color: var(--ink)
-        }
-
-        .btn-sm {
-            padding: 6px 12px;
-            font-size: 12px
-        }
-
-        .btn-warning {
-            background: var(--warning);
-            color: #fff
-        }
-
-        .btn-danger {
-            background: var(--danger);
-            color: #fff
-        }
-
-        .controls-row {
-            display: flex;
-            gap: 16px;
-            align-items: end;
-            flex-wrap: wrap
-        }
-
-        .control-group {
-            flex: 1;
-            min-width: 160px
-        }
-
-        .progress-bar-track {
-            width: 100%;
-            height: 6px;
-            background: var(--line);
-            border-radius: 3px;
-            overflow: hidden;
-            margin: 12px 0
-        }
-
-        .progress-bar-fill {
-            height: 100%;
-            background: linear-gradient(90deg, var(--brand), var(--success));
-            border-radius: 3px;
-            width: 0;
-            transition: width .3s
-        }
-
-        .log-box {
-            max-height: 200px;
-            overflow-y: auto;
-            font-family: var(--mono);
-            font-size: 11px;
-            color: var(--muted);
-            background: #f8f9fa;
-            border: 1px solid var(--line);
-            border-radius: 4px;
-            padding: 10px;
-            line-height: 1.6
-        }
-
-        .log-box .s {
-            color: var(--success)
-        }
-
-        .log-box .w {
-            color: var(--warning)
-        }
-
-        .log-box .e {
-            color: var(--danger)
-        }
-
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            font-size: 13px
-        }
-
-        th {
-            text-align: left;
-            padding: 12px 16px;
-            background: #f8f9fa;
-            border-bottom: 2px solid var(--line);
-            font-weight: 700;
-            font-size: 11px;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            color: var(--muted);
-            white-space: nowrap
-        }
-
-        td {
-            padding: 10px 16px;
-            border-bottom: 1px solid var(--line);
-            vertical-align: middle
-        }
-
-        tr:hover {
-            background: #f8fbff
-        }
-
-        .badge {
-            display: inline-flex;
-            align-items: center;
-            gap: 4px;
-            padding: 3px 10px;
-            border-radius: 4px;
-            font-size: 11px;
-            font-weight: 700;
-            text-transform: uppercase;
-            letter-spacing: .5px
-        }
-
-        .b-match {
-            background: rgba(16, 185, 129, .1);
-            color: var(--success)
-        }
-
-        .b-outdated {
-            background: rgba(245, 158, 11, .1);
-            color: var(--warning)
-        }
-
-        .b-notfound {
-            background: rgba(239, 68, 68, .1);
-            color: var(--danger)
-        }
-
-        .b-error {
-            background: rgba(100, 100, 100, .1);
-            color: #666
-        }
-
-        .b-updated {
-            background: rgba(16, 185, 129, .15);
-            color: var(--success)
-        }
-
-        .b-newer {
-            background: rgba(5, 170, 225, .1);
-            color: var(--brand)
-        }
-
-        .summary-bar {
-            display: flex;
-            gap: 20px;
-            padding: 12px 24px;
-            background: #f8f9fa;
-            border-bottom: 1px solid var(--line);
-            font-size: 13px
-        }
-
-        .summary-bar .dot {
-            width: 8px;
-            height: 8px;
-            border-radius: 50%;
-            display: inline-block;
-            margin-right: 4px
-        }
-
-        .hidden {
-            display: none !important
-        }
-
-        .spinner {
-            display: inline-block;
-            width: 16px;
-            height: 16px;
-            border: 2px solid rgba(255, 255, 255, .3);
-            border-top-color: #fff;
-            border-radius: 50%;
-            animation: spin .6s linear infinite
-        }
-
-        @keyframes spin {
-            to {
-                transform: rotate(360deg)
-            }
-        }
-
-        @keyframes fadeIn {
-            from {
-                opacity: 0;
-                transform: translateY(8px)
-            }
-
-            to {
-                opacity: 1;
-                transform: translateY(0)
-            }
-        }
-
-        tbody tr {
-            animation: fadeIn .3s ease both
-        }
-
-        .big-num {
-            font-family: var(--mono);
-            font-size: 48px;
-            font-weight: 900;
-            color: var(--brand)
-        }
-
-        .stat-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
-            gap: 16px;
-            margin: 16px 0
-        }
-
-        .stat-card {
-            background: #f8f9fa;
-            border: 1px solid var(--line);
-            border-radius: 8px;
-            padding: 16px;
-            text-align: center
-        }
-
-        .stat-card .num {
-            font-family: var(--mono);
-            font-size: 32px;
-            font-weight: 800
-        }
-
-        .stat-card .lbl {
-            font-size: 11px;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            color: var(--muted);
-            margin-top: 4px
-        }
-
-        .drop-zone {
-            border: 2px dashed var(--line);
-            border-radius: 8px;
-            padding: 32px;
-            text-align: center;
-            color: var(--muted);
-            cursor: pointer;
-            transition: .2s
-        }
-
-        .drop-zone:hover,
-        .drop-zone.drag {
-            border-color: var(--brand);
-            background: rgba(5, 170, 225, .05)
-        }
-
-        .footer-info {
-            text-align: center;
-            padding: 20px;
-            font-family: var(--mono);
-            font-size: 11px;
-            color: var(--muted);
-            opacity: .5
+            color-scheme: light;
+            --navy: #252c78;
+            --teal: #55b8ae;
+            --ink: #172033;
+            --muted: #667085;
+            --line: #dfe4ea;
+            --surface: #ffffff;
+            --bg: #f3f5f8;
+            --good: #067647;
+            --good-bg: #ecfdf3;
+            --warn: #b54708;
+            --warn-bg: #fffaeb;
+            --bad: #b42318;
+            --bad-bg: #fef3f2;
+            --info: #175cd3;
+            --info-bg: #eff8ff;
+        }
+
+        * { box-sizing: border-box; }
+        body { margin: 0; min-height: 100vh; background: var(--bg); color: var(--ink); font: 15px/1.5 Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; }
+        button, input { font: inherit; }
+        header { background: linear-gradient(130deg, var(--navy), #38449c 58%, var(--teal)); color: white; padding: 34px max(22px, calc((100vw - 1440px) / 2)); }
+        header h1 { margin: 0; font-size: clamp(25px, 3vw, 36px); letter-spacing: -.03em; }
+        header p { margin: 7px 0 0; max-width: 800px; opacity: .88; }
+        main { max-width: 1440px; margin: 0 auto; padding: 24px; }
+        .toolbar, .card, .notice { background: var(--surface); border: 1px solid var(--line); border-radius: 13px; box-shadow: 0 3px 18px rgba(16, 24, 40, .05); }
+        .toolbar { display: grid; grid-template-columns: minmax(280px, 1fr) auto; gap: 18px; align-items: center; padding: 18px; }
+        .drop { border: 2px dashed #aeb7c6; border-radius: 10px; padding: 22px; text-align: center; cursor: pointer; transition: .15s ease; }
+        .drop:hover, .drop.drag { border-color: var(--teal); background: #f0fbf9; }
+        .drop strong { display: block; font-size: 17px; }
+        .drop span { color: var(--muted); font-size: 13px; }
+        .actions { display: flex; flex-wrap: wrap; gap: 9px; justify-content: flex-end; }
+        .btn { border: 0; border-radius: 8px; padding: 10px 15px; font-weight: 700; cursor: pointer; transition: .15s ease; }
+        .btn:hover:not(:disabled) { transform: translateY(-1px); filter: brightness(.98); }
+        .btn:disabled { opacity: .48; cursor: not-allowed; }
+        .primary { background: var(--navy); color: white; }
+        .success { background: var(--good); color: white; }
+        .secondary { background: white; color: var(--navy); border: 1px solid #aab1d9; }
+        .notice { margin: 16px 0; padding: 14px 16px; color: #344054; }
+        .notice strong { color: var(--navy); }
+        .notice.error { border-color: #fecdca; background: var(--bad-bg); color: var(--bad); }
+        .stats { display: grid; grid-template-columns: repeat(5, minmax(130px, 1fr)); gap: 12px; margin: 16px 0; }
+        .stat { background: white; border: 1px solid var(--line); border-radius: 11px; padding: 15px; }
+        .stat b { display: block; font-size: 25px; line-height: 1.1; }
+        .stat span { color: var(--muted); font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: .04em; }
+        .card { overflow: hidden; }
+        .card-head { display: flex; gap: 12px; justify-content: space-between; align-items: center; padding: 16px 18px; border-bottom: 1px solid var(--line); }
+        .card-head h2 { margin: 0; font-size: 18px; }
+        .card-head small { color: var(--muted); }
+        .table-wrap { overflow: auto; max-height: 65vh; }
+        table { width: 100%; border-collapse: separate; border-spacing: 0; min-width: 1180px; }
+        th { position: sticky; top: 0; z-index: 1; background: #f8fafc; color: #475467; text-align: left; font-size: 11px; letter-spacing: .045em; text-transform: uppercase; }
+        th, td { padding: 11px 12px; border-bottom: 1px solid #edf0f3; vertical-align: top; }
+        tbody tr:hover { background: #fafcfd; }
+        td small { display: block; color: var(--muted); }
+        .mono { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; }
+        .badge { display: inline-block; border-radius: 999px; padding: 4px 8px; font-size: 12px; font-weight: 800; white-space: nowrap; }
+        .good { color: var(--good); background: var(--good-bg); }
+        .warn { color: var(--warn); background: var(--warn-bg); }
+        .bad { color: var(--bad); background: var(--bad-bg); }
+        .info { color: var(--info); background: var(--info-bg); }
+        .muted { color: var(--muted); background: #f2f4f7; }
+        .progress { height: 7px; background: #e9edf2; overflow: hidden; border-radius: 999px; margin-top: 12px; }
+        .progress div { height: 100%; width: 0; background: linear-gradient(90deg, var(--navy), var(--teal)); transition: width .2s ease; }
+        .empty { padding: 56px 20px; text-align: center; color: var(--muted); }
+        a { color: var(--navy); font-weight: 700; }
+        footer { padding: 22px 4px 8px; color: var(--muted); font-size: 12px; text-align: center; }
+        [hidden] { display: none !important; }
+
+        @media (max-width: 900px) {
+            main { padding: 14px; }
+            .toolbar { grid-template-columns: 1fr; }
+            .actions { justify-content: flex-start; }
+            .stats { grid-template-columns: repeat(2, 1fr); }
         }
     </style>
 </head>
-
 <body>
+    <header>
+        <h1>License &amp; Code of Ethics Checker</h1>
+        <p>Compare active GrowthZone agents with live DBPR license data and DBPR course completions, then add only verified current-cycle COE records to the GrowthZone Real Estate tab.</p>
+    </header>
 
-    <div class="header">
-        <h1><i class="fas fa-shield-alt" style="margin-right:8px;font-size:24px"></i> License Expiration Checker</h1>
-        <p>Cross-reference GrowthZone license records with DBPR public data</p>
-    </div>
-    <div class="container">
-
-        <!-- STEP INDICATORS -->
-        <div class="step-indicator">
-            <div class="step active" id="s1"><span class="num">1</span> Load Licenses</div>
-            <div class="step" id="s2"><span class="num">2</span> Check DBPR</div>
-            <div class="step" id="s3"><span class="num">3</span> Update GrowthZone</div>
-        </div>
-
-        <!-- ══════ STEP 1: LOAD LICENSES ══════ -->
-        <div class="card" id="step1Panel">
-            <div class="card-head" data-label="// STEP_01">
-                <h2>Load License Data</h2>
+    <main>
+        <section class="toolbar" aria-label="License checker controls">
+            <label class="drop" id="dropZone" for="fileInput">
+                <strong id="fileLabel">Choose or drop a GrowthZone export</strong>
+                <span>Excel or CSV · works in Chrome, Edge, Safari, and Firefox on Windows or macOS</span>
+                <input id="fileInput" type="file" accept=".xlsx,.xls,.csv" hidden>
+            </label>
+            <div class="actions">
+                <button class="btn primary" id="checkButton" disabled>Check DBPR + COE</button>
+                <button class="btn success" id="syncButton" disabled>Sync verified COE</button>
+                <button class="btn secondary" id="downloadButton" disabled>Download results</button>
             </div>
-            <div class="card-body">
-                <p style="margin-bottom:16px;color:var(--muted)">Import a GrowthZone Contacts Report (Excel) or fetch
-                    licenses directly from the GrowthZone API.</p>
+        </section>
 
-                <div style="display:grid;grid-template-columns:1fr 1fr;gap:24px;margin-bottom:20px">
-                    <!-- Option A: Excel Import -->
-                    <div>
-                        <label class="field-label">Option A: Import Excel Report</label>
-                        <div class="drop-zone" id="dropZone" onclick="document.getElementById('fileInput').click()">
-                            <i class="fas fa-file-excel"
-                                style="font-size:32px;display:block;margin-bottom:8px;opacity:.4"></i>
-                            <span>Drop Excel file here or click to browse</span>
-                            <input type="file" id="fileInput" accept=".xlsx,.xls,.csv" style="display:none"
-                                onchange="handleFile(this)">
-                        </div>
-                    </div>
-                    <!-- Option B: API Fetch -->
-                    <div>
-                        <label class="field-label">Option B: Fetch from GrowthZone API</label>
-                        <div class="controls-row" style="margin-bottom:12px">
-                            <div class="control-group">
-                                <label class="field-label" style="margin-top:8px">Expiration Date</label>
-                                <input type="date" id="expDate" value="2026-03-31">
-                            </div>
-                            <div class="control-group">
-                                <label class="field-label" style="margin-top:8px">License Type</label>
-                                <div class="toggle-group">
-                                    <input type="radio" name="lt" id="ltBoth" value="both" checked><label
-                                        for="ltBoth">Both</label>
-                                    <input type="radio" name="lt" id="ltSL" value="SL"><label for="ltSL">SL</label>
-                                    <input type="radio" name="lt" id="ltBK" value="BK"><label for="ltBK">BK</label>
-                                </div>
-                            </div>
-                        </div>
-                        <button class="btn btn-primary" id="btnFetchGZ" onclick="fetchFromGZ()"><i
-                                class="fas fa-cloud-download-alt"></i> Fetch from GrowthZone</button>
-                    </div>
-                </div>
+        <div class="progress" id="progress" hidden><div id="progressBar"></div></div>
+        <div class="notice" id="message"><strong>Required columns:</strong> license number. Include Contact ID to enable GrowthZone updates; name, license expiration, and Code of Ethics date are optional.</div>
 
-                <!-- Progress -->
-                <div id="step1Progress" class="hidden">
-                    <div class="progress-bar-track">
-                        <div class="progress-bar-fill" id="bar1"></div>
-                    </div>
-                    <div class="log-box" id="log1"></div>
-                </div>
+        <section class="stats" id="stats" hidden>
+            <div class="stat"><b id="totalStat">0</b><span>Loaded</span></div>
+            <div class="stat"><b id="licenseStat">0</b><span>License updates</span></div>
+            <div class="stat"><b id="coeReadyStat">0</b><span>COE ready</span></div>
+            <div class="stat"><b id="reviewStat">0</b><span>Manual review</span></div>
+            <div class="stat"><b id="syncedStat">0</b><span>COE updated</span></div>
+        </section>
 
-                <!-- Results Preview -->
-                <div id="step1Results" class="hidden">
-                    <div class="stat-grid">
-                        <div class="stat-card">
-                            <div class="num" id="totalCount" style="color:var(--brand)">0</div>
-                            <div class="lbl">Total Licenses</div>
-                        </div>
-                        <div class="stat-card">
-                            <div class="num" id="slCount" style="color:var(--success)">0</div>
-                            <div class="lbl">SL (Sales)</div>
-                        </div>
-                        <div class="stat-card">
-                            <div class="num" id="bkCount" style="color:var(--warning)">0</div>
-                            <div class="lbl">BK (Broker)</div>
-                        </div>
-                        <div class="stat-card">
-                            <div class="num" id="otherCount" style="color:var(--muted)">0</div>
-                            <div class="lbl">Other</div>
-                        </div>
-                    </div>
-                    <div style="overflow-x:auto;max-height:400px;overflow-y:auto;margin-top:12px">
-                        <table>
-                            <thead>
-                                <tr>
-                                    <th>Name</th>
-                                    <th>License #</th>
-                                    <th>Type</th>
-                                    <th>GZ Expiration</th>
-                                    <th>Email</th>
-                                    <th>Office</th>
-                                </tr>
-                            </thead>
-                            <tbody id="previewBody"></tbody>
-                        </table>
-                    </div>
-                    <div style="margin-top:16px;text-align:right">
-                        <button class="btn btn-primary" onclick="goToStep2()"><i class="fas fa-arrow-right"></i> Check
-                            These Against DBPR</button>
-                    </div>
-                </div>
+        <section class="card">
+            <div class="card-head">
+                <h2>Results</h2>
+                <small id="resultSummary">No file loaded</small>
             </div>
-        </div>
-
-        <!-- ══════ STEP 2: DBPR CROSS-CHECK ══════ -->
-        <div class="card hidden" id="step2Panel">
-            <div class="card-head" data-label="// STEP_02">
-                <h2>DBPR Cross-Check</h2>
-                <span id="dbprCount" style="font-family:var(--mono);font-size:13px;color:var(--muted)"></span>
+            <div class="table-wrap">
+                <table id="resultsTable" hidden>
+                    <thead>
+                        <tr>
+                            <th>Agent</th>
+                            <th>License</th>
+                            <th>GZ license exp.</th>
+                            <th>DBPR license exp.</th>
+                            <th>GZ COE</th>
+                            <th>Latest verified DBPR COE</th>
+                            <th>Result</th>
+                        </tr>
+                    </thead>
+                    <tbody id="resultsBody"></tbody>
+                </table>
+                <div class="empty" id="emptyState">Load a GrowthZone export to begin.</div>
             </div>
-            <div class="card-body">
-                <div style="margin-bottom:16px">
-                    <button class="btn btn-primary" id="btnDbpr" onclick="runDbprCheck()"><i class="fas fa-search"></i>
-                        Start DBPR Verification</button>
-                    <button class="btn btn-outline" onclick="goToStep1()" style="margin-left:8px"><i
-                            class="fas fa-arrow-left"></i> Back</button>
-                </div>
-                <div class="progress-bar-track">
-                    <div class="progress-bar-fill" id="bar2"></div>
-                </div>
-                <div class="log-box" id="log2" style="margin-bottom:16px"></div>
+        </section>
 
-                <div id="step2Results" class="hidden">
-                    <div class="summary-bar" id="summaryBar"></div>
-                    <div style="overflow-x:auto;max-height:500px;overflow-y:auto">
-                        <table>
-                            <thead>
-                                <tr>
-                                    <th>Name</th>
-                                    <th>License #</th>
-                                    <th>Type</th>
-                                    <th>GZ Exp</th>
-                                    <th>DBPR Exp</th>
-                                    <th>DBPR Status</th>
-                                    <th>Result</th>
-                                </tr>
-                            </thead>
-                            <tbody id="dbprBody"></tbody>
-                        </table>
-                    </div>
-                    <div style="margin-top:16px;text-align:right">
-                        <button class="btn btn-outline btn-sm" onclick="exportCSV()" style="margin-right:8px"><i
-                                class="fas fa-download"></i> Export CSV</button>
-                        <button class="btn btn-success" id="btnGoStep3" onclick="goToStep3()"><i
-                                class="fas fa-arrow-right"></i> Review & Push Updates</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- ══════ STEP 3: PUSH UPDATES ══════ -->
-        <div class="card hidden" id="step3Panel">
-            <div class="card-head" data-label="// STEP_03">
-                <h2>Generate Bulk Update CSV</h2>
-                <div>
-                    <button class="btn btn-success btn-sm" id="btnDownloadCsv" onclick="downloadGZCsv()"><i
-                            class="fas fa-file-csv"></i> Download GrowthZone CSV</button>
-                    <button class="btn btn-primary btn-sm" onclick="runBot()" style="margin-left:8px"><i
-                            class="fas fa-robot"></i> Run Automation Bot</button>
-                </div>
-            </div>
-            <div class="card-body">
-                <div class="alert alert-warning" style="margin-bottom:16px">
-                    <i class="fas fa-info-circle"></i> <strong>API Limitation:</strong> GrowthZone's API does not allow
-                    external apps to edit License Expiration dates. Click "Download GrowthZone CSV" to get a
-                    pre-formatted file you can upload via GrowthZone's native <strong>Import Contacts</strong> tool.
-                </div>
-                <p style="margin-bottom:12px;color:var(--muted)">The following licenses have a newer expiration date on
-                    DBPR:</p>
-                <div class="progress-bar-track">
-                    <div class="progress-bar-fill" id="bar3"></div>
-                </div>
-                <div class="log-box hidden" id="log3" style="margin-bottom:12px"></div>
-                <div style="overflow-x:auto;max-height:500px;overflow-y:auto">
-                    <table>
-                        <thead>
-                            <tr>
-                                <th>Name</th>
-                                <th>License #</th>
-                                <th>Type</th>
-                                <th>GZ Exp (Old)</th>
-                                <th>DBPR Exp (New)</th>
-                            </tr>
-                        </thead>
-                        <tbody id="updateBody"></tbody>
-                    </table>
-                </div>
-                <div style="margin-top:16px"><button class="btn btn-outline" onclick="goToStep2()"><i
-                            class="fas fa-arrow-left"></i> Back to Results</button></div>
-            </div>
-        </div>
-
-        <div class="footer-info">CCOR License Checker v2.0 — Data from GrowthZone API &amp; DBPR Public Records</div>
-    </div>
+        <footer>CCOR License Checker v3 · License status is checked live; COE data refreshes from the DBPR extract and only explicit current-cycle courses are eligible for automatic sync.</footer>
+    </main>
 
     <script>
-        (function () {
-            const GZ = 'https://bonitaspringsesterorealtorsfl.growthzoneapp.com';
-            const KEY = ''; // Removed compromised key - use proxy endpoint
-            const WRAP = 'https://wrapsheet.bonitaspringsrealtors.workers.dev';
-            const RTIDS = [10137, 10138, 10139, 10140, 10165, 34117];
-            const hd = () => ({ 'Authorization': 'ApiKey ' + KEY, 'Content-Type': 'application/json' });
-            const wait = ms => new Promise(r => setTimeout(r, ms));
+        (() => {
+            "use strict";
 
-            let licenses = [];  // Step 1 data
-            let results = [];   // Step 2 data (with DBPR comparison)
+            const API = "https://ccor-license-checker-api.bonitaspringsrealtors.workers.dev";
+            const GZ_BASE = "https://bonitaspringsesterorealtorsfl.growthzoneapp.com";
+            const state = { rows: [], checked: false, busy: false };
+            const elements = Object.fromEntries([
+                "fileInput", "fileLabel", "dropZone", "checkButton", "syncButton", "downloadButton",
+                "message", "progress", "progressBar", "stats", "totalStat", "licenseStat", "coeReadyStat",
+                "reviewStat", "syncedStat", "resultsTable", "resultsBody", "emptyState", "resultSummary",
+            ].map((id) => [id, document.getElementById(id)]));
 
-            function contactLink(name, contactId) {
-                if (!contactId) return `<strong>${name}</strong>`;
-                const url = `${GZ}/a#/ContactInfo/${contactId}/ContactOverview`;
-                return `<a href="${url}" target="_blank" rel="noopener noreferrer" style="color:var(--brand);text-decoration:none;font-weight:700;display:inline-flex;align-items:center;gap:5px" title="Open ${name} in GrowthZone">${name} <i class="fas fa-external-link-alt" style="font-size:10px;opacity:.65"></i></a>`;
-            }
-
-            // ── HELPERS ──
-            function log(id, msg, cls = '') { const el = document.getElementById(id); const s = document.createElement('span'); s.className = cls; s.textContent = `[${new Date().toLocaleTimeString()}] ${msg}\n`; el.appendChild(s); el.scrollTop = el.scrollHeight }
-            function bar(id, pct) { document.getElementById(id).style.width = pct + '%' }
-            function parseD(s) {
-                if (!s) return null;
-                if (s instanceof Date) { return isNaN(s.getTime()) ? null : s; }
-                // Handle XLSX serial date numbers
-                if (typeof s === 'number') {
-                    // Excel serial date: days since 1/1/1900 (with 1900 bug)
-                    const d = new Date((s - 25569) * 86400 * 1000);
-                    return isNaN(d.getTime()) ? null : d;
+            const headerKey = (value) => String(value || "").toLowerCase().replace(/[^a-z0-9]/g, "");
+            const normalizeLicense = (value) => {
+                const compact = String(value || "").toUpperCase().replace(/[^A-Z0-9]/g, "");
+                return compact.replace(/^[A-Z]+/, "").replace(/^0+/, "") || compact;
+            };
+            const iso = (value) => {
+                if (value === null || value === undefined || value === "") return null;
+                if (value instanceof Date && !Number.isNaN(value.valueOf())) return value.toISOString().slice(0, 10);
+                if (typeof value === "number" && window.XLSX?.SSF) {
+                    const parsed = XLSX.SSF.parse_date_code(value);
+                    if (parsed) return `${parsed.y}-${String(parsed.m).padStart(2, "0")}-${String(parsed.d).padStart(2, "0")}`;
                 }
-                const str = String(s).trim();
-                // MM/DD/YYYY
-                const m = str.match(/(\d{1,2})\/(\d{1,2})\/(\d{4})/);
-                if (m) return new Date(+m[3], +m[1] - 1, +m[2]);
-                // ISO or other
-                const d = new Date(str);
-                return isNaN(d.getTime()) ? null : d;
+                const text = String(value).trim();
+                const us = /^(\d{1,2})\/(\d{1,2})\/(\d{4})$/.exec(text);
+                if (us) return `${us[3]}-${us[1].padStart(2, "0")}-${us[2].padStart(2, "0")}`;
+                const ymd = /^(\d{4})-(\d{2})-(\d{2})/.exec(text);
+                return ymd ? `${ymd[1]}-${ymd[2]}-${ymd[3]}` : null;
+            };
+            const displayDate = (value) => value ? new Date(`${value}T00:00:00Z`).toLocaleDateString("en-US", { timeZone: "UTC" }) : "—";
+
+            function findColumn(keys, tests) {
+                return keys.find((key) => tests.some((test) => test(headerKey(key)))) || null;
             }
-            function fmtD(d) { if (!d || !(d instanceof Date) || isNaN(d.getTime())) return '—'; return `${(d.getMonth() + 1).toString().padStart(2, '0')}/${d.getDate().toString().padStart(2, '0')}/${d.getFullYear()}` }
-            function setStep(n) { ['s1', 's2', 's3'].forEach((id, i) => { const el = document.getElementById(id); el.classList.remove('active', 'done'); if (i < n - 1) el.classList.add('done'); if (i === n - 1) el.classList.add('active') }) }
-            function normType(t) { const s = String(t || '').trim().toUpperCase(); if (s === 'BROKER' || s === 'BK') return 'BK'; if (s === 'REALTOR LICENSE' || s === 'SL') return 'SL'; return s; }
 
-            // ── STEP NAVIGATION ──
-            window.goToStep1 = function () {
-                setStep(1);
-                document.getElementById('step1Panel').classList.remove('hidden');
-                document.getElementById('step2Panel').classList.add('hidden');
-                document.getElementById('step3Panel').classList.add('hidden');
-            };
-            window.goToStep2 = function () {
-                if (licenses.length === 0) { alert('Load licenses first.'); return }
-                setStep(2);
-                document.getElementById('step1Panel').classList.add('hidden');
-                document.getElementById('step2Panel').classList.remove('hidden');
-                document.getElementById('step3Panel').classList.add('hidden');
-                document.getElementById('dbprCount').textContent = licenses.length + ' licenses to check';
-            };
-            window.goToStep3 = function () {
-                const outdated = results.filter(r => r.status === 'outdated');
-                // Removed block: allow access even if 0 outdated licenses are found
-                setStep(3);
-                document.getElementById('step2Panel').classList.add('hidden');
-                document.getElementById('step3Panel').classList.remove('hidden');
-                renderUpdateTable(outdated);
-            };
-
-            // ── STEP 1A: EXCEL IMPORT ──
-            const dz = document.getElementById('dropZone');
-            dz.addEventListener('dragover', e => { e.preventDefault(); dz.classList.add('drag') });
-            dz.addEventListener('dragleave', () => dz.classList.remove('drag'));
-            dz.addEventListener('drop', e => { e.preventDefault(); dz.classList.remove('drag'); if (e.dataTransfer.files.length) processFile(e.dataTransfer.files[0]) });
-
-            window.handleFile = function (inp) { if (inp.files.length) processFile(inp.files[0]) };
-
-            function processFile(file) {
-                const reader = new FileReader();
-                reader.onload = function (e) {
-                    const wb = XLSX.read(e.target.result, { type: 'array', cellDates: true });
-                    const ws = wb.Sheets[wb.SheetNames[0]];
-                    const rows = XLSX.utils.sheet_to_json(ws);
-
-                    console.log('Excel rows parsed:', rows.length);
-                    if (rows.length > 0) console.log('First row keys:', Object.keys(rows[0]));
-
-                    // Flexible column matching — find the right column names
-                    const colMap = { licNum: null, licType: null, expDate: null, name: null, email: null, office: null, contactId: null };
-                    if (rows.length > 0) {
-                        const keys = Object.keys(rows[0]);
-                        colMap.licNum = keys.find(k => /license.*number/i.test(k)) || null;
-                        colMap.licType = keys.find(k => /license.*type/i.test(k)) || null;
-                        colMap.expDate = keys.find(k => /expir/i.test(k)) || null;
-                        colMap.name = keys.find(k => /contact.*name|^name$/i.test(k)) || null;
-                        colMap.email = keys.find(k => /email/i.test(k)) || null;
-                        colMap.office = keys.find(k => /business|office|company/i.test(k)) || null;
-                        // Match 'ContactId', ignore 'Primary Contact Id'
-                        colMap.contactId = keys.find(k => /^contactid$/i.test(k.replace(/\s+/g, ''))) || null;
-                        console.log('Column mapping:', colMap);
-                    }
-
-                    licenses = [];
-                    let skipped = 0;
-                    rows.forEach((r, idx) => {
-                        const licNum = colMap.licNum ? r[colMap.licNum] : '';
-                        const licType = colMap.licType ? r[colMap.licType] : '';
-                        const expDate = colMap.expDate ? r[colMap.expDate] : '';
-                        const name = colMap.name ? r[colMap.name] : '';
-                        const email = colMap.email ? r[colMap.email] : '';
-                        const office = colMap.office ? r[colMap.office] : '';
-                        const rawContactId = colMap.contactId ? r[colMap.contactId] : null;
-
-                        // Accept any truthy licNum including numeric 0 edge case
-                        if (licNum !== null && licNum !== undefined && String(licNum).trim() !== '') {
-                            licenses.push({
-                                name: String(name || '').trim(),
-                                licenseNumber: String(licNum).trim(),
-                                licenseType: normType(licType),
-                                gzExpDate: parseD(expDate),
-                                gzExpStr: fmtD(parseD(expDate)),
-                                email: String(email || ''),
-                                office: String(office || ''),
-                                contactId: rawContactId ? String(rawContactId).trim() : null
-                            });
-                        } else {
-                            skipped++;
-                        }
-                    });
-
-                    console.log(`Loaded ${licenses.length} licenses, skipped ${skipped} rows`);
-                    dz.innerHTML = `<i class="fas fa-check-circle" style="color:var(--success);font-size:32px;display:block;margin-bottom:8px"></i><strong>${file.name}</strong><br>${licenses.length} licenses loaded (${skipped} rows skipped)`;
-                    showStep1Results();
+            function mapColumns(rows) {
+                const keys = Object.keys(rows[0] || {});
+                return {
+                    license: findColumn(keys, [(key) => ["licensenumber", "realestatelicensenumber", "m1licensenumber", "nrdslicensenumber"].includes(key), (key) => key.includes("license") && key.includes("number")]),
+                    contactId: findColumn(keys, [(key) => ["contactid", "growthzonecontactid"].includes(key)]),
+                    name: findColumn(keys, [(key) => ["name", "contactname", "displayname", "membername"].includes(key)]),
+                    licenseExpiration: findColumn(keys, [(key) => key.includes("license") && (key.includes("expiration") || key.includes("expiry"))]),
+                    coeDate: findColumn(keys, [(key) => key.includes("ethic") && (key.includes("date") || key.includes("training") || key.includes("completion"))]),
                 };
-                reader.readAsArrayBuffer(file);
             }
 
-            // ── STEP 1B: GZ API FETCH ──
-            window.fetchFromGZ = async function () {
-                const btn = document.getElementById('btnFetchGZ');
-                btn.disabled = true; btn.innerHTML = '<span class="spinner"></span> Fetching...';
-                document.getElementById('step1Progress').classList.remove('hidden');
-                const logId = 'log1';
-
-                try {
-                    // 1. Fetch all active REALTOR contact IDs from memberships
-                    log(logId, 'Fetching active REALTOR® memberships...');
-                    const contactMap = new Map();
-                    for (const tid of RTIDS) {
-                        let skip = 0;
-                        while (true) {
-                            const r = await fetch(`${GZ}/api/memberships/all?$skip=${skip}&$top=2000`, { method: 'POST', headers: hd(), body: JSON.stringify({ MembershipTypeId: tid }) });
-                            if (!r.ok) break;
-                            const d = await r.json(); const rs = d.Results || [];
-                            if (!rs.length) break;
-                            rs.forEach(m => { if (m.Status === 'Active' && m.ContactId) contactMap.set(m.ContactId, { ContactId: m.ContactId, Name: m.ContactDisplayName || m.ContactName || '' }) });
-                            skip += rs.length; if (skip >= (d.TotalRecordAvailable || 0)) break;
-                        }
-                    }
-                    log(logId, `Found ${contactMap.size} active members.`, 's');
-
-                    // 2. Fetch license data from moreinfo for each contact
-                    log(logId, 'Reading license fields from contact profiles...');
-                    licenses = [];
-                    const members = Array.from(contactMap.values());
-                    const BS = 5;
-                    for (let i = 0; i < members.length; i += BS) {
-                        const batch = members.slice(i, i + BS);
-                        const ps = batch.map(async m => {
-                            try {
-                                const r = await fetch(`${GZ}/api/contacts/${m.ContactId}/moreinfo`, { headers: hd() });
-                                if (!r.ok) return;
-                                const d = await r.json();
-                                const fs = d.Fields || [];
-                                const gf = n => { const f = fs.find(x => x.DisplayName === n && x.Value && x.Value.trim()); return f ? f.Value.trim() : '' };
-                                const ln = gf('License Number'), lt = gf('License Type'), ed = gf('Expiration Date');
-                                if (ln && (lt === 'SL' || lt === 'BK' || lt === 'Realtor License' || lt === 'Broker')) {
-                                    licenses.push({ name: m.Name, licenseNumber: ln, licenseType: normType(lt), gzExpDate: parseD(ed), gzExpStr: fmtD(parseD(ed)), email: '', office: '', contactId: m.ContactId });
-                                }
-                            } catch (e) { }
-                        });
-                        await Promise.all(ps);
-                        bar('bar1', (i + BS) / members.length * 100);
-                        if (i + BS < members.length) await wait(200);
-                    }
-                    log(logId, `Found ${licenses.length} SL/BK licenses.`, 's');
-
-                    // Filter by selected date + type
-                    const targetDate = document.getElementById('expDate').value;
-                    const licTypeFilter = document.querySelector('input[name=lt]:checked').value;
-                    if (targetDate) {
-                        const td = new Date(targetDate + 'T00:00:00');
-                        licenses = licenses.filter(l => {
-                            if (!l.gzExpDate) return true;
-                            return l.gzExpDate.getFullYear() === td.getFullYear() && l.gzExpDate.getMonth() === td.getMonth() && l.gzExpDate.getDate() === td.getDate();
-                        });
-                    }
-                    if (licTypeFilter !== 'both') {
-                        licenses = licenses.filter(l => l.licenseType === licTypeFilter.toUpperCase());
-                    }
-                    log(logId, `${licenses.length} licenses match filters.`, 's');
-
-                    showStep1Results();
-                } catch (e) {
-                    log(logId, 'Error: ' + e.message, 'e');
-                } finally {
-                    btn.disabled = false; btn.innerHTML = '<i class="fas fa-cloud-download-alt"></i> Fetch from GrowthZone';
-                }
-            };
-
-            function showStep1Results() {
-                document.getElementById('step1Results').classList.remove('hidden');
-                const sl = licenses.filter(l => l.licenseType === 'SL').length;
-                const bk = licenses.filter(l => l.licenseType === 'BK').length;
-                const other = licenses.length - sl - bk;
-                document.getElementById('totalCount').textContent = licenses.length;
-                document.getElementById('slCount').textContent = sl;
-                document.getElementById('bkCount').textContent = bk;
-                document.getElementById('otherCount').textContent = other;
-
-                const tb = document.getElementById('previewBody');
-                tb.innerHTML = '';
-                licenses.forEach((l, i) => {
-                    const tr = document.createElement('tr');
-                    tr.style.animationDelay = i * 10 + 'ms';
-                    tr.innerHTML = `<td>${contactLink(l.name, l.contactId)}</td><td style="font-family:var(--mono);font-size:12px">${l.licenseNumber}</td><td><strong>${l.licenseType}</strong></td><td>${l.gzExpStr}</td><td style="font-size:12px">${l.email || '—'}</td><td style="font-size:12px">${l.office || '—'}</td>`;
-                    tb.appendChild(tr);
-                });
+            function setMessage(text, error = false) {
+                elements.message.textContent = text;
+                elements.message.classList.toggle("error", error);
             }
 
-            // ── STEP 2: DBPR CROSS-CHECK ──
-            window.runDbprCheck = async function () {
-                const btn = document.getElementById('btnDbpr');
-                btn.disabled = true; btn.innerHTML = '<span class="spinner"></span> Checking...';
-                results = [];
-                const logId = 'log2';
-                document.getElementById('log2').innerHTML = '';
-                bar('bar2', 0);
-
-                for (let i = 0; i < licenses.length; i++) {
-                    const l = licenses[i];
-                    try {
-                        const r = await fetch(`${WRAP}/api/verify-license?number=${encodeURIComponent(l.licenseNumber)}`);
-                        const d = await r.json();
-                        let dbprExp = null, dbprStatus = '', dbprName = '';
-                        if (d.valid && d.details) {
-                            dbprName = d.details.name || '';
-                            dbprStatus = d.details.status_expires || '';
-                            if (d.details.expiration_date) dbprExp = parseD(d.details.expiration_date);
-                            else { const dm = dbprStatus.match(/(\d{1,2}\/\d{1,2}\/\d{4})/); if (dm) dbprExp = parseD(dm[1]) }
-                        }
-
-                        let status = 'notfound';
-                        if (!d.valid) {
-                            status = 'notfound'; log(logId, `${l.name} (#${l.licenseNumber}) — Not found on DBPR`, 'w');
-                        } else if (dbprExp && l.gzExpDate) {
-                            if (dbprExp.getTime() === l.gzExpDate.getTime()) { status = 'match'; log(logId, `${l.name} — ✓ Match`, 's') }
-                            else if (dbprExp > l.gzExpDate) { status = 'outdated'; log(logId, `${l.name} — ⚠ GZ outdated (DBPR: ${fmtD(dbprExp)})`, 'w') }
-                            else { status = 'newer'; log(logId, `${l.name} — GZ has newer date`, '') }
-                        } else if (dbprExp && !l.gzExpDate) {
-                            status = 'outdated'; log(logId, `${l.name} — GZ missing, DBPR: ${fmtD(dbprExp)}`, 'w');
-                        } else { status = 'error'; log(logId, `${l.name} — Could not compare`, 'e') }
-
-                        results.push({ ...l, dbprName, dbprStatus, dbprExpDate: dbprExp, dbprExpStr: fmtD(dbprExp), status, updated: false });
-                    } catch (e) {
-                        log(logId, `${l.name} — Error: ${e.message}`, 'e');
-                        results.push({ ...l, dbprName: '', dbprStatus: '', dbprExpDate: null, dbprExpStr: '—', status: 'error', updated: false });
-                    }
-                    bar('bar2', (i + 1) / licenses.length * 100);
-                    if (i < licenses.length - 1) await wait(400);
-                }
-
-                log(logId, `Done. ${results.length} licenses checked.`, 's');
-                btn.disabled = false; btn.innerHTML = '<i class="fas fa-search"></i> Re-run DBPR Check';
-                renderDbprResults();
-            };
-
-            function renderDbprResults() {
-                document.getElementById('step2Results').classList.remove('hidden');
-                const c = { match: 0, outdated: 0, newer: 0, notfound: 0, error: 0 };
-                results.forEach(r => c[r.status] = (c[r.status] || 0) + 1);
-
-                document.getElementById('summaryBar').innerHTML = `
-    <span><span class="dot" style="background:var(--success)"></span> ${c.match} Match</span>
-    <span><span class="dot" style="background:var(--warning)"></span> ${c.outdated} Outdated</span>
-    <span><span class="dot" style="background:var(--brand)"></span> ${c.newer} GZ Newer</span>
-    <span><span class="dot" style="background:var(--danger)"></span> ${c.notfound} Not Found</span>
-    <span><span class="dot" style="background:#666"></span> ${c.error} Error</span>`;
-
-                // Always allow the user to go to Step 3 to access the bot
-                document.getElementById('btnGoStep3').style.display = '';
-
-                const order = { outdated: 0, notfound: 1, error: 2, newer: 3, match: 4 };
-                const sorted = [...results].sort((a, b) => (order[a.status] || 9) - (order[b.status] || 9));
-                const tb = document.getElementById('dbprBody');
-                tb.innerHTML = '';
-                sorted.forEach((r, i) => {
-                    const tr = document.createElement('tr');
-                    tr.style.animationDelay = i * 20 + 'ms';
-                    const bc = { 'match': 'b-match', 'outdated': 'b-outdated', 'newer': 'b-newer', 'notfound': 'b-notfound', 'error': 'b-error' }[r.status] || '';
-                    const bt = { 'match': '✓ Match', 'outdated': '⚠ Outdated', 'newer': 'GZ Newer', 'notfound': 'Not Found', 'error': 'Error' }[r.status] || '—';
-                    tr.innerHTML = `<td>${contactLink(r.name, r.contactId)}</td><td style="font-family:var(--mono);font-size:12px">${r.licenseNumber}</td><td><strong>${r.licenseType}</strong></td>
-    <td>${r.gzExpStr}</td><td style="font-weight:${r.status === 'outdated' ? '700' : '400'};color:${r.status === 'outdated' ? 'var(--success)' : ''}">${r.dbprExpStr}</td>
-    <td style="font-size:12px;max-width:180px;overflow:hidden;text-overflow:ellipsis">${r.dbprStatus || '—'}</td>
-    <td><span class="badge ${bc}">${bt}</span></td>`;
-                    tb.appendChild(tr);
-                });
+            function setBusy(busy, progress = 0) {
+                state.busy = busy;
+                elements.progress.hidden = !busy;
+                elements.progressBar.style.width = `${Math.max(0, Math.min(100, progress))}%`;
+                elements.checkButton.disabled = busy || !state.rows.length;
+                elements.syncButton.disabled = busy || !state.checked || !state.rows.some((row) =>
+                    row.coe?.autoEligible && row.contactId && (!row.gzCoeDate || row.coe.verifiedDate > row.gzCoeDate) && row.syncAction !== "updated",
+                );
+                elements.downloadButton.disabled = busy || !state.checked;
             }
 
-            // ── STEP 3: GENERATE BULK UPDATE CSV ──
-            let contactMap = null; // name (lowercase) → ContactId
-            let contactMapReady = false;
-
-            // Bulk-load ALL GZ contacts into a name→ContactId map
-            async function loadContactMap() {
-                if (contactMapReady) return;
-                contactMap = new Map();
-                log('log3', 'Loading GrowthZone contact directory for matching...', '');
-                document.getElementById('log3').classList.remove('hidden');
-                let skip = 0;
-                const PAGE = 5000;
-                let total = null;
-                while (true) {
-                    try {
-                        const r = await fetch(`${GZ}/api/contacts?$skip=${skip}&$top=${PAGE}`, { headers: hd() });
-                        if (!r.ok) break;
-                        const data = await r.json();
-                        const rs = data.Results || [];
-                        if (!rs.length) break;
-                        if (total === null) total = data.TotalRecordAvailable || 0;
-                        rs.forEach(c => {
-                            if (c.ContactId && c.Name) {
-                                contactMap.set(c.Name.toLowerCase().trim(), c.ContactId);
-                            }
-                        });
-                        skip += rs.length;
-                        bar('bar3', Math.min(skip / (total || 1) * 50, 50)); // 0-50% for loading
-                        if (skip >= (total || 0)) break;
-                    } catch (e) { break; }
-                }
-                contactMapReady = true;
-                log('log3', `Loaded ${contactMap.size} contacts from GrowthZone.`, 's');
+            function statusFor(row) {
+                if (row.error) return { text: row.error, css: "bad" };
+                if (!state.checked && !row.coe) return { text: "Not checked", css: "muted" };
+                if (row.syncAction === "updated") return { text: `COE updated · ${displayDate(row.savedDate)}`, css: "good" };
+                if (row.syncReason === "growthzone_already_current") return { text: "GrowthZone COE already current", css: "good" };
+                if (row.syncReason && row.syncReason !== "no_verified_coe") return { text: row.syncReason.replaceAll("_", " "), css: "warn" };
+                if (!row.coe?.verifiedDate) return { text: "No explicit DBPR COE", css: "muted" };
+                if (!row.coe.autoEligible) return { text: row.coe.eligibilityReason.replaceAll("_", " "), css: "warn" };
+                if (row.gzCoeDate && row.gzCoeDate >= row.coe.verifiedDate) return { text: "COE current", css: "good" };
+                if (!row.contactId) return { text: "COE ready · Contact ID needed", css: "warn" };
+                return { text: "COE ready to sync", css: "info" };
             }
 
-            function findContactId(name) {
-                if (!contactMap) return null;
-                const key = String(name).toLowerCase().trim();
-                // Exact match
-                if (contactMap.has(key)) return contactMap.get(key);
-                // Try "Last, First" format
-                const parts = key.split(/\s+/);
-                if (parts.length >= 2) {
-                    const lastFirst = parts.slice(1).join(' ') + ', ' + parts[0];
-                    if (contactMap.has(lastFirst)) return contactMap.get(lastFirst);
-                    // Try reversed
-                    const firstLast = parts[0] + ' ' + parts.slice(1).join(' ');
-                    if (contactMap.has(firstLast)) return contactMap.get(firstLast);
-                }
-                // Fuzzy: find any key that contains both first and last tokens
-                if (parts.length >= 2) {
-                    for (const [k, v] of contactMap) {
-                        if (parts.every(p => k.includes(p))) return v;
-                    }
-                }
-                return null;
+            function licenseNeedsUpdate(row) {
+                return Boolean(row.dbprExpiration && (!row.gzExpiration || row.dbprExpiration > row.gzExpiration));
             }
 
-            function renderUpdateTable(items) {
-                const tb = document.getElementById('updateBody');
-                tb.innerHTML = '';
-                items.forEach((r, i) => {
-                    const tr = document.createElement('tr');
-                    tr.style.animationDelay = i * 20 + 'ms';
-                    tr.innerHTML = `<td>${contactLink(r.name, r.contactId)}</td><td style="font-family:var(--mono);font-size:12px">${r.licenseNumber}</td><td><strong>${r.licenseType}</strong></td>
-    <td style="text-decoration:line-through;opacity:.6">${r.gzExpStr}</td>
-    <td style="font-weight:700;color:var(--success)">${r.dbprExpStr}</td>`;
-                    tb.appendChild(tr);
-                });
+            function cell(text, className = "") {
+                const td = document.createElement("td");
+                td.textContent = text;
+                if (className) td.className = className;
+                return td;
             }
 
-            window.downloadGZCsv = async function () {
-                const outdated = results.filter(r => r.status === 'outdated');
-                if (!outdated.length) return;
-
-                const btn = document.getElementById('btnDownloadCsv');
-                btn.disabled = true;
-                btn.innerHTML = '<span class="spinner" style="border-width:2px;width:14px;height:14px;margin-right:8px;vertical-align:middle"></span> Matching Contacts...';
-                document.getElementById('log3').classList.remove('hidden');
-
-                // Load map to get ContactIds for accurate importing
-                await loadContactMap();
-                bar('bar3', 75);
-
-                // Construct CSV
-                let csv = 'ContactId,Name,License Number,License Type,License Expiration Date\n';
-                let matched = 0;
-
-                outdated.forEach(r => {
-                    if (!r.contactId) {
-                        const foundId = findContactId(r.name);
-                        if (foundId) r.contactId = foundId;
-                    }
-                    // Escape quotes just in case
-                    const cleanName = r.name.replace(/"/g, '""');
-                    csv += `"${r.contactId || ''}","${cleanName}","${r.licenseNumber}","${r.licenseType}","${fmtD(r.dbprExpDate)}"\n`;
-                    if (r.contactId) matched++;
-                });
-
-                log('log3', `Matched ${matched} of ${outdated.length} contacts with GrowthZone IDs.`, 's');
-                renderUpdateTable(outdated);
-                bar('bar3', 100);
-
-                // Trigger Download
-                const fileName = `GrowthZone_License_Updates_${new Date().toISOString().slice(0, 10)}.csv`;
-                window.latestDownloadedCsvPath = `/Users/kevinweinkauff/Downloads/${fileName}`; // Assume default Mac Downloads folder
-
-                const blob = new Blob([csv], { type: 'text/csv' });
-                const url = URL.createObjectURL(blob);
-                const a = document.createElement('a');
-                a.href = url;
-                a.download = fileName;
-                document.body.appendChild(a);
-                a.click();
-                document.body.removeChild(a);
-                URL.revokeObjectURL(url);
-
-                log('log3', `CSV file downloaded successfully!`, 's');
-                btn.disabled = false;
-                btn.innerHTML = '<i class="fas fa-file-csv"></i> Download GrowthZone CSV';
-            };
-
-            // ── EXPORT CSV ──
-            window.exportCSV = function () {
-                if (!results.length) return;
-                let csv = 'Name,License #,Type,GZ Expiration,DBPR Expiration,DBPR Status,Result\n';
-                results.forEach(r => { csv += `"${r.name}","${r.licenseNumber}","${r.licenseType}","${r.gzExpStr}","${r.dbprExpStr}","${(r.dbprStatus || '').replace(/"/g, "'")}","${r.status}"\n` });
-                const a = document.createElement('a');
-                a.href = URL.createObjectURL(new Blob([csv], { type: 'text/csv' }));
-                a.download = `license_check_${new Date().toISOString().split('T')[0]}.csv`;
-                a.click();
-            };
-
-            // ── RUN BOT ──
-            window.runBot = async function () {
-                if (!window.latestDownloadedCsvPath) {
-                    alert("Please download the GrowthZone CSV first so the bot knows what file to process!");
-                    return;
-                }
-
-                if (!confirm(`This will trigger the local Puppeteer automation bot to update GrowthZone profiles based on the CSV in your Downloads folder.\\n\\nYou MUST have 'node server.js' running in the terminal.\\n\\nContinue?`)) return;
-
-                try {
-                    const res = await fetch('http://localhost:3001/run-updater', {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({ csvPath: window.latestDownloadedCsvPath })
-                    });
-                    const data = await res.json();
-                    if (res.ok) {
-                        alert(data.message + '\\n\\nSwitch to your terminal to view progress, and do not touch the mouse/keyboard while the Chrome window is open!');
+            function render() {
+                elements.resultsBody.replaceChildren();
+                for (const row of state.rows) {
+                    const tr = document.createElement("tr");
+                    const agent = document.createElement("td");
+                    if (row.contactId) {
+                        const link = document.createElement("a");
+                        link.href = `${GZ_BASE}/a#/ContactInfo/${encodeURIComponent(row.contactId)}/NAREditionFieldsV2`;
+                        link.target = "_blank";
+                        link.rel = "noopener";
+                        link.textContent = row.name || "Open GrowthZone";
+                        agent.append(link);
                     } else {
-                        alert('Error: ' + data.error);
+                        agent.textContent = row.name || "—";
                     }
-                } catch (e) {
-                    alert('❌ Could not connect to the local bot server!\\n\\nPlease open a terminal, cd into Homepage/2026/gz-updater-bot, and run:\\nnode server.js');
+                    if (row.contactId) {
+                        const small = document.createElement("small");
+                        small.textContent = `Contact ${row.contactId}`;
+                        agent.append(small);
+                    }
+                    tr.append(agent, cell(row.licenseNumber, "mono"), cell(displayDate(row.gzExpiration)));
+                    const dbprCell = cell(displayDate(row.dbprExpiration));
+                    if (licenseNeedsUpdate(row)) dbprCell.classList.add("good");
+                    tr.append(dbprCell, cell(displayDate(row.gzCoeDate)));
+                    const coeCell = cell(displayDate(row.coe?.verifiedDate));
+                    if (row.coe?.verifiedCourseName) {
+                        const small = document.createElement("small");
+                        small.textContent = row.coe.verifiedCourseName;
+                        coeCell.append(small);
+                    }
+                    tr.append(coeCell);
+                    const resultCell = document.createElement("td");
+                    const status = statusFor(row);
+                    const badge = document.createElement("span");
+                    badge.className = `badge ${status.css}`;
+                    badge.textContent = status.text;
+                    resultCell.append(badge);
+                    tr.append(resultCell);
+                    elements.resultsBody.append(tr);
                 }
-            };
+
+                elements.resultsTable.hidden = !state.rows.length;
+                elements.emptyState.hidden = Boolean(state.rows.length);
+                elements.stats.hidden = !state.rows.length;
+                elements.totalStat.textContent = state.rows.length;
+                elements.licenseStat.textContent = state.rows.filter(licenseNeedsUpdate).length;
+                elements.coeReadyStat.textContent = state.rows.filter((row) => row.coe?.autoEligible && (!row.gzCoeDate || row.coe.verifiedDate > row.gzCoeDate)).length;
+                elements.reviewStat.textContent = state.rows.filter((row) => row.coe && !row.coe.autoEligible && (row.coe.verifiedDate || row.coe.reviewDate)).length;
+                elements.syncedStat.textContent = state.rows.filter((row) => row.syncAction === "updated").length;
+                elements.resultSummary.textContent = `${state.rows.length} license record${state.rows.length === 1 ? "" : "s"}`;
+                setBusy(state.busy, Number(elements.progressBar.style.width.replace("%", "")) || 0);
+            }
+
+            async function loadFile(file) {
+                setBusy(true, 8);
+                try {
+                    const workbook = XLSX.read(await file.arrayBuffer(), { type: "array", cellDates: true });
+                    const sheet = workbook.Sheets[workbook.SheetNames[0]];
+                    const rawRows = XLSX.utils.sheet_to_json(sheet, { defval: "", raw: true });
+                    if (!rawRows.length) throw new Error("The first worksheet is empty.");
+                    const columns = mapColumns(rawRows);
+                    if (!columns.license) throw new Error("No license number column was found.");
+                    state.rows = rawRows.map((raw) => ({
+                        name: columns.name ? String(raw[columns.name] || "").trim() : "",
+                        licenseNumber: normalizeLicense(raw[columns.license]),
+                        contactId: columns.contactId && /^\d+$/.test(String(raw[columns.contactId]).trim()) ? String(raw[columns.contactId]).trim() : "",
+                        gzExpiration: columns.licenseExpiration ? iso(raw[columns.licenseExpiration]) : null,
+                        gzCoeDate: columns.coeDate ? iso(raw[columns.coeDate]) : null,
+                        dbprExpiration: null,
+                        coe: null,
+                        error: null,
+                    })).filter((row) => row.licenseNumber);
+                    if (!state.rows.length) throw new Error("No populated license numbers were found.");
+                    state.checked = false;
+                    elements.fileLabel.textContent = `${file.name} · ${state.rows.length} records`;
+                    setMessage(`Loaded ${state.rows.length} records. Click “Check DBPR + COE” to verify them.`);
+                    render();
+                } catch (error) {
+                    state.rows = [];
+                    setMessage(error instanceof Error ? error.message : "The file could not be read.", true);
+                    render();
+                } finally {
+                    setBusy(false);
+                }
+            }
+
+            async function checkAll() {
+                if (!state.rows.length) return;
+                setBusy(true, 0);
+                state.checked = false;
+                let next = 0;
+                let complete = 0;
+                const worker = async () => {
+                    while (next < state.rows.length) {
+                        const index = next++;
+                        const row = state.rows[index];
+                        try {
+                            const response = await fetch(`${API}/api/verify-license?number=${encodeURIComponent(row.licenseNumber)}`);
+                            const payload = await response.json();
+                            if (!response.ok || !payload.valid) throw new Error(payload.error || "License not found in DBPR");
+                            row.dbprExpiration = iso(payload.details?.expiration_date) || iso((payload.details?.status_expires || "").match(/\d{1,2}\/\d{1,2}\/\d{4}/)?.[0]);
+                            row.coe = payload.coe || { autoEligible: false, eligibilityReason: "no_coe_candidate" };
+                        } catch (error) {
+                            row.error = error instanceof Error ? error.message : "Lookup failed";
+                        }
+                        complete += 1;
+                        setBusy(true, complete / state.rows.length * 100);
+                        if (complete % 5 === 0 || complete === state.rows.length) render();
+                    }
+                };
+                await Promise.all(Array.from({ length: Math.min(5, state.rows.length) }, worker));
+                state.checked = true;
+                setBusy(false, 100);
+                setMessage(`Checked ${state.rows.length} licenses. Review the results, then sync only the verified COE candidates.`);
+                render();
+            }
+
+            async function syncCoe() {
+                const candidates = state.rows.filter((row) =>
+                    row.coe?.autoEligible && row.contactId && (!row.gzCoeDate || row.coe.verifiedDate > row.gzCoeDate) && row.syncAction !== "updated",
+                );
+                if (!candidates.length) return;
+                if (!window.confirm(`Sync ${candidates.length} guarded COE candidate${candidates.length === 1 ? "" : "s"} to GrowthZone? Existing current records and failed validations will be skipped.`)) return;
+                setBusy(true, 5);
+                try {
+                    let completed = 0;
+                    for (let offset = 0; offset < candidates.length; offset += 25) {
+                        const batch = candidates.slice(offset, offset + 25);
+                        const response = await fetch(`${API}/api/coe/sync`, {
+                            method: "POST",
+                            headers: { "Content-Type": "application/json" },
+                            body: JSON.stringify({ records: batch.map((row) => ({ contactId: row.contactId, licenseNumber: row.licenseNumber })) }),
+                        });
+                        const payload = await response.json();
+                        if (!response.ok) throw new Error(payload.error || "GrowthZone sync failed.");
+                        for (const result of payload.results || []) {
+                            const row = state.rows.find((item) => item.contactId === String(result.contactId) && item.licenseNumber === result.licenseNumber);
+                            if (!row) continue;
+                            row.syncAction = result.action;
+                            row.syncReason = result.reason;
+                            row.savedDate = result.savedDate || result.existingDate || null;
+                            if (row.savedDate) row.gzCoeDate = row.savedDate;
+                        }
+                        completed += batch.length;
+                        setBusy(true, completed / candidates.length * 100);
+                        render();
+                    }
+                    setMessage("GrowthZone sync finished. Updated records were verified from the save response; all ineligible records were skipped.");
+                } catch (error) {
+                    setMessage(error instanceof Error ? error.message : "GrowthZone sync failed.", true);
+                } finally {
+                    setBusy(false, 100);
+                    render();
+                }
+            }
+
+            function csvValue(value) {
+                return `"${String(value ?? "").replaceAll('"', '""')}"`;
+            }
+
+            function downloadResults() {
+                const headers = ["Name", "Contact ID", "License Number", "GZ License Expiration", "DBPR License Expiration", "GZ COE Date", "DBPR Verified COE Date", "DBPR COE Course", "COE Eligible", "Result"];
+                const lines = [headers.map(csvValue).join(",")];
+                for (const row of state.rows) {
+                    lines.push([
+                        row.name, row.contactId, row.licenseNumber, row.gzExpiration, row.dbprExpiration,
+                        row.gzCoeDate, row.coe?.verifiedDate, row.coe?.verifiedCourseName,
+                        row.coe?.autoEligible ? "Yes" : "No", statusFor(row).text,
+                    ].map(csvValue).join(","));
+                }
+                const url = URL.createObjectURL(new Blob([lines.join("\r\n")], { type: "text/csv;charset=utf-8" }));
+                const link = document.createElement("a");
+                link.href = url;
+                link.download = `CCOR_License_COE_Results_${new Date().toISOString().slice(0, 10)}.csv`;
+                document.body.append(link);
+                link.click();
+                link.remove();
+                URL.revokeObjectURL(url);
+            }
+
+            elements.fileInput.addEventListener("change", () => elements.fileInput.files[0] && loadFile(elements.fileInput.files[0]));
+            elements.dropZone.addEventListener("dragover", (event) => { event.preventDefault(); elements.dropZone.classList.add("drag"); });
+            elements.dropZone.addEventListener("dragleave", () => elements.dropZone.classList.remove("drag"));
+            elements.dropZone.addEventListener("drop", (event) => {
+                event.preventDefault();
+                elements.dropZone.classList.remove("drag");
+                if (event.dataTransfer.files[0]) loadFile(event.dataTransfer.files[0]);
+            });
+            elements.checkButton.addEventListener("click", checkAll);
+            elements.syncButton.addEventListener("click", syncCoe);
+            elements.downloadButton.addEventListener("click", downloadResults);
         })();
     </script>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<div id="ccor-waves-bg" aria-hidden="true" style="position: fixed; inset: 0; z-index: -9999; pointer-events: none; opacity: 0.45; overflow: hidden; background: #ffffff;">
-  <div class="ccor-wave-container ccor-ribbon-bottom" style="position: absolute; inset: 0;"></div>
-</div>
-<style>
-  /* ── CCOR Wave Background ── Optimized for performance ── */
-
-  /* Pure-CSS drift: no JS rAF needed for horizontal movement */
-  @keyframes waveSlide {
-    0%   { transform: translateX(0)   translateY(var(--wy,0px)) rotate(var(--wr,0deg)) scaleX(1.4); }
-    50%  { transform: translateX(var(--wx,60px)) translateY(var(--wy2,0px)) rotate(var(--wr2,0deg)) scaleX(1.4); }
-    100% { transform: translateX(0)   translateY(var(--wy,0px)) rotate(var(--wr,0deg)) scaleX(1.4); }
-  }
-  @keyframes waveSlide-mobile {
-    0%   { transform: translateX(0)   translateY(var(--wy,0px)) rotate(var(--wr,0deg)) scaleX(1.6); }
-    50%  { transform: translateX(var(--wx,30px)) translateY(var(--wy2,0px)) rotate(var(--wr2,0deg)) scaleX(1.6); }
-    100% { transform: translateX(0)   translateY(var(--wy,0px)) rotate(var(--wr,0deg)) scaleX(1.6); }
-  }
-  @keyframes gradientShift {
-    0%   { background-position: 0% 0; }
-    100% { background-position: 400% 0; }
-  }
-
-  .ccor-wave {
-    position: absolute;
-    width: 300%;        /* ↓ from 400% — still covers viewport */
-    left: -100%;        /* ↓ from -150% */
-    /* NO filter:blur — this is the #1 GPU killer */
-    background: linear-gradient(120deg,
-      #1B449D 0%,  #2e5ab8 8%,  #3d6cd1 16%,
-      #64BAB0 24%, #8dd4ca 32%, #a6e1d9 40%,
-      #D4AC6C 48%, #e8c88a 56%, #f2dcb3 64%,
-      #5B5A5C 72%, #7a7a7a 80%, #64BAB0 88%,
-      #4da69a 94%, #1B449D 100%
-    );
-    background-size: 400% 100%;
-    border-radius: 42% 45% 40% 43%;
-    will-change: transform;          /* promote to own compositor layer */
-    transform-origin: center bottom;
-    /* Gradient shifts via CSS — no JS needed */
-    animation: gradientShift 18s ease-in-out infinite alternate,
-               waveSlide      var(--dur, 12s) ease-in-out infinite;
-    /* Animation-play-state toggled by JS on visibility change */
-  }
-
-  .ccor-ribbon-bottom .ccor-wave { bottom: -520px; height: 560px; }
-
-  /* Mobile: simpler, lighter */
-  @media (max-width: 768px) {
-    .ccor-wave {
-      height: 360px !important;
-      bottom: -360px !important;
-      animation-name: gradientShift, waveSlide-mobile;
-    }
-  }
-
-  /* ── Respect user preference ── */
-  @media (prefers-reduced-motion: reduce) {
-    .ccor-wave { animation: none !important; }
-  }
-
-  /* FORCE TRANSPARENCY ON HOST CONTAINERS */
-  html { background-color: #ffffff !important; }
-  body, .site, #page, .site-content, #content, .entry-content,
-  .joinber-page, .ber-about, #main, .main-container, .wrapper,
-  .ber-directory, .container, .main-content, .directory-grid,
-  .controls, .section, main {
-    background-color: transparent !important;
-    background: transparent !important;
-  }
-</style>
-<script>
-  (function () {
-    // Clear any previously stored performance disable flags to restore wave graphics
-    sessionStorage.removeItem('ccor-waves-disabled');
-
-    /* ── Performance-optimised wave init ── */
-    function initCcorWaves() {
-      const root = document.getElementById('ccor-waves-bg');
-      if (!root) return;
-
-      /* 1. Honour reduced-motion: skip entirely */
-      if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
-        root.style.display = 'none';
-        return;
-      }
-
-      const isMobile = () => window.innerWidth < 768;
-
-      /* Reduced wave count: 5 on desktop, 3 on mobile */
-      const WAVE_COUNT = isMobile() ? 3 : 5;
-      const containers = root.querySelectorAll('.ccor-wave-container');
-      
-      containers.forEach(container => {
-        const waves = [];
-        for (let i = 0; i < WAVE_COUNT; i++) {
-          const wave = document.createElement('div');
-          wave.className = 'ccor-wave';
-
-          /* Vary shape */
-          const r1 = 38 + Math.random() * 10;
-          wave.style.borderRadius = r1 + '% ' + (r1+3) + '% ' + (r1-2) + '% ' + (r1+2) + '%';
-          wave.style.opacity      = 0.18 + (Math.random() * 0.28);
-          wave.style.zIndex       = WAVE_COUNT - i;
-
-          /* CSS custom properties drive the pure-CSS animation */
-          const offsetY  = i * (isMobile() ? 12 : 28);
-          const driftX   = (isMobile() ? 25 : 55) + Math.random() * (isMobile() ? 20 : 45);
-          const rotA     = (Math.random() - 0.5) * 3;
-          const rotB     = rotA + (Math.random() - 0.5) * 3;
-          const undA     = -(offsetY + (Math.random() * 18));
-          const undB     = -(offsetY + (Math.random() * 28));
-          const dur      = 10 + Math.random() * 8;   /* 10–18 s per wave */
-          const delay    = -(Math.random() * dur);    /* stagger start */
-
-          wave.style.setProperty('--wx',  driftX + 'px');
-          wave.style.setProperty('--wy',  undA    + 'px');
-          wave.style.setProperty('--wy2', undB    + 'px');
-          wave.style.setProperty('--wr',  rotA    + 'deg');
-          wave.style.setProperty('--wr2', rotB    + 'deg');
-          wave.style.setProperty('--dur', dur     + 's');
-          wave.style.animationDelay = delay + 's, ' + (delay * 0.7) + 's';
-
-          container.appendChild(wave);
-          waves.push(wave);
-        }
-      });
-
-      /* Pause animations when tab is hidden → saves CPU/GPU entirely */
-      document.addEventListener('visibilitychange', () => {
-        const state = document.hidden ? 'paused' : 'running';
-        root.querySelectorAll('.ccor-wave').forEach(w => {
-          w.style.animationPlayState = state;
-        });
-      });
-    }
-
-    if (document.readyState === 'loading') {
-      document.addEventListener('DOMContentLoaded', initCcorWaves);
-    } else {
-      initCcorWaves();
-    }
-  })();
-</script>
 </body>
-
 </html>
-
