@@ -1,5 +1,6 @@
 import assert from "node:assert/strict";
 import test from "node:test";
+import worker from "../src/index.mjs";
 
 import {
     classifyCoeCourse,
@@ -76,4 +77,13 @@ test("requires the active M1-linked GrowthZone license", () => {
     assert.equal(editionIsActive(edition), true);
     assert.equal(editionSyncsToM1(edition), true);
     assert.equal(editionLicenseNumber(edition), "3317954");
+});
+
+test("rejects the retired cloud COE write endpoint", async () => {
+    const response = await worker.fetch(new Request("https://worker.example/api/coe/sync", {
+        method: "POST",
+        headers: { Origin: "https://ccor-license-checker.pages.dev" },
+    }), { ALLOWED_ORIGIN: "https://ccor-license-checker.pages.dev" });
+    assert.equal(response.status, 410);
+    assert.equal((await response.json()).localHelperRequired, true);
 });

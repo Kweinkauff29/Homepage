@@ -95,7 +95,7 @@
 <body>
     <header>
         <h1>License &amp; Code of Ethics Checker</h1>
-        <p>Compare active GrowthZone agents with live DBPR license data and DBPR course completions, then add only verified current-cycle COE records to the GrowthZone Real Estate tab.</p>
+        <p>Compare active GrowthZone agents with live DBPR license data and DBPR course completions, then use the signed-in desktop browser helper to update licenses, confirmed COEs, or both.</p>
     </header>
 
     <main>
@@ -112,7 +112,7 @@
                     <label><input type="radio" name="updateMode" value="coe"> Confirmed COE</label>
                     <label><input type="radio" name="updateMode" value="both" checked> Both</label>
                 </fieldset>
-                <small class="source-status">License and Both require the signed-in PC/Mac GrowthZone helper. Confirmed COE runs entirely in the cloud.</small>
+                <small class="source-status">All three options use the signed-in PC/Mac GrowthZone helper. Cloudflare verifies DBPR data but does not write directly to GrowthZone.</small>
                 <div class="actions">
                     <button class="btn primary" id="checkButton" disabled>Check DBPR + COE</button>
                     <button class="btn success" id="syncButton" disabled>Run both updates</button>
@@ -156,7 +156,7 @@
             </div>
         </section>
 
-        <footer>CCOR License Checker v4 · License status is checked live; COE data refreshes from the DBPR extract and only explicit current-cycle courses are eligible for automatic sync.</footer>
+        <footer>CCOR License Checker v4 · License status is checked live; the DBPR COE index checks for a new source file once daily and only explicit current-cycle courses are eligible for upload.</footer>
     </main>
 
     <script>
@@ -203,7 +203,7 @@
                     const source = payload.dbpr || {};
                     const progress = source.source_length ? Math.min(100, Math.round(Number(source.cursor || 0) / Number(source.source_length) * 100)) : 0;
                     const phase = source.status === "processing" ? `refreshing (${progress}%)` : source.status || "idle";
-                    elements.dbprStatus.textContent = `DBPR COE index: ${phase} · source ${source.source_last_modified || "unknown"} · checked ${displayTimestamp(source.checked_at)} · indexed ${displayTimestamp(source.completed_at)}${source.last_error ? ` · error: ${source.last_error}` : ""}`;
+                    elements.dbprStatus.textContent = `DBPR COE index: ${phase} · daily source check at 10:15 UTC · source ${source.source_last_modified || "unknown"} · checked ${displayTimestamp(source.checked_at)} · indexed ${displayTimestamp(source.completed_at)}${source.last_error ? ` · error: ${source.last_error}` : ""}`;
                 } catch {
                     elements.dbprStatus.textContent = "DBPR COE index status is temporarily unavailable.";
                 }
@@ -244,13 +244,23 @@
             function statusFor(row) {
                 if (row.error) return { text: row.error, css: "bad" };
                 if (!state.checked && !row.coe) return { text: "Not checked", css: "muted" };
-                if (row.licenseSyncAction === "updated" && row.syncAction === "updated") return { text: "License + COE updated", css: "good" };
-                if (row.licenseSyncAction === "updated") return { text: `License updated · ${displayDate(row.dbprExpiration)}`, css: "good" };
+                if (row.licenseSyncAction === "launched" && row.syncAction === "launched") return { text: "License + COE running locally", css: "info" };
                 if (row.licenseSyncAction === "launched") return { text: "License update running locally", css: "info" };
-                if (row.licenseSyncReason) return { text: row.licenseSyncReason.replaceAll("_", " "), css: "warn" };
-                if (row.syncAction === "updated") return { text: `COE updated · ${displayDate(row.savedDate)}`, css: "good" };
-                if (row.syncReason === "growthzone_already_current") return { text: "GrowthZone COE already current", css: "good" };
-                if (row.syncReason && row.syncReason !== "no_verified_coe") return { text: row.syncReason.replaceAll("_", " "), css: "warn" };
+                if (row.syncAction === "launched") return { text: "COE update running locally", css: "info" };
+                const actionText = (kind, action, reason, date) => {
+                    if (action === "updated") return `${kind} updated · ${displayDate(date)}`;
+                    if (action === "skipped") return `${kind} already current · ${displayDate(date)}`;
+                    return `${kind} ${String(reason || action).replaceAll("_", " ")}`;
+                };
+                if (row.licenseSyncAction && row.syncAction) {
+                    const blocked = row.licenseSyncAction === "blocked" || row.syncAction === "blocked";
+                    return {
+                        text: `${actionText("License", row.licenseSyncAction, row.licenseSyncReason, row.gzExpiration)} · ${actionText("COE", row.syncAction, row.syncReason, row.gzCoeDate)}`,
+                        css: blocked ? "warn" : "good",
+                    };
+                }
+                if (row.licenseSyncAction) return { text: actionText("License", row.licenseSyncAction, row.licenseSyncReason, row.gzExpiration), css: row.licenseSyncAction === "blocked" ? "warn" : "good" };
+                if (row.syncAction) return { text: actionText("COE", row.syncAction, row.syncReason, row.gzCoeDate), css: row.syncAction === "blocked" ? "warn" : "good" };
                 if (!row.coe?.verifiedDate) return { text: "No explicit DBPR COE", css: "muted" };
                 if (!row.coe.autoEligible) return { text: row.coe.eligibilityReason.replaceAll("_", " "), css: "warn" };
                 if (row.gzCoeDate && row.gzCoeDate >= row.coe.verifiedDate) return { text: "COE current", css: "good" };
@@ -386,65 +396,71 @@
                 render();
             }
 
-            async function syncCoeCandidates(candidates) {
-                let completed = 0;
-                for (let offset = 0; offset < candidates.length; offset += 25) {
-                    const batch = candidates.slice(offset, offset + 25);
-                    const response = await fetch(`${API}/api/coe/sync`, {
-                        method: "POST",
-                        headers: { "Content-Type": "application/json" },
-                        body: JSON.stringify({ records: batch.map((row) => ({ contactId: row.contactId, licenseNumber: row.licenseNumber })) }),
-                    });
-                    const payload = await response.json();
-                    if (!response.ok) throw new Error(payload.error || "GrowthZone COE sync failed.");
-                    for (const result of payload.results || []) {
-                        const row = state.rows.find((item) => item.contactId === String(result.contactId) && item.licenseNumber === result.licenseNumber);
-                        if (!row) continue;
-                        row.syncAction = result.action;
-                        row.syncReason = result.reason;
-                        row.savedDate = result.savedDate || result.existingDate || null;
-                        if (row.savedDate) row.gzCoeDate = row.savedDate;
-                    }
-                    completed += batch.length;
-                    setBusy(true, candidates.length ? completed / candidates.length * 100 : 100);
-                    render();
-                }
-            }
-
-            async function launchLicenseUpdate(candidates) {
-                const response = await fetch(`${LOCAL_UPDATER}/run-updater`, {
-                    method: "POST",
-                    headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify({
-                        records: candidates.map((row) => ({
+            async function launchGrowthZoneUpdate(licenseCandidates, coeCandidates) {
+                const recordsByKey = new Map();
+                const getRecord = (row) => {
+                    const key = `${row.contactId}:${row.licenseNumber}`;
+                    if (!recordsByKey.has(key)) {
+                        recordsByKey.set(key, {
                             name: row.name,
                             contactId: row.contactId,
                             licenseNumber: row.licenseNumber,
-                            expirationDate: row.dbprExpiration,
-                        })),
-                    }),
+                            updateLicense: false,
+                            updateCoe: false,
+                        });
+                    }
+                    return recordsByKey.get(key);
+                };
+                for (const row of licenseCandidates) {
+                    Object.assign(getRecord(row), { updateLicense: true, expirationDate: row.dbprExpiration });
+                    row.licenseSyncAction = "launched";
+                    row.licenseSyncReason = null;
+                }
+                for (const row of coeCandidates) {
+                    Object.assign(getRecord(row), {
+                        updateCoe: true,
+                        coeDate: row.coe.verifiedDate,
+                        coeCycle: row.coe.cycle,
+                        coeCourseNumber: row.coe.verifiedCourseNumber,
+                        coeCourseName: row.coe.verifiedCourseName,
+                    });
+                    row.syncAction = "launched";
+                    row.syncReason = null;
+                }
+                render();
+
+                const response = await fetch(`${LOCAL_UPDATER}/run-updater`, {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ records: [...recordsByKey.values()] }),
                 });
                 const payload = await response.json();
-                if (!response.ok) throw new Error(payload.error || "The local license updater could not start.");
-                for (const row of candidates) row.licenseSyncAction = "launched";
-                render();
-                for (let attempt = 0; attempt < 180; attempt += 1) {
+                if (!response.ok) throw new Error(payload.error || "The local GrowthZone updater could not start.");
+                for (let attempt = 0; attempt < 240; attempt += 1) {
                     await new Promise((resolve) => window.setTimeout(resolve, 5000));
                     const jobResponse = await fetch(`${LOCAL_UPDATER}/jobs/${encodeURIComponent(payload.jobId)}`);
                     const job = await jobResponse.json();
-                    if (!jobResponse.ok) throw new Error(job.error || "The local license update job could not be read.");
+                    if (!jobResponse.ok) throw new Error(job.error || "The local GrowthZone update job could not be read.");
                     for (const result of job.results || []) {
                         const row = state.rows.find((item) => item.contactId === String(result.contactId) && item.licenseNumber === String(result.licenseNumber));
                         if (!row) continue;
-                        row.licenseSyncAction = result.action;
-                        row.licenseSyncReason = result.reason;
-                        if (result.savedDate) row.gzExpiration = result.savedDate;
+                        if (result.kind === "license") {
+                            row.licenseSyncAction = result.action;
+                            row.licenseSyncReason = result.reason;
+                            if (result.savedDate) row.gzExpiration = result.savedDate;
+                        }
+                        if (result.kind === "coe") {
+                            row.syncAction = result.action;
+                            row.syncReason = result.reason;
+                            row.savedDate = result.savedDate || null;
+                            if (result.savedDate) row.gzCoeDate = result.savedDate;
+                        }
                     }
                     render();
                     if (job.status === "complete") return payload.jobId;
-                    if (job.status === "failed") throw new Error("The local GrowthZone license update job failed. Review the helper window for details.");
+                    if (job.status === "failed") throw new Error("The local GrowthZone update job failed. Review the helper window for details.");
                 }
-                throw new Error("The local license update is still running. Leave the helper open and check GrowthZone before retrying.");
+                throw new Error("The local GrowthZone update is still running. Leave the helper open and check GrowthZone before retrying.");
             }
 
             async function syncSelected() {
@@ -456,27 +472,16 @@
                 const runLicense = state.mode !== "coe" && licenseCandidates.length > 0;
                 if (!runCoe && !runLicense) return;
                 const summary = [runLicense ? `${licenseCandidates.length} license` : "", runCoe ? `${coeCandidates.length} COE` : ""].filter(Boolean).join(" and ");
-                if (!window.confirm(`Run ${summary} update${licenseCandidates.length + coeCandidates.length === 1 ? "" : "s"}? COE writes are validated by the cloud service; license writes run through the signed-in local GrowthZone helper.`)) return;
+                if (!window.confirm(`Run ${summary} update${licenseCandidates.length + coeCandidates.length === 1 ? "" : "s"}? All GrowthZone writes will run in the visible, signed-in browser helper on this computer.`)) return;
                 setBusy(true, 5);
                 const messages = [];
                 let failed = false;
                 try {
-                    if (runCoe) {
-                        await syncCoeCandidates(coeCandidates);
-                        messages.push("COE sync finished and its saves were verified");
-                    }
-                    if (runLicense) {
-                        try {
-                            const jobId = await launchLicenseUpdate(licenseCandidates);
-                            messages.push(`license updater started${jobId ? ` (job ${jobId})` : ""}`);
-                        } catch (error) {
-                            failed = true;
-                            messages.push(`${error instanceof Error ? error.message : "License updater failed"} Start the cross-platform helper on this computer with npm start, then retry the license option.`);
-                        }
-                    }
+                    const jobId = await launchGrowthZoneUpdate(runLicense ? licenseCandidates : [], runCoe ? coeCandidates : []);
+                    messages.push(`GrowthZone browser updates finished and were verified${jobId ? ` (job ${jobId})` : ""}`);
                 } catch (error) {
                     failed = true;
-                    messages.push(error instanceof Error ? error.message : "GrowthZone update failed.");
+                    messages.push(`${error instanceof Error ? error.message : "GrowthZone update failed."} Start the PC/Mac helper, sign in in its browser window if prompted, then retry.`);
                 } finally {
                     setBusy(false, 100);
                     setMessage(messages.join(". ") || "No updates were run.", failed);

@@ -411,13 +411,10 @@ async function handleRequest(request, env) {
 
     if (request.method === "POST" && url.pathname === "/api/coe/sync") {
         if (!allowedOrigin(request, env)) return json({ error: "Origin not allowed." }, 403, headers);
-        const body = await readJson(request);
-        if (!Array.isArray(body?.records) || body.records.length > MAX_SYNC_RECORDS) {
-            return json({ error: `records must be an array of at most ${MAX_SYNC_RECORDS}.` }, 400, headers);
-        }
-        const results = [];
-        for (const record of body.records) results.push(await syncOneCoe(env, record));
-        return json({ results }, 200, headers);
+        return json({
+            error: "Direct cloud GrowthZone writes are disabled. Use the signed-in PC/Mac browser helper for confirmed COE uploads.",
+            localHelperRequired: true,
+        }, 410, headers);
     }
 
     return json({ error: "Not found." }, 404, headers);

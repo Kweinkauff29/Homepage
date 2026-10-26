@@ -1,6 +1,6 @@
-# CCOR GrowthZone License Helper
+# CCOR GrowthZone Update Helper
 
-The Cloudflare checker uses this local helper only for **DBPR license-expiration updates**. GrowthZone's published API exposes Professional license records for reading but not writing, so this helper safely updates the signed-in GrowthZone page in Chrome or Edge. COE updates do not require the helper.
+The Cloudflare checker uses this local helper for all GrowthZone writes: **DBPR license expiration**, **confirmed Code of Ethics**, or **both**. The helper opens a visible Chrome or Edge window and uses the signed-in GrowthZone interface, so the same workflow works on Windows and macOS without sending GrowthZone credentials to Cloudflare.
 
 ## Windows
 
@@ -14,6 +14,11 @@ The Cloudflare checker uses this local helper only for **DBPR license-expiration
 2. Double-click `start-mac.command`. If macOS blocks it, right-click it and choose **Open**.
 3. Keep the Terminal window open while using the checker.
 
-The first license run opens a separate browser profile. Sign in to GrowthZone there once; the profile is then reused locally. Credentials are not sent to the Cloudflare page or stored in GitHub.
+The first update opens a separate browser profile. Sign in to GrowthZone there once; the profile is then reused locally. Credentials are not sent to the Cloudflare page or stored in GitHub.
 
-The helper listens only on `127.0.0.1:3001`, accepts requests only from the CCOR checker (plus local development), validates every record, and updates only one exact matching license. It never creates or deletes license rows. After saving, it reopens the record and verifies the expiration date.
+## Safety checks
+
+- The helper listens only on `127.0.0.1:3001` and accepts requests only from the CCOR checker or local development.
+- License mode updates only one exact matching Professional license record. It never creates or deletes license rows and verifies the saved expiration date.
+- COE mode requires an active contact, M1 sync enabled, and an exact M1 license match. It skips an equal-or-newer COE record, adds only a confirmed DBPR date with the COEC code/current cycle, and verifies the new row on the Real Estate tab.
+- Both mode combines those guarded actions in one visible browser job.

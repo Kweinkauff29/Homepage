@@ -1,36 +1,42 @@
+'use strict';
+
 const puppeteer = require('puppeteer');
 const fs = require('fs');
 const path = require('path');
 const csv = require('csv-parser');
+const { enabled, normalizeLicenseNumber, toIsoDate, usDate } = require('./core');
 require('dotenv').config();
 
 const GZ_BASE_URL = 'https://bonitaspringsesterorealtorsfl.growthzoneapp.com';
+const MODAL_SELECTOR = '.modal.in, .modal.show, .modal[style*="display: block"]';
+const sleep = (milliseconds) => new Promise((resolve) => setTimeout(resolve, milliseconds));
 
-// ─── CSV Loading ────────────────────────────────────────────────────────────
+function emitResult(kind, contact, action, reason, details = {}) {
+    const result = {
+        kind,
+        contactId: String(contact.ContactId || ''),
+        licenseNumber: normalizeLicenseNumber(contact['License Number']),
+        action,
+        reason,
+        ...details,
+    };
+    console.log(`CCOR_RESULT ${JSON.stringify(result)}`);
+    return result;
+}
+
 function loadContactsFromCSV(filePath) {
     return new Promise((resolve, reject) => {
         const contacts = [];
         fs.createReadStream(filePath)
             .pipe(csv())
             .on('data', (row) => {
-                if (row.ContactId && row['License Expiration Date']) {
-                    contacts.push(row);
-                }
+                const wantsLicense = enabled(row['Update License']);
+                const wantsCoe = enabled(row['Update COE']);
+                if (row.ContactId && row['License Number'] && (wantsLicense || wantsCoe)) contacts.push(row);
             })
             .on('end', () => resolve(contacts))
             .on('error', reject);
     });
-}
-
-// ─── Helpers ────────────────────────────────────────────────────────────────
-const sleep = (ms) => new Promise(r => setTimeout(r, ms));
-
-function toIsoDate(value) {
-    const text = String(value || '').trim();
-    let match = /^(\d{1,2})\/(\d{1,2})\/(\d{4})$/.exec(text);
-    if (match) return `${match[3]}-${match[1].padStart(2, '0')}-${match[2].padStart(2, '0')}`;
-    match = /^(\d{4})-(\d{2})-(\d{2})/.exec(text);
-    return match ? `${match[1]}-${match[2]}-${match[3]}` : null;
 }
 
 function findBrowserExecutable() {
@@ -49,777 +55,392 @@ function findBrowserExecutable() {
     return candidates.find((candidate) => candidate && fs.existsSync(candidate)) || null;
 }
 
-/**
- * Detect if the browser is currently on any login or authorization challenge page.
- */
 async function isLoginPage(page) {
     try {
-        const url = page.url();
-        if (url.includes('/auth') || url.includes('/login') || url.includes('/Account/Login') || url.includes('/oauth2/authorize') || url.includes('/connect/authorize')) {
-            return true;
-        }
-        return await page.evaluate(() => {
-            const userField = document.querySelector('#check-user-name-field, #loginId, input[name="Username"], input[name="loginId"], input[type="email"]');
-            const pwdField = document.querySelector('#password, #Password, input[name="password"], input[name="Password"], input[type="password"]');
-            const isSpa = !!document.querySelector('#ContactExperienceTableWidget, .navbar-brand, [ng-app], .app-content');
-            return (!isSpa && (!!userField || !!pwdField));
+        const url = page.url().toLowerCase();
+        if (url.includes('/auth') || url.includes('/login') || url.includes('/oauth2/authorize') || url.includes('/connect/authorize')) return true;
+        return page.evaluate(() => {
+            const username = document.querySelector('#check-user-name-field, #loginId, input[name="Username"], input[name="loginId"], input[type="email"]');
+            const password = document.querySelector('#password, #Password, input[name="password"], input[name="Password"], input[type="password"]');
+            const app = document.querySelector('[ng-app], .app-content, #ContactExperienceTableWidget');
+            return !app && Boolean(username || password);
         });
-    } catch (e) {
+    } catch {
         return false;
     }
 }
 
-/**
- * Automatically fill credentials and log into GrowthZone whenever a login challenge is encountered.
- */
-async function ensureLoggedIn(page, targetUrlAfterLogin = null) {
-    const onLogin = await isLoginPage(page);
-    if (!onLogin) {
-        return true;
-    }
-
-    console.log('   🔐 GrowthZone login screen detected.');
+async function ensureLoggedIn(page, targetUrl) {
+    if (!(await isLoginPage(page))) return;
+    console.log('GrowthZone sign-in is required.');
     const username = process.env.GZ_USERNAME;
     const password = process.env.GZ_PASSWORD;
-    if (!username || !password) {
-        console.log('   GrowthZone login is required. Sign in in the opened browser window; waiting up to 5 minutes...');
-        const deadline = Date.now() + 5 * 60 * 1000;
-        while (Date.now() < deadline) {
-            await sleep(1000);
-            if (!(await isLoginPage(page))) break;
+
+    if (username && password) {
+        const usernameSelector = '#check-user-name-field, #loginId, input[name="Username"], input[name="loginId"]';
+        const passwordSelector = '#password, #Password, input[name="password"], input[name="Password"], input[type="password"]';
+        const usernameField = await page.$(usernameSelector);
+        if (usernameField) {
+            await usernameField.click({ clickCount: 3 });
+            await usernameField.type(username, { delay: 25 });
+            const next = await page.$('#check-user-name-button, button[type="submit"]');
+            if (next) await next.click();
+            await sleep(1500);
         }
-        if (await isLoginPage(page)) throw new Error('GrowthZone login timed out.');
-        if (targetUrlAfterLogin) {
-            await page.goto(targetUrlAfterLogin, { waitUntil: 'domcontentloaded', timeout: 30000 }).catch(() => {});
-            await sleep(3000);
+        await page.waitForSelector(passwordSelector, { visible: true, timeout: 15000 }).catch(() => {});
+        const passwordField = await page.$(passwordSelector);
+        if (passwordField) {
+            await passwordField.click({ clickCount: 3 });
+            await passwordField.type(password, { delay: 25 });
+            const submit = await page.$('button.blue.button, button[type="submit"], input[type="submit"], #sign-up-button');
+            if (submit) await submit.click();
         }
-        return true;
+    } else {
+        console.log('Sign in in the opened browser window. Waiting up to 5 minutes...');
     }
 
-    // Step 1: Handle username field if present
-    try {
-        const userSelector = '#check-user-name-field, #loginId, input[name="Username"], input[name="loginId"]';
-        const userEl = await page.$(userSelector);
-        if (userEl) {
-            const isVisible = await page.evaluate(el => el.offsetWidth > 0 && el.offsetHeight > 0, userEl);
-            if (isVisible) {
-                console.log(`   ⌨️  Entering username (${username})...`);
-                await page.evaluate(sel => {
-                    const el = document.querySelector(sel);
-                    if (el) { el.value = ''; el.focus(); }
-                }, userSelector);
-                await page.type(userSelector, username, { delay: 30 });
-                await sleep(300);
-
-                const nextBtn = await page.$('#check-user-name-button, button[type="submit"]');
-                if (nextBtn) {
-                    await Promise.all([
-                        page.waitForNavigation({ waitUntil: 'networkidle2', timeout: 20000 }).catch(() => {}),
-                        nextBtn.click()
-                    ]);
-                } else {
-                    await page.keyboard.press('Enter');
-                }
-                await sleep(2000);
-            }
-        }
-    } catch (err) {
-        console.log(`   [Login Notice] Username step: ${err.message}`);
-    }
-
-    // Step 2: Handle password field (works on both FusionAuth and IdentityServer)
-    try {
-        const pwdSelector = '#password, #Password, input[name="password"], input[name="Password"], input[type="password"]';
-        await page.waitForSelector(pwdSelector, { visible: true, timeout: 15000 }).catch(() => {});
-        const pwdEl = await page.$(pwdSelector);
-        if (pwdEl) {
-            console.log(`   ⌨️  Entering password...`);
-            await page.evaluate(sel => {
-                const el = document.querySelector(sel);
-                if (el) { el.value = ''; el.focus(); }
-            }, pwdSelector);
-            await page.type(pwdSelector, password, { delay: 30 });
-            await sleep(300);
-
-            const submitBtn = await page.$('button.blue.button, button[type="submit"], input[type="submit"], #sign-up-button');
-            if (submitBtn) {
-                await Promise.all([
-                    page.waitForNavigation({ waitUntil: 'domcontentloaded', timeout: 35000 }).catch(() => {}),
-                    submitBtn.click()
-                ]);
-            } else {
-                await page.keyboard.press('Enter');
-            }
-            console.log('   ✅ Submitted login credentials. Waiting for session initialization...');
-            await sleep(8000);
-        }
-    } catch (err) {
-        console.log(`   [Login Notice] Password step: ${err.message}`);
-    }
-
-    // If a target contact URL was provided and we are not there yet, navigate to it
-    if (targetUrlAfterLogin) {
-        const cur = page.url();
-        if (!cur.includes(targetUrlAfterLogin) && !cur.includes(targetUrlAfterLogin.replace(GZ_BASE_URL, ''))) {
-            console.log(`   🌐 Navigating to destination: ${targetUrlAfterLogin}`);
-            await page.goto(targetUrlAfterLogin, { waitUntil: 'domcontentloaded', timeout: 30000 }).catch(() => {});
-            await sleep(3000);
-        }
-    }
-
-    return true;
-}
-
-/**
- * Wait for #ContactExperienceTableWidget to be present in the DOM.
- * This widget contains ALL professional/license records for the contact.
- */
-async function waitForWidget(page, timeout = 20000) {
-    await sleep(2500); // initial render buffer
-
-    if (await isLoginPage(page)) {
-        console.log('   ⚠️ Login screen detected while waiting for widget! Auto-authenticating...');
-        await ensureLoggedIn(page);
-    }
-
-    const start = Date.now();
-    while (Date.now() - start < timeout) {
-        const found = await page.$('#ContactExperienceTableWidget');
-        if (found) {
-            await sleep(1500); // extra buffer for Angular rendering
-            return;
-        }
-        if (await isLoginPage(page)) {
-            console.log('   ⚠️ Login screen detected while waiting for widget! Auto-authenticating...');
-            await ensureLoggedIn(page);
-        }
-        await sleep(1000);
+    const deadline = Date.now() + 5 * 60 * 1000;
+    while (Date.now() < deadline && await isLoginPage(page)) await sleep(1000);
+    if (await isLoginPage(page)) throw new Error('GrowthZone login timed out.');
+    if (targetUrl) {
+        await page.goto(targetUrl, { waitUntil: 'domcontentloaded', timeout: 45000 });
+        await sleep(2500);
     }
 }
 
-/**
- * Focus a modal input by index and type a value using real keyboard input.
- * AngularJS only detects changes from actual keyboard events.
- */
-async function focusAndType(page, inputIndex, value) {
-    if (!value) return;
+async function navigateTo(page, contactId, route, readySelector) {
+    const url = `${GZ_BASE_URL}/a#/ContactInfo/${encodeURIComponent(contactId)}/${route}`;
+    await page.goto(url, { waitUntil: 'domcontentloaded', timeout: 45000 });
+    await sleep(1800);
+    if (await isLoginPage(page)) await ensureLoggedIn(page, url);
+    await page.waitForSelector(readySelector, { visible: true, timeout: 30000 });
+    await sleep(700);
+}
 
-    // Focus the input (only target VISIBLE inputs and wait for them)
-    const focused = await page.evaluate((idx) => {
-        const modal = document.querySelector('.modal.in, .modal.show, .modal[style*="display: block"]');
-        if (!modal) return false;
-        // Filter only fully visible inputs
-        const visibleInputs = Array.from(modal.querySelectorAll('input.form-control'))
-                                   .filter(i => i.offsetWidth > 0 && i.offsetHeight > 0);
-        if (!visibleInputs[idx]) return false;
-        visibleInputs[idx].focus();
-        visibleInputs[idx].click();
+async function cancelOpenModal(page) {
+    await page.evaluate((selector) => {
+        const modal = document.querySelector(selector);
+        if (!modal) return;
+        const button = [...modal.querySelectorAll('button')].find((item) => ['Cancel', 'Close'].includes(item.innerText.trim()));
+        button?.click();
+    }, MODAL_SELECTOR).catch(() => {});
+    await sleep(250);
+}
+
+async function fillInputWithKeyboard(page, handle, value) {
+    await handle.click({ clickCount: 3 });
+    await page.keyboard.press(process.platform === 'darwin' ? 'Meta+A' : 'Control+A');
+    await page.keyboard.press('Backspace');
+    await page.keyboard.type(value, { delay: 35 });
+    await page.keyboard.press('Tab');
+    await sleep(250);
+}
+
+async function clickModalDone(page) {
+    const outcome = await page.evaluate((selector) => {
+        const modal = document.querySelector(selector);
+        if (!modal) return 'modal_missing';
+        const button = [...modal.querySelectorAll('button')].find((item) => ['Done', 'Save'].includes(item.innerText.trim()) && item.offsetParent !== null);
+        if (!button) return 'save_button_missing';
+        if (button.disabled) return 'save_button_disabled';
+        button.click();
+        return 'clicked';
+    }, MODAL_SELECTOR);
+    if (outcome !== 'clicked') throw new Error(outcome);
+    await page.waitForFunction((selector) => !document.querySelector(selector), { timeout: 20000 }, MODAL_SELECTOR).catch(() => {});
+    await sleep(1200);
+    const error = await page.evaluate((selector) => {
+        const modal = document.querySelector(selector);
+        if (!modal) return null;
+        const box = modal.querySelector('#grumpyCatError, .alert-danger');
+        return box && box.offsetParent !== null ? box.innerText.trim().replace(/\s+/g, ' ').slice(0, 240) : 'GrowthZone kept the editor open after Save.';
+    }, MODAL_SELECTOR);
+    if (error) {
+        await cancelOpenModal(page);
+        throw new Error(error);
+    }
+}
+
+async function openMatchingLicense(page, expectedLicense) {
+    return page.evaluate((licenseNumber) => {
+        const widget = document.querySelector('#ContactExperienceTableWidget');
+        if (!widget) return { error: 'growthzone_license_widget_missing' };
+        const licenseRows = [...widget.querySelectorAll('tr.widget-row:not(.widget-row-condensed)')].filter((row) =>
+            [...row.querySelectorAll('span')].some((span) => span.innerText.trim() === 'License'));
+        if (licenseRows.length !== 1) return { error: licenseRows.length ? 'multiple_growthzone_license_rows' : 'growthzone_license_missing' };
+        const row = licenseRows[0];
+        const spanValues = [...row.querySelectorAll('span')].map((span) => span.innerText.trim()).filter(Boolean);
+        const categoryIndex = spanValues.indexOf('License');
+        const displayedLicense = categoryIndex >= 0 ? spanValues[categoryIndex + 1] : '';
+        const numberMatches = String(displayedLicense).toUpperCase().replace(/[^A-Z0-9]/g, '').replace(/^[A-Z]+/, '').replace(/^0+/, '') === licenseNumber;
+        if (!numberMatches) return { error: 'growthzone_license_mismatch' };
+        const edit = row.querySelector('li.item-action i.fa-pen, li.item-action [class*="fa-pen"], li.item-action i.edit-dialog');
+        if (!edit) return { error: 'growthzone_license_edit_missing' };
+        edit.closest('li.item-action').click();
+        return { opened: true };
+    }, expectedLicense);
+}
+
+async function readLicenseExpiration(page) {
+    return page.evaluate((selector) => {
+        const modal = document.querySelector(selector);
+        if (!modal) return null;
+        const label = [...modal.querySelectorAll('label')].find((item) => item.innerText.trim().toLowerCase().includes('expir'));
+        return label?.closest('.form-group')?.querySelector('input')?.value || null;
+    }, MODAL_SELECTOR);
+}
+
+async function expirationInput(page) {
+    const handle = await page.evaluateHandle((selector) => {
+        const modal = document.querySelector(selector);
+        const label = [...(modal?.querySelectorAll('label') || [])].find((item) => item.innerText.trim().toLowerCase().includes('expir'));
+        return label?.closest('.form-group')?.querySelector('input') || null;
+    }, MODAL_SELECTOR);
+    return handle.asElement();
+}
+
+async function updateGrowthZoneLicense(page, contact) {
+    const expectedLicense = normalizeLicenseNumber(contact['License Number']);
+    const targetDate = toIsoDate(contact['License Expiration Date']);
+    console.log(`License: ${contact.Name || contact.ContactId} -> ${targetDate}`);
+    if (!targetDate) return emitResult('license', contact, 'blocked', 'invalid_dbpr_expiration');
+
+    await navigateTo(page, contact.ContactId, 'ContactOverview', '#ContactExperienceTableWidget');
+    const opened = await openMatchingLicense(page, expectedLicense);
+    if (opened.error) return emitResult('license', contact, 'blocked', opened.error);
+    await page.waitForSelector(MODAL_SELECTOR, { visible: true, timeout: 15000 });
+    await sleep(500);
+
+    const currentDate = toIsoDate(await readLicenseExpiration(page));
+    if (currentDate && currentDate >= targetDate) {
+        await cancelOpenModal(page);
+        return emitResult('license', contact, 'skipped', 'growthzone_license_already_current', { savedDate: currentDate });
+    }
+
+    const input = await expirationInput(page);
+    if (!input) {
+        await cancelOpenModal(page);
+        return emitResult('license', contact, 'blocked', 'growthzone_expiration_field_missing');
+    }
+    await fillInputWithKeyboard(page, input, usDate(targetDate));
+    await clickModalDone(page);
+
+    await page.waitForSelector('#ContactExperienceTableWidget', { visible: true, timeout: 20000 });
+    const verifyOpened = await openMatchingLicense(page, expectedLicense);
+    if (verifyOpened.error) return emitResult('license', contact, 'blocked', 'growthzone_save_not_verified', { previousDate: currentDate });
+    await page.waitForSelector(MODAL_SELECTOR, { visible: true, timeout: 15000 });
+    const savedDate = toIsoDate(await readLicenseExpiration(page));
+    await cancelOpenModal(page);
+
+    if (savedDate !== targetDate) {
+        return emitResult('license', contact, 'blocked', 'growthzone_save_not_verified', { previousDate: currentDate, savedDate });
+    }
+    return emitResult('license', contact, 'updated', 'dbpr_expiration_verified', { previousDate: currentDate, savedDate });
+}
+
+async function realEstateGuard(page, expectedLicense) {
+    return page.evaluate((licenseNumber) => {
+        const section = document.querySelector('.NRDSInformation')?.closest('.gzui-tableformfield');
+        if (!section) return { error: 'growthzone_real_estate_data_missing' };
+        const values = {};
+        for (const row of section.querySelectorAll('tr')) {
+            const cells = [...row.querySelectorAll('td')].map((cell) => cell.innerText.trim());
+            if (cells.length >= 2) values[cells[0]] = cells[1];
+        }
+        const currentLicense = String(values['M1 License Number'] || '').replace(/\D/g, '').replace(/^0+/, '');
+        if (String(values.Status || '').trim().toLowerCase() !== 'active') return { error: 'growthzone_contact_not_active' };
+        if (String(values['Sync to M1'] || '').trim().toLowerCase() !== 'yes') return { error: 'growthzone_m1_sync_disabled' };
+        if (!currentLicense || currentLicense !== licenseNumber) return { error: 'growthzone_license_mismatch' };
+        return { ok: true };
+    }, expectedLicense);
+}
+
+async function latestCoeDateOnPage(page) {
+    return page.evaluate(() => {
+        const dates = [...document.querySelectorAll('#CodesOfEthics tbody tr')]
+            .map((row) => row.querySelector('td')?.innerText.trim() || '')
+            .map((value) => {
+                const match = /^(\d{1,2})\/(\d{1,2})\/(\d{4})$/.exec(value);
+                return match ? `${match[3]}-${match[1].padStart(2, '0')}-${match[2].padStart(2, '0')}` : null;
+            })
+            .filter(Boolean)
+            .sort();
+        return dates.at(-1) || null;
+    });
+}
+
+async function openCoeEditor(page) {
+    const opened = await page.evaluate(() => {
+        const button = document.querySelector('.CodesOfEthics a[title="Code of Ethics"]');
+        if (!button || button.offsetParent === null) return false;
+        button.click();
         return true;
-    }, inputIndex);
+    });
+    if (!opened) throw new Error('growthzone_coe_editor_missing');
+    await page.waitForSelector('#AddEditNARCodeOfEthicsModel', { visible: true, timeout: 15000 });
+    await sleep(500);
+}
 
-    if (!focused) {
-        console.error(`      ⚠️ Could not focus input at index ${inputIndex}`);
+async function editableCoeRow(page) {
+    let row = await page.evaluateHandle(() => {
+        const rows = [...document.querySelectorAll('#CodeOfEthicsList tbody tr.dynamic-list-body')];
+        return rows.find((item) => {
+            const input = item.querySelector('input[ng-model="ctrl.localDate"]');
+            return input && !input.readOnly && !input.disabled;
+        }) || null;
+    });
+    if (row.asElement()) return row.asElement();
+    await row.dispose();
+
+    const added = await page.evaluate(() => {
+        const button = document.querySelector('#CodeOfEthicsList button.gzui-add-button');
+        if (!button || button.disabled) return false;
+        button.click();
+        return true;
+    });
+    if (!added) return null;
+    await sleep(400);
+    row = await page.evaluateHandle(() => {
+        const rows = [...document.querySelectorAll('#CodeOfEthicsList tbody tr.dynamic-list-body')];
+        return rows.findLast((item) => {
+            const input = item.querySelector('input[ng-model="ctrl.localDate"]');
+            return input && !input.readOnly && !input.disabled;
+        }) || null;
+    });
+    return row.asElement();
+}
+
+async function fillCoeRow(page, row, targetDate, cycle) {
+    const dateInput = await row.$('input[ng-model="ctrl.localDate"]');
+    const courseCode = await row.$('select[ng-model="itemCodeOfEthicsList.EducationCourseCode"]');
+    const cycleSelect = await row.$('select[ng-model="itemCodeOfEthicsList.Cycle"]');
+    if (!dateInput || !courseCode || !cycleSelect) throw new Error('growthzone_coe_fields_missing');
+
+    await fillInputWithKeyboard(page, dateInput, usDate(targetDate));
+    await courseCode.select('number:1');
+    await sleep(250);
+    await cycleSelect.select(`number:${cycle}`);
+    await sleep(350);
+
+    const derived = await row.evaluate((element) => element.innerText.replace(/\s+/g, ' '));
+    const year = targetDate.slice(0, 4);
+    if (!derived.includes(`${year}C${cycle}`) || !derived.includes(year)) throw new Error('growthzone_coe_course_derivation_failed');
+}
+
+async function updateGrowthZoneCoe(page, contact) {
+    const expectedLicense = normalizeLicenseNumber(contact['License Number']);
+    const targetDate = toIsoDate(contact['Confirmed COE Date']);
+    const cycle = Number(contact['COE Cycle']);
+    console.log(`COE: ${contact.Name || contact.ContactId} -> ${targetDate} (Cycle ${cycle})`);
+    if (!targetDate || !Number.isInteger(cycle) || cycle < 1 || cycle > 25) {
+        return emitResult('coe', contact, 'blocked', 'invalid_confirmed_coe');
+    }
+
+    await navigateTo(page, contact.ContactId, 'NAREditionFieldsV2', '.CodesOfEthics');
+    const guard = await realEstateGuard(page, expectedLicense);
+    if (guard.error) return emitResult('coe', contact, 'blocked', guard.error);
+
+    const currentDate = await latestCoeDateOnPage(page);
+    if (currentDate && currentDate >= targetDate) {
+        return emitResult('coe', contact, 'skipped', 'growthzone_already_current', { savedDate: currentDate });
+    }
+
+    await openCoeEditor(page);
+    const row = await editableCoeRow(page);
+    if (!row) {
+        await cancelOpenModal(page);
+        return emitResult('coe', contact, 'blocked', 'growthzone_coe_row_add_failed', { previousDate: currentDate });
+    }
+    await fillCoeRow(page, row, targetDate, cycle);
+    await page.waitForFunction((selector) => {
+        const modal = document.querySelector(selector);
+        const button = [...(modal?.querySelectorAll('button') || [])].find((item) => item.innerText.trim() === 'Done');
+        return Boolean(button && !button.disabled);
+    }, { timeout: 10000 }, MODAL_SELECTOR);
+    await clickModalDone(page);
+
+    await page.waitForSelector('.CodesOfEthics', { visible: true, timeout: 20000 });
+    let savedDate = null;
+    const deadline = Date.now() + 15000;
+    while (Date.now() < deadline) {
+        savedDate = await latestCoeDateOnPage(page);
+        if (savedDate && savedDate >= targetDate) break;
+        await sleep(750);
+    }
+    if (savedDate !== targetDate) {
+        return emitResult('coe', contact, 'blocked', 'growthzone_save_not_verified', { previousDate: currentDate, savedDate });
+    }
+    return emitResult('coe', contact, 'updated', 'confirmed_dbpr_coe_verified', {
+        previousDate: currentDate,
+        savedDate,
+        cycle,
+        courseNumber: `${targetDate.slice(0, 4)}C${cycle}`,
+    });
+}
+
+async function recoverModal(page) {
+    await cancelOpenModal(page).catch(() => {});
+}
+
+async function main() {
+    const csvFile = process.argv[2];
+    if (!csvFile || !fs.existsSync(csvFile)) {
+        console.error('Usage: node index.js path/to/GrowthZone_Updates.csv');
+        process.exitCode = 1;
         return;
     }
-    await sleep(300);
 
-    // Select all & delete, then type
-    await page.keyboard.press('End');
-    for (let i = 0; i < 20; i++) {
-        await page.keyboard.press('Backspace');
-    }
-    await sleep(200);
+    const contacts = await loadContactsFromCSV(csvFile);
+    console.log(`Loaded ${contacts.length} GrowthZone contact(s).`);
+    if (!contacts.length) return;
 
-    // Also clear via JS as a fallback
-    await page.evaluate(() => {
-        const el = document.activeElement;
-        if (el && el.tagName === 'INPUT') {
-            el.value = '';
-            el.dispatchEvent(new Event('input', { bubbles: true }));
-        }
-    });
-    await sleep(200);
-    await page.keyboard.type(value, { delay: 50 });  // Slower, more reliable typing
-    await sleep(200);
-    await page.keyboard.press('Tab'); // Critical for AngularJS to detect the blur/change
-    await sleep(200);
-}
-
-// ─── Core Automation ────────────────────────────────────────────────────────
-
-/**
- * Process a single contact's license record in GrowthZone.
- *
- * ALL interactions are scoped to #ContactExperienceTableWidget.
- *
- * DOM structure (verified via live HTML dump):
- *   #ContactExperienceTableWidget
- *     ├─ div.row  (header area)
- *     │   ├─ div.widget-action-wrapper
- *     │   │   └─ i.far.fa-plus-circle.edit-dialog  [ADD button]
- *     │   └─ div.widget-name.subtitle-1
- *     │       └─ span "Professional"  /  span.summary-bubble "1"
- *     └─ div.widget-table-wrapper
- *         └─ table.widget-table > tbody
- *             ├─ tr.widget-header  (column headers: Category | What | Where | Actions)
- *             ├─ tr.widget-row  (expanded row — has separate <td> per column)
- *             │   └─ td > span "License"
- *             │   └─ td > actions-wrapper > li.item-action [Remove] / li.item-action [Edit]
- *             └─ tr.widget-row.widget-row-condensed  (condensed row for sidebar)
- *                 └─ td > span "License"  /  span "BK 3154832"
- *                 └─ td > condensed-widget-actions > li.item-action [Remove] / li.item-action [Edit]
- *
- * Key ng-click handlers:
- *   ADD:    vm.AddShowCreateDialogAddEditContactExperienceModel(widget, ...)
- *   EDIT:   vm.EditShowAddEditDialogAddEditContactExperienceModel(item, ...)
- *   DELETE: vm.appUIFunctions.confirm(this, vm.DeferRemoveExperienceDelete(item), ...)
- */
-async function updateGrowthZoneLicense(page, contact) {
-    const contactHash = `/ContactInfo/${contact.ContactId}/ContactOverview`;
-    const contactUrl = `${GZ_BASE_URL}/a#${contactHash}`;
-    console.log(`\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━`);
-    console.log(`📋 ${contact.Name}  (ID: ${contact.ContactId})`);
-    console.log(`   Target Exp Date: ${contact['License Expiration Date']}`);
-    console.log(`━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━`);
-
-    // Guard: Ensure we are logged in before attempting navigation
-    if (await isLoginPage(page)) {
-        console.log(`   ⚠️ Login screen detected before navigating to contact. Auto-logging in...`);
-        await ensureLoggedIn(page, contactUrl);
-    }
-
-    const currentUrl = page.url();
-    const isInsideSpa = currentUrl.includes(GZ_BASE_URL) && currentUrl.includes('/a');
-
-    if (!isInsideSpa) {
-        console.log(`   🌐 Navigating directly to contact URL...`);
-        await page.goto(contactUrl, { waitUntil: 'domcontentloaded', timeout: 30000 });
-    } else {
-        // SPA Hash navigation to preserve session
-        await page.evaluate((hash) => {
-            if (window.angular) {
-                try {
-                    const el = document.querySelector('[ng-app]') || document.body;
-                    const inj = window.angular.element(el).injector();
-                    if (inj && inj.has('$location')) {
-                        inj.get('$location').path(hash);
-                        inj.get('$rootScope').$apply();
-                        return;
-                    }
-                } catch (e) { /* fallback */ }
-            }
-            window.location.hash = '#' + hash;
-            window.dispatchEvent(new HashChangeEvent('hashchange'));
-        }, contactHash);
-    }
-
-    // Verify we weren't challenged by a login page upon opening the contact
-    await sleep(2000);
-    if (await isLoginPage(page)) {
-        console.log(`   ⚠️ Session challenge triggered upon loading contact! Auto-entering credentials...`);
-        await ensureLoggedIn(page, contactUrl);
-    }
-
-    await waitForWidget(page);
-
-    // ── STEP 1: Count License rows INSIDE #ContactExperienceTableWidget ─────
-    const licenseInfo = await page.evaluate(() => {
-        const widget = document.querySelector('#ContactExperienceTableWidget');
-        if (!widget) return { error: 'Widget not found', rows: [] };
-
-        // Only count NON-condensed widget-rows that contain "License" text
-        // (condensed rows are duplicates shown in sidebar view)
-        const rows = widget.querySelectorAll('tr.widget-row:not(.widget-row-condensed)');
-        const licenseRows = [];
-        rows.forEach((row, idx) => {
-            const text = row.innerText.trim();
-            // Check if this row's first visible span says "License"
-            const spans = row.querySelectorAll('span');
-            let isLicense = false;
-            for (const span of spans) {
-                if (span.innerText.trim() === 'License') {
-                    isLicense = true;
-                    break;
-                }
-            }
-            if (isLicense) {
-                licenseRows.push({
-                    index: idx,
-                    text: text.replace(/\n/g, ' | ').substring(0, 150)
-                });
-            }
-        });
-        return { error: null, rows: licenseRows };
-    });
-
-    if (licenseInfo.error) {
-        console.log(`   ⚠️  ${licenseInfo.error} — will try adding new`);
-    }
-
-    const licenseCount = licenseInfo.rows.length;
-    console.log(`   Found ${licenseCount} License row(s) in #ContactExperienceTableWidget`);
-    licenseInfo.rows.forEach((r, i) => console.log(`     [${i}] "${r.text}"`));
-
-    // Safety guard: never add or delete license rows. Only update one exact match.
-    const expectedLicense = String(contact['License Number'] || '').replace(/\D/g, '').replace(/^0+/, '');
-    const matchingRows = licenseInfo.rows.filter((row) => row.text.replace(/\D/g, '').includes(expectedLicense));
-    if (licenseCount !== 1) {
-        const result = { contactId: contact.ContactId, licenseNumber: expectedLicense, action: 'blocked', reason: licenseCount ? 'multiple_growthzone_license_rows' : 'growthzone_license_missing' };
-        console.log(`CCOR_RESULT ${JSON.stringify(result)}`);
-        return result;
-    }
-    if (!expectedLicense || matchingRows.length !== 1) {
-        const result = { contactId: contact.ContactId, licenseNumber: expectedLicense, action: 'blocked', reason: 'growthzone_license_mismatch' };
-        console.log(`CCOR_RESULT ${JSON.stringify(result)}`);
-        return result;
-    }
-
-    // ── STEP 2: Delete EXTRAS only (if more than 1 license row) ─────────────
-    if (licenseCount > 1) {
-        console.log(`   ⚠️  Removing ${licenseCount - 1} extra license row(s)...`);
-
-        for (let i = licenseCount - 1; i > 0; i--) {
-            console.log(`   🗑️  Deleting extra row [${i}]...`);
-
-            // Click the Remove (X) icon on this specific row INSIDE the widget
-            const deleteClicked = await page.evaluate((targetIdx) => {
-                const widget = document.querySelector('#ContactExperienceTableWidget');
-                if (!widget) return 'widget-not-found';
-
-                const rows = widget.querySelectorAll('tr.widget-row:not(.widget-row-condensed)');
-                let licIdx = 0;
-                for (const row of rows) {
-                    const spans = row.querySelectorAll('span');
-                    let isLicense = false;
-                    for (const span of spans) {
-                        if (span.innerText.trim() === 'License') { isLicense = true; break; }
-                    }
-                    if (isLicense) {
-                        if (licIdx === targetIdx) {
-                            // Find the Remove li.item-action (has fa-times icon)
-                            const removeBtn = row.querySelector('li.item-action i.fa-times, li.item-action [class*="fa-times"]');
-                            if (removeBtn) {
-                                // Click the parent li, not just the icon
-                                removeBtn.closest('li.item-action').click();
-                                return 'clicked-remove';
-                            }
-                            return 'no-remove-icon';
-                        }
-                        licIdx++;
-                    }
-                }
-                return 'row-not-found';
-            }, i);
-
-            console.log(`      Delete click: ${deleteClicked}`);
-
-            if (deleteClicked === 'clicked-remove') {
-                await sleep(2000);
-                // Confirm the "Are you sure you want to Remove" dialog
-                const confirmed = await page.evaluate(() => {
-                    const allBtns = document.querySelectorAll('.modal.in button, .modal.show button, .bootbox button');
-                    for (const btn of allBtns) {
-                        const txt = btn.innerText.trim().toLowerCase();
-                        if (btn.offsetParent !== null && (txt === 'ok' || txt === 'yes' || txt === 'confirm' || txt === 'remove')) {
-                            btn.click();
-                            return 'confirmed: ' + txt;
-                        }
-                    }
-                    return 'no-confirm-btn';
-                });
-                console.log(`      Confirm: ${confirmed}`);
-                await sleep(3000);
-            }
-        }
-    }
-
-    // ── STEP 3: Decide: ADD new or EDIT existing ────────────────────────────
-    // Re-check the count after any deletions
-    const currentCount = await page.evaluate(() => {
-        const widget = document.querySelector('#ContactExperienceTableWidget');
-        if (!widget) return 0;
-        let count = 0;
-        const rows = widget.querySelectorAll('tr.widget-row:not(.widget-row-condensed)');
-        for (const row of rows) {
-            const spans = row.querySelectorAll('span');
-            for (const span of spans) {
-                if (span.innerText.trim() === 'License') { count++; break; }
-            }
-        }
-        return count;
-    });
-
-    console.log(`   Current License rows after cleanup: ${currentCount}`);
-
-    if (currentCount === 0) {
-        // ── ADD NEW LICENSE ─────────────────────────────────────────────────
-        console.log(`   ➕ Adding new license record...`);
-
-        const addClicked = await page.evaluate(() => {
-            const widget = document.querySelector('#ContactExperienceTableWidget');
-            if (!widget) return 'widget-not-found';
-            // The add button is: i.far.fa-plus-circle.edit-dialog inside widget
-            const addBtn = widget.querySelector('i.fa-plus-circle, i[class*="fa-plus-circle"]');
-            if (addBtn) {
-                addBtn.click();
-                return 'clicked-add';
-            }
-            return 'add-btn-not-found';
-        });
-
-        console.log(`   Add button: ${addClicked}`);
-
-        if (!addClicked.includes('clicked')) {
-            console.error(`   ❌ Could not find Add button. Skipping.`);
-            return;
-        }
-
-        await sleep(3000);
-
-        // Select "License" category
-        const categorySet = await page.evaluate(() => {
-            const modal = document.querySelector('.modal.in, .modal.show, .modal[style*="display: block"]');
-            if (!modal) return 'no-modal';
-            const sel = modal.querySelector('select');
-            if (!sel) return 'no-select';
-            for (let i = 0; i < sel.options.length; i++) {
-                if (sel.options[i].text.trim() === 'License') {
-                    sel.selectedIndex = i;
-                    const angularEl = window.angular?.element(sel);
-                    if (angularEl) angularEl.triggerHandler('change');
-                    sel.dispatchEvent(new Event('change', { bubbles: true }));
-                    return 'selected-License';
-                }
-            }
-            return 'License-not-in-options';
-        });
-
-        console.log(`   Category: ${categorySet}`);
-        await sleep(3000); // Wait longer for Angular to render the dynamic fields
-
-        // Type License Number (input[0]), License Type (input[1]), Issuing Authority (input[2])
-        await focusAndType(page, 0, contact['License Number'] || '');
-        console.log(`   ⌨️  License Number: ${contact['License Number']}`);
-        await focusAndType(page, 1, contact['License Type'] || '');
-        console.log(`   ⌨️  License Type: ${contact['License Type']}`);
-        await focusAndType(page, 2, 'DBPR');
-        console.log(`   ⌨️  Issuing Authority: DBPR`);
-
-    } else {
-        // ── EDIT EXISTING LICENSE ───────────────────────────────────────────
-        console.log(`   ✏️  Editing existing license record...`);
-
-        const editClicked = await page.evaluate(() => {
-            const widget = document.querySelector('#ContactExperienceTableWidget');
-            if (!widget) return 'widget-not-found';
-
-            const rows = widget.querySelectorAll('tr.widget-row:not(.widget-row-condensed)');
-            for (const row of rows) {
-                const spans = row.querySelectorAll('span');
-                let isLicense = false;
-                for (const span of spans) {
-                    if (span.innerText.trim() === 'License') { isLicense = true; break; }
-                }
-                if (isLicense) {
-                    // Click the Edit li.item-action (has fa-pen icon)
-                    const editBtn = row.querySelector('li.item-action i.fa-pen, li.item-action [class*="fa-pen"], li.item-action i.edit-dialog');
-                    if (editBtn) {
-                        editBtn.closest('li.item-action').click();
-                        return 'clicked-edit';
-                    }
-                    return 'no-edit-icon';
-                }
-            }
-            return 'no-license-row';
-        });
-
-        console.log(`   Edit click: ${editClicked}`);
-
-        if (!editClicked.includes('clicked')) {
-            console.error(`   ❌ Could not click Edit. Skipping.`);
-            return;
-        }
-
-        await sleep(3000);
-    }
-
-    // ── STEP 4: Set the Expiration Date ─────────────────────────────────────
-    const expDate = contact['License Expiration Date'];
-    const currentExpiration = await page.evaluate(() => {
-        const modal = document.querySelector('.modal.in, .modal.show, .modal[style*="display: block"]');
-        if (!modal) return null;
-        for (const label of modal.querySelectorAll('label')) {
-            if (label.innerText.trim().toLowerCase().includes('expir')) {
-                return label.closest('.form-group')?.querySelector('input')?.value || null;
-            }
-        }
-        return null;
-    });
-    const currentIso = toIsoDate(currentExpiration);
-    const targetIso = toIsoDate(expDate);
-    if (!targetIso) {
-        const result = { contactId: contact.ContactId, licenseNumber: expectedLicense, action: 'blocked', reason: 'invalid_dbpr_expiration' };
-        console.log(`CCOR_RESULT ${JSON.stringify(result)}`);
-        return result;
-    }
-    if (currentIso && currentIso >= targetIso) {
-        await page.evaluate(() => {
-            const modal = document.querySelector('.modal.in, .modal.show, .modal[style*="display: block"]');
-            const cancel = [...(modal?.querySelectorAll('button') || [])].find((button) => button.innerText.trim() === 'Cancel');
-            cancel?.click();
-        });
-        const result = { contactId: contact.ContactId, licenseNumber: expectedLicense, action: 'skipped', reason: 'growthzone_license_already_current', savedDate: currentIso };
-        console.log(`CCOR_RESULT ${JSON.stringify(result)}`);
-        return result;
-    }
-    console.log(`   📅 Setting Expiration Date: ${expDate}`);
-
-    // Focus the Expiration Date field (the second date input with a calendar icon)
-    const expFocused = await page.evaluate(() => {
-        const modal = document.querySelector('.modal.in, .modal.show, .modal[style*="display: block"]');
-        if (!modal) return 'no-modal';
-
-        const visibleInputs = Array.from(modal.querySelectorAll('input.form-control'))
-                                   .filter(i => i.offsetWidth > 0 && i.offsetHeight > 0);
-
-        // Strategy 1: Find by label text containing "Expir"
-        const labels = modal.querySelectorAll('label');
-        for (const label of labels) {
-            if (label.innerText.trim().toLowerCase().includes('expir') && label.offsetWidth > 0) {
-                const group = label.closest('.form-group');
-                const input = group?.querySelector('input');
-                if (input && input.offsetWidth > 0) {
-                    input.focus();
-                    input.click();
-                    return 'focused-via-label';
-                }
-            }
-        }
-
-        // Strategy 2: Find by calendar icon position (second date input among visible inputs)
-        const dateInputs = [];
-        for (const input of visibleInputs) {
-            const hasCalendar = input.parentElement?.querySelector('[class*="calendar"]');
-            if (hasCalendar) dateInputs.push(input);
-        }
-        if (dateInputs.length >= 2) {
-            dateInputs[1].focus();
-            dateInputs[1].click();
-            return 'focused-via-calendar-position';
-        }
-
-        // Strategy 3: Use visible input index 4 (5th visible input in License form)
-        if (visibleInputs[4]) {
-            visibleInputs[4].focus();
-            visibleInputs[4].click();
-            return 'focused-via-index-4';
-        }
-
-        return 'exp-field-not-found';
-    });
-
-    console.log(`   Exp focus: ${expFocused}`);
-
-    if (!expFocused.includes('not-found') && expFocused !== 'no-modal') {
-        await sleep(300);
-        
-        await page.keyboard.press('End');
-        for (let i = 0; i < 15; i++) {
-            await page.keyboard.press('Backspace');
-        }
-        await sleep(200);
-
-        // Explicitly clear value via JS just in case
-        await page.evaluate(() => {
-            const el = document.activeElement;
-            if (el && el.tagName === 'INPUT') {
-                el.value = '';
-                el.dispatchEvent(new Event('input', { bubbles: true }));
-            }
-        });
-        await sleep(200);
-
-        await page.keyboard.type(expDate, { delay: 50 });
-        await sleep(200);
-        await page.keyboard.press('Tab');
-        console.log(`   ⌨️  Typed Expiration Date: ${expDate}`);
-    } else {
-        console.error(`   ❌ Could not focus Expiration Date field`);
-    }
-
-    await sleep(1000);
-
-    // ── STEP 5: Click "Done" to save ────────────────────────────────────────
-    console.log(`   💾 Saving...`);
-
-    const saveResult = await page.evaluate(() => {
-        const modal = document.querySelector('.modal.in, .modal.show, .modal[style*="display: block"]');
-        if (!modal) return 'no-modal';
-
-        const buttons = modal.querySelectorAll('button');
-        for (const btn of buttons) {
-            const txt = btn.innerText.trim();
-            if (btn.offsetParent !== null && modal.contains(btn) && (txt === 'Done' || txt === 'Save')) {
-                btn.click();
-                return 'saved: ' + txt;
-            }
-        }
-        return 'no-save-button';
-    });
-
-    console.log(`   Save: ${saveResult}`);
-    await sleep(4000);
-
-    // Check for success gracefully (clicking done might navigate the page and detach the frame!)
-    let success = 'no-toast (may still be OK)';
-    try {
-        success = await page.evaluate(() => {
-            const toast = document.querySelector('.toast-success, .alert-success, [class*="toast-success"]');
-            if (toast) return 'SUCCESS: ' + toast.innerText.substring(0, 80).replace(/\n/g, ' ');
-            return 'no-toast (may still be OK)';
-        });
-    } catch (e) {
-        success = 'SUCCESS (assumed positive due to page navigation / frame detach)';
-    }
-
-    console.log(`   Result: ${success}`);
-    await waitForWidget(page);
-    const verifyOpened = await page.evaluate(() => {
-        const widget = document.querySelector('#ContactExperienceTableWidget');
-        if (!widget) return false;
-        for (const row of widget.querySelectorAll('tr.widget-row:not(.widget-row-condensed)')) {
-            if ([...row.querySelectorAll('span')].some((span) => span.innerText.trim() === 'License')) {
-                const edit = row.querySelector('li.item-action i.fa-pen, li.item-action [class*="fa-pen"], li.item-action i.edit-dialog');
-                if (edit) { edit.closest('li.item-action').click(); return true; }
-            }
-        }
-        return false;
-    });
-    if (verifyOpened) await sleep(2000);
-    const savedExpiration = verifyOpened ? await page.evaluate(() => {
-        const modal = document.querySelector('.modal.in, .modal.show, .modal[style*="display: block"]');
-        if (!modal) return null;
-        let value = null;
-        for (const label of modal.querySelectorAll('label')) {
-            if (label.innerText.trim().toLowerCase().includes('expir')) {
-                value = label.closest('.form-group')?.querySelector('input')?.value || null;
-                break;
-            }
-        }
-        const cancel = [...modal.querySelectorAll('button')].find((button) => button.innerText.trim() === 'Cancel');
-        cancel?.click();
-        return value;
-    }) : null;
-    const savedIso = toIsoDate(savedExpiration);
-    const result = savedIso === targetIso
-        ? { contactId: contact.ContactId, licenseNumber: expectedLicense, action: 'updated', reason: 'dbpr_expiration_verified', previousDate: currentIso, savedDate: savedIso }
-        : { contactId: contact.ContactId, licenseNumber: expectedLicense, action: 'blocked', reason: 'growthzone_save_not_verified', previousDate: currentIso, savedDate: savedIso };
-    console.log(`CCOR_RESULT ${JSON.stringify(result)}`);
-    return result;
-    console.log(`   ✅ Done processing ${contact.Name}`);
-}
-
-// ─── Main Entry Point ───────────────────────────────────────────────────────
-(async () => {
-    const csvFile = process.argv[2];
-    if (!csvFile) {
-        console.error('Usage: node index.js path/to/GrowthZone_License_Updates.csv');
-        process.exit(1);
-    }
-    if (!fs.existsSync(csvFile)) {
-        console.error(`Error: CSV file not found: ${csvFile}`);
-        process.exit(1);
-    }
-
-    console.log(`📂 Loading contacts from ${csvFile}...`);
-    const contactsToUpdate = await loadContactsFromCSV(csvFile);
-    console.log(`📊 ${contactsToUpdate.length} contacts with valid data.\n`);
-
-    if (contactsToUpdate.length === 0) {
-        console.log('No contacts to update. Exiting.');
-        process.exit(0);
-    }
-
-    console.log('🚀 Launching browser with persistent session profile...');
-    const sessionDir = path.join(__dirname, '.chrome-session');
     const executablePath = findBrowserExecutable();
     if (!executablePath) throw new Error('Google Chrome or Microsoft Edge was not found on this computer.');
     const browser = await puppeteer.launch({
         executablePath,
         headless: false,
         defaultViewport: null,
-        userDataDir: sessionDir,
-        args: [
-            '--start-maximized',
-            '--no-sandbox',
-            '--disable-setuid-sandbox',
-            '--disable-blink-features=AutomationControlled'
-        ]
+        userDataDir: path.join(__dirname, '.chrome-session'),
+        args: ['--start-maximized', '--no-sandbox', '--disable-setuid-sandbox', '--disable-blink-features=AutomationControlled'],
     });
     const page = await browser.newPage();
+    page.on('dialog', async (dialog) => dialog.accept());
 
-    // Auto-accept any browser-native confirm()/alert() dialogs
-    page.on('dialog', async dialog => {
-        console.log(`   [Dialog] ${dialog.type()}: "${dialog.message()}" → Accepting`);
-        await dialog.accept();
-    });
-
-    // ── Session Verification & Login ────────────────────────────────────────
-    console.log(`🔐 Connecting to GrowthZone...`);
-    await page.goto('https://growthzoneapp.com/auth?ReturnUrl=%2fa', { waitUntil: 'domcontentloaded', timeout: 45000 }).catch(() => {});
-    await sleep(3000);
-
-    if (await isLoginPage(page)) {
-        console.log('🔐 GrowthZone login required.');
+    try {
+        await page.goto('https://growthzoneapp.com/auth?ReturnUrl=%2fa', { waitUntil: 'domcontentloaded', timeout: 45000 }).catch(() => {});
+        await sleep(1500);
         await ensureLoggedIn(page, `${GZ_BASE_URL}/a`);
-    } else {
-        console.log('✨ Session already active via persistent profile!');
-    }
 
-    console.log('⏳ Waiting for dashboard to ready...');
-    await sleep(8000);
-
-    // ── Process All Contacts ────────────────────────────────────────────────
-    console.log('\n╔══════════════════════════════════╗');
-    console.log('║    STARTING LICENSE UPDATES      ║');
-    console.log('╚══════════════════════════════════╝\n');
-
-    let ok = 0, fail = 0;
-
-    for (let idx = 0; idx < contactsToUpdate.length; idx++) {
-        const contact = contactsToUpdate[idx];
-        console.log(`\n[${idx + 1}/${contactsToUpdate.length}]`);
-        try {
-            const result = await updateGrowthZoneLicense(page, contact);
-            if (result?.action === 'updated' || result?.action === 'skipped') ok++;
-            else fail++;
-        } catch (err) {
-            console.error(`   ❌ FAILED: ${err.message}`);
-            fail++;
-            // Try to close any leftover modals
-            try {
-                await page.evaluate(() => {
-                    const modal = document.querySelector('.modal.in, .modal.show');
-                    if (modal) {
-                        const close = modal.querySelector('.close, button.close');
-                        if (close) close.click();
-                    }
-                });
-            } catch { /* ignore */ }
-            await sleep(2000);
+        for (let index = 0; index < contacts.length; index += 1) {
+            const contact = contacts[index];
+            console.log(`[${index + 1}/${contacts.length}] ${contact.Name || contact.ContactId}`);
+            if (enabled(contact['Update License'])) {
+                try {
+                    await updateGrowthZoneLicense(page, contact);
+                } catch (error) {
+                    console.error(`License update failed: ${error.message}`);
+                    await recoverModal(page);
+                    emitResult('license', contact, 'blocked', 'automation_error', { detail: String(error.message).slice(0, 240) });
+                }
+            }
+            if (enabled(contact['Update COE'])) {
+                try {
+                    await updateGrowthZoneCoe(page, contact);
+                } catch (error) {
+                    console.error(`COE update failed: ${error.message}`);
+                    await recoverModal(page);
+                    emitResult('coe', contact, 'blocked', 'automation_error', { detail: String(error.message).slice(0, 240) });
+                }
+            }
         }
-        await sleep(2000);
+        console.log('GrowthZone update job complete.');
+        await sleep(2500);
+    } finally {
+        await browser.close();
     }
+}
 
-    // ── Summary ─────────────────────────────────────────────────────────────
-    console.log('\n╔══════════════════════════════════╗');
-    console.log('║         UPDATE COMPLETE          ║');
-    console.log('╚══════════════════════════════════╝');
-    console.log(`✅ Succeeded: ${ok}`);
-    console.log(`❌ Failed:    ${fail}`);
-    console.log(`📊 Total:     ${contactsToUpdate.length}`);
-
-    console.log('\nKeeping browser open for 10s to verify...');
-    await sleep(10000);
-    await browser.close();
-})();
+main().catch((error) => {
+    console.error(error.stack || error.message || String(error));
+    process.exitCode = 1;
+});

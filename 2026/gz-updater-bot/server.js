@@ -1,3 +1,5 @@
+'use strict';
+
 const express = require('express');
 const cors = require('cors');
 const { spawn } = require('child_process');
@@ -5,6 +7,7 @@ const crypto = require('crypto');
 const fs = require('fs');
 const os = require('os');
 const path = require('path');
+const { normalizeJobRecord, usDate } = require('./core');
 require('dotenv').config();
 
 const app = express();
@@ -15,6 +18,11 @@ const allowedOrigins = new Set([
 ]);
 const jobs = new Map();
 
+app.use((_request, response, next) => {
+    // Chrome's Private Network Access preflight requires this for an HTTPS page calling localhost.
+    response.setHeader('Access-Control-Allow-Private-Network', 'true');
+    next();
+});
 app.use(cors({
     origin(origin, callback) {
         if (!origin || allowedOrigins.has(origin) || /^https:\/\/[a-z0-9-]+\.ccor-license-checker\.pages\.dev$/i.test(origin)) {
@@ -26,44 +34,51 @@ app.use(cors({
     methods: ['GET', 'POST', 'OPTIONS'],
     allowedHeaders: ['Content-Type'],
 }));
-app.use(express.json({ limit: '64kb' }));
+app.use(express.json({ limit: '96kb' }));
 
 function csvValue(value) {
     return `"${String(value ?? '').replaceAll('"', '""')}"`;
 }
 
-function validRecord(record) {
-    return record
-        && /^\d+$/.test(String(record.contactId || ''))
-        && /^\d{1,20}$/.test(String(record.licenseNumber || ''))
-        && /^\d{4}-\d{2}-\d{2}$/.test(String(record.expirationDate || ''));
-}
-
-function usDate(isoDate) {
-    const [year, month, day] = isoDate.split('-');
-    return `${Number(month)}/${Number(day)}/${year}`;
-}
-
-app.get('/health', (_request, response) => response.json({ ok: true, service: 'ccor-growthzone-license-updater' }));
+app.get('/health', (_request, response) => response.json({
+    ok: true,
+    service: 'ccor-growthzone-updater',
+    capabilities: ['license', 'coe', 'both'],
+}));
 
 app.post('/run-updater', (request, response) => {
-    const records = request.body?.records;
-    if (!Array.isArray(records) || records.length < 1 || records.length > 100 || records.some((record) => !validRecord(record))) {
-        response.status(400).json({ error: 'records must contain 1-100 valid Contact ID, license number, and ISO expiration date entries.' });
+    const input = request.body?.records;
+    const records = Array.isArray(input) ? input.map(normalizeJobRecord) : [];
+    if (!Array.isArray(input) || input.length < 1 || input.length > 100 || records.some((record) => !record)) {
+        response.status(400).json({ error: 'records must contain 1-100 valid Contact ID/license entries and at least one requested update with its verified ISO date.' });
         return;
     }
     if ([...jobs.values()].some((job) => job.status === 'running')) {
-        response.status(409).json({ error: 'A license update job is already running on this computer.' });
+        response.status(409).json({ error: 'A GrowthZone update job is already running on this computer.' });
         return;
     }
 
     const jobId = crypto.randomUUID();
-    const jobDir = fs.mkdtempSync(path.join(os.tmpdir(), 'ccor-gz-license-'));
+    const jobDir = fs.mkdtempSync(path.join(os.tmpdir(), 'ccor-gz-update-'));
     const csvPath = path.join(jobDir, 'updates.csv');
-    const headers = ['Name', 'ContactId', 'License Number', 'License Expiration Date'];
+    const headers = [
+        'Name', 'ContactId', 'License Number', 'Update License', 'License Expiration Date',
+        'Update COE', 'Confirmed COE Date', 'COE Cycle', 'COE Course Number', 'COE Course Name',
+    ];
     const lines = [headers.map(csvValue).join(',')];
     for (const record of records) {
-        lines.push([record.name, record.contactId, record.licenseNumber, usDate(record.expirationDate)].map(csvValue).join(','));
+        lines.push([
+            record.name,
+            record.contactId,
+            record.licenseNumber,
+            record.updateLicense ? 'Yes' : 'No',
+            record.updateLicense ? usDate(record.expirationDate) : '',
+            record.updateCoe ? 'Yes' : 'No',
+            record.updateCoe ? usDate(record.coeDate) : '',
+            record.updateCoe ? record.coeCycle : '',
+            record.coeCourseNumber,
+            record.coeCourseName,
+        ].map(csvValue).join(','));
     }
     fs.writeFileSync(csvPath, lines.join('\r\n'), { encoding: 'utf8', flag: 'wx' });
 
@@ -90,9 +105,9 @@ app.post('/run-updater', (request, response) => {
     const capture = (chunk, level) => {
         for (const line of String(chunk).split(/\r?\n/).filter(Boolean)) {
             job.logs.push({ level, line });
-            if (job.logs.length > 250) job.logs.shift();
+            if (job.logs.length > 300) job.logs.shift();
             if (line.startsWith('CCOR_RESULT ')) {
-                try { job.results.push(JSON.parse(line.slice('CCOR_RESULT '.length))); } catch { /* keep raw log */ }
+                try { job.results.push(JSON.parse(line.slice('CCOR_RESULT '.length))); } catch { /* retain the raw log */ }
             }
         }
     };
@@ -125,5 +140,5 @@ app.get('/jobs/:jobId', (request, response) => {
 
 const PORT = Number(process.env.PORT || 3001);
 app.listen(PORT, '127.0.0.1', () => {
-    console.log(`CCOR GrowthZone license updater ready at http://127.0.0.1:${PORT}`);
+    console.log(`CCOR GrowthZone updater ready at http://127.0.0.1:${PORT} (license, COE, or both)`);
 });
