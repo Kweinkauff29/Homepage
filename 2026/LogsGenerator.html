@@ -1,3 +1,121 @@
+<!-- Dynamic Head Metadata & SEO Hoisting for Elementor / WordPress -->
+<script>
+(function() {
+  document.title = "Letter of Good Standing Request (LOGS) | Coconut Coast REALTORS®";
+  
+  function setOrCreateMeta(attr, attrVal, contentVal) {
+    var el = document.querySelector('meta[' + attr + '="' + attrVal + '"]');
+    if (!el) {
+      el = document.createElement('meta');
+      el.setAttribute(attr, attrVal);
+      document.head.appendChild(el);
+    }
+    el.setAttribute('content', contentVal);
+  }
+
+  function setOrCreateLink(rel, href) {
+    var el = document.querySelector('link[rel="' + rel + '"]');
+    if (!el) {
+      el = document.createElement('link');
+      el.setAttribute('rel', rel);
+      document.head.appendChild(el);
+    }
+    el.setAttribute('href', href);
+  }
+
+  setOrCreateMeta('name', 'description', 'Official Letter of Good Standing (LOGS) request generator for Coconut Coast Organization of REALTORS® (CCOR). Request primary board verification for secondary association membership, reciprocal MLS access, and DBPR compliance in Southwest Florida.');
+  setOrCreateMeta('name', 'keywords', 'letter of good standing realtor, CCOR LOGS request, Southwest Florida realtor board letter, SWFLAMLS reciprocal letter, secondary board membership realtor Florida');
+  setOrCreateMeta('property', 'og:site_name', 'Coconut Coast Organization of REALTORS® (CCOR)');
+  setOrCreateMeta('property', 'og:title', 'Letter of Good Standing Request (LOGS) | Coconut Coast REALTORS®');
+  setOrCreateMeta('property', 'og:description', 'Official Letter of Good Standing request generator for CCOR members. Fast verification for secondary board and MLS access across Southwest Florida.');
+  setOrCreateMeta('property', 'og:type', 'website');
+  setOrCreateMeta('property', 'og:url', 'https://coconutcoastrealtors.org/logsrequest/');
+  setOrCreateLink('canonical', 'https://coconutcoastrealtors.org/logsrequest/');
+})();
+</script>
+
+<!-- Schema.org JSON-LD Structured Data for Search Engines & LLM Overviews -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "WebPage",
+      "@id": "https://coconutcoastrealtors.org/logsrequest/#webpage",
+      "url": "https://coconutcoastrealtors.org/logsrequest/",
+      "name": "Letter of Good Standing Request (LOGS) | Coconut Coast Organization of REALTORS®",
+      "description": "Request an official Letter of Good Standing (LOGS) from Coconut Coast Organization of REALTORS® (CCOR). Required for secondary association membership, reciprocal MLS access, and DBPR licensing compliance in Southwest Florida.",
+      "isPartOf": {
+        "@id": "https://coconutcoastrealtors.org/#website"
+      },
+      "about": {
+        "@id": "https://coconutcoastrealtors.org/#organization"
+      },
+      "breadcrumb": {
+        "@type": "BreadcrumbList",
+        "itemListElement": [
+          {
+            "@type": "ListItem",
+            "position": 1,
+            "name": "Home",
+            "item": "https://coconutcoastrealtors.org/"
+          },
+          {
+            "@type": "ListItem",
+            "position": 2,
+            "name": "Member Services",
+            "item": "https://coconutcoastrealtors.org/mls-membership-information/"
+          },
+          {
+            "@type": "ListItem",
+            "position": 3,
+            "name": "Letter of Good Standing",
+            "item": "https://coconutcoastrealtors.org/logsrequest/"
+          }
+        ]
+      }
+    },
+    {
+      "@type": "FAQPage",
+      "@id": "https://coconutcoastrealtors.org/logsrequest/#faq",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "What is a REALTOR® Letter of Good Standing (LOGS)?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "A Letter of Good Standing (LOGS) is an official document issued by your primary local REALTOR® association certifying that you are an active member in good standing. It verifies your National Association of REALTORS® (NAR) NRDS/M1 ID, Florida REALTORS® affiliation, current dues-paid status, and completion of the mandatory NAR Code of Ethics training cycle."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Why do I need a Letter of Good Standing in Southwest Florida?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "REALTORS® in Southwest Florida commonly need a Letter of Good Standing when applying for secondary board membership, joining an adjacent MLS (such as NABOR in Naples, RPCRA in Fort Myers/Cape Coral, or Stellar MLS), transferring brokers, or applying for reciprocal MLS access across Florida."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "How quickly does CCOR process Letter of Good Standing requests?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "CCOR processes Letters of Good Standing within 1 business day. You can use this online generator to preview and download your request or submit it directly to CCOR Member Services at info@coconutcoastrealtors.org."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Is there any fee for obtaining a Letter of Good Standing from CCOR?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "No. Letters of Good Standing are provided free of charge as a core membership benefit to all active primary members of Coconut Coast Organization of REALTORS®."
+          }
+        }
+      ]
+    }
+  ]
+}
+</script>
 <div id="logs-letter-root">
   <style>
     :root {
@@ -459,6 +577,43 @@
       <button class="download-btn" type="button" id="downloadBtn">Download PDF</button>
     </div>
 
+    <!-- Informational Guide & FAQ for Search Engines, LLMs & Members -->
+    <div class="panel" style="margin-top: 1.5rem; line-height: 1.6;">
+      <h2 style="font-size: 1.25rem; font-weight: 700; color: #101114; margin-top: 0; margin-bottom: 0.75rem;">About Letters of Good Standing (LOGS)</h2>
+      <p style="font-size: 0.95rem; color: #4a5568; margin-bottom: 1rem;">
+        A <strong>Letter of Good Standing (LOGS)</strong> confirms to other real estate associations, multiple listing services (MLSs), and brokerages that you hold active REALTOR® status with the <strong>Coconut Coast Organization of REALTORS® (CCOR)</strong>, that your state and national dues are paid in full, and that your NAR Code of Ethics certification is up to date.
+      </p>
+
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1rem; margin-top: 1.25rem;">
+        <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; padding: 1rem;">
+          <h3 style="font-size: 1rem; font-weight: 600; color: #1e3a8a; margin-top: 0; margin-bottom: 0.5rem;">Secondary Board Membership</h3>
+          <p style="font-size: 0.88rem; color: #64748b; margin-bottom: 0;">
+            Joining a neighboring board in Southwest Florida (e.g., NABOR in Naples or RPCRA in Fort Myers)? Your secondary board requires a current LOGS from your primary board (CCOR) to waive redundant national and state dues.
+          </p>
+        </div>
+
+        <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; padding: 1rem;">
+          <h3 style="font-size: 1rem; font-weight: 600; color: #1e3a8a; margin-top: 0; margin-bottom: 0.5rem;">Reciprocal MLS Access</h3>
+          <p style="font-size: 0.88rem; color: #64748b; margin-bottom: 0;">
+            Need MLS access in another Florida territory? A LOGS proves your active primary REALTOR® status so you can activate reciprocal MLS privileges quickly. See our <a href="https://coconutcoastrealtors.org/reciprocal-application-orientation/" style="color: #0284c7; text-decoration: underline;">Reciprocal MLS Guide</a>.
+          </p>
+        </div>
+
+        <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; padding: 1rem;">
+          <h3 style="font-size: 1rem; font-weight: 600; color: #1e3a8a; margin-top: 0; margin-bottom: 0.5rem;">Fast 1-Day Processing</h3>
+          <p style="font-size: 0.88rem; color: #64748b; margin-bottom: 0;">
+            Requests are processed and transmitted within 1 business day. For urgent broker transfers or time-sensitive board onboarding, contact our Member Services team directly at <a href="mailto:info@coconutcoastrealtors.org" style="color: #0284c7; text-decoration: underline;">info@coconutcoastrealtors.org</a>.
+          </p>
+        </div>
+      </div>
+
+      <div style="margin-top: 1.5rem; padding-top: 1rem; border-top: 1px solid #e2e8f0; font-size: 0.88rem; color: #64748b;">
+        <strong>Helpful Member Resources:</strong>
+        <a href="https://coconutcoastrealtors.org/mls-membership-information/" style="margin-left: 0.5rem; color: #0284c7; text-decoration: underline;">MLS Membership &amp; Rules</a> |
+        <a href="https://coconutcoastrealtors.org/upcoming-education/" style="margin-left: 0.5rem; color: #0284c7; text-decoration: underline;">Code of Ethics &amp; CE Classes</a> |
+        <a href="https://coconutcoastrealtors.org/join-bser/" style="margin-left: 0.5rem; color: #0284c7; text-decoration: underline;">Primary Membership Benefits</a>
+      </div>
+    </div>
   </div>
 
   <!-- html2canvas + jsPDF for PDF download -->

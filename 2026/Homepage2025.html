@@ -362,7 +362,8 @@
 
     #welcome-head {
       font-family: 'Inter', sans-serif;
-      font-size: 46px
+      font-size: 46px;
+      color: #ffffff !important;
     }
 
     /* Quick-link buttons — CCOR brand colors, equal width, one line text, textured */
@@ -1476,13 +1477,22 @@
     }
 
     /* Headings */
-    #outside-contain #welcome-head,
+    #outside-contain #welcome-head {
+      color: #ffffff !important;
+      font-family: 'Inter', system-ui, -apple-system, 'Segoe UI', sans-serif;
+      font-size: clamp(1.8rem, 2.2vw, 2.4rem);
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      margin: 0 0 12px;
+    }
+
     #outside-contain #support-head {
       font-family: 'Inter', system-ui, -apple-system, 'Segoe UI', sans-serif;
       font-size: clamp(1.8rem, 2.2vw, 2.4rem);
       letter-spacing: 0.08em;
       text-transform: uppercase;
       margin: 0 0 12px;
+      color: #111111;
     }
 
     /* Small Swiss-style rule under welcome */
@@ -3532,7 +3542,7 @@
   <div class="welcome-row">
     <!-- Welcome block -->
     <div class="welcome welcome--intro">
-      <h1 id="welcome-head">Welcome to Coconut Coast Organization of REALTORS® (CCOR)</h1>
+      <h1 id="welcome-head" style="color: #ffffff !important;">Welcome to Coconut Coast Organization of REALTORS® (CCOR)</h1>
       <hr class="welcome-rule">
       <p id="welcome-text" class="welcome-lead">
         Creating value-driven success for our members and the communities we serve.
