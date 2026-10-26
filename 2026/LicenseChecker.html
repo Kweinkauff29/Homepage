@@ -55,6 +55,8 @@
         .notice strong { color: var(--navy); }
         .notice.error { border-color: #fecdca; background: var(--bad-bg); color: var(--bad); }
         .source-status { display: block; margin-top: 5px; color: var(--muted); font-size: 12px; }
+        .helper-status.online { color: var(--good); font-weight: 800; }
+        .helper-status.offline { color: var(--bad); font-weight: 800; }
         .stats { display: grid; grid-template-columns: repeat(5, minmax(130px, 1fr)); gap: 12px; margin: 16px 0; }
         .stat { background: white; border: 1px solid var(--line); border-radius: 11px; padding: 15px; }
         .stat b { display: block; font-size: 25px; line-height: 1.1; }
@@ -113,6 +115,7 @@
                     <label><input type="radio" name="updateMode" value="both" checked> Both</label>
                 </fieldset>
                 <small class="source-status">All three options use the signed-in PC/Mac GrowthZone helper. Start <code>start-windows.cmd</code> or <code>start-mac.command</code> from <code>2026/gz-updater-bot</code> and keep it open. Cloudflare verifies DBPR data but does not write directly to GrowthZone.</small>
+                <small class="source-status helper-status" id="helperStatus">Checking the local GrowthZone helper…</small>
                 <div class="actions">
                     <button class="btn primary" id="checkButton" disabled>Check DBPR + COE</button>
                     <button class="btn success" id="syncButton" disabled>Run both updates</button>
@@ -166,11 +169,12 @@
             const API = "https://ccor-license-checker-api.bonitaspringsrealtors.workers.dev";
             const GZ_BASE = "https://bonitaspringsesterorealtorsfl.growthzoneapp.com";
             const LOCAL_UPDATER = "http://127.0.0.1:3001";
-            const state = { rows: [], checked: false, busy: false, mode: "both" };
+            const HELPER_STARTUP_MESSAGE = "GrowthZone helper is offline. Start start-windows.cmd on Windows or start-mac.command on macOS from 2026/gz-updater-bot, leave it open, then retry.";
+            const state = { rows: [], checked: false, busy: false, mode: "both", helperOnline: false };
             const elements = Object.fromEntries([
                 "fileInput", "fileLabel", "dropZone", "checkButton", "syncButton", "downloadButton",
                 "message", "messageBox", "progress", "progressBar", "stats", "totalStat", "licenseStat", "coeReadyStat",
-                "reviewStat", "syncedStat", "resultsTable", "resultsBody", "emptyState", "resultSummary", "dbprStatus",
+                "reviewStat", "syncedStat", "resultsTable", "resultsBody", "emptyState", "resultSummary", "dbprStatus", "helperStatus",
             ].map((id) => [id, document.getElementById(id)]));
 
             const headerKey = (value) => String(value || "").toLowerCase().replace(/[^a-z0-9]/g, "");
@@ -206,6 +210,28 @@
                     elements.dbprStatus.textContent = `DBPR COE index: ${phase} · daily source check at 10:15 UTC · source ${source.source_last_modified || "unknown"} · checked ${displayTimestamp(source.checked_at)} · indexed ${displayTimestamp(source.completed_at)}${source.last_error ? ` · error: ${source.last_error}` : ""}`;
                 } catch {
                     elements.dbprStatus.textContent = "DBPR COE index status is temporarily unavailable.";
+                }
+            }
+
+            function showHelperStatus(online) {
+                state.helperOnline = online;
+                elements.helperStatus.classList.toggle("online", online);
+                elements.helperStatus.classList.toggle("offline", !online);
+                elements.helperStatus.textContent = online
+                    ? "GrowthZone helper: online and ready on this computer."
+                    : HELPER_STARTUP_MESSAGE;
+            }
+
+            async function loadHelperStatus() {
+                try {
+                    const response = await fetch(`${LOCAL_UPDATER}/health`, { cache: "no-store" });
+                    const payload = await response.json();
+                    if (!response.ok || !payload.ok) throw new Error("Helper unavailable");
+                    showHelperStatus(true);
+                    return true;
+                } catch {
+                    showHelperStatus(false);
+                    return false;
                 }
             }
 
@@ -397,6 +423,7 @@
             }
 
             async function launchGrowthZoneUpdate(licenseCandidates, coeCandidates) {
+                if (!(await loadHelperStatus())) throw new Error(HELPER_STARTUP_MESSAGE);
                 const recordsByKey = new Map();
                 const getRecord = (row) => {
                     const key = `${row.contactId}:${row.licenseNumber}`;
@@ -429,16 +456,28 @@
                 }
                 render();
 
-                const response = await fetch(`${LOCAL_UPDATER}/run-updater`, {
-                    method: "POST",
-                    headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify({ records: [...recordsByKey.values()] }),
-                });
+                let response;
+                try {
+                    response = await fetch(`${LOCAL_UPDATER}/run-updater`, {
+                        method: "POST",
+                        headers: { "Content-Type": "application/json" },
+                        body: JSON.stringify({ records: [...recordsByKey.values()] }),
+                    });
+                } catch {
+                    showHelperStatus(false);
+                    throw new Error(HELPER_STARTUP_MESSAGE);
+                }
                 const payload = await response.json();
                 if (!response.ok) throw new Error(payload.error || "The local GrowthZone updater could not start.");
                 for (let attempt = 0; attempt < 240; attempt += 1) {
                     await new Promise((resolve) => window.setTimeout(resolve, 5000));
-                    const jobResponse = await fetch(`${LOCAL_UPDATER}/jobs/${encodeURIComponent(payload.jobId)}`);
+                    let jobResponse;
+                    try {
+                        jobResponse = await fetch(`${LOCAL_UPDATER}/jobs/${encodeURIComponent(payload.jobId)}`);
+                    } catch {
+                        showHelperStatus(false);
+                        throw new Error(`${HELPER_STARTUP_MESSAGE} If its browser window was closed during this job, check GrowthZone before retrying.`);
+                    }
                     const job = await jobResponse.json();
                     if (!jobResponse.ok) throw new Error(job.error || "The local GrowthZone update job could not be read.");
                     for (const result of job.results || []) {
@@ -481,7 +520,7 @@
                     messages.push(`GrowthZone browser updates finished and were verified${jobId ? ` (job ${jobId})` : ""}`);
                 } catch (error) {
                     failed = true;
-                    messages.push(`${error instanceof Error ? error.message : "GrowthZone update failed."} Start the PC/Mac helper, sign in in its browser window if prompted, then retry.`);
+                    messages.push(error instanceof Error ? error.message : "GrowthZone update failed.");
                 } finally {
                     setBusy(false, 100);
                     setMessage(messages.join(". ") || "No updates were run.", failed);
@@ -532,6 +571,8 @@
                 });
             }
             loadDbprStatus();
+            loadHelperStatus();
+            window.addEventListener("focus", loadHelperStatus);
             window.setInterval(loadDbprStatus, 5 * 60 * 1000);
         })();
     </script>
