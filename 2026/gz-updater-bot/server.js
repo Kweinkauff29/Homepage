@@ -9,7 +9,7 @@ const os = require('os');
 const path = require('path');
 const { normalizeJobRecord, usDate } = require('./core');
 const { checkBrowserRuntime } = require('./browser-runtime');
-require('dotenv').config();
+require('dotenv').config({ path: path.join(__dirname, '.env'), quiet: true });
 
 const app = express();
 const allowedOrigins = new Set([
@@ -51,6 +51,7 @@ app.get('/health', async (_request, response) => {
         browserReady: browserRuntime.ready,
         browser: browserRuntime.browser,
         issue: browserRuntime.issue,
+        automaticLoginConfigured: Boolean((process.env.GZ_USERNAME || process.env.GZ_EMAIL) && process.env.GZ_PASSWORD),
     });
 });
 

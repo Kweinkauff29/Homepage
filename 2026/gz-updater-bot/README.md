@@ -14,7 +14,7 @@ The Cloudflare checker uses this local helper for all GrowthZone writes: **DBPR 
 2. Double-click `start-mac.command`. If macOS blocks it, right-click it and choose **Open**.
 3. Keep the Terminal window open while using the checker.
 
-The first update opens a separate browser profile. Sign in to GrowthZone there once; the profile is then reused locally. Credentials are not sent to the Cloudflare page or stored in GitHub.
+The helper first reuses its separate signed-in browser profile. If `GZ_USERNAME` (or `GZ_EMAIL`) and `GZ_PASSWORD` are present in a local `.env` file beside `server.js`, it can also sign in automatically when GrowthZone requests a new login. Credentials stay on that computer: they are not sent to the Cloudflare page or stored in GitHub. Without a local credential file, sign in once in the browser window and the helper will reuse that profile whenever GrowthZone allows it.
 
 The checker verifies that the helper can open child browser processes before enabling an update. If it reports that the browser runtime is blocked, close the existing helper and start the Windows or macOS launcher directly from File Explorer or Finder.
 

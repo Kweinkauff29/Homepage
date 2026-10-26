@@ -6,10 +6,13 @@ const path = require('path');
 const csv = require('csv-parser');
 const { enabled, normalizeLicenseNumber, toIsoDate, usDate } = require('./core');
 const { findBrowserExecutable } = require('./browser-runtime');
-require('dotenv').config();
+require('dotenv').config({ path: path.join(__dirname, '.env'), quiet: true });
 
 const GZ_BASE_URL = 'https://bonitaspringsesterorealtorsfl.growthzoneapp.com';
 const MODAL_SELECTOR = '.modal.in, .modal.show, .modal[style*="display: block"]';
+const GZ_PROFILE_DIR = process.env.GZ_PROFILE_DIR
+    ? path.resolve(process.env.GZ_PROFILE_DIR)
+    : path.join(__dirname, '.chrome-session');
 const sleep = (milliseconds) => new Promise((resolve) => setTimeout(resolve, milliseconds));
 
 function emitResult(kind, contact, action, reason, details = {}) {
@@ -58,10 +61,11 @@ async function isLoginPage(page) {
 async function ensureLoggedIn(page, targetUrl) {
     if (!(await isLoginPage(page))) return;
     console.log('GrowthZone sign-in is required.');
-    const username = process.env.GZ_USERNAME;
+    const username = process.env.GZ_USERNAME || process.env.GZ_EMAIL;
     const password = process.env.GZ_PASSWORD;
 
     if (username && password) {
+        console.log('Using the locally stored GrowthZone credentials.');
         const usernameSelector = '#check-user-name-field, #loginId, input[name="Username"], input[name="loginId"]';
         const passwordSelector = '#password, #Password, input[name="password"], input[name="Password"], input[type="password"]';
         const usernameField = await page.$(usernameSelector);
@@ -87,6 +91,7 @@ async function ensureLoggedIn(page, targetUrl) {
     const deadline = Date.now() + 5 * 60 * 1000;
     while (Date.now() < deadline && await isLoginPage(page)) await sleep(1000);
     if (await isLoginPage(page)) throw new Error('GrowthZone login timed out.');
+    console.log('GrowthZone sign-in complete.');
     if (targetUrl) {
         await page.goto(targetUrl, { waitUntil: 'domcontentloaded', timeout: 45000 });
         await sleep(2500);
@@ -385,7 +390,7 @@ async function main() {
         executablePath,
         headless: false,
         defaultViewport: null,
-        userDataDir: path.join(__dirname, '.chrome-session'),
+        userDataDir: GZ_PROFILE_DIR,
         args: ['--start-maximized', '--no-sandbox', '--disable-setuid-sandbox', '--disable-blink-features=AutomationControlled'],
     });
     const page = await browser.newPage();

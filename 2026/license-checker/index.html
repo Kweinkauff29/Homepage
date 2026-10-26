@@ -231,7 +231,9 @@
                         showHelperStatus(false, payload.issue || HELPER_STARTUP_MESSAGE);
                         return false;
                     }
-                    showHelperStatus(true);
+                    showHelperStatus(true, payload.automaticLoginConfigured
+                        ? "GrowthZone helper: online, browser ready, and automatic sign-in configured."
+                        : "GrowthZone helper: online and browser ready. Sign in in its browser window if prompted.");
                     return true;
                 } catch {
                     showHelperStatus(false);
