@@ -178,18 +178,49 @@ async function readLicenseExpiration(page) {
     return page.evaluate((selector) => {
         const modal = document.querySelector(selector);
         if (!modal) return null;
-        const label = [...modal.querySelectorAll('label')].find((item) => item.innerText.trim().toLowerCase().includes('expir'));
-        return label?.closest('.form-group')?.querySelector('input')?.value || null;
+        const label = [...modal.querySelectorAll('label')].find((item) => item.innerText.trim().toLowerCase() === 'expiration date');
+        const input = label?.closest('.form-group')?.querySelector('input');
+        return input && input.offsetParent !== null ? input.value || null : null;
     }, MODAL_SELECTOR);
 }
 
 async function expirationInput(page) {
     const handle = await page.evaluateHandle((selector) => {
         const modal = document.querySelector(selector);
-        const label = [...(modal?.querySelectorAll('label') || [])].find((item) => item.innerText.trim().toLowerCase().includes('expir'));
-        return label?.closest('.form-group')?.querySelector('input') || null;
+        const label = [...(modal?.querySelectorAll('label') || [])].find((item) => item.innerText.trim().toLowerCase() === 'expiration date');
+        const input = label?.closest('.form-group')?.querySelector('input');
+        return input && input.offsetParent !== null ? input : null;
     }, MODAL_SELECTOR);
     return handle.asElement();
+}
+
+async function waitForLicenseEditor(page, expectedLicense) {
+    await page.waitForFunction((selector, licenseNumber) => {
+        const modal = document.querySelector(selector);
+        if (!modal) return false;
+        const groups = [...modal.querySelectorAll('.form-group')];
+        const inputFor = (labelText) => {
+            const group = groups.find((item) => item.querySelector('label')?.innerText.trim().toLowerCase() === labelText);
+            const input = group?.querySelector('input');
+            return input && input.offsetParent !== null ? input : null;
+        };
+        const license = inputFor('license number');
+        const expiration = inputFor('expiration date');
+        const normalized = String(license?.value || '').replace(/\D/g, '').replace(/^0+/, '');
+        return normalized === licenseNumber && Boolean(expiration);
+    }, { timeout: 15000 }, MODAL_SELECTOR, expectedLicense);
+    await sleep(300);
+}
+
+async function waitForValidLicenseExpiration(page, targetDate) {
+    await page.waitForFunction((selector, expectedDate) => {
+        const modal = document.querySelector(selector);
+        const label = [...(modal?.querySelectorAll('label') || [])].find((item) => item.innerText.trim().toLowerCase() === 'expiration date');
+        const input = label?.closest('.form-group')?.querySelector('input');
+        const normalize = (value) => value.split('/').map((part) => String(Number(part))).join('/');
+        const done = [...(modal?.querySelectorAll('button') || [])].find((button) => button.innerText.trim() === 'Done' && button.offsetParent !== null);
+        return Boolean(input && normalize(input.value) === normalize(expectedDate) && input.classList.contains('ng-valid-date') && done && !done.disabled);
+    }, { timeout: 10000 }, MODAL_SELECTOR, usDate(targetDate));
 }
 
 async function updateGrowthZoneLicense(page, contact) {
@@ -202,7 +233,7 @@ async function updateGrowthZoneLicense(page, contact) {
     const opened = await openMatchingLicense(page, expectedLicense);
     if (opened.error) return emitResult('license', contact, 'blocked', opened.error);
     await page.waitForSelector(MODAL_SELECTOR, { visible: true, timeout: 15000 });
-    await sleep(500);
+    await waitForLicenseEditor(page, expectedLicense);
 
     const currentDate = toIsoDate(await readLicenseExpiration(page));
     if (currentDate && currentDate >= targetDate) {
@@ -216,12 +247,14 @@ async function updateGrowthZoneLicense(page, contact) {
         return emitResult('license', contact, 'blocked', 'growthzone_expiration_field_missing');
     }
     await fillInputWithKeyboard(page, input, usDate(targetDate));
+    await waitForValidLicenseExpiration(page, targetDate);
     await clickModalDone(page);
 
     await page.waitForSelector('#ContactExperienceTableWidget', { visible: true, timeout: 20000 });
     const verifyOpened = await openMatchingLicense(page, expectedLicense);
     if (verifyOpened.error) return emitResult('license', contact, 'blocked', 'growthzone_save_not_verified', { previousDate: currentDate });
     await page.waitForSelector(MODAL_SELECTOR, { visible: true, timeout: 15000 });
+    await waitForLicenseEditor(page, expectedLicense);
     const savedDate = toIsoDate(await readLicenseExpiration(page));
     await cancelOpenModal(page);
 
