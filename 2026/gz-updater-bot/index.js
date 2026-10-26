@@ -119,7 +119,10 @@ async function cancelOpenModal(page) {
 
 async function fillInputWithKeyboard(page, handle, value) {
     await handle.click({ clickCount: 3 });
-    await page.keyboard.press(process.platform === 'darwin' ? 'Meta+A' : 'Control+A');
+    const modifier = process.platform === 'darwin' ? 'Meta' : 'Control';
+    await page.keyboard.down(modifier);
+    await page.keyboard.press('A');
+    await page.keyboard.up(modifier);
     await page.keyboard.press('Backspace');
     await page.keyboard.type(value, { delay: 35 });
     await page.keyboard.press('Tab');
@@ -272,43 +275,73 @@ async function openCoeEditor(page) {
 }
 
 async function editableCoeRow(page) {
-    let row = await page.evaluateHandle(() => {
-        const rows = [...document.querySelectorAll('#CodeOfEthicsList tbody tr.dynamic-list-body')];
-        return rows.find((item) => {
-            const input = item.querySelector('input[ng-model="ctrl.localDate"]');
-            return input && !input.readOnly && !input.disabled;
-        }) || null;
-    });
-    if (row.asElement()) return row.asElement();
-    await row.dispose();
+    const findEditable = async () => {
+        const handle = await page.evaluateHandle(() => {
+            const rows = [...document.querySelectorAll('#CodeOfEthicsList tbody tr.dynamic-list-body')];
+            return rows.findLast((item) => {
+                const input = item.querySelector('input[ng-model="ctrl.localDate"]');
+                const course = item.querySelector('select[ng-model="itemCodeOfEthicsList.EducationCourseCode"]');
+                return input && !input.readOnly && !input.disabled && course && !course.disabled;
+            }) || null;
+        });
+        const element = handle.asElement();
+        if (!element) await handle.dispose();
+        return element;
+    };
+
+    let row = await findEditable();
+    if (row) return row;
+    const beforeCount = await page.$$eval('#CodeOfEthicsList tbody tr.dynamic-list-body', (rows) => rows.length);
 
     const added = await page.evaluate(() => {
-        const button = document.querySelector('#CodeOfEthicsList button.gzui-add-button');
-        if (!button || button.disabled) return false;
+        const buttons = [...document.querySelectorAll('.CodeOfEthicsList button.gzui-add-button, button[ng-click*="addNewCodeOfEthicsList"]')];
+        const button = buttons.find((item) => item.offsetParent !== null && !item.disabled);
+        if (!button) return false;
         button.click();
         return true;
     });
     if (!added) return null;
-    await sleep(400);
-    row = await page.evaluateHandle(() => {
+    await page.waitForFunction((count) => {
         const rows = [...document.querySelectorAll('#CodeOfEthicsList tbody tr.dynamic-list-body')];
-        return rows.findLast((item) => {
+        return rows.length > count && rows.some((item) => {
             const input = item.querySelector('input[ng-model="ctrl.localDate"]');
-            return input && !input.readOnly && !input.disabled;
-        }) || null;
-    });
-    return row.asElement();
+            const course = item.querySelector('select[ng-model="itemCodeOfEthicsList.EducationCourseCode"]');
+            return input && !input.readOnly && !input.disabled && course && !course.disabled;
+        });
+    }, { timeout: 10000 }, beforeCount).catch(() => {});
+    await sleep(250);
+    row = await findEditable();
+    return row;
 }
 
 async function fillCoeRow(page, row, targetDate, cycle) {
     const dateInput = await row.$('input[ng-model="ctrl.localDate"]');
     const courseCode = await row.$('select[ng-model="itemCodeOfEthicsList.EducationCourseCode"]');
-    const cycleSelect = await row.$('select[ng-model="itemCodeOfEthicsList.Cycle"]');
-    if (!dateInput || !courseCode || !cycleSelect) throw new Error('growthzone_coe_fields_missing');
+    const initialCycleSelect = await row.$('select[ng-model="itemCodeOfEthicsList.Cycle"]');
+    if (!dateInput || !courseCode || !initialCycleSelect) throw new Error('growthzone_coe_fields_missing');
 
     await fillInputWithKeyboard(page, dateInput, usDate(targetDate));
+    await page.waitForFunction((expectedDate) => {
+        const normalize = (value) => value.split('/').map((part) => String(Number(part))).join('/');
+        const rows = [...document.querySelectorAll('#CodeOfEthicsList tbody tr.dynamic-list-body')];
+        const input = rows.findLast((item) => {
+            const candidate = item.querySelector('input[ng-model="ctrl.localDate"]');
+            return candidate && !candidate.readOnly && !candidate.disabled;
+        })?.querySelector('input[ng-model="ctrl.localDate"]');
+        return Boolean(input && normalize(input.value) === normalize(expectedDate) && input.classList.contains('ng-valid-date'));
+    }, { timeout: 10000 }, usDate(targetDate));
     await courseCode.select('number:1');
-    await sleep(250);
+    await page.waitForFunction(() => {
+        const rows = [...document.querySelectorAll('#CodeOfEthicsList tbody tr.dynamic-list-body')];
+        const editable = rows.findLast((item) => {
+            const input = item.querySelector('input[ng-model="ctrl.localDate"]');
+            return input && !input.readOnly && !input.disabled;
+        });
+        const select = editable?.querySelector('select[ng-model="itemCodeOfEthicsList.Cycle"]');
+        return Boolean(select && !select.disabled);
+    }, { timeout: 10000 });
+    const cycleSelect = await row.$('select[ng-model="itemCodeOfEthicsList.Cycle"]');
+    if (!cycleSelect) throw new Error('growthzone_coe_cycle_field_missing');
     await cycleSelect.select(`number:${cycle}`);
     await sleep(350);
 
