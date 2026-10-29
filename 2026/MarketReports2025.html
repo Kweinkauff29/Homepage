@@ -1081,6 +1081,18 @@
     const REPORTS = [
       /* ===== 2026 ===== */
       {
+        year: 2026, month: "September",
+        fastStats: "https://coconutcoastrealtors.org/wp-content/uploads/2026/10/CCOR_Fast_Stats_September_2026.pdf",
+        frStats: "https://coconutcoastrealtors.org/wp-content/uploads/2026/10/OctFloridaRealtors.pdf",
+        indicators: "https://coconutcoastrealtors.org/wp-content/uploads/2026/10/CCOR_Monthly_Indicators_September_2026.pdf",
+        thumb: "https://coconutcoastrealtors.org/wp-content/uploads/2026/10/Bonita-Springs-Estero-September-2026.png",
+        thumbs: [
+          "https://coconutcoastrealtors.org/wp-content/uploads/2026/10/Bonita-Springs-Estero-September-2026.png",
+          "https://coconutcoastrealtors.org/wp-content/uploads/2026/10/Fort-Myers-Area-September-2026.png",
+          "https://coconutcoastrealtors.org/wp-content/uploads/2026/10/Naples-Area-September-2026.png"
+        ]
+      },
+      {
         year: 2026, month: "August",
         fastStats: "https://coconutcoastrealtors.org/wp-content/uploads/2026/09/BER_Fast_Stats-2.pdf",
         frStats: "https://coconutcoastrealtors.org/wp-content/uploads/2026/09/August-2026-FR-Stats.pdf",
@@ -1349,6 +1361,8 @@
 
     // ---- Curated video list made GLOBAL so the rail can see it ----
     window.VIDEOS = [
+      { title: "September 2026 Bonita + Estero Stats", url: "https://youtu.be/SzHddOvQy4E" },
+      { title: "September 2026 Naples + Fort Myers Stats", url: "https://youtu.be/U2WdV8MjCXw" },
       { title: "August 2026 Bonita + Estero Stats", url: "https://youtu.be/DxznykIfbWY" },
       { title: "August 2026 Naples + Fort Myers Stats", url: "https://youtu.be/kb2kwUB-sZE" },
       { title: "July 2026 Bonita + Estero Stats", url: "https://youtu.be/gyhiXI0h5eE" },
@@ -1765,6 +1779,54 @@
     // ---- Mock AI Chatbot Logic ----
     // Data mapping for specific month interactions
     const AI_DATA = {
+      "2026-september-q1": `Based on the September 2026 market data across Southwest Florida (Lee, Collier, and Hendry Counties / Bonita Springs-Estero, Naples, Fort Myers), buyer activity maintained steady positive momentum with **Pending Sales rising 3.2%** and **Closed Sales up 1.4%** Year-over-Year. Persistent buyer absorption drove total **Active Inventory down 9.5%** to 21,890 units.
+
+KEY METRICS OVERVIEW (ALL PROPERTIES):
+* Median Sale Price: $343,017 (Down 0.2% YoY).
+* Closed Sales: 2,676 units (Up 1.4% YoY).
+* Pending Sales: 2,580 units (Up 3.2% YoY).
+* New Listings: 4,857 units (Up 0.2% YoY).
+* Active Inventory: 21,890 units (Down 9.5% YoY).
+* Months Supply: 10 Months (Down from 11 Months).
+* Median Days on Market: 59 days (Down 16.8%).
+
+CLOSED SALES (YoY):
+[BAR: September 2025|2,639|99%, September 2026|2,676|100%]
+
+PENDING SALES GROWTH:
+[BAR: September 2025|2,500|97%, September 2026|2,580|100%]`,
+
+      "2026-september-q2": `PRICING & INVENTORY DYNAMICS:
+The overall regional median sales price held steady at **$343,017** (down just 0.2% YoY), while Single-Family Homes rose **2.4% to $430,000** and Condos adjusted to **$330,000** (-4.8%). Inventory tightened across the board, with total **Active Inventory falling 9.5%** Year-over-Year to 21,890 units despite a flat flow of **New Listings (+0.2% to 4,857)**.
+
+INVENTORY & SALES FLOW (SEPTEMBER 2026):
+[BAR: New Listings|4,857|100%, Closed Sales|2,676|55%]
+
+MONTHS SUPPLY TRAJECTORY:
+[BAR: September 2025|11 Mos|100%, September 2026|10 Mos|91%]
+
+With 2,580 pending contracts secured and 2,676 closed sales, overall inventory contracted from 24,198 to 21,890 homes for sale, reducing supply from 11 to 10 months regionally (and as tight as 4.2 months in local Single-Family markets). Homes also moved notably quicker, with median days on market declining 16.8% down to 59 days.`,
+
+      "2026-september-q3": `Comparing September 2026 to September 2025 highlights resilient demand and contracting inventory heading into the fall season across Southwest Florida. Regional pending sales climbed 3.2% (2,580 vs 2,500) and closed sales rose 1.4% (2,676 vs 2,639), while homes sold 16.8% faster (59 days vs 71 days).
+
+CLOSED SALES COMPARISON (YoY):
+[BAR: September 2025 Sales|2,639|99%, September 2026 Sales|2,676|100%]
+
+ACTIVE INVENTORY LEVEL (YoY):
+[BAR: September 2025 Active|24,198|100%, September 2026 Active|21,890|90%]
+
+Regional inventory contracted by over 2,300 properties compared to last September. Across key local submarkets, performance reflected localized trends: Naples posted strong buyer demand with closed sales up 12% and median prices up 5% ($589,900); Bonita Springs-Estero saw closed sales up 4% with active homes for sale dropping 22%; and Fort Myers experienced an inventory decrease of 14% alongside a 17% price adjustment to $382,500.`,
+
+      "2026-september-fr": `The September 2026 Florida Realtors and Fast Stats reports illustrate contrasting dynamics between Single-Family Homes and Condos/Townhomes. Regionally across SWFL, Single-Family Homes recorded a median price of **$430,000 (+2.4% YoY)** with months supply falling to 5.7 months (-12.9%) and median days on market dropping 28.8% to 47 days. The Condo/Townhome sector experienced a **6.7% increase in closed sales** (670 units) and **4.0% increase in pending sales**, with a median price of **$330,000 (-4.8% YoY)** and days on market falling 23.4% to 75.5 days.
+
+SFH vs. CONDO MEDIAN PRICES (SEPTEMBER 2026):
+[BAR: SFH Price|$430K|100%, Condo Price|$330K|77%]
+
+MONTHS SUPPLY OF INVENTORY (SEPTEMBER 2026):
+[BAR: SFH Supply|5.7 Mos|74%, Condo Supply|7.7 Mos|100%]
+
+In the CCOR Florida Realtors local report, Single-Family closed sales rose 3.4% (median $525,000) with supply tightening to 4.2 months (-25.0%), while Townhouse/Condo closed sales climbed 5.6% with a median sale price jumping 11.9% to $352,500 and months supply contracting 38.6% down to 4.3 months.`,
+
       "2026-august-q1": `Based on the August 2026 market data across Southwest Florida (Lee, Collier, and Hendry Counties / Bonita Springs-Estero, Naples, Fort Myers), buyer momentum continued steadily with **Pending Sales rising 12.0%** and **Closed Sales up 2.3%** Year-over-Year. Persistent buyer absorption drove total **Active Inventory down 12.2%** to 21,577 units.
 
 KEY METRICS OVERVIEW (ALL PROPERTIES):
