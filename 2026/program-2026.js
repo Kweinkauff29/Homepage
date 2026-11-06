@@ -32,6 +32,66 @@
     return Math.round(v).toLocaleString('en-US') + suffix;
   }
 
+  function animateMetricValue(el, fromVal, toVal, fmt, suffix = '', duration = 680) {
+    if (!el) return;
+    if (el._rafId) {
+      window.cancelAnimationFrame(el._rafId);
+      el._rafId = null;
+    }
+    const target = Number(toVal);
+    if (isSyntheticDOM || reducedMotion.matches || typeof window.requestAnimationFrame !== 'function') {
+      el.textContent = formatMetric(target, fmt, suffix);
+      return;
+    }
+    const startVal = Math.abs(Number(fromVal) - target) < 1e-9 ? 0 : Number(fromVal);
+    const startTime = performance.now();
+    el.classList.remove('is-popping');
+    void el.offsetWidth;
+    el.classList.add('is-popping');
+
+    function tick(now) {
+      const elapsed = now - startTime;
+      const p = Math.min(1, elapsed / duration);
+      const eased = 1 - Math.pow(1 - p, 3);
+      const current = startVal + (target - startVal) * eased;
+      el.textContent = formatMetric(p < 1 ? current : target, fmt, suffix);
+      if (p < 1) {
+        el._rafId = window.requestAnimationFrame(tick);
+      } else {
+        el._rafId = null;
+      }
+    }
+    el._rafId = window.requestAnimationFrame(tick);
+  }
+
+  function animatePulseCard(pulseBtn, duration = 850) {
+    const valEl = pulseBtn.querySelector('[data-pulse-value]');
+    if (!valEl) return;
+    const target = Number(pulseBtn.dataset.pulseTarget || 0);
+    const prefix = pulseBtn.dataset.pulsePrefix || '';
+    const suffix = pulseBtn.dataset.pulseSuffix || '';
+    const decimals = Number(pulseBtn.dataset.pulseDecimals || 0);
+    if (!target || isSyntheticDOM || reducedMotion.matches || typeof window.requestAnimationFrame !== 'function') return;
+
+    if (valEl._rafId) window.cancelAnimationFrame(valEl._rafId);
+    const startTime = performance.now();
+    function tick(now) {
+      const p = Math.min(1, (now - startTime) / duration);
+      const eased = 1 - Math.pow(1 - p, 3);
+      const curr = target * eased;
+      const formatted = decimals > 0
+        ? curr.toFixed(decimals)
+        : Math.round(curr).toLocaleString('en-US');
+      valEl.textContent = `${prefix}${formatted}${suffix}`;
+      if (p < 1) {
+        valEl._rafId = window.requestAnimationFrame(tick);
+      } else {
+        valEl._rafId = null;
+      }
+    }
+    valEl._rafId = window.requestAnimationFrame(tick);
+  }
+
   function drawMarketCanvas(card, metric, selectedYear, progress = 1) {
     const canvas = card.querySelector('[data-market-canvas]');
     if (!canvas || typeof canvas.getContext !== 'function') return;
@@ -59,7 +119,6 @@
     const slotW = plotW / CHART_YEARS.length;
     const barW = Math.min(34, slotW * 0.62);
 
-    // Subtle horizontal grid lines
     ctx.strokeStyle = 'rgba(2, 128, 143, 0.14)';
     ctx.lineWidth = 1;
     for (let i = 0; i <= 2; i++) {
@@ -106,13 +165,11 @@
         ctx.fill();
       }
 
-      // Year label
       ctx.fillStyle = isSel ? '#002054' : '#35576b';
       ctx.font = (isSel ? '700 ' : '600 ') + '10.5px Quicksand, sans-serif';
       ctx.textAlign = 'center';
       ctx.fillText(yr, x + barW / 2, cssH - 7);
 
-      // Value label above selected bar (and 2026 bar)
       if (isSel || Number(yr) === 2026) {
         ctx.fillStyle = isSel ? '#002054' : '#006371';
         ctx.font = (isSel ? '700 ' : '600 ') + '10px Oswald, Arial, sans-serif';
@@ -128,7 +185,7 @@
       return;
     }
     const start = performance.now();
-    const dur = 380;
+    const dur = 480;
     function step(now) {
       const t = Math.min(1, (now - start) / dur);
       const eased = 1 - Math.pow(1 - t, 3);
@@ -152,20 +209,22 @@
     const goodDir = metric.goodDirection || card.dataset.goodDirection || 'up';
     let currentVal = Number(baseline);
 
+    card._countUpFromZero = (duration = 900) => {
+      const activeBtn = card.querySelector('[data-market-year][aria-pressed="true"]');
+      const yr = activeBtn ? Number(activeBtn.dataset.marketYear) : baselineYear;
+      const targetVal = Number(metric.values[yr]);
+      currentVal = targetVal;
+      animateMetricValue(card.querySelector('.market-value'), 0, targetVal, metric.format, suffix, duration);
+      animateCanvas(card, metric, yr);
+    };
+
     const selectYear = (year) => {
       const value = metric.values[year];
       const valueEl = card.querySelector('.market-value');
       const prevVal = currentVal;
       currentVal = Number(value);
 
-      // Always set final formatted value synchronously first for deterministic DOM assertions
-      valueEl.textContent = formatMetric(value, metric.format, suffix);
-
-      if (!isSyntheticDOM && !reducedMotion.matches && typeof window.requestAnimationFrame === 'function' && prevVal !== currentVal) {
-        valueEl.classList.remove('is-popping');
-        void valueEl.offsetWidth;
-        valueEl.classList.add('is-popping');
-      }
+      animateMetricValue(valueEl, prevVal, currentVal, metric.format, suffix, 680);
 
       const yearTag = card.querySelector('[data-market-year-tag]');
       if (yearTag) yearTag.textContent = `${year} YTD`;
@@ -184,7 +243,6 @@
         } else {
           comparison = `${year} · ${Math.abs((difference / baseline) * 100).toFixed(1)}% ${direction} than ${baselineYear}`;
         }
-        // Highlight whether 2026 improved vs the selected past year
         const changeTo2026 = baseline - value;
         if (changeTo2026 !== 0) {
           const isGood = (changeTo2026 > 0 && goodDir === 'up') || (changeTo2026 < 0 && goodDir === 'down');
@@ -241,6 +299,33 @@
     drawMarketCanvas(card, metric, baselineYear, 1);
   });
 
+  // Scroll-triggered count-up when cards enter viewport inside #market
+  if (!isSyntheticDOM && !reducedMotion.matches && typeof window.IntersectionObserver === 'function') {
+    const seenCards = new WeakSet();
+    const cardObserver = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting && !seenCards.has(entry.target)) {
+          seenCards.add(entry.target);
+          if (typeof entry.target._countUpFromZero === 'function') {
+            entry.target._countUpFromZero(900);
+          }
+        }
+      });
+    }, { threshold: 0.2 });
+    document.querySelectorAll('[data-market-key]').forEach(card => cardObserver.observe(card));
+
+    const seenPulse = new WeakSet();
+    const pulseObserver = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting && !seenPulse.has(entry.target)) {
+          seenPulse.add(entry.target);
+          animatePulseCard(entry.target, 900);
+        }
+      });
+    }, { threshold: 0.2 });
+    document.querySelectorAll('.market-pulse-card').forEach(p => pulseObserver.observe(p));
+  }
+
   // Category filter buttons in Market Stats
   document.querySelectorAll('[data-market-filter]').forEach(btn => {
     btn.addEventListener('click', () => {
@@ -248,10 +333,8 @@
       document.querySelectorAll('[data-market-filter]').forEach(b => b.classList.toggle('is-active', b === btn));
       document.querySelectorAll('.market-card[data-market-cat]').forEach(card => {
         card.hidden = cat !== 'all' && card.dataset.marketCat !== cat;
-        if (!card.hidden) {
-          const metric = metricsArray.find(m => m.key === card.dataset.marketKey);
-          const activeBtn = card.querySelector('[data-market-year][aria-pressed="true"]');
-          if (metric) drawMarketCanvas(card, metric, activeBtn ? Number(activeBtn.dataset.marketYear) : 2026, 1);
+        if (!card.hidden && typeof card._countUpFromZero === 'function') {
+          card._countUpFromZero(700);
         }
       });
     });
@@ -269,7 +352,7 @@
     });
   });
 
-  // Executive Market Pulse KPI cards jump to metric card
+  // Executive Market Pulse KPI cards jump to metric card and trigger count-up
   document.querySelectorAll('[data-pulse-jump]').forEach(pulseBtn => {
     pulseBtn.addEventListener('click', () => {
       const key = pulseBtn.dataset.pulseJump;
@@ -281,19 +364,19 @@
       }
       targetCard.scrollIntoView({ behavior: reducedMotion.matches ? 'auto' : 'smooth', block: 'center' });
       targetCard.classList.add('is-highlight-flash');
+      if (typeof targetCard._countUpFromZero === 'function') targetCard._countUpFromZero(800);
       setTimeout(() => targetCard.classList.remove('is-highlight-flash'), 1600);
     });
   });
 
-  // Re-render canvases when #market section opens or window resizes
+  // Count up numbers & animate charts whenever #market section is opened
   const marketSection = document.getElementById('market');
   if (marketSection) {
     marketSection.addEventListener('toggle', () => {
       if (marketSection.open) {
+        document.querySelectorAll('.market-pulse-card').forEach(p => animatePulseCard(p, 850));
         document.querySelectorAll('[data-market-key]').forEach(card => {
-          const metric = metricsArray.find(m => m.key === card.dataset.marketKey);
-          const activeBtn = card.querySelector('[data-market-year][aria-pressed="true"]');
-          if (metric) animateCanvas(card, metric, activeBtn ? Number(activeBtn.dataset.marketYear) : 2026);
+          if (typeof card._countUpFromZero === 'function') card._countUpFromZero(850);
         });
       }
     });

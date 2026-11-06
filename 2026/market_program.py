@@ -131,7 +131,7 @@ def render_market(data: dict) -> str:
     hero_html = f"""<div class="market-hero-banner">
       <div class="market-hero-copy">
         <span class="market-eyebrow">{geography} MLS · {period_label} YTD</span>
-        <p class="market-intro">Explore <strong>{len(metrics_list)} verified MLS market indicators</strong> comparing 2026 year-to-date performance against 2021–2025. Tap any year button or chart bar below to watch the numbers animate.</p>
+        <p class="market-intro">Explore <strong>{len(metrics_list)} verified MLS market indicators</strong> comparing 2026 year-to-date performance against 2021–2025. Tap any year button or chart bar below to compare historical benchmarks.</p>
       </div>
       <div class="market-mascot-wrap">
         <img class="market-mascot" src="program-2026-assets/coastal-mascot.png" alt="CCOR Coastal Sun and Home Mascot" loading="lazy" decoding="async">
@@ -255,7 +255,7 @@ def render_market(data: dict) -> str:
           <p class="market-value" data-market-value>{html.escape(initial_value)}</p>
           <p class="market-comparison is-{comp_tone}" data-market-comparison>{html.escape(comp_text)}</p>
         </div>
-        <p class="market-breathe">▾ Tap a Year to Animate &amp; Compare Against 2026 ▾</p>
+        <p class="market-breathe">▾ Tap a Year to Compare Against 2026 ▾</p>
         <div class="market-years" role="group" aria-label="{label} comparison years">{year_buttons}</div>
         <div class="market-canvas-wrap">
           <canvas class="market-canvas" data-market-canvas="{html.escape(key)}" width="340" height="155" aria-label="{label} 2021 to 2026 chart"></canvas>
