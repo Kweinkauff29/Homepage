@@ -1,0 +1,134 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="theme-color" content="#002054">
+  <meta name="description" content="The mobile program for the 2027 CCOR Installation Breakfast on November 19, 2026. Leadership, event photos and our sponsors.">
+  <meta name="robots" content="noindex">
+  <title>${title} | Mobile Program</title>
+  <link rel="stylesheet" href="program-2026-fonts.css">
+  <link rel="stylesheet" href="program-2026.css">
+  <script src="program-2026.js" defer></script>
+</head>
+<body>
+  <a class="skip" href="#main">Skip to program</a>
+  <div class="ocean-background" aria-hidden="true">
+    <video id="ocean-video" autoplay muted loop playsinline preload="none" poster="program-2026-assets/ocean-poster.webp" disablepictureinpicture tabindex="-1">
+      <source data-src="program-2026-assets/ocean-background.mp4" type="video/mp4">
+    </video>
+  </div>
+  <div class="ocean-wash" aria-hidden="true"></div>
+  <div class="content-wrapper">
+    <header class="program-header">
+      <a class="home-logo" href="https://coconutcoastrealtors.org/" aria-label="Coconut Coast Organization of REALTORS home">${logo}</a>
+      <p class="theme-badge">${theme}</p>
+      <div class="title-box"><h1><span>2027 CCOR</span><br>Installation Breakfast Program</h1></div>
+      <p class="event-date">${date}<br>${time} · Eastern</p>
+      <p class="event-venue">${venue}<br><small>${address}</small></p>
+      ${draft}
+      <p class="tap-hint">Tap any section below or jump straight to a section</p>
+      <nav class="quick-nav" aria-label="Jump to program section">
+        <a class="quick-pill" href="#program">Program</a>
+        <a class="quick-pill" href="#leadership">Board</a>
+        <a class="quick-pill" href="#chairs">Committees</a>
+        <a class="quick-pill" href="#letter">President</a>
+        <a class="quick-pill" href="#photos">Photos</a>
+        <a class="quick-pill is-highlight" href="#market">2026 Market Stats</a>
+        <a class="quick-pill" href="#achievements">Achievements</a>
+        <a class="quick-pill" href="#upcoming">2027 Events</a>
+        <a class="quick-pill" href="#sponsors">Sponsors</a>
+      </nav>
+      <div class="header-controls">
+        <button class="expand-toggle" id="toggle-all-sections" type="button" aria-pressed="false">Expand All Sections on One Page ▾</button>
+        <button class="motion-toggle" id="ocean-motion" type="button" aria-controls="ocean-video" aria-pressed="false" hidden>Play ocean background</button>
+      </div>
+    </header>
+    <main id="main">
+      <details class="program-section" id="program">
+        <summary><span class="summary-left"><img class="sec-icon" src="program-2026-assets/sec-icon-program.png" alt="Event Program icon" loading="lazy" decoding="async"><span>Event Program</span></span></summary>
+        <div class="panel">
+          <h2 class="mini-title">A Morning of Connection & Celebration</h2>
+          <div class="program-item"><h3>9:00 AM · Networking & Breakfast</h3><p>Connect with fellow members and enjoy a full buffet breakfast.</p></div>
+          <div class="program-item"><h3>9:30 AM · Program Begins</h3><p>Welcome CCOR’s incoming 2027 leadership, committee leaders and volunteers.</p></div>
+          <div class="program-item"><h3>Master of Ceremonies</h3><p>${emcee}</p></div>
+          <div class="program-item"><h3>Installing Officer</h3><p>${installing_officer}</p></div>
+          <div class="program-item"><h3>Music</h3><p>${music}</p></div>
+          <p class="pending-note">The complete ceremony order and presenters will be added as they are finalized. The event runs until noon.</p>
+          <a class="button secondary" href="https://www.google.com/maps/search/?api=1&query=9801%20Treasure%20Cay%20Lane%20Bonita%20Springs%20FL%2034135" target="_blank" rel="noopener noreferrer">Directions to Spanish Wells ↗</a>
+        </div>
+      </details>
+      <details class="program-section" id="leadership">
+        <summary><span class="summary-left"><img class="sec-icon" src="program-2026-assets/sec-icon-board.png" alt="Board of Directors icon" loading="lazy" decoding="async"><span>2027 Board of Directors</span></span></summary>
+        <div class="panel">
+          <h2 class="mini-title">Executive Committee</h2>
+          <div class="officers">${officers}</div>
+          <h2 class="mini-title">Directors</h2>
+          <div class="directors">${directors}</div>
+          <p class="pending-note">Appointments are being finalized. Entries marked “to confirm” will be updated when confirmed.</p>
+        </div>
+      </details>
+      <details class="program-section" id="chairs">
+        <summary><span class="summary-left"><img class="sec-icon" src="program-2026-assets/sec-icon-chairs.png" alt="Committee Chairs icon" loading="lazy" decoding="async"><span>2027 Committee Chairs</span></span></summary>
+        <div class="panel"><div class="chair-grid">${chairs}</div></div>
+      </details>
+      <details class="program-section" id="letter">
+        <summary><span class="summary-left"><img class="sec-icon" src="program-2026-assets/sec-icon-letter.png" alt="Letter from the President icon" loading="lazy" decoding="async"><span>Letter from the President</span></span></summary>
+        <div class="panel letter-panel">
+          ${president_portrait}
+          <h2 class="mini-title">Wade Abed</h2>
+          <p class="role">2027 CCOR President</p>
+          ${president_message}
+        </div>
+      </details>
+      <details class="program-section review-section" id="photos">
+        <summary><span class="summary-left"><img class="sec-icon" src="program-2026-assets/sec-icon-photos.png" alt="Photo Highlights icon" loading="lazy" decoding="async"><span>2026 in Review · Photo Highlights</span></span></summary>
+        <div class="panel photo-panel">
+          <h2 class="mini-title">Our Year in Photos</h2>
+          <p>A look back at the connections we made and experiences we shared. Tap any photo to view it.</p>
+          <button class="button" id="start-slideshow">View Photo Slideshow ↗</button>
+          <div class="filters" role="group" aria-label="Filter event photos"><button class="filter" data-filter="all" aria-pressed="true">All highlights</button>${filters}</div>
+          <p id="gallery-status" class="fine" aria-live="polite">${photo_count} selected photos</p>
+          <div class="gallery">${photos}</div>
+          <div class="album-notes">${album_notes}</div>
+          <p class="fine">More 2026 event highlights will be added as photo selections are completed.</p>
+          <noscript><p>Enable JavaScript to filter photos or use the slideshow.</p></noscript>
+        </div>
+      </details>
+      <details class="program-section review-section" id="market">
+        <summary><span class="summary-left"><img class="sec-icon" src="program-2026-assets/sec-icon-market.png" alt="2026 Market Stats icon" loading="lazy" decoding="async"><span>2026 Market Stats <small class="summary-badge">12 Interactive Charts</small></span></span></summary>
+        <div class="panel"><h2 class="mini-title">2026 Market Snapshot</h2>${market_highlights}</div>
+      </details>
+      <details class="program-section review-section" id="achievements">
+        <summary><span class="summary-left"><img class="sec-icon" src="program-2026-assets/sec-icon-achievements.png" alt="2026 Achievements icon" loading="lazy" decoding="async"><span>2026 Achievements</span></span></summary>
+        <div class="panel"><h2 class="mini-title">Celebrating Our Progress</h2>${achievements}</div>
+      </details>
+      <details class="program-section" id="upcoming">
+        <summary><span class="summary-left"><img class="sec-icon" src="program-2026-assets/sec-icon-events.png" alt="Events in 2027 icon" loading="lazy" decoding="async"><span>Events in 2027</span></span></summary>
+        <div class="panel"><h2 class="mini-title">Looking Ahead</h2>${upcoming_events}</div>
+      </details>
+      <section id="sponsors" class="sponsors-section" aria-labelledby="sponsor-title">
+        <div class="sponsor-title-box"><h2 id="sponsor-title">Installation Sponsors</h2></div>
+        <div class="sponsor-panel">
+          <p class="sponsor-thanks">Thank you for making this morning possible.</p>
+          ${sponsors}
+          <p class="fine">Categories follow the <a href="${event_source}" target="_blank" rel="noopener noreferrer">official registration page</a>. Sponsors may be recognized in more than one category.</p>
+        </div>
+      </section>
+    </main>
+    <footer class="footer">
+      <strong>Coconut Coast Organization of REALTORS®</strong>
+      <p>${theme}</p>
+      <p><a href="tel:2399926771">(239) 992-6771</a> · <a href="mailto:operations@coconutcoastrealtors.org">Contact the event team</a></p>
+      <small>Program updated ${updated}</small>
+    </footer>
+  </div>
+  <dialog class="dialog" id="photo-dialog" aria-label="2026 photo slideshow">
+    <div class="viewer">
+      <div class="viewer-head"><div><strong id="viewer-album"></strong><small id="viewer-credit"></small></div><button id="close-viewer" aria-label="Close photo viewer">Close ×</button></div>
+      <figure id="viewer-figure"><img id="viewer-image" src="program-2026-assets/${first_photo}" alt=""><figcaption id="viewer-caption"></figcaption><p class="viewer-error" id="viewer-error">This photo could not load. Use Next to continue.</p></figure>
+      <div class="viewer-controls"><button id="previous-photo" aria-label="Previous photo">←</button><span class="counter" id="photo-counter" aria-live="polite"></span><button id="next-photo" aria-label="Next photo">→</button><button id="play-slideshow" aria-pressed="false">Play</button><button id="fullscreen" aria-label="Enter full screen">⛶</button></div>
+    </div>
+  </dialog>
+  <script type="application/json" id="program-data">${json_data}</script>
+</body></html>
