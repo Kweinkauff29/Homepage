@@ -1081,6 +1081,18 @@
     const REPORTS = [
       /* ===== 2026 ===== */
       {
+        year: 2026, month: "October",
+        fastStats: "https://coconutcoastrealtors.org/wp-content/uploads/2026/11/CCOR_Fast_Stats_October_2026.pdf",
+        frStats: null,
+        indicators: "https://coconutcoastrealtors.org/wp-content/uploads/2026/11/CCOR_Monthly_Indicators_October_2026.pdf",
+        thumb: "https://coconutcoastrealtors.org/wp-content/uploads/2026/11/Bonita-Springs-Estero-October-2026.png",
+        thumbs: [
+          "https://coconutcoastrealtors.org/wp-content/uploads/2026/11/Bonita-Springs-Estero-October-2026.png",
+          "https://coconutcoastrealtors.org/wp-content/uploads/2026/11/Fort-Myers-Area-October-2026.png",
+          "https://coconutcoastrealtors.org/wp-content/uploads/2026/11/Naples-Area-October-2026.png"
+        ]
+      },
+      {
         year: 2026, month: "September",
         fastStats: "https://coconutcoastrealtors.org/wp-content/uploads/2026/10/CCOR_Fast_Stats_September_2026.pdf",
         frStats: "https://coconutcoastrealtors.org/wp-content/uploads/2026/10/OctFloridaRealtors.pdf",
@@ -1779,6 +1791,54 @@
     // ---- Mock AI Chatbot Logic ----
     // Data mapping for specific month interactions
     const AI_DATA = {
+      "2026-october-q1": `Based on the October 2026 market data across Southwest Florida (Lee, Collier, and Hendry Counties / Bonita Springs-Estero, Naples, Fort Myers), buyer transaction times accelerated significantly with **median days on market dropping 24.1%** down to 55 days. While monthly closed sales eased modestly by 4.6% to 2,534 units, year-to-date closings maintained strong upward momentum at **31,784 sales (+7.0% YoY)**. Active residential inventory declined **9.1% to 23,475 units**, keeping overall months supply balanced at 11.6 months.
+
+KEY METRICS OVERVIEW (ALL PROPERTIES):
+* Median Sale Price: $350,791 (Down 2.2% YoY).
+* Closed Sales: 2,534 units (Down 4.6% YoY | YTD Up 7.0%).
+* Pending Sales: 2,627 units (Down 2.0% YoY | YTD Up 7.8%).
+* New Listings: 5,893 units (Down 10.6% YoY).
+* Active Inventory: 23,475 units (Down 9.1% YoY).
+* Months Supply: 11.6 Months (Down from 11.7 Months).
+* Median Days on Market: 55 days (Down 24.1% from 72 days).
+
+CLOSED SALES (YoY):
+[BAR: October 2025|2,656|100%, October 2026|2,534|95%]
+
+DAYS ON MARKET VELOCITY:
+[BAR: October 2025|72 Days|100%, October 2026|55 Days|76%]`,
+
+      "2026-october-q2": `PRICING & INVENTORY DYNAMICS:
+The overall regional median sales price remained resilient at **$350,791** (-2.2% YoY), with Single-Family Homes holding completely firm at **$445,000** (0.0% YoY) and Condos adjusting to **$313,750** (-10.4% YoY). Overall active inventory contracted **9.1% to 23,475 units** compared to 25,820 last October, supported by a 10.6% reduction in New Listings (5,893 vs. 6,593).
+
+INVENTORY & SALES FLOW (OCTOBER 2026):
+[BAR: New Listings|5,893|100%, Closed Sales|2,534|43%]
+
+MONTHS SUPPLY TRAJECTORY:
+[BAR: October 2025|11.7 Mos|100%, October 2026|11.6 Mos|99%]
+
+Single-family inventory fell 10.3% to 9,547 available homes, reducing single-family supply to 6.4 months. Condominium inventory tightened even further, falling 15.2% to 5,853 units (9.5 months supply). With active inventory decreasing across all primary sectors, days on market dropped 24.1% down to 55 days regionally.`,
+
+      "2026-october-q3": `Comparing October 2026 to October 2025 highlights accelerating buyer velocity, tightening inventory, and robust year-to-date market demand across Southwest Florida. Properties sold 24.1% faster than last year (55 median days vs 72 days in October 2025). On a year-to-date basis, regional transactions reached 31,784 closed sales (+7.0%) and 32,434 pending contracts (+7.8%), representing over $19.88 Billion in sold volume (+12.6%).
+
+YEAR-TO-DATE CLOSED SALES:
+[BAR: YTD 2025 Sales|29,700|93%, YTD 2026 Sales|31,784|100%]
+
+ACTIVE INVENTORY LEVEL (YoY):
+[BAR: October 2025 Active|25,820|100%, October 2026 Active|23,475|91%]
+
+Across local submarkets, performance underscored strong local stability: Bonita Springs-Estero posted a 1% price gain to $525,500 with inventory falling 20% and 52 days on market; Naples posted median sales prices up 6% to $620,000 with pending sales up 5% and inventory down 13%; and the Fort Myers Area (combining Fort Myers and Fort Myers Beach) maintained steady sales at 405 units with active inventory contracting 14%.`,
+
+      "2026-october-fr": `The October 2026 market statistics illustrate steady performance in Single-Family Homes alongside active contract absorption in Condominiums across Southwest Florida. Single-Family Homes recorded an unchanged median price of **$445,000 (0.0% YoY)**, with months supply tightening to **6.4 months** as inventory decreased 10.3% (9,547 homes) and days on market dropped 24.6% to 49 days. Condominiums saw strong buyer contract interest with pending sales up **3.3% to 722 units** and year-to-date closings climbing **19.7%**, while price adjustments brought the median condo price to **$313,750 (-10.4% YoY)** as active inventory shrank 15.2% (5,853 units).
+
+SFH vs. CONDO MEDIAN PRICES (OCTOBER 2026):
+[BAR: SFH Price|$445K|100%, Condo Price|$314K|71%]
+
+MONTHS SUPPLY OF INVENTORY (OCTOBER 2026):
+[BAR: SFH Supply|6.4 Mos|67%, Condo Supply|9.5 Mos|100%]
+
+Overall, Single-Family properties maintain tight supply and stable pricing, while condominiums provide attractive buyer value and swift contract absorption with rapidly diminishing inventory.`,
+
       "2026-september-q1": `Based on the September 2026 market data across Southwest Florida (Lee, Collier, and Hendry Counties / Bonita Springs-Estero, Naples, Fort Myers), buyer activity maintained steady positive momentum with **Pending Sales rising 3.2%** and **Closed Sales up 1.4%** Year-over-Year. Persistent buyer absorption drove total **Active Inventory down 9.5%** to 21,890 units.
 
 KEY METRICS OVERVIEW (ALL PROPERTIES):
