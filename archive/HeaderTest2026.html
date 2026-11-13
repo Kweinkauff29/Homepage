@@ -3197,8 +3197,10 @@
     const PROXY_URL = 'https://gz-realestate-proxy.bonitaspringsrealtors.workers.dev';
     const SESSION_KEY = 'ber-events-popup-dismissed';
 
-    // Don't show if user already dismissed this session
-    if (sessionStorage.getItem(SESSION_KEY) === 'true') return;
+    // Don't show if user already dismissed this session (unless testing with ?popup, ?events, or ?preview)
+    const urlParams = new URLSearchParams(window.location.search);
+    const forceShow = urlParams.has('popup') || urlParams.has('events') || urlParams.has('preview');
+    if (!forceShow && sessionStorage.getItem(SESSION_KEY) === 'true') return;
 
     const popup = document.getElementById('ber-events-popup');
     const eventsContainer = document.getElementById('ber-popup-events');
