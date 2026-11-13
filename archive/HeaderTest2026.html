@@ -3240,31 +3240,19 @@
         const classes = future.filter(e => e.IsClass);
 
         // Filter out any API event that might match the prioritized marquee events to avoid duplication
-        const isExcluded = (e) => e.Name && /casino night|poker|installation/i.test(e.Name);
+        const isExcluded = (e) => e.Name && /casino night|poker|installation|bootcamp|boot\s*camp/i.test(e.Name);
         const filteredFuture = future.filter(e => !isExcluded(e));
         const filteredEvents = events.filter(e => !isExcluded(e));
         const filteredClasses = classes.filter(e => !isExcluded(e));
 
         // Priority logic:
-        // 1. Prioritize Poker Run and Installation Breakfast as top highlight marquee events
+        // 1. Prioritize Installation Breakfast, Poker Run, and BootCAMP 2027 as top highlight marquee events
         // 2. Fill remaining slot(s) with:
-        //    a. Check for a membership breakfast (if upcoming and space permits)
+        //    a. Check for a membership appreciation breakfast (if upcoming and space permits)
         //    b. Next upcoming class / event
         let displayItems = [];
 
-        // 1. Poker Run (Save the Date: Nov 21, 2026)
-        const pokerApiEvent = future.find(e => e.Name && /poker/i.test(e.Name));
-        const pokerDate = pokerApiEvent ? new Date(pokerApiEvent.StartDate) : new Date("2026-11-21T10:00:00-05:00");
-        if (pokerDate >= now) {
-          displayItems.push(pokerApiEvent || {
-            EventId: 'poker-run-2026',
-            Name: "6th Annual CCOR Charity Poker Run",
-            StartDate: pokerDate.toISOString(),
-            PublicUrl: "https://coconutcoastrealtors.org/all-upcoming-events/"
-          });
-        }
-
-        // 2. Installation Breakfast (Nov 19, 2026)
+        // 1. Installation Breakfast (Nov 19, 2026)
         const installApiEvent = future.find(e => e.Name && /installation/i.test(e.Name));
         const installDate = installApiEvent ? new Date(installApiEvent.StartDate) : new Date("2026-11-19T09:00:00-05:00");
         if (installDate >= now) {
@@ -3276,14 +3264,44 @@
           });
         }
 
+        // 2. Poker Run (Save the Date: Nov 21, 2026)
+        const pokerApiEvent = future.find(e => e.Name && /poker/i.test(e.Name));
+        const pokerDate = pokerApiEvent ? new Date(pokerApiEvent.StartDate) : new Date("2026-11-21T10:00:00-05:00");
+        if (pokerDate >= now) {
+          displayItems.push(pokerApiEvent || {
+            EventId: 'poker-run-2026',
+            Name: "6th Annual CCOR Charity Poker Run",
+            StartDate: pokerDate.toISOString(),
+            PublicUrl: "https://coconutcoastrealtors.org/all-upcoming-events/"
+          });
+        }
+
+        // 3. BootCAMP 2027 with Kerri Herrity (Jan 11–22, 2027)
+        const bootcampApiEvent = future.find(e => e.Name && /bootcamp|boot\s*camp/i.test(e.Name));
+        const bootcampDate = bootcampApiEvent ? new Date(bootcampApiEvent.StartDate) : new Date("2027-01-11T08:30:00-05:00");
+        if (bootcampDate >= now) {
+          displayItems.push(bootcampApiEvent ? {
+            ...bootcampApiEvent,
+            Name: (bootcampApiEvent.Name && /kerri/i.test(bootcampApiEvent.Name))
+              ? bootcampApiEvent.Name
+              : "BootCAMP 2027 with Kerri Herrity",
+            PublicUrl: bootcampApiEvent.PublicUrl || "https://coconutcoastrealtors.growthzoneapp.com/ap/Events/Register/Dr6RjeRr?mode=Attendee"
+          } : {
+            EventId: 'bootcamp-2027',
+            Name: "BootCAMP 2027 with Kerri Herrity",
+            StartDate: bootcampDate.toISOString(),
+            PublicUrl: "https://coconutcoastrealtors.growthzoneapp.com/ap/Events/Register/Dr6RjeRr?mode=Attendee"
+          });
+        }
+
         // Fill remaining slots up to 3 with upcoming classes/events
         const remainingSlots = 3 - displayItems.length;
         if (remainingSlots > 0) {
           const breakfastEvent = filteredEvents.find(e =>
-            e.Name && /membership\s*breakfast/i.test(e.Name) && !displayItems.some(d => d.Name === e.Name)
+            e.Name && /membership.*breakfast|appreciation\s*breakfast/i.test(e.Name) && !displayItems.some(d => d.Name === e.Name)
           );
 
-          if (breakfastEvent && displayItems.length < 2) {
+          if (breakfastEvent && displayItems.length < 3) {
             displayItems.push(breakfastEvent);
           }
 
@@ -3306,6 +3324,9 @@
           }
         }
 
+        // Sort chronologically ascending
+        displayItems.sort((a, b) => new Date(a.StartDate) - new Date(b.StartDate));
+
         // If nothing at all, don't show popup
         if (displayItems.length === 0) return;
 
@@ -3313,7 +3334,12 @@
         eventsContainer.innerHTML = '';
         displayItems.slice(0, 3).forEach(ev => {
           const start = new Date(ev.StartDate);
-          const dateStr = `${start.getMonth() + 1}/${start.getDate()}`;
+          const dateStr = (typeof ev.StartDate === 'string' && ev.StartDate.length >= 10 && ev.StartDate.includes('-'))
+            ? (function () {
+                const parts = ev.StartDate.slice(0, 10).split('-');
+                return parts.length === 3 ? `${parseInt(parts[1], 10)}/${parseInt(parts[2], 10)}` : `${start.getMonth() + 1}/${start.getDate()}`;
+              })()
+            : `${start.getMonth() + 1}/${start.getDate()}`;
           const name = ev.Name || 'Event';
 
           const row = document.createElement('a');
